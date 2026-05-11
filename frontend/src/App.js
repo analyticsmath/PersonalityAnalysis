@@ -128,8 +128,7 @@ const AppRoutes = () => {
               path="/assessment"
               element={withTransition(
                 <ProtectedRoute>
-                  {/* Deprecated legacy questionnaire route retained for backward compatibility. */}
-                  <AssessmentPage />
+                  <Navigate to="/assessment/start" replace />
                 </ProtectedRoute>
               )}
             />
