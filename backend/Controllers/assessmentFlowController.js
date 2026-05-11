@@ -33,6 +33,7 @@ const { explainWhyNotCareer } = require('../services/assessment/career-recommend
 const { generateAssessmentPdfBuffer } = require('../services/assessment/pdf-report.service');
 const { streamProgress } = require('../services/assessment/progress-stream.service');
 const { interpretTextAnswer } = require('../services/response-parser.service');
+const { CANONICAL_STAGES, normalizeStage, toSessionState } = require('../services/assessment/assessment-state-machine.service');
 const {
   ensureJsonObjectPayload,
   extractSubmittedSessionId,
@@ -277,6 +278,22 @@ const toParsedProfileFromCvData = ({ cvData = {}, existingProfile = {} } = {}) =
 };
 
 const toQuestionIdentity = (question = {}) => toText(question.questionId || question.id);
+
+
+const ensureExpectedStage = ({ expectedStage, sessionStage }) => {
+  if (!expectedStage) return;
+  const current = normalizeStage(sessionStage);
+  const expected = String(expectedStage || '').trim().toUpperCase();
+  if (expected && expected !== current) {
+    throw createHttpError(409, JSON.stringify({
+      code: 'ASSESSMENT_STAGE_CONFLICT',
+      message: 'This action is not allowed in the current assessment stage.',
+      currentStage: current,
+      expectedStage: expected,
+      allowedActions: [],
+    }));
+  }
+};
 
 const prefetchNextQuestion = ({ session }) => {
   const currentIndex = Number(session.currentQuestionIndex || 0);
@@ -1147,6 +1164,11 @@ const answerAdaptiveQuestion = async (req, res, next) => {
 
     if (session.stage === 'questionnaire') {
       const payload = ensureJsonObjectPayload(req.body);
+      ensureExpectedStage({ expectedStage: payload.expectedStage, sessionStage: session.stage });
+      const idempotencyKey = String(payload.idempotencyKey || payload.clientActionId || '').trim();
+      if (idempotencyKey && session.adaptiveMetrics?.lastIdempotencyKey === idempotencyKey) {
+        return sendSuccess(res, { data: { session: toPublicSession(session), question: toPublicQuestion(session), duplicateActionIgnored: true }, message: 'Duplicate action ignored' });
+      }
       const submittedSessionId = extractSubmittedSessionId(payload);
       assertSessionMatch({
         submittedSessionId,
@@ -1503,6 +1525,11 @@ const answerAdaptiveQuestion = async (req, res, next) => {
     if (session.stage === 'behavior') {
       // Backward-compatible behavior stage support for existing in-progress sessions.
       const payload = ensureJsonObjectPayload(req.body);
+      ensureExpectedStage({ expectedStage: payload.expectedStage, sessionStage: session.stage });
+      const idempotencyKey = String(payload.idempotencyKey || payload.clientActionId || '').trim();
+      if (idempotencyKey && session.adaptiveMetrics?.lastIdempotencyKey === idempotencyKey) {
+        return sendSuccess(res, { data: { session: toPublicSession(session), question: toPublicQuestion(session), duplicateActionIgnored: true }, message: 'Duplicate action ignored' });
+      }
       const promptId = String(payload.promptId || '').trim();
       const text = String(payload.text || '').trim();
 
@@ -1688,6 +1715,7 @@ const getActiveFlowSession = async (req, res, next) => {
         session: toPublicSession(session),
         question: toPublicQuestion(session),
         behaviorPrompt: toPublicBehaviorPrompt(session),
+        state: toSessionState({ session: toPublicSession(session), question: toPublicQuestion(session), behaviorPrompt: toPublicBehaviorPrompt(session) }),
       },
       message: 'Active assessment flow session fetched successfully',
     });
@@ -1708,6 +1736,7 @@ const getFlowSessionById = async (req, res, next) => {
         session: toPublicSession(session),
         question: toPublicQuestion(session),
         behaviorPrompt: toPublicBehaviorPrompt(session),
+        state: toSessionState({ session: toPublicSession(session), question: toPublicQuestion(session), behaviorPrompt: toPublicBehaviorPrompt(session) }),
       },
       message: 'Assessment flow session fetched successfully',
     });
