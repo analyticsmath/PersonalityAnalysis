@@ -477,7 +477,23 @@ const toLegacyBehaviorAnswers = ({ answers = [], behaviorPrompts = [], questionP
 const countByAnswerType = ({ answers = [], type }) =>
   normalizeUnifiedAnswers(answers).filter((answer) => answer.type === type).length;
 
-const mapResultToLegacySummary = (result = {}) => ({
+const deriveScoreMeta = (result = {}) => {
+  const traits = result.personality?.traits && typeof result.personality.traits === 'object' ? result.personality.traits : {};
+  const keys = ['O','C','E','A','N'];
+  const present = keys.filter((k) => Number.isFinite(Number(traits[k])));
+  const confidence = Number(result.analytics?.confidence || 0);
+  const hasAiReport = Boolean(result.analytics?.aiReport?.summary);
+  const hasScores = present.length > 0;
+  if (!hasScores) return { scoreSource: 'unknown', scoreValidity: 'insufficient_data', confidence: null, evidenceCount: 0, missingDimensions: keys, isFinal: false };
+  const missing = keys.filter((k)=>!present.includes(k));
+  const scoreSource = hasAiReport ? 'ai_augmented' : 'deterministic';
+  const scoreValidity = missing.length ? 'partial' : 'valid';
+  return { scoreSource, scoreValidity, confidence: Number.isFinite(confidence)?confidence:null, evidenceCount: present.length, missingDimensions: missing, isFinal: missing.length===0 };
+};
+
+const mapResultToLegacySummary = (result = {}) => {
+  const scoreMeta = deriveScoreMeta(result);
+  return ({
   personality_type:
     toString(result.personality?.archetypes?.personalityType) ||
     toString(result.personality?.archetypes?.dominantArchetype) ||
@@ -529,6 +545,12 @@ const mapResultToLegacySummary = (result = {}) => ({
     careerScore: 0,
   },
   meta: {
+    scoreSource: scoreMeta.scoreSource,
+    scoreValidity: scoreMeta.scoreValidity,
+    confidence: scoreMeta.confidence,
+    evidenceCount: scoreMeta.evidenceCount,
+    missingDimensions: scoreMeta.missingDimensions,
+    isFinal: scoreMeta.isFinal,
     questions_answered: normalizeUnifiedAnswers(result.answers || []).filter((answer) =>
       ['likert', 'scale', 'mcq', 'text', 'scenario'].includes(answer.type)
     ).length,
@@ -536,6 +558,7 @@ const mapResultToLegacySummary = (result = {}) => ({
     generated_at: new Date(result.completedAt || result.updatedAt || Date.now()).toISOString(),
   },
 });
+};
 
 const isValidStageTransition = ({ from, to }) => {
   const current = toString(from) || 'cv_upload';
@@ -578,4 +601,5 @@ module.exports = {
   mapResultToLegacySummary,
   isValidStageTransition,
   normalizeResultSchemaVersion,
+  deriveScoreMeta,
 };

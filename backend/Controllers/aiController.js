@@ -10,6 +10,7 @@ const {
   toPublicAiReport,
   toTraitPayload,
 } = require('../services/assessmentResultView.service');
+const { deriveScoreMeta } = require('../services/assessment/unified-contracts.service');
 
 const generateAssessmentAiReport = async (req, res, next) => {
   try {
@@ -28,6 +29,14 @@ const generateAssessmentAiReport = async (req, res, next) => {
       assessmentId,
     });
 
+    const scoreMeta = deriveScoreMeta(assessmentResult.toObject());
+    if (scoreMeta.scoreValidity === 'insufficient_data') {
+      throw createHttpError(409, 'SCORING_REQUIRED: Assessment scoring must be completed before generating the report.');
+    }
+    if (['mock','unknown'].includes(scoreMeta.scoreSource)) {
+      throw createHttpError(409, 'INVALID_SCORE_SOURCE: Final report cannot be generated from mock or unknown scoring data.');
+    }
+
     const traits = toTraitPayload(assessmentResult.personality?.traits || {});
     const deterministicInsights = generateInsightSnapshot(traits);
     const adaptiveCareer = normalizeCareerRecommendations(
@@ -36,6 +45,11 @@ const generateAssessmentAiReport = async (req, res, next) => {
     const careerEngine = adaptiveCareer.length > 0 ? adaptiveCareer : buildCareerContext(traits, 5);
 
     const existingAiReport = assessmentResult.analytics?.aiReport;
+    const actionId = String(req.body?.idempotencyKey || req.body?.clientActionId || req.headers['x-idempotency-key'] || '').trim();
+    const reportState = assessmentResult.analytics?.reportState || {};
+    if (actionId && reportState.lastActionId === actionId) {
+      return sendSuccess(res, { data: { assessmentId: assessmentResult._id, cached: true, generating: Boolean(reportState.generating), aiReport: toPublicAiReport(existingAiReport), aiReportMeta: toAiReportMeta(existingAiReport) }, message: 'Duplicate report action ignored' });
+    }
 
     if (existingAiReport && !forceRefresh) {
       return sendSuccess(res, {
@@ -51,10 +65,13 @@ const generateAssessmentAiReport = async (req, res, next) => {
       });
     }
 
+    assessmentResult.analytics = { ...(assessmentResult.analytics || {}), reportState: { generating: true, status: 'generating', lastActionId: actionId || null, updatedAt: new Date() } };
+    await assessmentResult.save();
     const generatedReport = await generatePersonalityReport(traits, {});
 
     assessmentResult.analytics = {
       ...(assessmentResult.analytics || {}),
+      reportState: { generating: false, status: 'ready', lastActionId: actionId || null, updatedAt: new Date() },
       aiReport: {
         summary: generatedReport.summary,
         strengths: generatedReport.strengths,
