@@ -1,12 +1,12 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
 const { normalizeStage, getAllowedActions } = require('../services/assessment/assessment-state-machine.service');
 
-describe('assessment state machine canonical mapping', () => {
-  test('maps legacy stage names to canonical stages', () => {
-    expect(normalizeStage('questionnaire')).toBe('ASSESSMENT_IN_PROGRESS');
-    expect(normalizeStage('behavior')).toBe('BEHAVIOR_PROMPTS');
-  });
+test('maps legacy stage names to canonical stages', () => {
+  assert.equal(normalizeStage('questionnaire'), 'ASSESSMENT_IN_PROGRESS');
+  assert.equal(normalizeStage('behavior'), 'BEHAVIOR_PROMPTS');
+});
 
-  test('returns allowed actions for answering stage', () => {
-    expect(getAllowedActions('ASSESSMENT_IN_PROGRESS')).toContain('SUBMIT_ANSWER');
-  });
+test('returns allowed actions for answering stage', () => {
+  assert.ok(getAllowedActions('ASSESSMENT_IN_PROGRESS').includes('SUBMIT_ANSWER'));
 });

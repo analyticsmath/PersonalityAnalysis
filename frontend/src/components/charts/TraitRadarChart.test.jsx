@@ -1,8 +1,9 @@
+/* eslint-env vitest */
 import { render, screen } from '@testing-library/react';
 import TraitRadarChart from './TraitRadarChart';
 
 beforeAll(() => {
-  global.ResizeObserver = class {
+  globalThis.ResizeObserver = class {
     observe() {}
     unobserve() {}
     disconnect() {}
