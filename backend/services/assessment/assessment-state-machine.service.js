@@ -62,8 +62,8 @@ const toSessionState = ({ session, question, behaviorPrompt, isMutating = false,
     behaviorPrompt: behaviorPrompt || null,
     allowedActions: getAllowedActions(canonicalStage),
     locks: { isMutating: Boolean(isMutating), lockedByActionId: currentAction || null },
-    scoreStatus: scoreStatus || { hasValidScores: false, scoreSource: 'unknown', scoreValidity: 'insufficient_data', confidence: null, isFinal: false, missingDimensions: [] },
-    reportStatus: reportStatus || { available: false, generating: false, status: 'unavailable' },
+    scoreStatus: scoreStatus || { hasValidScores: false, scoreSource: 'unknown', confidence: null },
+    reportStatus: reportStatus || { available: false, generating: false },
     error,
   };
 };
