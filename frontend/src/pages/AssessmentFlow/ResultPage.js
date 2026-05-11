@@ -106,6 +106,7 @@ const AssessmentFlowResultPage = () => {
   const resultsLoadedRef = useRef(false);
 
   const result = resultQuery.data?.result || null;
+  const scoreMeta = result?.meta || null;
 
   useEffect(() => {
     if (resultQuery.isPending || chatMutation.isPending) {
@@ -557,7 +558,7 @@ const AssessmentFlowResultPage = () => {
           data-avatar-target="result-profile-chart"
         >
           <Card title="OCEAN Radar" subtitle="Personality profile">
-            <TraitRadarChart key={`radar-${result.meta?.generated_at || 'latest'}`} traits={traits} height={320} />
+            <TraitRadarChart key={`radar-${result.meta?.generated_at || 'latest'}`} traits={traits} height={320} scoreMeta={scoreMeta} />
           </Card>
 
           <Card title="3D Trait Sphere" subtitle="Interactive trait field" className="result-profile-chart" >

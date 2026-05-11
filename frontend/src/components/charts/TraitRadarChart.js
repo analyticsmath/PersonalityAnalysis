@@ -11,7 +11,7 @@ import {
 import { toTraitArray } from '../../utils/traits';
 import tokens, { chartTokens } from '../../theme/tokens';
 
-const TraitRadarChart = ({ traits = {}, compact = false, height = 320 }) => {
+const TraitRadarChart = ({ traits = {}, compact = false, height = 320, scoreMeta = null }) => {
   const data = useMemo(
     () =>
       toTraitArray(traits).map((item) => ({
@@ -21,6 +21,15 @@ const TraitRadarChart = ({ traits = {}, compact = false, height = 320 }) => {
       })),
     [traits]
   );
+
+
+  const isBlocked = scoreMeta && (['mock', 'unknown'].includes(scoreMeta.scoreSource) || ['insufficient_data', 'invalid'].includes(scoreMeta.scoreValidity));
+  if (isBlocked) {
+    const message = ['insufficient_data', 'invalid'].includes(scoreMeta.scoreValidity)
+      ? 'Not enough valid assessment data to generate a reliable personality graph.'
+      : 'Personality graph is unavailable because final scoring has not been completed.';
+    return <div className="chart-shell" aria-label="Trait radar chart unavailable">{message}</div>;
+  }
 
   return (
     <div className="chart-shell" aria-label="Trait radar chart">
