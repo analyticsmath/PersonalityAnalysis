@@ -15,8 +15,8 @@ import { useAuth } from '../../hooks/useAuth';
 import {
   useAdaptiveQuestionQuery,
   usePreviousAdaptiveQuestionMutation,
-  useSubmitAdaptiveAnswerMutation,
 } from '../../hooks/useAssessmentFlow';
+import useAssessmentSessionMachine from '../../hooks/useAssessmentSessionMachine';
 import {
   clearQuestionDraft,
   readAssessmentFlowState,
@@ -144,7 +144,7 @@ const AdaptiveAssessmentTestPage = () => {
 
   const questionQuery = useAdaptiveQuestionQuery(sessionId, Boolean(sessionId));
   const refetchQuestion = questionQuery.refetch;
-  const answerMutation = useSubmitAdaptiveAnswerMutation();
+  const assessmentMachine = useAssessmentSessionMachine();
   const previousMutation = usePreviousAdaptiveQuestionMutation();
   const { emit } = useAvatarEvents();
 
@@ -531,7 +531,7 @@ const AdaptiveAssessmentTestPage = () => {
           questionId: submissionPayload.questionId,
         });
 
-        const payload = await answerMutation.mutateAsync({
+        const payload = await assessmentMachine.submitAnswer({
           sessionId,
           payload: submissionPayload,
         });
@@ -577,7 +577,7 @@ const AdaptiveAssessmentTestPage = () => {
         setFeedback(error.message || 'Unable to save answer. Please retry.');
       }
     },
-    [auth.userId, answerMutation, buildPayload, canSubmit, emit, navigate, refetchQuestion, sessionId]
+    [assessmentMachine, auth.userId, buildPayload, canSubmit, emit, navigate, refetchQuestion, sessionId]
   );
 
   const goToPrevious = useCallback(async () => {
@@ -672,7 +672,7 @@ const AdaptiveAssessmentTestPage = () => {
   }, [liveTraitPreview, prefersReducedMotion]);
 
   const isResultGenerationPending =
-    answerMutation.isPending &&
+    assessmentMachine.isMutating &&
     Boolean(question) &&
     Number(question.sequence || question.index + 1 || 1) >= Number(question.total || 1);
 
@@ -684,6 +684,9 @@ const AdaptiveAssessmentTestPage = () => {
       });
     }
   }, [emit, isResultGenerationPending, questionQuery.isPending]);
+
+  const recoveredSessionId = String(assessmentMachine.session?.sessionId || '');
+  const showRecoveryBanner = Boolean(recoveredSessionId) && recoveredSessionId === String(sessionId || '') && Number(assessmentMachine.progress?.answeredCount || 0) > 0;
 
   useEffect(() => {
     const questionId = String(question?.questionId || question?.id || '').trim();
@@ -867,6 +870,9 @@ const AdaptiveAssessmentTestPage = () => {
                 onExampleChange={setExampleValue}
               />
 
+              {showRecoveryBanner ? (
+                <p className="ui-message ui-message--success">Your assessment progress was recovered.</p>
+              ) : null}
               {statusNote ? <p className="ui-message">{statusNote}</p> : null}
               {feedback ? <p className="ui-message ui-message--error">{feedback}</p> : null}
 
@@ -877,7 +883,7 @@ const AdaptiveAssessmentTestPage = () => {
                   loading={previousMutation.isPending}
                   disabled={
                     previousMutation.isPending ||
-                    answerMutation.isPending ||
+                    assessmentMachine.isMutating ||
                     Number(question.sequence || 1) <= 1
                   }
                   data-avatar-action="question-prev"
@@ -887,8 +893,8 @@ const AdaptiveAssessmentTestPage = () => {
                 </Button>
                 <Button
                   onClick={submitAnswer}
-                  loading={answerMutation.isPending}
-                  disabled={!canSubmit}
+                  loading={assessmentMachine.isMutating}
+                  disabled={!canSubmit || !assessmentMachine.canSubmitAnswer || assessmentMachine.isMutating}
                   data-avatar-action="question-next"
                   data-avatar-target="question-card"
                   data-avatar-hint="Submit this answer to move forward."

@@ -107,6 +107,10 @@ const AssessmentFlowResultPage = () => {
 
   const result = resultQuery.data?.result || null;
   const scoreMeta = result?.meta || null;
+  const normalizedState = resultQuery.data?.state || null;
+  const reportStatus = normalizedState?.reportStatus || result?.reportStatus || null;
+  const reportStatusCode = String(reportStatus?.status || '').toLowerCase();
+
 
   useEffect(() => {
     if (resultQuery.isPending || chatMutation.isPending) {
@@ -432,6 +436,58 @@ const AssessmentFlowResultPage = () => {
               {resultQuery.error?.message || 'Assessment result is not ready yet.'}
             </p>
             <Button onClick={() => navigate('/assessment/start')}>Back to Start</Button>
+          </Card>
+        </div>
+      </main>
+    );
+  }
+
+
+  if (reportStatusCode === 'scoring_required') {
+    return (
+      <main className="app-page">
+        <div className="page-shell">
+          <Card title="Scoring required">
+            <p className="ui-message ui-message--warning">Scoring is required before report generation.</p>
+            <Button onClick={() => resultQuery.refetch()}>Retry Failed Action</Button>
+          </Card>
+        </div>
+      </main>
+    );
+  }
+
+  if (reportStatusCode === 'generating') {
+    return (
+      <main className="app-page">
+        <div className="page-shell">
+          <Card title="Generating report">
+            <p className="ui-message">Generating your AI report...</p>
+            <Button disabled>Generate Report</Button>
+          </Card>
+        </div>
+      </main>
+    );
+  }
+
+  if (reportStatusCode === 'unavailable') {
+    return (
+      <main className="app-page">
+        <div className="page-shell">
+          <Card title="Report unavailable">
+            <p className="ui-message ui-message--warning">Your report is currently unavailable.</p>
+          </Card>
+        </div>
+      </main>
+    );
+  }
+
+  if (reportStatusCode === 'failed') {
+    return (
+      <main className="app-page">
+        <div className="page-shell">
+          <Card title="Report generation failed">
+            <p className="ui-message ui-message--error">Action failed. Please retry.</p>
+            <Button onClick={() => resultQuery.refetch()}>Retry Failed Action</Button>
           </Card>
         </div>
       </main>
