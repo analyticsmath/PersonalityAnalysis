@@ -158,6 +158,18 @@ const AdaptiveAssessmentTestPage = () => {
   const [questionStartAt, setQuestionStartAt] = useState(Date.now());
   const [isSavingProgress, setIsSavingProgress] = useState(false);
 
+  const [recoveryState, setRecoveryState] = useState('idle');
+
+  const handleRecoverSession = useCallback(async () => {
+    setRecoveryState('recovering');
+    try {
+      await assessmentMachine.recoverSession();
+      setRecoveryState('recovered');
+    } catch (error) {
+      setRecoveryState('failed');
+    }
+  }, [assessmentMachine]);
+
   const progressBarRef = useRef(null);
   const questionCardRef = useRef(null);
   const sidePanelRef = useRef(null);
@@ -174,9 +186,9 @@ const AdaptiveAssessmentTestPage = () => {
   const answerSignalRef = useRef({ questionId: '', value: '' });
   const draftTimerRef = useRef(0);
 
-  const stage = questionQuery.data?.session?.stage || 'questionnaire';
+  const stage = normalizeStage(assessmentMachine.stage || questionQuery.data?.session?.stage || 'questionnaire');
   const question = questionQuery.data?.question || null;
-  const waitingForNextQuestion = Boolean(questionQuery.data?.waitingForNextQuestion) && !question;
+  const waitingForNextQuestion = Boolean(questionQuery.data?.waitingForNextQuestion) && !question && assessmentMachine.shouldPoll && !assessmentMachine.isMutating;
 
   useEffect(() => {
     questionRef.current = question;
@@ -213,7 +225,7 @@ const AdaptiveAssessmentTestPage = () => {
   }, [auth.userId, localState.inputMode, localState.userProfile, localState.userRole, questionQuery.data, sessionId]);
 
   useEffect(() => {
-    if (!waitingForNextQuestion || !sessionId) {
+    if (!waitingForNextQuestion || !sessionId || !assessmentMachine.shouldPoll || assessmentMachine.isMutating) {
       return () => {};
     }
 
@@ -224,7 +236,7 @@ const AdaptiveAssessmentTestPage = () => {
     return () => {
       window.clearInterval(timer);
     };
-  }, [refetchQuestion, sessionId, waitingForNextQuestion]);
+  }, [assessmentMachine.isMutating, assessmentMachine.shouldPoll, refetchQuestion, sessionId, waitingForNextQuestion]);
 
   useEffect(() => {
     setLikertValue(0);
@@ -570,7 +582,7 @@ const AdaptiveAssessmentTestPage = () => {
 
         if (payload.waitingForNextQuestion) {
           setStatusNote('Preparing next question…');
-          refetchQuestion();
+          if (assessmentMachine.shouldPoll && !assessmentMachine.isMutating) refetchQuestion();
           return;
         }
       } catch (error) {
@@ -687,6 +699,7 @@ const AdaptiveAssessmentTestPage = () => {
 
   const recoveredSessionId = String(assessmentMachine.session?.sessionId || '');
   const showRecoveryBanner = Boolean(recoveredSessionId) && recoveredSessionId === String(sessionId || '') && Number(assessmentMachine.progress?.answeredCount || 0) > 0;
+  const showRecoveryFailure = recoveryState === 'failed';
 
   useEffect(() => {
     const questionId = String(question?.questionId || question?.id || '').trim();
@@ -870,8 +883,17 @@ const AdaptiveAssessmentTestPage = () => {
                 onExampleChange={setExampleValue}
               />
 
-              {showRecoveryBanner ? (
-                <p className="ui-message ui-message--success">Your assessment progress was recovered.</p>
+              {showRecoveryBanner || recoveryState !== 'idle' ? (
+                <>
+                  {recoveryState === 'recovering' && <p className="ui-message ui-message--info">Recovering your assessment progress...</p>}
+                  {(showRecoveryBanner || recoveryState === 'recovered') && <p className="ui-message ui-message--success">Your assessment progress was recovered.</p>}
+                  {showRecoveryFailure && <p className="ui-message ui-message--error">We could not recover your assessment safely.</p>}
+                  {showRecoveryFailure && (
+                    <Button variant="ghost" size="sm" onClick={handleRecoverSession} disabled={assessmentMachine.isMutating || recoveryState === 'recovering'}>
+                      Retry recovery
+                    </Button>
+                  )}
+                </>
               ) : null}
               {statusNote ? <p className="ui-message">{statusNote}</p> : null}
               {feedback ? <p className="ui-message ui-message--error">{feedback}</p> : null}
