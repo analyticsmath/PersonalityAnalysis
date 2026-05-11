@@ -1871,4 +1871,7 @@ module.exports = {
   streamAssessmentProgress,
   careerChat,
   explainWhyNotCareerForSession,
+  __test__: {
+    ensureExpectedStage,
+  },
 };
