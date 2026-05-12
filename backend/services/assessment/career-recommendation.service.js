@@ -1,4 +1,9 @@
 const { recommendCareersWithIntelligence } = require('../ai-career-intelligence.service');
+const {
+  runCareerRecommendationOrchestrator,
+  toLegacyRecommendations,
+} = require('../career/careerRecommendationOrchestrator.service');
+const { FIT_WEIGHTS } = require('../career/careerFitTypes');
 
 const CAREER_CLUSTERS = ['AI_Similarity'];
 const WEIGHTS = {
@@ -44,6 +49,96 @@ const buildRoadmap = ({ growthPath = [], keySkills = [] }) => [
   },
 ];
 
+const defaultAptitudeFromCognitive = (cognitiveVector = {}) => ({
+  logical_reasoning: Number(cognitiveVector.analytical || 50),
+  numerical_reasoning: Number(cognitiveVector.systematic || 50),
+  verbal_reasoning: Number(cognitiveVector.strategic || 50),
+});
+
+const buildDeterministicCareerOutput = ({
+  cvData = {},
+  aiProfile = {},
+  cognitiveScores = {},
+  scoringOutput,
+  userProfile = {},
+}) => {
+  const careerIntelligence = runCareerRecommendationOrchestrator({
+    scoringOutput,
+    cvData,
+    aiProfile,
+    userProfile: userProfile && typeof userProfile === 'object' ? userProfile : {},
+  });
+
+  if (careerIntelligence.locked) {
+    return {
+      recommendations: [],
+      careerRoadmap: [],
+      aptitudeSignals: defaultAptitudeFromCognitive(cognitiveScores),
+      cluster: 'undetermined',
+      clusterLabel: 'Career intelligence unavailable',
+      userCluster: 'undetermined',
+      whyNotCatalog: {},
+      balance: {
+        personalityScore: 0,
+        careerScore: 0,
+        weights: FIT_WEIGHTS,
+      },
+      careerIntelligence,
+    };
+  }
+
+  const recommendations = toLegacyRecommendations(careerIntelligence);
+  const careerRoadmap =
+    recommendations[0]?.roadmap_timeline && recommendations[0].roadmap_timeline.length
+      ? recommendations[0].roadmap_timeline
+      : (careerIntelligence.topRecommendations[0]?.roadmap?.timeline || []).map((t) => ({
+          stage: t.stage,
+          summary: `${t.title}: ${(t.actions || []).join('; ')}`,
+        }));
+
+  const personalityScoreAvg = recommendations.length
+    ? Math.round(
+        recommendations.reduce((sum, item) => sum + Number(item.personality_score || 0), 0) /
+          recommendations.length
+      )
+    : 0;
+
+  const careerScoreAvg = recommendations.length
+    ? Math.round(
+        recommendations.reduce((sum, item) => sum + Number(item.career_score || 0), 0) /
+          recommendations.length
+      )
+    : 0;
+
+  const whyNotCatalog = recommendations.reduce((accumulator, career) => {
+    accumulator[career.career] = {
+      cluster: career.cluster,
+      score: career.score,
+      top_signals: career.explanation?.top_signals || [],
+      key_gaps: career.skill_gaps || [],
+    };
+    return accumulator;
+  }, {});
+
+  const topCluster = toText(recommendations[0]?.cluster || aiProfile?.domain || 'general') || 'general';
+
+  return {
+    recommendations,
+    careerRoadmap,
+    aptitudeSignals: defaultAptitudeFromCognitive(cognitiveScores),
+    cluster: topCluster,
+    clusterLabel: `${topCluster} domain`,
+    userCluster: topCluster,
+    whyNotCatalog,
+    balance: {
+      personalityScore: personalityScoreAvg,
+      careerScore: careerScoreAvg,
+      weights: FIT_WEIGHTS,
+    },
+    careerIntelligence,
+  };
+};
+
 const recommendCareers = async ({
   cvData = {},
   aiProfile = {},
@@ -51,7 +146,19 @@ const recommendCareers = async ({
   traitVectorOutput = {},
   cognitiveScores = {},
   behaviorVector = {},
+  scoringOutput = null,
+  userProfile = {},
 } = {}) => {
+  if (scoringOutput && scoringOutput.scores && scoringOutput.scoreMeta) {
+    return buildDeterministicCareerOutput({
+      cvData,
+      aiProfile,
+      cognitiveScores,
+      scoringOutput,
+      userProfile,
+    });
+  }
+
   const skills = toList((cvData.skills || []).map((skill) => skill?.name || skill), 32);
   const interests = toList(cvData.interests || [], 24);
 
@@ -173,11 +280,7 @@ const recommendCareers = async ({
   return {
     recommendations,
     careerRoadmap,
-    aptitudeSignals: {
-      logical_reasoning: Number(cognitiveVector.analytical || 50),
-      numerical_reasoning: Number(cognitiveVector.systematic || 50),
-      verbal_reasoning: Number(cognitiveVector.strategic || 50),
-    },
+    aptitudeSignals: defaultAptitudeFromCognitive(cognitiveVector),
     cluster: topCluster,
     clusterLabel: `${topCluster} Domain`,
     userCluster: topCluster,
@@ -187,6 +290,7 @@ const recommendCareers = async ({
       careerScore: careerScoreAvg,
       weights: WEIGHTS,
     },
+    careerIntelligence: null,
   };
 };
 
@@ -241,7 +345,7 @@ const explainWhyNotCareer = ({ careerName = '', recommendations = [] }) => {
       top.length > 0
         ? `${careerName} is not currently in the top recommendations. Your highest alignment is with ${top
             .map((item) => item.career)
-            .join(', ')} based on AI profile and embedding similarity.`
+            .join(', ')} based on profile and fit signals.`
         : `${careerName} could not be validated against ranked recommendations yet.`,
     gaps: [],
     comparison: {
@@ -258,4 +362,5 @@ module.exports = {
   WEIGHTS,
   recommendCareers,
   explainWhyNotCareer,
+  buildDeterministicCareerOutput,
 };

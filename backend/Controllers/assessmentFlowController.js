@@ -29,7 +29,10 @@ const {
 } = require('../services/assessment/assessment-session.service');
 const { generateAssessmentResult } = require('../services/assessment/assessment-result.service');
 const { generateCareerChatReply } = require('../services/assessment/career-chatbot.service');
-const { explainWhyNotCareer } = require('../services/assessment/career-recommendation.service');
+const {
+  explainWhyNotCareer,
+  buildDeterministicCareerOutput,
+} = require('../services/assessment/career-recommendation.service');
 const { generateAssessmentPdfBuffer } = require('../services/assessment/pdf-report.service');
 const { streamProgress } = require('../services/assessment/progress-stream.service');
 const { interpretTextAnswer } = require('../services/response-parser.service');
@@ -1835,6 +1838,88 @@ const careerChat = async (req, res, next) => {
   }
 };
 
+const emptyCareerBuckets = () => ({
+  bestFits: [],
+  stretchFits: [],
+  exploratoryFits: [],
+  lowerFitButPossible: [],
+});
+
+const getCareerRecommendations = async (req, res, next) => {
+  try {
+    const session = await getSessionForUser({
+      sessionId: req.params.id,
+      user: req.user,
+    });
+
+    const result = await loadResultForSession(session);
+
+    if (!result) {
+      throw createHttpError(409, 'Assessment result is not ready yet');
+    }
+
+    const ro = result.toObject();
+    let ci = ro.careerRecommendations;
+
+    if (!ci || typeof ci !== 'object') {
+      const scoringOutput = {
+        scores: ro.scores,
+        scoreMeta: ro.scoreMeta,
+        warnings: ro.warnings || [],
+      };
+
+      if (!scoringOutput.scores || !scoringOutput.scoreMeta) {
+        return sendSuccess(res, {
+          data: {
+            assessmentId: String(session._id),
+            scoreMeta: ro.scoreMeta || {},
+            careerProfileVersion: 'phase4-v1',
+            locked: true,
+            preliminary: false,
+            recommendations: emptyCareerBuckets(),
+            topRecommendations: [],
+            skillGapSummary: {
+              note: 'Career recommendations require stored Phase 3 scores and score metadata on this result.',
+            },
+            roadmaps: [],
+            warnings: ['Career intelligence is unavailable because scoring metadata is missing from this result.'],
+          },
+          message: 'Career intelligence unavailable for this result',
+        });
+      }
+
+      const rebuilt = buildDeterministicCareerOutput({
+        cvData: ro.cvData || {},
+        aiProfile: session.aiProfile || {},
+        cognitiveScores: ro.personality?.cognitiveScores || {},
+        scoringOutput,
+        userProfile: session.userProfile || {},
+      });
+      ci = rebuilt.careerIntelligence;
+    }
+
+    const careerProfileVersion = ci.version || ci.careerProfileVersion || 'phase4-v1';
+
+    return sendSuccess(res, {
+      data: {
+        assessmentId: String(session._id),
+        scoreMeta: ro.scoreMeta || {},
+        careerProfileVersion,
+        locked: Boolean(ci.locked),
+        preliminary: Boolean(ci.preliminary),
+        recommendations: ci.recommendations || emptyCareerBuckets(),
+        topRecommendations: ci.topRecommendations || [],
+        skillGapSummary: ci.skillGapSummary || {},
+        roadmaps: ci.roadmaps || [],
+        warnings: Array.isArray(ci.warnings) ? ci.warnings : [],
+      },
+      message: 'Career recommendations fetched successfully',
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const explainWhyNotCareerForSession = async (req, res, next) => {
   try {
     const session = await getSessionForUser({
@@ -1884,6 +1969,7 @@ module.exports = {
   answerAdaptiveQuestion,
   getAssessmentResult,
   downloadAssessmentResultPdf,
+  getCareerRecommendations,
   getActiveFlowSession,
   getFlowSessionById,
   streamAssessmentProgress,

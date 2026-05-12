@@ -11,6 +11,7 @@ import StartAssessmentFlowPage from './pages/AssessmentFlow/StartPage';
 import AdaptiveAssessmentTestPage from './pages/AssessmentFlow/TestPage';
 import BehaviorAssessmentPage from './pages/AssessmentFlow/BehaviorPage';
 import AssessmentFlowResultPage from './pages/AssessmentFlow/ResultPage';
+import CareerExplorerPage from './pages/AssessmentFlow/CareerExplorerPage';
 import LegacyStaticAssessmentPage from './pages/Legacy/LegacyStaticAssessmentPage';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import AnimatedBackground from './components/ui/AnimatedBackground';
@@ -168,6 +169,14 @@ const AppRoutes = () => {
               element={withTransition(
                 <ProtectedRoute>
                   <BehaviorAssessmentPage />
+                </ProtectedRoute>
+              )}
+            />
+            <Route
+              path="/assessment/career"
+              element={withTransition(
+                <ProtectedRoute>
+                  <CareerExplorerPage />
                 </ProtectedRoute>
               )}
             />

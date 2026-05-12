@@ -59,6 +59,27 @@ const toProfileContext = ({ session, result }) => {
     )
   ).slice(0, 10);
 
+  const phase4 = result?.careerRecommendations;
+  const phase4Slim =
+    phase4 && typeof phase4 === 'object'
+      ? {
+          version: phase4.version,
+          locked: Boolean(phase4.locked),
+          preliminary: Boolean(phase4.preliminary),
+          topRecommendations: (phase4.topRecommendations || []).slice(0, 5).map((r) => ({
+            careerId: r.careerId,
+            title: r.title,
+            fitScore: r.fitScore,
+            confidence: r.confidence,
+            fitType: r.fitType,
+            whyThisFits: r.whyThisFits,
+            whyThisMayBeChallenging: r.whyThisMayBeChallenging,
+            skillGaps: r.skillGaps,
+          })),
+          warnings: (phase4.warnings || []).slice(0, 8),
+        }
+      : null;
+
   return {
     aiProfile,
     domain: toText(aiProfile.domain || cv.source_domain || 'general'),
@@ -72,6 +93,7 @@ const toProfileContext = ({ session, result }) => {
     interests,
     careers,
     topSkillGaps,
+    phase4CareerIntelligence: phase4Slim,
   };
 };
 
@@ -118,7 +140,7 @@ const generateCareerChatReply = async ({ session, result, message }) => {
         {
           role: 'system',
           content:
-            'You are a profile-grounded career assistant. Always answer using provided profile evidence. Use sections and bullet points with clear reasoning. Avoid generic advice.',
+            'You are a profile-grounded career assistant. Always answer using provided profile evidence. Use sections and bullet points with clear reasoning. Avoid generic advice. Phase 4 career intelligence (if present) is read-only: never change or invent fit scores, confidence numbers, or missing skills—explain and contextualize them only.',
         },
         {
           role: 'user',

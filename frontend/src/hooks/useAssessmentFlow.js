@@ -6,6 +6,7 @@ import {
   getAdaptiveQuestion,
   getPreviousAdaptiveQuestion,
   getAssessmentFlowResult,
+  getCareerRecommendations,
   getFlowSession,
   startAdaptiveAssessment,
   streamAssessmentProgress,
@@ -19,6 +20,7 @@ export const assessmentFlowKeys = {
   session: (sessionId) => ['assessment-flow', 'session', sessionId],
   question: (sessionId) => ['assessment-flow', 'question', sessionId],
   result: (sessionId) => ['assessment-flow', 'result', sessionId],
+  careerRec: (sessionId) => ['assessment-flow', 'career-rec', sessionId],
 };
 
 export const useActiveFlowSessionQuery = (enabled = true) =>
@@ -51,6 +53,14 @@ export const useAssessmentFlowResultQuery = (sessionId, enabled = true) =>
     queryFn: () => getAssessmentFlowResult(sessionId),
     enabled: Boolean(sessionId) && enabled,
     staleTime: 20000,
+  });
+
+export const useCareerRecommendationsQuery = (sessionId, enabled = true) =>
+  useQuery({
+    queryKey: assessmentFlowKeys.careerRec(sessionId),
+    queryFn: () => getCareerRecommendations(sessionId),
+    enabled: Boolean(sessionId) && enabled,
+    staleTime: 60000,
   });
 
 export const useUploadCvMutation = () => {

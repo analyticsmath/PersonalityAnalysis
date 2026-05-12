@@ -36,7 +36,11 @@ Twelve preference dimensions (achievement, independence, recognition, relationsh
 
 ## Career signals
 
-Structured keys (e.g. technicalDepth, leadership) combine lightweight answer heuristics with CV-derived hints for Phase 4 occupation matching.
+Structured keys (e.g. technicalDepth, leadership) combine lightweight answer heuristics with CV-derived hints. These signals feed the **Phase 4 career intelligence engine** (occupation fit, skill gaps, and roadmaps) as read-only numeric inputs; see `docs/architecture/career-intelligence-engine.md`.
+
+## Phase 4 consumption (Career intelligence)
+
+Phase 3 outputs (`scores`, `scoreMeta`, `evidence`, `warnings`) are passed into `runCareerRecommendationOrchestrator` after each adaptive completion. The orchestrator computes deterministic career fit **without** OpenAI involvement in numeric scoring. AI narratives and chat may summarize the structured recommendations but must not replace or contradict the stored fit numbers.
 
 ## Score metadata (`scoreMeta`)
 

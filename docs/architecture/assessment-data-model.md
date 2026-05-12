@@ -21,6 +21,7 @@ Persisted scoring + narrative payload for a completed adaptive run.
 
 - **Links:** `userId`, `sessionId` (unique, indexed).
 - **Phase 3 fields:** `scores` (Mixed), `scoreMeta` (Mixed), `evidence` (array), `warnings` (string array) — see `docs/architecture/scoring-methodology.md`.
+- **Phase 4 fields:** `careerRecommendations` (Mixed) — deterministic occupation intelligence (`version`, `generatedAt`, `locked`, `preliminary`, bucketed `recommendations`, `topRecommendations`, `skillGapSummary`, `roadmaps`, orchestrator `warnings`). Omitted on legacy documents; the API can recompute on read when Phase 3 scores exist.
 - **Legacy compatibility:** `personality.traits` continues to expose O/C/E/A/N for older clients; summaries add `meta.scoreSource` of `legacy_unverified` when Phase 3 metadata was never persisted.
 
 ### `User` (`backend/models/User.js`)

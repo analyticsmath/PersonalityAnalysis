@@ -34,12 +34,14 @@ import {
   useAssessmentFlowResultQuery,
   useCareerChatMutation,
   useWhyNotCareerMutation,
+  useCareerRecommendationsQuery,
 } from '../../hooks/useAssessmentFlow';
 import { downloadAssessmentFlowPdf } from '../../api/assessmentFlowApi';
 import { clearAssessmentFlowState, readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
 import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEvents';
 import ScoringEvidenceCard from '../../components/results/ScoringEvidenceCard';
 import CareerSignalsSummary from '../../components/results/CareerSignalsSummary';
+import CareerRecommendationCard from '../../components/career/CareerRecommendationCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -112,6 +114,12 @@ const AssessmentFlowResultPage = () => {
   const result = resultQuery.data?.result || null;
   const normalized = useMemo(() => normalizeAssessmentResult(result), [result]);
   const scoreMeta = normalized.scoreMeta || result?.meta || null;
+  const careerPhase4Embedded = normalized.careerPhase4;
+  const careerRecQuery = useCareerRecommendationsQuery(
+    sessionId,
+    Boolean(sessionId && result && !careerPhase4Embedded)
+  );
+  const careerIntel = careerPhase4Embedded || careerRecQuery.data || null;
   const normalizedState = resultQuery.data?.state || null;
   const reportStatus = normalizedState?.reportStatus || result?.reportStatus || null;
   const reportStatusCode = String(reportStatus?.status || '').toLowerCase();
@@ -646,6 +654,59 @@ const AssessmentFlowResultPage = () => {
 
           <Card title="Evidence & caveats" subtitle="Why you see these numbers">
             <ScoringEvidenceCard scoreMeta={scoreMeta} evidence={evidenceList} warnings={warningList} />
+          </Card>
+
+          <Card title="Career Intelligence" subtitle="Explainable fit, gaps, and next steps (Phase 4)">
+            {String(scoreMeta?.scoreValidity || '').toLowerCase() === 'invalid' || careerIntel?.locked ? (
+              <div>
+                <p className="ui-message ui-message--error" role="status">
+                  Career recommendations are locked because assessment score validity is invalid or insufficient for
+                  ranked matching.
+                </p>
+                <Button variant="ghost" onClick={() => navigate(`/assessment/career?session=${sessionId}`)}>
+                  Open Career Explorer
+                </Button>
+              </div>
+            ) : (careerIntel?.topRecommendations || []).length ? (
+              <div style={{ display: 'grid', gap: 16 }}>
+                {careerIntel.preliminary ? (
+                  <p className="ui-message ui-message--neutral" role="status">
+                    Career recommendations are preliminary because the assessment evidence is limited.
+                  </p>
+                ) : null}
+                <p className="ui-message ui-message--neutral">
+                  Career recommendations are guidance based on your assessment, CV signals, and stated preferences. They
+                  are not final career decisions or hiring judgments.
+                </p>
+                <div style={{ display: 'grid', gap: 12 }}>
+                  {(careerIntel.topRecommendations || []).slice(0, 3).map((item) => (
+                    <CareerRecommendationCard
+                      key={item.careerId}
+                      title={item.title}
+                      fitScore={item.fitScore}
+                      confidence={item.confidence}
+                      preliminary={Boolean(careerIntel.preliminary)}
+                      fitType={item.fitType}
+                      whyThisFits={item.whyThisFits}
+                      skillGaps={item.skillGaps}
+                    />
+                  ))}
+                </div>
+                <Button variant="ghost" onClick={() => navigate(`/assessment/career?session=${sessionId}`)}>
+                  Full Career Explorer
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <p className="ui-message ui-message--neutral">
+                  Structured career intelligence is not embedded in this result yet. Open Career Explorer to compute
+                  guidance from your stored scores when available.
+                </p>
+                <Button variant="ghost" onClick={() => navigate(`/assessment/career?session=${sessionId}`)}>
+                  Open Career Explorer
+                </Button>
+              </div>
+            )}
           </Card>
         </section>
 

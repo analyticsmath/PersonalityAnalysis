@@ -42,6 +42,7 @@ export function normalizeAssessmentResult(raw) {
       scores: {},
       evidence: [],
       warnings: [],
+      careerPhase4: null,
     };
   }
 
@@ -51,5 +52,9 @@ export function normalizeAssessmentResult(raw) {
     scores: raw.scores && typeof raw.scores === 'object' ? raw.scores : {},
     evidence: Array.isArray(raw.evidence) ? raw.evidence : [],
     warnings: Array.isArray(raw.warnings) ? raw.warnings : [],
+    careerPhase4:
+      raw.career_recommendations_phase4 && typeof raw.career_recommendations_phase4 === 'object'
+        ? raw.career_recommendations_phase4
+        : null,
   };
 }

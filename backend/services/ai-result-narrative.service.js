@@ -73,6 +73,7 @@ const generateResultNarrative = async ({
   phase3ScoreMeta = null,
   phase3EvidencePreview = [],
   phase3Warnings = [],
+  phase4CareerIntelligence = null,
 } = {}) => {
   const fallback = fallbackNarrative({
     aiProfile,
@@ -81,17 +82,41 @@ const generateResultNarrative = async ({
     skills,
   });
 
+  const phase4Slim =
+    phase4CareerIntelligence && typeof phase4CareerIntelligence === 'object'
+      ? {
+          careerProfileVersion: phase4CareerIntelligence.careerProfileVersion,
+          locked: Boolean(phase4CareerIntelligence.locked),
+          preliminary: Boolean(phase4CareerIntelligence.preliminary),
+          topRecommendations: (phase4CareerIntelligence.topRecommendations || []).slice(0, 5).map((r) => ({
+            careerId: r.careerId,
+            title: r.title,
+            fitScore: r.fitScore,
+            confidence: r.confidence,
+            fitType: r.fitType,
+            whyThisFits: r.whyThisFits,
+            whyThisMayBeChallenging: r.whyThisMayBeChallenging,
+            skillGaps: r.skillGaps,
+          })),
+          warnings: (phase4CareerIntelligence.warnings || []).slice(0, 8),
+        }
+      : null;
+
   const phase3ContextBlock = {
     numericScoresAreFixed: true,
     phase3Scores,
     phase3ScoreMeta,
     phase3EvidencePreview,
     phase3Warnings,
+    phase4CareerIntelligence: phase4Slim,
     narrativeRules: [
       'Do not invent or restate numeric trait, RIASEC, work values, or career signal scores.',
+      'Do not invent career fit scores or skill gaps; use Phase 4 career intelligence only as provided.',
+      'Use career recommendation data as structured guidance. Do not alter numeric fit scores. Explain uncertainty and development paths.',
       'Do not provide medical, clinical, or diagnostic language.',
       'Frame outputs as career guidance and self-insight, not diagnosis.',
       'Call out uncertainty explicitly when confidence is low or scoreValidity is partial/insufficient_data.',
+      'Never claim the user is guaranteed to succeed or fail in a career, and never use hiring/selection authority language.',
     ],
   };
 
@@ -108,7 +133,7 @@ const generateResultNarrative = async ({
         {
           role: 'system',
           content:
-            'Generate concise career-development narratives grounded strictly in provided profile evidence. Return JSON only. Never output revised numeric scores; reference them qualitatively only.',
+            'Generate concise career-development narratives grounded strictly in provided profile evidence. Return JSON only. Never output revised numeric scores or career fit numbers; reference them qualitatively only. Treat Phase 4 career intelligence as read-only structured guidance.',
         },
         {
           role: 'user',

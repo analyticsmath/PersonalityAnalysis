@@ -23,6 +23,14 @@ describe('assessmentResultNormalize', () => {
     expect(traits.N).toBe(70);
   });
 
+  it('normalizeAssessmentResult exposes careerPhase4 from legacy summary field', () => {
+    const n = normalizeAssessmentResult({
+      meta: {},
+      career_recommendations_phase4: { version: 'phase4-v1', locked: false },
+    });
+    expect(n.careerPhase4?.version).toBe('phase4-v1');
+  });
+
   it('normalizeAssessmentResult handles null', () => {
     const n = normalizeAssessmentResult(null);
     expect(n.radarTraits.O).toBe(0);

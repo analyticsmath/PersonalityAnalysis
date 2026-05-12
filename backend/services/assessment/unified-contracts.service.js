@@ -608,6 +608,10 @@ const mapResultToLegacySummary = (result = {}) => {
   scores: result.scores && typeof result.scores === 'object' ? result.scores : {},
   evidence: Array.isArray(result.evidence) ? result.evidence.slice(0, 80) : [],
   warnings: Array.isArray(result.warnings) ? result.warnings : [],
+  career_recommendations_phase4:
+    result.careerRecommendations && typeof result.careerRecommendations === 'object'
+      ? result.careerRecommendations
+      : null,
 };
 };
 

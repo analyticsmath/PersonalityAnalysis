@@ -1,7 +1,7 @@
 /**
  * Assessment API — canonical mount at `/api/assessment`.
  *
- * Core adaptive flow: cv/upload, session/active, start, :id, question, answer, result, chat, pdf, events.
+ * Core adaptive flow: cv/upload, session/active, start, :id, question, answer, result, career-recommendations, chat, pdf, events.
  * Legacy static questionnaire (compatibility): `/legacy/session/*`, `/legacy/save`.
  * Dashboard/report/analytics helpers live here so one auth gate applies; see docs/architecture/assessment-api-contract.md.
  */
@@ -16,6 +16,7 @@ const {
   answerAdaptiveQuestion,
   getAssessmentResult,
   downloadAssessmentResultPdf,
+  getCareerRecommendations,
   getActiveFlowSession,
   getFlowSessionById,
   streamAssessmentProgress,
@@ -69,6 +70,7 @@ router.post('/:id/question/previous', getPreviousQuestion);
 router.post('/:id/answer', answerAdaptiveQuestion);
 router.get('/:id/result', getAssessmentResult);
 router.get('/:id/result/pdf', downloadAssessmentResultPdf);
+router.get('/:id/career-recommendations', getCareerRecommendations);
 router.post('/:id/chat', careerChat);
 router.post('/:id/why-not', explainWhyNotCareerForSession);
 

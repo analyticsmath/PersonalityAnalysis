@@ -56,7 +56,7 @@ Structured errors (`success` + `error` + `meta`) are available via `utils/apiRes
 | GET | `/api/assessment/:id/question` | Current adaptive question |
 | POST | `/api/assessment/:id/question/previous` | Previous question |
 | POST | `/api/assessment/:id/answer` | Submit answer (expected-stage + idempotency) |
-| GET | `/api/assessment/:id/result` | Result / scoring payload (Phase 3 adds `scores`, `scoreMeta`, `evidence`, `warnings`; see below) |
+| GET | `/api/assessment/:id/career-recommendations` | Phase 4 deterministic career intelligence (recomputes if missing on stored result) |
 | GET | `/api/assessment/:id/result/pdf` | PDF download |
 | POST | `/api/assessment/:id/chat` | Career chat (post-result) |
 | POST | `/api/assessment/:id/why-not` | Explain career exclusion |
@@ -118,6 +118,20 @@ Flow `GET /api/assessment/:id/result` returns `data.result` with legacy keys **p
 - `meta` — chart gating + `scoringVersion`, `isFinal`, `missingEvidence`, `evidenceSources`, `generatedAt` / `generated_at`
 - `evidence` — capped evidence list for transparency UI
 - `warnings` — scoring warnings
+- `career_recommendations_phase4` — persisted Phase 4 bundle (`version`, `locked`, `preliminary`, `recommendations` buckets, `topRecommendations`, `skillGapSummary`, `roadmaps`, `warnings`) when available; `null` for legacy results
+
+### `GET /api/assessment/:id/career-recommendations`
+
+Returns `success: true` and `data` shaped as:
+
+- `assessmentId` — session id string
+- `scoreMeta` — copied from the stored result for transparency
+- `careerProfileVersion` — e.g. `phase4-v1`
+- `locked` / `preliminary` — gating flags
+- `recommendations` — `{ bestFits, stretchFits, exploratoryFits, lowerFitButPossible }` (each an array of career objects with `fitScore`, `confidence`, `fitBreakdown`, `whyThisFits`, `skillGaps`, etc.)
+- `topRecommendations`, `skillGapSummary`, `roadmaps`, `warnings`
+
+When stored metadata is missing but Phase 3 scores exist, the handler recomputes deterministically from the result document and session CV/profile.
 
 Dashboard `GET /api/assessment/report/:assessmentId` returns the same blocks on `report` (`scores`, `scoreMeta`, `evidence`, `warnings`).
 

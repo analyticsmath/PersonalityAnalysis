@@ -97,6 +97,11 @@ export const getAssessmentFlowResult = async (sessionId) => {
   return unwrap(response);
 };
 
+export const getCareerRecommendations = async (sessionId) => {
+  const response = await client.get(`/assessment/${sessionId}/career-recommendations`);
+  return unwrap(response);
+};
+
 export const askCareerChat = async ({ sessionId, message }) => {
   const response = await client.post(`/assessment/${sessionId}/chat`, { message });
   return unwrap(response);

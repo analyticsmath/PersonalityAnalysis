@@ -39,6 +39,7 @@ vi.mock('../../hooks/useAssessmentFlow', () => ({
   },
   useCareerChatMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
   useWhyNotCareerMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
+  useCareerRecommendationsQuery: () => ({ data: null, isPending: false, isError: false }),
 }));
 vi.mock('../../components/assessment/QuestionRenderer', () => ({ default: ({ onLikertChange }) => <button onClick={() => onLikertChange(4)}>set</button> }));
 vi.mock('../../components/assessment/QuestionVisualPanel', () => ({ default: () => <div/> }));
@@ -253,5 +254,60 @@ describe('phase1e page states', () => {
       </MemoryRouter>
     );
     expect(h.generateReport).not.toHaveBeenCalled();
+  });
+
+  it('result page shows Career Intelligence when Phase 4 bundle is embedded', () => {
+    h.mockResultQuery.mockReturnValue({
+      isPending: false,
+      data: {
+        result: {
+          personality_type: 'Analyst',
+          personality_type_label: 'Analyst',
+          trait_scores: { O: 50, C: 50, E: 50, A: 50, N: 50 },
+          career_recommendations: [{ career: 'Engineer', score: 80 }],
+          meta: { generated_at: 't1', scoreValidity: 'valid', scoreSource: 'deterministic' },
+          narrative_summary: 'Summary',
+          confidence_band: 'high',
+          confidence_score: 80,
+          confidence_gap: 1,
+          cognitive_scores: {},
+          behavior_vector: {},
+          scores: {
+            bigFive: {
+              openness: { score: 50, source: 'deterministic' },
+              conscientiousness: { score: 50, source: 'deterministic' },
+              extraversion: { score: 50, source: 'deterministic' },
+              agreeableness: { score: 50, source: 'deterministic' },
+              emotionalStability: { score: 50, source: 'deterministic' },
+            },
+            riasec: { dimensions: {} },
+          },
+          career_recommendations_phase4: {
+            locked: false,
+            preliminary: false,
+            topRecommendations: [
+              {
+                careerId: 'software_engineer',
+                title: 'Software Engineer',
+                fitScore: 82,
+                confidence: 0.7,
+                fitType: 'bestFit',
+                whyThisFits: ['Problem-solving overlap.'],
+                skillGaps: { missingCriticalSkills: [] },
+              },
+            ],
+          },
+        },
+        state: { reportStatus: { status: 'ready', available: true } },
+      },
+      refetch: h.generateReport,
+    });
+    render(
+      <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <ResultPage />
+      </MemoryRouter>
+    );
+    expect(screen.getByRole('heading', { name: 'Career Intelligence' })).toBeInTheDocument();
+    expect(screen.getByText(/Software Engineer/i)).toBeInTheDocument();
   });
 });

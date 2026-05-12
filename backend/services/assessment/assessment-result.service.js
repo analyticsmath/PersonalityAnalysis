@@ -285,6 +285,19 @@ const persistAssessmentResult = async ({
     scoreMeta: scoringOutput?.scoreMeta || {},
     evidence: Array.isArray(scoringOutput?.evidence) ? scoringOutput.evidence.slice(0, 500) : [],
     warnings: Array.isArray(scoringOutput?.warnings) ? scoringOutput.warnings : [],
+    careerRecommendations: careerOutput.careerIntelligence
+      ? {
+          version: careerOutput.careerIntelligence.careerProfileVersion,
+          generatedAt: careerOutput.careerIntelligence.generatedAt,
+          locked: careerOutput.careerIntelligence.locked,
+          preliminary: careerOutput.careerIntelligence.preliminary,
+          recommendations: careerOutput.careerIntelligence.recommendations,
+          topRecommendations: careerOutput.careerIntelligence.topRecommendations,
+          skillGapSummary: careerOutput.careerIntelligence.skillGapSummary,
+          roadmaps: careerOutput.careerIntelligence.roadmaps,
+          warnings: careerOutput.careerIntelligence.warnings,
+        }
+      : undefined,
     schemaVersion: normalizeResultSchemaVersion(),
     completedAt: session.completedAt || now,
   };
@@ -355,18 +368,6 @@ const generateAssessmentResult = async ({ session }) => {
     behaviorVector,
   });
 
-  const careerOutput = await recommendCareers({
-    cvData: session.cvData || {},
-    aiProfile,
-    personalityProfile,
-    profileVector: session.profileVector || {},
-    traitVectorOutput,
-    cognitiveScores,
-    behaviorVector,
-  });
-
-  const careerContrast = buildCareerContrast(careerOutput.recommendations || []);
-
   const scoringOutput = runAssessmentScoring({
     session,
     unifiedAnswers,
@@ -376,6 +377,20 @@ const generateAssessmentResult = async ({ session }) => {
     traitBehaviorVector: traitVectorOutput.behaviorVector || {},
     cognitiveVector: traitVectorOutput.cognitiveVector || {},
   });
+
+  const careerOutput = await recommendCareers({
+    cvData: session.cvData || {},
+    aiProfile,
+    personalityProfile,
+    profileVector: session.profileVector || {},
+    traitVectorOutput,
+    cognitiveScores,
+    behaviorVector,
+    scoringOutput,
+    userProfile: session.userProfile && typeof session.userProfile === 'object' ? session.userProfile : {},
+  });
+
+  const careerContrast = buildCareerContrast(careerOutput.recommendations || []);
 
   const narrativeOutput = await generateResultNarrative({
     aiProfile,
@@ -388,6 +403,7 @@ const generateAssessmentResult = async ({ session }) => {
     phase3ScoreMeta: scoringOutput.scoreMeta,
     phase3EvidencePreview: (scoringOutput.evidence || []).slice(0, 24),
     phase3Warnings: scoringOutput.warnings || [],
+    phase4CareerIntelligence: careerOutput.careerIntelligence || null,
   });
 
   const consistencyOutput = computeConsistencyScore({ traitVectorOutput });

@@ -162,6 +162,10 @@ const assessmentResultSchema = new mongoose.Schema(
       type: [String],
       default: undefined,
     },
+    careerRecommendations: {
+      type: mongoose.Schema.Types.Mixed,
+      default: undefined,
+    },
     schemaVersion: { type: String, default: RESULT_SCHEMA_VERSION, trim: true },
     legacyAssessmentId: {
       type: mongoose.Schema.Types.ObjectId,
