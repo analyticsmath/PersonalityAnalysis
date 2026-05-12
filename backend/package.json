@@ -8,7 +8,7 @@
     "test": "node --test tests/*.test.js",
     "lint": "eslint . --ext .js",
     "typecheck": "echo \"No TypeScript files in backend\"",
-    "check:syntax": "find . -path './node_modules' -prune -o -name '*.js' -print | xargs -n1 node --check",
+    "check:syntax": "node scripts/check-syntax.js",
     "seed:questions": "node scripts/seedQuestions.js",
     "migrate:assessment-results": "node scripts/migrateAssessmentsToAssessmentResults.js",
     "test:assessment-flow": "node scripts/testAssessmentFlow.js",

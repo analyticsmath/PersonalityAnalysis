@@ -132,14 +132,17 @@ const AssessmentFlowResultPage = () => {
   }, [sessionId]);
 
   useEffect(() => {
-    if (!chatFeedRef.current) {
+    const node = chatFeedRef.current;
+    if (!node) {
       return;
     }
 
-    chatFeedRef.current.scrollTo({
-      top: chatFeedRef.current.scrollHeight,
-      behavior: 'smooth',
-    });
+    const top = node.scrollHeight;
+    if (typeof node.scrollTo === 'function') {
+      node.scrollTo({ top, behavior: 'smooth' });
+    } else {
+      node.scrollTop = top;
+    }
   }, [chatHistory, chatTyping]);
 
   const traits = useMemo(() => normalizeTraits(result?.trait_scores || {}), [result?.trait_scores]);

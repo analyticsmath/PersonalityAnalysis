@@ -131,6 +131,23 @@ const inferCurrentScore = ({ question, likertValue, scaleValue, optionId, textVa
   return 50;
 };
 
+/** Same gate as the adaptive question polling effect (exported for tests). */
+export function shouldScheduleAdaptiveQuestionPoll({
+  questionQueryWaiting,
+  question,
+  sessionId,
+  shouldPoll,
+  isMutating,
+}) {
+  return Boolean(
+    questionQueryWaiting &&
+      !question &&
+      Boolean(sessionId) &&
+      shouldPoll &&
+      !isMutating
+  );
+}
+
 const AdaptiveAssessmentTestPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -188,7 +205,13 @@ const AdaptiveAssessmentTestPage = () => {
 
   const stage = normalizeStage(assessmentMachine.stage || questionQuery.data?.session?.stage || 'questionnaire');
   const question = questionQuery.data?.question || null;
-  const waitingForNextQuestion = Boolean(questionQuery.data?.waitingForNextQuestion) && !question && assessmentMachine.shouldPoll && !assessmentMachine.isMutating;
+  const waitingForNextQuestion = shouldScheduleAdaptiveQuestionPoll({
+    questionQueryWaiting: Boolean(questionQuery.data?.waitingForNextQuestion),
+    question,
+    sessionId,
+    shouldPoll: assessmentMachine.shouldPoll,
+    isMutating: assessmentMachine.isMutating,
+  });
 
   useEffect(() => {
     questionRef.current = question;
@@ -225,7 +248,7 @@ const AdaptiveAssessmentTestPage = () => {
   }, [auth.userId, localState.inputMode, localState.userProfile, localState.userRole, questionQuery.data, sessionId]);
 
   useEffect(() => {
-    if (!waitingForNextQuestion || !sessionId || !assessmentMachine.shouldPoll || assessmentMachine.isMutating) {
+    if (!waitingForNextQuestion) {
       return () => {};
     }
 
@@ -236,7 +259,7 @@ const AdaptiveAssessmentTestPage = () => {
     return () => {
       window.clearInterval(timer);
     };
-  }, [assessmentMachine.isMutating, assessmentMachine.shouldPoll, refetchQuestion, sessionId, waitingForNextQuestion]);
+  }, [refetchQuestion, waitingForNextQuestion]);
 
   useEffect(() => {
     setLikertValue(0);
@@ -814,6 +837,18 @@ const AdaptiveAssessmentTestPage = () => {
             </p>
           </div>
           <div className="assessment-header-actions">
+            <Button
+              variant="ghost"
+              onClick={handleRecoverSession}
+              disabled={assessmentMachine.isMutating || recoveryState === 'recovering'}
+              data-testid="assessment-recover-session"
+              aria-label="Recover assessment session"
+              data-avatar-action="recover-session"
+              data-avatar-target="question-card"
+              data-avatar-hint="Sync session state from the server if progress looks out of date."
+            >
+              Recover session
+            </Button>
             <Button
               variant="ghost"
               onClick={handleSaveProgress}

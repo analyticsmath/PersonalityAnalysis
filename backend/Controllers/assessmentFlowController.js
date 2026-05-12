@@ -33,7 +33,7 @@ const { explainWhyNotCareer } = require('../services/assessment/career-recommend
 const { generateAssessmentPdfBuffer } = require('../services/assessment/pdf-report.service');
 const { streamProgress } = require('../services/assessment/progress-stream.service');
 const { interpretTextAnswer } = require('../services/response-parser.service');
-const { CANONICAL_STAGES, normalizeStage, toSessionState } = require('../services/assessment/assessment-state-machine.service');
+const { normalizeStage, toSessionState } = require('../services/assessment/assessment-state-machine.service');
 const {
   ensureJsonObjectPayload,
   extractSubmittedSessionId,
@@ -1235,6 +1235,12 @@ const answerAdaptiveQuestion = async (req, res, next) => {
       });
 
       session.answers = upsertResult.answers;
+      if (idempotencyKey) {
+        session.adaptiveMetrics = {
+          ...(session.adaptiveMetrics || {}),
+          lastIdempotencyKey: idempotencyKey,
+        };
+      }
 
       const previousTelemetry = Array.isArray(session.adaptiveMetrics?.answerTelemetry)
         ? session.adaptiveMetrics.answerTelemetry
@@ -1580,6 +1586,12 @@ const answerAdaptiveQuestion = async (req, res, next) => {
 
         if (upsertResult.inserted) {
           session.currentBehaviorIndex += 1;
+        }
+        if (idempotencyKey) {
+          session.adaptiveMetrics = {
+            ...(session.adaptiveMetrics || {}),
+            lastIdempotencyKey: idempotencyKey,
+          };
         }
       }
 
