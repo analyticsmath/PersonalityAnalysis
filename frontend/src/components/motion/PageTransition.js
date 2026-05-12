@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 const toNamespace = (pathname = '') => {
   if (pathname.startsWith('/dashboard')) return 'dashboard';
   if (pathname.startsWith('/assessment/test')) return 'assessment';
+  if (pathname.startsWith('/legacy/assessment-static')) return 'assessment';
   if (pathname.startsWith('/assessment/behavior')) return 'assessment';
   if (pathname.startsWith('/assessment/start')) return 'assessment';
   if (pathname.startsWith('/assessment/result')) return 'result';

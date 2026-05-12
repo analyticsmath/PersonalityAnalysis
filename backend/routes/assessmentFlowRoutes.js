@@ -1,3 +1,10 @@
+/**
+ * Assessment API — canonical mount at `/api/assessment`.
+ *
+ * Core adaptive flow: cv/upload, session/active, start, :id, question, answer, result, chat, pdf, events.
+ * Legacy static questionnaire (compatibility): `/legacy/session/*`, `/legacy/save`.
+ * Dashboard/report/analytics helpers live here so one auth gate applies; see docs/architecture/assessment-api-contract.md.
+ */
 const express = require('express');
 const multer = require('multer');
 const authMiddleware = require('../middleware/authMiddleware');

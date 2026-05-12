@@ -334,6 +334,8 @@ test('getActiveFlowSession exposes normalized state for the authenticated user o
     assert.ok(state.scoreStatus);
     assert.ok(state.reportStatus);
     assert.equal(String(res.payload?.data?.session?.sessionId || ''), String(session._id));
+    assert.ok(res.payload?.meta?.requestId);
+    assert.ok(res.payload?.meta?.timestamp);
   } finally {
     restoreSessionService();
     restoreAssessmentFlowController();

@@ -41,6 +41,7 @@ import {
   hasResumableAssessmentDraft,
   readAssessmentDraft,
 } from '../../utils/assessmentSessionStorage';
+import { readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
 import { getPersonalityProfile } from '../../utils/personalityProfiles';
 import { normalizeTraits, TRAIT_META, TRAIT_ORDER } from '../../utils/traits';
 import TraitRadarChart from '../../components/charts/TraitRadarChart';
@@ -341,8 +342,10 @@ const Dashboard = () => {
 
   const hasLocalResume = hasResumableAssessmentDraft(auth.userId);
   const localDraft = readAssessmentDraft(auth.userId);
+  const flowState = useMemo(() => readAssessmentFlowState(auth.userId), [auth.userId]);
+  const hasFlowLocalResume = Boolean(String(flowState?.sessionId || '').trim());
   const hasServerResume = Boolean(activeFlowSessionQuery.data?.session?.sessionId);
-  const hasResume = hasServerResume || hasLocalResume;
+  const hasResume = hasServerResume || hasLocalResume || hasFlowLocalResume;
 
   const dominantTraitExplanation =
     reportQuery.data?.insightEngine?.dominantTraitExplanation ||
@@ -573,13 +576,34 @@ const Dashboard = () => {
       return;
     }
 
+    const localFlow = readAssessmentFlowState(auth.userId);
+    const flowSessionId = String(localFlow?.sessionId || '').trim();
+    const flowStage = String(localFlow?.stage || '').toLowerCase();
+
+    if (flowSessionId) {
+      if (flowStage === 'questionnaire') {
+        navigate(`/assessment/test?session=${flowSessionId}`);
+        return;
+      }
+      if (flowStage === 'behavior') {
+        navigate(`/assessment/behavior?session=${flowSessionId}`);
+        return;
+      }
+      if (flowStage === 'result') {
+        navigate(`/assessment/result?session=${flowSessionId}`);
+        return;
+      }
+      navigate('/assessment/start');
+      return;
+    }
+
     if (localDraft?.sessionId) {
-      navigate(`/assessment?mode=resume&session=${localDraft.sessionId}`);
+      navigate('/legacy/assessment-static?mode=resume');
       return;
     }
 
     navigate('/assessment/start');
-  }, [activeFlowSessionQuery.data?.session, localDraft?.sessionId, navigate]);
+  }, [activeFlowSessionQuery.data?.session, auth.userId, localDraft?.sessionId, navigate]);
 
   const handleSearchSubmit = useCallback(
     (event) => {

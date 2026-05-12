@@ -1,6 +1,10 @@
 import client from './client';
 import { API_URL } from '../config/env';
 
+/**
+ * Canonical adaptive assessment API client (`/api/assessment/*`).
+ */
+
 const unwrap = (response) => response?.data?.data || {};
 
 const getToken = () => {

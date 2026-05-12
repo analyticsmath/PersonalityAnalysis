@@ -1719,6 +1719,8 @@ const getActiveFlowSession = async (req, res, next) => {
           behaviorPrompt: null,
         },
         message: 'No active assessment flow session found',
+        meta: true,
+        req,
       });
     }
 
@@ -1730,6 +1732,8 @@ const getActiveFlowSession = async (req, res, next) => {
         state: toSessionState({ session: toPublicSession(session), question: toPublicQuestion(session), behaviorPrompt: toPublicBehaviorPrompt(session) }),
       },
       message: 'Active assessment flow session fetched successfully',
+      meta: true,
+      req,
     });
   } catch (error) {
     return next(error);
@@ -1751,6 +1755,8 @@ const getFlowSessionById = async (req, res, next) => {
         state: toSessionState({ session: toPublicSession(session), question: toPublicQuestion(session), behaviorPrompt: toPublicBehaviorPrompt(session) }),
       },
       message: 'Assessment flow session fetched successfully',
+      meta: true,
+      req,
     });
   } catch (error) {
     return next(error);

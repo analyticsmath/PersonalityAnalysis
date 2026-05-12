@@ -1,3 +1,9 @@
+# Personality Accessor — Frontend
+
+This UI is a **Vite + React** app. Adaptive assessment calls the backend only under **`/api/assessment/*`** (see repo `docs/architecture/assessment-api-contract.md`).
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

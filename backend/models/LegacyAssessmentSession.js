@@ -1,3 +1,7 @@
+/**
+ * Legacy Mongo model for pre-adaptive static questionnaire sessions (collection: assessmentsessions).
+ * Active CV-driven flow uses AssessmentSession (assessmentflowsessions). New code must not write here.
+ */
 const mongoose = require('mongoose');
 
 const answerSchema = new mongoose.Schema(

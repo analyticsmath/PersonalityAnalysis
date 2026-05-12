@@ -6,12 +6,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
 import DashboardPage from './pages/Dashboard';
-import AssessmentPage from './pages/Assessment';
 import ResultPage from './pages/Result';
 import StartAssessmentFlowPage from './pages/AssessmentFlow/StartPage';
 import AdaptiveAssessmentTestPage from './pages/AssessmentFlow/TestPage';
 import BehaviorAssessmentPage from './pages/AssessmentFlow/BehaviorPage';
 import AssessmentFlowResultPage from './pages/AssessmentFlow/ResultPage';
+import LegacyStaticAssessmentPage from './pages/Legacy/LegacyStaticAssessmentPage';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import AnimatedBackground from './components/ui/AnimatedBackground';
 import PageTransition from './components/motion/PageTransition';
@@ -24,6 +24,13 @@ gsap.registerPlugin(ScrollTrigger);
 const HomeRedirect = () => {
   const auth = useAuth();
   return <Navigate to={auth.isAuthenticated ? '/dashboard' : '/login'} replace />;
+};
+
+/** Preserves query string when normalizing /assessment → /assessment/start (e.g. deep links). */
+const AssessmentRootRedirect = () => {
+  const location = useLocation();
+  const target = `/assessment/start${location.search || ''}`;
+  return <Navigate to={target} replace />;
 };
 
 const AppRoutes = () => {
@@ -128,7 +135,15 @@ const AppRoutes = () => {
               path="/assessment"
               element={withTransition(
                 <ProtectedRoute>
-                  <Navigate to="/assessment/start" replace />
+                  <AssessmentRootRedirect />
+                </ProtectedRoute>
+              )}
+            />
+            <Route
+              path="/legacy/assessment-static"
+              element={withTransition(
+                <ProtectedRoute>
+                  <LegacyStaticAssessmentPage />
                 </ProtectedRoute>
               )}
             />

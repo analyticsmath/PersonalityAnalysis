@@ -20,7 +20,8 @@ export const detectPageKey = (pathname = '') => {
   if (pathname.startsWith('/signup')) return 'signup';
   if (pathname.startsWith('/dashboard')) return 'dashboard';
   if (pathname.startsWith('/assessment/start')) return 'start';
-  if (pathname.startsWith('/assessment/test') || pathname.startsWith('/assessment?')) return 'question';
+  if (pathname.startsWith('/assessment/test')) return 'question';
+  if (pathname.startsWith('/legacy/assessment-static')) return 'question';
   if (pathname.startsWith('/assessment/behavior')) return 'behavior';
   if (pathname.startsWith('/assessment/result')) return 'results';
   if (pathname.startsWith('/result/')) return 'report';

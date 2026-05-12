@@ -1,5 +1,10 @@
 import client from './client';
 
+/**
+ * Legacy static questionnaire + dashboard/report helpers (Phase 2).
+ * All paths hit `/api/assessment/*` — see assessmentFlowRoutes (legacy namespace + history/report/analytics).
+ */
+
 const unwrap = (response) => response?.data?.data || {};
 const AI_REPORT_TIMEOUT_MS = 120000;
 

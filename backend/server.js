@@ -53,6 +53,8 @@ const createApp = () => {
 
   app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
+  // API surface: canonical adaptive + dashboard lives under /api/assessment (see docs/architecture/assessment-api-contract.md).
+  // Deprecated mounts below keep HTTP + Deprecation headers for older integrations.
   app.use('/api/auth', require('./routes/googleAuth.routes'));
   app.use('/api/auth', require('./routes/authRoutes'));
   app.use('/api/questions', require('./routes/questionRoutes'));
