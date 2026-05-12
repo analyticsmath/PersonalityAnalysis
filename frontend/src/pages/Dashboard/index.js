@@ -36,6 +36,7 @@ import {
   useAssessmentReportQuery,
   useTraitTrendsQuery,
 } from '../../hooks/useAssessment';
+import { usePersonalAnalyticsOverviewQuery } from '../../hooks/usePersonalAnalytics';
 import { useActiveFlowSessionQuery } from '../../hooks/useAssessmentFlow';
 import {
   hasResumableAssessmentDraft,
@@ -300,6 +301,7 @@ const Dashboard = () => {
   const historyQuery = useAssessmentHistoryQuery(auth.userId, Boolean(auth.userId));
   const activeFlowSessionQuery = useActiveFlowSessionQuery(Boolean(auth.userId));
   const trendsQuery = useTraitTrendsQuery(auth.userId, Boolean(auth.userId));
+  const personalOverviewQuery = usePersonalAnalyticsOverviewQuery(Boolean(auth.userId));
 
   const assessments = useMemo(() => historyQuery.data || [], [historyQuery.data]);
   const latestAssessment = assessments[0] || null;
@@ -1007,6 +1009,55 @@ const Dashboard = () => {
                         Open Full AI Report
                       </Link>
                     )}
+                  </>
+                )}
+              </Card>
+            </motion.div>
+
+            <motion.div
+              id="personal-analytics-preview"
+              className="intel-grid__ai"
+              variants={cardVariants}
+              data-avatar-section="dashboard-analytics-preview"
+            >
+              <Card
+                title="Personal intelligence preview"
+                subtitle="Career readiness indicator and history — opens the full analytics dashboard"
+                animated={false}
+              >
+                {personalOverviewQuery.isPending ? (
+                  <div className="skeleton-stack">
+                    <Skeleton height="72px" />
+                    <Skeleton width="55%" />
+                  </div>
+                ) : personalOverviewQuery.isError ? (
+                  <p className="ui-message ui-message--error">{personalOverviewQuery.error.message}</p>
+                ) : !personalOverviewQuery.data?.assessmentCount ? (
+                  <p className="empty-state">
+                    Complete an assessment to unlock the personal intelligence dashboard — no simulated metrics are
+                    shown here.
+                  </p>
+                ) : (
+                  <>
+                    <p className="ui-message ui-message--neutral">
+                      Assessments: <strong>{personalOverviewQuery.data.assessmentCount}</strong> · Career readiness
+                      indicator:{' '}
+                      <strong>
+                        {personalOverviewQuery.data.careerReadiness?.careerReadinessScore != null
+                          ? `${personalOverviewQuery.data.careerReadiness.careerReadinessScore}`
+                          : '—'}
+                      </strong>{' '}
+                      · Latest confidence:{' '}
+                      <strong>
+                        {personalOverviewQuery.data.latestConfidence != null
+                          ? `${Math.round(Number(personalOverviewQuery.data.latestConfidence) * 100)}%`
+                          : '—'}
+                      </strong>
+                    </p>
+                    <p className="intel-ai-card__summary">{personalOverviewQuery.data.nextRecommendedAction}</p>
+                    <Link className="history-item__link" to="/analytics">
+                      Open full analytics dashboard
+                    </Link>
                   </>
                 )}
               </Card>

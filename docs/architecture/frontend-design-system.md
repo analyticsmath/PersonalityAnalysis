@@ -51,3 +51,21 @@ Global styles are loaded from `frontend/src/main.jsx`:
 - `styles/phase6-ui.css`
 
 Optional JS barrel: `import { tokens, designTokens } from './styles/theme';`
+
+## Phase 7 analytics modules (`frontend/src/components/analytics/`)
+
+| Component | Role |
+|-----------|------|
+| `PersonalIntelligenceOverview` | Overview metrics + honest empty/error from `/assessment/analytics/overview`. |
+| `AssessmentHistoryList` | History rows with validity + links to `/result/:assessmentId`. |
+| `TraitTrendChart` | Big Five trend table plus `ChartSummary`; shows insufficient-history when the API has fewer than two eligible assessments. |
+| `CareerReadinessCard` | Career readiness **indicator** (explicitly not hireability). |
+| `SkillProgressPanel` | Matched / missing / recommended skills and optional real deltas. |
+| `RoadmapProgressPanel` | Roadmap checkbox completion via roadmap progress API. |
+| `InsightTimeline` | Chronological intelligence events. |
+| `ReportHistoryPanel` | Per-result report / AI / validity flags. |
+| `AnalyticsEmptyState` | Wrapper around shared `EmptyState`. |
+
+**Routing:** `/analytics` renders `pages/AnalyticsPage.jsx`, route-level lazy loaded in `App.js` with a `Suspense` fallback (`LoadingState`).
+
+**Headings:** the analytics dashboard uses a single page `h1`; inner sections use `h2` (avoid nested `SectionHeader` default `h1`).

@@ -1,18 +1,11 @@
-import React, { useEffect } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
-import DashboardPage from './pages/Dashboard';
-import ResultPage from './pages/Result';
-import StartAssessmentFlowPage from './pages/AssessmentFlow/StartPage';
-import AdaptiveAssessmentTestPage from './pages/AssessmentFlow/TestPage';
-import BehaviorAssessmentPage from './pages/AssessmentFlow/BehaviorPage';
-import AssessmentFlowResultPage from './pages/AssessmentFlow/ResultPage';
-import CareerExplorerPage from './pages/AssessmentFlow/CareerExplorerPage';
-import LegacyStaticAssessmentPage from './pages/Legacy/LegacyStaticAssessmentPage';
+import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import AnimatedBackground from './components/ui/AnimatedBackground';
 import PageTransition from './components/motion/PageTransition';
@@ -20,6 +13,26 @@ import { useAuth } from './hooks/useAuth';
 import AvatarController from './components/avatar/AvatarController';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
 import { getPrefersReducedMotion } from './utils/motion';
+
+const DashboardPage = lazy(() => import('./pages/Dashboard'));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
+const ResultPage = lazy(() => import('./pages/Result'));
+const StartAssessmentFlowPage = lazy(() => import('./pages/AssessmentFlow/StartPage'));
+const AdaptiveAssessmentTestPage = lazy(() => import('./pages/AssessmentFlow/TestPage'));
+const BehaviorAssessmentPage = lazy(() => import('./pages/AssessmentFlow/BehaviorPage'));
+const AssessmentFlowResultPage = lazy(() => import('./pages/AssessmentFlow/ResultPage'));
+const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplorerPage'));
+const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
+
+const SuspensePageFallback = () => (
+  <main className="app-page">
+    <div className="page-shell">
+      <LoadingState message="Loading page" />
+    </div>
+  </main>
+);
+
+const withSuspense = (node) => <Suspense fallback={<SuspensePageFallback />}>{node}</Suspense>;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -135,9 +148,21 @@ const AppRoutes = () => {
             <Route
               path="/dashboard"
               element={withTransition(
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                )
+              )}
+            />
+            <Route
+              path="/analytics"
+              element={withTransition(
+                withSuspense(
+                  <ProtectedRoute>
+                    <AnalyticsPage />
+                  </ProtectedRoute>
+                )
               )}
             />
             <Route
@@ -151,49 +176,61 @@ const AppRoutes = () => {
             <Route
               path="/legacy/assessment-static"
               element={withTransition(
-                <ProtectedRoute>
-                  <LegacyStaticAssessmentPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <LegacyStaticAssessmentPage />
+                  </ProtectedRoute>
+                )
               )}
             />
             <Route
               path="/assessment/start"
               element={withTransition(
-                <ProtectedRoute>
-                  <StartAssessmentFlowPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <StartAssessmentFlowPage />
+                  </ProtectedRoute>
+                )
               )}
             />
             <Route
               path="/assessment/test"
               element={withTransition(
-                <ProtectedRoute>
-                  <AdaptiveAssessmentTestPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <AdaptiveAssessmentTestPage />
+                  </ProtectedRoute>
+                )
               )}
             />
             <Route
               path="/assessment/behavior"
               element={withTransition(
-                <ProtectedRoute>
-                  <BehaviorAssessmentPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <BehaviorAssessmentPage />
+                  </ProtectedRoute>
+                )
               )}
             />
             <Route
               path="/assessment/career"
               element={withTransition(
-                <ProtectedRoute>
-                  <CareerExplorerPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <CareerExplorerPage />
+                  </ProtectedRoute>
+                )
               )}
             />
             <Route
               path="/assessment/result"
               element={withTransition(
-                <ProtectedRoute>
-                  <AssessmentFlowResultPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <AssessmentFlowResultPage />
+                  </ProtectedRoute>
+                )
               )}
             />
             <Route
@@ -215,9 +252,11 @@ const AppRoutes = () => {
             <Route
               path="/result/:assessmentId"
               element={withTransition(
-                <ProtectedRoute>
-                  <ResultPage />
-                </ProtectedRoute>
+                withSuspense(
+                  <ProtectedRoute>
+                    <ResultPage />
+                  </ProtectedRoute>
+                )
               )}
             />
 

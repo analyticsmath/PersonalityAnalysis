@@ -71,8 +71,17 @@ These are first-class for the product but are not “core session” verbs:
 | GET | `/api/assessment/report/:assessmentId` | Legacy-shaped report fetch |
 | POST | `/api/assessment/report/:assessmentId/ai` | AI narrative report |
 | GET | `/api/assessment/dashboard/:userId` | Dashboard snapshot |
-| GET | `/api/assessment/analytics/trends/:userId` | Trait trends |
+| GET | `/api/assessment/analytics/trends/:userId` | Trait trends (legacy path; requires `:userId` match token) |
 | GET | `/api/assessment/analytics/compare` | Compare two assessments |
+| GET | `/api/assessment/analytics/overview` | Phase 7 personal analytics overview (current user) |
+| GET | `/api/assessment/analytics/history` | Phase 7 assessment history rows |
+| GET | `/api/assessment/analytics/trends` | Phase 7 multi-dimensional trends (requires ≥2 eligible results for series) |
+| GET | `/api/assessment/analytics/career-readiness` | Career readiness **indicator** (not hireability) |
+| GET | `/api/assessment/analytics/skill-progress` | Skill gap snapshot + honest deltas when comparable |
+| GET | `/api/assessment/analytics/timeline` | Insight timeline from stored events only |
+| GET | `/api/assessment/analytics/report-history` | Report / AI presence per result |
+| GET | `/api/assessment/analytics/roadmap-progress/:resultId/:careerId` | Roadmap completion keys for one career on a result |
+| POST | `/api/assessment/analytics/roadmap-progress/:resultId/:careerId` | Replace completed roadmap action keys (body: `{ completedActionKeys: string[] }`) |
 
 ## Legacy routes on canonical router (LEGACY)
 

@@ -24,6 +24,10 @@ Persisted scoring + narrative payload for a completed adaptive run.
 - **Phase 4 fields:** `careerRecommendations` (Mixed) — deterministic occupation intelligence (`version`, `generatedAt`, `locked`, `preliminary`, bucketed `recommendations`, `topRecommendations`, `skillGapSummary`, `roadmaps`, orchestrator `warnings`). Omitted on legacy documents; the API can recompute on read when Phase 3 scores exist.
 - **Legacy compatibility:** `personality.traits` continues to expose O/C/E/A/N for older clients; summaries add `meta.scoreSource` of `legacy_unverified` when Phase 3 metadata was never persisted.
 
+### `CareerRoadmapProgress` (`backend/models/CareerRoadmapProgress.js`, Phase 7)
+
+Optional per-user completion state for deterministic roadmap actions on a specific `AssessmentResult` + `careerId` (taxonomy slug). Keys are stable indices (`careerId|stageIndex|actionIndex`) derived from stored `careerRecommendations.roadmaps[].timeline[].actions`. Unique index on `{ userId, resultId, careerId }`.
+
 ### `User` (`backend/models/User.js`)
 
 Authentication and cross-session preferences; assessment-specific counters may live here (e.g. asked questions).

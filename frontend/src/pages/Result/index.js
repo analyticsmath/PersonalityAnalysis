@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -7,7 +7,6 @@ import FadeIn from '../../components/motion/FadeIn';
 import TraitRadarChart from '../../components/charts/TraitRadarChart';
 import TraitBarChart from '../../components/charts/TraitBarChart';
 import TraitDeltaChart from '../../components/charts/TraitDeltaChart';
-import TraitSphere from '../../components/3d/TraitSphere';
 import {
   useAssessmentComparisonQuery,
   useAssessmentHistoryQuery,
@@ -19,6 +18,8 @@ import mapTraitsTo3DData from '../../utils/traitMapper';
 import { getPersonalityProfile } from '../../utils/personalityProfiles';
 import { getDominantTrait, normalizeTraits } from '../../utils/traits';
 import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEvents';
+
+const TraitSphereLazy = lazy(() => import('../../components/3d/TraitSphere'));
 
 const formatDate = (value) => {
   if (!value) {
@@ -551,7 +552,9 @@ const ResultPage = () => {
             subtitle="Interactive OCEAN trait graph with orbit and zoom"
           >
             {canRender3D ? (
-              <TraitSphere data={threeDPayload} />
+              <Suspense fallback={<Skeleton height="280px" aria-label="Loading 3D visualization" />}>
+                <TraitSphereLazy data={threeDPayload} />
+              </Suspense>
             ) : (
               <>
                 <p className="empty-state">

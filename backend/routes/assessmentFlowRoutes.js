@@ -37,6 +37,17 @@ const {
   getAnalyticsTrends,
   getAssessmentComparison,
 } = require('../Controllers/analyticsController');
+const {
+  getOverview: getPersonalAnalyticsOverview,
+  getHistory: getPersonalAnalyticsHistory,
+  getTrends: getPersonalTraitTrends,
+  getCareerReadiness: getPersonalCareerReadiness,
+  getSkillProgress: getPersonalSkillProgress,
+  getTimeline: getPersonalInsightTimeline,
+  getReportHistory: getPersonalReportHistory,
+  getRoadmapProgress: getPersonalRoadmapProgress,
+  postRoadmapProgress: postPersonalRoadmapProgress,
+} = require('../Controllers/personalAnalyticsController');
 
 const router = express.Router();
 const upload = multer({
@@ -60,6 +71,17 @@ router.post('/report/:assessmentId/ai', generateAssessmentAiReport);
 router.get('/dashboard/:userId', getDashboardSnapshot);
 router.get('/analytics/trends/:userId', getAnalyticsTrends);
 router.get('/analytics/compare', getAssessmentComparison);
+
+/** Phase 7 — personal analytics (current user only; no :userId in path). */
+router.get('/analytics/overview', getPersonalAnalyticsOverview);
+router.get('/analytics/history', getPersonalAnalyticsHistory);
+router.get('/analytics/trends', getPersonalTraitTrends);
+router.get('/analytics/career-readiness', getPersonalCareerReadiness);
+router.get('/analytics/skill-progress', getPersonalSkillProgress);
+router.get('/analytics/timeline', getPersonalInsightTimeline);
+router.get('/analytics/report-history', getPersonalReportHistory);
+router.get('/analytics/roadmap-progress/:resultId/:careerId', getPersonalRoadmapProgress);
+router.post('/analytics/roadmap-progress/:resultId/:careerId', postPersonalRoadmapProgress);
 
 router.get('/session/active', getActiveFlowSession);
 router.get('/:id/events', streamAssessmentProgress);
