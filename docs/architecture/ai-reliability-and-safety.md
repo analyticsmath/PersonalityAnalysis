@@ -74,6 +74,16 @@ This document summarizes how the platform keeps **AI surfaces bounded**, **outpu
 
 Persisted on `AssessmentResult.analytics.aiReport.aiStatus` for dashboard reports when generated.
 
+## Frontend status badges (Phase 6)
+
+- `AiStatusBadges` (`frontend/src/components/results/AiStatusBadges.jsx`) renders **compact, user-facing** labels derived from the same `aiStatus` object:
+  - **Fallback summary** when `fallbackUsed` or `status === "fallback"`.
+  - **Preliminary insight** when `status === "skipped"`.
+  - **AI-assisted** / **AI generating** for successful / in-progress narrative paths.
+  - **AI checked** when the automated safety pipeline ran (`safetyChecked`).
+  - **Safety limited** when `errorCode` suggests moderation-style limits (heuristic on known codes).
+- **Technical detail** (prompt version, provider, latency, model, schema validated) is kept in the **native `title` tooltip** on each pill — not as noisy inline jargon.
+
 ## Privacy rules for logging
 
 - Audit events store **metadata only** (lengths, ids redacted, flags).

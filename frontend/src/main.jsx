@@ -10,6 +10,7 @@ import { AuthProvider } from './store/AuthStore';
 import { GOOGLE_CLIENT_ID } from './config/env';
 import './index.css';
 import './styles/theme.css';
+import './styles/phase6-ui.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

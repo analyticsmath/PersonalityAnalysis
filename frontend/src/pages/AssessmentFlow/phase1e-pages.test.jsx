@@ -180,11 +180,14 @@ describe('phase1e page states', () => {
   });
 
   it('result page report states render', () => {
-    const { rerender } = render(
-      <MemoryRouter>
-        <ResultPage />
+    const wrap = () => (
+      <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <React.Suspense fallback={null}>
+          <ResultPage />
+        </React.Suspense>
       </MemoryRouter>
     );
+    const { rerender } = render(wrap());
     expect(screen.getByText(/Scoring is required/i)).toBeInTheDocument();
     h.mockResultQuery.mockReturnValue({
       isPending: false,
@@ -194,11 +197,7 @@ describe('phase1e page states', () => {
       },
       refetch: h.generateReport,
     });
-    rerender(
-      <MemoryRouter>
-        <ResultPage />
-      </MemoryRouter>
-    );
+    rerender(wrap());
     expect(screen.getByText(/Your optional AI narrative may still be generating/i)).toBeInTheDocument();
     h.mockResultQuery.mockReturnValue({
       isPending: false,
@@ -208,11 +207,7 @@ describe('phase1e page states', () => {
       },
       refetch: h.generateReport,
     });
-    rerender(
-      <MemoryRouter>
-        <ResultPage />
-      </MemoryRouter>
-    );
+    rerender(wrap());
     expect(screen.getByText(/optional AI narrative step failed/i)).toBeInTheDocument();
   });
 
@@ -237,22 +232,17 @@ describe('phase1e page states', () => {
       },
       refetch: h.generateReport,
     });
-    const { rerender } = render(
-      <MemoryRouter>
-        <ResultPage />
+    const wrap = () => (
+      <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <React.Suspense fallback={null}>
+          <ResultPage />
+        </React.Suspense>
       </MemoryRouter>
     );
+    const { rerender } = render(wrap());
     expect(screen.getByText(/AI Career Intelligence Report/i)).toBeInTheDocument();
-    rerender(
-      <MemoryRouter>
-        <ResultPage />
-      </MemoryRouter>
-    );
-    rerender(
-      <MemoryRouter>
-        <ResultPage />
-      </MemoryRouter>
-    );
+    rerender(wrap());
+    rerender(wrap());
     expect(h.generateReport).not.toHaveBeenCalled();
   });
 
@@ -304,10 +294,12 @@ describe('phase1e page states', () => {
     });
     render(
       <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <React.Suspense fallback={null}>
         <ResultPage />
+        </React.Suspense>
       </MemoryRouter>
     );
     expect(screen.getByRole('heading', { name: 'Career Intelligence' })).toBeInTheDocument();
-    expect(screen.getByText(/Software Engineer/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Software Engineer/i).length).toBeGreaterThanOrEqual(1);
   });
 });

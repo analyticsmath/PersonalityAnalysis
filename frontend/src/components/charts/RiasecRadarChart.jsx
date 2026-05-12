@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useId, useMemo } from 'react';
+import { useReducedMotion } from 'framer-motion';
+import ChartSummary from '../a11y/ChartSummary';
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -20,6 +22,8 @@ const ORDER = [
 ];
 
 const RiasecRadarChart = ({ riasec = {}, scoreMeta = null, height = 300 }) => {
+  const summaryId = useId();
+  const prefersReducedMotion = useReducedMotion();
   const dims = riasec?.dimensions && typeof riasec.dimensions === 'object' ? riasec.dimensions : {};
   const data = useMemo(
     () =>
@@ -28,6 +32,11 @@ const RiasecRadarChart = ({ riasec = {}, scoreMeta = null, height = 300 }) => {
         score: Math.max(0, Math.min(100, Math.round(Number(dims[key]?.score ?? 0)))),
       })),
     [dims]
+  );
+
+  const summaryLines = useMemo(
+    () => data.map((row) => `${row.trait} interest near ${row.score} percent`),
+    [data]
   );
 
   const hasModel = riasec && typeof riasec === 'object' && Object.keys(dims).length > 0;
@@ -49,7 +58,8 @@ const RiasecRadarChart = ({ riasec = {}, scoreMeta = null, height = 300 }) => {
   const preliminary = Boolean(riasec.hollandCodePreliminary);
 
   return (
-    <div className="chart-shell" aria-label="RIASEC radar chart">
+    <div className="chart-shell" aria-label="RIASEC radar chart" aria-describedby={summaryId}>
+      <ChartSummary id={summaryId} title="RIASEC interest summary" lines={summaryLines} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
         <span style={{ fontWeight: 700 }}>Holland code: {code}</span>
         {preliminary ? (
@@ -80,7 +90,8 @@ const RiasecRadarChart = ({ riasec = {}, scoreMeta = null, height = 300 }) => {
             stroke={tokens.accent.blueGlow}
             strokeWidth={2}
             dot={{ r: 3 }}
-            isAnimationActive
+            isAnimationActive={!prefersReducedMotion}
+            animationDuration={prefersReducedMotion ? 0 : 900}
           />
         </RadarChart>
       </ResponsiveContainer>

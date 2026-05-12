@@ -19,6 +19,7 @@ import PageTransition from './components/motion/PageTransition';
 import { useAuth } from './hooks/useAuth';
 import AvatarController from './components/avatar/AvatarController';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
+import { getPrefersReducedMotion } from './utils/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,6 +84,13 @@ const AppRoutes = () => {
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll('[data-scroll-reveal]'));
     const animations = [];
+
+    if (getPrefersReducedMotion()) {
+      nodes.forEach((node) => {
+        gsap.set(node, { autoAlpha: 1, y: 0 });
+      });
+      return () => {};
+    }
 
     nodes.forEach((node, index) => {
       animations.push(

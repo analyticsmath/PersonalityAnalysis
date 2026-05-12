@@ -16,6 +16,13 @@ const flattenBuckets = (rec) => {
   ];
 };
 
+const BUCKET_LABELS = {
+  bestFits: 'Best fits',
+  stretchFits: 'Stretch fits',
+  exploratoryFits: 'Exploratory fits',
+  lowerFitButPossible: 'Development paths',
+};
+
 const CareerExplorerPanel = ({ payload = null }) => {
   const [selectedId, setSelectedId] = useState('');
 
@@ -66,7 +73,7 @@ const CareerExplorerPanel = ({ payload = null }) => {
         <div className="career-explorer-panel__groups">
           {['bestFits', 'stretchFits', 'exploratoryFits', 'lowerFitButPossible'].map((key) => (
             <div key={key} data-group={key}>
-              <h4>{key}</h4>
+              <h4>{BUCKET_LABELS[key] || key}</h4>
               <ul>
                 {(rec[key] || []).slice(0, 6).map((item) => (
                   <li key={item.careerId}>
@@ -80,12 +87,14 @@ const CareerExplorerPanel = ({ payload = null }) => {
       </Card>
 
       <Card animated={false} title="Select a career" subtitle="Inspect fit, gaps, and roadmap">
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }} role="tablist" aria-label="Career options">
           {top.map((item) => (
             <button
               type="button"
               key={item.careerId}
-              className={item.careerId === selected?.careerId ? 'is-active' : ''}
+              className={`career-pill-btn ${item.careerId === selected?.careerId ? 'is-active' : ''}`.trim()}
+              role="tab"
+              aria-selected={item.careerId === selected?.careerId}
               onClick={() => setSelectedId(item.careerId)}
             >
               {item.title}

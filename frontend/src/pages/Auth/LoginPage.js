@@ -99,9 +99,13 @@ const LoginPage = () => {
         <div data-avatar-target="login-form" data-avatar-section="login-form">
           <Card className="auth-card" title="Welcome Back" subtitle="Use your account credentials">
             <form onSubmit={handleSubmit} className="auth-form" noValidate>
-              <label className="auth-form__field">
+              <div className="auth-form__announce" role="alert" aria-live="assertive">
+                {errorMessage ? <p className="ui-message ui-message--error">{errorMessage}</p> : null}
+              </div>
+              <label className="auth-form__field" htmlFor="login-email">
                 <span>Email</span>
                 <input
+                  id="login-email"
                   type="email"
                   name="email"
                   value={form.email}
@@ -112,10 +116,11 @@ const LoginPage = () => {
                 />
               </label>
 
-              <label className="auth-form__field">
+              <label className="auth-form__field" htmlFor="login-password">
                 <span>Password</span>
                 <div className="auth-form__password-wrap">
                   <input
+                    id="login-password"
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     value={form.password}
@@ -130,17 +135,17 @@ const LoginPage = () => {
                     onClick={() => setShowPassword((prev) => !prev)}
                     data-avatar-action="toggle-password"
                     data-avatar-hint="You can toggle password visibility."
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
               </label>
 
-              {errorMessage && <p className="ui-message ui-message--error">{errorMessage}</p>}
-
               <Button
                 type="submit"
                 loading={loginMutation.isPending || googleMutation.isPending}
+                loadingLabel="Signing in…"
                 block
                 data-avatar-action="login-submit"
                 data-avatar-target="login-form"

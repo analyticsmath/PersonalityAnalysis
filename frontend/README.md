@@ -2,6 +2,8 @@
 
 This UI is a **Vite + React** app. Adaptive assessment calls the backend only under **`/api/assessment/*`** (see repo `docs/architecture/assessment-api-contract.md`).
 
+**Design system (Phase 6):** shared tokens, UI primitives, motion, and accessibility patterns are documented in `docs/architecture/frontend-design-system.md`. Global polish styles live in `src/styles/phase6-ui.css` (imported from `src/main.jsx`).
+
 ---
 
 # Getting Started with Create React App

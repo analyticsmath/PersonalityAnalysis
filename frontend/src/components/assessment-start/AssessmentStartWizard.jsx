@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { gsap } from 'gsap';
 import { FiCheckCircle } from 'react-icons/fi';
+import ProgressStepper from '../ui/ProgressStepper';
+import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion';
 import StepRole from './steps/StepRole';
 import StepCV from './steps/StepCV';
 import StepProfile from './steps/StepProfile';
@@ -14,6 +16,14 @@ const PROGRESS_STEPS = [
   { id: WIZARD_STEPS.profileType, label: 'Profile Type' },
   { id: WIZARD_STEPS.cvAnalysis, label: 'Analyze CV' },
   { id: WIZARD_STEPS.startAssessment, label: 'Start' },
+];
+
+const JOURNEY_STEPS = [
+  { id: 'cv', label: 'CV & profile' },
+  { id: 'adaptive', label: 'Adaptive questions' },
+  { id: 'ocean', label: 'Personality scoring' },
+  { id: 'career', label: 'Career intelligence' },
+  { id: 'ai', label: 'AI report' },
 ];
 
 const AssessmentStartWizard = () => {
@@ -39,10 +49,19 @@ const AssessmentStartWizard = () => {
     goToNextStep,
   } = useAssessmentWizard();
 
+  const prefersReducedMotion = usePrefersReducedMotion();
   const stepShellRef = useRef(null);
+
+  const journeyActiveIndex =
+    currentStep === WIZARD_STEPS.profileType ? 0 : currentStep === WIZARD_STEPS.cvAnalysis ? 0 : 1;
 
   useEffect(() => {
     if (!stepShellRef.current) {
+      return () => {};
+    }
+
+    if (prefersReducedMotion) {
+      gsap.set(stepShellRef.current, { autoAlpha: 1, y: 0, scale: 1 });
       return () => {};
     }
 
@@ -53,7 +72,7 @@ const AssessmentStartWizard = () => {
     );
 
     return () => {};
-  }, [currentStep]);
+  }, [currentStep, prefersReducedMotion]);
 
   const progressPercent = useMemo(() => {
     const maxIndex = PROGRESS_STEPS.length - 1;
@@ -141,6 +160,21 @@ const AssessmentStartWizard = () => {
       data-avatar-label="Assessment Setup"
     >
       <div className="page-shell assessment-wizard-shell">
+        <header className="assessment-wizard-intro">
+          <p className="page-header__eyebrow">Adaptive assessment</p>
+          <h1 className="page-header__title">CV-aware personality &amp; career intelligence</h1>
+          <p className="assessment-journey-note">
+            Your CV and profile context tune adaptive questions. After you begin, deterministic scoring produces Big Five,
+            RIASEC, work values, and career signals. An optional AI narrative layers on top — it never replaces the
+            numeric engine. CV text is used only for this session&apos;s personalization; avoid pasting highly sensitive
+            secrets you would not share with an HR screening tool.
+          </p>
+        </header>
+        <ProgressStepper
+          steps={JOURNEY_STEPS}
+          activeIndex={journeyActiveIndex}
+          aria-label="Full assessment journey"
+        />
         <section
           className="assessment-wizard-progress"
           aria-label="Assessment wizard progress"

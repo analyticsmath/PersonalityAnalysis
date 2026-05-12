@@ -115,9 +115,16 @@ const SignupPage = () => {
         <div data-avatar-target="signup-form" data-avatar-section="signup-form">
           <Card className="auth-card" title="Create Account" subtitle="Get started in under a minute">
             <form onSubmit={handleSubmit} className="auth-form" noValidate>
-            <label className="auth-form__field">
+              <div className="auth-form__announce" role="alert" aria-live="assertive">
+                {errorMessage ? <p className="ui-message ui-message--error">{errorMessage}</p> : null}
+              </div>
+              <div className="auth-form__announce" role="status" aria-live="polite">
+                {successMessage ? <p className="ui-message ui-message--success">{successMessage}</p> : null}
+              </div>
+            <label className="auth-form__field" htmlFor="signup-name">
               <span>Full Name</span>
               <input
+                id="signup-name"
                 type="text"
                 name="name"
                 value={form.name}
@@ -128,9 +135,10 @@ const SignupPage = () => {
               />
             </label>
 
-            <label className="auth-form__field">
+            <label className="auth-form__field" htmlFor="signup-email">
               <span>Email</span>
               <input
+                id="signup-email"
                 type="email"
                 name="email"
                 value={form.email}
@@ -141,9 +149,10 @@ const SignupPage = () => {
               />
             </label>
 
-            <label className="auth-form__field">
+            <label className="auth-form__field" htmlFor="signup-password">
               <span>Password</span>
               <input
+                id="signup-password"
                 type="password"
                 name="password"
                 value={form.password}
@@ -154,8 +163,9 @@ const SignupPage = () => {
               />
             </label>
 
-            <label className="auth-form__check">
+            <label className="auth-form__check" htmlFor="signup-terms">
               <input
+                id="signup-terms"
                 type="checkbox"
                 name="terms"
                 checked={form.terms}
@@ -164,12 +174,10 @@ const SignupPage = () => {
               <span>I agree to the terms and conditions</span>
             </label>
 
-            {errorMessage && <p className="ui-message ui-message--error">{errorMessage}</p>}
-            {successMessage && <p className="ui-message ui-message--success">{successMessage}</p>}
-
             <Button
               type="submit"
               loading={signupMutation.isPending || googleMutation.isPending}
+              loadingLabel="Creating account…"
               block
               data-avatar-action="signup-submit"
               data-avatar-target="signup-form"

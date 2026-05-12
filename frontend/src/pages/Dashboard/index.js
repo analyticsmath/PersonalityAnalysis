@@ -66,27 +66,6 @@ const SIDEBAR_ITEMS = [
   { key: 'settings', label: 'Settings', icon: FiSettings },
 ];
 
-const MOCK_NOTIFICATIONS = [
-  {
-    id: 'daily-digest',
-    title: 'Daily digest ready',
-    detail: 'Your trait momentum summary has been refreshed.',
-    time: '2m ago',
-  },
-  {
-    id: 'trend-delta',
-    title: 'Trend alert',
-    detail: 'Conscientiousness increased by 4% since the previous run.',
-    time: '1h ago',
-  },
-  {
-    id: 'ai-report',
-    title: 'AI report available',
-    detail: 'Open the latest report to review growth recommendations.',
-    time: 'Today',
-  },
-];
-
 const AVATAR_STORAGE_PREFIX = 'dashboard-avatar';
 
 const formatDate = (value) => {
@@ -857,20 +836,15 @@ const Dashboard = () => {
                   onClick={() => setIsNotificationOpen((current) => !current)}
                 >
                   <FiBell />
-                  <span className="intel-badge-dot">3</span>
                 </button>
 
                 {isNotificationOpen && (
                   <div className="intel-popover" role="dialog" aria-label="Notifications panel">
                     <p className="intel-popover__title">Notifications</p>
                     <div className="intel-notification-list">
-                      {MOCK_NOTIFICATIONS.map((item) => (
-                        <article key={item.id} className="intel-notification-item">
-                          <h4>{item.title}</h4>
-                          <p>{item.detail}</p>
-                          <span>{item.time}</span>
-                        </article>
-                      ))}
+                      <p className="intel-popover__empty" role="status">
+                        No notifications yet. Assessment milestones and digest summaries will appear here when available.
+                      </p>
                     </div>
                   </div>
                 )}

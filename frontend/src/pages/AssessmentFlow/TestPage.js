@@ -11,6 +11,7 @@ import LoaderOverlay from '../../components/ui/LoaderOverlay';
 import QuestionRenderer from '../../components/assessment/QuestionRenderer';
 import QuestionVisualPanel from '../../components/assessment/QuestionVisualPanel';
 import TraitRadarChart from '../../components/charts/TraitRadarChart';
+import AccessibleStatus from '../../components/a11y/AccessibleStatus';
 import { useAuth } from '../../hooks/useAuth';
 import {
   useAdaptiveQuestionQuery,
@@ -919,19 +920,42 @@ const AdaptiveAssessmentTestPage = () => {
               />
 
               {showRecoveryBanner || recoveryState !== 'idle' ? (
-                <>
-                  {recoveryState === 'recovering' && <p className="ui-message ui-message--info">Recovering your assessment progress...</p>}
-                  {(showRecoveryBanner || recoveryState === 'recovered') && <p className="ui-message ui-message--success">Your assessment progress was recovered.</p>}
-                  {showRecoveryFailure && <p className="ui-message ui-message--error">We could not recover your assessment safely.</p>}
+                <div
+                  className={`recovery-banner ${showRecoveryFailure ? 'recovery-banner--error' : ''}`.trim()}
+                  role="region"
+                  aria-label="Session recovery"
+                >
+                  {recoveryState === 'recovering' && (
+                    <p className="ui-message ui-message--info">Recovering your assessment progress...</p>
+                  )}
+                  {(showRecoveryBanner || recoveryState === 'recovered') && (
+                    <p className="ui-message ui-message--success">Your assessment progress was recovered.</p>
+                  )}
                   {showRecoveryFailure && (
-                    <Button variant="ghost" size="sm" onClick={handleRecoverSession} disabled={assessmentMachine.isMutating || recoveryState === 'recovering'}>
+                    <p className="ui-message ui-message--error">We could not recover your assessment safely.</p>
+                  )}
+                  {showRecoveryFailure && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleRecoverSession}
+                      disabled={assessmentMachine.isMutating || recoveryState === 'recovering'}
+                    >
                       Retry recovery
                     </Button>
                   )}
-                </>
+                </div>
               ) : null}
-              {statusNote ? <p className="ui-message">{statusNote}</p> : null}
-              {feedback ? <p className="ui-message ui-message--error">{feedback}</p> : null}
+              {statusNote ? (
+                <AccessibleStatus politeness="polite">
+                  <p className="ui-message">{statusNote}</p>
+                </AccessibleStatus>
+              ) : null}
+              {feedback ? (
+                <AccessibleStatus politeness="assertive">
+                  <p className="ui-message ui-message--error">{feedback}</p>
+                </AccessibleStatus>
+              ) : null}
 
               <div className="question-card__actions phase3-question-actions">
                 <Button
@@ -951,6 +975,7 @@ const AdaptiveAssessmentTestPage = () => {
                 <Button
                   onClick={submitAnswer}
                   loading={assessmentMachine.isMutating}
+                  loadingLabel="Saving…"
                   disabled={!canSubmit || !assessmentMachine.canSubmitAnswer || assessmentMachine.isMutating}
                   data-avatar-action="question-next"
                   data-avatar-target="question-card"

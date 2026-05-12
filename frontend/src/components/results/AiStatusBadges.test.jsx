@@ -3,24 +3,7 @@ import { render, screen } from '@testing-library/react';
 import AiStatusBadges from './AiStatusBadges';
 
 describe('AiStatusBadges', () => {
-  it('renders schema validated badge', () => {
-    render(
-      <AiStatusBadges
-        aiStatus={{
-          status: 'ready',
-          provider: 'openai',
-          promptVersion: '2',
-          schemaValidated: true,
-          safetyChecked: true,
-          fallbackUsed: false,
-          errorCode: null,
-        }}
-      />
-    );
-    expect(screen.getByText('Schema validated')).toBeInTheDocument();
-  });
-
-  it('renders safety checked badge when safetyChecked is true', () => {
+  it('renders AI-assisted and AI checked when ready with safety', () => {
     render(
       <AiStatusBadges
         aiStatus={{
@@ -36,10 +19,31 @@ describe('AiStatusBadges', () => {
         }}
       />
     );
-    expect(screen.getByText('Safety checked')).toBeInTheDocument();
+    expect(screen.getByText('AI-assisted')).toBeInTheDocument();
+    expect(screen.getByText('AI checked')).toBeInTheDocument();
+    expect(screen.getAllByTitle(/Schema validated/i).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders fallback badge when fallbackUsed', () => {
+  it('renders AI checked when safetyChecked is true', () => {
+    render(
+      <AiStatusBadges
+        aiStatus={{
+          status: 'ready',
+          provider: 'openai',
+          promptVersion: '2',
+          schemaValidated: true,
+          safetyChecked: true,
+          fallbackUsed: false,
+          errorCode: null,
+          latencyMs: 120,
+          model: 'gpt-test',
+        }}
+      />
+    );
+    expect(screen.getByText('AI checked')).toBeInTheDocument();
+  });
+
+  it('renders fallback summary when fallbackUsed', () => {
     render(
       <AiStatusBadges
         aiStatus={{
@@ -53,6 +57,6 @@ describe('AiStatusBadges', () => {
         }}
       />
     );
-    expect(screen.getByText('Fallback used')).toBeInTheDocument();
+    expect(screen.getByText('Fallback summary')).toBeInTheDocument();
   });
 });

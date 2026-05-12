@@ -2,6 +2,10 @@ import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
+import SectionHeader from '../../components/ui/SectionHeader';
+import LoadingState from '../../components/ui/LoadingState';
+import ErrorState from '../../components/ui/ErrorState';
+import EmptyState from '../../components/ui/EmptyState';
 import CareerExplorerPanel from '../../components/career/CareerExplorerPanel';
 import { useCareerRecommendationsQuery } from '../../hooks/useAssessmentFlow';
 import { readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
@@ -21,8 +25,13 @@ const CareerExplorerPage = () => {
       <main className="app-page">
         <div className="page-shell">
           <Card animated={false} title="Career Explorer">
-            <p className="ui-message ui-message--error">No session was provided.</p>
-            <Button onClick={() => navigate('/assessment/start')}>Start assessment</Button>
+            <EmptyState
+              title="No active session"
+              description="Start or resume an assessment to generate deterministic career intelligence for this explorer."
+              action={
+                <Button onClick={() => navigate('/assessment/start')}>Start assessment</Button>
+              }
+            />
           </Card>
         </div>
       </main>
@@ -33,8 +42,12 @@ const CareerExplorerPage = () => {
     return (
       <main className="app-page">
         <div className="page-shell">
-          <Card animated={false} title="Career Explorer">
-            <p>Loading structured career intelligence…</p>
+          <SectionHeader
+            title="Career Explorer"
+            subtitle="Structured fit scores, skill gaps, and roadmaps from your latest assessment."
+          />
+          <Card animated={false}>
+            <LoadingState message="Loading structured career intelligence…" variant="question" />
           </Card>
         </div>
       </main>
@@ -45,26 +58,42 @@ const CareerExplorerPage = () => {
     return (
       <main className="app-page">
         <div className="page-shell">
-          <Card animated={false} title="Career Explorer">
-            <p className="ui-message ui-message--error">
-              {careerQuery.error?.message || 'Unable to load career recommendations.'}
-            </p>
-            <Button onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>Back to results</Button>
+          <SectionHeader title="Career Explorer" subtitle="We could not load recommendations for this session." />
+          <Card animated={false}>
+            <ErrorState
+              message={careerQuery.error?.message || 'Unable to load career recommendations.'}
+              onRetry={() => careerQuery.refetch()}
+            />
+            <Button variant="ghost" onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>
+              Back to results
+            </Button>
           </Card>
         </div>
       </main>
     );
   }
 
+  const top = Array.isArray(careerQuery.data?.topRecommendations) ? careerQuery.data.topRecommendations : [];
+  const first = top[0];
+
   return (
     <main className="app-page">
       <div className="page-shell">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <h1 style={{ margin: 0 }}>Career Explorer</h1>
-          <Button variant="ghost" onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>
-            Back to results
-          </Button>
-        </div>
+        <SectionHeader
+          title="Career Explorer"
+          subtitle="Recommendations are deterministic guidance from your assessment — not hiring decisions."
+          actions={
+            <Button variant="ghost" onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>
+              Back to results
+            </Button>
+          }
+        />
+        {first ? (
+          <div className="career-explorer-sticky" role="status">
+            <strong>Top match:</strong> {first.title} · {Math.round(Number(first.fitScore || 0))}% fit
+            {careerQuery.data?.preliminary ? ' · Preliminary' : ''}
+          </div>
+        ) : null}
         <CareerExplorerPanel payload={careerQuery.data} />
       </div>
     </main>

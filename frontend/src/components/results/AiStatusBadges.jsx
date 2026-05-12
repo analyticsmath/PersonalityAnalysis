@@ -1,51 +1,92 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+
+function buildDetailTooltip(aiStatus) {
+  const parts = [
+    `Prompt: ${String(aiStatus.promptVersion || 'n/a')}`,
+    `Provider: ${String(aiStatus.provider || 'n/a')}`,
+    `Latency: ${aiStatus.latencyMs != null ? `${aiStatus.latencyMs}ms` : 'n/a'}`,
+    `Model: ${String(aiStatus.model || 'n/a')}`,
+    aiStatus.schemaValidated ? 'Schema validated' : 'Schema not validated',
+  ];
+  if (aiStatus.errorCode) {
+    parts.push(`Code: ${aiStatus.errorCode}`);
+  }
+  return parts.join(' · ');
+}
 
 /**
- * Compact badges for AI provenance / validation (tooltips keep UI quiet).
+ * Compact badges for AI provenance; friendly labels, technical detail in tooltips.
  * @param {{ aiStatus?: Record<string, unknown> | null, className?: string }} props
  */
 export default function AiStatusBadges({ aiStatus = null, className = '' }) {
-  if (!aiStatus || typeof aiStatus !== 'object') {
-    return null;
-  }
+  const items = useMemo(() => {
+    if (!aiStatus || typeof aiStatus !== 'object') {
+      return [];
+    }
 
-  const schemaOk = Boolean(aiStatus.schemaValidated);
-  const fallback = Boolean(aiStatus.fallbackUsed);
-  const safety = Boolean(aiStatus.safetyChecked);
-  const status = String(aiStatus.status || '').toLowerCase();
+    const fallback = Boolean(aiStatus.fallbackUsed);
+    const safety = Boolean(aiStatus.safetyChecked);
+    const status = String(aiStatus.status || '').toLowerCase();
+    const err = String(aiStatus.errorCode || '').toUpperCase();
+    const safetyLimited = /SAFETY|MODERAT|BLOCK|LIMIT/i.test(err);
 
-  const items = [
-    { key: 'ai', label: 'AI-generated', show: status === 'ready' || status === 'fallback' },
-    { key: 'schema', label: 'Schema validated', show: schemaOk },
-    { key: 'fb', label: 'Fallback used', show: fallback },
-    { key: 'prelim', label: 'Preliminary', show: status === 'skipped' },
-    { key: 'safe', label: 'Safety checked', show: safety },
-  ].filter((i) => i.show);
+    const detail = buildDetailTooltip(aiStatus);
+    const list = [];
+
+    if (fallback || status === 'fallback') {
+      list.push({
+        key: 'fb',
+        label: 'Fallback summary',
+        title: `${detail} · Deterministic sections remain authoritative.`,
+      });
+    } else if (status === 'skipped') {
+      list.push({
+        key: 'prelim',
+        label: 'Preliminary insight',
+        title: `${detail} · Narrative may be abbreviated until more evidence is collected.`,
+      });
+    } else if (status === 'ready' || status === 'generating') {
+      list.push({
+        key: 'ai',
+        label: status === 'generating' ? 'AI generating' : 'AI-assisted',
+        title: detail,
+      });
+    }
+
+    if (safetyLimited) {
+      list.push({
+        key: 'slim',
+        label: 'Safety limited',
+        title: 'Output was constrained by automated safety checks.',
+      });
+    } else if (safety) {
+      list.push({
+        key: 'safe',
+        label: 'AI checked',
+        title: `${detail} · Automated review completed.`,
+      });
+    }
+
+    return list;
+  }, [aiStatus]);
 
   if (!items.length) {
     return null;
   }
 
   return (
-    <div className={`ai-status-badges ${className}`.trim()} style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+    <ul className={`ai-status-badges ${className}`.trim()} role="list" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, listStyle: 'none', margin: 0, padding: 0 }}>
       {items.map((i) => (
-        <span
-          key={i.key}
-          title={`Prompt: ${String(aiStatus.promptVersion || 'n/a')} · Provider: ${String(aiStatus.provider || 'n/a')} · Latency: ${String(
-            aiStatus.latencyMs != null ? `${aiStatus.latencyMs}ms` : 'n/a'
-          )} · Model: ${String(aiStatus.model || 'n/a')}`}
-          style={{
-            fontSize: 11,
-            lineHeight: 1.2,
-            padding: '2px 8px',
-            borderRadius: 999,
-            border: '1px solid rgba(255,255,255,0.12)',
-            opacity: 0.9,
-          }}
-        >
-          {i.label}
-        </span>
+        <li key={i.key} style={{ margin: 0 }}>
+          <span
+            className="ds-badge ds-badge--neutral"
+            title={i.title}
+            style={{ fontSize: 11, lineHeight: 1.2, padding: '4px 10px', borderRadius: 999, textTransform: 'none', letterSpacing: 0 }}
+          >
+            {i.label}
+          </span>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

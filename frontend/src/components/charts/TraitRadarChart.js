@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useId, useMemo } from 'react';
+import { useReducedMotion } from 'framer-motion';
+import ChartSummary from '../a11y/ChartSummary';
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -12,6 +14,8 @@ import { toTraitArray } from '../../utils/traits';
 import tokens, { chartTokens } from '../../theme/tokens';
 
 const TraitRadarChart = ({ traits = {}, compact = false, height = 320, scoreMeta = null }) => {
+  const summaryId = useId();
+  const prefersReducedMotion = useReducedMotion();
   const data = useMemo(
     () =>
       toTraitArray(traits).map((item) => ({
@@ -20,6 +24,12 @@ const TraitRadarChart = ({ traits = {}, compact = false, height = 320, scoreMeta
         score: item.score,
       })),
     [traits]
+  );
+
+  const summaryLines = useMemo(
+    () =>
+      data.map((row) => `${row.label} at about ${Math.round(row.score)} percent`),
+    [data]
   );
 
   const isBlocked =
@@ -39,7 +49,8 @@ const TraitRadarChart = ({ traits = {}, compact = false, height = 320, scoreMeta
   const legacy = scoreMeta && String(scoreMeta.scoreSource || '') === 'legacy_unverified';
 
   return (
-    <div className="chart-shell" aria-label="Trait radar chart">
+    <div className="chart-shell" aria-label="Trait radar chart" aria-describedby={summaryId}>
+      <ChartSummary id={summaryId} title="Big Five radar summary" lines={summaryLines} />
       {(confPct != null || validity || legacy) && (
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8, fontSize: 12 }}>
           {confPct != null ? (
@@ -101,8 +112,8 @@ const TraitRadarChart = ({ traits = {}, compact = false, height = 320, scoreMeta
               stroke: tokens.text.secondary,
               fill: tokens.accent.blue,
             }}
-            isAnimationActive
-            animationDuration={1200}
+            isAnimationActive={!prefersReducedMotion}
+            animationDuration={prefersReducedMotion ? 0 : 1200}
             animationEasing="ease-out"
           />
         </RadarChart>

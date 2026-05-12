@@ -1,12 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion';
 
 const Loader = ({ label = 'Loading...', variant = 'default' }) => {
   const dotsRef = useRef([]);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const targets = dotsRef.current.filter(Boolean);
     if (!targets.length) {
+      return () => {};
+    }
+
+    if (prefersReducedMotion) {
+      gsap.set(targets, { y: 0, opacity: 1 });
       return () => {};
     }
 
@@ -21,10 +28,10 @@ const Loader = ({ label = 'Loading...', variant = 'default' }) => {
     });
 
     return () => tween.kill();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
-    <div className={`ui-loader ui-loader--${variant}`} role="status" aria-live="polite">
+    <div className={`ui-loader ui-loader--${variant}`} role="status" aria-live="polite" aria-busy="true">
       <span className="ui-loader__bar" aria-hidden="true">
         <span
           className="ui-loader__dot"

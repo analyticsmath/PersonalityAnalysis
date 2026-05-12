@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, Suspense, lazy } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useReducedMotion } from 'framer-motion';
 import {
@@ -17,6 +17,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Skeleton from '../../components/ui/Skeleton';
+import MetricCard from '../../components/ui/MetricCard';
 import Loader from '../../components/ui/Loader';
 import LoaderOverlay from '../../components/ui/LoaderOverlay';
 import TraitRadarChart from '../../components/charts/TraitRadarChart';
@@ -25,7 +26,7 @@ import WorkValuesProfileCard from '../../components/charts/WorkValuesProfileCard
 import CareerAlignmentChart from '../../components/charts/CareerAlignmentChart';
 import MetricBarChart from '../../components/charts/MetricBarChart';
 import InsightHeatmapChart from '../../components/charts/InsightHeatmapChart';
-import TraitSphere from '../../components/3d/TraitSphere';
+import AiStatusBadges from '../../components/results/AiStatusBadges';
 import mapTraitsTo3DData from '../../utils/traitMapper';
 import { normalizeAssessmentResult } from '../../utils/assessmentResultNormalize';
 import { useAuth } from '../../hooks/useAuth';
@@ -42,7 +43,8 @@ import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEv
 import ScoringEvidenceCard from '../../components/results/ScoringEvidenceCard';
 import CareerSignalsSummary from '../../components/results/CareerSignalsSummary';
 import CareerRecommendationCard from '../../components/career/CareerRecommendationCard';
-import AiStatusBadges from '../../components/results/AiStatusBadges';
+
+const TraitSphere = lazy(() => import('../../components/3d/TraitSphere'));
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -531,6 +533,50 @@ const AssessmentFlowResultPage = () => {
             </Card>
           </section>
         ) : null}
+        <section className="result-summary-grid" aria-label="Report at a glance">
+          <MetricCard
+            label="Personality confidence"
+            value={`${confidencePercent}%`}
+            hint={`Band: ${String(result.confidence_band || 'low').toUpperCase()}`}
+          />
+          <MetricCard
+            label="Career readiness"
+            value={
+              careerIntel?.locked
+                ? 'Insufficient data'
+                : careerIntel?.topRecommendations?.[0]?.title ||
+                  topCareer?.career ||
+                  'Open Career Explorer'
+            }
+            hint={
+              careerIntel?.locked
+                ? 'More reliable responses are needed for ranked matching.'
+                : careerIntel?.topRecommendations?.[0]
+                  ? `${Math.round(Number(careerIntel.topRecommendations[0].fitScore || 0))}% fit (deterministic)`
+                  : topCareer?.career
+                    ? `${Number(topCareer.score || 0)}% match from assessment model`
+                    : 'Structured roles appear when scores are valid.'
+            }
+          />
+          <MetricCard
+            label="AI narrative"
+            value={
+              reportStatusCode === 'generating'
+                ? 'Generating'
+                : reportStatusCode === 'failed' || reportStatusCode === 'unavailable'
+                  ? 'Unavailable'
+                  : String(flowAiStatus?.status || '').toLowerCase() === 'fallback'
+                    ? 'Fallback summary'
+                    : 'Ready'
+            }
+            hint="Optional layer; deterministic charts stay authoritative."
+          />
+          <MetricCard
+            label="Evidence cues"
+            value={String(Array.isArray(evidenceList) ? evidenceList.length : 0)}
+            hint="Transparency items from the scoring engine."
+          />
+        </section>
         <section
           data-scroll-reveal
           className="phase3-result-hero phase3-result-section"
@@ -652,8 +698,10 @@ const AssessmentFlowResultPage = () => {
             <TraitRadarChart key={`radar-${result.meta?.generated_at || 'latest'}`} traits={traits} height={320} scoreMeta={scoreMeta} />
           </Card>
 
-          <Card title="3D Trait Sphere" subtitle="Interactive trait field" className="result-profile-chart" >
-            <TraitSphere data={threeDPayload} />
+          <Card title="3D Trait Sphere" subtitle="Interactive trait field (loads on demand)">
+            <Suspense fallback={<Skeleton height="280px" />}>
+              <TraitSphere data={threeDPayload} />
+            </Suspense>
           </Card>
 
           <Card title="RIASEC interests" subtitle="Holland-style career interests (evidence-weighted)">
@@ -837,9 +885,10 @@ const AssessmentFlowResultPage = () => {
                   onChange={(event) => setWhyNotCareer(event.target.value)}
                   className="ui-input"
                   placeholder="Example: Data Scientist"
+                  aria-label="Career title to compare against your profile"
                   style={{ flex: 1, minWidth: 0 }}
                 />
-                <Button onClick={submitWhyNot} loading={whyNotMutation.isPending}>
+                <Button onClick={submitWhyNot} loading={whyNotMutation.isPending} loadingLabel="Analyzing…">
                   Why Not?
                 </Button>
               </div>
@@ -958,6 +1007,7 @@ const AssessmentFlowResultPage = () => {
                 <Button
                   onClick={() => submitChat()}
                   loading={chatMutation.isPending}
+                  loadingLabel="Sending…"
                   data-avatar-action="chat-send"
                   data-avatar-target="chatbot-panel"
                   data-avatar-hint="Send your question and I will explain based on your profile."

@@ -79,6 +79,13 @@ Copy avoids “unsuitable career” language.
 - `career-chatbot.service.js` includes `phase4CareerIntelligence` in JSON context with explicit instructions: **do not change fit scores or invent gaps**.
 - **Phase 5:** client and HTTP responses may surface `aiStatus` (`schemaValidated`, `fallbackUsed`, `safetyChecked`, `latencyMs`, `model`, …) alongside narratives. **`aiStatus` never overrides** stored `fitScore`, `skillReadinessScore`, or Phase 3 `scores` — it is provenance metadata only.
 
+## Career Explorer UI (Phase 6)
+
+- Route: `/assessment/career` loads Phase 4 JSON via `useCareerRecommendationsQuery` (`CareerExplorerPage.jsx`).
+- **Grouped lists** use human-readable headings: *Best fits*, *Stretch fits*, *Exploratory fits*, *Development paths* (mapped from `bestFits`, `stretchFits`, `exploratoryFits`, `lowerFitButPossible`).
+- **Sticky summary** shows the current top match and preliminary flag when recommendations exist.
+- **Locked / preliminary** states match backend semantics; the UI does not invent careers when the payload is empty or `locked`.
+
 ## Tests
 
 See `backend/tests/career-intelligence.test.js` and `frontend/src/components/career/career-components.test.jsx`.

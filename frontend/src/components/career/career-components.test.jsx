@@ -99,6 +99,6 @@ describe('Career UI components', () => {
     };
     render(<CareerExplorerPanel payload={payload} />);
     expect(screen.getByTestId('career-explorer-panel')).toBeTruthy();
-    expect(screen.getByText('bestFits')).toBeTruthy();
+    expect(screen.getByText('Best fits')).toBeTruthy();
   });
 });

@@ -7,6 +7,7 @@ const Button = ({
   size = 'md',
   block = false,
   loading = false,
+  loadingLabel = 'Saving…',
   disabled = false,
   onClick,
   className = '',
@@ -61,7 +62,7 @@ const Button = ({
       aria-busy={loading}
       {...rest}
     >
-      <span className="ui-button__content">{loading ? 'Please wait...' : children}</span>
+      <span className="ui-button__content">{loading ? loadingLabel : children}</span>
       <span className="ui-button__ripple-container" aria-hidden="true">
         {ripples.map((ripple) => (
           <span

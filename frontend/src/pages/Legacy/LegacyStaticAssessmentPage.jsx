@@ -10,6 +10,8 @@ const LegacyStaticAssessmentPage = () => {
   return (
     <div className="legacy-static-assessment">
       <div
+        role="note"
+        aria-label="Legacy assessment notice"
         style={{
           padding: '12px 16px',
           marginBottom: 12,
