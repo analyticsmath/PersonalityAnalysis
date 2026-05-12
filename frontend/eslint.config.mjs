@@ -29,6 +29,7 @@ export default [
         atob: 'readonly',
         process: 'readonly',
         URL: 'readonly',
+        Blob: 'readonly',
         console: 'readonly',
         setTimeout: 'readonly',
         clearTimeout: 'readonly',

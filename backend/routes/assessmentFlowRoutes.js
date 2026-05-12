@@ -10,6 +10,7 @@ const multer = require('multer');
 const authMiddleware = require('../middleware/authMiddleware');
 const {
   uploadCv,
+  submitManualProfile,
   startAdaptiveAssessment,
   getCurrentQuestion,
   getPreviousQuestion,
@@ -60,6 +61,7 @@ const upload = multer({
 router.use(authMiddleware);
 
 router.post('/cv/upload', upload.single('cv'), uploadCv);
+router.post('/profile/manual', submitManualProfile);
 router.post('/legacy/session/start', startAssessmentSession);
 router.get('/legacy/session/:userId', getActiveAssessmentSession);
 router.patch('/legacy/session/:sessionId', syncAssessmentSession);

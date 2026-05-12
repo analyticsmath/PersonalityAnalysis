@@ -275,6 +275,8 @@ const toPublicSession = (session) => {
     adaptiveMetrics: session.adaptiveMetrics || {},
     smartIntro: session.smartIntro || null,
     resultId: session.resultId || null,
+    profileSource: session.profileSource || '',
+    profileConsent: session.profileConsent || null,
     lastActiveAt: session.lastActiveAt,
     startedAt: session.startedAt,
     completedAt: session.completedAt,

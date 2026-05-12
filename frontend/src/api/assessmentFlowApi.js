@@ -34,6 +34,7 @@ export const uploadCv = async ({ file, userRole, userProfile } = {}) => {
   if (userProfile && typeof userProfile === 'object') {
     formData.append('userProfile', JSON.stringify(userProfile));
   }
+  formData.append('consentAccepted', 'true');
 
   const response = await client.post('/assessment/cv/upload', formData, {
     headers: {
@@ -42,6 +43,13 @@ export const uploadCv = async ({ file, userRole, userProfile } = {}) => {
     timeout: 120000,
   });
 
+  return unwrap(response);
+};
+
+export const submitManualProfile = async (payload = {}) => {
+  const response = await client.post('/assessment/profile/manual', payload, {
+    timeout: 120000,
+  });
   return unwrap(response);
 };
 

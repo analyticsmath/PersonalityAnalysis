@@ -471,6 +471,33 @@ const detectFileType = ({ originalName = '', mimeType = '' }) => {
   return 'unsupported';
 };
 
+const validateCvUploadBuffer = ({ buffer, originalName, mimeType }) => {
+  if (!buffer || buffer.length < 24) {
+    throw createHttpError(400, 'CV file is too small or empty.');
+  }
+
+  const fileType = detectFileType({ originalName, mimeType });
+  const headAscii = buffer.slice(0, 5).toString('latin1');
+  const isPdfMagic = headAscii.startsWith('%PDF');
+  const isZipMagic = buffer[0] === 0x50 && buffer[1] === 0x4b;
+
+  if (fileType === 'pdf') {
+    if (!isPdfMagic) {
+      throw createHttpError(400, 'File content does not match a PDF document.');
+    }
+    return;
+  }
+
+  if (fileType === 'docx') {
+    if (!isZipMagic) {
+      throw createHttpError(400, 'File content does not match a DOCX (Office Open XML) document.');
+    }
+    return;
+  }
+
+  throw createHttpError(400, 'Unsupported CV format. Please upload PDF or DOCX.');
+};
+
 const parseCvText = async ({ buffer, originalName, mimeType }) => {
   const fileType = detectFileType({ originalName, mimeType });
 
@@ -524,6 +551,7 @@ const parseCvWithAi = async (rawText, fallbackPayload) => {
 };
 
 const analyzeCv = async ({ buffer, originalName, mimeType }) => {
+  validateCvUploadBuffer({ buffer, originalName, mimeType });
   const rawText = await parseCvText({ buffer, originalName, mimeType });
 
   if (!rawText || rawText.length < 30) {

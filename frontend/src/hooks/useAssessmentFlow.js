@@ -12,6 +12,7 @@ import {
   streamAssessmentProgress,
   submitAdaptiveAnswer,
   uploadCv,
+  submitManualProfile,
 } from '../api/assessmentFlowApi';
 
 export const assessmentFlowKeys = {
@@ -68,6 +69,17 @@ export const useUploadCvMutation = () => {
 
   return useMutation({
     mutationFn: uploadCv,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: assessmentFlowKeys.active });
+    },
+  });
+};
+
+export const useSubmitManualProfileMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: submitManualProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: assessmentFlowKeys.active });
     },

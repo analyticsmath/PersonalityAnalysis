@@ -885,6 +885,24 @@ const Dashboard = () => {
                       type="button"
                       onClick={() => {
                         setIsUserMenuOpen(false);
+                        navigate('/account/privacy');
+                      }}
+                    >
+                      Privacy &amp; data
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        navigate('/trust');
+                      }}
+                    >
+                      Trust &amp; safety
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
                         handleStart();
                       }}
                       data-avatar-action="start-assessment"

@@ -41,11 +41,15 @@ Copy uses **“career readiness indicator”** language — not hireability. `st
 
 Latest snapshot of matched / missing / recommended skills from Phase 4 `topRecommendations[0].skillGaps`. Optional `progressItems` only when **two** results share the same target career title and new matched skills appear — never fabricated deltas.
 
+## Report history & growth recommendations
+
+`GET /api/assessment/analytics/report-history` returns `{ items, growthRecommendations }` where `growthRecommendations` is an array of `{ source, text }` entries derived from the latest stored AI report growth suggestions, career-engine next steps, and bounded system warnings. The analytics UI renders this list as a **Growth recommendations** panel with an honest empty state when none exist.
+
 ## Roadmap progress
 
-`roadmapProgress.service` validates `completedActionKeys` against the stored timeline for `(resultId, careerId)`. Progress percent = completed keys / total derived keys. Ownership enforced on every read/write.
+`roadmapProgress.service` validates `completedActionKeys` against the stored timeline for `(resultId, careerId)`. Progress percent = completed keys / total derived keys. Ownership enforced on every read/write. Responses include **`actionLabels`**: a map from stable action key → human-readable label built from roadmap stage titles and action text (string or object entries), with a deterministic fallback when titles are missing.
 
-## Timeline events
+## Privacy
 
 `insightTimeline.service` emits events only when backing fields exist (assessment completed, AI report present, fallback flags, career recommendations block, low confidence threshold, legacy markers, roadmap progress updates with keys, CV fields on a stored result).
 

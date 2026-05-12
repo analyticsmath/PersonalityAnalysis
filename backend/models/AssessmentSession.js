@@ -704,6 +704,20 @@ const assessmentSessionSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    profileSource: {
+      type: String,
+      enum: ['', 'cv_upload', 'manual_profile'],
+      default: '',
+      trim: true,
+    },
+    profileConsent: {
+      type: mongoose.Schema.Types.Mixed,
+      default: undefined,
+    },
+    manualProfileArtifact: {
+      type: mongoose.Schema.Types.Mixed,
+      default: undefined,
+    },
     expiresAt: {
       type: Date,
       required: true,

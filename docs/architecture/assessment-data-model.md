@@ -12,6 +12,7 @@ Primary document for the **CV-driven adaptive assessment**.
 - **Adaptive:** `questionPlan`, `adaptiveMetrics` (includes `lastIdempotencyKey`, prefetch fields), `currentQuestionIndex`, `behaviorPrompts`, etc.
 - **Scoring linkage:** `resultId` → `AssessmentResult`.
 - **Result-side UX:** `chatHistory`, `progressEvents`, denormalized legacy result fields (marked deprecated in schema comments).
+- **Phase 8 profile governance:** `profileSource` (`''` \| `cv_upload` \| `manual_profile`), `profileConsent` (Mixed object with `consentAccepted`, `consentVersion`, `acceptedAt`, `profileSource`), `manualProfileArtifact` (sanitized manual normalization snapshot for transparency).
 
 **Indexes (selected):** partial unique `{ userId, status }` for a single `in_progress` session; `{ userId, status, updatedAt: -1 }`; `{ status, stage, updatedAt: -1 }`; TTL on `expiresAt`.
 
@@ -26,7 +27,11 @@ Persisted scoring + narrative payload for a completed adaptive run.
 
 ### `CareerRoadmapProgress` (`backend/models/CareerRoadmapProgress.js`, Phase 7)
 
-Optional per-user completion state for deterministic roadmap actions on a specific `AssessmentResult` + `careerId` (taxonomy slug). Keys are stable indices (`careerId|stageIndex|actionIndex`) derived from stored `careerRecommendations.roadmaps[].timeline[].actions`. Unique index on `{ userId, resultId, careerId }`.
+Optional per-user completion state for deterministic roadmap actions on a specific `AssessmentResult` + `careerId` (taxonomy slug). Keys are stable indices (`careerId|stageIndex|actionIndex`) derived from stored `careerRecommendations.roadmaps[].timeline[].actions`. The roadmap progress API also returns `actionLabels` mapping each key to a human-readable label when timeline titles/actions are available. Unique index on `{ userId, resultId, careerId }`.
+
+### Account deletion (Phase 8)
+
+`DELETE /api/account` with `{ confirm: true }` **hard-deletes** the `User` document and removes related `AssessmentSession`, `AssessmentResult`, and `CareerRoadmapProgress` rows for that user (see `accountData.service.js`). This is irreversible in a typical Mongo deployment without external backups.
 
 ### `User` (`backend/models/User.js`)
 

@@ -53,6 +53,9 @@ const {
   toLegacyScaleAnswers,
   upsertUnifiedAnswer,
 } = require('../services/assessment/unified-contracts.service');
+const { buildManualProfilePayload } = require('../services/assessment/manualProfile.service');
+const { resetAdaptiveBranchAfterProfileIngest } = require('../services/assessment/sessionProfileIngestReset.service');
+const { CONSENT_VERSION } = require('../config/dataRetention.constants');
 
 const MIN_BEHAVIOR_ANSWER_LENGTH = 4;
 const MIN_TEXT_ANSWER_LENGTH = 4;
@@ -773,6 +776,13 @@ const uploadCv = async (req, res, next) => {
       throw createHttpError(400, 'Please upload a CV file (PDF or DOCX)');
     }
 
+    const consentRaw = req.body?.consentAccepted;
+    const consentAccepted =
+      consentRaw === true || String(consentRaw).toLowerCase() === 'true' || consentRaw === 1 || consentRaw === '1';
+    if (!consentAccepted) {
+      throw createHttpError(400, 'Profile processing consent is required (consentAccepted: true).');
+    }
+
     const session = await getOrCreateInProgressSession({ userId: req.user.id });
     const parsedProfileInput = parseMaybeJsonObject(req.body?.userProfile);
     const normalizedRole = normalizeUserRole(req.body?.userRole);
@@ -819,41 +829,17 @@ const uploadCv = async (req, res, next) => {
       gender: parsedProfile.gender,
       marks: parsedProfile.marks,
     };
-    session.aiProfile = undefined;
-    session.profileVector = undefined;
-    session.smartIntro = undefined;
-    session.questionPlan = [];
-    session.questionPoolBackup = [];
-    session.askedQuestions = [];
-    session.usedIntents = [];
-    session.adaptiveMetrics = {
-      answerTelemetry: [],
-      fatigue: null,
-      fatigueDetected: false,
-      questionnaireConfidence: 0,
-      shouldStopEarly: false,
-      targetQuestionCount: 0,
-      cvComplexity: 0,
-      confidenceExtensionApplied: false,
-      inconsistencyExtensionApplied: false,
-      extensionReasons: [],
-      prefetchedSupplementalQuestionPlan: [],
-      evaluatedAt: new Date(),
+    const consentVersion = toText(req.body?.consentVersion).slice(0, 64) || CONSENT_VERSION;
+    session.profileSource = 'cv_upload';
+    session.profileConsent = {
+      consentAccepted: true,
+      consentVersion,
+      acceptedAt: new Date(),
+      profileSource: 'cv_upload',
     };
-    session.currentQuestionIndex = 0;
-    session.answers = [];
-    session.answersJson = [];
-    session.behaviorPrompts = [];
-    session.currentBehaviorIndex = 0;
-    session.behaviorAnswers = [];
-    session.resultId = null;
-    session.behaviorAnalysis = undefined;
-    session.personalityProfile = undefined;
-    session.careerRecommendations = [];
-    session.careerRoadmap = [];
-    session.resultSummary = undefined;
-    session.completedAt = null;
-    session.lastActiveAt = new Date();
+    session.manualProfileArtifact = undefined;
+
+    resetAdaptiveBranchAfterProfileIngest(session);
 
     await session.save();
 
@@ -874,6 +860,83 @@ const uploadCv = async (req, res, next) => {
         parsedProfile,
       },
       message: 'CV uploaded and analyzed successfully',
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const submitManualProfile = async (req, res, next) => {
+  try {
+    const session = await getOrCreateInProgressSession({ userId: req.user.id });
+    const normalizedRole = normalizeUserRole(req.body?.userRole);
+
+    await appendProgressEvent({
+      session,
+      event: {
+        stage: 'cv_upload',
+        status: 'processing',
+        message: 'Processing your manual profile…',
+      },
+    });
+
+    const { cvData, cvRawText, normalizedManual, consent, injection } = buildManualProfilePayload(req.body || {});
+
+    transitionSessionStage({ session, nextStage: 'cv_upload' });
+    session.status = 'in_progress';
+    if (normalizedRole) {
+      session.userRole = normalizedRole;
+    }
+    const existingUserProfile =
+      session.userProfile && typeof session.userProfile === 'object' ? session.userProfile : {};
+
+    session.cvRawText = cvRawText;
+    session.cvData = cvData;
+    session.profileSource = 'manual_profile';
+    session.profileConsent = consent;
+    session.manualProfileArtifact = {
+      normalized: normalizedManual,
+      injectionSeverity: injection.severity,
+      injectionPatterns: injection.patterns,
+    };
+
+    const parsedProfile = toParsedProfileFromCvData({
+      cvData: session.cvData,
+      existingProfile: existingUserProfile,
+    });
+    session.userProfile = {
+      ...existingUserProfile,
+      field: parsedProfile.field,
+      subjects: parsedProfile.subjects,
+      skills: parsedProfile.skills,
+      interests: parsedProfile.interests,
+      preferredCareers: parsedProfile.preferredCareers,
+      age: parsedProfile.age,
+      gender: parsedProfile.gender,
+      marks: parsedProfile.marks,
+    };
+
+    resetAdaptiveBranchAfterProfileIngest(session);
+    await session.save();
+
+    await appendProgressEvent({
+      session,
+      event: {
+        stage: 'cv_upload',
+        status: 'completed',
+        message: 'Manual profile saved',
+      },
+    });
+
+    return sendSuccess(res, {
+      status: 201,
+      data: {
+        session: toPublicSession(session),
+        manualProfile: normalizedManual,
+        injection,
+        parsedProfile,
+      },
+      message: 'Manual profile processed successfully',
     });
   } catch (error) {
     return next(error);
@@ -1967,6 +2030,7 @@ const explainWhyNotCareerForSession = async (req, res, next) => {
 
 module.exports = {
   uploadCv,
+  submitManualProfile,
   startAdaptiveAssessment,
   getCurrentQuestion,
   getPreviousQuestion,

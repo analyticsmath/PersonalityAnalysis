@@ -6,6 +6,9 @@ import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion';
 import StepRole from './steps/StepRole';
 import StepCV from './steps/StepCV';
 import StepProfile from './steps/StepProfile';
+import ProfileSourceSelector from '../manual-profile/ProfileSourceSelector';
+import ManualProfileForm from '../manual-profile/ManualProfileForm';
+import Button from '../ui/Button';
 import {
   ROLE_OPTIONS,
   useAssessmentWizard,
@@ -14,7 +17,7 @@ import {
 
 const PROGRESS_STEPS = [
   { id: WIZARD_STEPS.profileType, label: 'Profile Type' },
-  { id: WIZARD_STEPS.cvAnalysis, label: 'Analyze CV' },
+  { id: WIZARD_STEPS.cvAnalysis, label: 'Profile setup' },
   { id: WIZARD_STEPS.startAssessment, label: 'Start' },
 ];
 
@@ -31,8 +34,16 @@ const AssessmentStartWizard = () => {
     currentStep,
     userRole,
     setUserRole,
+    profileMode,
+    setProfileMode,
     cvFile,
     setCvFile,
+    cvConsent,
+    setCvConsent,
+    manualForm,
+    setManualForm,
+    manualConsent,
+    setManualConsent,
     parsedProfile,
     stepError,
     setStepError,
@@ -42,9 +53,12 @@ const AssessmentStartWizard = () => {
     isBusy,
     isStarting,
     isUploading,
+    isManualSaving,
     isStep1Valid,
     isStep2Valid,
     isStep3Valid,
+    lastManualProfile,
+    lastInjection,
     goToPreviousStep,
     goToNextStep,
   } = useAssessmentWizard();
@@ -85,6 +99,8 @@ const AssessmentStartWizard = () => {
     return Math.round((activeIndex / maxIndex) * 100);
   }, [currentStep]);
 
+  const step2Analyzing = isUploading || isManualSaving;
+
   const stepView = useMemo(() => {
     if (currentStep === WIZARD_STEPS.profileType) {
       return (
@@ -103,27 +119,84 @@ const AssessmentStartWizard = () => {
 
     if (currentStep === WIZARD_STEPS.cvAnalysis) {
       return (
-        <StepCV
-          cvFile={cvFile}
-          onCvFileChange={(file) => {
-            setStepError('');
-            setCvFile(file);
-          }}
-          onBack={goToPreviousStep}
-          onAnalyze={goToNextStep}
-          isAnalyzeDisabled={!isStep2Valid}
-          isAnalyzing={isUploading}
-          analysisStatus={analysisStatus}
-          analysisMessages={analysisMessages}
-          analysisIndex={analysisIndex}
-          errorMessage={stepError}
-        />
+        <section className="assessment-step" aria-labelledby="wizard-profile-setup-title">
+          <header className="assessment-step__header">
+            <p className="assessment-step__eyebrow">Step 2</p>
+            <h2 id="wizard-profile-setup-title" className="assessment-step__title">
+              Profile setup
+            </h2>
+            <p className="assessment-step__subtitle">
+              Upload a CV or enter your background manually. Both paths feed the same adaptive assessment engine.
+            </p>
+          </header>
+
+          <ProfileSourceSelector value={profileMode} onChange={setProfileMode} disabled={step2Analyzing} />
+
+          {profileMode === 'cv' ? (
+            <StepCV
+              cvFile={cvFile}
+              onCvFileChange={(file) => {
+                setStepError('');
+                setCvFile(file);
+              }}
+              consentAccepted={cvConsent}
+              onConsentChange={(v) => {
+                setStepError('');
+                setCvConsent(v);
+              }}
+              onBack={goToPreviousStep}
+              onAnalyze={goToNextStep}
+              isAnalyzeDisabled={!isStep2Valid}
+              isAnalyzing={step2Analyzing}
+              analysisStatus={analysisStatus}
+              analysisMessages={analysisMessages}
+              analysisIndex={analysisIndex}
+              errorMessage={stepError}
+            />
+          ) : (
+            <div className="manual-profile-step-wrap">
+              <ManualProfileForm
+                value={manualForm}
+                onChange={(next) => {
+                  setStepError('');
+                  setManualForm(next);
+                }}
+                consentAccepted={manualConsent}
+                onConsentChange={(v) => {
+                  setStepError('');
+                  setManualConsent(v);
+                }}
+                onSubmit={goToNextStep}
+                isSubmitting={step2Analyzing}
+                disabled={step2Analyzing}
+              />
+              <footer className="assessment-step__actions">
+                <Button type="button" variant="ghost" onClick={goToPreviousStep} disabled={step2Analyzing}>
+                  Back
+                </Button>
+              </footer>
+              {stepError ? (
+                <p className="ui-message ui-message--error" role="alert" aria-live="assertive">
+                  {stepError}
+                </p>
+              ) : null}
+              {analysisStatus === 'running' || analysisStatus === 'success' ? (
+                <p className="ui-message ui-message--neutral" role="status" aria-live="polite">
+                  {analysisStatus === 'success' ? 'Profile saved.' : analysisMessages[analysisIndex]}
+                </p>
+              ) : null}
+            </div>
+          )}
+        </section>
       );
     }
 
     return (
       <StepProfile
         parsedProfile={parsedProfile}
+        profileMode={profileMode}
+        manualProfile={lastManualProfile}
+        injection={lastInjection}
         onBack={goToPreviousStep}
         onStartAssessment={goToNextStep}
         isStartDisabled={!isStep3Valid}
@@ -132,23 +205,33 @@ const AssessmentStartWizard = () => {
       />
     );
   }, [
-    currentStep,
-    cvFile,
     analysisIndex,
     analysisMessages,
     analysisStatus,
+    currentStep,
+    cvConsent,
+    cvFile,
     goToNextStep,
     goToPreviousStep,
     isBusy,
     isStarting,
-    isUploading,
     isStep1Valid,
     isStep2Valid,
     isStep3Valid,
+    lastInjection,
+    lastManualProfile,
+    manualConsent,
+    manualForm,
     parsedProfile,
+    profileMode,
+    setCvConsent,
     setCvFile,
+    setManualConsent,
+    setManualForm,
+    setProfileMode,
     setStepError,
     setUserRole,
+    step2Analyzing,
     stepError,
     userRole,
   ]);
@@ -164,9 +247,9 @@ const AssessmentStartWizard = () => {
           <p className="page-header__eyebrow">Adaptive assessment</p>
           <h1 className="page-header__title">CV-aware personality &amp; career intelligence</h1>
           <p className="assessment-journey-note">
-            Your CV and profile context tune adaptive questions. After you begin, deterministic scoring produces Big Five,
-            RIASEC, work values, and career signals. An optional AI narrative layers on top — it never replaces the
-            numeric engine. CV text is used only for this session&apos;s personalization; avoid pasting highly sensitive
+            Your CV or manual profile context tunes adaptive questions. After you begin, deterministic scoring produces
+            Big Five, RIASEC, work values, and career signals. An optional AI narrative layers on top — it never
+            replaces the numeric engine. This product offers guidance, not hiring or clinical decisions. Avoid pasting
             secrets you would not share with an HR screening tool.
           </p>
         </header>

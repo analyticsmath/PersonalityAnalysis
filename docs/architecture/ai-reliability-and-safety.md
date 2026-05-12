@@ -15,7 +15,8 @@ This document summarizes how the platform keeps **AI surfaces bounded**, **outpu
 | Dashboard AI report | `services/aiService.js`, `Controllers/aiController.js` | JSON personality narrative + narrative career blurbs | `report-narrative-v1` via `aiSchemas.js` | Local output scan + moderation stub | `aiFallbacks.service.js` template |
 | Adaptive result narrative | `services/ai-result-narrative.service.js` | Post-assessment summary tied to Phase 3/4 context | Mapped to `report-narrative-v1` | Injection scan on profile blob + output scan | Deterministic `fallbackNarrative` |
 | Career coach chat | `services/assessment/career-chatbot.service.js` | Profile-grounded Q&A | `career-coach-v1` JSON | Crisis/clinical fast-path + injection wrapper | `buildStructuredCoachFallback` |
-| CV parse (structured) | `services/assessment/cvAnalysis.service.js` | ATS-style extraction | Legacy CV schema (existing) | User text treated as data in prompts | Heuristic parser |
+| CV parse (structured) | `services/assessment/cvAnalysis.service.js` | ATS-style extraction | Legacy CV schema (existing) | User text treated as data in prompts + **magic-byte / extension validation** | Heuristic parser |
+| Manual profile (structured) | `services/assessment/manualProfile.service.js` | Same adaptive pipeline without file upload | Normalized CV-shaped payload | Strip tags / length limits + **injection scan** + `wrapUntrustedUserContent` blocks | Reject insufficient text |
 | CV intelligence profile | `services/ai-cv-intelligence.service.js` | Profile vector hints | Normalized profile object | Output scan (light) | `buildFallbackProfile` |
 | Adaptive question refinement / generation | `question-refiner`, `ai-question-generator` | Question text assistance | Partial / legacy | Prompt rules in services | Internal templates |
 
@@ -43,6 +44,7 @@ This document summarizes how the platform keeps **AI surfaces bounded**, **outpu
 - **`aiPromptInjectionGuard.service.js`** scans for common jailbreak phrases with low false-positive design.
 - Suspicious text is **flagged** (not hard-blocked) and wrapped with `wrapUntrustedUserContent` so models treat payloads as **data, not instructions**.
 - Flags surface in chat `safetyFlags` and audit `injectionFlags` (pattern ids only).
+- **Phase 8:** manual profile submissions run the same scanner; suspicious patterns add **warnings** on the normalized manual artifact returned to the client (not hard-blocked unless validation fails).
 
 ## Moderation / safety
 

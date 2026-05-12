@@ -34,6 +34,40 @@ const buildActionKeysForCareer = (careerId, timeline = []) => {
   return keys;
 };
 
+const actionTextFromEntry = (action) => {
+  if (typeof action === 'string') {
+    return String(action).trim();
+  }
+  if (action && typeof action === 'object') {
+    return String(action.title || action.label || action.text || action.name || '').trim();
+  }
+  return '';
+};
+
+const buildActionLabelMap = (careerIdStr, timeline = []) => {
+  const labels = {};
+  (Array.isArray(timeline) ? timeline : []).forEach((stage, si) => {
+    const actions = Array.isArray(stage?.actions) ? stage.actions : [];
+    const stageTitle = String(stage?.title || stage?.stage || `Stage ${si + 1}`).trim();
+    actions.forEach((action, ai) => {
+      const key = `${careerIdStr}|${si}|${ai}`;
+      const actText = actionTextFromEntry(action);
+      labels[key] = actText ? `${stageTitle}: ${actText}` : `${stageTitle}: Action ${ai + 1}`;
+    });
+  });
+  return labels;
+};
+
+const prettifyActionKey = (key = '') => {
+  const raw = String(key || '').trim();
+  if (!raw) return 'Roadmap action';
+  const parts = raw.split('|');
+  if (parts.length === 3) {
+    return `Stage ${Number(parts[1]) + 1} · item ${Number(parts[2]) + 1}`;
+  }
+  return raw.replace(/\|/g, ' · ');
+};
+
 /**
  * Progress percent for the top recommended career on the given result (0–100).
  */
@@ -98,6 +132,7 @@ const getRoadmapProgressDoc = async ({ requester, resultId, careerId }) => {
 
   const completed = new Set(Array.isArray(progress?.completedActionKeys) ? progress.completedActionKeys : []);
   const percent = allKeys.length ? Math.round((allKeys.filter((k) => completed.has(k)).length / allKeys.length) * 100) : 0;
+  const actionLabels = buildActionLabelMap(careerIdStr, timeline);
 
   return {
     resultId: String(resultId),
@@ -107,6 +142,7 @@ const getRoadmapProgressDoc = async ({ requester, resultId, careerId }) => {
     progressPercent: percent,
     completedActionKeys: Array.from(completed),
     validActionKeys: allKeys,
+    actionLabels,
   };
 };
 
@@ -148,6 +184,7 @@ const updateRoadmapProgressDoc = async ({ requester, resultId, careerId, complet
   const allKeys = [...validKeys];
   const completed = new Set(updated.completedActionKeys || []);
   const percent = allKeys.length ? Math.round((allKeys.filter((k) => completed.has(k)).length / allKeys.length) * 100) : 0;
+  const actionLabels = buildActionLabelMap(careerIdStr, timeline);
 
   return {
     resultId: String(resultId),
@@ -157,6 +194,7 @@ const updateRoadmapProgressDoc = async ({ requester, resultId, careerId, complet
     progressPercent: percent,
     completedActionKeys: updated.completedActionKeys || [],
     validActionKeys: allKeys,
+    actionLabels,
   };
 };
 
@@ -167,4 +205,6 @@ module.exports = {
   assertResultOwned,
   countRoadmapActions,
   buildActionKeysForCareer,
+  buildActionLabelMap,
+  prettifyActionKey,
 };

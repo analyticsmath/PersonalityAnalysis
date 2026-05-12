@@ -42,7 +42,7 @@ const createApp = () => {
   app.use(helmet());
   app.use(cors(corsOptions));
   app.use(compression());
-  app.use(express.json({ limit: '10kb' }));
+  app.use(express.json({ limit: '512kb' }));
   app.use('/api', apiRateLimiter);
 
   app.get('/', (req, res) => {
@@ -61,6 +61,7 @@ const createApp = () => {
 
   // API surface: canonical adaptive + dashboard lives under /api/assessment (see docs/architecture/assessment-api-contract.md).
   // Deprecated mounts below keep HTTP + Deprecation headers for older integrations.
+  app.use('/api/account', require('./routes/accountRoutes'));
   app.use('/api/auth', require('./routes/googleAuth.routes'));
   app.use('/api/auth', require('./routes/authRoutes'));
   app.use('/api/questions', require('./routes/questionRoutes'));

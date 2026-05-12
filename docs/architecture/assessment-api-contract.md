@@ -48,7 +48,8 @@ Structured errors (`success` + `error` + `meta`) are available via `utils/apiRes
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| POST | `/api/assessment/cv/upload` | CV upload + parse into session |
+| POST | `/api/assessment/cv/upload` | CV upload + parse into session (**requires** `consentAccepted` in multipart body) |
+| POST | `/api/assessment/profile/manual` | Manual profile ingest → same `cvData` / `cvRawText` pipeline (**JSON**; requires `consentAccepted: true`) |
 | GET | `/api/assessment/session/active` | Active in-progress flow session + normalized `state` |
 | POST | `/api/assessment/start` | Start / continue adaptive flow |
 | GET | `/api/assessment/:id` | Session by id (user-scoped) |
@@ -106,6 +107,17 @@ Still mounted for backward compatibility; responses include **`Deprecation`**, *
 | `POST /api/ai/report/:assessmentId` | `POST /api/assessment/report/:assessmentId/ai` |
 
 **Frontend:** main adaptive journey uses **`assessmentFlowApi.js`** and **`assessmentApi.js`** only against `/api/assessment/*`. Do not wire new UI to `/api/cv`, `/api/ai`, or `/api/analytics`.
+
+## Account privacy API (Phase 8)
+
+Mounted at `/api/account/*` with the same `authMiddleware` as assessment routes.
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/api/account/export` | JSON export of the current user (no password hash / secrets) |
+| DELETE | `/api/account/profile-data` | Body `{ "confirm": true }` — scrubs CV/manual profile fields from stored sessions/results per service implementation |
+| DELETE | `/api/account/assessment/:resultId` | Body `{ "confirm": true }` — delete one `AssessmentResult` owned by the user (+ linked roadmap rows / sessions as implemented) |
+| DELETE | `/api/account` | Body `{ "confirm": true }` — hard delete user and related Mongo documents |
 
 ## Error codes (assessment flow)
 

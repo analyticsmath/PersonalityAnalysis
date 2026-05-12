@@ -18,6 +18,7 @@ import SkillProgressPanel from '../components/analytics/SkillProgressPanel';
 import RoadmapProgressPanel from '../components/analytics/RoadmapProgressPanel';
 import InsightTimeline from '../components/analytics/InsightTimeline';
 import ReportHistoryPanel from '../components/analytics/ReportHistoryPanel';
+import GrowthRecommendationsPanel from '../components/analytics/GrowthRecommendationsPanel';
 
 export default function AnalyticsPage() {
   const auth = useAuth();
@@ -56,6 +57,10 @@ export default function AnalyticsPage() {
         <AssessmentHistoryList query={historyQ} />
         <InsightTimeline query={timelineQ} />
         <ReportHistoryPanel query={reportHistQ} />
+        <GrowthRecommendationsPanel
+          query={reportHistQ}
+          items={reportHistQ.data?.growthRecommendations || []}
+        />
       </div>
     </main>
   );

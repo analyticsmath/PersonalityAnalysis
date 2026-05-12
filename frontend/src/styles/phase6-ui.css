@@ -427,3 +427,112 @@ textarea:focus-visible {
 .analytics-timeline__item {
   margin-bottom: var(--space-3);
 }
+
+/* Phase 8 — manual profile + privacy */
+.manual-profile-source {
+  border: 0;
+  padding: 0;
+  margin: var(--space-3) 0;
+}
+
+.manual-profile-source__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.manual-profile-source__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.manual-profile-form__grid {
+  display: grid;
+  grid-template-columns: minmax(140px, 200px) 1fr;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.manual-profile-form__grid input,
+.manual-profile-form__grid textarea {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  background: rgba(15, 23, 42, 0.45);
+  color: var(--text-primary, #e2e8f0);
+}
+
+.manual-profile-form__consent {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-top: var(--space-3);
+  font-size: 0.9rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.manual-profile-form__actions {
+  margin-top: var(--space-3);
+}
+
+.manual-profile-step-wrap {
+  margin-top: var(--space-2);
+}
+
+.manual-profile-summary__chips {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.manual-profile-summary__chips li {
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  font-size: 0.85rem;
+}
+
+.privacy-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3);
+}
+
+.privacy-page section {
+  margin-bottom: var(--space-5);
+}
+
+.privacy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.ui-message--warn {
+  border-left: 3px solid #f59e0b;
+  padding-left: 0.65rem;
+}
+
+.growth-recs {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.growth-recs li {
+  padding: var(--space-2);
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  background: rgba(15, 23, 42, 0.35);
+}
+

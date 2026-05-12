@@ -4,6 +4,9 @@
  */
 const RETENTION_POLICY_VERSION = 'phase8-v1';
 
+/** Consent record version aligned with retention policy documentation. */
+const CONSENT_VERSION = RETENTION_POLICY_VERSION;
+
 const DEFAULT_RETENTION_STANCE = {
   version: RETENTION_POLICY_VERSION,
   summary:
@@ -13,5 +16,6 @@ const DEFAULT_RETENTION_STANCE = {
 
 module.exports = {
   RETENTION_POLICY_VERSION,
+  CONSENT_VERSION,
   DEFAULT_RETENTION_STANCE,
 };

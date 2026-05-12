@@ -10,6 +10,22 @@ export default function RoadmapProgressPanel({ resultId, careerId }) {
 
   const keys = useMemo(() => q.data?.validActionKeys || [], [q.data?.validActionKeys]);
   const completed = useMemo(() => new Set(q.data?.completedActionKeys || []), [q.data?.completedActionKeys]);
+  const actionLabels = useMemo(() => q.data?.actionLabels || {}, [q.data?.actionLabels]);
+
+  const labelForKey = useCallback(
+    (key) => {
+      if (actionLabels && actionLabels[key]) {
+        return actionLabels[key];
+      }
+      const raw = String(key || '').trim();
+      const parts = raw.split('|');
+      if (parts.length === 3) {
+        return `Stage ${Number(parts[1]) + 1} · item ${Number(parts[2]) + 1}`;
+      }
+      return raw.replace(/\|/g, ' · ');
+    },
+    [actionLabels]
+  );
 
   const toggle = useCallback(
     async (key) => {
@@ -70,9 +86,9 @@ export default function RoadmapProgressPanel({ resultId, careerId }) {
                 checked={completed.has(key)}
                 onChange={() => toggle(key)}
                 disabled={m.isPending}
-                aria-label={`Mark roadmap action complete: ${key}`}
+                aria-label={`Mark roadmap action complete: ${labelForKey(key)}`}
               />
-              <span>{key}</span>
+              <span>{labelForKey(key)}</span>
             </label>
           </li>
         ))}

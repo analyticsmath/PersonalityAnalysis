@@ -27,6 +27,8 @@ const StepCV = ({
   analysisMessages = [],
   analysisIndex = 0,
   errorMessage,
+  consentAccepted = false,
+  onConsentChange,
 }) => {
   const fileRef = useRef(null);
 
@@ -38,20 +40,21 @@ const StepCV = ({
           Upload CV and analyze profile
         </h2>
         <p className="assessment-step__subtitle">
-          We will analyze your CV to detect field, skills, and interests before assessment starts.
+          We analyze your CV to detect field, skills, and interests before the adaptive assessment. Only PDF or DOCX
+          files are accepted (max 6 MB).
         </p>
       </header>
 
       <div className="wizard-cv-pane">
         <div className="wizard-upload-box">
           <p className="wizard-upload-box__title">Upload CV</p>
-          <p className="wizard-upload-box__subtitle">PDF, DOCX, or TXT</p>
+          <p className="wizard-upload-box__subtitle">PDF or DOCX (max 6 MB)</p>
 
           <input
             ref={fileRef}
             type="file"
             className="wizard-upload-box__input"
-            accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+            accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             onChange={(event) => onCvFileChange?.(event.target.files?.[0] || null)}
           />
 
@@ -106,6 +109,18 @@ const StepCV = ({
           </div>
         ) : null}
       </div>
+
+      <label className="manual-profile-form__consent">
+        <input
+          type="checkbox"
+          checked={Boolean(consentAccepted)}
+          onChange={(e) => onConsentChange?.(e.target.checked)}
+          disabled={isAnalyzing}
+        />
+        <span>
+          I consent to CV text being processed to personalize my assessment and career analytics (version phase8-v1).
+        </span>
+      </label>
 
       {errorMessage ? <p className="ui-message ui-message--error">{errorMessage}</p> : null}
 

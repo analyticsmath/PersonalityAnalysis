@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Button from '../../ui/Button';
+import ManualProfileSummary from '../../manual-profile/ManualProfileSummary';
 
 const toList = (value = '') =>
   String(value || '')
@@ -9,6 +10,9 @@ const toList = (value = '') =>
 
 const StepProfile = ({
   parsedProfile,
+  profileMode = 'cv',
+  manualProfile = null,
+  injection = null,
   onBack,
   onStartAssessment,
   isStartDisabled,
@@ -32,9 +36,20 @@ const StepProfile = ({
           Your profile ready
         </h2>
         <p className="assessment-step__subtitle">
-          CV analysis is complete. Review your detected profile and start the assessment.
+          {profileMode === 'manual'
+            ? 'Manual profile is saved. Review detected signals and start the adaptive assessment.'
+            : 'CV analysis is complete. Review your detected profile and start the assessment.'}
+        </p>
+        <p className="ui-message ui-message--neutral" role="status">
+          Profile source: {profileMode === 'manual' ? 'Manual entry' : 'CV upload'}
         </p>
       </header>
+
+      {profileMode === 'manual' ? (
+        <div className="wizard-profile-ready" style={{ marginBottom: '1rem' }}>
+          <ManualProfileSummary manualProfile={manualProfile} injection={injection} />
+        </div>
+      ) : null}
 
       <div className="wizard-profile-ready">
         <div className="wizard-profile-ready__block">

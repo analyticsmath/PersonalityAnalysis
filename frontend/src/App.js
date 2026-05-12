@@ -23,6 +23,8 @@ const BehaviorAssessmentPage = lazy(() => import('./pages/AssessmentFlow/Behavio
 const AssessmentFlowResultPage = lazy(() => import('./pages/AssessmentFlow/ResultPage'));
 const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplorerPage'));
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
+const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
+const TrustTransparencyPage = lazy(() => import('./pages/TrustTransparencyPage'));
 
 const SuspensePageFallback = () => (
   <main className="app-page">
@@ -161,6 +163,26 @@ const AppRoutes = () => {
                 withSuspense(
                   <ProtectedRoute>
                     <AnalyticsPage />
+                  </ProtectedRoute>
+                )
+              )}
+            />
+            <Route
+              path="/account/privacy"
+              element={withTransition(
+                withSuspense(
+                  <ProtectedRoute>
+                    <PrivacyControlsPage />
+                  </ProtectedRoute>
+                )
+              )}
+            />
+            <Route
+              path="/trust"
+              element={withTransition(
+                withSuspense(
+                  <ProtectedRoute>
+                    <TrustTransparencyPage />
                   </ProtectedRoute>
                 )
               )}
