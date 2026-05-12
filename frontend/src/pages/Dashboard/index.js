@@ -44,6 +44,7 @@ import {
 import { readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
 import { getPersonalityProfile } from '../../utils/personalityProfiles';
 import { normalizeTraits, TRAIT_META, TRAIT_ORDER } from '../../utils/traits';
+import { buildRadarTraits } from '../../utils/assessmentResultNormalize';
 import TraitRadarChart from '../../components/charts/TraitRadarChart';
 import TraitTrendsChart from '../../components/charts/TraitTrendsChart';
 import TraitDistributionChart from '../../components/charts/TraitDistributionChart';
@@ -330,6 +331,16 @@ const Dashboard = () => {
 
   const profile = getPersonalityProfile(latestAssessment?.dominantTrait);
   const trendData = useMemo(() => trendsQuery.data || [], [trendsQuery.data]);
+  const latestRadarForChart = useMemo(
+    () =>
+      buildRadarTraits({
+        trait_scores: latestAssessment?.traits,
+        traits: latestAssessment?.traits,
+        scores: reportQuery.data?.scores,
+      }),
+    [latestAssessment?.traits, reportQuery.data?.scores]
+  );
+
   const latestTraits = useMemo(
     () => normalizeTraits(latestAssessment?.traits || {}),
     [latestAssessment?.traits]
@@ -1051,7 +1062,12 @@ const Dashboard = () => {
                         <p>OCEAN dominance snapshot</p>
                       </header>
 
-                      <TraitRadarChart traits={latestTraits} compact={isMobile} height={280} />
+                      <TraitRadarChart
+                        traits={latestRadarForChart}
+                        compact={isMobile}
+                        height={280}
+                        scoreMeta={reportQuery.data?.scoreMeta || null}
+                      />
                     </article>
 
                     <article className="intel-chart-card">

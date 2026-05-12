@@ -7,7 +7,7 @@ export const TRAIT_META = {
   C: { label: 'Conscientiousness', short: 'C' },
   E: { label: 'Extraversion', short: 'E' },
   A: { label: 'Agreeableness', short: 'A' },
-  N: { label: 'Neuroticism', short: 'N' },
+  N: { label: 'Emotional Stability', short: 'ES' },
 };
 
 export const EMPTY_TRAITS = {

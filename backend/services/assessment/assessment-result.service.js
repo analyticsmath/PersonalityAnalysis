@@ -15,6 +15,7 @@ const {
   normalizeResultSchemaVersion,
   toLegacyBehaviorAnswers,
 } = require('./unified-contracts.service');
+const { runAssessmentScoring } = require('../scoring/assessmentScoringOrchestrator.service');
 
 const TRAITS = ['O', 'C', 'E', 'A', 'N'];
 
@@ -184,6 +185,7 @@ const persistAssessmentResult = async ({
   consistencyOutput,
   heatmapOutput,
   aiProfile,
+  scoringOutput,
 }) => {
   const now = new Date();
   const normalizedCv = normalizeCvData(session.cvData || {});
@@ -279,6 +281,10 @@ const persistAssessmentResult = async ({
         generatedAt: now,
       },
     },
+    scores: scoringOutput?.scores || {},
+    scoreMeta: scoringOutput?.scoreMeta || {},
+    evidence: Array.isArray(scoringOutput?.evidence) ? scoringOutput.evidence.slice(0, 500) : [],
+    warnings: Array.isArray(scoringOutput?.warnings) ? scoringOutput.warnings : [],
     schemaVersion: normalizeResultSchemaVersion(),
     completedAt: session.completedAt || now,
   };
@@ -361,6 +367,16 @@ const generateAssessmentResult = async ({ session }) => {
 
   const careerContrast = buildCareerContrast(careerOutput.recommendations || []);
 
+  const scoringOutput = runAssessmentScoring({
+    session,
+    unifiedAnswers,
+    questionPlan: session.questionPlan || [],
+    oceanTraitScores: personalityProfile.trait_scores || {},
+    aiProfile,
+    traitBehaviorVector: traitVectorOutput.behaviorVector || {},
+    cognitiveVector: traitVectorOutput.cognitiveVector || {},
+  });
+
   const narrativeOutput = await generateResultNarrative({
     aiProfile,
     traitVector: personalityProfile.trait_scores || {},
@@ -368,6 +384,10 @@ const generateAssessmentResult = async ({ session }) => {
     skills: aiProfile.skills || [],
     cognitiveVector: traitVectorOutput.cognitiveVector || {},
     behaviorVector: traitVectorOutput.behaviorVector || {},
+    phase3Scores: scoringOutput.scores,
+    phase3ScoreMeta: scoringOutput.scoreMeta,
+    phase3EvidencePreview: (scoringOutput.evidence || []).slice(0, 24),
+    phase3Warnings: scoringOutput.warnings || [],
   });
 
   const consistencyOutput = computeConsistencyScore({ traitVectorOutput });
@@ -403,6 +423,7 @@ const generateAssessmentResult = async ({ session }) => {
     consistencyOutput,
     heatmapOutput,
     aiProfile,
+    scoringOutput,
   });
 
   const resultObject = resultDocument.toObject();

@@ -1,0 +1,66 @@
+# Scoring methodology (Phase 3)
+
+This document describes the **deterministic scientific scoring layer** used alongside (but not controlled by) AI narrative features.
+
+## Scope and disclaimers
+
+- Outputs are **career and self-development guidance**, not medical or clinical diagnosis.
+- **AI does not own numeric scores.** OpenAI is used only for narrative text; all structured scores are computed in Node.js services under `backend/services/scoring/`.
+- Users should treat low-confidence or `partial` / `insufficient_data` validity states as invitations to gather more evidence, not as fixed labels.
+
+## Big Five (OCEAN-derived)
+
+Traits surfaced in the product API:
+
+| Internal key | Display |
+| --- | --- |
+| openness | Openness |
+| conscientiousness | Conscientiousness |
+| extraversion | Extraversion |
+| agreeableness | Agreeableness |
+| emotionalStability | Emotional Stability |
+
+**Emotional stability vs neuroticism:** legacy pipelines still compute a reactivity-oriented **N** channel internally (higher N = higher self-reported stress sensitivity in item space). Public **emotional stability** scores use an inverse stability view on that channel for clearer, non-clinical wording. This is **not** a clinical instrument.
+
+Each trait block includes: `score` (0–100), `confidence`, `evidenceCount`, `signals`, `contradictions`, `interpretation`, `source: "deterministic"`, and `validity` (`valid` | `partial` | `insufficient_data`).
+
+## RIASEC career interests
+
+Dimensions: **realistic, investigative, artistic, social, enterprising, conventional**.
+
+Holland-style **top-3 code** is derived from ranked dimension scores. When mean confidence is below an internal threshold or fewer than three dimensions have evidence, the code is flagged **preliminary**.
+
+## Work values
+
+Twelve preference dimensions (achievement, independence, recognition, relationships, support, workingConditions, security, autonomy, learning, impact, workLifeBalance, compensation). These are **preference indicators**, not immutable traits.
+
+## Career signals
+
+Structured keys (e.g. technicalDepth, leadership) combine lightweight answer heuristics with CV-derived hints for Phase 4 occupation matching.
+
+## Score metadata (`scoreMeta`)
+
+| Field | Meaning |
+| --- | --- |
+| `scoreSource` | Always `deterministic` for numeric scoring in Phase 3 |
+| `scoreValidity` | `valid` \| `partial` \| `insufficient_data` \| `invalid` |
+| `confidence` | Global 0–1 confidence |
+| `evidenceCount` | Number of evidence rows |
+| `missingDimensions` / `missingEvidence` | Honest coverage gaps |
+| `isFinal` | `false` when evidence thresholds are not met |
+| `scoringVersion` | e.g. `phase3-v1` |
+| `generatedAt` | ISO timestamp |
+
+Legacy documents without `scoreMeta` are surfaced as `scoreSource: legacy_unverified` in summaries.
+
+## Evidence model
+
+Evidence rows reference `answer`, `cv`, `behavior`, or `inferred` sources with short signal text (not full raw CV text).
+
+## AI narrative boundary
+
+The narrative model receives **read-only** Phase 3 JSON. It must not output replacement numeric scores. Prompts explicitly require non-clinical language and uncertainty caveats when validity is partial or confidence is low.
+
+## Versioning
+
+Bump `scoringVersion` in `backend/services/scoring/scoringTypes.js` when materially changing thresholds or formulas.

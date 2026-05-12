@@ -69,6 +69,10 @@ const generateResultNarrative = async ({
   skills = [],
   cognitiveVector = {},
   behaviorVector = {},
+  phase3Scores = null,
+  phase3ScoreMeta = null,
+  phase3EvidencePreview = [],
+  phase3Warnings = [],
 } = {}) => {
   const fallback = fallbackNarrative({
     aiProfile,
@@ -76,6 +80,20 @@ const generateResultNarrative = async ({
     careers,
     skills,
   });
+
+  const phase3ContextBlock = {
+    numericScoresAreFixed: true,
+    phase3Scores,
+    phase3ScoreMeta,
+    phase3EvidencePreview,
+    phase3Warnings,
+    narrativeRules: [
+      'Do not invent or restate numeric trait, RIASEC, work values, or career signal scores.',
+      'Do not provide medical, clinical, or diagnostic language.',
+      'Frame outputs as career guidance and self-insight, not diagnosis.',
+      'Call out uncertainty explicitly when confidence is low or scoreValidity is partial/insufficient_data.',
+    ],
+  };
 
   if (!config.openaiApiKey) {
     return fallback;
@@ -90,11 +108,11 @@ const generateResultNarrative = async ({
         {
           role: 'system',
           content:
-            'Generate concise psychometric narratives grounded strictly in provided profile evidence. Return JSON only.',
+            'Generate concise career-development narratives grounded strictly in provided profile evidence. Return JSON only. Never output revised numeric scores; reference them qualitatively only.',
         },
         {
           role: 'user',
-          content: `Generate personality summary.\n\nUse:\n\ntop traits\ntop skills\ndomain\ncareers\n\nReturn:\n\nsummary\nstrengths\nweaknesses\ngrowth path\n\nJSON schema:\n{\n  "summary": "",\n  "strengths": [""],\n  "weaknesses": [""],\n  "growth_path": [""]\n}\n\nProfile data:\n${JSON.stringify(
+          content: `Generate personality summary.\n\nUse:\n\ntop traits\ntop skills\ndomain\ncareers\nPhase 3 deterministic score context (read-only numbers)\n\nReturn:\n\nsummary\nstrengths\nweaknesses\ngrowth path\n\nJSON schema:\n{\n  "summary": "",\n  "strengths": [""],\n  "weaknesses": [""],\n  "growth_path": [""]\n}\n\nProfile data:\n${JSON.stringify(
             {
               aiProfile,
               traitVector,
@@ -102,6 +120,7 @@ const generateResultNarrative = async ({
               behaviorVector,
               careers: (careers || []).slice(0, 5),
               skills: toList(skills.length ? skills : aiProfile.skills, 12),
+              phase3ContextBlock,
             },
             null,
             2

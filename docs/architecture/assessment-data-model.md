@@ -1,4 +1,4 @@
-# Assessment data model (Phase 2)
+# Assessment data model (Phase 2 + Phase 3 scoring)
 
 ## Active canonical models
 
@@ -20,7 +20,8 @@ Primary document for the **CV-driven adaptive assessment**.
 Persisted scoring + narrative payload for a completed adaptive run.
 
 - **Links:** `userId`, `sessionId` (unique, indexed).
-- **Score metadata:** trait vectors, facet scores, `scoreSource` / confidence fields (see schema — consumed by report guards and honest chart gating).
+- **Phase 3 fields:** `scores` (Mixed), `scoreMeta` (Mixed), `evidence` (array), `warnings` (string array) — see `docs/architecture/scoring-methodology.md`.
+- **Legacy compatibility:** `personality.traits` continues to expose O/C/E/A/N for older clients; summaries add `meta.scoreSource` of `legacy_unverified` when Phase 3 metadata was never persisted.
 
 ### `User` (`backend/models/User.js`)
 
@@ -28,7 +29,7 @@ Authentication and cross-session preferences; assessment-specific counters may l
 
 ## Legacy / compatibility
 
-### `LegacyAssessmentSession` (`legacyassessmentsessions` / `assessmentsessions` collection per model file)
+### `LegacyAssessmentSession` (`backend/models/LegacyAssessmentSession.js`, Mongo collection **`assessmentsessions`**)
 
 Pre-adaptive static questionnaire sessions (`Question` refs, Likert answers). **No new writes** from the active adaptive pipeline.
 

@@ -120,6 +120,10 @@ const toAssessmentReport = (result) => {
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
     completedAt: result.completedAt,
+    scores: result.scores && typeof result.scores === 'object' ? result.scores : {},
+    scoreMeta: result.scoreMeta && typeof result.scoreMeta === 'object' ? result.scoreMeta : null,
+    evidence: Array.isArray(result.evidence) ? result.evidence.slice(0, 80) : [],
+    warnings: Array.isArray(result.warnings) ? result.warnings : [],
   };
 };
 

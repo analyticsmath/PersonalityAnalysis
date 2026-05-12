@@ -20,12 +20,14 @@ import Skeleton from '../../components/ui/Skeleton';
 import Loader from '../../components/ui/Loader';
 import LoaderOverlay from '../../components/ui/LoaderOverlay';
 import TraitRadarChart from '../../components/charts/TraitRadarChart';
+import RiasecRadarChart from '../../components/charts/RiasecRadarChart';
+import WorkValuesProfileCard from '../../components/charts/WorkValuesProfileCard';
 import CareerAlignmentChart from '../../components/charts/CareerAlignmentChart';
 import MetricBarChart from '../../components/charts/MetricBarChart';
 import InsightHeatmapChart from '../../components/charts/InsightHeatmapChart';
 import TraitSphere from '../../components/3d/TraitSphere';
 import mapTraitsTo3DData from '../../utils/traitMapper';
-import { normalizeTraits } from '../../utils/traits';
+import { normalizeAssessmentResult } from '../../utils/assessmentResultNormalize';
 import { useAuth } from '../../hooks/useAuth';
 import tokens from '../../theme/tokens';
 import {
@@ -36,6 +38,8 @@ import {
 import { downloadAssessmentFlowPdf } from '../../api/assessmentFlowApi';
 import { clearAssessmentFlowState, readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
 import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEvents';
+import ScoringEvidenceCard from '../../components/results/ScoringEvidenceCard';
+import CareerSignalsSummary from '../../components/results/CareerSignalsSummary';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,7 +110,8 @@ const AssessmentFlowResultPage = () => {
   const resultsLoadedRef = useRef(false);
 
   const result = resultQuery.data?.result || null;
-  const scoreMeta = result?.meta || null;
+  const normalized = useMemo(() => normalizeAssessmentResult(result), [result]);
+  const scoreMeta = normalized.scoreMeta || result?.meta || null;
   const normalizedState = resultQuery.data?.state || null;
   const reportStatus = normalizedState?.reportStatus || result?.reportStatus || null;
   const reportStatusCode = String(reportStatus?.status || '').toLowerCase();
@@ -145,7 +150,10 @@ const AssessmentFlowResultPage = () => {
     }
   }, [chatHistory, chatTyping]);
 
-  const traits = useMemo(() => normalizeTraits(result?.trait_scores || {}), [result?.trait_scores]);
+  const traits = normalized.radarTraits;
+  const phaseScores = normalized.scores;
+  const evidenceList = normalized.evidence;
+  const warningList = normalized.warnings;
   const threeDPayload = useMemo(() => mapTraitsTo3DData(traits), [traits]);
   const recommendations = Array.isArray(result?.career_recommendations)
     ? result.career_recommendations
@@ -622,6 +630,22 @@ const AssessmentFlowResultPage = () => {
 
           <Card title="3D Trait Sphere" subtitle="Interactive trait field" className="result-profile-chart" >
             <TraitSphere data={threeDPayload} />
+          </Card>
+
+          <Card title="RIASEC interests" subtitle="Holland-style career interests (evidence-weighted)">
+            <RiasecRadarChart riasec={phaseScores?.riasec} scoreMeta={scoreMeta} height={280} />
+          </Card>
+
+          <Card title="Work values" subtitle="Preference indicators — not fixed personality traits">
+            <WorkValuesProfileCard workValues={phaseScores?.workValues} scoreMeta={scoreMeta} height={280} />
+          </Card>
+
+          <Card title="Career skill signals" subtitle="Structured signals for future occupation matching">
+            <CareerSignalsSummary careerSignals={phaseScores?.careerSignals} scoreMeta={scoreMeta} />
+          </Card>
+
+          <Card title="Evidence & caveats" subtitle="Why you see these numbers">
+            <ScoringEvidenceCard scoreMeta={scoreMeta} evidence={evidenceList} warnings={warningList} />
           </Card>
         </section>
 

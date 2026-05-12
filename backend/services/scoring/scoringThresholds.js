@@ -1,0 +1,15 @@
+/**
+ * Configurable validity thresholds (Phase 3).
+ * Tuned for adaptive runs with partial metadata; adjust as question bank matures.
+ */
+module.exports = {
+  BIG_FIVE_MIN_TRAITS_WITH_EVIDENCE: 3,
+  BIG_FIVE_MIN_TOTAL_EVIDENCE_ITEMS: 8,
+  RIASEC_MIN_DIMENSIONS_SCORED: 3,
+  RIASEC_PRELIMINARY_MEAN_CONFIDENCE: 0.45,
+  WORK_VALUES_MIN_VALUES_WITH_EVIDENCE: 4,
+  CAREER_SIGNALS_MIN_WITH_SOURCES: 2,
+  MIN_SCORABLE_ANSWERS: 5,
+  EVIDENCE_CONFIDENCE_CAP_PER_ITEM: 0.22,
+  GLOBAL_VALID_MIN_CONFIDENCE: 0.35,
+};

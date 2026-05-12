@@ -1,4 +1,4 @@
-# Assessment API contract (Phase 2)
+# Assessment API contract (Phase 2 + Phase 3)
 
 Canonical active assessment traffic uses **`/api/assessment/*`** (mounted in `backend/server.js` as `app.use('/api/assessment', assessmentFlowRoutes)`). All routes on this router require `authMiddleware` (Bearer JWT).
 
@@ -56,7 +56,7 @@ Structured errors (`success` + `error` + `meta`) are available via `utils/apiRes
 | GET | `/api/assessment/:id/question` | Current adaptive question |
 | POST | `/api/assessment/:id/question/previous` | Previous question |
 | POST | `/api/assessment/:id/answer` | Submit answer (expected-stage + idempotency) |
-| GET | `/api/assessment/:id/result` | Result / scoring payload |
+| GET | `/api/assessment/:id/result` | Result / scoring payload (Phase 3 adds `scores`, `scoreMeta`, `evidence`, `warnings`; see below) |
 | GET | `/api/assessment/:id/result/pdf` | PDF download |
 | POST | `/api/assessment/:id/chat` | Career chat (post-result) |
 | POST | `/api/assessment/:id/why-not` | Explain career exclusion |
@@ -106,6 +106,22 @@ Still mounted for backward compatibility; responses include **`Deprecation`**, *
 | Various scoring/report strings | 409 | Report blocked before scoring / invalid score source (Phase 1 guards) |
 
 Exact messages are asserted in backend Phase 1 tests.
+
+## Phase 3 result summary fields (`mapResultToLegacySummary`)
+
+Flow `GET /api/assessment/:id/result` returns `data.result` with legacy keys **plus**:
+
+- `scores.bigFive` — formal trait blocks (`openness`, `conscientiousness`, `extraversion`, `agreeableness`, `emotionalStability`)
+- `scores.riasec` — dimensions, `hollandCode`, `hollandCodePreliminary`
+- `scores.workValues` — keyed value blocks
+- `scores.careerSignals` — structured career signal metadata
+- `meta` — chart gating + `scoringVersion`, `isFinal`, `missingEvidence`, `evidenceSources`, `generatedAt` / `generated_at`
+- `evidence` — capped evidence list for transparency UI
+- `warnings` — scoring warnings
+
+Dashboard `GET /api/assessment/report/:assessmentId` returns the same blocks on `report` (`scores`, `scoreMeta`, `evidence`, `warnings`).
+
+Scoring error code constants live in `backend/services/scoring/scoringErrors.js` for reuse (not all are thrown as HTTP errors yet).
 
 ## Utilities
 

@@ -478,22 +478,62 @@ const countByAnswerType = ({ answers = [], type }) =>
   normalizeUnifiedAnswers(answers).filter((answer) => answer.type === type).length;
 
 const deriveScoreMeta = (result = {}) => {
-  const traits = result.personality?.traits && typeof result.personality.traits === 'object' ? result.personality.traits : {};
-  const keys = ['O','C','E','A','N'];
+  if (result.scoreMeta && typeof result.scoreMeta === 'object' && result.scoreMeta.scoreValidity) {
+    const m = result.scoreMeta;
+    return {
+      scoreSource: m.scoreSource || 'deterministic',
+      scoreValidity: m.scoreValidity || 'partial',
+      confidence: Number.isFinite(Number(m.confidence)) ? Number(m.confidence) : null,
+      evidenceCount: Number(m.evidenceCount || 0),
+      missingDimensions: Array.isArray(m.missingDimensions) ? m.missingDimensions : [],
+      isFinal: Boolean(m.isFinal),
+      scoringVersion: String(m.scoringVersion || ''),
+      generatedAt: String(m.generatedAt || ''),
+      missingEvidence: Array.isArray(m.missingEvidence) ? m.missingEvidence : [],
+      evidenceSources: Array.isArray(m.evidenceSources) ? m.evidenceSources : [],
+    };
+  }
+
+  const traits =
+    result.personality?.traits && typeof result.personality.traits === 'object'
+      ? result.personality.traits
+      : {};
+  const keys = ['O', 'C', 'E', 'A', 'N'];
   const present = keys.filter((k) => Number.isFinite(Number(traits[k])));
   const confidence = Number(result.analytics?.confidence || 0);
-  const hasAiReport = Boolean(result.analytics?.aiReport?.summary);
   const hasScores = present.length > 0;
-  if (!hasScores) return { scoreSource: 'unknown', scoreValidity: 'insufficient_data', confidence: null, evidenceCount: 0, missingDimensions: keys, isFinal: false };
-  const missing = keys.filter((k)=>!present.includes(k));
-  const scoreSource = hasAiReport ? 'ai_augmented' : 'deterministic';
-  const scoreValidity = missing.length ? 'partial' : 'valid';
-  return { scoreSource, scoreValidity, confidence: Number.isFinite(confidence)?confidence:null, evidenceCount: present.length, missingDimensions: missing, isFinal: missing.length===0 };
+  if (!hasScores) {
+    return {
+      scoreSource: 'unknown',
+      scoreValidity: 'insufficient_data',
+      confidence: null,
+      evidenceCount: 0,
+      missingDimensions: keys,
+      isFinal: false,
+      scoringVersion: '',
+      generatedAt: '',
+      missingEvidence: [],
+      evidenceSources: [],
+    };
+  }
+  const missing = keys.filter((k) => !present.includes(k));
+  return {
+    scoreSource: 'legacy_unverified',
+    scoreValidity: missing.length ? 'partial' : 'valid',
+    confidence: Number.isFinite(confidence) ? confidence : null,
+    evidenceCount: present.length,
+    missingDimensions: missing,
+    isFinal: missing.length === 0,
+    scoringVersion: 'legacy',
+    generatedAt: '',
+    missingEvidence: [],
+    evidenceSources: [],
+  };
 };
 
 const mapResultToLegacySummary = (result = {}) => {
   const scoreMeta = deriveScoreMeta(result);
-  return ({
+  return {
   personality_type:
     toString(result.personality?.archetypes?.personalityType) ||
     toString(result.personality?.archetypes?.dominantArchetype) ||
@@ -551,13 +591,24 @@ const mapResultToLegacySummary = (result = {}) => {
     evidenceCount: scoreMeta.evidenceCount,
     missingDimensions: scoreMeta.missingDimensions,
     isFinal: scoreMeta.isFinal,
+    scoringVersion: scoreMeta.scoringVersion,
+    generatedAt:
+      scoreMeta.generatedAt ||
+      new Date(result.completedAt || result.updatedAt || Date.now()).toISOString(),
+    generated_at:
+      scoreMeta.generatedAt ||
+      new Date(result.completedAt || result.updatedAt || Date.now()).toISOString(),
+    missingEvidence: scoreMeta.missingEvidence,
+    evidenceSources: scoreMeta.evidenceSources,
     questions_answered: normalizeUnifiedAnswers(result.answers || []).filter((answer) =>
       ['likert', 'scale', 'mcq', 'text', 'scenario'].includes(answer.type)
     ).length,
     behavior_questions_answered: countByAnswerType({ answers: result.answers, type: 'behavior' }),
-    generated_at: new Date(result.completedAt || result.updatedAt || Date.now()).toISOString(),
   },
-});
+  scores: result.scores && typeof result.scores === 'object' ? result.scores : {},
+  evidence: Array.isArray(result.evidence) ? result.evidence.slice(0, 80) : [],
+  warnings: Array.isArray(result.warnings) ? result.warnings : [],
+};
 };
 
 const isValidStageTransition = ({ from, to }) => {

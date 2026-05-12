@@ -146,6 +146,22 @@ const assessmentResultSchema = new mongoose.Schema(
       stopConfidence: { type: Number, min: 0, max: 1, default: 0 },
       aiReport: { type: aiReportSchema, default: undefined },
     },
+    scores: {
+      type: mongoose.Schema.Types.Mixed,
+      default: undefined,
+    },
+    scoreMeta: {
+      type: mongoose.Schema.Types.Mixed,
+      default: undefined,
+    },
+    evidence: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: undefined,
+    },
+    warnings: {
+      type: [String],
+      default: undefined,
+    },
     schemaVersion: { type: String, default: RESULT_SCHEMA_VERSION, trim: true },
     legacyAssessmentId: {
       type: mongoose.Schema.Types.ObjectId,
