@@ -119,6 +119,20 @@ Flow `GET /api/assessment/:id/result` returns `data.result` with legacy keys **p
 - `evidence` — capped evidence list for transparency UI
 - `warnings` — scoring warnings
 - `career_recommendations_phase4` — persisted Phase 4 bundle (`version`, `locked`, `preliminary`, `recommendations` buckets, `topRecommendations`, `skillGapSummary`, `roadmaps`, `warnings`) when available; `null` for legacy results
+- `ai_report` — optional dashboard AI narrative payload (includes `narrativeExtended` when present)
+- `ai_status` — last known AI pipeline status (`schemaValidated`, `fallbackUsed`, `provider`, `promptVersion`, …)
+
+## Phase 5 — coach + report safety fields
+
+`POST /api/assessment/:id/chat` now returns, in addition to `answer` and `history`:
+
+- `coachResponse` — structured JSON (`answer`, `referencedScores`, `referencedCareers`, `suggestedNextSteps`, `uncertaintyNotes`, `safetyFlags`, `shouldEscalateToHuman`, `version`)
+- `aiStatus` — orchestration metadata (see `docs/architecture/ai-reliability-and-safety.md`)
+- `safetyFlags` — merged injection + output safety flags for the UI
+
+`POST /api/assessment/report/:assessmentId/ai` echoes `aiStatus` on success, cached, and duplicate-idempotency responses.
+
+`GET /api/assessment/:id/career-recommendations` requires a Bearer token (**401** without). Session access is enforced via `getSessionForUser` (**403** for non-owners). Owners receive deterministic Phase 4 payloads independent of AI availability.
 
 ### `GET /api/assessment/:id/career-recommendations`
 

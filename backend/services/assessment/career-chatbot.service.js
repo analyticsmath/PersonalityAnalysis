@@ -1,6 +1,22 @@
 const { config } = require('../../config/env');
-const { extractOutputText } = require('./aiJson');
-const { getOpenAiClient } = require('./openaiClient');
+const { runOrchestratedAiCall, finalizeAiStatus } = require('../ai/aiOrchestrator.service');
+const { validateCoachWithRepair } = require('../ai/aiOutputValidator.service');
+const { SCHEMA_IDS } = require('../ai/aiSchemas');
+const { buildStructuredCoachFallback } = require('../ai/aiFallbacks.service');
+const {
+  scanUserText,
+  wrapUntrustedUserContent,
+} = require('../ai/aiPromptInjectionGuard.service');
+const {
+  scanUserMessageForRisk,
+  crisisSupportFallback,
+  clinicalRequestFallback,
+  scanOutputForSafetyFlags,
+  runLocalModerationStub,
+  unsafeOutputReplacement,
+} = require('../ai/aiSafety.service');
+const { logAiAuditEvent } = require('../ai/aiAudit.service');
+const { getPromptRegistryEntry } = require('../ai/aiPromptRegistry');
 
 const toText = (value) => String(value || '').trim();
 
@@ -97,7 +113,7 @@ const toProfileContext = ({ session, result }) => {
   };
 };
 
-const buildFallback = ({ context, message }) => {
+const buildFallbackStructured = ({ context, message }) => {
   const topCareer = context.careers?.[0] || null;
   const topTraits = (context.topTraits || [])
     .map((item) => `${item.key} ${Math.round(item.value)}%`)
@@ -105,61 +121,242 @@ const buildFallback = ({ context, message }) => {
 
   const topGaps = (context.topSkillGaps || []).slice(0, 3).join(', ');
 
+  const hints = [];
   if (topCareer) {
-    return [
-      `Profile-grounded answer for: ${message}`,
-      `Top match: ${topCareer.career} (${Math.round(topCareer.score || 0)}%).`,
-      `Evidence: traits (${topTraits || 'balanced profile'}) and domain (${context.domain}).`,
-      topGaps ? `Primary skill gaps to close: ${topGaps}.` : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
+    hints.push(`Top match: ${topCareer.career} (${Math.round(topCareer.score || 0)}%).`);
+    hints.push(`Evidence: traits (${topTraits || 'balanced profile'}) and domain (${context.domain}).`);
+    if (topGaps) hints.push(`Primary skill gaps to close: ${topGaps}.`);
   }
 
-  return `Using your profile context, I can answer with specific career fit logic. Ask about a target role, growth path, or skill-gap plan.`;
+  const fb = buildStructuredCoachFallback({ message, contextHints: hints });
+  return {
+    ...fb,
+    referencedCareers: topCareer ? [topCareer.career] : [],
+    referencedScores: (context.topTraits || []).map((t) => t.key),
+  };
 };
 
 const generateCareerChatReply = async ({ session, result, message }) => {
   const context = toProfileContext({ session, result });
-
-  if (!config.openaiApiKey) {
-    return buildFallback({ context, message });
+  const registry = getPromptRegistryEntry('career-coach-chat');
+  const userRisk = scanUserMessageForRisk(message);
+  if (userRisk.level === 'crisis') {
+    const coach = {
+      answer: crisisSupportFallback,
+      referencedScores: [],
+      referencedCareers: [],
+      suggestedNextSteps: ['Reach out to local emergency or crisis resources', 'Contact someone you trust'],
+      uncertaintyNotes: 'Automated safety response; not a substitute for professional crisis care.',
+      safetyFlags: userRisk.flags,
+      shouldEscalateToHuman: true,
+      version: SCHEMA_IDS.CAREER_COACH_V1,
+    };
+    const aiStatus = finalizeAiStatus({
+      basePromptVersion: registry?.version || 'phase5',
+      schemaValidated: true,
+      safetyChecked: true,
+      fallbackUsed: true,
+      errorCode: 'USER_MESSAGE_SAFETY',
+      noKey: false,
+      latencyMs: 0,
+      model: 'n/a',
+    });
+    logAiAuditEvent({
+      promptId: 'career-coach-chat',
+      promptVersion: registry?.version || 'phase5',
+      provider: 'local_fallback',
+      model: 'n/a',
+      schemaId: SCHEMA_IDS.CAREER_COACH_V1,
+      schemaValidated: true,
+      safetyChecked: true,
+      fallbackUsed: true,
+      latencyMs: 0,
+      errorCode: 'USER_MESSAGE_SAFETY',
+    });
+    return { answer: coach.answer, coach, aiStatus, safetyFlags: coach.safetyFlags };
+  }
+  if (userRisk.level === 'clinical_request') {
+    const coach = {
+      answer: clinicalRequestFallback,
+      referencedScores: [],
+      referencedCareers: [],
+      suggestedNextSteps: ['Review your deterministic scores in the Results view'],
+      uncertaintyNotes: 'Clinical requests are out of scope for this coach.',
+      safetyFlags: userRisk.flags,
+      shouldEscalateToHuman: false,
+      version: SCHEMA_IDS.CAREER_COACH_V1,
+    };
+    const aiStatus = finalizeAiStatus({
+      basePromptVersion: registry?.version || 'phase5',
+      schemaValidated: true,
+      safetyChecked: true,
+      fallbackUsed: true,
+      errorCode: 'CLINICAL_OUT_OF_SCOPE',
+      noKey: false,
+      latencyMs: 0,
+      model: 'n/a',
+    });
+    logAiAuditEvent({
+      promptId: 'career-coach-chat',
+      promptVersion: registry?.version || 'phase5',
+      provider: 'local_fallback',
+      model: 'n/a',
+      schemaId: SCHEMA_IDS.CAREER_COACH_V1,
+      schemaValidated: true,
+      safetyChecked: true,
+      fallbackUsed: true,
+      latencyMs: 0,
+      errorCode: 'CLINICAL_OUT_OF_SCOPE',
+    });
+    return { answer: coach.answer, coach, aiStatus, safetyFlags: coach.safetyFlags };
   }
 
+  const injectionScan = scanUserText(message);
+  const contextJson = JSON.stringify(context, null, 2);
   const recentHistory = (session.chatHistory || [])
     .slice(-8)
     .map((entry) => `${entry.role}: ${entry.message}`)
     .join('\n');
 
-  try {
-    const response = await getOpenAiClient().responses.create({
-      model: config.openaiModel,
-      temperature: 0.2,
-      max_output_tokens: 700,
-      input: [
-        {
-          role: 'system',
-          content:
-            'You are a profile-grounded career assistant. Always answer using provided profile evidence. Use sections and bullet points with clear reasoning. Avoid generic advice. Phase 4 career intelligence (if present) is read-only: never change or invent fit scores, confidence numbers, or missing skills—explain and contextualize them only.',
-        },
-        {
-          role: 'user',
-          content: `Answer using this profile.\n\nUse:\n\nbullet points\nsections\nclear reasoning\n\nProfile context:\n${JSON.stringify(context, null, 2)}\n\nRecent chat:\n${recentHistory || 'none'}\n\nUser question:\n${message}\n\nOutput style:\n- Start with a short direct answer.\n- Then provide sections: Evidence, Career Fit, Skill Gaps, Next Actions.\n- Reference profile traits, skills, and ranked careers explicitly.`,
-        },
-      ],
+  if (!config.openaiApiKey) {
+    const coach = buildFallbackStructured({ context, message });
+    const aiStatus = finalizeAiStatus({
+      basePromptVersion: registry?.version || 'phase5',
+      schemaValidated: true,
+      safetyChecked: true,
+      fallbackUsed: true,
+      errorCode: 'NO_API_KEY',
+      noKey: true,
+      latencyMs: 0,
+      model: 'n/a',
     });
-
-    const text = toText(extractOutputText(response));
-    if (text) {
-      return text;
-    }
-
-    return buildFallback({ context, message });
-  } catch (error) {
-    return buildFallback({ context, message });
+    logAiAuditEvent({
+      promptId: 'career-coach-chat',
+      promptVersion: registry?.version || 'phase5',
+      provider: 'none',
+      model: 'n/a',
+      schemaId: SCHEMA_IDS.CAREER_COACH_V1,
+      schemaValidated: true,
+      safetyChecked: true,
+      fallbackUsed: true,
+      latencyMs: 0,
+      errorCode: 'NO_API_KEY',
+      injectionFlags: injectionScan.patterns,
+    });
+    return {
+      answer: coach.answer,
+      coach,
+      aiStatus,
+      safetyFlags: [...(coach.safetyFlags || []), ...(injectionScan.suspicious ? ['user_text_injection_suspected'] : [])],
+    };
   }
+
+  const orchestration = await runOrchestratedAiCall({
+    promptId: 'career-coach-chat',
+    promptVersion: registry?.version || 'phase5',
+    schemaId: SCHEMA_IDS.CAREER_COACH_V1,
+    buildInput: () => [
+      {
+        role: 'system',
+        content: `You are a profile-grounded career assistant. Always answer using provided profile evidence. Phase 4 career intelligence (if present) is read-only: never change or invent fit scores, confidence numbers, or missing skills—explain and contextualize them only. Return JSON only with keys: answer, referencedScores, referencedCareers, suggestedNextSteps, uncertaintyNotes, safetyFlags, shouldEscalateToHuman, version="${SCHEMA_IDS.CAREER_COACH_V1}".`,
+      },
+      {
+        role: 'user',
+        content: [
+          wrapUntrustedUserContent('profile_context', contextJson),
+          wrapUntrustedUserContent('recent_chat', recentHistory || 'none'),
+          wrapUntrustedUserContent('user_question', message),
+          'Answer using JSON schema only.',
+        ].join('\n\n'),
+      },
+    ],
+    injectionMeta: injectionScan,
+    timeoutMs: 45000,
+    maxRetries: 1,
+  });
+
+  if (!orchestration.ok || !orchestration.text.trim()) {
+    const coach = buildFallbackStructured({ context, message });
+    const aiStatus = finalizeAiStatus({
+      basePromptVersion: registry?.version || 'phase5',
+      schemaValidated: false,
+      safetyChecked: true,
+      fallbackUsed: true,
+      errorCode: orchestration.errorCode || 'AI_CALL_FAILED',
+      noKey: false,
+      latencyMs: orchestration.latencyMs,
+      model: orchestration.model || config.openaiModel,
+    });
+    logAiAuditEvent({
+      promptId: 'career-coach-chat',
+      promptVersion: registry?.version || 'phase5',
+      provider: 'local_fallback',
+      model: orchestration.model || config.openaiModel,
+      schemaId: SCHEMA_IDS.CAREER_COACH_V1,
+      schemaValidated: false,
+      safetyChecked: true,
+      fallbackUsed: true,
+      latencyMs: orchestration.latencyMs || 0,
+      errorCode: orchestration.errorCode,
+      injectionFlags: injectionScan.patterns,
+    });
+    return {
+      answer: coach.answer,
+      coach,
+      aiStatus,
+      safetyFlags: [...(coach.safetyFlags || []), ...(injectionScan.suspicious ? ['user_text_injection_suspected'] : [])],
+    };
+  }
+
+  const vr = validateCoachWithRepair(orchestration.text);
+  let coach = vr.ok && vr.result.ok ? vr.result.value : buildFallbackStructured({ context, message });
+  const mod = runLocalModerationStub(coach.answer);
+  const bad = scanOutputForSafetyFlags(coach.answer);
+  if (mod.flagged || bad.length) {
+    coach = {
+      ...coach,
+      answer: unsafeOutputReplacement,
+      safetyFlags: Array.from(new Set([...(coach.safetyFlags || []), ...bad, 'output_safety'])),
+    };
+  }
+  if (injectionScan.suspicious) {
+    coach = {
+      ...coach,
+      safetyFlags: Array.from(new Set([...(coach.safetyFlags || []), 'user_text_injection_suspected'])),
+    };
+  }
+
+  const aiStatus = finalizeAiStatus({
+    basePromptVersion: registry?.version || 'phase5',
+    schemaValidated: Boolean(vr.ok && vr.result.ok),
+    safetyChecked: true,
+    fallbackUsed: !(vr.ok && vr.result.ok),
+    errorCode: vr.ok && vr.result.ok ? null : 'SCHEMA_VALIDATION_FAILED',
+    noKey: false,
+    latencyMs: orchestration.latencyMs,
+    model: orchestration.model || config.openaiModel,
+  });
+
+  logAiAuditEvent({
+    promptId: 'career-coach-chat',
+    promptVersion: registry?.version || 'phase5',
+    provider: aiStatus.provider,
+    model: orchestration.model || config.openaiModel,
+    schemaId: SCHEMA_IDS.CAREER_COACH_V1,
+    schemaValidated: aiStatus.schemaValidated,
+    safetyChecked: aiStatus.safetyChecked,
+    fallbackUsed: aiStatus.fallbackUsed,
+    latencyMs: orchestration.latencyMs || 0,
+    tokenUsage: orchestration.usage,
+    errorCode: aiStatus.errorCode,
+    injectionFlags: injectionScan.patterns,
+    outputSafetyFlags: coach.safetyFlags || [],
+  });
+
+  return { answer: coach.answer, coach, aiStatus, safetyFlags: coach.safetyFlags || [] };
 };
 
 module.exports = {
   generateCareerChatReply,
+  toProfileContext,
 };

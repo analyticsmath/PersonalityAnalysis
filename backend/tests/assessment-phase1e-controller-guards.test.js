@@ -17,7 +17,7 @@ const loadController = ({ scoreMeta, reportState = {}, existingAiReport = null }
     save: async () => { saveCalls.push({ ...fakeResult.analytics }); },
   };
 
-  require.cache[aiServicePath] = { exports: { generatePersonalityReport: async () => { aiCalls += 1; return { summary: 'ok', strengths: [], weaknesses: [], communicationStyle: '', workStyle: '', growthSuggestions: [], careerRecommendations: [], metadata: { model: 'm', promptVersion: '1', generatedAt: new Date().toISOString(), usage: {} }, deterministicInsights: [], staticCareerMatches: [] }; } } };
+  require.cache[aiServicePath] = { exports: { generatePersonalityReport: async () => { aiCalls += 1; return { summary: 'ok', strengths: [], weaknesses: [], communicationStyle: 'direct', workStyle: 'structured', growthSuggestions: [], careerRecommendations: [], narrativeExtended: null, aiStatus: { status: 'ready', provider: 'openai', promptVersion: '1', schemaValidated: true, safetyChecked: true, fallbackUsed: false, errorCode: null, latencyMs: 0, model: 'm' }, metadata: { model: 'm', promptVersion: '1', generatedAt: new Date().toISOString(), usage: {} }, deterministicInsights: [], staticCareerMatches: [] }; } } };
   require.cache[resultServicePath] = { exports: { getResultByIdForUpdate: async () => fakeResult, normalizeCareerRecommendations: (x) => x, toAiReportMeta: () => ({}), toPublicAiReport: () => ({}), toTraitPayload: () => ({ O: 60 }) } };
   require.cache[unifiedPath] = { exports: { deriveScoreMeta: () => scoreMeta } };
   delete require.cache[require.resolve('../Controllers/aiController')];

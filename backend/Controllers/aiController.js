@@ -48,7 +48,17 @@ const generateAssessmentAiReport = async (req, res, next) => {
     const actionId = String(req.body?.idempotencyKey || req.body?.clientActionId || req.headers['x-idempotency-key'] || '').trim();
     const reportState = assessmentResult.analytics?.reportState || {};
     if (actionId && reportState.lastActionId === actionId) {
-      return sendSuccess(res, { data: { assessmentId: assessmentResult._id, cached: true, generating: Boolean(reportState.generating), aiReport: toPublicAiReport(existingAiReport), aiReportMeta: toAiReportMeta(existingAiReport) }, message: 'Duplicate report action ignored' });
+      return sendSuccess(res, {
+        data: {
+          assessmentId: assessmentResult._id,
+          cached: true,
+          generating: Boolean(reportState.generating),
+          aiReport: toPublicAiReport(existingAiReport),
+          aiReportMeta: toAiReportMeta(existingAiReport),
+          aiStatus: existingAiReport?.aiStatus || null,
+        },
+        message: 'Duplicate report action ignored',
+      });
     }
 
     if (existingAiReport && !forceRefresh) {
@@ -58,6 +68,7 @@ const generateAssessmentAiReport = async (req, res, next) => {
           cached: true,
           aiReport: toPublicAiReport(existingAiReport),
           aiReportMeta: toAiReportMeta(existingAiReport),
+          aiStatus: existingAiReport?.aiStatus || null,
           insightEngine: deterministicInsights,
           careerEngine,
         },
@@ -83,17 +94,17 @@ const generateAssessmentAiReport = async (req, res, next) => {
         model: generatedReport.metadata.model,
         promptVersion: generatedReport.metadata.promptVersion,
         generatedAt: new Date(generatedReport.metadata.generatedAt),
+        narrativeExtended: generatedReport.narrativeExtended || null,
+        aiStatus: generatedReport.aiStatus || null,
+        safetyFlags: generatedReport.narrativeExtended?.safetyFlags || [],
       },
     };
 
-    if (Array.isArray(generatedReport.careerRecommendations)) {
-      assessmentResult.career = {
-        ...(assessmentResult.career || {}),
-        recommendations: generatedReport.careerRecommendations,
-      };
-    }
-
     await assessmentResult.save();
+
+    const persistedCareer = normalizeCareerRecommendations(assessmentResult.career?.recommendations || []);
+    const careerEngineOut =
+      persistedCareer.length > 0 ? persistedCareer : buildCareerContext(traits, 5);
 
     return sendSuccess(res, {
       data: {
@@ -104,10 +115,9 @@ const generateAssessmentAiReport = async (req, res, next) => {
           ...toAiReportMeta(assessmentResult.analytics?.aiReport),
           usage: generatedReport.metadata.usage,
         },
+        aiStatus: generatedReport.aiStatus || null,
         insightEngine: generatedReport.deterministicInsights,
-        careerEngine: normalizeCareerRecommendations(
-          assessmentResult.career?.recommendations || generatedReport.staticCareerMatches
-        ),
+        careerEngine: careerEngineOut,
       },
       message: 'AI report generated successfully',
     });

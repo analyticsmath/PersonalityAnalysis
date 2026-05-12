@@ -73,10 +73,11 @@ Copy avoids “unsuitable career” language.
 - Returns Phase 4 payload fields (`assessmentId`, `scoreMeta`, `careerProfileVersion`, `locked`, `preliminary`, `recommendations`, `topRecommendations`, `skillGapSummary`, `roadmaps`, `warnings`).
 - If the stored document lacks `careerRecommendations` but Phase 3 scores exist, the handler **recomputes** deterministically from `scores` + `scoreMeta` + session CV/profile.
 
-## AI boundary (reports + chat)
+## AI boundary (reports + chat + observability)
 
 - `ai-result-narrative.service.js` receives a **slimmed** Phase 4 block inside `phase3ContextBlock`.
 - `career-chatbot.service.js` includes `phase4CareerIntelligence` in JSON context with explicit instructions: **do not change fit scores or invent gaps**.
+- **Phase 5:** client and HTTP responses may surface `aiStatus` (`schemaValidated`, `fallbackUsed`, `safetyChecked`, `latencyMs`, `model`, …) alongside narratives. **`aiStatus` never overrides** stored `fitScore`, `skillReadinessScore`, or Phase 3 `scores` — it is provenance metadata only.
 
 ## Tests
 

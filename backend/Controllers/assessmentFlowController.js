@@ -1802,11 +1802,12 @@ const careerChat = async (req, res, next) => {
       throw createHttpError(400, 'message is required');
     }
 
-    const reply = await generateCareerChatReply({
+    const chatOut = await generateCareerChatReply({
       session,
       result: result.toObject(),
       message,
     });
+    const reply = typeof chatOut === 'string' ? chatOut : chatOut.answer;
 
     session.chatHistory = [
       ...(session.chatHistory || []),
@@ -1829,6 +1830,9 @@ const careerChat = async (req, res, next) => {
       data: {
         sessionId: session._id,
         answer: reply,
+        coachResponse: typeof chatOut === 'string' ? null : chatOut.coach,
+        aiStatus: typeof chatOut === 'string' ? null : chatOut.aiStatus,
+        safetyFlags: typeof chatOut === 'string' ? [] : chatOut.safetyFlags || [],
         history: session.chatHistory,
       },
       message: 'Career assistant response generated successfully',

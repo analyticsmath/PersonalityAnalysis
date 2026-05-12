@@ -42,6 +42,7 @@ import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEv
 import ScoringEvidenceCard from '../../components/results/ScoringEvidenceCard';
 import CareerSignalsSummary from '../../components/results/CareerSignalsSummary';
 import CareerRecommendationCard from '../../components/career/CareerRecommendationCard';
+import AiStatusBadges from '../../components/results/AiStatusBadges';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -100,6 +101,7 @@ const AssessmentFlowResultPage = () => {
   const [followUpPrompts, setFollowUpPrompts] = useState(QUICK_CHAT_PROMPTS);
   const [chatError, setChatError] = useState('');
   const [chatTyping, setChatTyping] = useState(false);
+  const [coachAiStatus, setCoachAiStatus] = useState(null);
   const [pdfError, setPdfError] = useState('');
   const [shareStatus, setShareStatus] = useState('');
   const [whyNotCareer, setWhyNotCareer] = useState('');
@@ -113,6 +115,7 @@ const AssessmentFlowResultPage = () => {
 
   const result = resultQuery.data?.result || null;
   const normalized = useMemo(() => normalizeAssessmentResult(result), [result]);
+  const flowAiStatus = normalized.aiStatus || null;
   const scoreMeta = normalized.scoreMeta || result?.meta || null;
   const careerPhase4Embedded = normalized.careerPhase4;
   const careerRecQuery = useCareerRecommendationsQuery(
@@ -123,6 +126,10 @@ const AssessmentFlowResultPage = () => {
   const normalizedState = resultQuery.data?.state || null;
   const reportStatus = normalizedState?.reportStatus || result?.reportStatus || null;
   const reportStatusCode = String(reportStatus?.status || '').toLowerCase();
+  const reportWarning =
+    reportStatusCode === 'failed' ||
+    reportStatusCode === 'unavailable' ||
+    reportStatusCode === 'generating';
 
 
   useEffect(() => {
@@ -142,6 +149,7 @@ const AssessmentFlowResultPage = () => {
 
   useEffect(() => {
     resultsLoadedRef.current = false;
+    setCoachAiStatus(null);
   }, [sessionId]);
 
   useEffect(() => {
@@ -327,6 +335,7 @@ const AssessmentFlowResultPage = () => {
         targetKey: 'chatbot-panel',
       });
       setChatHistory((current) => (Array.isArray(payload.history) ? payload.history : current));
+      setCoachAiStatus(payload.aiStatus || null);
       setFollowUpPrompts(
         toDefaultFollowUps(topCareer?.career || 'your best-fit role').map((item, index) =>
           index === 0 ? item : `${item} (${text.slice(0, 36)}...)`
@@ -334,11 +343,31 @@ const AssessmentFlowResultPage = () => {
       );
     } catch (error) {
       setChatError(error.message || 'Assistant is unavailable right now.');
-      setChatHistory((current) =>
-        current.filter(
+      setCoachAiStatus({
+        status: 'fallback',
+        provider: 'local_fallback',
+        promptVersion: 'n/a',
+        schemaValidated: false,
+        safetyChecked: true,
+        fallbackUsed: true,
+        errorCode: 'CLIENT_CHAT_ERROR',
+        latencyMs: 0,
+        model: 'n/a',
+      });
+      setChatHistory((current) => {
+        const withoutOptimistic = current.filter(
           (entry) => !(entry.createdAt === optimisticTimestamp && entry.role === 'user' && entry.message === text)
-        )
-      );
+        );
+        return [
+          ...withoutOptimistic,
+          {
+            role: 'assistant',
+            message:
+              'The career coach is temporarily unavailable. Your deterministic scores and Career Intelligence cards above remain the source of truth for fit and gaps.',
+            createdAt: new Date().toISOString(),
+          },
+        ];
+      });
     } finally {
       setChatTyping(false);
     }
@@ -475,44 +504,6 @@ const AssessmentFlowResultPage = () => {
     );
   }
 
-  if (reportStatusCode === 'generating') {
-    return (
-      <main className="app-page">
-        <div className="page-shell">
-          <Card title="Generating report">
-            <p className="ui-message">Generating your AI report...</p>
-            <Button disabled>Generate Report</Button>
-          </Card>
-        </div>
-      </main>
-    );
-  }
-
-  if (reportStatusCode === 'unavailable') {
-    return (
-      <main className="app-page">
-        <div className="page-shell">
-          <Card title="Report unavailable">
-            <p className="ui-message ui-message--warning">Your report is currently unavailable.</p>
-          </Card>
-        </div>
-      </main>
-    );
-  }
-
-  if (reportStatusCode === 'failed') {
-    return (
-      <main className="app-page">
-        <div className="page-shell">
-          <Card title="Report generation failed">
-            <p className="ui-message ui-message--error">Action failed. Please retry.</p>
-            <Button onClick={() => resultQuery.refetch()}>Retry Failed Action</Button>
-          </Card>
-        </div>
-      </main>
-    );
-  }
-
   const confidenceBand = bandClass(result.confidence_band);
   const confidencePercent = Math.max(0, Math.min(100, Math.round(result.confidence_score || 0)));
 
@@ -520,6 +511,26 @@ const AssessmentFlowResultPage = () => {
     <main className="app-page phase3-result-page" data-avatar-section="results-main">
       <LoaderOverlay visible={resultQuery.isPending} message="Building your personality profile..." />
       <div className="page-shell result-shell phase3-result-shell">
+        {reportWarning ? (
+          <section className="phase3-result-section" style={{ marginBottom: 8 }}>
+            <Card title="Report and AI narrative status">
+              <p className="ui-message ui-message--warning">
+                {reportStatusCode === 'generating'
+                  ? 'Your optional AI narrative may still be generating. Charts below use deterministic scoring and remain available.'
+                  : ''}
+                {reportStatusCode === 'failed'
+                  ? 'The optional AI narrative step failed; refresh to retry. Deterministic scores and Career Intelligence remain available below.'
+                  : ''}
+                {reportStatusCode === 'unavailable'
+                  ? 'The optional AI narrative is temporarily unavailable. Deterministic results remain authoritative.'
+                  : ''}
+              </p>
+              <Button variant="ghost" onClick={() => resultQuery.refetch()}>
+                Refresh status
+              </Button>
+            </Card>
+          </section>
+        ) : null}
         <section
           data-scroll-reveal
           className="phase3-result-hero phase3-result-section"
@@ -533,6 +544,11 @@ const AssessmentFlowResultPage = () => {
             <p className="page-header__subtitle">
               {result.narrative_summary || result.behavioral_summary || 'Narrative summary unavailable.'}
             </p>
+            <p className="ui-message ui-message--neutral" style={{ marginTop: 8, fontSize: 13 }}>
+              Guidance only — not medical or psychological diagnosis and not a hiring decision. Numeric scores are
+              produced by the deterministic engine.
+            </p>
+            <AiStatusBadges aiStatus={flowAiStatus} />
             <div className="phase3-archetype-badge">
               <FiAward />
               <span>{result.personality_type_label || result.personality_type}</span>
@@ -872,6 +888,7 @@ const AssessmentFlowResultPage = () => {
           data-avatar-target="chatbot-panel"
         >
           <Card title="AI Career Chatbot" subtitle="Ask follow-up questions about your profile">
+            <AiStatusBadges aiStatus={coachAiStatus} />
             <div className="phase4-chat-shell" data-avatar-target="chatbot-panel">
               <div className="phase4-chat-suggestions">
                 {followUps.map((prompt) => (

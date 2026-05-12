@@ -199,7 +199,7 @@ describe('phase1e page states', () => {
         <ResultPage />
       </MemoryRouter>
     );
-    expect(screen.getByText(/Generating your AI report/i)).toBeInTheDocument();
+    expect(screen.getByText(/Your optional AI narrative may still be generating/i)).toBeInTheDocument();
     h.mockResultQuery.mockReturnValue({
       isPending: false,
       data: {
@@ -213,7 +213,7 @@ describe('phase1e page states', () => {
         <ResultPage />
       </MemoryRouter>
     );
-    expect(screen.getByText(/Please retry/i)).toBeInTheDocument();
+    expect(screen.getByText(/optional AI narrative step failed/i)).toBeInTheDocument();
   });
 
   it('does not auto-generate report repeatedly on rerender', () => {

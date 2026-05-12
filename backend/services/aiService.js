@@ -1,16 +1,15 @@
-const OpenAI = require('openai');
 const { config } = require('../config/env');
-const { createHttpError } = require('../utils/httpError');
-const {
-  buildPersonalityReportPrompt,
-} = require('../prompts/personalityReport.prompt');
+const { buildPersonalityReportPrompt } = require('../prompts/personalityReport.prompt');
 const { normalizeTraits, generateInsightSnapshot } = require('./insightService');
-const {
-  buildCareerContext,
-  mergeCareerRecommendations,
-} = require('./careerEngine');
-
-let openaiClient;
+const { mergeCareerRecommendations, buildCareerContext } = require('./careerEngine');
+const { runOrchestratedAiCall, finalizeAiStatus } = require('./ai/aiOrchestrator.service');
+const { validateReportWithRepair } = require('./ai/aiOutputValidator.service');
+const { SCHEMA_IDS } = require('./ai/aiSchemas');
+const { buildDeterministicPersonalityReportFallback } = require('./ai/aiFallbacks.service');
+const { scanOutputForSafetyFlags, runLocalModerationStub, unsafeOutputReplacement } = require('./ai/aiSafety.service');
+const { getPromptRegistryEntry } = require('./ai/aiPromptRegistry');
+const { logAiAuditEvent } = require('./ai/aiAudit.service');
+const { parseJsonFromText } = require('./assessment/aiJson');
 
 const MAX_LIST_ITEMS = {
   strengths: 6,
@@ -51,116 +50,43 @@ const toCareerRecommendations = (value) => {
     .slice(0, MAX_LIST_ITEMS.careerRecommendations);
 };
 
-const ensureText = (value, fieldName) => {
-  const text = String(value || '').trim();
-
-  if (!text) {
-    throw createHttpError(502, `AI response missing required field: ${fieldName}`);
-  }
-
-  return text;
+const bundleNarrativeText = (ext) => {
+  const cg = Array.isArray(ext?.careerGuidance)
+    ? ext.careerGuidance
+    : ext?.careerGuidance
+      ? [String(ext.careerGuidance)]
+      : [];
+  return [
+    ext.summary,
+    ...(ext.strengths || []),
+    ...(ext.growthAreas || []),
+    ...cg,
+    ext.communicationStyle,
+    ext.workStyle,
+  ].join('\n');
 };
 
-const extractOutputText = (response) => {
-  if (typeof response?.output_text === 'string' && response.output_text.trim()) {
-    return response.output_text.trim();
+const applySafetyToNarrative = (ext) => {
+  const mod = runLocalModerationStub(bundleNarrativeText(ext));
+  const patternFlags = scanOutputForSafetyFlags(bundleNarrativeText(ext));
+  const mergedFlags = Array.from(new Set([...(ext.safetyFlags || []), ...patternFlags]));
+  if (!mod.flagged && patternFlags.length === 0) {
+    return { ...ext, safetyFlags: mergedFlags };
   }
-
-  const chunks = [];
-
-  if (!Array.isArray(response?.output)) {
-    return '';
-  }
-
-  response.output.forEach((entry) => {
-    if (!entry || !Array.isArray(entry.content)) {
-      return;
-    }
-
-    entry.content.forEach((contentItem) => {
-      if (!contentItem) {
-        return;
-      }
-
-      if (typeof contentItem.text === 'string') {
-        chunks.push(contentItem.text);
-        return;
-      }
-
-      if (typeof contentItem?.text?.value === 'string') {
-        chunks.push(contentItem.text.value);
-        return;
-      }
-
-      if (typeof contentItem.value === 'string') {
-        chunks.push(contentItem.value);
-      }
-    });
-  });
-
-  return chunks.join('\n').trim();
-};
-
-const parseJsonFromText = (text) => {
-  const normalized = String(text || '')
-    .replace(/^```json\s*/i, '')
-    .replace(/^```\s*/i, '')
-    .replace(/\s*```$/i, '')
-    .trim();
-
-  if (!normalized) {
-    throw createHttpError(502, 'AI returned an empty report payload');
-  }
-
-  try {
-    return JSON.parse(normalized);
-  } catch (initialError) {
-    const startIndex = normalized.indexOf('{');
-    const endIndex = normalized.lastIndexOf('}');
-
-    if (startIndex < 0 || endIndex <= startIndex) {
-      throw createHttpError(502, 'AI report format was not valid JSON');
-    }
-
-    const jsonSlice = normalized.slice(startIndex, endIndex + 1);
-
-    try {
-      return JSON.parse(jsonSlice);
-    } catch (fallbackError) {
-      throw createHttpError(502, 'AI report could not be parsed as JSON');
-    }
-  }
-};
-
-const normalizeReport = (payload) => {
-  if (!payload || typeof payload !== 'object') {
-    throw createHttpError(502, 'AI report payload was malformed');
-  }
-
   return {
-    summary: ensureText(payload.summary, 'summary'),
-    strengths: toStringList(payload.strengths, MAX_LIST_ITEMS.strengths),
-    weaknesses: toStringList(payload.weaknesses, MAX_LIST_ITEMS.weaknesses),
-    communicationStyle: ensureText(payload.communicationStyle, 'communicationStyle'),
-    workStyle: ensureText(payload.workStyle, 'workStyle'),
-    growthSuggestions: toStringList(
-      payload.growthSuggestions,
-      MAX_LIST_ITEMS.growthSuggestions
-    ),
-    careerRecommendations: toCareerRecommendations(payload.careerRecommendations),
+    ...ext,
+    summary: unsafeOutputReplacement,
+    safetyFlags: Array.from(new Set([...mergedFlags, 'output_safety_replacement'])),
   };
 };
 
-const getOpenAiClient = () => {
-  if (!config.openaiApiKey) {
-    throw createHttpError(503, 'AI report is unavailable: OPENAI_API_KEY is not configured');
+const extractAiCareersFromResponseText = (text) => {
+  try {
+    const parsed = parseJsonFromText(text, 'AI report');
+    return toCareerRecommendations(parsed.careerRecommendations);
+  } catch {
+    return [];
   }
-
-  if (!openaiClient) {
-    openaiClient = new OpenAI({ apiKey: config.openaiApiKey });
-  }
-
-  return openaiClient;
 };
 
 const generatePersonalityReport = async (traits = {}, facetScores = {}) => {
@@ -168,51 +94,170 @@ const generatePersonalityReport = async (traits = {}, facetScores = {}) => {
   const deterministicInsights = generateInsightSnapshot(normalizedTraits);
   const staticCareerMatches = buildCareerContext(normalizedTraits, 5);
 
+  const registry = getPromptRegistryEntry('personality-report');
   const { promptVersion, systemPrompt, userPrompt } = buildPersonalityReportPrompt({
     traits: normalizedTraits,
     facetScores,
     deterministicInsights,
     staticCareerMatches,
   });
+  const effectivePromptVersion = registry?.version || promptVersion;
 
-  const response = await getOpenAiClient().responses.create({
-    model: config.openaiModel,
-    input: [
-      {
-        role: 'system',
-        content: systemPrompt,
-      },
-      {
-        role: 'user',
-        content: userPrompt,
-      },
-    ],
-    temperature: 0.35,
-    max_output_tokens: 1800,
+  const orchestration = await runOrchestratedAiCall({
+    promptId: 'personality-report',
+    promptVersion: effectivePromptVersion,
+    schemaId: SCHEMA_IDS.REPORT_NARRATIVE_V1,
+    buildInput: () => {
+      const guardrails = registry
+        ? `Prompt governance (${registry.promptId} ${registry.version}):\n${registry.forbiddenClaims
+            .map((c) => `- ${c}`)
+            .join('\n')}\nSafety:\n${registry.safetyRules.map((c) => `- ${c}`).join('\n')}\n\n`
+        : '';
+      return [
+        { role: 'system', content: `${guardrails}${systemPrompt}` },
+        { role: 'user', content: userPrompt },
+      ];
+    },
+    timeoutMs: 55000,
+    maxRetries: 1,
   });
 
-  const outputText = extractOutputText(response);
-  const parsedPayload = parseJsonFromText(outputText);
-  const normalizedReport = normalizeReport(parsedPayload);
+  const finishAndAudit = ({
+    narrativeExtended,
+    mergedCareerRecommendations,
+    model,
+    usage,
+    generatedAt,
+    aiStatus,
+    repairedSchema,
+  }) => {
+    logAiAuditEvent({
+      promptId: 'personality-report',
+      promptVersion: effectivePromptVersion,
+      provider: aiStatus.provider,
+      model: aiStatus.model || model || 'n/a',
+      schemaId: SCHEMA_IDS.REPORT_NARRATIVE_V1,
+      schemaValidated: aiStatus.schemaValidated,
+      safetyChecked: aiStatus.safetyChecked,
+      fallbackUsed: aiStatus.fallbackUsed,
+      latencyMs: aiStatus.latencyMs ?? 0,
+      tokenUsage: usage,
+      errorCode: aiStatus.errorCode,
+      injectionFlags: [],
+      outputSafetyFlags: narrativeExtended.safetyFlags || [],
+    });
+    return {
+      summary: narrativeExtended.summary,
+      strengths: toStringList(narrativeExtended.strengths, MAX_LIST_ITEMS.strengths),
+      weaknesses: toStringList(narrativeExtended.growthAreas, MAX_LIST_ITEMS.weaknesses),
+      communicationStyle: narrativeExtended.communicationStyle,
+      workStyle: narrativeExtended.workStyle,
+      growthSuggestions: toStringList(
+        narrativeExtended.learningRecommendations,
+        MAX_LIST_ITEMS.growthSuggestions
+      ),
+      careerRecommendations: mergedCareerRecommendations,
+      narrativeExtended,
+      metadata: {
+        model,
+        promptVersion: effectivePromptVersion,
+        usage,
+        generatedAt,
+        schemaRepairUsed: Boolean(repairedSchema),
+      },
+      deterministicInsights,
+      staticCareerMatches,
+      aiStatus,
+    };
+  };
 
+  if (!orchestration.ok || !String(orchestration.text || '').trim()) {
+    const fb = buildDeterministicPersonalityReportFallback({
+      traits: normalizedTraits,
+      facetScores,
+      deterministicInsights,
+      staticCareerMatches,
+      promptVersion: effectivePromptVersion,
+    });
+    const aiStatus = finalizeAiStatus({
+      basePromptVersion: effectivePromptVersion,
+      schemaValidated: true,
+      safetyChecked: true,
+      fallbackUsed: true,
+      errorCode: orchestration.errorCode || 'AI_CALL_FAILED',
+      noKey: !config.openaiApiKey,
+      latencyMs: orchestration.latencyMs,
+      model: orchestration.model || config.openaiModel || 'n/a',
+    });
+    return finishAndAudit({
+      narrativeExtended: fb.narrativeExtended,
+      mergedCareerRecommendations: fb.careerRecommendations,
+      model: fb.metadata.model,
+      usage: fb.metadata.usage,
+      generatedAt: fb.metadata.generatedAt,
+      aiStatus,
+      repairedSchema: false,
+    });
+  }
+
+  const vr = validateReportWithRepair(orchestration.text);
+  if (!vr.ok || !vr.result.ok) {
+    const fb = buildDeterministicPersonalityReportFallback({
+      traits: normalizedTraits,
+      facetScores,
+      deterministicInsights,
+      staticCareerMatches,
+      promptVersion: effectivePromptVersion,
+    });
+    const aiStatus = finalizeAiStatus({
+      basePromptVersion: effectivePromptVersion,
+      schemaValidated: false,
+      safetyChecked: true,
+      fallbackUsed: true,
+      errorCode: 'SCHEMA_VALIDATION_FAILED',
+      noKey: false,
+      latencyMs: orchestration.latencyMs,
+      model: orchestration.model || config.openaiModel,
+    });
+    return finishAndAudit({
+      narrativeExtended: fb.narrativeExtended,
+      mergedCareerRecommendations: fb.careerRecommendations,
+      model: fb.metadata.model,
+      usage: fb.metadata.usage,
+      generatedAt: fb.metadata.generatedAt,
+      aiStatus,
+      repairedSchema: vr.repaired,
+    });
+  }
+
+  const narrativeExtended = applySafetyToNarrative(vr.result.value);
+  const aiCareerList = extractAiCareersFromResponseText(orchestration.text);
   const mergedCareerRecommendations = mergeCareerRecommendations({
-    aiRecommendations: normalizedReport.careerRecommendations,
+    aiRecommendations: aiCareerList,
     staticRecommendations: staticCareerMatches,
     limit: MAX_LIST_ITEMS.careerRecommendations,
   });
 
-  return {
-    ...normalizedReport,
-    careerRecommendations: mergedCareerRecommendations,
-    metadata: {
-      model: response.model || config.openaiModel,
-      promptVersion,
-      usage: response.usage || null,
-      generatedAt: new Date().toISOString(),
-    },
-    deterministicInsights,
-    staticCareerMatches,
-  };
+  const aiStatus = finalizeAiStatus({
+    basePromptVersion: effectivePromptVersion,
+    schemaValidated: true,
+    safetyChecked: true,
+    fallbackUsed: false,
+    errorCode: null,
+    noKey: false,
+    latencyMs: orchestration.latencyMs,
+    model: orchestration.model || config.openaiModel,
+  });
+
+  return finishAndAudit({
+    narrativeExtended,
+    mergedCareerRecommendations,
+    model: orchestration.model,
+    usage: orchestration.usage,
+    generatedAt: new Date().toISOString(),
+    aiStatus,
+    repairedSchema: vr.repaired,
+  });
 };
 
 module.exports = {

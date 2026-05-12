@@ -43,6 +43,8 @@ export function normalizeAssessmentResult(raw) {
       evidence: [],
       warnings: [],
       careerPhase4: null,
+      aiStatus: null,
+      aiReport: null,
     };
   }
 
@@ -56,5 +58,7 @@ export function normalizeAssessmentResult(raw) {
       raw.career_recommendations_phase4 && typeof raw.career_recommendations_phase4 === 'object'
         ? raw.career_recommendations_phase4
         : null,
+    aiStatus: raw.ai_status || raw.ai_report?.aiStatus || null,
+    aiReport: raw.ai_report && typeof raw.ai_report === 'object' ? raw.ai_report : null,
   };
 }

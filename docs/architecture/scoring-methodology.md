@@ -65,6 +65,10 @@ Evidence rows reference `answer`, `cv`, `behavior`, or `inferred` sources with s
 
 The narrative model receives **read-only** Phase 3 JSON. It must not output replacement numeric scores. Prompts explicitly require non-clinical language and uncertainty caveats when validity is partial or confidence is low.
 
+## Phase 5 — `aiStatus` on results and reports
+
+API summaries and dashboard AI report payloads may include **`ai_status` / `aiStatus`** metadata: `status`, `provider`, `promptVersion`, `schemaValidated`, `safetyChecked`, `fallbackUsed`, `errorCode`, **`latencyMs`**, and **`model`**. These fields describe the last AI pipeline step only; they **do not** change Phase 3 numeric scores stored on `AssessmentResult`.
+
 ## Versioning
 
 Bump `scoringVersion` in `backend/services/scoring/scoringTypes.js` when materially changing thresholds or formulas.

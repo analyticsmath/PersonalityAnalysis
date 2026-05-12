@@ -58,6 +58,11 @@ const toPublicAiReport = (aiReport) => {
       ? aiReport.growthSuggestions
       : [],
     careerRecommendations: normalizeCareerRecommendations(aiReport.careerRecommendations),
+    narrativeExtended: aiReport.narrativeExtended && typeof aiReport.narrativeExtended === 'object'
+      ? aiReport.narrativeExtended
+      : null,
+    aiStatus: aiReport.aiStatus && typeof aiReport.aiStatus === 'object' ? aiReport.aiStatus : null,
+    safetyFlags: Array.isArray(aiReport.safetyFlags) ? aiReport.safetyFlags : [],
   };
 };
 
@@ -70,6 +75,8 @@ const toAiReportMeta = (aiReport) => {
     model: aiReport.model,
     promptVersion: aiReport.promptVersion,
     generatedAt: aiReport.generatedAt,
+    aiStatus: aiReport.aiStatus && typeof aiReport.aiStatus === 'object' ? aiReport.aiStatus : null,
+    safetyFlags: Array.isArray(aiReport.safetyFlags) ? aiReport.safetyFlags : [],
   };
 };
 

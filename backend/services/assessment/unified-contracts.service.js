@@ -612,6 +612,25 @@ const mapResultToLegacySummary = (result = {}) => {
     result.careerRecommendations && typeof result.careerRecommendations === 'object'
       ? result.careerRecommendations
       : null,
+  ai_report:
+    result.analytics?.aiReport && typeof result.analytics.aiReport === 'object'
+      ? {
+          summary: String(result.analytics.aiReport.summary || ''),
+          strengths: Array.isArray(result.analytics.aiReport.strengths) ? result.analytics.aiReport.strengths : [],
+          weaknesses: Array.isArray(result.analytics.aiReport.weaknesses) ? result.analytics.aiReport.weaknesses : [],
+          communicationStyle: String(result.analytics.aiReport.communicationStyle || ''),
+          workStyle: String(result.analytics.aiReport.workStyle || ''),
+          growthSuggestions: Array.isArray(result.analytics.aiReport.growthSuggestions)
+            ? result.analytics.aiReport.growthSuggestions
+            : [],
+          narrativeExtended: result.analytics.aiReport.narrativeExtended || null,
+          aiStatus: result.analytics.aiReport.aiStatus || null,
+          safetyFlags: Array.isArray(result.analytics.aiReport.safetyFlags)
+            ? result.analytics.aiReport.safetyFlags
+            : [],
+        }
+      : null,
+  ai_status: result.analytics?.aiReport?.aiStatus || null,
 };
 };
 

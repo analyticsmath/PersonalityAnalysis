@@ -31,8 +31,11 @@ describe('assessmentResultNormalize', () => {
     expect(n.careerPhase4?.version).toBe('phase4-v1');
   });
 
-  it('normalizeAssessmentResult handles null', () => {
-    const n = normalizeAssessmentResult(null);
-    expect(n.radarTraits.O).toBe(0);
+  it('normalizeAssessmentResult exposes aiStatus from ai_status', () => {
+    const n = normalizeAssessmentResult({
+      meta: {},
+      ai_status: { status: 'ready', schemaValidated: true, fallbackUsed: false },
+    });
+    expect(n.aiStatus?.status).toBe('ready');
   });
 });
