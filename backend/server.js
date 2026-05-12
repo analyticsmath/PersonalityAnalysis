@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 const { config, validateRequiredEnv } = require('./config/env');
 const { sendSuccess } = require('./utils/response');
+const { DEFAULT_RETENTION_STANCE } = require('./config/dataRetention.constants');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
 const corsOptions = {
@@ -51,7 +52,12 @@ const createApp = () => {
     });
   });
 
-  app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok' }));
+  app.get('/api/health', (req, res) =>
+    res.status(200).json({
+      status: 'ok',
+      dataRetention: DEFAULT_RETENTION_STANCE,
+    })
+  );
 
   // API surface: canonical adaptive + dashboard lives under /api/assessment (see docs/architecture/assessment-api-contract.md).
   // Deprecated mounts below keep HTTP + Deprecation headers for older integrations.
