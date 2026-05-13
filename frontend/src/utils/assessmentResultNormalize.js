@@ -1,4 +1,5 @@
 import { normalizeTraits } from './traits';
+import { hasSufficientGraphData } from './graphDataGuards';
 
 /**
  * Normalize flow `result` payloads (Phase 3 + legacy).
@@ -10,6 +11,8 @@ export function buildRadarTraits(raw) {
   }
 
   const traitScores = raw.trait_scores || raw.traits || {};
+
+  const meta = raw.meta && typeof raw.meta === 'object' ? raw.meta : null;
   const p3 = raw.scores?.bigFive;
   const hasP3 =
     p3 &&
@@ -18,20 +21,29 @@ export function buildRadarTraits(raw) {
     String(p3.openness.source || '') === 'deterministic';
 
   if (hasP3) {
-    return {
+    const deterministicTraits = {
       O: Math.max(0, Math.min(100, Number(p3.openness.score || 0))),
       C: Math.max(0, Math.min(100, Number(p3.conscientiousness.score || 0))),
       E: Math.max(0, Math.min(100, Number(p3.extraversion.score || 0))),
       A: Math.max(0, Math.min(100, Number(p3.agreeableness.score || 0))),
       N: Math.max(0, Math.min(100, Number(p3.emotionalStability.score || 0))),
     };
+    if (!meta) return deterministicTraits;
+    return hasSufficientGraphData(deterministicTraits, ['O','C','E','A','N'], meta)
+      ? deterministicTraits
+      : { O: 0, C: 0, E: 0, A: 0, N: 0 };
   }
 
   const base = normalizeTraits(traitScores);
-  return {
+  const normalized = {
     ...base,
     N: Math.max(0, Math.min(100, 100 - Number(base.N || 0))),
   };
+
+  if (!meta) return normalized;
+  return hasSufficientGraphData(normalized, ['O','C','E','A','N'], meta)
+    ? normalized
+    : { O: 0, C: 0, E: 0, A: 0, N: 0 };
 }
 
 export function normalizeAssessmentResult(raw) {

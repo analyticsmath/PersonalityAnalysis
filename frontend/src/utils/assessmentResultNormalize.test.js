@@ -39,3 +39,19 @@ describe('assessmentResultNormalize', () => {
     expect(n.aiStatus?.status).toBe('ready');
   });
 });
+
+  it('blocks placeholder repeated values when metadata is insufficient', () => {
+    const traits = buildRadarTraits({
+      meta: { scoreSource: 'unknown', scoreValidity: 'insufficient_data', evidenceCount: 0 },
+      scores: {
+        bigFive: {
+          openness: { score: 51, source: 'deterministic' },
+          conscientiousness: { score: 51, source: 'deterministic' },
+          extraversion: { score: 51, source: 'deterministic' },
+          agreeableness: { score: 51, source: 'deterministic' },
+          emotionalStability: { score: 51, source: 'deterministic' },
+        },
+      },
+    });
+    expect(traits).toEqual({ O: 0, C: 0, E: 0, A: 0, N: 0 });
+  });

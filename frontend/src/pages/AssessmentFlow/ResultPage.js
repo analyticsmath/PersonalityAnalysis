@@ -189,33 +189,7 @@ const AssessmentFlowResultPage = () => {
       (result?.facet_scores && typeof result.facet_scores === 'object' && result.facet_scores) ||
       {};
 
-    if (Object.keys(direct).length > 0) {
-      return direct;
-    }
-
-    const fromInsight = Array.isArray(result?.insightHeatmap)
-      ? result.insightHeatmap
-      : Array.isArray(result?.insight_heatmap)
-      ? result.insight_heatmap
-      : [];
-
-    if (!fromInsight.length) {
-      return {};
-    }
-
-    return fromInsight.reduce((accumulator, entry) => {
-      const trait = String(entry?.trait || '').toUpperCase();
-      const value = Number(entry?.value || 0);
-      if (!trait) {
-        return accumulator;
-      }
-
-      for (let index = 1; index <= 6; index += 1) {
-        accumulator[`${trait}${index}`] = Math.max(0, Math.min(100, Math.round(value + index - 3)));
-      }
-
-      return accumulator;
-    }, {});
+    return Object.keys(direct).length > 0 ? direct : {};
   }, [result]);
   const hasHeatmapData = Object.keys(heatmapFacetScores).length > 0;
 
