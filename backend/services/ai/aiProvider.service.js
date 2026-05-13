@@ -35,8 +35,8 @@ const runOpenAiResponses = async ({
   input,
   model,
   temperature = 0.3,
-  max_output_tokens = 1800,
-  timeoutMs = 55000,
+  max_output_tokens = config.openaiMaxOutputTokens || 1800,
+  timeoutMs = config.openaiTimeoutMs || 55000,
   maxRetries = 1,
 } = {}) => {
   if (!config.openaiApiKey) {

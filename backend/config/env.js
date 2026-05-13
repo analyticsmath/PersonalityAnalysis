@@ -64,6 +64,8 @@ const config = {
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   openaiApiKey: process.env.OPENAI_API_KEY,
   openaiModel: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+  openaiTimeoutMs: toInt(process.env.OPENAI_TIMEOUT_MS, 55000),
+  openaiMaxOutputTokens: toInt(process.env.OPENAI_MAX_OUTPUT_TOKENS, 1800),
   frontendUrl: process.env.FRONTEND_URL || '',
   allowedOrigins: parseOrigins(process.env.ALLOWED_ORIGINS),
   corsOrigins,
