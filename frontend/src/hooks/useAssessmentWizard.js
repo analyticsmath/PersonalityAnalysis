@@ -326,7 +326,7 @@ export const useAssessmentWizard = () => {
       const response = await manualMutation.mutateAsync({
         ...manualForm,
         consentAccepted: true,
-        consentVersion: 'phase8-v1',
+        consentVersion: 'v1',
         userRole,
       });
 

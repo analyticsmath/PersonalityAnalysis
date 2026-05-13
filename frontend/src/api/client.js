@@ -24,7 +24,7 @@ const client = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000,
+  timeout: 30000,
 });
 
 client.interceptors.request.use((config) => {
@@ -39,8 +39,22 @@ client.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.code === 'ECONNABORTED') {
+      const url = String(error.config?.url || '');
+      const isAiCall =
+        url.includes('/result') ||
+        url.includes('/chat') ||
+        url.includes('/career') ||
+        url.includes('/why-not') ||
+        url.includes('/ai-report');
+      if (isAiCall) {
+        return Promise.reject(
+          new Error(
+            'Your AI summary is taking a little longer than expected. Your scores are ready — showing a fallback summary now. You can retry the AI-enhanced version.'
+          )
+        );
+      }
       return Promise.reject(
-        new Error('Request timed out while waiting for AI processing. Please retry once.')
+        new Error('The request timed out. Please check your connection and try again.')
       );
     }
 

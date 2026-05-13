@@ -37,7 +37,24 @@ const generateAssessmentAiReport = async (req, res, next) => {
       throw createHttpError(409, 'INVALID_SCORE_SOURCE: Final report cannot be generated from mock or unknown scoring data.');
     }
 
-    const traits = toTraitPayload(assessmentResult.personality?.traits || {});
+    // Prefer canonical scores.bigFive; fall back to personality.traits for legacy results.
+    const bf = assessmentResult.scores?.bigFive;
+    const canonicalBigFive =
+      bf &&
+      typeof bf === 'object' &&
+      bf.openness &&
+      typeof bf.openness.score === 'number';
+
+    const traits = canonicalBigFive
+      ? {
+          O: Number(bf.openness.score || 0),
+          C: Number(bf.conscientiousness?.score || 0),
+          E: Number(bf.extraversion?.score || 0),
+          A: Number(bf.agreeableness?.score || 0),
+          N: Number(bf.emotionalStability?.score || 0),
+        }
+      : toTraitPayload(assessmentResult.personality?.traits || {});
+
     const deterministicInsights = generateInsightSnapshot(traits);
     const adaptiveCareer = normalizeCareerRecommendations(
       assessmentResult.career?.recommendations || []
@@ -78,7 +95,13 @@ const generateAssessmentAiReport = async (req, res, next) => {
 
     assessmentResult.analytics = { ...(assessmentResult.analytics || {}), reportState: { generating: true, status: 'generating', lastActionId: actionId || null, updatedAt: new Date() } };
     await assessmentResult.save();
-    const generatedReport = await generatePersonalityReport(traits, {});
+
+    const facetScores =
+      assessmentResult.analytics?.facetScores && typeof assessmentResult.analytics.facetScores === 'object'
+        ? assessmentResult.analytics.facetScores
+        : {};
+
+    const generatedReport = await generatePersonalityReport(traits, facetScores);
 
     assessmentResult.analytics = {
       ...(assessmentResult.analytics || {}),

@@ -101,28 +101,31 @@ export const submitAdaptiveAnswer = async ({ sessionId, payload }) => {
 };
 
 export const getAssessmentFlowResult = async (sessionId) => {
-  const response = await client.get(`/assessment/${sessionId}/result`);
+  const response = await client.get(`/assessment/${sessionId}/result`, { timeout: 60000 });
   return unwrap(response);
 };
 
 export const getCareerRecommendations = async (sessionId) => {
-  const response = await client.get(`/assessment/${sessionId}/career-recommendations`);
+  const response = await client.get(`/assessment/${sessionId}/career-recommendations`, {
+    timeout: 45000,
+  });
   return unwrap(response);
 };
 
 export const askCareerChat = async ({ sessionId, message }) => {
-  const response = await client.post(`/assessment/${sessionId}/chat`, { message });
+  const response = await client.post(`/assessment/${sessionId}/chat`, { message }, { timeout: 90000 });
   return unwrap(response);
 };
 
 export const askWhyNotCareer = async ({ sessionId, career }) => {
-  const response = await client.post(`/assessment/${sessionId}/why-not`, { career });
+  const response = await client.post(`/assessment/${sessionId}/why-not`, { career }, { timeout: 90000 });
   return unwrap(response);
 };
 
 export const downloadAssessmentFlowPdf = async (sessionId) => {
   const response = await client.get(`/assessment/${sessionId}/result/pdf`, {
     responseType: 'blob',
+    timeout: 60000,
   });
 
   return response?.data || null;

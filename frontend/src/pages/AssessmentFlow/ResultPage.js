@@ -43,6 +43,12 @@ import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEv
 import ScoringEvidenceCard from '../../components/results/ScoringEvidenceCard';
 import CareerSignalsSummary from '../../components/results/CareerSignalsSummary';
 import CareerRecommendationCard from '../../components/career/CareerRecommendationCard';
+import {
+  deriveCognitiveFromCareerSignals,
+  deriveBehaviorFromCareerSignals,
+  getDominantBehaviorLabel,
+  isAllDefaultVector,
+} from '../../utils/chartSignalDerivation';
 
 const TraitSphere = lazy(() => import('../../components/3d/TraitSphere'));
 
@@ -178,6 +184,44 @@ const AssessmentFlowResultPage = () => {
     : [];
   const contrast = result?.career_contrast || {};
   const topCareer = recommendations[0] || null;
+
+  // Cognitive chart: prefer result.cognitive_scores; derive from careerSignals if missing/all-default.
+  const cognitiveResolved = useMemo(() => {
+    const raw = result?.cognitive_scores;
+    const hasReal = raw && typeof raw === 'object' && Object.keys(raw).length > 0 && !isAllDefaultVector(raw);
+    if (hasReal) return { scores: raw, source: 'direct' };
+    return deriveCognitiveFromCareerSignals(phaseScores?.careerSignals);
+  }, [result, phaseScores]);
+
+  // Behavior chart: prefer result.behavior_vector; derive from careerSignals if missing/all-default.
+  const behaviorResolved = useMemo(() => {
+    const raw = result?.behavior_vector;
+    const hasReal = raw && typeof raw === 'object' && Object.keys(raw).length > 0 && !isAllDefaultVector(raw);
+    if (hasReal) return { scores: raw, source: 'direct' };
+    return deriveBehaviorFromCareerSignals(phaseScores?.careerSignals);
+  }, [result, phaseScores]);
+
+  const dominantBehaviorLabel = useMemo(
+    () => getDominantBehaviorLabel(behaviorResolved.scores, BEHAVIOR_LABELS),
+    [behaviorResolved.scores]
+  );
+
+  // Career Alignment Chart: prefer Phase 4 topRecommendations; fall back to legacy.
+  const careerAlignmentData = useMemo(() => {
+    const phase4 = careerIntel?.topRecommendations;
+    if (Array.isArray(phase4) && phase4.length) {
+      return phase4.map((item) => ({
+        career: item.title || item.careerId || 'Role',
+        score: Math.round(Number(item.fitScore || 0)),
+        personality_score: Math.round(Number(item.fitScore || 0)),
+        career_score: Math.round(Number(item.fitScore || 0)),
+        confidence: Math.round(Number(item.confidence || 0)),
+        why_fit: item.whyThisFits || '',
+        confidence_band: item.confidence >= 70 ? 'high' : item.confidence >= 45 ? 'medium' : 'low',
+      }));
+    }
+    return recommendations;
+  }, [careerIntel, recommendations]);
   const followUps = useMemo(
     () => (followUpPrompts.length ? followUpPrompts : toDefaultFollowUps(topCareer?.career || '')),
     [followUpPrompts, topCareer?.career]
@@ -749,23 +793,50 @@ const AssessmentFlowResultPage = () => {
         </section>
 
         <section data-scroll-reveal className="phase3-result-charts phase3-result-section" ref={(node) => { sectionsRef.current[3] = node; }}>
-          <Card title="Cognitive Chart" subtitle="Adaptive cognitive signals">
-            <MetricBarChart
-              key={`cognitive-${result.meta?.generated_at || 'latest'}`}
-              metrics={result.cognitive_scores || {}}
-              labels={COGNITIVE_LABELS}
-              barColor={tokens.accent.cyan}
-              height={300}
-            />
+          <Card
+            title="Cognitive Chart"
+            subtitle={cognitiveResolved.source === 'derived_from_careerSignals'
+              ? 'Derived from career signals (direct cognitive data not yet scored)'
+              : 'Adaptive cognitive signals'}
+          >
+            {cognitiveResolved.source === 'insufficient' ? (
+              <p className="empty-state">
+                Cognitive signal data is insufficient. Complete more assessment questions to unlock this chart.
+              </p>
+            ) : (
+              <MetricBarChart
+                key={`cognitive-${result.meta?.generated_at || 'latest'}`}
+                metrics={cognitiveResolved.scores || {}}
+                labels={COGNITIVE_LABELS}
+                barColor={tokens.accent.cyan}
+                height={300}
+              />
+            )}
           </Card>
-          <Card title="Behavior Chart" subtitle="Behavioral execution signals">
-            <MetricBarChart
-              key={`behavior-${result.meta?.generated_at || 'latest'}`}
-              metrics={result.behavior_vector || {}}
-              labels={BEHAVIOR_LABELS}
-              barColor={tokens.accent.amber}
-              height={300}
-            />
+          <Card
+            title="Behavior Chart"
+            subtitle={behaviorResolved.source === 'derived_from_careerSignals'
+              ? 'Derived from career signals (direct behavior data not yet scored)'
+              : 'Behavioral execution signals'}
+          >
+            {dominantBehaviorLabel && (
+              <p className="ui-message ui-message--neutral" style={{ marginBottom: 8 }}>
+                Dominant behavior signal: <strong>{dominantBehaviorLabel}</strong>
+              </p>
+            )}
+            {behaviorResolved.source === 'insufficient' ? (
+              <p className="empty-state">
+                Behavior signal data is insufficient. Complete the behavior assessment to unlock this chart.
+              </p>
+            ) : (
+              <MetricBarChart
+                key={`behavior-${result.meta?.generated_at || 'latest'}`}
+                metrics={behaviorResolved.scores || {}}
+                labels={BEHAVIOR_LABELS}
+                barColor={tokens.accent.amber}
+                height={300}
+              />
+            )}
           </Card>
         </section>
 
@@ -781,8 +852,15 @@ const AssessmentFlowResultPage = () => {
           ref={(node) => { sectionsRef.current[5] = node; }}
           data-avatar-section="result-career-landscape"
         >
-          <Card title="Career Match Landscape" subtitle="Overall, personality, and career fit">
-            <CareerAlignmentChart recommendations={recommendations} />
+          <Card
+            title="Career Match Landscape"
+            subtitle={
+              careerIntel?.topRecommendations?.length
+                ? 'Career intelligence — fit scores and confidence'
+                : 'Overall, personality, and career fit'
+            }
+          >
+            <CareerAlignmentChart recommendations={careerAlignmentData} />
           </Card>
         </section>
 

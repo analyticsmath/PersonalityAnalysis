@@ -4,7 +4,7 @@ const PAGE_MARGIN = 46;
 const TOP_MARGIN = PAGE_HEIGHT - PAGE_MARGIN;
 const DEFAULT_WRAP_WIDTH = 94;
 const lineHeight = 14;
-const sectionSpacing = 28;
+const sectionSpacing = 26;
 
 const wrapLine = (text = '', width = DEFAULT_WRAP_WIDTH) => {
   const words = String(text || '')
@@ -54,19 +54,13 @@ const toBar = (value = 0) => {
 const toConfidenceLabel = (confidenceBand = '', confidenceGap = 0) => {
   const band = String(confidenceBand || '').toLowerCase();
   if (band) {
-    return `${band.toUpperCase()} (${Math.round(Number(confidenceGap || 0))})`;
+    return `${band.toUpperCase()} (gap ${Math.round(Number(confidenceGap || 0))})`;
   }
 
   const gap = Number(confidenceGap || 0);
-  if (gap < 5) {
-    return `LOW (${gap})`;
-  }
-
-  if (gap <= 15) {
-    return `MEDIUM (${gap})`;
-  }
-
-  return `HIGH (${gap})`;
+  if (gap < 5) return `LOW (gap ${gap})`;
+  if (gap <= 15) return `MEDIUM (gap ${gap})`;
+  return `HIGH (gap ${gap})`;
 };
 
 const extractOceanScores = (result) => {
@@ -90,49 +84,172 @@ const extractOceanScores = (result) => {
   return Object.keys(legacy).length > 0 ? { ...legacy, _source: 'legacy' } : null;
 };
 
+const extractCognitive = (result) => {
+  const cs = result.cognitive_scores;
+  if (cs && typeof cs === 'object' && Object.keys(cs).length > 0) {
+    const vals = Object.values(cs).map(Number).filter(Number.isFinite);
+    if (vals.some((v) => v > 0 && v !== 50)) return cs;
+  }
+  // Derive from careerSignals
+  const sig = result.scores?.careerSignals;
+  if (!sig || typeof sig !== 'object') return null;
+  const getScore = (key) => {
+    const entry = sig[key];
+    if (!entry || typeof entry !== 'object') return null;
+    const s = Number(entry.score);
+    return Number.isFinite(s) ? s : null;
+  };
+  const analytical = getScore('analyticalThinking');
+  const creative = getScore('creativity');
+  const planning = getScore('planning');
+  const problemSolving = getScore('problemSolving');
+  const technicalDepth = getScore('technicalDepth');
+  const domainFocus = getScore('domainFocus');
+  const learningOrientation = getScore('learningOrientation');
+
+  const avg2 = (a, b) => (a !== null && b !== null ? Math.round((a + b) / 2) : a ?? b);
+
+  const derived = {
+    analytical,
+    creative,
+    strategic: avg2(planning, problemSolving),
+    systematic: planning,
+    practical: avg2(technicalDepth, domainFocus),
+    abstract: avg2(learningOrientation, creative),
+  };
+  const hasData = Object.values(derived).some((v) => v !== null);
+  if (!hasData) return null;
+  const filled = {};
+  Object.entries(derived).forEach(([k, v]) => { filled[k] = v ?? 0; });
+  return filled;
+};
+
+const extractBehavior = (result) => {
+  const bv = result.behavior_vector;
+  if (bv && typeof bv === 'object' && Object.keys(bv).length > 0) {
+    const vals = Object.values(bv).map(Number).filter(Number.isFinite);
+    if (vals.some((v) => v > 0 && v !== 50)) return bv;
+  }
+  const sig = result.scores?.careerSignals;
+  if (!sig || typeof sig !== 'object') return null;
+  const getScore = (key) => {
+    const entry = sig[key];
+    if (!entry || typeof entry !== 'object') return null;
+    const s = Number(entry.score);
+    return Number.isFinite(s) ? s : null;
+  };
+  const leadership = getScore('leadership');
+  const riskTolerance = getScore('riskTolerance');
+  const adaptability = getScore('adaptability');
+  const collaboration = getScore('collaboration');
+  const derived = {
+    leadership,
+    risk_tolerance: riskTolerance,
+    decision_speed: adaptability,
+    stress_tolerance: adaptability !== null ? Math.round(adaptability * 0.9) : null,
+    team_preference: collaboration,
+  };
+  const hasData = Object.values(derived).some((v) => v !== null);
+  if (!hasData) return null;
+  const filled = {};
+  Object.entries(derived).forEach(([k, v]) => { filled[k] = v ?? 0; });
+  return filled;
+};
+
+const getDominantBehavior = (bv) => {
+  if (!bv || typeof bv !== 'object') return null;
+  const LABELS = {
+    leadership: 'Leadership',
+    risk_tolerance: 'Risk Tolerance',
+    decision_speed: 'Decision Speed',
+    stress_tolerance: 'Stress Tolerance',
+    team_preference: 'Team Preference',
+  };
+  const entries = Object.entries(bv).filter(([, v]) => Number.isFinite(Number(v)));
+  if (!entries.length) return null;
+  const [topKey] = entries.sort((a, b) => Number(b[1]) - Number(a[1]))[0];
+  return LABELS[topKey] || topKey;
+};
+
+const extractTopCareers = (result) => {
+  // Prefer Phase 4 canonical data
+  const phase4 = result.career_recommendations_phase4;
+  if (phase4 && typeof phase4 === 'object') {
+    const top = phase4.topRecommendations;
+    if (Array.isArray(top) && top.length) {
+      return top.slice(0, 6).map((item) => ({
+        career: item.title || item.careerId || 'Role',
+        score: Math.round(Number(item.fitScore || 0)),
+        confidence: Math.round(Number(item.confidence || 0)),
+        why_fit: item.whyThisFits || '',
+        cluster: '',
+      }));
+    }
+  }
+  // Fall back to legacy career_recommendations
+  const legacy = Array.isArray(result.career_recommendations) ? result.career_recommendations : [];
+  return legacy.slice(0, 6).map((c) => ({
+    career: c.career || 'Role',
+    score: Math.round(Number(c.score || 0)),
+    confidence: Math.round(Number(c.confidence || 0)),
+    why_fit: c.why_fit || '',
+    cluster: c.cluster || '',
+  }));
+};
+
 const toReportSections = ({ result }) => {
   const cv = result.cv_data || {};
-  const careers = Array.isArray(result.career_recommendations) ? result.career_recommendations : [];
+  const careers = extractTopCareers(result);
   const roadmap = Array.isArray(result.career_roadmap) ? result.career_roadmap : [];
   const skills = Array.isArray(cv.skills) ? cv.skills : [];
   const topSkills = skills.slice(0, 8).map((item) => `${item.name} (${item.level}/5)`);
   const oceanRaw = extractOceanScores(result);
   const ocean = oceanRaw || {};
   const isPhase3Ocean = oceanRaw?._source === 'phase3';
-  const cognitive = result.cognitive_scores || {};
-  const behaviorVector = result.behavior_vector || {};
-  const careerContrast = result.career_contrast || {};
+  const cognitive = extractCognitive(result);
+  const behavior = extractBehavior(result);
+  const dominantBehavior = getDominantBehavior(behavior);
   const consistencyScore = Math.round(Number(result.consistency_score || 0) * 100);
   const narrativeSummary = String(result.narrative_summary || result.behavioral_summary || '').trim();
+  const aiReport = result.ai_report || {};
+  const strengths = Array.isArray(aiReport.strengths) ? aiReport.strengths : Array.isArray(result.dominant_strengths) ? result.dominant_strengths : [];
+  const growthAreas = Array.isArray(aiReport.weaknesses) ? aiReport.weaknesses : Array.isArray(result.weaknesses) ? result.weaknesses : [];
+  const facetScores = result.facetScores || result.facet_scores || {};
+  const hasFacetData = Object.keys(facetScores).length > 0;
+  const skillGaps = [];
+  if (careers.length && careers[0]) {
+    const top = careers[0];
+    if (typeof top.why_fit === 'string' && top.why_fit) {
+      skillGaps.push(top.why_fit);
+    }
+  }
 
   return [
     {
-      title: 'Cover Page',
+      title: 'Your Personality Assessment & Career Counseling Report',
       lines: [
-        'Career Personality Intelligence Report',
         '',
         `Candidate: ${cv.name || 'Candidate'}`,
+        `Date Generated: ${new Date().toLocaleDateString('en-US', { dateStyle: 'long' })}`,
         `Archetype: ${result.personality_type_label || result.personality_type || 'Analytical Builder'}`,
         `Career Cluster: ${result.career_cluster || 'Not specified'}`,
         `Confidence: ${toConfidenceLabel(result.confidence_band, result.confidence_gap)}`,
         `Consistency: ${consistencyScore}%`,
-        `Generated At: ${new Date().toISOString()}`,
+        '',
+        'Disclaimer: This report provides guidance only. It is not a medical or psychological',
+        'diagnosis and must not be used as the sole basis for any hiring or selection decision.',
       ],
     },
     {
-      title: 'Personality Summary',
+      title: 'Profile Summary',
       lines: [
         `Archetype: ${result.personality_type_label || result.personality_type || 'Analytical Builder'}`,
         '',
-        ...wrapLine(narrativeSummary || 'Narrative summary unavailable.'),
-        '',
-        ...(Array.isArray(result.dominant_strengths) ? result.dominant_strengths.slice(0, 4) : []).map(
-          (item, index) => `Strength ${index + 1}: ${item}`
-        ),
+        ...wrapLine(narrativeSummary || (aiReport.summary ? String(aiReport.summary) : 'Narrative summary not available.')),
       ],
     },
     {
-      title: 'OCEAN',
+      title: 'Personality Snapshot — Big Five (OCEAN)',
       lines:
         Object.keys(ocean).filter((k) => k !== '_source').length === 0
           ? ['Insufficient scored evidence — complete the assessment for a full OCEAN profile.']
@@ -153,70 +270,120 @@ const toReportSections = ({ result }) => {
             ],
     },
     {
-      title: 'Cognitive',
+      title: 'Strengths vs Growth Areas',
       lines: [
-        `Analytical: [${toBar(cognitive.analytical)}] ${Math.round(Number(cognitive.analytical || 0))}%`,
-        `Creative:   [${toBar(cognitive.creative)}] ${Math.round(Number(cognitive.creative || 0))}%`,
-        `Strategic:  [${toBar(cognitive.strategic)}] ${Math.round(Number(cognitive.strategic || 0))}%`,
-        `Systematic: [${toBar(cognitive.systematic)}] ${Math.round(Number(cognitive.systematic || 0))}%`,
-        `Practical:  [${toBar(cognitive.practical)}] ${Math.round(Number(cognitive.practical || 0))}%`,
-        `Abstract:   [${toBar(cognitive.abstract)}] ${Math.round(Number(cognitive.abstract || 0))}%`,
+        '--- STRENGTHS --------------------------------',
+        ...(strengths.length
+          ? strengths.slice(0, 4).map((s, i) => `  ${i + 1}. ${s}`)
+          : ['  Strengths appear in your AI report after generation.']),
+        '',
+        '--- GROWTH AREAS -----------------------------',
+        ...(growthAreas.length
+          ? growthAreas.slice(0, 4).map((w, i) => `  ${i + 1}. ${w}`)
+          : ['  Growth areas appear in your AI report after generation.']),
       ],
     },
     {
-      title: 'Behavior',
-      lines: [
-        `Leadership:       [${toBar(behaviorVector.leadership)}] ${Math.round(Number(behaviorVector.leadership || 0))}%`,
-        `Risk Tolerance:   [${toBar(behaviorVector.risk_tolerance)}] ${Math.round(Number(behaviorVector.risk_tolerance || 0))}%`,
-        `Decision Speed:   [${toBar(behaviorVector.decision_speed)}] ${Math.round(Number(behaviorVector.decision_speed || 0))}%`,
-        `Stress Tolerance: [${toBar(behaviorVector.stress_tolerance)}] ${Math.round(Number(behaviorVector.stress_tolerance || 0))}%`,
-        `Team Preference:  [${toBar(behaviorVector.team_preference)}] ${Math.round(Number(behaviorVector.team_preference || 0))}%`,
-      ],
+      title: 'Cognitive Signals',
+      lines: cognitive
+        ? [
+            `Analytical:  [${toBar(cognitive.analytical)}] ${Math.round(Number(cognitive.analytical || 0))}%`,
+            `Creative:    [${toBar(cognitive.creative)}] ${Math.round(Number(cognitive.creative || 0))}%`,
+            `Strategic:   [${toBar(cognitive.strategic)}] ${Math.round(Number(cognitive.strategic || 0))}%`,
+            `Systematic:  [${toBar(cognitive.systematic)}] ${Math.round(Number(cognitive.systematic || 0))}%`,
+            `Practical:   [${toBar(cognitive.practical)}] ${Math.round(Number(cognitive.practical || 0))}%`,
+            `Abstract:    [${toBar(cognitive.abstract)}] ${Math.round(Number(cognitive.abstract || 0))}%`,
+          ]
+        : ['Cognitive signal data insufficient — complete more questions to unlock.'],
     },
     {
-      title: 'Skills',
-      lines: topSkills.length
-        ? topSkills.map((skill, index) => `${index + 1}. ${skill}`)
-        : ['No skill chart data available.'],
+      title: 'Behavior Signals',
+      lines: behavior
+        ? [
+            ...(dominantBehavior ? [`Dominant behavior signal: ${dominantBehavior}`, ''] : []),
+            `Leadership:       [${toBar(behavior.leadership)}] ${Math.round(Number(behavior.leadership || 0))}%`,
+            `Risk Tolerance:   [${toBar(behavior.risk_tolerance)}] ${Math.round(Number(behavior.risk_tolerance || 0))}%`,
+            `Decision Speed:   [${toBar(behavior.decision_speed)}] ${Math.round(Number(behavior.decision_speed || 0))}%`,
+            `Stress Tolerance: [${toBar(behavior.stress_tolerance)}] ${Math.round(Number(behavior.stress_tolerance || 0))}%`,
+            `Team Preference:  [${toBar(behavior.team_preference)}] ${Math.round(Number(behavior.team_preference || 0))}%`,
+          ]
+        : ['Behavior signal data insufficient — complete the behavior section to unlock.'],
     },
     {
-      title: 'Careers',
+      title: 'Trait Facets / Heatmap',
+      lines: hasFacetData
+        ? Object.entries(facetScores).slice(0, 12).map(([k, v]) =>
+            `${k.replace(/_/g, ' ')}: [${toBar(v)}] ${Math.round(Number(v || 0))}%`
+          )
+        : ['Facet-level data is not available for this assessment run.'],
+    },
+    {
+      title: 'Career Match Landscape',
+      lines: careers.length
+        ? [
+            'Role                           | Fit%  | Conf%',
+            '--------------------------------------------',
+            ...careers.slice(0, 6).map(
+              (c) =>
+                `${String(c.career).slice(0, 29).padEnd(30)} | ${String(c.score).padStart(4)}% | ${String(c.confidence).padStart(4)}%`
+            ),
+          ]
+        : ['Career match data is not available.'],
+    },
+    {
+      title: 'Top Career Suggestions',
       lines: careers.length
         ? careers.slice(0, 6).flatMap((career, index) => [
-            `${index + 1}. ${career.career} (${career.cluster || 'General'}) - ${career.score}% | Confidence ${career.confidence || 0}%`,
+            `${index + 1}. ${career.career}  (Fit ${career.score}%  |  Confidence ${career.confidence}%)`,
             ...wrapLine(career.why_fit || ''),
             '',
           ])
-        : ['No career matches available.'],
+        : ['No career suggestions available.'],
     },
     {
-      title: 'Summary',
+      title: 'Skill Gaps',
+      lines: topSkills.length
+        ? topSkills.map((skill, index) => `${index + 1}. ${skill}`)
+        : skillGaps.length
+        ? skillGaps.flatMap((line) => wrapLine(line))
+        : ['Skill gap data will appear after career recommendations are generated.'],
+    },
+    {
+      title: 'Roadmap',
+      lines: roadmap.length
+        ? roadmap.slice(0, 5).flatMap((item, index) => [
+            `${index + 1}. ${item.stage || 'Stage'}`,
+            ...wrapLine(item.summary || ''),
+            '',
+          ])
+        : ['Roadmap data will appear after career recommendations are generated.'],
+    },
+    {
+      title: 'AI Summary',
+      lines: aiReport.summary
+        ? [
+            ...wrapLine(String(aiReport.summary)),
+            '',
+            ...(aiReport.workStyle ? ['Work style: ' + String(aiReport.workStyle)] : []),
+            ...(aiReport.communicationStyle
+              ? ['Communication style: ' + String(aiReport.communicationStyle)]
+              : []),
+          ]
+        : [
+            ...wrapLine(
+              narrativeSummary ||
+                'AI summary will appear after report generation. Deterministic scores above are the primary source of truth.'
+            ),
+          ],
+    },
+    {
+      title: 'Disclaimer',
       lines: [
-        `Top Career: ${careers[0]?.career || 'n/a'} (${careers[0]?.score || 0}%)`,
-        `Confidence Band: ${String(result.confidence_band || 'low').toUpperCase()}`,
-        `Consistency Score: ${consistencyScore}%`,
-        '',
-        ...(careerContrast?.summary
-          ? [
-              ...wrapLine(careerContrast.summary),
-              '',
-              ...(Array.isArray(careerContrast.reasons) ? careerContrast.reasons.slice(0, 4) : []).map(
-                (item, index) => `${index + 1}. ${item}`
-              ),
-              '',
-            ]
-          : []),
-        ...(roadmap.length
-          ? roadmap.slice(0, 4).flatMap((item, index) => [
-              `${index + 1}. ${item.stage || 'Stage'}`,
-              ...wrapLine(item.summary || ''),
-              '',
-            ])
-          : []),
-        ...wrapLine(
-          narrativeSummary ||
-            'This report combines personality, cognition, behavior, and career alignment signals to guide your next steps.'
-        ),
+        'This report is intended as personal development guidance.',
+        'It is not a medical, clinical, or psychological assessment.',
+        'Numeric scores are produced by a deterministic engine and are not',
+        'modified by the AI narrative layer.',
+        'Do not use this report as the sole basis for any hiring or selection decision.',
       ],
     },
   ];
@@ -256,7 +423,8 @@ const toPageStreams = (sections = []) => {
     }
 
     checkPageBreak({ state, requiredSpace: lineHeight * 2 + sectionSpacing });
-    pushTextLine({ state, text: section.title, font: 'F2', size: 17 });
+    // First section title uses a slightly larger size
+    pushTextLine({ state, text: section.title, font: 'F2', size: sectionIndex === 0 ? 14 : 15 });
     state.y -= Math.max(4, Math.round(sectionSpacing / 3));
 
     const rawLines = Array.isArray(section.lines) ? section.lines : [];
