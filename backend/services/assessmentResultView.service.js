@@ -80,6 +80,24 @@ const toAiReportMeta = (aiReport) => {
   };
 };
 
+const extractCanonicalOceanScores = (result) => {
+  const bf = result.scores?.bigFive;
+  if (bf && typeof bf === 'object' && bf.openness && typeof bf.openness.score === 'number') {
+    return {
+      O: Number(bf.openness.score || 0),
+      C: Number(bf.conscientiousness?.score || 0),
+      E: Number(bf.extraversion?.score || 0),
+      A: Number(bf.agreeableness?.score || 0),
+      ES: Number(bf.emotionalStability?.score || 0),
+      _scoreSource: 'phase3',
+    };
+  }
+  const traits = result.personality?.traits || {};
+  return Object.keys(traits).length > 0
+    ? { ...traits, _scoreSource: 'legacy_unverified' }
+    : {};
+};
+
 const toAssessmentReport = (result) => {
   const traits = toTraitPayload(result.personality?.traits || {});
   const aiReport = result.analytics?.aiReport;
@@ -92,7 +110,7 @@ const toAssessmentReport = (result) => {
     sessionId: result.sessionId,
     userId: result.userId,
     traits,
-    oceanScores: result.personality?.oceanNormalized || {},
+    oceanScores: extractCanonicalOceanScores(result),
     personalityTypeLabel:
       String(result.personality?.archetypes?.interpretation?.label || '').trim() ||
       String(result.personality?.archetypes?.personalityType || '').trim() ||

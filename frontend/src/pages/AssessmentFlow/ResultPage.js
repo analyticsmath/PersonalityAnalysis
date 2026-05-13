@@ -694,7 +694,7 @@ const AssessmentFlowResultPage = () => {
             <ScoringEvidenceCard scoreMeta={scoreMeta} evidence={evidenceList} warnings={warningList} />
           </Card>
 
-          <Card title="Career Intelligence" subtitle="Explainable fit, gaps, and next steps (Phase 4)">
+          <Card title="Career Intelligence" subtitle="Career fit, skill gaps, and next steps.">
             {String(scoreMeta?.scoreValidity || '').toLowerCase() === 'invalid' || careerIntel?.locked ? (
               <div>
                 <p className="ui-message ui-message--error" role="status">
@@ -716,7 +716,7 @@ const AssessmentFlowResultPage = () => {
                   Career recommendations are guidance based on your assessment, CV signals, and stated preferences. They
                   are not final career decisions or hiring judgments.
                 </p>
-                <div style={{ display: 'grid', gap: 12 }}>
+                <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
                   {(careerIntel.topRecommendations || []).slice(0, 3).map((item) => (
                     <CareerRecommendationCard
                       key={item.careerId}
@@ -770,15 +770,8 @@ const AssessmentFlowResultPage = () => {
         </section>
 
         <section data-scroll-reveal className="phase3-result-section" ref={(node) => { sectionsRef.current[4] = node; }}>
-          <Card title="Insight Heatmap" subtitle="Trait-intensity map for deeper interpretation">
-            {hasHeatmapData ? (
-              <InsightHeatmapChart facetScores={heatmapFacetScores} />
-            ) : (
-              <div className="skeleton-stack">
-                <Skeleton height="220px" />
-                <Skeleton height="20px" />
-              </div>
-            )}
+          <Card title="Insight Heatmap" subtitle="Facet-level signal intensity — supporting context, not a separate diagnosis">
+            <InsightHeatmapChart facetScores={heatmapFacetScores} />
           </Card>
         </section>
 

@@ -49,7 +49,7 @@ export default function PersonalIntelligenceOverview({ query }) {
           hint="From latest result metadata"
         />
         <MetricCard label="Top signal" value={d.topTrait || '—'} hint="Dominant archetype or trait label" />
-        <MetricCard label="Top career match" value={d.topCareerFit || '—'} hint="From latest Phase 4 recommendations" />
+        <MetricCard label="Top career match" value={d.topCareerFit || '—'} hint="From latest career recommendations" />
         <MetricCard
           label="Career readiness indicator"
           value={

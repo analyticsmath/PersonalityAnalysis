@@ -531,6 +531,30 @@ const deriveScoreMeta = (result = {}) => {
   };
 };
 
+const buildOceanScoresFromResult = (result = {}) => {
+  const bf = result.scores?.bigFive;
+  if (
+    bf &&
+    typeof bf === 'object' &&
+    bf.openness &&
+    typeof bf.openness.score === 'number'
+  ) {
+    return {
+      O: Number(bf.openness.score || 0),
+      C: Number(bf.conscientiousness?.score || 0),
+      E: Number(bf.extraversion?.score || 0),
+      A: Number(bf.agreeableness?.score || 0),
+      ES: Number(bf.emotionalStability?.score || 0),
+      _scoreSource: 'phase3',
+    };
+  }
+  const legacy = result.personality?.traits || {};
+  if (Object.keys(legacy).length > 0) {
+    return { ...legacy, _scoreSource: 'legacy_unverified' };
+  }
+  return {};
+};
+
 const mapResultToLegacySummary = (result = {}) => {
   const scoreMeta = deriveScoreMeta(result);
   return {
@@ -544,7 +568,7 @@ const mapResultToLegacySummary = (result = {}) => {
     'Analytical',
   dominant_trait: toString(result.personality?.archetypes?.dominantTrait) || 'O',
   trait_scores: result.personality?.traits || {},
-  ocean_scores: result.personality?.oceanNormalized || {},
+  ocean_scores: buildOceanScoresFromResult(result),
   introversion_score: Number(result.personality?.archetypes?.introversionScore || 0),
   hybrid_trait_scores: result.personality?.archetypes?.hybridTraitScores || {},
   dominant_strengths: result.personality?.archetypes?.dominantStrengths || [],
@@ -673,6 +697,7 @@ module.exports = {
   toLegacyScaleAnswers,
   toLegacyBehaviorAnswers,
   mapResultToLegacySummary,
+  buildOceanScoresFromResult,
   isValidStageTransition,
   normalizeResultSchemaVersion,
   deriveScoreMeta,

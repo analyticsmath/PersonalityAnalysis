@@ -118,7 +118,7 @@ const StepCV = ({
           disabled={isAnalyzing}
         />
         <span>
-          I consent to CV text being processed to personalize my assessment and career analytics (version phase8-v1).
+          I agree to use my CV/profile details to personalize my assessment and career insights.
         </span>
       </label>
 

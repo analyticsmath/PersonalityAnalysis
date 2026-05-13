@@ -155,8 +155,7 @@ export default function ManualProfileForm({
           disabled={disabled}
         />
         <span>
-          I consent to processing this profile text to personalize my assessment and career analytics (version
-          phase8-v1).
+          I agree to use my profile details to personalize my assessment and career insights.
         </span>
       </label>
 

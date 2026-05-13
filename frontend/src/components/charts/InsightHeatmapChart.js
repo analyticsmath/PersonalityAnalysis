@@ -149,16 +149,21 @@ const InsightHeatmapChart = ({ facetScores = {}, compact = false }) => {
   if (!visibleEntries.length) {
     return (
       <div className="heatmap-shell">
-        <div className="skeleton-stack">
-          <Skeleton height="180px" />
-          <Skeleton height="14px" />
-        </div>
+        <p className="ui-message ui-message--neutral" role="status">
+          Facet-level detail is not available for this assessment. Complete a full scored assessment
+          to unlock the personality facet heatmap.
+        </p>
       </div>
     );
   }
 
   return (
     <div className={`heatmap-shell ${compact ? 'is-compact' : ''}`}>
+      <p className="heatmap-help" role="note">
+        Each cell represents one personality facet. Color intensity (low → high) shows relative
+        signal strength within your profile — not a diagnostic score. Facets are supporting signals
+        that refine your Big Five trait interpretation.
+      </p>
       <div className="heatmap-grid" role="list" aria-label="Facet intensity heatmap">
         {visibleEntries.map((entry, index) => (
           <motion.button
@@ -185,9 +190,9 @@ const InsightHeatmapChart = ({ facetScores = {}, compact = false }) => {
       </div>
 
       <div className="heatmap-footnote">
-        <span>Low</span>
-        <div className="heatmap-footnote__bar" />
-        <span>High</span>
+        <span>Low intensity</span>
+        <div className="heatmap-footnote__bar" aria-hidden="true" />
+        <span>High intensity</span>
       </div>
 
       {activeFacet && (

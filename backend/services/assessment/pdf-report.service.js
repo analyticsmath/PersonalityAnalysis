@@ -69,13 +69,36 @@ const toConfidenceLabel = (confidenceBand = '', confidenceGap = 0) => {
   return `HIGH (${gap})`;
 };
 
+const extractOceanScores = (result) => {
+  const bf = result.scores?.bigFive;
+  if (
+    bf &&
+    typeof bf === 'object' &&
+    bf.openness &&
+    typeof bf.openness.score === 'number'
+  ) {
+    return {
+      O: bf.openness.score,
+      C: bf.conscientiousness?.score ?? 0,
+      E: bf.extraversion?.score ?? 0,
+      A: bf.agreeableness?.score ?? 0,
+      ES: bf.emotionalStability?.score ?? 0,
+      _source: 'phase3',
+    };
+  }
+  const legacy = result.ocean_scores || result.trait_scores || {};
+  return Object.keys(legacy).length > 0 ? { ...legacy, _source: 'legacy' } : null;
+};
+
 const toReportSections = ({ result }) => {
   const cv = result.cv_data || {};
   const careers = Array.isArray(result.career_recommendations) ? result.career_recommendations : [];
   const roadmap = Array.isArray(result.career_roadmap) ? result.career_roadmap : [];
   const skills = Array.isArray(cv.skills) ? cv.skills : [];
   const topSkills = skills.slice(0, 8).map((item) => `${item.name} (${item.level}/5)`);
-  const ocean = result.ocean_scores || result.trait_scores || {};
+  const oceanRaw = extractOceanScores(result);
+  const ocean = oceanRaw || {};
+  const isPhase3Ocean = oceanRaw?._source === 'phase3';
   const cognitive = result.cognitive_scores || {};
   const behaviorVector = result.behavior_vector || {};
   const careerContrast = result.career_contrast || {};
@@ -110,13 +133,24 @@ const toReportSections = ({ result }) => {
     },
     {
       title: 'OCEAN',
-      lines: [
-        `Openness (O):         [${toBar(ocean.O)}] ${Math.round(Number(ocean.O || 0))}%`,
-        `Conscientiousness (C):[${toBar(ocean.C)}] ${Math.round(Number(ocean.C || 0))}%`,
-        `Extraversion (E):      [${toBar(ocean.E)}] ${Math.round(Number(ocean.E || 0))}%`,
-        `Agreeableness (A):     [${toBar(ocean.A)}] ${Math.round(Number(ocean.A || 0))}%`,
-        `Neuroticism (N):       [${toBar(ocean.N)}] ${Math.round(Number(ocean.N || 0))}%`,
-      ],
+      lines:
+        Object.keys(ocean).filter((k) => k !== '_source').length === 0
+          ? ['Insufficient scored evidence — complete the assessment for a full OCEAN profile.']
+          : isPhase3Ocean
+          ? [
+              `Openness (O):              [${toBar(ocean.O)}] ${Math.round(Number(ocean.O || 0))}%`,
+              `Conscientiousness (C):     [${toBar(ocean.C)}] ${Math.round(Number(ocean.C || 0))}%`,
+              `Extraversion (E):          [${toBar(ocean.E)}] ${Math.round(Number(ocean.E || 0))}%`,
+              `Agreeableness (A):         [${toBar(ocean.A)}] ${Math.round(Number(ocean.A || 0))}%`,
+              `Emotional Stability (ES):  [${toBar(ocean.ES)}] ${Math.round(Number(ocean.ES || 0))}%`,
+            ]
+          : [
+              `Openness (O):         [${toBar(ocean.O)}] ${Math.round(Number(ocean.O || 0))}%`,
+              `Conscientiousness (C):[${toBar(ocean.C)}] ${Math.round(Number(ocean.C || 0))}%`,
+              `Extraversion (E):      [${toBar(ocean.E)}] ${Math.round(Number(ocean.E || 0))}%`,
+              `Agreeableness (A):     [${toBar(ocean.A)}] ${Math.round(Number(ocean.A || 0))}%`,
+              `Emotional Stability:   [${toBar(100 - Number(ocean.N || 0))}] ${Math.round(100 - Number(ocean.N || 0))}%`,
+            ],
     },
     {
       title: 'Cognitive',
