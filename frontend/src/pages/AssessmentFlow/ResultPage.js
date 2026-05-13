@@ -4,13 +4,18 @@ import { useReducedMotion } from 'framer-motion';
 import {
   FiArrowLeft,
   FiAward,
+  FiCompass,
   FiCpu,
   FiDownload,
+  FiMapPin,
+  FiMessageCircle,
   FiRefreshCw,
   FiShare2,
   FiSend,
+  FiTarget,
   FiTrendingUp,
   FiUser,
+  FiZap,
 } from 'react-icons/fi';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -36,6 +41,7 @@ import {
   useCareerChatMutation,
   useWhyNotCareerMutation,
   useCareerRecommendationsQuery,
+  useRetryAiReportMutation,
 } from '../../hooks/useAssessmentFlow';
 import { downloadAssessmentFlowPdf } from '../../api/assessmentFlowApi';
 import { clearAssessmentFlowState, readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
@@ -102,6 +108,7 @@ const AssessmentFlowResultPage = () => {
   const resultQuery = useAssessmentFlowResultQuery(sessionId, Boolean(sessionId));
   const chatMutation = useCareerChatMutation();
   const whyNotMutation = useWhyNotCareerMutation();
+  const retryAiMutation = useRetryAiReportMutation(sessionId);
   const { emit } = useAvatarEvents();
 
   const [message, setMessage] = useState('');
@@ -112,6 +119,7 @@ const AssessmentFlowResultPage = () => {
   const [coachAiStatus, setCoachAiStatus] = useState(null);
   const [pdfError, setPdfError] = useState('');
   const [shareStatus, setShareStatus] = useState('');
+  const [aiRetryMessage, setAiRetryMessage] = useState('');
   const [whyNotCareer, setWhyNotCareer] = useState('');
   const [whyNotResult, setWhyNotResult] = useState(null);
   const [whyNotError, setWhyNotError] = useState('');
@@ -306,21 +314,8 @@ const AssessmentFlowResultPage = () => {
     };
   }, [result, prefersReducedMotion]);
 
-  useEffect(() => {
-    if (prefersReducedMotion || !downloadButtonRef.current) {
-      return () => {};
-    }
+  // Glow only on hover — handled via CSS. No continuous animation.
 
-    const tween = gsap.to(downloadButtonRef.current, {
-      boxShadow: `${tokens.glow.cyan}, 0 12px 24px rgba(25, 151, 219, 0.3)`,
-      repeat: -1,
-      yoyo: true,
-      duration: 1.2,
-      ease: 'sine.inOut',
-    });
-
-    return () => tween.kill();
-  }, [prefersReducedMotion, result?.meta?.generated_at]);
 
   const submitChat = async (incomingMessage) => {
     const text = String(incomingMessage ?? message ?? '').trim();
@@ -383,7 +378,7 @@ const AssessmentFlowResultPage = () => {
           {
             role: 'assistant',
             message:
-              'The career coach is temporarily unavailable. Your deterministic scores and Career Intelligence cards above remain the source of truth for fit and gaps.',
+              'The career coach is temporarily unavailable. Your scores and Career Intelligence cards above remain your primary reference for fit and gaps.',
             createdAt: new Date().toISOString(),
           },
         ];
@@ -400,6 +395,21 @@ const AssessmentFlowResultPage = () => {
   const handleRetakeAssessment = () => {
     clearAssessmentFlowState(auth.userId);
     navigate('/assessment/start');
+  };
+
+  const handleRetryAiReport = async () => {
+    const assessmentId = result?._id || result?.assessmentId;
+    if (!assessmentId || retryAiMutation.isPending) return;
+    setAiRetryMessage('');
+    try {
+      await retryAiMutation.mutateAsync({ assessmentId });
+      setAiRetryMessage('AI summary is being regenerated. Refreshing results…');
+      setTimeout(() => resultQuery.refetch(), 2000);
+    } catch (error) {
+      setAiRetryMessage(
+        'Your scores are ready. The AI summary could not be regenerated — try again shortly.'
+      );
+    }
   };
 
   const downloadPdf = async () => {
@@ -531,26 +541,53 @@ const AssessmentFlowResultPage = () => {
     <main className="app-page phase3-result-page" data-avatar-section="results-main">
       <LoaderOverlay visible={resultQuery.isPending} message="Building your personality profile..." />
       <div className="page-shell result-shell phase3-result-shell">
-        {reportWarning ? (
-          <section className="phase3-result-section" style={{ marginBottom: 8 }}>
-            <Card title="Report and AI narrative status">
+        {(reportWarning || String(flowAiStatus?.status || '').toLowerCase() === 'fallback') ? (
+          <section className="phase3-result-section" style={{ marginBottom: 8 }} data-testid="ai-retry-section">
+            <Card title="AI Narrative">
               <p className="ui-message ui-message--warning">
                 {reportStatusCode === 'generating'
-                  ? 'Your optional AI narrative may still be generating. Charts below use deterministic scoring and remain available.'
-                  : ''}
-                {reportStatusCode === 'failed'
-                  ? 'The optional AI narrative step failed; refresh to retry. Deterministic scores and Career Intelligence remain available below.'
-                  : ''}
-                {reportStatusCode === 'unavailable'
-                  ? 'The optional AI narrative is temporarily unavailable. Deterministic results remain authoritative.'
-                  : ''}
+                  ? 'Preparing your AI summary. Your scores and charts are ready below.'
+                  : reportStatusCode === 'failed'
+                    ? 'The AI narrative could not be generated. Your scores remain available below.'
+                    : reportStatusCode === 'unavailable'
+                      ? 'The AI narrative is temporarily unavailable. Your results are ready below.'
+                      : String(flowAiStatus?.status || '').toLowerCase() === 'fallback'
+                        ? 'Your scores are ready. The AI summary used a fallback because the AI response took longer than expected.'
+                        : ''}
               </p>
-              <Button variant="ghost" onClick={() => resultQuery.refetch()}>
-                Refresh status
-              </Button>
+              {aiRetryMessage ? (
+                <p className="ui-message ui-message--neutral" aria-live="polite">{aiRetryMessage}</p>
+              ) : null}
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 8 }}>
+                {reportStatusCode === 'generating' ? (
+                  <Button variant="ghost" onClick={() => resultQuery.refetch()} loading={resultQuery.isFetching}>
+                    <FiRefreshCw /> Refresh status
+                  </Button>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    onClick={handleRetryAiReport}
+                    loading={retryAiMutation.isPending}
+                    loadingLabel="Preparing your AI summary…"
+                    disabled={retryAiMutation.isPending}
+                    data-testid="retry-ai-report-btn"
+                  >
+                    <FiRefreshCw /> {reportStatusCode === 'failed' ? 'Retry AI Summary' : String(flowAiStatus?.status || '').toLowerCase() === 'fallback' ? 'Regenerate AI Summary' : 'Generate AI Summary'}
+                  </Button>
+                )}
+              </div>
             </Card>
           </section>
         ) : null}
+        <header className="result-report-title" aria-label="Report title">
+          <h1 className="result-report-title__heading">
+            <FiAward aria-hidden="true" /> Personality &amp; Career Intelligence Report
+          </h1>
+          <p className="result-report-title__sub">
+            Deterministic psychometric scoring · AI-enhanced insights · Career matching
+          </p>
+        </header>
+
         <section className="result-summary-grid" aria-label="Report at a glance">
           <MetricCard
             label="Personality confidence"
@@ -570,7 +607,7 @@ const AssessmentFlowResultPage = () => {
               careerIntel?.locked
                 ? 'More reliable responses are needed for ranked matching.'
                 : careerIntel?.topRecommendations?.[0]
-                  ? `${Math.round(Number(careerIntel.topRecommendations[0].fitScore || 0))}% fit (deterministic)`
+                  ? `${Math.round(Number(careerIntel.topRecommendations[0].fitScore || 0))}% fit score`
                   : topCareer?.career
                     ? `${Number(topCareer.score || 0)}% match from assessment model`
                     : 'Structured roles appear when scores are valid.'
@@ -587,7 +624,7 @@ const AssessmentFlowResultPage = () => {
                     ? 'Fallback summary'
                     : 'Ready'
             }
-            hint="Optional layer; deterministic charts stay authoritative."
+            hint="Optional AI layer; your scored charts remain the primary reference."
           />
           <MetricCard
             label="Evidence cues"
@@ -610,7 +647,7 @@ const AssessmentFlowResultPage = () => {
             </p>
             <p className="ui-message ui-message--neutral" style={{ marginTop: 8, fontSize: 13 }}>
               Guidance only — not medical or psychological diagnosis and not a hiring decision. Numeric scores are
-              produced by the deterministic engine.
+              produced by the psychometric scoring engine.
             </p>
             <AiStatusBadges aiStatus={flowAiStatus} />
             <div className="phase3-archetype-badge">
@@ -746,7 +783,7 @@ const AssessmentFlowResultPage = () => {
                   ranked matching.
                 </p>
                 <Button variant="ghost" onClick={() => navigate(`/assessment/career?session=${sessionId}`)}>
-                  Open Career Explorer
+                  <FiCompass /> Open Career Explorer
                 </Button>
               </div>
             ) : (careerIntel?.topRecommendations || []).length ? (
@@ -760,7 +797,7 @@ const AssessmentFlowResultPage = () => {
                   Career recommendations are guidance based on your assessment, CV signals, and stated preferences. They
                   are not final career decisions or hiring judgments.
                 </p>
-                <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+                <div className="career-intel-grid" style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
                   {(careerIntel.topRecommendations || []).slice(0, 3).map((item) => (
                     <CareerRecommendationCard
                       key={item.careerId}
@@ -775,7 +812,7 @@ const AssessmentFlowResultPage = () => {
                   ))}
                 </div>
                 <Button variant="ghost" onClick={() => navigate(`/assessment/career?session=${sessionId}`)}>
-                  Full Career Explorer
+                  <FiCompass /> Full Career Explorer
                 </Button>
               </div>
             ) : (
@@ -785,7 +822,7 @@ const AssessmentFlowResultPage = () => {
                   guidance from your stored scores when available.
                 </p>
                 <Button variant="ghost" onClick={() => navigate(`/assessment/career?session=${sessionId}`)}>
-                  Open Career Explorer
+                  <FiCompass /> Open Career Explorer
                 </Button>
               </div>
             )}
@@ -960,16 +997,34 @@ const AssessmentFlowResultPage = () => {
           data-avatar-section="result-roadmap"
           data-avatar-target="learning-roadmap"
         >
-          <Card title="Learning Roadmap" subtitle="Sequenced growth path">
-            <div className="intel-timeline" data-avatar-target="learning-roadmap">
-              {(result.career_roadmap || []).map((step, index) => (
-                <article key={`${step.stage}-${index}`} className="intel-timeline__item is-expanded">
-                  <div className="intel-timeline__details" style={{ maxHeight: '100%' }}>
-                    <h4>{step.stage}</h4>
-                    <p>{step.summary}</p>
-                  </div>
-                </article>
-              ))}
+          <Card title="Learning Roadmap" subtitle="Sequenced career growth path">
+            <div className="roadmap-timeline" data-avatar-target="learning-roadmap" data-testid="roadmap-timeline">
+              {(result.career_roadmap || []).length === 0 ? (
+                <p className="empty-state">Complete the assessment to unlock your personalized roadmap.</p>
+              ) : (result.career_roadmap || []).map((step, index) => {
+                const stageIcons = [<FiTarget key="0" />, <FiZap key="1" />, <FiTrendingUp key="2" />, <FiCompass key="3" />, <FiMapPin key="4" />];
+                const stageIcon = stageIcons[index % stageIcons.length];
+                const humanStage = String(step.stage || `Phase ${index + 1}`)
+                  .replace(/_/g, ' ')
+                  .replace(/\b\w/g, (c) => c.toUpperCase());
+                return (
+                  <article key={`${step.stage}-${index}`} className="roadmap-timeline__item" data-testid="roadmap-stage">
+                    <div className="roadmap-timeline__icon" aria-hidden="true">{stageIcon}</div>
+                    <div className="roadmap-timeline__body">
+                      <h4 className="roadmap-timeline__label">{humanStage}</h4>
+                      {step.duration ? <p className="roadmap-timeline__duration"><strong>{step.duration}</strong></p> : null}
+                      <p className="roadmap-timeline__summary">{step.summary}</p>
+                      {Array.isArray(step.actions) && step.actions.length ? (
+                        <ul className="roadmap-timeline__actions">
+                          {step.actions.slice(0, 4).map((action, ai) => (
+                            <li key={`${action}-${ai}`}>{String(action).replace(/_/g, ' ')}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </Card>
         </section>
@@ -981,7 +1036,7 @@ const AssessmentFlowResultPage = () => {
           data-avatar-section="result-chat"
           data-avatar-target="chatbot-panel"
         >
-          <Card title="AI Career Chatbot" subtitle="Ask follow-up questions about your profile">
+          <Card title="Ask AI Career Coach" subtitle="Get personalized guidance about your profile and career fit">
             <AiStatusBadges aiStatus={coachAiStatus} />
             <div className="phase4-chat-shell" data-avatar-target="chatbot-panel">
               <div className="phase4-chat-suggestions">
@@ -1056,8 +1111,9 @@ const AssessmentFlowResultPage = () => {
                   data-avatar-action="chat-send"
                   data-avatar-target="chatbot-panel"
                   data-avatar-hint="Send your question and I will explain based on your profile."
+                  aria-label="Send message to AI career coach"
                 >
-                  <FiSend /> Ask
+                  <FiSend /> Ask AI Coach
                 </Button>
               </div>
               {chatError ? <p className="ui-message ui-message--error">{chatError}</p> : null}
@@ -1067,6 +1123,20 @@ const AssessmentFlowResultPage = () => {
           </Card>
         </section>
       </div>
+
+      <button
+        type="button"
+        className="chatbot-sticky-launcher"
+        aria-label="Ask AI Career Coach"
+        data-testid="chatbot-sticky-launcher"
+        onClick={() => {
+          const chatSection = document.querySelector('[data-avatar-target="chatbot-panel"]');
+          if (chatSection) chatSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }}
+      >
+        <FiMessageCircle aria-hidden="true" />
+        <span className="chatbot-sticky-launcher__label">Ask AI Coach</span>
+      </button>
     </main>
   );
 };

@@ -122,6 +122,15 @@ export const askWhyNotCareer = async ({ sessionId, career }) => {
   return unwrap(response);
 };
 
+export const retryAiReport = async ({ assessmentId }) => {
+  const response = await client.post(
+    `/assessment/report/${assessmentId}/ai?forceRefresh=true`,
+    {},
+    { timeout: 90000 }
+  );
+  return unwrap(response);
+};
+
 export const downloadAssessmentFlowPdf = async (sessionId) => {
   const response = await client.get(`/assessment/${sessionId}/result/pdf`, {
     responseType: 'blob',

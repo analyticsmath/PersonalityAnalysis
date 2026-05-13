@@ -177,12 +177,15 @@ const AdaptiveAssessmentTestPage = () => {
   const [isSavingProgress, setIsSavingProgress] = useState(false);
 
   const [recoveryState, setRecoveryState] = useState('idle');
+  const recoveryBannerTimerRef = useRef(0);
 
   const handleRecoverSession = useCallback(async () => {
     setRecoveryState('recovering');
     try {
       await assessmentMachine.recoverSession();
       setRecoveryState('recovered');
+      window.clearTimeout(recoveryBannerTimerRef.current);
+      recoveryBannerTimerRef.current = window.setTimeout(() => setRecoveryState('idle'), 5000);
     } catch (error) {
       setRecoveryState('failed');
     }
@@ -721,8 +724,7 @@ const AdaptiveAssessmentTestPage = () => {
     }
   }, [emit, isResultGenerationPending, questionQuery.isPending]);
 
-  const recoveredSessionId = String(assessmentMachine.session?.sessionId || '');
-  const showRecoveryBanner = Boolean(recoveredSessionId) && recoveredSessionId === String(sessionId || '') && Number(assessmentMachine.progress?.answeredCount || 0) > 0;
+  const showRecoveryBanner = recoveryState === 'recovered';
   const showRecoveryFailure = recoveryState === 'failed';
 
   useEffect(() => {
@@ -919,16 +921,17 @@ const AdaptiveAssessmentTestPage = () => {
                 onExampleChange={setExampleValue}
               />
 
-              {showRecoveryBanner || recoveryState !== 'idle' ? (
+              {recoveryState !== 'idle' ? (
                 <div
                   className={`recovery-banner ${showRecoveryFailure ? 'recovery-banner--error' : ''}`.trim()}
                   role="region"
                   aria-label="Session recovery"
+                  aria-live="polite"
                 >
                   {recoveryState === 'recovering' && (
                     <p className="ui-message ui-message--info">Recovering your assessment progress...</p>
                   )}
-                  {(showRecoveryBanner || recoveryState === 'recovered') && (
+                  {showRecoveryBanner && (
                     <p className="ui-message ui-message--success">Your assessment progress was recovered.</p>
                   )}
                   {showRecoveryFailure && (

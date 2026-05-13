@@ -3,6 +3,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Rectangle,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -19,8 +20,11 @@ const toData = (metrics = {}, labels = {}) =>
     }))
     .filter((item) => item.value > 0 || Object.keys(metrics || {}).includes(item.key));
 
+let gradientCounter = 0;
+
 const MetricBarChart = ({ metrics = {}, labels = {}, barColor = tokens.accent.cyan, height = 300 }) => {
   const data = useMemo(() => toData(metrics, labels), [metrics, labels]);
+  const gradientId = useMemo(() => `metricBarGrad-${(gradientCounter += 1)}`, []);
 
   if (!data.length) {
     return <p className="empty-state">Chart data will appear after assessment scoring completes.</p>;
@@ -31,14 +35,14 @@ const MetricBarChart = ({ metrics = {}, labels = {}, barColor = tokens.accent.cy
       <ResponsiveContainer width="100%" height={height}>
         <BarChart data={data} margin={{ top: 12, right: 12, left: 0, bottom: 12 }}>
           <defs>
-            <linearGradient id="metricBarGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={barColor} stopOpacity={0.95} />
-              <stop offset="100%" stopColor={barColor} stopOpacity={0.48} />
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={barColor} stopOpacity={0.92} />
+              <stop offset="100%" stopColor={barColor} stopOpacity={0.42} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke={chartTokens.grid} />
-          <XAxis dataKey="label" tick={{ fill: chartTokens.axis, fontSize: 11, fontWeight: 700 }} />
-          <YAxis domain={[0, 100]} tick={{ fill: chartTokens.mutedAxis, fontSize: 11 }} />
+          <CartesianGrid strokeDasharray="3 3" stroke={chartTokens.grid} vertical={false} />
+          <XAxis dataKey="label" tick={{ fill: chartTokens.axis, fontSize: 11, fontWeight: 700 }} axisLine={false} tickLine={false} />
+          <YAxis domain={[0, 100]} tick={{ fill: chartTokens.mutedAxis, fontSize: 11 }} axisLine={false} tickLine={false} />
           <Tooltip
             formatter={(value) => [`${value}%`, 'Score']}
             contentStyle={{
@@ -46,13 +50,15 @@ const MetricBarChart = ({ metrics = {}, labels = {}, barColor = tokens.accent.cy
               border: chartTokens.tooltip.border,
               background: chartTokens.tooltip.background,
               color: chartTokens.tooltip.text,
+              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
             }}
-            labelStyle={{ color: chartTokens.tooltip.text, fontWeight: 700 }}
+            labelStyle={{ color: chartTokens.tooltip.text, fontWeight: 700, marginBottom: 4 }}
+            cursor={<Rectangle radius={6} fill={barColor} fillOpacity={0.06} stroke={barColor} strokeOpacity={0.15} strokeWidth={1} />}
           />
           <Bar
             dataKey="value"
-            fill="url(#metricBarGradient)"
-            radius={[10, 10, 0, 0]}
+            fill={`url(#${gradientId})`}
+            radius={[8, 8, 0, 0]}
             isAnimationActive
             animationDuration={960}
             animationEasing="ease-out"

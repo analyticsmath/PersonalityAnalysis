@@ -28,6 +28,17 @@ const withTimeout = async (promise, ms) => {
   }
 };
 
+/** Models that do not accept a temperature parameter (reasoning/o-series + gpt-5.x). */
+const NO_TEMPERATURE_MODELS = /^(o1|o3|o4|gpt-5)/i;
+
+const buildResponsesParams = ({ model, input, temperature, max_output_tokens }) => {
+  const params = { model, input, max_output_tokens };
+  if (!NO_TEMPERATURE_MODELS.test(model)) {
+    params.temperature = temperature;
+  }
+  return params;
+};
+
 /**
  * OpenAI Responses API wrapper with timeout and limited retry.
  */
@@ -44,17 +55,15 @@ const runOpenAiResponses = async ({
   }
 
   const client = getOpenAiClient();
+  const resolvedModel = model || config.openaiModel;
   let attempt = 0;
   let lastErr;
   while (attempt <= maxRetries) {
     try {
       const response = await withTimeout(
-        client.responses.create({
-          model: model || config.openaiModel,
-          input,
-          temperature,
-          max_output_tokens,
-        }),
+        client.responses.create(
+          buildResponsesParams({ model: resolvedModel, input, temperature, max_output_tokens })
+        ),
         timeoutMs
       );
       return { response, text: extractOutputText(response) };

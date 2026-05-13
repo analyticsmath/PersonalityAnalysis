@@ -39,6 +39,7 @@ vi.mock('../../hooks/useAssessmentFlow', () => ({
   },
   useCareerChatMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
   useWhyNotCareerMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
+  useRetryAiReportMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
   useCareerRecommendationsQuery: () => ({ data: null, isPending: false, isError: false }),
 }));
 vi.mock('../../components/assessment/QuestionRenderer', () => ({ default: ({ onLikertChange }) => <button onClick={() => onLikertChange(4)}>set</button> }));
@@ -87,15 +88,15 @@ describe('phase1e page states', () => {
     });
   });
 
-  it('disables submit while mutation pending and shows recovery states', async () => {
-    h.mockMachine.mockReturnValueOnce({
+  it('disables submit while mutation pending; recovery banner does NOT show passively', () => {
+    h.mockMachine.mockReturnValue({
       stage: 'ASSESSMENT_IN_PROGRESS',
       shouldPoll: true,
       isMutating: true,
       canSubmitAnswer: true,
       submitAnswer: h.submitAnswer,
       recoverSession: h.recoverSession,
-      progress: { answeredCount: 1 },
+      progress: { answeredCount: 5 },
       session: { sessionId: 's1' },
     });
     render(
@@ -103,8 +104,33 @@ describe('phase1e page states', () => {
         <TestPage />
       </MemoryRouter>
     );
-    expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
-    expect(screen.getByText(/recovered/i)).toBeInTheDocument();
+    // When mutating, button shows loading label "Saving…" and is disabled
+    const savingBtn = screen.getByRole('button', { name: /saving/i });
+    expect(savingBtn).toBeDisabled();
+    // Recovery banner must NOT appear just because answeredCount > 0 — only after explicit recovery
+    expect(screen.queryByText(/your assessment progress was recovered/i)).not.toBeInTheDocument();
+  });
+
+  it('recovery banner appears only after explicit recover action', async () => {
+    h.recoverSession.mockResolvedValueOnce(undefined);
+    h.mockMachine.mockReturnValue({
+      stage: 'ASSESSMENT_IN_PROGRESS',
+      shouldPoll: false,
+      isMutating: false,
+      canSubmitAnswer: true,
+      submitAnswer: h.submitAnswer,
+      recoverSession: h.recoverSession,
+      progress: { answeredCount: 3 },
+      session: { sessionId: 's1' },
+    });
+    render(<MemoryRouter><TestPage /></MemoryRouter>);
+    // Banner not visible before recover
+    expect(screen.queryByText(/your assessment progress was recovered/i)).not.toBeInTheDocument();
+    // Click recover
+    fireEvent.click(screen.getByTestId('assessment-recover-session'));
+    await waitFor(() => {
+      expect(screen.getByText(/your assessment progress was recovered/i)).toBeInTheDocument();
+    });
   });
 
   it('double click submit triggers submit handler (hook enforces dedupe)', async () => {
@@ -125,21 +151,37 @@ describe('phase1e page states', () => {
   });
 
   it('shows recovery failure copy and retry; retry calls recoverSession again', async () => {
-    h.recoverSession.mockRejectedValueOnce(new Error('network')).mockResolvedValueOnce(undefined);
+    h.recoverSession
+      .mockRejectedValueOnce(new Error('network'))
+      .mockResolvedValueOnce(undefined);
+    h.mockMachine.mockReturnValue({
+      stage: 'ASSESSMENT_IN_PROGRESS',
+      shouldPoll: false,
+      isMutating: false,
+      canSubmitAnswer: true,
+      submitAnswer: h.submitAnswer,
+      recoverSession: h.recoverSession,
+      progress: { answeredCount: 2 },
+      session: { sessionId: 's1' },
+    });
     render(
       <MemoryRouter>
         <TestPage />
       </MemoryRouter>
     );
-    fireEvent.click(screen.getByTestId('assessment-recover-session'));
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('assessment-recover-session'));
+    });
     await waitFor(() => {
       expect(screen.getByText('We could not recover your assessment safely.')).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
     expect(screen.getByRole('button', { name: /retry recovery/i })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /retry recovery/i }));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /retry recovery/i }));
+    });
     await waitFor(() => {
       expect(h.recoverSession).toHaveBeenCalledTimes(2);
-    });
+    }, { timeout: 3000 });
   });
 
   it('does not poll while assessment machine is mutating (no interval when mutating)', () => {
@@ -201,7 +243,7 @@ describe('phase1e page states', () => {
     });
     rerender(wrap());
     await waitFor(() => {
-      expect(screen.getByText(/Your optional AI narrative may still be generating/i)).toBeInTheDocument();
+      expect(screen.getByText(/Preparing your AI summary/i)).toBeInTheDocument();
     });
     h.mockResultQuery.mockReturnValue({
       isPending: false,
@@ -213,7 +255,7 @@ describe('phase1e page states', () => {
     });
     rerender(wrap());
     await waitFor(() => {
-      expect(screen.getByText(/optional AI narrative step failed/i)).toBeInTheDocument();
+      expect(screen.getByText(/AI narrative could not be generated/i)).toBeInTheDocument();
     });
   });
 
@@ -252,6 +294,134 @@ describe('phase1e page states', () => {
     rerender(wrap());
     rerender(wrap());
     expect(h.generateReport).not.toHaveBeenCalled();
+  });
+
+  it('retry AI summary button visible on failed status; disabled while pending', async () => {
+    h.mockResultQuery.mockReturnValue({
+      isPending: false,
+      isFetching: false,
+      data: {
+        result: { trait_scores: {}, career_recommendations: [], meta: {} },
+        state: { reportStatus: { status: 'failed' } },
+      },
+      refetch: h.generateReport,
+    });
+    render(
+      <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <React.Suspense fallback={null}>
+          <ResultPage />
+        </React.Suspense>
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId('retry-ai-report-btn')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('retry-ai-report-btn')).not.toBeDisabled();
+  });
+
+  it('result page shows report title and chatbot sticky launcher', async () => {
+    h.mockResultQuery.mockReturnValue({
+      isPending: false,
+      data: {
+        result: {
+          personality_type: 'Analyst',
+          trait_scores: { O: 70, C: 65 },
+          career_recommendations: [],
+          meta: { generated_at: 't1' },
+          narrative_summary: 'Summary',
+          confidence_band: 'high',
+          confidence_score: 80,
+          confidence_gap: 1,
+        },
+        state: { reportStatus: { status: 'ready' } },
+      },
+      refetch: h.generateReport,
+    });
+    render(
+      <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <React.Suspense fallback={null}>
+          <ResultPage />
+        </React.Suspense>
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(screen.getByText(/Personality & Career Intelligence Report/i)).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('chatbot-sticky-launcher')).toBeInTheDocument();
+    expect(screen.getByTestId('chatbot-sticky-launcher')).toHaveAttribute('aria-label', 'Ask AI Career Coach');
+  });
+
+  it('roadmap renders stages with human-readable labels (no raw key strings)', async () => {
+    h.mockResultQuery.mockReturnValue({
+      isPending: false,
+      data: {
+        result: {
+          personality_type: 'Analyst',
+          trait_scores: {},
+          career_recommendations: [],
+          meta: {},
+          narrative_summary: 'Summary',
+          confidence_band: 'low',
+          confidence_score: 40,
+          confidence_gap: 5,
+          career_roadmap: [
+            { stage: 'foundation_phase', summary: 'Build core skills', duration: '0–30 days', actions: ['read_docs', 'practice_code'] },
+            { stage: 'portfolio_phase', summary: 'Build portfolio', duration: '1–3 months', actions: ['create_project'] },
+          ],
+        },
+        state: { reportStatus: { status: 'ready' } },
+      },
+      refetch: h.generateReport,
+    });
+    render(
+      <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <React.Suspense fallback={null}>
+          <ResultPage />
+        </React.Suspense>
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(screen.getAllByTestId('roadmap-stage').length).toBeGreaterThan(0);
+    });
+    // Human-readable label: underscores replaced with spaces, capitalized
+    expect(screen.getByText('Foundation Phase')).toBeInTheDocument();
+    // Actions should also be human-readable
+    expect(screen.getByText('read docs')).toBeInTheDocument();
+  });
+
+  it('result page has no user-facing Phase 4 / phase labels', async () => {
+    h.mockResultQuery.mockReturnValue({
+      isPending: false,
+      data: {
+        result: {
+          personality_type: 'Analyst',
+          trait_scores: {},
+          career_recommendations: [],
+          meta: {},
+          narrative_summary: 'Summary',
+          confidence_band: 'low',
+          confidence_score: 40,
+          confidence_gap: 5,
+        },
+        state: { reportStatus: { status: 'ready' } },
+      },
+      refetch: h.generateReport,
+    });
+    render(
+      <MemoryRouter initialEntries={['/assessment/result?session=s1']}>
+        <React.Suspense fallback={null}>
+          <ResultPage />
+        </React.Suspense>
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(screen.getByText(/Personality & Career Intelligence Report/i)).toBeInTheDocument();
+    });
+    // No raw internal phase labels in visible content
+    const html = document.body.innerHTML;
+    expect(html).not.toMatch(/\bphase8-v1\b/);
+    expect(html).not.toMatch(/\bphase8\b/);
+    expect(html).not.toMatch(/\bdeterministic\b/i.source + '.*score');
   });
 
   it('result page shows Career Intelligence when Phase 4 bundle is embedded', async () => {

@@ -8,6 +8,7 @@ import {
   getAssessmentFlowResult,
   getCareerRecommendations,
   getFlowSession,
+  retryAiReport,
   startAdaptiveAssessment,
   streamAssessmentProgress,
   submitAdaptiveAnswer,
@@ -171,6 +172,16 @@ export const useWhyNotCareerMutation = () =>
   useMutation({
     mutationFn: askWhyNotCareer,
   });
+
+export const useRetryAiReportMutation = (sessionId) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: retryAiReport,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: assessmentFlowKeys.result(sessionId) });
+    },
+  });
+};
 
 export const openAssessmentProgressStream = async ({
   sessionId,
