@@ -72,3 +72,5 @@ API summaries and dashboard AI report payloads may include **`ai_status` / `aiSt
 ## Versioning
 
 Bump `scoringVersion` in `backend/services/scoring/scoringTypes.js` when materially changing thresholds or formulas.
+
+- Phase 9 variance checks require non-identical Big Five/RIASEC/work-values vectors across at least three deterministic profile fixtures.

@@ -69,3 +69,5 @@ Optional JS barrel: `import { tokens, designTokens } from './styles/theme';`
 **Routing:** `/analytics` renders `pages/AnalyticsPage.jsx`, route-level lazy loaded in `App.js` with a `Suspense` fallback (`LoadingState`).
 
 **Headings:** the analytics dashboard uses a single page `h1`; inner sections use `h2` (avoid nested `SectionHeader` default `h1`).
+
+- Phase 9 graph policy: charts must gate on trusted `scoreMeta` and never render placeholder vectors (50/51/60) as final analytics.
