@@ -96,3 +96,5 @@ Persisted on `AssessmentResult.analytics.aiReport.aiStatus` for dashboard report
 - `assessment-api-contract.md` — HTTP fields for `ai_status`, chat coach payloads.
 - `career-intelligence-engine.md` — deterministic ownership of fit scores.
 - `scoring-methodology.md` — Phase 3 numeric ownership.
+
+- Phase 9: timeout + fallback verification matrix includes missing key, invalid auth, timeout, and fallback UI badges.
