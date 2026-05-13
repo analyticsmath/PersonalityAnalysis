@@ -129,15 +129,18 @@ test('mapResultToLegacySummary preserves legacy documents without Phase 3 fields
 // OpenAI model config
 // ---------------------------------------------------------------------------
 
-test('config.openaiModel never defaults to gpt-4o', () => {
+test('config.openaiModel never defaults to gpt-4o or gpt-5-mini', () => {
   assert.notEqual(config.openaiModel, 'gpt-4o');
   assert.notEqual(config.openaiModel, 'gpt-4o-mini');
+  assert.notEqual(config.openaiModel, 'gpt-4.1-mini');
+  assert.notEqual(config.openaiModel, 'gpt-5-mini');
 });
 
-test('config.openaiModel defaults to gpt-5 family when env absent', () => {
-  assert.ok(
-    config.openaiModel.startsWith('gpt-5'),
-    `Expected gpt-5 family, got: ${config.openaiModel}`
+test('config.openaiModel defaults to gpt-5.5 when OPENAI_MODEL env is absent', () => {
+  assert.equal(
+    config.openaiModel,
+    'gpt-5.5',
+    `Expected gpt-5.5 default, got: ${config.openaiModel}`
   );
 });
 

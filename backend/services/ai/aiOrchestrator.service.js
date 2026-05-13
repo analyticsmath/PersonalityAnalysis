@@ -76,7 +76,18 @@ const runOrchestratedAiCall = async ({
     };
   } catch (err) {
     const latencyMs = Date.now() - started;
-    const code = String(err?.status || err?.message || 'AI_ERROR');
+    const rawCode = String(err?.status || err?.message || 'AI_ERROR');
+    const errMsg = String(err?.message || '').toLowerCase();
+    const errType = String(err?.type || err?.error?.type || '').toLowerCase();
+    const isModelUnavailable =
+      err?.status === 404 ||
+      errType.includes('model_not_found') ||
+      errMsg.includes('model_not_found') ||
+      errMsg.includes('does not exist') ||
+      errMsg.includes('no such model') ||
+      errMsg.includes('model is not available') ||
+      (err?.status === 400 && errMsg.includes('model'));
+    const code = isModelUnavailable ? 'OPENAI_MODEL_UNAVAILABLE' : rawCode;
     logAiAuditEvent({
       ...baseAudit,
       schemaValidated: false,
