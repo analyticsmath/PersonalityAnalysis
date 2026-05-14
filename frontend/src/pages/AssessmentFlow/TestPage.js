@@ -137,16 +137,10 @@ export function shouldScheduleAdaptiveQuestionPoll({
   questionQueryWaiting,
   question,
   sessionId,
-  shouldPoll,
-  isMutating,
 }) {
-  return Boolean(
-    questionQueryWaiting &&
-      !question &&
-      Boolean(sessionId) &&
-      shouldPoll &&
-      !isMutating
-  );
+  // Derived purely from the API flag — no dependency on assessmentMachine.shouldPoll
+  // (which only covers LONG_RUNNING_STAGES and would wrongly suppress the queue-wait state).
+  return Boolean(questionQueryWaiting && !question && Boolean(sessionId));
 }
 
 const AdaptiveAssessmentTestPage = () => {
@@ -213,8 +207,6 @@ const AdaptiveAssessmentTestPage = () => {
     questionQueryWaiting: Boolean(questionQuery.data?.waitingForNextQuestion),
     question,
     sessionId,
-    shouldPoll: assessmentMachine.shouldPoll,
-    isMutating: assessmentMachine.isMutating,
   });
 
   useEffect(() => {
@@ -608,8 +600,9 @@ const AdaptiveAssessmentTestPage = () => {
         }
 
         if (payload.waitingForNextQuestion) {
-          setStatusNote('Preparing next question…');
-          if (assessmentMachine.shouldPoll && !assessmentMachine.isMutating) refetchQuestion();
+          setStatusNote('Preparing your next questions…');
+          // The query's refetchInterval handles subsequent polls automatically.
+          refetchQuestion();
           return;
         }
       } catch (error) {
@@ -796,10 +789,10 @@ const AdaptiveAssessmentTestPage = () => {
     return (
       <main className="app-page assessment-page phase4-question-page">
         <div className="page-shell assessment-shell">
-          <Card title="Preparing next question" subtitle="Preparing next question…">
-            <Loader label="Preparing next question…" variant="question" />
+          <Card title="Preparing your next questions">
+            <Loader label="Preparing your next questions…" variant="question" />
             <p className="ui-message ui-message--neutral">
-              We are adding the next personalized question in the background.
+              We are personalizing the next set of questions based on your answers so far. This takes a few seconds.
             </p>
           </Card>
         </div>

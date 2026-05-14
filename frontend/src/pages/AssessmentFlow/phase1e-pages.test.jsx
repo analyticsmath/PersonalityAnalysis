@@ -184,30 +184,32 @@ describe('phase1e page states', () => {
     }, { timeout: 3000 });
   });
 
-  it('does not poll while assessment machine is mutating (no interval when mutating)', () => {
-    vi.useFakeTimers();
+  it('shows waiting UI when API says waitingForNextQuestion and no question is loaded', () => {
     h.adaptiveQuery.data = {
       session: { stage: 'questionnaire', adaptiveMetrics: {} },
       waitingForNextQuestion: true,
       question: null,
     };
-    h.mockMachine.mockReturnValue({
-      stage: 'ASSESSMENT_IN_PROGRESS',
-      shouldPoll: true,
-      isMutating: true,
-      canSubmitAnswer: true,
-      submitAnswer: h.submitAnswer,
-      recoverSession: h.recoverSession,
-      progress: { answeredCount: 1 },
-      session: { sessionId: 's1' },
-    });
+    // shouldScheduleAdaptiveQuestionPoll is derived solely from API flag + question presence.
     expect(
       shouldScheduleAdaptiveQuestionPoll({
         questionQueryWaiting: true,
         question: null,
         sessionId: 's1',
-        shouldPoll: true,
-        isMutating: true,
+      })
+    ).toBe(true);
+    expect(
+      shouldScheduleAdaptiveQuestionPoll({
+        questionQueryWaiting: false,
+        question: null,
+        sessionId: 's1',
+      })
+    ).toBe(false);
+    expect(
+      shouldScheduleAdaptiveQuestionPoll({
+        questionQueryWaiting: true,
+        question: { questionId: 'q1' },
+        sessionId: 's1',
       })
     ).toBe(false);
 
@@ -216,9 +218,7 @@ describe('phase1e page states', () => {
         <TestPage />
       </MemoryRouter>
     );
-    vi.advanceTimersByTime(5000);
-    expect(h.refetchQuestion).not.toHaveBeenCalled();
-    vi.useRealTimers();
+    expect(screen.getAllByText(/preparing your next questions/i).length).toBeGreaterThan(0);
   });
 
   it('result page report states render', async () => {

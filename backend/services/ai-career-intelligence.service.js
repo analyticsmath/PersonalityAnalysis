@@ -235,8 +235,8 @@ const requestAiCareerCandidates = async ({
 
   try {
     const response = await getOpenAiClient().responses.create(
-      sanitizeOpenAiParams(config.openaiModel, {
-        model: config.openaiModel,
+      sanitizeOpenAiParams(config.openaiProfileModel, {
+        model: config.openaiProfileModel,
         temperature: 0.2,
         max_output_tokens: 1600,
         input: [

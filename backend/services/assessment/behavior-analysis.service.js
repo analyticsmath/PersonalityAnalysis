@@ -108,8 +108,8 @@ const analyzeBehaviorWithAi = async ({ answers, cvData, profileVector }) => {
   }
 
   const response = await getOpenAiClient().responses.create(
-    sanitizeOpenAiParams(config.openaiModel, {
-      model: config.openaiModel,
+    sanitizeOpenAiParams(config.openaiQuestionModel, {
+      model: config.openaiQuestionModel,
       temperature: 0.25,
       max_output_tokens: 1200,
       input: [

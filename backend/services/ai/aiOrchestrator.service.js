@@ -13,12 +13,14 @@ const runOrchestratedAiCall = async ({
   promptVersion,
   schemaId,
   buildInput,
+  model: callerModel = null,
   userId = null,
   sessionId = null,
   injectionMeta = null,
-  timeoutMs = 55000,
+  timeoutMs = config.openaiTimeoutMs || 60000,
   maxRetries = 1,
 } = {}) => {
+  const resolvedModel = callerModel || config.openaiModel;
   const started = Date.now();
   const baseAudit = {
     promptId,
@@ -27,7 +29,7 @@ const runOrchestratedAiCall = async ({
     userId,
     sessionId,
     provider: AI_PROVIDER.OPENAI,
-    model: config.openaiModel,
+    model: resolvedModel,
     injectionFlags: injectionMeta?.patterns || [],
   };
 
@@ -58,7 +60,7 @@ const runOrchestratedAiCall = async ({
     const input = typeof buildInput === 'function' ? buildInput() : buildInput;
     const out = await runOpenAiResponses({
       input,
-      model: config.openaiModel,
+      model: resolvedModel,
       timeoutMs,
       maxRetries,
     });
@@ -71,7 +73,7 @@ const runOrchestratedAiCall = async ({
       response,
       text,
       usage: response?.usage || null,
-      model: response?.model || config.openaiModel,
+      model: response?.model || resolvedModel,
       latencyMs,
     };
   } catch (err) {
@@ -102,7 +104,7 @@ const runOrchestratedAiCall = async ({
       response: null,
       text,
       usage: null,
-      model: config.openaiModel,
+      model: resolvedModel,
       latencyMs,
     };
   }

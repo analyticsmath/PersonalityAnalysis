@@ -136,17 +136,31 @@ test('config.openaiModel never defaults to gpt-4o or gpt-5-mini', () => {
   assert.notEqual(config.openaiModel, 'gpt-5-mini');
 });
 
-test('config.openaiModel defaults to gpt-5.5 when OPENAI_MODEL env is absent', () => {
+test('config.openaiModel defaults to gpt-5.4-mini when OPENAI_MODEL env is absent', () => {
   assert.equal(
     config.openaiModel,
-    'gpt-5.5',
-    `Expected gpt-5.5 default, got: ${config.openaiModel}`
+    'gpt-5.4-mini',
+    `Expected gpt-5.4-mini default, got: ${config.openaiModel}`
   );
 });
 
 test('config exposes openaiReportModel and openaiCoachModel', () => {
   assert.ok(config.openaiReportModel, 'openaiReportModel must be defined');
   assert.ok(config.openaiCoachModel, 'openaiCoachModel must be defined');
+});
+
+test('config.openaiReportModel defaults to gpt-5.5 for premium narrative', () => {
+  assert.equal(
+    config.openaiReportModel,
+    'gpt-5.5',
+    `Expected gpt-5.5 for report model, got: ${config.openaiReportModel}`
+  );
+});
+
+test('config exposes per-task model overrides (cvModel, profileModel, questionModel)', () => {
+  assert.ok(config.openaiCvModel, 'openaiCvModel must be defined');
+  assert.ok(config.openaiProfileModel, 'openaiProfileModel must be defined');
+  assert.ok(config.openaiQuestionModel, 'openaiQuestionModel must be defined');
 });
 
 test('config.openaiTimeoutMs is at least 30000ms', () => {

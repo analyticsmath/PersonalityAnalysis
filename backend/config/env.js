@@ -63,10 +63,20 @@ const config = {
   jwtSecret: process.env.JWT_SECRET,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   openaiApiKey: process.env.OPENAI_API_KEY,
-  openaiModel: process.env.OPENAI_MODEL || 'gpt-5.5',
-  openaiReportModel: process.env.OPENAI_REPORT_MODEL || process.env.OPENAI_MODEL || 'gpt-5.5',
-  openaiCoachModel: process.env.OPENAI_COACH_MODEL || process.env.OPENAI_MODEL || 'gpt-5.5',
+  // Base fallback — used by any call site that hasn't opted into a specific model variable.
+  openaiModel: process.env.OPENAI_MODEL || 'gpt-5.4-mini',
+  // Per-operation model overrides (all default to the fast mini for interactive work).
+  openaiCvModel: process.env.OPENAI_CV_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
+  openaiProfileModel: process.env.OPENAI_PROFILE_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
+  openaiQuestionModel: process.env.OPENAI_QUESTION_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
+  openaiCoachModel: process.env.OPENAI_COACH_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
+  // Premium narrative report — use the full model.
+  openaiReportModel: process.env.OPENAI_REPORT_MODEL || 'gpt-5.5',
+  // Timeout policy (per operation, in ms).
   openaiTimeoutMs: toInt(process.env.OPENAI_TIMEOUT_MS, 60000),
+  openaiCvTimeoutMs: toInt(process.env.OPENAI_CV_TIMEOUT_MS, 75000),
+  openaiQuestionTimeoutMs: toInt(process.env.OPENAI_QUESTION_TIMEOUT_MS, 90000),
+  openaiReportTimeoutMs: toInt(process.env.OPENAI_REPORT_TIMEOUT_MS, 150000),
   openaiMaxOutputTokens: toInt(process.env.OPENAI_MAX_OUTPUT_TOKENS, 3000),
   frontendUrl: process.env.FRONTEND_URL || '',
   allowedOrigins: parseOrigins(process.env.ALLOWED_ORIGINS),

@@ -121,8 +121,8 @@ const analyzeWithAi = async ({ answerText = '', exampleText = '', question = {},
   }
 
   const response = await getOpenAiClient().responses.create(
-    sanitizeOpenAiParams(config.openaiModel, {
-      model: config.openaiModel,
+    sanitizeOpenAiParams(config.openaiQuestionModel, {
+      model: config.openaiQuestionModel,
       temperature: 0.15,
       max_output_tokens: 900,
       input: [

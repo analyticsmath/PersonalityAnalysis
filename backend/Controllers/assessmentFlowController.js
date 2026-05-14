@@ -1129,23 +1129,36 @@ const getCurrentQuestion = async (req, res, next) => {
     if (session.stage === 'questionnaire') {
       const currentQuestion = toPublicQuestion(session);
 
-      if (!currentQuestion && isQuestionGenerationPending(session)) {
-        enqueueRemainingQuestions({
-          sessionId: session._id,
-          userId: req.user.id,
-          targetTotal: Number(session.adaptiveMetrics?.targetQuestionCount || TARGET_QUESTION_TOTAL),
-        });
+      if (!currentQuestion) {
+        const targetTotal = Number(session.adaptiveMetrics?.targetQuestionCount || TARGET_QUESTION_TOTAL);
+        const stillExpecting = Array.isArray(session.questionPlan)
+          ? session.questionPlan.length < targetTotal
+          : true;
 
-        return sendSuccess(res, {
-          data: {
-            session: toPublicSession(session),
-            question: null,
-            prefetchedQuestion: null,
-            waitingForNextQuestion: true,
-            next: 'questionnaire',
-          },
-          message: 'Preparing next question…',
-        });
+        if (isQuestionGenerationPending(session) || stillExpecting) {
+          // Re-enqueue if stalled (failed or completed-with-0-new-questions).
+          if (!isQuestionGenerationPending(session) && stillExpecting) {
+            setQuestionGenerationStatus({ session, status: 'queued', targetTotal });
+            await session.save();
+          }
+
+          enqueueRemainingQuestions({
+            sessionId: session._id,
+            userId: req.user.id,
+            targetTotal,
+          });
+
+          return sendSuccess(res, {
+            data: {
+              session: toPublicSession(session),
+              question: null,
+              prefetchedQuestion: null,
+              waitingForNextQuestion: true,
+              next: 'questionnaire',
+            },
+            message: 'Preparing your next questions…',
+          });
+        }
       }
 
       const prefetchedQuestion = prefetchNextQuestion({ session });

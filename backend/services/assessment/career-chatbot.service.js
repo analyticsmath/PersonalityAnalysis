@@ -255,6 +255,7 @@ const generateCareerChatReply = async ({ session, result, message }) => {
     promptId: 'career-coach-chat',
     promptVersion: registry?.version || 'phase5',
     schemaId: SCHEMA_IDS.CAREER_COACH_V1,
+    model: config.openaiCoachModel,
     buildInput: () => [
       {
         role: 'system',
@@ -285,13 +286,13 @@ const generateCareerChatReply = async ({ session, result, message }) => {
       errorCode: orchestration.errorCode || 'AI_CALL_FAILED',
       noKey: false,
       latencyMs: orchestration.latencyMs,
-      model: orchestration.model || config.openaiModel,
+      model: orchestration.model || config.openaiCoachModel,
     });
     logAiAuditEvent({
       promptId: 'career-coach-chat',
       promptVersion: registry?.version || 'phase5',
       provider: 'local_fallback',
-      model: orchestration.model || config.openaiModel,
+      model: orchestration.model || config.openaiCoachModel,
       schemaId: SCHEMA_IDS.CAREER_COACH_V1,
       schemaValidated: false,
       safetyChecked: true,

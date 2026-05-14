@@ -18,9 +18,9 @@ const MCQOptions = ({ options = [], selectedOptionId = '', onSelect }) => {
       gsap.to(element, {
         duration: 0.28,
         ease: 'power2.out',
-        scale: isActive ? 1.02 : 1,
+        scale: isActive ? 1.01 : 1,
         boxShadow: isActive
-          ? '0 0 0 1px rgba(61, 245, 255, 0.5), 0 14px 28px rgba(24, 173, 219, 0.22)'
+          ? '0 0 0 2px rgba(79, 70, 229, 0.18), 0 4px 14px rgba(79, 70, 229, 0.10)'
           : '0 0 0 0 rgba(0,0,0,0)',
       });
     });

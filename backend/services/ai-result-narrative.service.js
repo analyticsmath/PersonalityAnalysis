@@ -190,7 +190,7 @@ const generateResultNarrative = async ({
       promptId: 'adaptive-result-narrative',
       promptVersion: registry?.version || 'phase5',
       provider: aiStatus.provider,
-      model: aiStatus.provider === AI_PROVIDER.OPENAI ? config.openaiModel : String(aiStatus.model || 'n/a'),
+      model: aiStatus.provider === AI_PROVIDER.OPENAI ? config.openaiReportModel : String(aiStatus.model || 'n/a'),
       schemaId: SCHEMA_IDS.REPORT_NARRATIVE_V1,
       schemaValidated: aiStatus.schemaValidated,
       safetyChecked: aiStatus.safetyChecked,
@@ -228,6 +228,7 @@ const generateResultNarrative = async ({
     promptId: 'adaptive-result-narrative',
     promptVersion: registry?.version || 'phase5',
     schemaId: SCHEMA_IDS.REPORT_NARRATIVE_V1,
+    model: config.openaiReportModel,
     buildInput: () => [
       {
         role: 'system',
@@ -240,7 +241,7 @@ const generateResultNarrative = async ({
       },
     ],
     injectionMeta: injectionScan,
-    timeoutMs: 50000,
+    timeoutMs: config.openaiReportTimeoutMs || 150000,
     maxRetries: 1,
   });
 
@@ -254,7 +255,7 @@ const generateResultNarrative = async ({
       errorCode: orchestration.errorCode || 'AI_CALL_FAILED',
       noKey: false,
       latencyMs: orchestration.latencyMs,
-      model: orchestration.model || config.openaiModel,
+      model: orchestration.model || config.openaiReportModel,
     });
     auditFinalize(aiStatus, mapped, false);
     return {
@@ -278,7 +279,7 @@ const generateResultNarrative = async ({
       errorCode: 'PARSE_ERROR',
       noKey: false,
       latencyMs: orchestration.latencyMs,
-      model: orchestration.model || config.openaiModel,
+      model: orchestration.model || config.openaiReportModel,
     });
     auditFinalize(aiStatus, mapped, false);
     return {

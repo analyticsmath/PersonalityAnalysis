@@ -221,8 +221,8 @@ const interpretTextAnswer = async ({ answerText = '', question = {}, aiProfile =
 
   try {
     const response = await getOpenAiClient().responses.create(
-      sanitizeOpenAiParams(config.openaiModel, {
-        model: config.openaiModel,
+      sanitizeOpenAiParams(config.openaiQuestionModel, {
+        model: config.openaiQuestionModel,
         temperature: 0.2,
         max_output_tokens: 700,
         input: [

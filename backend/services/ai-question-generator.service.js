@@ -264,8 +264,8 @@ const generateAdaptiveQuestion = async ({
 
   try {
     const response = await getOpenAiClient().responses.create(
-      sanitizeOpenAiParams(config.openaiModel, {
-        model: config.openaiModel,
+      sanitizeOpenAiParams(config.openaiQuestionModel, {
+        model: config.openaiQuestionModel,
         temperature: 0.28,
         max_output_tokens: 700,
         input: [

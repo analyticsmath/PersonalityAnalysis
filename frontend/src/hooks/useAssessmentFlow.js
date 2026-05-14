@@ -47,6 +47,9 @@ export const useAdaptiveQuestionQuery = (sessionId, enabled = true) =>
     queryFn: () => getAdaptiveQuestion(sessionId),
     enabled: Boolean(sessionId) && enabled,
     staleTime: 4000,
+    // Auto-poll while the backend is generating the next batch of questions.
+    refetchInterval: (query) =>
+      query.state.data?.waitingForNextQuestion && !query.state.data?.question ? 3000 : false,
   });
 
 export const useAssessmentFlowResultQuery = (sessionId, enabled = true) =>
