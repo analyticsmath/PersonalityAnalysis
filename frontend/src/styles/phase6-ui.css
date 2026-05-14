@@ -121,6 +121,35 @@
   box-shadow: var(--glow-purple);
 }
 
+/* Semantic tinted variants */
+.metric-card--indigo {
+  background: #EEF2FF;
+  border-color: #C7D2FE;
+  backdrop-filter: none;
+}
+.metric-card--indigo .metric-card__label { color: #3730A3; }
+
+.metric-card--sky {
+  background: #E0F2FE;
+  border-color: #BAE6FD;
+  backdrop-filter: none;
+}
+.metric-card--sky .metric-card__label { color: #0369A1; }
+
+.metric-card--green {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+  backdrop-filter: none;
+}
+.metric-card--green .metric-card__label { color: #047857; }
+
+.metric-card--amber {
+  background: #FFFBEB;
+  border-color: #FDE68A;
+  backdrop-filter: none;
+}
+.metric-card--amber .metric-card__label { color: #B45309; }
+
 .metric-card__label {
   font-size: 0.75rem;
   text-transform: uppercase;

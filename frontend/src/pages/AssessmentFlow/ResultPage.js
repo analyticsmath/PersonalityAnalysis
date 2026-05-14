@@ -614,6 +614,7 @@ const AssessmentFlowResultPage = () => {
             label="Personality confidence"
             value={`${confidencePercent}%`}
             hint={`Band: ${String(result.confidence_band || 'low').toUpperCase()}`}
+            variant="amber"
           />
           <MetricCard
             label="Career readiness"
@@ -633,6 +634,7 @@ const AssessmentFlowResultPage = () => {
                     ? `${Number(topCareer.score || 0)}% match from assessment model`
                     : 'Structured roles appear when scores are valid.'
             }
+            variant="sky"
           />
           <MetricCard
             label="AI narrative"
@@ -646,11 +648,13 @@ const AssessmentFlowResultPage = () => {
                     : 'Ready'
             }
             hint="Optional AI layer; your scored charts remain the primary reference."
+            variant="indigo"
           />
           <MetricCard
             label="Evidence cues"
             value={String(Array.isArray(evidenceList) ? evidenceList.length : 0)}
             hint="Transparency items from the scoring engine."
+            variant="green"
           />
         </section>
         <section
