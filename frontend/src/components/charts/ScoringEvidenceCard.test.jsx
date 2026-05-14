@@ -14,6 +14,6 @@ describe('ScoringEvidenceCard', () => {
     );
     expect(screen.getByTestId('scoring-evidence-card')).toBeTruthy();
     expect(screen.getByText(/Evidence items:/)).toBeTruthy();
-    expect(screen.getByText(/deterministic scoring layer/)).toBeTruthy();
+    expect(screen.getByText(/assessment responses and profile evidence/)).toBeTruthy();
   });
 });

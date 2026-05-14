@@ -506,7 +506,7 @@ const ResultPage = () => {
 
                 {insightEngine && (
                   <article className="ai-report-block ai-report-block--full">
-                    <h4>Insight Engine (Non-AI)</h4>
+                    <h4>Profile Insights</h4>
                     <p>{insightEngine.dominantTraitExplanation}</p>
                     <div className="hybrid-grid">
                       <div>
@@ -531,7 +531,7 @@ const ResultPage = () => {
 
                 {careerEngine.length > 0 && (
                   <article className="ai-report-block ai-report-block--full">
-                    <h4>Career Engine Baseline</h4>
+                    <h4>Career Match Summary</h4>
                     <div className="career-grid">
                       {careerEngine.map((item) => (
                         <div className="career-card" key={`${item.career}-${item.signal || 'base'}`}>
@@ -565,7 +565,7 @@ const ResultPage = () => {
             )}
           </Card>
 
-          <Card title="Recommendations" subtitle="Static guidance for now">
+          <Card title="Recommendations" subtitle="Personalized next steps">
             <ul className="recommendation-list">
               {profile.recommendations.map((item) => (
                 <li key={item}>{item}</li>

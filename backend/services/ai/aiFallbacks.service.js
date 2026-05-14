@@ -41,9 +41,7 @@ const buildDeterministicPersonalityReportFallback = ({
   const top = Object.entries(normalizedTraits).sort((a, b) => b[1] - a[1])[0];
   const bottom = Object.entries(normalizedTraits).sort((a, b) => a[1] - b[1])[0];
 
-  const summary = `This narrative was assembled from your deterministic trait profile (${JSON.stringify(
-    normalizedTraits
-  )}) because the live AI writer was unavailable or returned invalid output. It is developmental guidance only—not diagnosis or hiring authority.`;
+  const summary = `This summary was compiled from your assessment trait profile because the AI writer was unavailable or returned invalid output. It is developmental guidance only—not diagnosis or hiring authority.`;
 
   const strengths = toList(
     insights.map((i) => (typeof i === 'string' ? i : i?.summary || i?.title || '')).filter(Boolean),
@@ -76,7 +74,7 @@ const buildDeterministicPersonalityReportFallback = ({
     leadershipStyle: 'Situational: emphasize clarity and psychological safety in team settings.',
     workStyle: 'Structured iteration with explicit review checkpoints.',
     careerGuidance: [
-      'Use Phase 3–4 deterministic scores as the only numeric source of truth; explore roles iteratively with mentors and real work samples.',
+      'Use your assessment scores as a starting point; explore roles iteratively with mentors and real work samples.',
     ],
     learningRecommendations: [
       'Pick one measurable skill from your top gap list and practice it weekly.',
@@ -85,7 +83,7 @@ const buildDeterministicPersonalityReportFallback = ({
     confidenceNotes: 'Fallback mode: confidence should be read from score metadata, not this narrative.',
     disclaimers: [
       'Guidance only — not a medical, psychological, or hiring decision.',
-      'Numeric scores are produced by the deterministic engine and are not modified by this narrative.',
+      'Scores reflect your assessment responses and are preserved across all views.',
     ],
     safetyFlags: [],
     version: SCHEMA_IDS.REPORT_NARRATIVE_V1,
@@ -127,13 +125,13 @@ const buildStructuredCoachFallback = ({ message = '', contextHints = [] }) => ({
     'Here is a safe, profile-grounded response while the AI writer is unavailable.',
     ...contextHints.map((h) => `- ${h}`),
     message ? `You asked: "${message.slice(0, 200)}${message.length > 200 ? '…' : ''}"` : '',
-    'Next: pick one ranked career from your deterministic recommendations and ask for a skill-gap plan.',
+    'Next: pick one ranked career from your top recommendations and ask for a skill-gap plan.',
   ]
     .filter(Boolean)
     .join('\n'),
   referencedScores: [],
   referencedCareers: [],
-  suggestedNextSteps: ['Review your top deterministic career match', 'Open Career Explorer for structured gaps'],
+  suggestedNextSteps: ['Review your top career recommendations', 'Open Career Explorer for structured gaps'],
   uncertaintyNotes: 'Fallback response; live model unavailable or output failed validation.',
   safetyFlags: [],
   shouldEscalateToHuman: false,

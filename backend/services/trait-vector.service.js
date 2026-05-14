@@ -70,7 +70,11 @@ const buildTraitVector = async ({ answers = [], questionPlan = [], aiProfile = {
 
     TRAITS.forEach((trait) => {
       const signal = clamp(Number(traitSignals?.[trait] || 0), -1, 1);
-      oceanSignals[trait].push(signal);
+      // Only accumulate non-zero signals so that averaging reflects actual
+      // answers targeting this trait rather than being diluted by unrelated answers.
+      if (Math.abs(signal) > 0.001) {
+        oceanSignals[trait].push(signal);
+      }
     });
 
     const facet = toFacetKey(question);

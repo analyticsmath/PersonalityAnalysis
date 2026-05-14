@@ -241,10 +241,10 @@ const toLegacyRecommendations = (orchestratorOutput = {}) => {
     personality_alignment: item.fitBreakdown?.personalityFit ?? 50,
     cognitive_match: item.fitBreakdown?.goalFit ?? 50,
     behavior_match: item.fitBreakdown?.riasecFit ?? 50,
-    why_fit: item.whyThisFits[0] || 'Deterministic multi-factor fit alignment.',
+    why_fit: item.whyThisFits[0] || 'Multi-factor fit alignment based on your assessment signals.',
     explanation: {
       top_signals: item.topMatchedSignals,
-      summary: `Phase 4 fit score ${item.fitScore} (deterministic).`,
+      summary: `Fit score: ${item.fitScore}`,
     },
     key_skills_to_build: item.skillGaps?.missingCriticalSkills || [],
     skill_gaps: item.skillGaps?.missingCriticalSkills || [],
@@ -255,7 +255,7 @@ const toLegacyRecommendations = (orchestratorOutput = {}) => {
     })),
     confidence: Math.round((item.confidence || 0) * 100),
     confidence_band: item.confidence >= 0.65 ? 'high' : item.confidence >= 0.45 ? 'medium' : 'low',
-    reason: 'Deterministic career intelligence (Phase 4).',
+    reason: 'Career fit is based on your assessment evidence, skills, and profile signals.',
     phase4: {
       fitType: item.fitType,
       fitBreakdown: item.fitBreakdown,

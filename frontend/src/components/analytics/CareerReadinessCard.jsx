@@ -40,7 +40,7 @@ export default function CareerReadinessCard({ query }) {
       ) : null}
       <div className="analytics-metric-grid">
         <MetricCard label="Indicator score" value={`${d.careerReadinessScore}`} hint="Blended from fit, skills, confidence, roadmap, evidence" />
-        <MetricCard label="Top career" value={d.topCareer || '—'} hint="Highest deterministic match" />
+        <MetricCard label="Top career" value={d.topCareer || '—'} hint="Highest evidence-based match" />
         <MetricCard label="Skill readiness" value={`${d.skillReadiness ?? '—'}`} hint="From skill gap engine" />
         <MetricCard label="Roadmap progress" value={`${d.roadmapProgress ?? 0}%`} hint="Your saved roadmap completions" />
         <MetricCard label="Evidence completeness" value={`${d.evidenceCompleteness ?? '—'}`} hint="Breadth of stored evidence items" />

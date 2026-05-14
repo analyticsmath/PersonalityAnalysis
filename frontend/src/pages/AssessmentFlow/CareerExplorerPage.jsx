@@ -27,7 +27,7 @@ const CareerExplorerPage = () => {
           <Card animated={false} title="Career Explorer">
             <EmptyState
               title="No active session"
-              description="Start or resume an assessment to generate deterministic career intelligence for this explorer."
+              description="Start or resume an assessment to generate personalized career guidance for this explorer."
               action={
                 <Button onClick={() => navigate('/assessment/start')}>Start assessment</Button>
               }
@@ -81,7 +81,7 @@ const CareerExplorerPage = () => {
       <div className="page-shell">
         <SectionHeader
           title="Career Explorer"
-          subtitle="Recommendations are deterministic guidance from your assessment — not hiring decisions."
+          subtitle="Recommendations are evidence-based guidance from your assessment — not hiring decisions."
           actions={
             <Button variant="ghost" onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>
               Back to results

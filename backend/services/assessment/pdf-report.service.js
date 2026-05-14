@@ -171,6 +171,13 @@ const getDominantBehavior = (bv) => {
   return LABELS[topKey] || topKey;
 };
 
+const toConfidencePct = (v) => {
+  const n = Number(v || 0);
+  if (!Number.isFinite(n) || n < 0) return 0;
+  // Orchestrator stores phase-4 confidence as a 0–1 decimal; legacy already 0–100.
+  return Math.round(n <= 1.0 ? n * 100 : n);
+};
+
 const extractTopCareers = (result) => {
   // Prefer Phase 4 canonical data
   const phase4 = result.career_recommendations_phase4;
@@ -180,18 +187,18 @@ const extractTopCareers = (result) => {
       return top.slice(0, 6).map((item) => ({
         career: item.title || item.careerId || 'Role',
         score: Math.round(Number(item.fitScore || 0)),
-        confidence: Math.round(Number(item.confidence || 0)),
-        why_fit: item.whyThisFits || '',
-        cluster: '',
+        confidence: toConfidencePct(item.confidence),
+        why_fit: Array.isArray(item.whyThisFits) ? (item.whyThisFits[0] || '') : String(item.whyThisFits || ''),
+        cluster: item.category || '',
       }));
     }
   }
-  // Fall back to legacy career_recommendations
+  // Fall back to legacy career_recommendations (confidence already 0–100)
   const legacy = Array.isArray(result.career_recommendations) ? result.career_recommendations : [];
   return legacy.slice(0, 6).map((c) => ({
     career: c.career || 'Role',
     score: Math.round(Number(c.score || 0)),
-    confidence: Math.round(Number(c.confidence || 0)),
+    confidence: toConfidencePct(c.confidence),
     why_fit: c.why_fit || '',
     cluster: c.cluster || '',
   }));
@@ -381,8 +388,8 @@ const toReportSections = ({ result }) => {
       lines: [
         'This report is intended as personal development guidance.',
         'It is not a medical, clinical, or psychological assessment.',
-        'Numeric scores are produced by a deterministic engine and are not',
-        'modified by the AI narrative layer.',
+        'Scores are calculated from your assessment responses and profile evidence.',
+        'The AI narrative layer adds context but does not alter your scores.',
         'Do not use this report as the sole basis for any hiring or selection decision.',
       ],
     },

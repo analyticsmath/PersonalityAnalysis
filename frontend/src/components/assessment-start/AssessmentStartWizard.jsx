@@ -247,9 +247,9 @@ const AssessmentStartWizard = () => {
           <p className="page-header__eyebrow">Adaptive assessment</p>
           <h1 className="page-header__title">CV-aware personality &amp; career intelligence</h1>
           <p className="assessment-journey-note">
-            Your CV or manual profile context tunes adaptive questions. After you begin, deterministic scoring produces
+            Your CV or manual profile context tunes adaptive questions. After you begin, evidence-based scoring produces
             Big Five, RIASEC, work values, and career signals. An optional AI narrative layers on top — it never
-            replaces the numeric engine. This product offers guidance, not hiring or clinical decisions. Avoid pasting
+            replaces the numeric scores. This product offers guidance, not hiring or clinical decisions. Avoid pasting
             secrets you would not share with an HR screening tool.
           </p>
         </header>

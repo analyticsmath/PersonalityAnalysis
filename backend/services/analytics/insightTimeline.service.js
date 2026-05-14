@@ -74,7 +74,7 @@ const getInsightTimelineForUser = async ({ requester, userId }) => {
         type: 'career_recommendations_generated',
         date: cr.generatedAt || at,
         title: 'Career recommendations generated',
-        description: 'Deterministic career intelligence attached to this assessment.',
+        description: 'Career recommendations generated from your assessment evidence.',
         severity: cr.preliminary ? 'warning' : 'info',
         resultId,
       });

@@ -49,8 +49,8 @@ const ScoringEvidenceCard = ({ scoreMeta = null, evidence = [], warnings = [] })
         </ul>
       ) : null}
       <p style={{ marginTop: 12, fontSize: 12, opacity: 0.85 }}>
-        Guidance for careers and development — not a medical or clinical diagnosis. Numeric scores are produced by a
-        deterministic scoring layer; this assistant does not override those values.
+        Guidance for careers and development — not a medical or clinical diagnosis. Scores are calculated from your
+        assessment responses and profile evidence.
       </p>
     </div>
   );

@@ -94,7 +94,7 @@ const mapFlowPayloadToExtended = (payload = {}, fallback = {}) => {
       const s = toText(g);
       return s
         ? [s]
-        : ['Use deterministic scores and Phase 4 career intelligence as read-only anchors for exploration.'];
+        : ['Use your assessment scores as starting anchors; explore roles iteratively with guidance and real experience.'];
     })(),
     learningRecommendations: base.growth_path,
     confidenceNotes:
@@ -104,7 +104,7 @@ const mapFlowPayloadToExtended = (payload = {}, fallback = {}) => {
       ? toList(payload.disclaimers, 6)
       : [
           'Guidance only — not a medical, psychological, or hiring decision.',
-          'Numeric scores are produced by the deterministic engine and are not modified by this narrative.',
+          'Scores reflect your assessment responses and are preserved across all views.',
         ],
     safetyFlags: Array.isArray(payload.safetyFlags) ? toList(payload.safetyFlags, 12) : [],
     version: SCHEMA_IDS.REPORT_NARRATIVE_V1,
