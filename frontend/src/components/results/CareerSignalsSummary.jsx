@@ -37,7 +37,7 @@ const CareerSignalsSummary = ({ careerSignals = {}, scoreMeta = null }) => {
             display: 'flex',
             justifyContent: 'space-between',
             padding: '8px 0',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            borderBottom: '1px solid #E2E8F0',
             fontSize: 14,
           }}
         >

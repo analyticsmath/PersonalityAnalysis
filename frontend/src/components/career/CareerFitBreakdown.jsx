@@ -26,7 +26,7 @@ const CareerFitBreakdown = ({ fitBreakdown = {} }) => {
             justifyContent: 'space-between',
             gap: 12,
             padding: '6px 0',
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            borderBottom: '1px solid #E2E8F0',
           }}
         >
           <span>{row.label}</span>

@@ -555,6 +555,85 @@ const buildOceanScoresFromResult = (result = {}) => {
   return {};
 };
 
+const COGNITIVE_SIGNAL_KEYS = ['analytical', 'creative', 'strategic', 'systematic', 'practical', 'abstract'];
+const BEHAVIOR_SIGNAL_KEYS = ['leadership', 'riskTolerance', 'decisionSpeed', 'stressTolerance', 'teamPreference'];
+
+const isNarrowNeutralBand = (values) => {
+  if (!values.length) return true;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  return max - min <= 6 && min >= 43 && max <= 53;
+};
+
+const isBehaviorScaleError = (behaviorObj = {}) => {
+  const nonStress = ['leadership', 'risk_tolerance', 'decision_speed', 'team_preference']
+    .map((k) => Number(behaviorObj[k]))
+    .filter(Number.isFinite);
+  return nonStress.length >= 3 && nonStress.filter((v) => v < 10).length >= nonStress.length - 1;
+};
+
+const buildCanonicalCognitiveSignal = (cognitiveScores = {}) => {
+  const keys = COGNITIVE_SIGNAL_KEYS;
+  const values = keys.map((k) => Number(cognitiveScores[k])).filter(Number.isFinite);
+
+  if (!values.length) {
+    return { values: null, status: 'insufficient_data', source: 'none', evidenceCount: 0, warnings: [] };
+  }
+  if (isNarrowNeutralBand(values)) {
+    return { values: null, status: 'insufficient_data', source: 'legacy_unverified', evidenceCount: 0, warnings: ['Legacy or default cognitive scores detected — insufficient for display'] };
+  }
+  // Fractional 0-1 scale: all values < 5 means not converted to 0-100
+  if (values.every((v) => v < 5)) {
+    return { values: null, status: 'insufficient_data', source: 'scale_error', evidenceCount: 0, warnings: ['Cognitive scores appear to be on 0-1 scale, not 0-100'] };
+  }
+
+  const signalValues = {};
+  keys.forEach((k) => {
+    signalValues[k] = clamp(Math.round(Number(cognitiveScores[k] || 50)), 0, 100);
+  });
+
+  return {
+    values: signalValues,
+    status: 'valid',
+    source: 'assessment_answers',
+    evidenceCount: values.length,
+    warnings: [],
+  };
+};
+
+const buildCanonicalBehaviorSignal = (behaviorVector = {}) => {
+  if (!behaviorVector || typeof behaviorVector !== 'object' || !Object.keys(behaviorVector).length) {
+    return { values: null, dominant: null, status: 'insufficient_data', source: 'none', evidenceCount: 0, warnings: [] };
+  }
+
+  if (isBehaviorScaleError(behaviorVector)) {
+    return { values: null, dominant: null, status: 'insufficient_data', source: 'legacy_unverified', evidenceCount: 0, warnings: ['Behavior scale error detected — values appear to be on a 1-5 scale, not 0-100'] };
+  }
+
+  const leadership = clamp(Math.round(Number(behaviorVector.leadership || 50)), 0, 100);
+  const riskTolerance = clamp(Math.round(Number(behaviorVector.risk_tolerance || 50)), 0, 100);
+  const decisionSpeed = clamp(Math.round(Number(behaviorVector.decision_speed || 50)), 0, 100);
+  const stressTolerance = clamp(Math.round(Number(behaviorVector.stress_tolerance || 50)), 0, 100);
+  const teamPreference = clamp(Math.round(Number(behaviorVector.team_preference || 50)), 0, 100);
+
+  const signalValues = { leadership, riskTolerance, decisionSpeed, stressTolerance, teamPreference };
+  const allNeutral = Object.values(signalValues).every((v) => v === 50);
+  if (allNeutral) {
+    return { values: null, dominant: null, status: 'insufficient_data', source: 'no_answer_signal', evidenceCount: 0, warnings: [] };
+  }
+
+  const dominant = Object.entries(signalValues).sort(([, a], [, b]) => b - a)[0][0];
+
+  return {
+    values: signalValues,
+    dominant,
+    status: 'valid',
+    source: 'assessment_answers',
+    evidenceCount: Object.keys(signalValues).length,
+    warnings: [],
+  };
+};
+
 const mapResultToLegacySummary = (result = {}) => {
   const scoreMeta = deriveScoreMeta(result);
   return {
@@ -655,6 +734,10 @@ const mapResultToLegacySummary = (result = {}) => {
         }
       : null,
   ai_status: result.analytics?.aiReport?.aiStatus || null,
+  signals: {
+    cognitive: buildCanonicalCognitiveSignal(result.personality?.cognitiveScores || {}),
+    behavior: buildCanonicalBehaviorSignal(result.behavior?.vector || {}),
+  },
 };
 };
 
@@ -701,4 +784,6 @@ module.exports = {
   isValidStageTransition,
   normalizeResultSchemaVersion,
   deriveScoreMeta,
+  buildCanonicalCognitiveSignal,
+  buildCanonicalBehaviorSignal,
 };

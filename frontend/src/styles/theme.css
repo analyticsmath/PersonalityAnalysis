@@ -248,10 +248,10 @@ kbd {
   font-family: 'Inter', monospace;
   font-size: 0.76rem;
   border-radius: 7px;
-  border: 1px solid rgba(148, 163, 200, 0.48);
+  border: 1px solid #CBD5E1;
   padding: 0.1rem 0.38rem;
-  background: rgba(15, 23, 42, 0.84);
-  color: var(--text-secondary);
+  background: #F1F5F9;
+  color: var(--text-primary);
 }
 
 .animated-background {
@@ -1443,20 +1443,20 @@ kbd {
   width: fit-content;
   max-width: 94%;
   border-radius: 14px;
-  border: 1px solid color-mix(in srgb, var(--guide-tone, #22d3ee) 42%, rgba(148, 169, 221, 0.3));
-  background: color-mix(in srgb, var(--guide-tone, #22d3ee) 14%, rgba(14, 24, 43, 0.94));
+  border: 1px solid color-mix(in srgb, var(--guide-tone, #22d3ee) 42%, #CBD5E1);
+  background: color-mix(in srgb, var(--guide-tone, #22d3ee) 14%, #FFFFFF);
   padding: 0.45rem 0.66rem;
   color: var(--text-primary);
   font-size: 0.8rem;
   font-weight: 700;
-  box-shadow: 0 10px 18px rgba(8, 17, 35, 0.42);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.10);
 }
 
 .question-guide__fallback {
   min-height: 248px;
   border-radius: 18px;
-  border: 1px dashed color-mix(in srgb, var(--guide-tone, #22d3ee) 46%, rgba(140, 171, 228, 0.3));
-  background: radial-gradient(circle at 25% 20%, color-mix(in srgb, var(--guide-tone, #22d3ee) 26%, transparent), rgba(14, 24, 44, 0.9));
+  border: 1px dashed color-mix(in srgb, var(--guide-tone, #22d3ee) 46%, #CBD5E1);
+  background: color-mix(in srgb, var(--guide-tone, #22d3ee) 10%, #F8FAFC);
   display: grid;
   justify-items: center;
   align-content: center;
@@ -1474,8 +1474,8 @@ kbd {
   align-items: center;
   gap: 0.36rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--guide-tone, #22d3ee) 44%, transparent);
-  background: color-mix(in srgb, var(--guide-tone, #22d3ee) 18%, rgba(15, 24, 43, 0.94));
+  border: 1px solid color-mix(in srgb, var(--guide-tone, #22d3ee) 44%, #CBD5E1);
+  background: color-mix(in srgb, var(--guide-tone, #22d3ee) 18%, #FFFFFF);
   color: var(--text-primary);
   padding: 0.26rem 0.54rem;
   font-size: 0.76rem;
@@ -1497,8 +1497,8 @@ kbd {
   font-size: 0.78rem;
   font-weight: 800;
   color: var(--text-primary);
-  border: 1px solid color-mix(in srgb, var(--guide-tone, #22d3ee) 40%, transparent);
-  background: color-mix(in srgb, var(--guide-tone, #22d3ee) 18%, #0f182b 82%);
+  border: 1px solid color-mix(in srgb, var(--guide-tone, #22d3ee) 40%, #CBD5E1);
+  background: color-mix(in srgb, var(--guide-tone, #22d3ee) 18%, #F1F5F9 82%);
 }
 
 .question-guide__copy p {
@@ -2205,44 +2205,46 @@ kbd {
 
 .intel-notification-item {
   border-radius: 12px;
-  border: 1px solid rgba(122, 152, 210, 0.3);
-  background: rgba(18, 30, 54, 0.82);
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
   padding: 0.72rem;
 }
 
 .intel-notification-item h4 {
   margin-bottom: 0.24rem;
   font-size: 0.9rem;
+  color: var(--text-primary);
 }
 
 .intel-notification-item p {
   font-size: 0.83rem;
-  color: #b7caeb;
+  color: var(--text-secondary);
 }
 
 .intel-notification-item span {
   display: inline-block;
   margin-top: 0.45rem;
   font-size: 0.73rem;
-  color: #8ea5d1;
+  color: var(--text-muted);
 }
 
 .intel-user-trigger {
-  border: 1px solid rgba(122, 152, 209, 0.34);
+  border: 1px solid #CBD5E1;
   border-radius: 12px;
-  background: rgba(16, 25, 43, 0.88);
-  color: #d9e8ff;
+  background: #FFFFFF;
+  color: var(--text-primary);
   height: 40px;
   padding: 0.2rem 0.58rem 0.2rem 0.26rem;
   display: inline-flex;
   align-items: center;
   gap: 0.52rem;
   cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .intel-user-trigger:hover {
-  border-color: rgba(134, 198, 255, 0.58);
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.12);
   transform: translateY(-2px);
 }
 
@@ -2258,7 +2260,7 @@ kbd {
 
 .intel-user-trigger__meta strong {
   font-size: 0.81rem;
-  color: #e7f1ff;
+  color: var(--text-primary);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2267,7 +2269,7 @@ kbd {
 
 .intel-user-trigger__meta small {
   font-size: 0.68rem;
-  color: #8fa5d0;
+  color: var(--text-muted);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2276,7 +2278,7 @@ kbd {
 
 .intel-user-trigger__caret {
   font-size: 0.86rem;
-  color: #a6bee7;
+  color: var(--text-muted);
 }
 
 .intel-popover--menu {
@@ -2291,7 +2293,7 @@ kbd {
   border: 1px solid transparent;
   border-radius: 10px;
   background: transparent;
-  color: #d4e6ff;
+  color: var(--text-primary);
   text-align: left;
   padding: 0.55rem 0.64rem;
   display: inline-flex;
@@ -2303,8 +2305,8 @@ kbd {
 }
 
 .intel-popover--menu button:hover {
-  border-color: rgba(123, 162, 238, 0.34);
-  background: rgba(22, 35, 61, 0.92);
+  border-color: rgba(79, 70, 229, 0.22);
+  background: #EEF2FF;
   transform: translateX(2px);
 }
 
@@ -2352,7 +2354,7 @@ kbd {
 }
 
 .intel-profile__meta p {
-  color: #b2c8eb;
+  color: var(--text-secondary);
   font-size: 0.94rem;
   margin-bottom: var(--space-3);
 }
@@ -2365,39 +2367,39 @@ kbd {
 
 .intel-pill {
   border-radius: 999px;
-  border: 1px solid rgba(122, 151, 206, 0.34);
+  border: 1px solid #C7D2FE;
   padding: 0.36rem 0.62rem;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #c8dcff;
+  color: #3730A3;
   display: inline-flex;
   align-items: center;
   gap: 0.36rem;
-  background: rgba(20, 31, 54, 0.76);
+  background: #EEF2FF;
 }
 
 .intel-pill--personality {
-  border-color: rgba(80, 181, 255, 0.48);
-  color: #ddf2ff;
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(59, 130, 246, 0.28));
+  border-color: #BAE6FD;
+  color: #075985;
+  background: #E0F2FE;
 }
 
 .intel-profile__hint {
   font-size: 0.88rem;
-  color: #9db4dc;
+  color: var(--text-muted);
 }
 
 .intel-avatar {
   position: relative;
-  border: 1px solid rgba(122, 160, 227, 0.5);
+  border: 2px solid #C7D2FE;
   border-radius: 999px;
-  background: linear-gradient(140deg, rgba(42, 71, 123, 0.9), rgba(17, 30, 52, 0.95));
-  color: #e8f5ff;
+  background: linear-gradient(140deg, #4F46E5, #7C3AED);
+  color: #FFFFFF;
   font-weight: 800;
   display: grid;
   place-items: center;
   overflow: hidden;
-  box-shadow: 0 14px 28px rgba(8, 18, 38, 0.5);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.28);
 }
 
 .intel-avatar img {
@@ -2422,8 +2424,8 @@ kbd {
 
 .intel-avatar--large:hover {
   transform: translateY(-4px) scale(1.03);
-  border-color: rgba(133, 213, 255, 0.72);
-  box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.16), 0 18px 34px rgba(17, 31, 57, 0.66);
+  border-color: #818CF8;
+  box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.16), 0 8px 24px rgba(79, 70, 229, 0.28);
 }
 
 .intel-avatar--large:active {
@@ -2440,31 +2442,33 @@ kbd {
 }
 
 .intel-ai-card__summary {
-  color: #eaf5ff;
+  color: var(--text-primary);
   font-size: 0.99rem;
   line-height: 1.75;
   min-height: 72px;
   border-radius: 14px;
-  border: 1px solid rgba(121, 160, 229, 0.32);
+  border: 1px solid #BAE6FD;
   padding: var(--space-4);
-  background: rgba(16, 25, 44, 0.82);
+  background: #E0F2FE;
 }
 
 .intel-ai-card__block {
   border-radius: 12px;
-  border: 1px solid rgba(122, 151, 209, 0.3);
+  border: 1px solid #E2E8F0;
   padding: var(--space-4);
-  background: linear-gradient(145deg, rgba(18, 30, 55, 0.82), rgba(11, 19, 35, 0.92));
+  background: #F8FAFC;
   display: grid;
   gap: var(--space-2);
 }
 
 .intel-ai-card__block h4 {
   font-size: 0.9rem;
+  color: var(--text-primary);
 }
 
 .intel-ai-card__block p {
   font-size: 0.9rem;
+  color: var(--text-secondary);
 }
 
 .intel-analytics-grid {
@@ -2475,8 +2479,8 @@ kbd {
 
 .intel-chart-card {
   border-radius: 16px;
-  border: 1px solid rgba(126, 155, 215, 0.32);
-  background: linear-gradient(148deg, rgba(18, 30, 52, 0.9), rgba(10, 17, 32, 0.96));
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
   padding: var(--space-4);
   display: grid;
   gap: var(--space-3);
@@ -2490,11 +2494,12 @@ kbd {
 
 .intel-chart-card h4 {
   font-size: 0.95rem;
+  color: var(--text-primary);
 }
 
 .intel-chart-card p {
   font-size: 0.82rem;
-  color: #98afd7;
+  color: var(--text-muted);
 }
 
 .intel-timeline {
@@ -2516,19 +2521,19 @@ kbd {
 
 .intel-timeline__item {
   border-radius: 14px;
-  border: 1px solid rgba(121, 148, 203, 0.32);
-  background: linear-gradient(145deg, rgba(21, 32, 56, 0.95), rgba(13, 22, 39, 0.9));
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
   transition: border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
 .intel-timeline__item:hover {
-  border-color: rgba(130, 194, 255, 0.44);
-  box-shadow: 0 12px 24px rgba(7, 16, 34, 0.38);
+  border-color: #A5B4FC;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.12);
 }
 
 .intel-timeline__item.is-expanded {
-  border-color: rgba(127, 186, 255, 0.58);
-  box-shadow: 0 16px 28px rgba(7, 16, 34, 0.48);
+  border-color: #818CF8;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.16);
 }
 
 .intel-timeline__trigger {
@@ -2560,17 +2565,17 @@ kbd {
 }
 
 .intel-timeline__date {
-  color: #a2b6db;
+  color: var(--text-muted);
   font-size: 0.78rem;
 }
 
 .intel-timeline__meta {
-  color: #9fb2d7;
+  color: var(--text-secondary);
   font-size: 0.86rem;
 }
 
 .intel-timeline__chevron {
-  color: #9ab3e0;
+  color: var(--text-muted);
   transition: transform 0.2s ease;
 }
 
@@ -2775,24 +2780,23 @@ kbd {
 }
 
 .heatmap-cell {
-  border: 1px solid var(--cell-border, rgba(115, 146, 205, 0.3));
+  border: 1px solid var(--cell-border, #E2E8F0);
   border-radius: 10px;
-  background: var(--cell-bg, rgba(19, 30, 52, 0.84));
+  background: var(--cell-bg, #F8FAFC);
   color: var(--text-primary);
   min-height: 58px;
   padding: 0.45rem;
   display: grid;
   justify-items: start;
   align-content: space-between;
-  box-shadow: inset 0 0 0 1px rgba(193, 225, 255, 0.06);
   cursor: pointer;
   transition: transform var(--transition-standard), box-shadow var(--transition-standard), border-color var(--transition-standard);
 }
 
 .heatmap-cell:hover {
   transform: var(--motion-lift);
-  border-color: var(--cell-glow, rgba(125, 190, 255, 0.5));
-  box-shadow: 0 12px 20px rgba(8, 18, 39, 0.42), 0 0 0 1px var(--cell-glow, rgba(125, 190, 255, 0.5));
+  border-color: var(--cell-glow, #A5B4FC);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.14), 0 0 0 1px var(--cell-glow, #A5B4FC);
 }
 
 .heatmap-cell:active {

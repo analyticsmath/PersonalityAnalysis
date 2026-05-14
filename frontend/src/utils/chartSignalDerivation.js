@@ -23,9 +23,21 @@ const avg = (...values) => {
   return nums.length ? Math.round(nums.reduce((a, b) => a + b, 0) / nums.length) : null;
 };
 
+const hasRealEvidence = (signals, ...keys) =>
+  keys.some((k) => {
+    const entry = signals?.[k];
+    return entry && typeof entry === 'object' && Number(entry.evidenceCount || 0) > 0;
+  });
+
 export function deriveCognitiveFromCareerSignals(careerSignals) {
   if (!careerSignals || typeof careerSignals !== 'object') {
     return { scores: null, source: 'insufficient', reason: 'no_career_signals' };
+  }
+
+  // If none of the relevant signals have any real evidence, treat as insufficient
+  const cognitiveKeys = ['analyticalThinking', 'creativity', 'planning', 'problemSolving', 'technicalDepth', 'domainFocus', 'learningOrientation'];
+  if (!hasRealEvidence(careerSignals, ...cognitiveKeys)) {
+    return { scores: null, source: 'insufficient', reason: 'zero_evidence_count' };
   }
 
   const analytical = toScore(careerSignals, 'analyticalThinking');
@@ -68,6 +80,11 @@ export function deriveBehaviorFromCareerSignals(careerSignals) {
     return { scores: null, source: 'insufficient', reason: 'no_career_signals' };
   }
 
+  const behaviorKeys = ['leadership', 'riskTolerance', 'adaptability', 'collaboration'];
+  if (!hasRealEvidence(careerSignals, ...behaviorKeys)) {
+    return { scores: null, source: 'insufficient', reason: 'zero_evidence_count' };
+  }
+
   const leadership = toScore(careerSignals, 'leadership');
   const riskTolerance = toScore(careerSignals, 'riskTolerance');
   const adaptability = toScore(careerSignals, 'adaptability');
@@ -106,5 +123,22 @@ export function isAllDefaultVector(scores) {
   if (!scores || typeof scores !== 'object') return true;
   const values = Object.values(scores).map(Number).filter(Number.isFinite);
   if (!values.length) return true;
-  return values.every((v) => v === 0 || v === 50 || v === 1);
+
+  // Exact legacy sentinel values
+  if (values.every((v) => v === 0 || v === 50 || v === 1)) return true;
+
+  // Old cognitive fallback pattern: all values in a narrow band near neutral (44–52, spread ≤ 6)
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  if (max - min <= 6 && min >= 43 && max <= 53) return true;
+
+  // Old behavior scale error: most non-trivial values extremely low (< 10)
+  // except stress_tolerance which may legitimately derive from emotionalStability
+  const nonStress = Object.entries(scores)
+    .filter(([k]) => k !== 'stress_tolerance')
+    .map(([, v]) => Number(v))
+    .filter(Number.isFinite);
+  if (nonStress.length >= 3 && nonStress.filter((v) => v < 10).length >= nonStress.length - 1) return true;
+
+  return false;
 }

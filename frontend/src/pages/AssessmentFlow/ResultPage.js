@@ -193,26 +193,47 @@ const AssessmentFlowResultPage = () => {
   const contrast = result?.career_contrast || {};
   const topCareer = recommendations[0] || null;
 
-  // Cognitive chart: prefer result.cognitive_scores; derive from careerSignals if missing/all-default.
+  // Cognitive chart: prefer canonical signals.cognitive if valid; then direct scores if not default; else derive from careerSignals.
   const cognitiveResolved = useMemo(() => {
+    const canonical = result?.signals?.cognitive;
+    if (canonical && canonical.status === 'valid' && canonical.values) {
+      return { scores: canonical.values, source: canonical.source || 'canonical' };
+    }
     const raw = result?.cognitive_scores;
     const hasReal = raw && typeof raw === 'object' && Object.keys(raw).length > 0 && !isAllDefaultVector(raw);
     if (hasReal) return { scores: raw, source: 'direct' };
     return deriveCognitiveFromCareerSignals(phaseScores?.careerSignals);
   }, [result, phaseScores]);
 
-  // Behavior chart: prefer result.behavior_vector; derive from careerSignals if missing/all-default.
+  // Behavior chart: prefer canonical signals.behavior if valid; then direct vector if not default; else derive from careerSignals.
   const behaviorResolved = useMemo(() => {
+    const canonical = result?.signals?.behavior;
+    if (canonical && canonical.status === 'valid' && canonical.values) {
+      return { scores: canonical.values, source: canonical.source || 'canonical', dominant: canonical.dominant };
+    }
     const raw = result?.behavior_vector;
     const hasReal = raw && typeof raw === 'object' && Object.keys(raw).length > 0 && !isAllDefaultVector(raw);
     if (hasReal) return { scores: raw, source: 'direct' };
     return deriveBehaviorFromCareerSignals(phaseScores?.careerSignals);
   }, [result, phaseScores]);
 
-  const dominantBehaviorLabel = useMemo(
-    () => getDominantBehaviorLabel(behaviorResolved.scores, BEHAVIOR_LABELS),
-    [behaviorResolved.scores]
-  );
+  const dominantBehaviorLabel = useMemo(() => {
+    if (behaviorResolved.dominant) {
+      const BEHAVIOR_LABEL_MAP = {
+        leadership: 'Leadership',
+        riskTolerance: 'Risk Tolerance',
+        decisionSpeed: 'Decision Speed',
+        stressTolerance: 'Stress Tolerance',
+        teamPreference: 'Team Preference',
+        risk_tolerance: 'Risk Tolerance',
+        decision_speed: 'Decision Speed',
+        stress_tolerance: 'Stress Tolerance',
+        team_preference: 'Team Preference',
+      };
+      return BEHAVIOR_LABEL_MAP[behaviorResolved.dominant] || behaviorResolved.dominant;
+    }
+    return getDominantBehaviorLabel(behaviorResolved.scores, BEHAVIOR_LABELS);
+  }, [behaviorResolved]);
 
   // Career Alignment Chart: prefer Phase 4 topRecommendations; fall back to legacy.
   const careerAlignmentData = useMemo(() => {

@@ -84,15 +84,43 @@ const extractOceanScores = (result) => {
   return Object.keys(legacy).length > 0 ? { ...legacy, _source: 'legacy' } : null;
 };
 
+const pdfIsNarrowNeutralBand = (values) => {
+  if (!values.length) return true;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  return max - min <= 6 && min >= 43 && max <= 53;
+};
+
+const pdfIsBehaviorScaleError = (bv) => {
+  const nonStress = ['leadership', 'risk_tolerance', 'decision_speed', 'team_preference']
+    .map((k) => Number(bv[k]))
+    .filter(Number.isFinite);
+  return nonStress.length >= 3 && nonStress.filter((v) => v < 10).length >= nonStress.length - 1;
+};
+
+const pdfCareerSignalHasEvidence = (sig, ...keys) =>
+  keys.some((k) => {
+    const entry = sig?.[k];
+    return entry && typeof entry === 'object' && Number(entry.evidenceCount || 0) > 0;
+  });
+
 const extractCognitive = (result) => {
+  // Prefer canonical signals if valid
+  const canonical = result.signals?.cognitive;
+  if (canonical && canonical.status === 'valid' && canonical.values) return canonical.values;
+
   const cs = result.cognitive_scores;
   if (cs && typeof cs === 'object' && Object.keys(cs).length > 0) {
     const vals = Object.values(cs).map(Number).filter(Number.isFinite);
-    if (vals.some((v) => v > 0 && v !== 50)) return cs;
+    if (vals.some((v) => v > 0 && v !== 50) && !pdfIsNarrowNeutralBand(vals)) return cs;
   }
-  // Derive from careerSignals
+
+  // Derive from careerSignals only if evidence exists
   const sig = result.scores?.careerSignals;
   if (!sig || typeof sig !== 'object') return null;
+  const cogKeys = ['analyticalThinking', 'creativity', 'planning', 'problemSolving', 'technicalDepth', 'domainFocus', 'learningOrientation'];
+  if (!pdfCareerSignalHasEvidence(sig, ...cogKeys)) return null;
+
   const getScore = (key) => {
     const entry = sig[key];
     if (!entry || typeof entry !== 'object') return null;
@@ -125,13 +153,30 @@ const extractCognitive = (result) => {
 };
 
 const extractBehavior = (result) => {
+  // Prefer canonical signals if valid
+  const canonical = result.signals?.behavior;
+  if (canonical && canonical.status === 'valid' && canonical.values) {
+    const cv = canonical.values;
+    return {
+      leadership: Number(cv.leadership || 50),
+      risk_tolerance: Number(cv.riskTolerance || 50),
+      decision_speed: Number(cv.decisionSpeed || 50),
+      stress_tolerance: Number(cv.stressTolerance || 50),
+      team_preference: Number(cv.teamPreference || 50),
+    };
+  }
+
   const bv = result.behavior_vector;
   if (bv && typeof bv === 'object' && Object.keys(bv).length > 0) {
     const vals = Object.values(bv).map(Number).filter(Number.isFinite);
-    if (vals.some((v) => v > 0 && v !== 50)) return bv;
+    if (vals.some((v) => v > 0 && v !== 50) && !pdfIsBehaviorScaleError(bv)) return bv;
   }
+
   const sig = result.scores?.careerSignals;
   if (!sig || typeof sig !== 'object') return null;
+  const behKeys = ['leadership', 'riskTolerance', 'adaptability', 'collaboration'];
+  if (!pdfCareerSignalHasEvidence(sig, ...behKeys)) return null;
+
   const getScore = (key) => {
     const entry = sig[key];
     if (!entry || typeof entry !== 'object') return null;
