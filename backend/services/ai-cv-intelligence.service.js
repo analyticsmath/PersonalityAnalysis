@@ -1,6 +1,7 @@
 const { config } = require('../config/env');
 const { extractOutputText, parseJsonFromText } = require('./assessment/aiJson');
 const { getOpenAiClient } = require('./assessment/openaiClient');
+const { sanitizeOpenAiParams } = require('./ai/openAiParameterPolicy.service');
 
 const EXPERIENCE_LEVELS = ['entry', 'mid', 'senior'];
 const BEHAVIOR_KEYS = ['leadership', 'analysis', 'creativity', 'risk', 'collaboration', 'execution'];
@@ -179,22 +180,24 @@ const extractAiCvIntelligence = async ({ cvData = {}, cvRawText = '', existingPr
   }
 
   try {
-    const response = await getOpenAiClient().responses.create({
-      model: config.openaiModel,
-      temperature: 0.15,
-      max_output_tokens: 1200,
-      input: [
-        {
-          role: 'system',
-          content:
-            'Analyze CV content and return psychometric intelligence as strict JSON only. No markdown, no commentary.',
-        },
-        {
-          role: 'user',
-          content: `Analyze this CV deeply.\n\nExtract:\n\ndomain\nsubdomains\nskills\nsubjects\ntools\ninterests\nbehavior signals\nwork style signals\ncareer signals\nexperience level\n\nReturn JSON only using this schema:\n{\n  "domain": "",\n  "subdomains": [""],\n  "skills": [""],\n  "subjects": [""],\n  "tools": [""],\n  "interests": [""],\n  "behavior_signals": {\n    "leadership": 0,\n    "analysis": 0,\n    "creativity": 0,\n    "risk": 0,\n    "collaboration": 0,\n    "execution": 0\n  },\n  "work_style": [""],\n  "career_signals": [""],\n  "experience_level": "entry|mid|senior",\n  "confidence": 0\n}\n\n${toCvSummary({ cvData, cvRawText })}`,
-        },
-      ],
-    });
+    const response = await getOpenAiClient().responses.create(
+      sanitizeOpenAiParams(config.openaiModel, {
+        model: config.openaiModel,
+        temperature: 0.15,
+        max_output_tokens: 1200,
+        input: [
+          {
+            role: 'system',
+            content:
+              'Analyze CV content and return psychometric intelligence as strict JSON only. No markdown, no commentary.',
+          },
+          {
+            role: 'user',
+            content: `Analyze this CV deeply.\n\nExtract:\n\ndomain\nsubdomains\nskills\nsubjects\ntools\ninterests\nbehavior signals\nwork style signals\ncareer signals\nexperience level\n\nReturn JSON only using this schema:\n{\n  "domain": "",\n  "subdomains": [""],\n  "skills": [""],\n  "subjects": [""],\n  "tools": [""],\n  "interests": [""],\n  "behavior_signals": {\n    "leadership": 0,\n    "analysis": 0,\n    "creativity": 0,\n    "risk": 0,\n    "collaboration": 0,\n    "execution": 0\n  },\n  "work_style": [""],\n  "career_signals": [""],\n  "experience_level": "entry|mid|senior",\n  "confidence": 0\n}\n\n${toCvSummary({ cvData, cvRawText })}`,
+          },
+        ],
+      })
+    );
 
     const parsed = parseJsonFromText(extractOutputText(response), 'AI CV intelligence output invalid');
     return normalizeAiProfile(parsed);

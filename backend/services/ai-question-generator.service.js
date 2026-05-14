@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const { config } = require('../config/env');
 const { extractOutputText, parseJsonFromText } = require('./assessment/aiJson');
 const { getOpenAiClient } = require('./assessment/openaiClient');
+const { sanitizeOpenAiParams } = require('./ai/openAiParameterPolicy.service');
 const { FACET_LIBRARY, TRAITS, difficultyForIndex } = require('./question-coverage.service');
 
 const QUESTION_LENGTH_MIN = 13;
@@ -262,28 +263,30 @@ const generateAdaptiveQuestion = async ({
   }
 
   try {
-    const response = await getOpenAiClient().responses.create({
-      model: config.openaiModel,
-      temperature: 0.28,
-      max_output_tokens: 700,
-      input: [
-        {
-          role: 'system',
-          content:
-            'Generate one adaptive psychometric question. Return strict JSON only. Do not include markdown.',
-        },
-        {
-          role: 'user',
-          content: buildPrompt({
-            aiProfile,
-            askedQuestions,
-            coverage: fallbackCoverage,
-            questionIndex,
-            forceAnswerType,
-          }),
-        },
-      ],
-    });
+    const response = await getOpenAiClient().responses.create(
+      sanitizeOpenAiParams(config.openaiModel, {
+        model: config.openaiModel,
+        temperature: 0.28,
+        max_output_tokens: 700,
+        input: [
+          {
+            role: 'system',
+            content:
+              'Generate one adaptive psychometric question. Return strict JSON only. Do not include markdown.',
+          },
+          {
+            role: 'user',
+            content: buildPrompt({
+              aiProfile,
+              askedQuestions,
+              coverage: fallbackCoverage,
+              questionIndex,
+              forceAnswerType,
+            }),
+          },
+        ],
+      })
+    );
 
     const parsed = parseJsonFromText(extractOutputText(response), 'Adaptive question output invalid');
     return normalizeGeneratedQuestion({

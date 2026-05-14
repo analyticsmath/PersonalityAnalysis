@@ -1,6 +1,7 @@
 const { config } = require('../config/env');
 const { extractOutputText, parseJsonFromText } = require('./assessment/aiJson');
 const { getOpenAiClient } = require('./assessment/openaiClient');
+const { sanitizeOpenAiParams } = require('./ai/openAiParameterPolicy.service');
 
 const TRAITS = ['O', 'C', 'E', 'A', 'N'];
 
@@ -219,32 +220,34 @@ const interpretTextAnswer = async ({ answerText = '', question = {}, aiProfile =
   }
 
   try {
-    const response = await getOpenAiClient().responses.create({
-      model: config.openaiModel,
-      temperature: 0.2,
-      max_output_tokens: 700,
-      input: [
-        {
-          role: 'system',
-          content:
-            'Analyze short psychometric answers and return strict JSON only with trait signals and confidence.',
-        },
-        {
-          role: 'user',
-          content: `Analyze this answer.\n\nReturn:\n\ntrait signals\nconfidence\nbehavior indicators\n\nReturn JSON only:\n{\n  "trait_signals": {"O": -1..1, "C": -1..1, "E": -1..1, "A": -1..1, "N": -1..1},\n  "confidence": 0..1,\n  "behavior_indicators": [""],\n  "normalized_score": 1..5\n}\n\nQuestion context:\n${JSON.stringify(
-            {
-              question: question?.text || '',
-              trait: question?.trait || question?.traitFocus || '',
-              facet: question?.facet || question?.traitTarget || '',
-              domain: aiProfile?.domain || '',
-              skills: (aiProfile?.skills || []).slice(0, 8),
-            },
-            null,
-            2
-          )}\n\nAnswer:\n${String(answerText || '').slice(0, 3000)}`,
-        },
-      ],
-    });
+    const response = await getOpenAiClient().responses.create(
+      sanitizeOpenAiParams(config.openaiModel, {
+        model: config.openaiModel,
+        temperature: 0.2,
+        max_output_tokens: 700,
+        input: [
+          {
+            role: 'system',
+            content:
+              'Analyze short psychometric answers and return strict JSON only with trait signals and confidence.',
+          },
+          {
+            role: 'user',
+            content: `Analyze this answer.\n\nReturn:\n\ntrait signals\nconfidence\nbehavior indicators\n\nReturn JSON only:\n{\n  "trait_signals": {"O": -1..1, "C": -1..1, "E": -1..1, "A": -1..1, "N": -1..1},\n  "confidence": 0..1,\n  "behavior_indicators": [""],\n  "normalized_score": 1..5\n}\n\nQuestion context:\n${JSON.stringify(
+              {
+                question: question?.text || '',
+                trait: question?.trait || question?.traitFocus || '',
+                facet: question?.facet || question?.traitTarget || '',
+                domain: aiProfile?.domain || '',
+                skills: (aiProfile?.skills || []).slice(0, 8),
+              },
+              null,
+              2
+            )}\n\nAnswer:\n${String(answerText || '').slice(0, 3000)}`,
+          },
+        ],
+      })
+    );
 
     const parsed = parseJsonFromText(extractOutputText(response), 'Text response interpretation invalid');
     return normalizeTextInterpretation(parsed);

@@ -1,6 +1,7 @@
 const { config } = require('../../config/env');
 const { extractOutputText, parseJsonFromText } = require('./aiJson');
 const { getOpenAiClient } = require('./openaiClient');
+const { sanitizeOpenAiParams } = require('../ai/openAiParameterPolicy.service');
 
 const POSITIVE_WORDS = [
   'learn',
@@ -106,29 +107,31 @@ const analyzeBehaviorWithAi = async ({ answers, cvData, profileVector }) => {
     return null;
   }
 
-  const response = await getOpenAiClient().responses.create({
-    model: config.openaiModel,
-    temperature: 0.25,
-    max_output_tokens: 1200,
-    input: [
-      {
-        role: 'system',
-        content:
-          'You are a behavioral psychologist for career assessments. Analyze written responses for emotional patterns and decision signals. Return strict JSON.',
-      },
-      {
-        role: 'user',
-        content: `Candidate context:\n- Domain: ${profileVector?.domainCategory || 'unknown'}\n- Experience level: ${profileVector?.experienceLevel || 'unknown'}\n- Skills: ${(cvData?.skills || [])
-          .slice(0, 6)
-          .map((skill) => skill.name)
-          .join(', ') || 'n/a'}\n\nBehavior answers:\n${JSON.stringify(
-          answers,
-          null,
-          2
-        )}\n\nReturn schema:\n{\n  "personality_signals": [""],\n  "emotional_stability": "",\n  "decision_style": "",\n  "confidence_level": "",\n  "risk_tendency": ""\n}`,
-      },
-    ],
-  });
+  const response = await getOpenAiClient().responses.create(
+    sanitizeOpenAiParams(config.openaiModel, {
+      model: config.openaiModel,
+      temperature: 0.25,
+      max_output_tokens: 1200,
+      input: [
+        {
+          role: 'system',
+          content:
+            'You are a behavioral psychologist for career assessments. Analyze written responses for emotional patterns and decision signals. Return strict JSON.',
+        },
+        {
+          role: 'user',
+          content: `Candidate context:\n- Domain: ${profileVector?.domainCategory || 'unknown'}\n- Experience level: ${profileVector?.experienceLevel || 'unknown'}\n- Skills: ${(cvData?.skills || [])
+            .slice(0, 6)
+            .map((skill) => skill.name)
+            .join(', ') || 'n/a'}\n\nBehavior answers:\n${JSON.stringify(
+            answers,
+            null,
+            2
+          )}\n\nReturn schema:\n{\n  "personality_signals": [""],\n  "emotional_stability": "",\n  "decision_style": "",\n  "confidence_level": "",\n  "risk_tendency": ""\n}`,
+        },
+      ],
+    })
+  );
 
   const parsed = parseJsonFromText(
     extractOutputText(response),

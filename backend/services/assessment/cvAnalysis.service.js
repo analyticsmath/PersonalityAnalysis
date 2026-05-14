@@ -5,6 +5,7 @@ const { createHttpError } = require('../../utils/httpError');
 const { config } = require('../../config/env');
 const { extractOutputText, parseJsonFromText } = require('./aiJson');
 const { getOpenAiClient } = require('./openaiClient');
+const { sanitizeOpenAiParams } = require('../ai/openAiParameterPolicy.service');
 const {
   SKILL_CATALOG,
   INTEREST_KEYWORDS,
@@ -523,22 +524,24 @@ const parseCvWithAi = async (rawText, fallbackPayload) => {
 
   const inputText = truncate(rawText, MAX_CV_TEXT_LENGTH);
 
-  const response = await getOpenAiClient().responses.create({
-    model: config.openaiModel,
-    temperature: 0.15,
-    max_output_tokens: 2000,
-    input: [
-      {
-        role: 'system',
-        content:
-          'You are an ATS scanner and recruiter intelligence engine. Extract structured candidate intelligence from CV text. Return JSON only, without markdown.',
-      },
-      {
-        role: 'user',
-        content: `Extract and infer this schema exactly:\n{\n  "name": "",\n  "skills": [{ "name": "", "level": 1-5, "category": "frontend/backend/data/design/cloud/product/soft_skills" }],\n  "subjects": [""],\n  "marks": [{"subject":"", "score": 0-100}],\n  "projects": [""],\n  "tools": [""],\n  "education": [""],\n  "experience": [""],\n  "interests": [""],\n  "career_signals": [""],\n  "subject_vector": {"": 0},\n  "skill_vector": {"": 0},\n  "interest_vector": {"": 0}\n}\n\nRules:\n- Think like ATS + recruiter.\n- Include inferred subjects and measurable marks when mentioned.\n- Keep each list concise and specific.\n- Ensure skill level is integer 1-5.\n\nCV Text:\n${inputText}`,
-      },
-    ],
-  });
+  const response = await getOpenAiClient().responses.create(
+    sanitizeOpenAiParams(config.openaiModel, {
+      model: config.openaiModel,
+      temperature: 0.15,
+      max_output_tokens: 2000,
+      input: [
+        {
+          role: 'system',
+          content:
+            'You are an ATS scanner and recruiter intelligence engine. Extract structured candidate intelligence from CV text. Return JSON only, without markdown.',
+        },
+        {
+          role: 'user',
+          content: `Extract and infer this schema exactly:\n{\n  "name": "",\n  "skills": [{ "name": "", "level": 1-5, "category": "frontend/backend/data/design/cloud/product/soft_skills" }],\n  "subjects": [""],\n  "marks": [{"subject":"", "score": 0-100}],\n  "projects": [""],\n  "tools": [""],\n  "education": [""],\n  "experience": [""],\n  "interests": [""],\n  "career_signals": [""],\n  "subject_vector": {"": 0},\n  "skill_vector": {"": 0},\n  "interest_vector": {"": 0}\n}\n\nRules:\n- Think like ATS + recruiter.\n- Include inferred subjects and measurable marks when mentioned.\n- Keep each list concise and specific.\n- Ensure skill level is integer 1-5.\n\nCV Text:\n${inputText}`,
+        },
+      ],
+    })
+  );
 
   const parsed = parseJsonFromText(extractOutputText(response), 'AI CV parser output is invalid');
   const normalized = normalizeCvPayload(parsed);

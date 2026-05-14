@@ -2,6 +2,7 @@ const CAREERS_KB = require('../data/careers.json');
 const { config } = require('../config/env');
 const { extractOutputText, parseJsonFromText } = require('./assessment/aiJson');
 const { getOpenAiClient } = require('./assessment/openaiClient');
+const { sanitizeOpenAiParams } = require('./ai/openAiParameterPolicy.service');
 
 const EMBEDDING_MODEL = 'text-embedding-3-small';
 
@@ -233,29 +234,31 @@ const requestAiCareerCandidates = async ({
   }
 
   try {
-    const response = await getOpenAiClient().responses.create({
-      model: config.openaiModel,
-      temperature: 0.2,
-      max_output_tokens: 1600,
-      input: [
-        {
-          role: 'system',
-          content:
-            'You are a career intelligence engine. Recommend careers grounded in provided profile. Return strict JSON array only.',
-        },
-        {
-          role: 'user',
-          content: `Analyze this profile.\n\nRecommend best careers.\n\nConsider:\n\nskills\ntraits\ncognitive style\ninterests\ndomain\nbehavior\n\nReturn:\n\n[\n  {\n    "career":"",\n    "match":0,\n    "confidence":0,\n    "reason":"",\n    "skill_gaps":[],\n    "growth_path":[]\n  }\n]\n\nReturn top 8.\n\nProfile:\n${buildUserProfileText({
-            aiProfile,
-            traitVector,
-            cognitiveVector,
-            behaviorVector,
-            skills,
-            interests,
-          })}\n\nAvailable career titles:\n${catalog.map((item) => item.title).join(', ')}`,
-        },
-      ],
-    });
+    const response = await getOpenAiClient().responses.create(
+      sanitizeOpenAiParams(config.openaiModel, {
+        model: config.openaiModel,
+        temperature: 0.2,
+        max_output_tokens: 1600,
+        input: [
+          {
+            role: 'system',
+            content:
+              'You are a career intelligence engine. Recommend careers grounded in provided profile. Return strict JSON array only.',
+          },
+          {
+            role: 'user',
+            content: `Analyze this profile.\n\nRecommend best careers.\n\nConsider:\n\nskills\ntraits\ncognitive style\ninterests\ndomain\nbehavior\n\nReturn:\n\n[\n  {\n    "career":"",\n    "match":0,\n    "confidence":0,\n    "reason":"",\n    "skill_gaps":[],\n    "growth_path":[]\n  }\n]\n\nReturn top 8.\n\nProfile:\n${buildUserProfileText({
+              aiProfile,
+              traitVector,
+              cognitiveVector,
+              behaviorVector,
+              skills,
+              interests,
+            })}\n\nAvailable career titles:\n${catalog.map((item) => item.title).join(', ')}`,
+          },
+        ],
+      })
+    );
 
     const parsed = parseJsonFromText(extractOutputText(response), 'Career intelligence output invalid');
     return normalizeAiCareers(parsed);

@@ -1,6 +1,7 @@
 const { config } = require('../../config/env');
 const { extractOutputText, parseJsonFromText } = require('./aiJson');
 const { getOpenAiClient } = require('./openaiClient');
+const { sanitizeOpenAiParams } = require('../ai/openAiParameterPolicy.service');
 
 const TRAITS = ['O', 'C', 'E', 'A', 'N'];
 
@@ -119,22 +120,24 @@ const analyzeWithAi = async ({ answerText = '', exampleText = '', question = {},
     return null;
   }
 
-  const response = await getOpenAiClient().responses.create({
-    model: config.openaiModel,
-    temperature: 0.15,
-    max_output_tokens: 900,
-    input: [
-      {
-        role: 'system',
-        content:
-          'You analyze interview responses. Extract trait signals and communication confidence. Return JSON only.',
-      },
-      {
-        role: 'user',
-        content: `Analyze this interview answer.\n\nContext:\n- Domain: ${profileVector.domainCategory || 'unknown'}\n- Experience: ${profileVector.experience || 'mid'}\n- Question type: ${question.type || 'text'}\n- Question category: ${question.category || 'career'}\n- Trait target: ${question.traitTarget || question.traitFocus || 'unspecified'}\n\nQuestion:\n${question.text || ''}\n\nMain answer:\n${answerText}\n\nExample (if provided):\n${exampleText || 'n/a'}\n\nReturn schema:\n{\n  \"trait_signals\": {\"O\": -1..1, \"C\": -1..1, \"E\": -1..1, \"A\": -1..1, \"N\": -1..1},\n  \"confidence\": 0..1,\n  \"sentiment\": -1..1,\n  \"creativity\": 0..100,\n  \"reasoning\": 0..100,\n  \"leadership\": 0..100,\n  \"extracted_traits\": [\"O|C|E|A|N\"],\n  \"summary\": \"short explanation\"\n}`,
-      },
-    ],
-  });
+  const response = await getOpenAiClient().responses.create(
+    sanitizeOpenAiParams(config.openaiModel, {
+      model: config.openaiModel,
+      temperature: 0.15,
+      max_output_tokens: 900,
+      input: [
+        {
+          role: 'system',
+          content:
+            'You analyze interview responses. Extract trait signals and communication confidence. Return JSON only.',
+        },
+        {
+          role: 'user',
+          content: `Analyze this interview answer.\n\nContext:\n- Domain: ${profileVector.domainCategory || 'unknown'}\n- Experience: ${profileVector.experience || 'mid'}\n- Question type: ${question.type || 'text'}\n- Question category: ${question.category || 'career'}\n- Trait target: ${question.traitTarget || question.traitFocus || 'unspecified'}\n\nQuestion:\n${question.text || ''}\n\nMain answer:\n${answerText}\n\nExample (if provided):\n${exampleText || 'n/a'}\n\nReturn schema:\n{\n  \"trait_signals\": {\"O\": -1..1, \"C\": -1..1, \"E\": -1..1, \"A\": -1..1, \"N\": -1..1},\n  \"confidence\": 0..1,\n  \"sentiment\": -1..1,\n  \"creativity\": 0..100,\n  \"reasoning\": 0..100,\n  \"leadership\": 0..100,\n  \"extracted_traits\": [\"O|C|E|A|N\"],\n  \"summary\": \"short explanation\"\n}`,
+        },
+      ],
+    })
+  );
 
   const parsed = parseJsonFromText(
     extractOutputText(response),

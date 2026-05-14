@@ -1,6 +1,7 @@
 const { config } = require('../../config/env');
 const { extractOutputText, parseJsonFromText } = require('./aiJson');
 const { getOpenAiClient } = require('./openaiClient');
+const { sanitizeOpenAiParams } = require('../ai/openAiParameterPolicy.service');
 
 const refinerCache = new Map();
 
@@ -147,22 +148,24 @@ const refineQuestionsWithAi = async ({ questions, context }) => {
     traitFocus: question.traitFocus || question.traitTarget,
   }));
 
-  const response = await getOpenAiClient().responses.create({
-    model: config.openaiModel,
-    temperature: 0.2,
-    max_output_tokens: 2200,
-    input: [
-      {
-        role: 'system',
-        content:
-          'You refine assessment questions. Ensure each is scenario-based, measurable, realistic, concise, and non-generic. Return JSON only.',
-      },
-      {
-        role: 'user',
-        content: `Context:\n- Candidate domain: ${context.domainCategory}\n- Experience: ${context.experienceLevel}\n- Skills: ${(context.skillHighlights || []).join(', ') || 'n/a'}\n\nQuestions:\n${JSON.stringify(promptPayload, null, 2)}\n\nOutput schema:\n{\n  "questions": [\n    {\n      "questionId": "",\n      "refinedText": "",\n      "difficulty": "beginner|intermediate|advanced"\n    }\n  ]\n}`,
-      },
-    ],
-  });
+  const response = await getOpenAiClient().responses.create(
+    sanitizeOpenAiParams(config.openaiModel, {
+      model: config.openaiModel,
+      temperature: 0.2,
+      max_output_tokens: 2200,
+      input: [
+        {
+          role: 'system',
+          content:
+            'You refine assessment questions. Ensure each is scenario-based, measurable, realistic, concise, and non-generic. Return JSON only.',
+        },
+        {
+          role: 'user',
+          content: `Context:\n- Candidate domain: ${context.domainCategory}\n- Experience: ${context.experienceLevel}\n- Skills: ${(context.skillHighlights || []).join(', ') || 'n/a'}\n\nQuestions:\n${JSON.stringify(promptPayload, null, 2)}\n\nOutput schema:\n{\n  "questions": [\n    {\n      "questionId": "",\n      "refinedText": "",\n      "difficulty": "beginner|intermediate|advanced"\n    }\n  ]\n}`,
+        },
+      ],
+    })
+  );
 
   const parsed = parseJsonFromText(extractOutputText(response), 'Question refiner response invalid');
   return normalizeAiQuestions(parsed, questions);
