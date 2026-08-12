@@ -1,62 +1,36 @@
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { marketingDemo, publicMedia } from '../content/personalityMarketingDemo';
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import { PublicLayout, ResponsiveImage } from '../components/public/PublicChrome';
 import './PublicHomePage.css';
 
-const portraits = [
-  ['Professional context', 'What you have done, what you want next, and the conditions that matter to you.', publicMedia.work[0]],
-  ['Assessment response', 'Adaptive questions build a clearer reading without reducing work to a single answer.', publicMedia.work[3]],
-  ['Behaviour in context', 'Scenario-based evidence adds another perspective on how you tend to approach work.', publicMedia.work[4]],
-  ['Current profile', 'Your portrait holds tendencies, interests, values, signals and evidence confidence separately.', publicMedia.work[5]],
+gsap.registerPlugin(ScrollTrigger);
+const portraitStates = [
+  ['BIG FIVE', publicMedia.work[0], marketingDemo.profile.bigFive],
+  ['RIASEC', publicMedia.work[3], [['Investigative', 78], ['Artistic', 70], ['Enterprising', 57], ['Social', 49], ['Conventional', 44], ['Realistic', 38]]],
+  ['WORK VALUES', publicMedia.work[4], [['Growth', 82], ['Independence', 74], ['Intrinsic', 71], ['Security', 63], ['Lifestyle', 58], ['Relationships', 54], ['Prestige', 48], ['Extrinsic', 43]]],
+  ['CAREER SIGNALS', publicMedia.work[2], marketingDemo.profile.signals],
 ];
-
-function ProfileFragment() {
-  return <div className="pa-marketing__fragment" aria-label="Example professional profile fragment">
-    <span>Current profile · demonstration</span>
-    {marketingDemo.profile.bigFive.slice(0, 3).map(([trait, value]) => <div key={trait}><b>{trait}</b><strong>{value}</strong></div>)}
-    <p>Confidence is evidence metadata, not a verdict.</p>
-  </div>;
-}
+function PortraitState({ state, index }) { const [title, image, items] = state; return <article className={`pa-portrait-state pa-portrait-state--${index + 1}`} aria-label={`${title} demonstration`}><ResponsiveImage media={image} alt="" /><h3>{title}</h3><div className="pa-portrait-state__values">{items.map(([label, value], itemIndex) => <span key={label} className={`is-value-${itemIndex + 1}`}><b>{label}</b><i>{value}</i></span>)}</div></article>; }
 
 export default function PublicHomePage() {
-  return <PublicLayout page="home">
-    <main id="main-content" className="pa-marketing pa-home">
-      <section className="pa-home__hero" aria-labelledby="public-title">
-        <ResponsiveImage media={publicMedia.work[1]} alt="A professional working through software on a desk" priority className="pa-home__hero-image" />
-        <div className="pa-home__hero-copy"><p>Personality Assessor</p><h1 id="public-title">YOUR WORK<br />HAS A PATTERN.</h1><span>Make it useful.</span></div>
-        <div className="pa-home__hero-bottom"><p>Professional context, adaptive assessment and behavioural evidence become a portrait you can return to.</p><Link className="pa-button pa-button--dark" to="/signup">Start assessment</Link></div>
-      </section>
-
-      <section className="pa-home__evidence" aria-labelledby="evidence-title">
-        <div><p className="pa-kicker">FROM REAL WORK</p><h2 id="evidence-title">EVIDENCE<br />HAS A PLACE.</h2></div>
-        <ResponsiveImage media={publicMedia.work[0]} alt="Notes, planning work and a computer" />
-        <div className="pa-home__evidence-copy"><p>Work is more than a title. Context, responses and observed choices offer different evidence. The product keeps those sources visible as a professional portrait takes shape.</p><Link to="/how-it-works">See how it works <span aria-hidden="true">→</span></Link></div>
-      </section>
-
-      <section className="pa-home__portrait" aria-labelledby="portrait-title">
-        <header><p className="pa-kicker">A PROFESSIONAL PORTRAIT</p><h2 id="portrait-title">ONE PROFILE.<br />FOUR LENSES.</h2></header>
-        <div className="pa-home__portrait-grid">{portraits.map(([title, copy, image], index) => <article key={title} className={`pa-portrait-chapter pa-portrait-chapter--${index + 1}`}><ResponsiveImage media={image} alt="" /><div><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p>{index === 3 && <ProfileFragment />}</div></article>)}</div>
-      </section>
-
-      <section className="pa-home__career" aria-labelledby="career-title">
-        <ResponsiveImage media={publicMedia.careers.software} folder="careers" alt="Developer working at a computer" />
-        <div><p className="pa-kicker">CAREER RELATIONSHIP</p><h2 id="career-title">DIRECTION IS<br />A COMPARISON.</h2><p>Explore alignment with curated careers. See the factors that relate, the gaps that deserve attention, and other directions worth examining.</p><Link className="pa-button pa-button--light" to="/career-intelligence">Explore career intelligence</Link></div>
-        <aside><span>Software Engineer · demonstration</span><strong>Strong alignment</strong><p>Technical depth and problem solving are close to this curated model.</p></aside>
-      </section>
-
-      <section className="pa-home__development" aria-labelledby="development-title">
-        <div><p className="pa-kicker">DEVELOPMENT ACTION</p><h2 id="development-title">THE GAP<br />BECOMES A NEXT STEP.</h2></div>
-        <ol>{marketingDemo.roadmap.map(([label, copy], index) => <li key={label}><span>0{index + 1}</span><h3>{label}</h3><p>{copy}</p></li>)}</ol>
-        <Link to="/progress">See progress over time <span aria-hidden="true">→</span></Link>
-      </section>
-
-      <section className="pa-home__progress" aria-labelledby="progress-title">
-        <ResponsiveImage media={publicMedia.work[2]} alt="Technical work in progress on a circuit board" />
-        <div><p className="pa-kicker">PROGRESS OVER TIME</p><h2 id="progress-title">WHAT CHANGES<br />IS PART OF THE PICTURE.</h2><p>Assessment history, professional updates and roadmap work make development easier to read in context.</p><Link className="pa-button pa-button--dark" to="/progress">Explore progress</Link></div>
-      </section>
-
-      <section className="pa-home__trust" aria-labelledby="trust-title"><p className="pa-kicker">CLEAR BOUNDARIES</p><h2 id="trust-title">USEFUL DIRECTION<br />STARTS WITH HONEST LIMITS.</h2><div><p>Personality Assessor is not a clinical assessment, a hiring system or a career prediction machine.</p><Link to="/trust">Trust &amp; transparency <span aria-hidden="true">→</span></Link></div></section>
-      <section className="pa-home__closing"><ResponsiveImage media={publicMedia.work[5]} alt="Professional at an operational control desk" /><div><h2>FROM EVIDENCE<br />TO DIRECTION.</h2><Link className="pa-button pa-button--light" to="/signup">Start assessment</Link></div></section>
-    </main>
-  </PublicLayout>;
+  const root = useRef(null); const careerRef = useRef(null); const reduced = usePrefersReducedMotion(); const [careerIndex, setCareerIndex] = useState(1); const career = marketingDemo.careers[careerIndex];
+  useLayoutEffect(() => { if (reduced || !root.current) return undefined; const context = gsap.context(() => { const mm = gsap.matchMedia(); mm.add('(min-width: 1100px)', () => {
+    const work = gsap.timeline({ scrollTrigger: { trigger: '.pa-work-corridor', start: 'top top', end: 'bottom bottom', scrub: .8 } }); work.fromTo('.pa-work-plane', { clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(8% 12% 12% 8%)', duration: .35, stagger: .08 }, .12).fromTo('.pa-work-evidence', { autoAlpha: 0, y: 70 }, { autoAlpha: 1, y: 0, duration: .3, stagger: .12 }, .42).to('.pa-work-hero-lines span', { yPercent: -24, duration: .28, stagger: .06 }, .62);
+    const portrait = gsap.timeline({ scrollTrigger: { trigger: '.pa-portrait-corridor', start: 'top top', end: 'bottom bottom', scrub: .82 } }); portrait.set('.pa-portrait-state:not(:first-child)', { autoAlpha: 0 }).to('.pa-portrait-state--1', { scale: 1.06, duration: .18 }, .08).to('.pa-portrait-state--1', { autoAlpha: 0, yPercent: -8, duration: .12 }, .26).to('.pa-portrait-state--2', { autoAlpha: 1, duration: .12 }, .3).to('.pa-portrait-state--2', { scale: 1.05, duration: .18 }, .42).to('.pa-portrait-state--2', { autoAlpha: 0, duration: .12 }, .58).to('.pa-portrait-state--3', { autoAlpha: 1, duration: .12 }, .62).to('.pa-portrait-state--3', { scale: 1.04, duration: .18 }, .74).to('.pa-portrait-state--3', { autoAlpha: 0, duration: .12 }, .86).to('.pa-portrait-state--4', { autoAlpha: 1, duration: .14 }, .9).to('.pa-portrait-state--4', { scale: 1.04, duration: .1 }, 1.02);
+    const roadmap = gsap.timeline({ scrollTrigger: { trigger: '.pa-roadmap-corridor', start: 'top top', end: 'bottom bottom', scrub: .75 } }); roadmap.set('.pa-roadmap-step:not(:first-child)', { autoAlpha: 0, yPercent: 35 }).to('.pa-roadmap-step--1', { yPercent: -28, autoAlpha: .32, duration: .3 }, .28).to('.pa-roadmap-step--2', { autoAlpha: 1, yPercent: 0, duration: .2 }, .34).to('.pa-roadmap-step--2', { yPercent: -25, autoAlpha: .3, duration: .25 }, .62).to('.pa-roadmap-step--3', { autoAlpha: 1, yPercent: 0, duration: .2 }, .68);
+    const progress = gsap.timeline({ scrollTrigger: { trigger: '.pa-progress-corridor', start: 'top top', end: 'bottom bottom', scrub: .78 } }); progress.set('.pa-progress-state:not(:first-child)', { autoAlpha: 0, y: 55 }).to('.pa-progress-state--1', { autoAlpha: .15, y: -35, duration: .25 }, .28).to('.pa-progress-state--2', { autoAlpha: 1, y: 0, duration: .18 }, .35).to('.pa-progress-state--2', { autoAlpha: .15, y: -30, duration: .25 }, .62).to('.pa-progress-state--3', { autoAlpha: 1, y: 0, duration: .18 }, .7);
+  }); return () => mm.revert(); }); return () => context.revert(); }, [reduced]);
+  useEffect(() => { if (!careerRef.current || reduced) return; gsap.fromTo(careerRef.current.querySelectorAll('[data-career-motion]'), { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: .42, stagger: .07, ease: 'power2.out' }); }, [careerIndex, reduced]);
+  return <PublicLayout page="home"><main id="main-content" className={`pa-marketing pa-home ${reduced ? 'is-reduced' : ''}`} ref={root}>
+    <section className="pa-work-corridor" aria-labelledby="public-title"><div className="pa-work-stage"><ResponsiveImage media={publicMedia.work[1]} alt="Professional working through software on a desk" priority className="pa-work-image pa-work-plane pa-work-plane--one" /><ResponsiveImage media={publicMedia.work[0]} alt="" className="pa-work-image pa-work-plane pa-work-plane--two" /><ResponsiveImage media={publicMedia.work[3]} alt="" className="pa-work-image pa-work-plane pa-work-plane--three" /><ResponsiveImage media={publicMedia.work[4]} alt="" className="pa-work-image pa-work-plane pa-work-plane--four" /><div className="pa-work-hero-lines"><span className="pa-work-line--one" id="public-title">HOW YOU WORK</span><span className="pa-work-line--two">IS MORE THAN</span><span className="pa-work-line--three">A JOB TITLE.</span></div><Link className="pa-work-cta" to="/signup">Start assessment <span>→</span></Link><article className="pa-work-evidence pa-work-evidence--context"><p>Professional context</p><strong>Role, skills, field<br />and a next direction.</strong></article><article className="pa-work-evidence pa-work-evidence--response"><p>Adaptive response</p><strong>Questions build<br />evidence over time.</strong></article><article className="pa-work-evidence pa-work-evidence--behaviour"><p>Behavioural evidence</p><strong>Choices in context<br />add another lens.</strong></article><p className="pa-work-stage__note">WORK BECOMES EVIDENCE</p></div></section>
+    <section className="pa-portrait-corridor" aria-label="Professional portrait"><div className="pa-portrait-stage"><p className="pa-kicker">A PROFESSIONAL PORTRAIT</p>{portraitStates.map((state, index) => <PortraitState key={state[0]} state={state} index={index} />)}</div></section>
+    <section className="pa-home-career" ref={careerRef} aria-labelledby="career-title"><ResponsiveImage media={careerIndex === 0 ? publicMedia.careers.ux : publicMedia.careers.software} folder="careers" alt={careerIndex === 0 ? publicMedia.careers.ux.alt : publicMedia.careers.software.alt} /><h2 id="career-title" data-career-motion>{careerIndex === 0 ? <>UX<br />DESIGNER</> : <>SOFTWARE<br />ENGINEER</>}</h2><div className="pa-home-career__data" data-career-motion><p>{career.fit}</p><strong>{career.why}</strong><span>{career.gap}</span></div><div className="pa-home-career__switch" role="group" aria-label="Career examples"><button className={careerIndex === 0 ? 'is-active' : ''} onClick={() => setCareerIndex(0)} type="button">UX Designer</button><button className={careerIndex === 1 ? 'is-active' : ''} onClick={() => setCareerIndex(1)} type="button">Software Engineer</button></div><Link className="pa-work-cta pa-home-career__link" to="/career-intelligence">See why <span>→</span></Link></section>
+    <section className="pa-roadmap-corridor" aria-labelledby="roadmap-title"><div className="pa-roadmap-stage"><p className="pa-kicker">SKILL GAP → ROADMAP</p><h2 id="roadmap-title">ONE NEXT MOVE<br />AT A TIME.</h2>{marketingDemo.roadmap.map(([title, copy], index) => <article className={`pa-roadmap-step pa-roadmap-step--${index + 1}`} key={title}><span>0{index + 1}</span><h3>{index === 0 ? 'Applied research practice' : title}</h3><p>{copy}</p></article>)}</div></section>
+    <section className="pa-progress-corridor" aria-labelledby="progress-title"><div className="pa-progress-stage"><h2 id="progress-title">PROGRESS<br />HAS A HISTORY.</h2><article className="pa-progress-state pa-progress-state--1"><p className="pa-kicker">ASSESSMENT HISTORY</p><strong>APRIL<br />2026</strong><span>Professional context updated · Assessment reading available</span></article><article className="pa-progress-state pa-progress-state--2"><p className="pa-kicker">TRAIT MOVEMENT</p><svg viewBox="0 0 640 250" role="img" aria-label="Demo trend: openness and conscientiousness move gradually upward across four readings"><path d="M25 198 C130 165 170 178 260 142 S410 125 615 58" /><path d="M25 208 C130 194 190 152 280 170 S435 112 615 102" /></svg><p>Trend direction is context, not a target score.</p></article><article className="pa-progress-state pa-progress-state--3"><p className="pa-kicker">ROADMAP PROGRESS</p><span>Completed · define the research question</span><strong>Current · complete one observed research cycle</strong><span>Upcoming · record the outcome in your next assessment</span></article></div></section>
+    <section className="pa-home-trust"><p className="pa-kicker">TRUST</p><h2>USEFUL DIRECTION<br />NEEDS CLEAR LIMITS.</h2><p>Not a clinical diagnosis. Not a hiring system. Career fit is a comparison, not a promise.</p><Link to="/trust">Read the boundaries <span>→</span></Link></section>
+  </main></PublicLayout>;
 }
