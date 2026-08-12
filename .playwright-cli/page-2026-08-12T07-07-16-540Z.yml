@@ -1,0 +1,287 @@
+- main [ref=e4]:
+  - link "Skip proof sequence" [ref=e5] [cursor=pointer]:
+    - /url: "#proof-content"
+  - generic [ref=e6]:
+    - link "Personality Assessor" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - text: PersonalityAssessor
+    - generic [ref=e8]: Visual reset — proof 01
+    - link "Start assessment" [ref=e9] [cursor=pointer]:
+      - /url: /signup
+  - region [ref=e11]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - heading "How you work is more than a job title." [level=1] [ref=e14]:
+          - generic [ref=e15]: How you work
+          - generic [ref=e16]: is more than
+          - generic [ref=e17]: a job title.
+        - generic "Professional work in progress" [ref=e18]
+        - link "Start assessment" [ref=e26] [cursor=pointer]:
+          - /url: /signup
+      - generic "Demonstration evidence" [ref=e29]:
+        - article [ref=e33]:
+          - heading "Professional context" [level=2] [ref=e34]
+          - generic [ref=e35]: Product demonstration — demonstration data
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - term [ref=e38]: Education
+              - definition [ref=e39]: Human-centred design
+            - generic [ref=e40]:
+              - term [ref=e41]: Field
+              - definition [ref=e42]: Digital products
+            - generic [ref=e43]:
+              - term [ref=e44]: Skills
+              - definition [ref=e45]: Research · prototyping · systems thinking
+            - generic [ref=e46]:
+              - term [ref=e47]: Professional goal
+              - definition [ref=e48]: Explore career direction
+        - article [ref=e49]:
+          - heading "Adaptive response" [level=2] [ref=e50]
+          - generic [ref=e51]: Product demonstration — demonstration data
+          - paragraph [ref=e52]: A project changes direction unexpectedly. Which approach are you most likely to take?
+          - button "Clarify the changed constraint, then test the revised path." [ref=e53] [cursor=pointer]
+          - button "Gather input before choosing the next step." [ref=e54] [cursor=pointer]
+        - article [ref=e55]:
+          - heading "Behavioral evidence" [level=2] [ref=e56]
+          - generic [ref=e57]: Product demonstration — demonstration data
+          - paragraph [ref=e58]: A team is divided over a next step. What trade-off would you examine before proposing an approach?
+          - generic [ref=e59]: Scope · user impact · delivery risk
+      - generic:
+        - generic [ref=e60]: Evidence, organised.
+        - region [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - paragraph [ref=e64]: Professional Portrait
+              - heading "One field. 23 dimensions." [level=2] [ref=e65]
+            - generic [ref=e66]: Product demonstration — demonstration data
+          - generic [ref=e67]:
+            - region [ref=e68]:
+              - heading "Big Five 5" [level=3] [ref=e69]
+              - generic [ref=e70]:
+                - generic [ref=e71]:
+                  - generic [ref=e72]: Openness
+                  - strong [ref=e75]: "Openness: 76 demonstration profile extent"
+                - generic [ref=e76]:
+                  - generic [ref=e77]: Conscientiousness
+                  - strong [ref=e80]: "Conscientiousness: 68 demonstration profile extent"
+                - generic [ref=e81]:
+                  - generic [ref=e82]: Extraversion
+                  - strong [ref=e85]: "Extraversion: 54 demonstration profile extent"
+                - generic [ref=e86]:
+                  - generic [ref=e87]: Agreeableness
+                  - strong [ref=e90]: "Agreeableness: 63 demonstration profile extent"
+                - generic [ref=e91]:
+                  - generic [ref=e92]: Neuroticism
+                  - strong [ref=e95]: "Neuroticism: 41 demonstration profile extent"
+            - region [ref=e96]:
+              - heading "RIASEC 6" [level=3] [ref=e97]
+              - generic [ref=e98]:
+                - generic [ref=e99]:
+                  - generic [ref=e100]: Realistic
+                  - strong [ref=e103]: "Realistic: 44 demonstration profile extent"
+                - generic [ref=e104]:
+                  - generic [ref=e105]: Investigative
+                  - strong [ref=e108]: "Investigative: 78 demonstration profile extent"
+                - generic [ref=e109]:
+                  - generic [ref=e110]: Artistic
+                  - strong [ref=e113]: "Artistic: 70 demonstration profile extent"
+                - generic [ref=e114]:
+                  - generic [ref=e115]: Social
+                  - strong [ref=e118]: "Social: 58 demonstration profile extent"
+                - generic [ref=e119]:
+                  - generic [ref=e120]: Enterprising
+                  - strong [ref=e123]: "Enterprising: 57 demonstration profile extent"
+                - generic [ref=e124]:
+                  - generic [ref=e125]: Conventional
+                  - strong [ref=e128]: "Conventional: 52 demonstration profile extent"
+            - region [ref=e129]:
+              - heading "Work values 8" [level=3] [ref=e130]
+              - generic [ref=e131]:
+                - generic [ref=e132]:
+                  - generic [ref=e133]: Intrinsic
+                  - strong [ref=e136]: "Intrinsic: 71 demonstration profile extent"
+                - generic [ref=e137]:
+                  - generic [ref=e138]: Extrinsic
+                  - strong [ref=e141]: "Extrinsic: 46 demonstration profile extent"
+                - generic [ref=e142]:
+                  - generic [ref=e143]: Lifestyle
+                  - strong [ref=e146]: "Lifestyle: 62 demonstration profile extent"
+                - generic [ref=e147]:
+                  - generic [ref=e148]: Relationships
+                  - strong [ref=e151]: "Relationships: 59 demonstration profile extent"
+                - generic [ref=e152]:
+                  - generic [ref=e153]: Prestige
+                  - strong [ref=e156]: "Prestige: 48 demonstration profile extent"
+                - generic [ref=e157]:
+                  - generic [ref=e158]: Independence
+                  - strong [ref=e161]: "Independence: 74 demonstration profile extent"
+                - generic [ref=e162]:
+                  - generic [ref=e163]: Security
+                  - strong [ref=e166]: "Security: 66 demonstration profile extent"
+                - generic [ref=e167]:
+                  - generic [ref=e168]: Growth
+                  - strong [ref=e171]: "Growth: 82 demonstration profile extent"
+            - region [ref=e172]:
+              - heading "Career signals 4" [level=3] [ref=e173]
+              - generic [ref=e174]:
+                - generic [ref=e175]:
+                  - generic [ref=e176]: Technical depth
+                  - strong [ref=e179]: "Technical depth: 67 demonstration profile extent"
+                - generic [ref=e180]:
+                  - generic [ref=e181]: Learning orientation
+                  - strong [ref=e184]: "Learning orientation: 76 demonstration profile extent"
+                - generic [ref=e185]:
+                  - generic [ref=e186]: Leadership
+                  - strong [ref=e189]: "Leadership: 55 demonstration profile extent"
+                - generic [ref=e190]:
+                  - generic [ref=e191]: Problem solving
+                  - strong [ref=e194]: "Problem solving: 80 demonstration profile extent"
+          - paragraph [ref=e195]: This is demonstration data. The bands keep the profile dimensions distinct; they are not a combined score or prediction.
+      - generic:
+        - region "The profile remains. The relationship changes.":
+          - img "Developer working at a computer in a software environment"
+          - generic:
+            - paragraph: Career comparison
+            - heading "The profile remains. The relationship changes." [level=2]: The profile remains.The relationship changes.
+            - generic: Product demonstration — demonstration data
+          - group "Choose demonstration career world" [ref=e196]:
+            - button "UX Designer" [ref=e197] [cursor=pointer]
+            - button "Software Engineer" [active] [pressed] [ref=e198] [cursor=pointer]
+          - generic:
+            - region "One field. 23 dimensions.":
+              - generic:
+                - generic:
+                  - paragraph: Professional Portrait
+                  - heading "One field. 23 dimensions." [level=2]
+              - generic:
+                - region "Big Five 5":
+                  - heading "Big Five 5" [level=3]
+                  - generic:
+                    - generic:
+                      - generic: Openness
+                      - generic:
+                        - emphasis
+                      - strong: "Openness: 76 demonstration profile extent; Software Engineer comparison extent 71"
+                    - generic:
+                      - generic: Conscientiousness
+                      - generic:
+                        - emphasis
+                      - strong: "Conscientiousness: 68 demonstration profile extent; Software Engineer comparison extent 82"
+                    - generic:
+                      - generic: Extraversion
+                      - generic:
+                        - emphasis
+                      - strong: "Extraversion: 54 demonstration profile extent; Software Engineer comparison extent 48"
+                    - generic:
+                      - generic: Agreeableness
+                      - generic:
+                        - emphasis
+                      - strong: "Agreeableness: 63 demonstration profile extent; Software Engineer comparison extent 54"
+                    - generic:
+                      - generic: Neuroticism
+                      - generic:
+                        - emphasis
+                      - strong: "Neuroticism: 41 demonstration profile extent; Software Engineer comparison extent 56"
+                - region "RIASEC 6":
+                  - heading "RIASEC 6" [level=3]
+                  - generic:
+                    - generic:
+                      - generic: Realistic
+                      - generic:
+                        - emphasis
+                      - strong: "Realistic: 44 demonstration profile extent; Software Engineer comparison extent 62"
+                    - generic:
+                      - generic: Investigative
+                      - generic:
+                        - emphasis
+                      - strong: "Investigative: 78 demonstration profile extent; Software Engineer comparison extent 86"
+                    - generic:
+                      - generic: Artistic
+                      - generic:
+                        - emphasis
+                      - strong: "Artistic: 70 demonstration profile extent; Software Engineer comparison extent 47"
+                    - generic:
+                      - generic: Social
+                      - generic:
+                        - emphasis
+                      - strong: "Social: 58 demonstration profile extent; Software Engineer comparison extent 45"
+                    - generic:
+                      - generic: Enterprising
+                      - generic:
+                        - emphasis
+                      - strong: "Enterprising: 57 demonstration profile extent; Software Engineer comparison extent 54"
+                    - generic:
+                      - generic: Conventional
+                      - generic:
+                        - emphasis
+                      - strong: "Conventional: 52 demonstration profile extent; Software Engineer comparison extent 78"
+                - region "Work values 8":
+                  - heading "Work values 8" [level=3]
+                  - generic:
+                    - generic:
+                      - generic: Intrinsic
+                      - generic:
+                        - emphasis
+                      - strong: "Intrinsic: 71 demonstration profile extent; Software Engineer comparison extent 74"
+                    - generic:
+                      - generic: Extrinsic
+                      - generic:
+                        - emphasis
+                      - strong: "Extrinsic: 46 demonstration profile extent; Software Engineer comparison extent 55"
+                    - generic:
+                      - generic: Lifestyle
+                      - generic:
+                        - emphasis
+                      - strong: "Lifestyle: 62 demonstration profile extent; Software Engineer comparison extent 61"
+                    - generic:
+                      - generic: Relationships
+                      - generic:
+                        - emphasis
+                      - strong: "Relationships: 59 demonstration profile extent; Software Engineer comparison extent 60"
+                    - generic:
+                      - generic: Prestige
+                      - generic:
+                        - emphasis
+                      - strong: "Prestige: 48 demonstration profile extent; Software Engineer comparison extent 78"
+                    - generic:
+                      - generic: Independence
+                      - generic:
+                        - emphasis
+                      - strong: "Independence: 74 demonstration profile extent; Software Engineer comparison extent 72"
+                    - generic:
+                      - generic: Security
+                      - generic:
+                        - emphasis
+                      - strong: "Security: 66 demonstration profile extent; Software Engineer comparison extent 71"
+                    - generic:
+                      - generic: Growth
+                      - generic:
+                        - emphasis
+                      - strong: "Growth: 82 demonstration profile extent; Software Engineer comparison extent 68"
+                - region "Career signals 4":
+                  - heading "Career signals 4" [level=3]
+                  - generic:
+                    - generic:
+                      - generic: Technical depth
+                      - generic:
+                        - emphasis
+                      - strong: "Technical depth: 67 demonstration profile extent; Software Engineer comparison extent 58"
+                    - generic:
+                      - generic: Learning orientation
+                      - generic:
+                        - emphasis
+                      - strong: "Learning orientation: 76 demonstration profile extent; Software Engineer comparison extent 88"
+                    - generic:
+                      - generic: Leadership
+                      - generic:
+                        - emphasis
+                      - strong: "Leadership: 55 demonstration profile extent; Software Engineer comparison extent 86"
+                    - generic:
+                      - generic: Problem solving
+                      - generic:
+                        - emphasis
+                      - strong: "Problem solving: 80 demonstration profile extent; Software Engineer comparison extent 91"
+          - paragraph: The profile stays visible while its relationship shifts toward technical depth and structured problem solving.
+  - generic [ref=e30]:
+    - heading "Professional context, responses and behavioral evidence become a readable profile." [level=2] [ref=e31]
+    - paragraph [ref=e32]: Product demonstration — demonstration data. Career relationships are shown as visual comparison only—not an employability prediction or a score.

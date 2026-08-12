@@ -20,7 +20,7 @@ const runOrchestratedAiCall = async ({
   timeoutMs = config.openaiTimeoutMs || 60000,
   maxRetries = 1,
 } = {}) => {
-  const resolvedModel = callerModel || config.openaiModel;
+  const resolvedModel = callerModel || config.aiModel;
   const started = Date.now();
   const baseAudit = {
     promptId,
@@ -28,7 +28,7 @@ const runOrchestratedAiCall = async ({
     schemaId,
     userId,
     sessionId,
-    provider: AI_PROVIDER.OPENAI,
+    provider: config.aiProvider,
     model: resolvedModel,
     injectionFlags: injectionMeta?.patterns || [],
   };
@@ -148,14 +148,14 @@ const finalizeAiStatus = ({
   }
   return buildDefaultAiStatus({
     status: AI_STATUS.READY,
-    provider: AI_PROVIDER.OPENAI,
+    provider: config.aiProvider,
     promptVersion: basePromptVersion,
     schemaValidated,
     safetyChecked,
     fallbackUsed: false,
     errorCode: null,
     latencyMs,
-    model: model || config.openaiModel || '',
+    model: model || config.aiModel || '',
   });
 };
 

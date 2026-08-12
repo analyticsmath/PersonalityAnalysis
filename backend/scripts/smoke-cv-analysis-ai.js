@@ -26,32 +26,35 @@ Interests: open-source, AI/ML applications, system design.
 `;
 
 (async () => {
-  const model = config.openaiModel || 'gpt-5.5';
+  const provider = config.aiProvider || 'unknown';
+  const model = config.aiCvModel || config.aiModel;
 
   // ── Sanitizer verification (always runs) ────────────────────────────────
+  console.log(`[INFO] Provider under test: ${provider}`);
   console.log(`[INFO] Model under test: ${model}`);
-  console.log(`[INFO] isReasoningModel(${model}): ${isReasoningModel(model)}`);
+  console.log(`[INFO] isReasoningModel(${model}, ${provider}): ${isReasoningModel(model, provider)}`);
 
   const raw = { model, temperature: 0.15, top_p: 0.9, max_output_tokens: 100, input: [] };
-  const sanitized = sanitizeOpenAiParams(model, raw);
+  const sanitized = sanitizeOpenAiParams(model, raw, provider);
 
   const forbiddenPresent = ['temperature', 'top_p'].filter((k) => k in sanitized);
-  if (isReasoningModel(model) && forbiddenPresent.length > 0) {
+  if (isReasoningModel(model, provider) && forbiddenPresent.length > 0) {
     console.error(`[FAIL] sanitizeOpenAiParams did not remove: ${forbiddenPresent.join(', ')}`);
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   console.log('[PASS] Sanitizer verification passed.');
   console.log('[INFO] Sanitized param keys:', Object.keys(sanitized).join(', '));
 
   // ── Live call (only when key is present) ────────────────────────────────
-  const key = config.openaiApiKey || process.env.OPENAI_API_KEY;
+  const key = config.aiApiKey;
   if (!key) {
-    console.log('[SKIP] OPENAI_API_KEY absent — skipping live CV analysis call.');
-    process.exit(0);
+    console.log(`[SKIP] ${provider.toUpperCase()}_API_KEY absent — skipping live CV analysis call.`);
+    return;
   }
 
-  console.log(`[INFO] OPENAI_API_KEY detected (${maskKey(key)})`);
+  console.log(`[INFO] ${provider.toUpperCase()}_API_KEY detected (${maskKey(key)})`);
 
   try {
     const { getOpenAiClient } = require('../services/assessment/openaiClient');
@@ -71,7 +74,7 @@ Interests: open-source, AI/ML applications, system design.
           content: MOCK_CV,
         },
       ],
-    });
+    }, provider);
 
     const start = Date.now();
     const response = await getOpenAiClient().responses.create(params);
@@ -80,8 +83,7 @@ Interests: open-source, AI/ML applications, system design.
 
     console.log(`[PASS] Live CV analysis succeeded. latency=${latencyMs}ms, response_length=${String(text || '').length}`);
     console.log('[INFO] Model used:', model);
-    console.log('[INFO] No temperature error encountered.');
-    process.exit(0);
+    console.log('[INFO] Live response content:', text);
   } catch (err) {
     const msg = String(err?.message || err || 'unknown');
     if (/temperature/i.test(msg)) {
@@ -89,6 +91,6 @@ Interests: open-source, AI/ML applications, system design.
     } else {
       console.error('[FAIL] CV analysis smoke failed:', err?.status || err?.code || msg);
     }
-    process.exit(1);
+    process.exitCode = 1;
   }
 })();

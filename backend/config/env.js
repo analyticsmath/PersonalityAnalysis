@@ -62,16 +62,48 @@ const config = {
   mongoUri: process.env.MONGODB_URI || process.env.MONGO_URI,
   jwtSecret: process.env.JWT_SECRET,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
-  openaiApiKey: process.env.OPENAI_API_KEY,
-  // Base fallback — used by any call site that hasn't opted into a specific model variable.
-  openaiModel: process.env.OPENAI_MODEL || 'gpt-5.4-mini',
-  // Per-operation model overrides (all default to the fast mini for interactive work).
-  openaiCvModel: process.env.OPENAI_CV_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
-  openaiProfileModel: process.env.OPENAI_PROFILE_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
-  openaiQuestionModel: process.env.OPENAI_QUESTION_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
-  openaiCoachModel: process.env.OPENAI_COACH_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini',
-  // Premium narrative report — use the full model.
-  openaiReportModel: process.env.OPENAI_REPORT_MODEL || 'gpt-5.5',
+  // Canonical AI provider resolution
+  aiProvider: (process.env.AI_PROVIDER || (process.env.GROQ_API_KEY ? 'groq' : 'openai')).toLowerCase(),
+  get groqApiKey() {
+    return process.env.GROQ_API_KEY || '';
+  },
+  get groqBaseUrl() {
+    return process.env.GROQ_BASE_URL || 'https://api.groq.com/openai/v1';
+  },
+  get aiApiKey() {
+    return this.aiProvider === 'groq' ? (process.env.GROQ_API_KEY || '') : (process.env.OPENAI_API_KEY || '');
+  },
+  get aiBaseUrl() {
+    return this.aiProvider === 'groq' ? (process.env.GROQ_BASE_URL || 'https://api.groq.com/openai/v1') : (process.env.OPENAI_BASE_URL || null);
+  },
+  get aiModel() {
+    return process.env.AI_MODEL || (this.aiProvider === 'groq' ? 'openai/gpt-oss-120b' : process.env.OPENAI_MODEL || 'gpt-5.4-mini');
+  },
+  get aiCvModel() {
+    return process.env.AI_CV_MODEL || (this.aiProvider === 'groq' ? this.aiModel : process.env.OPENAI_CV_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini');
+  },
+  get aiProfileModel() {
+    return process.env.AI_PROFILE_MODEL || (this.aiProvider === 'groq' ? this.aiModel : process.env.OPENAI_PROFILE_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini');
+  },
+  get aiQuestionModel() {
+    return process.env.AI_QUESTION_MODEL || (this.aiProvider === 'groq' ? this.aiModel : process.env.OPENAI_QUESTION_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini');
+  },
+  get aiCoachModel() {
+    return process.env.AI_COACH_MODEL || (this.aiProvider === 'groq' ? this.aiModel : process.env.OPENAI_COACH_MODEL || process.env.OPENAI_MODEL || 'gpt-5.4-mini');
+  },
+  get aiReportModel() {
+    return process.env.AI_REPORT_MODEL || (this.aiProvider === 'groq' ? this.aiModel : process.env.OPENAI_REPORT_MODEL || 'gpt-5.5');
+  },
+
+  // Backward-compatibility aliases (read-only mapping to active canonical AI values)
+  get openaiApiKey() { return this.aiApiKey; },
+  get openaiModel() { return this.aiModel; },
+  get openaiCvModel() { return this.aiCvModel; },
+  get openaiProfileModel() { return this.aiProfileModel; },
+  get openaiQuestionModel() { return this.aiQuestionModel; },
+  get openaiCoachModel() { return this.aiCoachModel; },
+  get openaiReportModel() { return this.aiReportModel; },
+
   // Timeout policy (per operation, in ms).
   openaiTimeoutMs: toInt(process.env.OPENAI_TIMEOUT_MS, 60000),
   openaiCvTimeoutMs: toInt(process.env.OPENAI_CV_TIMEOUT_MS, 75000),

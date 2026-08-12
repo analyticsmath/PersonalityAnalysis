@@ -35,18 +35,20 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-seo-assets.mjs",
     "test": "vitest run",
     "preview": "vite preview",
     "lint": "eslint src",
     "typecheck": "echo \"No TypeScript files in frontend\"",
     "check:theme": "node scripts/check-light-theme-consistency.js"
+    ,"generate:marketing-media": "node scripts/generate-marketing-media.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
     "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^9.37.0",
     "jsdom": "^27.0.1",
+    "sharp": "^0.35.3",
     "vite": "^7.1.11",
     "vitest": "^3.2.4"
   },

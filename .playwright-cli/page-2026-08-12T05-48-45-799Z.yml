@@ -1,0 +1,243 @@
+- main [ref=e4]:
+  - link "Skip to homepage content" [ref=e5] [cursor=pointer]:
+    - /url: "#public-content"
+  - generic [ref=e6]:
+    - link "Personality Assessor" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - text: PersonalityAssessor
+    - navigation "Primary navigation" [ref=e8]:
+      - link "How it works" [ref=e9] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=e10] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=e11] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=e12] [cursor=pointer]:
+        - /url: /methodology
+    - generic [ref=e13]:
+      - link "Sign in" [ref=e14] [cursor=pointer]:
+        - /url: /login
+      - link "Start assessment" [ref=e15] [cursor=pointer]:
+        - /url: /signup
+  - region [ref=e17]:
+    - paragraph [ref=e18]: FROM WORK TO DIRECTION
+    - generic:
+      - generic: CONTEXT
+      - generic: RESPONSE
+      - generic: EVIDENCE
+    - figure "analysis / planning" [ref=e20]
+    - generic [ref=e24]:
+      - paragraph [ref=e25]: WAYS OF WORKING
+      - heading "How you work is more than a job title." [level=1] [ref=e26]:
+        - generic [ref=e27]: How you work
+        - generic [ref=e28]: is more than
+        - emphasis [ref=e30]: a job title.
+      - generic [ref=e31]: PROFESSIONAL CONTEXT · ADAPTIVE EVIDENCE
+    - paragraph [ref=e32]: Personality Assessor brings together professional context, adaptive assessment responses and behavioral evidence to build an explainable career profile — then helps you explore where it aligns, where it does not, and what to work on next.
+  - generic [ref=e33]:
+    - region [ref=e34]:
+      - generic:
+        - generic: CONTEXT
+        - generic: RESPONSE
+        - generic: EVIDENCE
+      - generic [ref=e35]:
+        - generic [ref=e36]: "02"
+        - text: EVIDENCE
+      - generic [ref=e37]:
+        - heading [level=2] [ref=e38]:
+          - text: Work leaves more than
+          - emphasis [ref=e39]: one kind of evidence.
+        - paragraph [ref=e40]: Your background, the context you choose to bring, your assessment responses and your behavioral choices each reveal something different. Personality Assessor keeps those signals distinct before bringing them together.
+      - generic [ref=e41]:
+        - article [ref=e42]:
+          - generic [ref=e43]: PROFESSIONAL CONTEXT
+          - generic [ref=e44]:
+            - generic [ref=e45]: Product demonstration
+            - generic [ref=e46]: EDUCATION
+            - generic [ref=e47]: Human-centred design
+            - generic [ref=e48]: FIELD
+            - generic [ref=e49]: Digital products
+            - generic [ref=e50]: GOAL
+            - generic [ref=e51]: Explore career direction
+        - article [ref=e52]:
+          - generic [ref=e53]: ADAPTIVE RESPONSE
+          - paragraph [ref=e54]: Which approach would you be most likely to take when a project changes direction unexpectedly?
+          - generic [ref=e55]: Product demonstration
+        - article [ref=e56]:
+          - generic [ref=e57]: BEHAVIORAL EVIDENCE
+          - paragraph [ref=e58]: Describe the trade-off you would examine before proposing a next step.
+          - generic [ref=e59]: Product demonstration
+        - generic [ref=e60]: EVIDENCEACCUMULATES
+    - region [ref=e61]:
+      - generic [ref=e62]:
+        - generic [ref=e63]: "03"
+        - text: ADAPTIVE ASSESSMENT
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - heading [level=2] [ref=e66]:
+            - text: A question changes
+            - emphasis [ref=e67]: what can be asked next.
+          - paragraph [ref=e68]: Assessment responses are considered alongside the professional context you choose to share. This demonstration shows the interaction pattern, not a result.
+        - generic [ref=e69]:
+          - generic [ref=e70]: Product demonstration
+          - strong [ref=e71]: When a project changes direction, which approach would you be most likely to take?
+          - button "Clarify the changed constraint, then test the revised path." [ref=e72] [cursor=pointer]
+          - button "Gather input before choosing the next step." [ref=e73] [cursor=pointer]
+          - paragraph [ref=e74]: Questions adapt as evidence accumulates.
+    - region [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e77]: "04"
+        - text: PROFESSIONAL PORTRAIT
+      - generic [ref=e78]:
+        - heading [level=2] [ref=e79]:
+          - text: Four lenses. One clearer
+          - emphasis [ref=e80]: professional picture.
+        - paragraph [ref=e81]: Personality, vocational interests, work values and career signals describe different parts of the same working life. They stay visible in their own right rather than being collapsed into one single score.
+      - img "Product demonstration Professional Portrait with distinct Big Five, RIASEC, Work Values and Career Signals information bands." [ref=e82]:
+        - generic: PROFILE SYSTEMS
+        - generic [ref=e83]: PROFESSIONALPORTRAIT
+        - generic [ref=e84]:
+          - generic [ref=e85]: "01"
+          - strong [ref=e86]: BIG FIVE
+          - generic [ref=e87]: temperament patterns
+        - generic [ref=e90]:
+          - generic [ref=e91]: "02"
+          - strong [ref=e92]: RIASEC
+          - generic [ref=e93]: work environments
+        - generic [ref=e96]:
+          - generic [ref=e97]: "03"
+          - strong [ref=e98]: WORK VALUES
+          - generic [ref=e99]: what sustains effort
+        - generic [ref=e102]:
+          - generic [ref=e103]: "04"
+          - strong [ref=e104]: CAREER SIGNALS
+          - generic [ref=e105]: comparison, not prediction
+      - generic [ref=e108]:
+        - generic [ref=e109]: Product demonstration
+        - generic [ref=e110]:
+          - generic [ref=e111]: MEASURED RESULT
+          - generic [ref=e113]: STRENGTH OF AVAILABLE EVIDENCE
+        - paragraph [ref=e114]: Your score and the strength of the evidence behind it are not the same thing.
+    - region [ref=e115]:
+      - generic:
+        - generic: EVIDENCE
+        - generic: ALIGNMENT
+        - generic: DIRECTION
+      - generic [ref=e116]:
+        - generic [ref=e117]: "05"
+        - text: CAREER INTELLIGENCE
+      - heading [level=2] [ref=e118]:
+        - text: A career match should come
+        - emphasis [ref=e119]: with its reasoning.
+      - paragraph [ref=e120]: Personality Assessor compares your profile with curated career models across multiple fit factors. See what aligns, what is missing and why another direction may fit differently.
+      - generic [ref=e121]:
+        - generic [ref=e122]:
+          - generic [ref=e123]: SOFTWARE ENGINEER
+          - generic [ref=e124]: UX DESIGNER
+          - generic [ref=e125]: DATA ANALYST
+          - generic [ref=e126]: PRODUCT MANAGER
+          - generic [ref=e127]: CYBERSECURITY ANALYST
+        - article [ref=e128]:
+          - generic [ref=e129]: Product demonstration / SOFTWARE ENGINEER
+          - heading "Software Engineer" [level=3] [ref=e130]
+          - generic [ref=e131]:
+            - generic [ref=e132]: Why this
+            - paragraph [ref=e133]: Technical depth, problem solving and learning orientation are close to this curated model.
+          - generic [ref=e134]:
+            - generic [ref=e135]: What to develop
+            - paragraph [ref=e136]: Build more evidence of production delivery.
+          - link "Explore career intelligence" [ref=e137] [cursor=pointer]:
+            - /url: /career-intelligence
+    - region [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: "06"
+        - text: GAP → DEVELOPMENT
+      - generic [ref=e141]:
+        - heading [level=2] [ref=e142]:
+          - text: A difference becomes
+          - emphasis [ref=e143]: the next milestone.
+        - paragraph [ref=e144]: Gap markers travel directly into deliberate practice. There is no judgement in the transition—only a next piece of work.
+      - generic [ref=e145]:
+        - generic [ref=e146]: RESEARCH PRACTICE
+        - generic [ref=e148]: FIELD NOTE
+        - generic [ref=e150]: APPLIED PROJECT
+    - region [ref=e151]:
+      - generic [ref=e152]:
+        - generic [ref=e153]: "07"
+        - text: TIME / ANALYTICS PREVIEW
+      - heading [level=2] [ref=e154]:
+        - text: Progress keeps
+        - emphasis [ref=e155]: its context.
+      - generic [ref=e156]:
+        - generic:
+          - generic: HISTORY
+          - generic: TRAIT TRENDS
+          - generic: ROADMAP
+          - generic: READINESS
+        - article [ref=e157]:
+          - generic [ref=e158]: ASSESSMENT HISTORY
+        - article [ref=e164]:
+          - generic [ref=e165]: TRAIT TRENDS
+        - article [ref=e168]:
+          - generic [ref=e169]: ROADMAP PROGRESS
+          - generic [ref=e170]: Evidencecarries forward.
+    - region [ref=e171]:
+      - generic [ref=e172]:
+        - generic [ref=e173]: "08"
+        - text: TRUST / BOUNDARIES
+      - heading [level=2] [ref=e174]:
+        - text: Clear about what
+        - emphasis [ref=e175]: the system can support.
+      - list [ref=e176]:
+        - listitem [ref=e177]: +Deterministic scoring core
+        - listitem [ref=e178]: +Evidence confidence, separately visible
+        - listitem [ref=e179]: +AI enhancement with stated boundaries
+        - listitem [ref=e180]: +Non-clinical scope, export and deletion controls
+      - paragraph [ref=e181]:
+        - link "Methodology" [ref=e182] [cursor=pointer]:
+          - /url: /trust
+        - link "Privacy" [ref=e183] [cursor=pointer]:
+          - /url: /account/privacy
+    - region [ref=e184]:
+      - generic:
+        - generic: COMPLEXITY
+        - generic: CLARITY
+      - generic [ref=e185]:
+        - paragraph [ref=e186]: RESOLUTION / FINAL FRAME
+        - heading [level=2] [ref=e187]:
+          - text: Understand the pattern.
+          - emphasis [ref=e188]: Question the direction.Build what comes next.
+        - generic [ref=e189]:
+          - link "Start assessment" [ref=e190] [cursor=pointer]:
+            - /url: /signup
+          - link "Sign in" [ref=e191] [cursor=pointer]:
+            - /url: /login
+  - generic [ref=e192]:
+    - generic:
+      - generic: EVIDENCE
+      - generic: DIRECTION
+      - generic: TIME
+    - generic [ref=e193]:
+      - link "Personality Assessor" [ref=e194] [cursor=pointer]:
+        - /url: /
+        - text: PersonalityAssessor
+      - paragraph [ref=e195]: Career intelligence built from evidence, not one answer.
+    - navigation "Product" [ref=e196]:
+      - link "How it works" [ref=e198] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=e199] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=e200] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=e201] [cursor=pointer]:
+        - /url: /methodology
+    - navigation "Trust" [ref=e202]:
+      - link "Trust" [ref=e204] [cursor=pointer]:
+        - /url: /trust
+      - link "Privacy" [ref=e205] [cursor=pointer]:
+        - /url: /privacy
+    - navigation "Account" [ref=e206]:
+      - link "Sign in" [ref=e208] [cursor=pointer]:
+        - /url: /login
+      - link "Start assessment" [ref=e209] [cursor=pointer]:
+        - /url: /signup

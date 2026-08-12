@@ -1,0 +1,35 @@
+- main [ref=e4]:
+  - link "Skip cinematic sequence" [ref=e5] [cursor=pointer]:
+    - /url: "#cinematic-content"
+  - generic [ref=e6]:
+    - generic [ref=e7]: PERSONALITY ASSESSOR
+    - generic [ref=e8]: DESIGN MOTION LAB / 02A
+  - region [ref=e10]:
+    - generic [ref=e11]:
+      - paragraph [ref=e12]: SIGNAL → STRUCTURE → DIRECTION
+      - heading "A professional identity is not one answer." [level=1] [ref=e13]: A professional identityis not one answer.
+      - paragraph [ref=e14]: It takes shape through the evidence you bring, the choices you make, and the patterns that emerge.
+    - generic [ref=e15]: PROTOTYPE_MEDIA_ONLY
+    - generic "Evidence sources"
+    - generic [ref=e24]: 01—04
+  - paragraph [ref=e26]: END OF PINNED SEQUENCE / NATIVE PAGE FLOW RESUMES
+  - region [ref=e27]:
+    - generic [ref=e28]:
+      - paragraph [ref=e29]: DEV-ONLY COMPARISON
+      - heading "Three transition primitives." [level=2] [ref=e30]
+      - paragraph [ref=e31]: Small isolated studies for deciding the motion grammar before it reaches a production route.
+    - generic [ref=e32]:
+      - article [ref=e33]:
+        - generic [ref=e34]: 01 / SCALE — PUSH
+        - generic [ref=e35]: PROTOTYPE MEDIA ONLY
+        - paragraph [ref=e44]: Contained surface exceeds the frame and reveals the orange index behind it.
+      - article [ref=e45]:
+        - generic [ref=e46]: 02 / MASK — SEGMENT
+        - paragraph [ref=e53]: One composition briefly resolves as a controlled shutter, not a permanent visual motif.
+      - article [ref=e54]:
+        - generic [ref=e55]: 03 / SHARED OBJECT — TRANSFER
+        - generic [ref=e56]:
+          - generic [ref=e57]: PROTOTYPE MEDIA ONLY
+          - generic [ref=e65]: →
+          - generic [ref=e66]: EVIDENCE01
+        - paragraph [ref=e67]: The same object changes from editorial focal point into an accountable unit of evidence.

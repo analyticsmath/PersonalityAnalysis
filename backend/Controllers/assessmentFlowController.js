@@ -1,4 +1,5 @@
 const AssessmentResult = require('../models/AssessmentResult');
+const AssessmentSession = require('../models/AssessmentSession');
 const User = require('../models/User');
 const { sendSuccess } = require('../utils/response');
 const { createHttpError } = require('../utils/httpError');
@@ -360,6 +361,37 @@ const hydrateLegacyAnswerViews = (session) => {
     behaviorPrompts: session.behaviorPrompts || [],
     questionPlan: session.questionPlan || [],
   });
+};
+
+const saveSessionWithRetry = async (session, retries = 3) => {
+  let currentSession = session;
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      await currentSession.save();
+      return currentSession;
+    } catch (err) {
+      if (err.name === 'VersionError' && attempt < retries - 1) {
+        const fresh = await AssessmentSession.findById(currentSession._id).exec();
+        if (fresh) {
+          fresh.answers = currentSession.answers;
+          fresh.currentQuestionIndex = currentSession.currentQuestionIndex;
+          fresh.askedQuestions = currentSession.askedQuestions;
+          fresh.usedIntents = currentSession.usedIntents;
+          fresh.adaptiveMetrics = currentSession.adaptiveMetrics;
+          fresh.status = currentSession.status;
+          fresh.stage = currentSession.stage;
+          fresh.lastActiveAt = new Date();
+          hydrateLegacyAnswerViews(fresh);
+          currentSession = fresh;
+        } else {
+          throw err;
+        }
+      } else {
+        throw err;
+      }
+    }
+  }
+  return currentSession;
 };
 
 const loadResultForSession = async (session) => {
@@ -1406,7 +1438,7 @@ const answerAdaptiveQuestion = async (req, res, next) => {
           targetTotal: targetQuestionCount,
         });
 
-        await session.save();
+        await saveSessionWithRetry(session);
 
         return sendSuccess(res, {
           data: {
@@ -1515,7 +1547,7 @@ const answerAdaptiveQuestion = async (req, res, next) => {
             prefetchedSupplementalQuestionPlan: [],
           };
 
-          await session.save();
+          await saveSessionWithRetry(session);
 
           await appendProgressEvent({
             session,
@@ -1593,7 +1625,7 @@ const answerAdaptiveQuestion = async (req, res, next) => {
       }
 
       const prefetchedQuestion = prefetchNextQuestion({ session });
-      await session.save();
+      await saveSessionWithRetry(session);
 
       return sendSuccess(res, {
         data: {

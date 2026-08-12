@@ -90,14 +90,14 @@ const LoginPage = () => {
       <div className="auth-page__content">
         <ScaleIn as="section" className="hero-panel" from={0.97} data-avatar-section="login-hero">
           <p className="hero-panel__eyebrow">Personality Assessor</p>
-          <h1 className="hero-panel__title">Sign in to continue your growth journey</h1>
+          <h1 className="hero-panel__title">Continue where you left off.</h1>
           <p className="hero-panel__subtitle">
-            Access your assessment history, compare trait trends, and resume unfinished sessions.
+            Return to your assessments, career exploration, roadmaps and progress.
           </p>
         </ScaleIn>
 
         <div data-avatar-target="login-form" data-avatar-section="login-form">
-          <Card className="auth-card" title="Welcome Back" subtitle="Use your account credentials">
+          <Card className="auth-card" title="Sign in" subtitle="Use your account credentials">
             <form onSubmit={handleSubmit} className="auth-form" noValidate>
               <div className="auth-form__announce" role="alert" aria-live="assertive">
                 {errorMessage ? <p className="ui-message ui-message--error">{errorMessage}</p> : null}

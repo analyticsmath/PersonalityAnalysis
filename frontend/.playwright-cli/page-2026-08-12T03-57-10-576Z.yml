@@ -1,0 +1,204 @@
+- generic [ref=e2]:
+  - generic:
+    - status: Start from the main assessment action to continue.
+  - main [ref=e4]:
+    - link "Skip to homepage content" [ref=e5] [cursor=pointer]:
+      - /url: "#public-content"
+    - generic [ref=e6]:
+      - link "Personality Assessor home" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - text: PERSONALITYASSESSOR
+      - navigation "Public navigation" [ref=e8]:
+        - link "How it works" [ref=e9] [cursor=pointer]:
+          - /url: "#how-it-works"
+        - link "Career intelligence" [ref=e10] [cursor=pointer]:
+          - /url: "#direction"
+        - link "Progress" [ref=e11] [cursor=pointer]:
+          - /url: "#progress"
+        - link "Methodology" [ref=e12] [cursor=pointer]:
+          - /url: "#methodology"
+      - generic [ref=e13]:
+        - link "Sign in" [ref=e14] [cursor=pointer]:
+          - /url: /login
+        - link "Start assessment" [ref=e15] [cursor=pointer]:
+          - /url: /signup
+    - region [ref=e17]:
+      - generic [ref=e18]: SIGNAL / STRUCTURE / DIRECTION
+      - img "Architectural reflections in an interior." [ref=e20]
+      - generic [ref=e21]:
+        - paragraph [ref=e22]: SIGNAL → STRUCTURE → DIRECTION
+        - heading [level=1] [ref=e23]:
+          - text: A professional identityis
+          - emphasis [ref=e24]: not one answer.
+        - generic [ref=e25]: PA / 01 — FACETS
+      - paragraph [ref=e26]: Personality Assessor brings professional context, adaptive responses and behavioral evidence together into an explainable profile for exploring where you fit and what to build next.
+    - generic [ref=e27]:
+      - region [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]: "02"
+          - text: EVIDENCE / ILLUSTRATIVE
+        - generic [ref=e31]:
+          - heading [level=2] [ref=e32]:
+            - text: More than a response.
+            - emphasis [ref=e33]: A field of evidence.
+          - paragraph [ref=e34]: Sources do not compete as cards. They come together, retain their context, then resolve into product structure.
+        - generic [ref=e35]:
+          - article [ref=e36]:
+            - generic [ref=e38]:
+              - generic [ref=e39]: MANUAL PROFILE
+              - generic [ref=e40]:
+                - generic [ref=e41]: illustrative profile
+                - generic [ref=e42]: ROLE
+                - generic [ref=e43]: Product operations
+                - generic [ref=e44]: FIELD
+                - generic [ref=e45]: Systems & service
+                - generic [ref=e46]: GOAL
+                - generic [ref=e47]: Explore direction
+          - article [ref=e48]:
+            - generic [ref=e50]:
+              - generic [ref=e51]: CV CONTEXT
+              - paragraph [ref=e52]: EXTRACTED SKILLSfacilitation · research · systems
+              - generic [ref=e53]: Illustrative terms
+          - article [ref=e54]:
+            - generic [ref=e56]:
+              - generic [ref=e57]: BEHAVIORAL EVIDENCE
+              - paragraph [ref=e58]: Interaction provides contextfor a response.
+      - region [ref=e60]:
+        - generic [ref=e61]:
+          - generic [ref=e62]: "03"
+          - text: ASSESSMENT / LIVE PRODUCT PREVIEW
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - heading [level=2] [ref=e65]:
+              - text: Evidence becomes
+              - emphasis [ref=e66]: a reading order.
+            - paragraph [ref=e67]: Context, adaptive responses and behavior stay separate until they can be explained together.
+          - generic "Illustrative adaptive assessment question" [ref=e68]:
+            - generic [ref=e69]: ADAPTIVE QUESTION / 04
+            - strong [ref=e70]: When a project changes direction, I first look for the constraint that changed.
+            - generic [ref=e71]:
+              - text: Usually true
+              - generic [ref=e72]: Selected response
+            - generic [ref=e73]: Sometimes true
+          - generic [ref=e74]:
+            - generic [ref=e75]: BEHAVIORAL RESPONSE
+            - paragraph [ref=e76]: “I asked the group to name the trade-off before proposing the next step.”
+            - generic [ref=e77]: Illustrative response
+      - region [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]: "04"
+          - text: PROFESSIONAL PORTRAIT V3
+        - generic [ref=e81]:
+          - heading [level=2] [ref=e82]:
+            - text: A profile is a system,
+            - emphasis [ref=e83]: not a single score.
+          - paragraph [ref=e84]: Four legitimate systems remain legible in their own right. Their relationship is the portrait.
+        - 'img "Illustrative Professional Portrait V3 showing four connected systems: Big Five, RIASEC, Work Values and Career Signals." [ref=e85]':
+          - generic [ref=e88]:
+            - generic [ref=e89]: "01"
+            - strong [ref=e90]: BIG FIVE
+            - generic [ref=e91]: Temperament patterns
+          - generic [ref=e92]:
+            - generic [ref=e93]: "02"
+            - strong [ref=e94]: RIASEC
+            - generic [ref=e95]: Work environments
+          - generic [ref=e96]:
+            - generic [ref=e97]: "03"
+            - strong [ref=e98]: WORK VALUES
+            - generic [ref=e99]: What sustains effort
+          - generic [ref=e100]:
+            - generic [ref=e101]: "04"
+            - strong [ref=e102]: CAREER SIGNALS
+            - generic [ref=e103]: Evidence, not prediction
+          - generic [ref=e104]: PROFESSIONALPORTRAIT
+        - generic [ref=e105]:
+          - generic [ref=e106]: READING WITH CARE
+          - generic [ref=e107]:
+            - strong [ref=e108]: SCORE
+            - strong [ref=e110]: EVIDENCE CONFIDENCE
+          - paragraph [ref=e111]: An interpretation and the strength of the evidence supporting it are related, but never the same thing.
+      - region [ref=e112]:
+        - generic [ref=e113]:
+          - generic [ref=e114]: "05"
+          - text: CAREER DIRECTION / EXPLAINABLE
+        - heading [level=2] [ref=e115]:
+          - text: A career match should explain
+          - emphasis [ref=e116]: more than a percentage.
+        - generic [ref=e117]:
+          - generic [ref=e118]: PROFILE SIGNALS
+          - generic [ref=e120]: PRODUCT STRATEGIST
+          - generic [ref=e122]: FIT DIMENSIONS
+        - generic [ref=e123]:
+          - generic [ref=e124]:
+            - text: WHY THIS
+            - paragraph [ref=e125]: "Alignment: systems thinkingMatched skill: facilitation"
+          - generic [ref=e126]:
+            - text: WHY NOT YET
+            - paragraph [ref=e127]: "Difference: domain exposureGap: applied research practice"
+      - region [ref=e128]:
+        - generic [ref=e129]:
+          - generic [ref=e130]: "06"
+          - text: GAP → DEVELOPMENT → TIME
+        - generic [ref=e131]:
+          - heading [level=2] [ref=e132]:
+            - text: Difference becomes
+            - emphasis [ref=e133]: the next milestone.
+          - paragraph [ref=e134]: Gaps do not disappear. They travel with the roadmap, becoming specific work you can question and develop.
+        - generic [ref=e135]:
+          - generic [ref=e136]: RESEARCH PRACTICE
+          - generic [ref=e138]: FIELD NOTE
+          - generic [ref=e140]: APPLIED PROJECT
+        - figure "EDITORIAL PAUSE / DEVELOPMENT IS A PRACTICE" [ref=e141]:
+          - img "Hands holding an open book." [ref=e142]
+      - region [ref=e144]:
+        - generic [ref=e145]:
+          - generic [ref=e146]: "07"
+          - text: TIME / ANALYTICS PREVIEW
+        - heading [level=2] [ref=e147]:
+          - text: Progress keeps
+          - emphasis [ref=e148]: its context.
+        - generic [ref=e149]:
+          - generic [ref=e150]: ASSESSMENT HISTORY
+          - generic [ref=e156]: TRAIT TRENDS
+          - generic [ref=e160]:
+            - generic [ref=e161]: ROADMAP PROGRESS
+            - generic [ref=e162]: Evidence carries forward.
+      - region [ref=e163]:
+        - generic [ref=e164]:
+          - generic [ref=e165]: "08"
+          - text: TRUST / BOUNDARIES
+        - heading [level=2] [ref=e166]:
+          - text: Clear about what
+          - emphasis [ref=e167]: the system can support.
+        - list [ref=e168]:
+          - listitem [ref=e169]: +Deterministic core scoring
+          - listitem [ref=e170]: +Evidence confidence, separately visible
+          - listitem [ref=e171]: +AI enhancement with stated boundaries
+          - listitem [ref=e172]: +Non-clinical scope, data export and deletion controls
+        - paragraph [ref=e173]:
+          - link "Methodology" [ref=e174] [cursor=pointer]:
+            - /url: /trust
+          - link "Privacy" [ref=e175] [cursor=pointer]:
+            - /url: /account/privacy
+      - region [ref=e176]:
+        - generic [ref=e178]:
+          - paragraph [ref=e179]: RESOLUTION / PA-01 RETURN
+          - heading [level=2] [ref=e180]:
+            - text: A clearer profile.
+            - emphasis [ref=e181]: A direction you can question, explore and develop.
+          - generic [ref=e182]:
+            - link "Start assessment" [ref=e183] [cursor=pointer]:
+              - /url: /signup
+            - link "Sign in" [ref=e184] [cursor=pointer]:
+              - /url: /login
+    - generic [ref=e185]:
+      - link "PERSONALITY ASSESSOR" [ref=e186] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e187]: PROFILE / PATH / DEVELOPMENT
+      - navigation [ref=e188]:
+        - link "How it works" [ref=e189] [cursor=pointer]:
+          - /url: "#how-it-works"
+        - link "Methodology" [ref=e190] [cursor=pointer]:
+          - /url: "#methodology"
+        - link "Privacy & trust" [ref=e191] [cursor=pointer]:
+          - /url: /trust

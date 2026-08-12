@@ -1,0 +1,114 @@
+- generic [ref=e4]:
+  - link "Skip to content" [ref=e5] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e6]:
+    - link "Personality Assessor" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - text: PersonalityAssessor
+    - navigation "Primary navigation" [ref=e8]:
+      - link "How it works" [ref=e9] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=e10] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=e11] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=e12] [cursor=pointer]:
+        - /url: /methodology
+    - generic [ref=e13]:
+      - link "Sign in" [ref=e14] [cursor=pointer]:
+        - /url: /login
+      - link "Start assessment" [ref=e15] [cursor=pointer]:
+        - /url: /signup
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic:
+        - generic: CONTEXT
+        - generic: EVIDENCE
+        - generic: DIRECTION
+      - paragraph [ref=e18]: 02 / CAREER INTELLIGENCE
+      - heading "A career match should come with its reasoning." [level=1] [ref=e19]
+      - paragraph [ref=e20]: Personality Assessor compares your profile with curated career models across multiple fit factors. The useful part is seeing what aligns, what is missing and why another direction may fit differently.
+      - img "Hands working through wireframes beside a laptop" [ref=e22]
+    - generic [ref=e23]:
+      - img "Developer working at a computer in a software environment" [ref=e25]
+      - generic [ref=e26]:
+        - paragraph [ref=e27]: REAL WORK, NOT ROLE STEREOTYPES
+        - heading "Professional work gives career exploration a real-world reference point." [level=2] [ref=e28]
+        - paragraph [ref=e29]: Images show work in progress. They do not identify a user, endorse the product, or represent a returned career match.
+    - generic [ref=e30]:
+      - paragraph [ref=e31]: 17 CURATED CAREER PROFILES
+      - article [ref=e32]:
+        - generic [ref=e33]: "01"
+        - heading "Software Engineer" [level=2] [ref=e34]
+        - paragraph [ref=e35]: Strong alignment
+        - generic [ref=e36]:
+          - generic [ref=e37]: Why this
+          - paragraph [ref=e38]: Technical depth, problem solving and learning orientation are close to this curated model.
+          - generic [ref=e39]: What to develop
+          - paragraph [ref=e40]: Build more evidence of production delivery.
+      - article [ref=e41]:
+        - generic [ref=e42]: "02"
+        - heading "UX Designer" [level=2] [ref=e43]
+        - paragraph [ref=e44]: Adjacent direction
+        - generic [ref=e45]:
+          - generic [ref=e46]: Why this
+          - paragraph [ref=e47]: Investigative and artistic interests support exploratory design work.
+          - generic [ref=e48]: What to develop
+          - paragraph [ref=e49]: Strengthen portfolio evidence and user-research practice.
+      - article [ref=e50]:
+        - generic [ref=e51]: "03"
+        - heading "Data Analyst" [level=2] [ref=e52]
+        - paragraph [ref=e53]: Strong alignment
+        - generic [ref=e54]:
+          - generic [ref=e55]: Why this
+          - paragraph [ref=e56]: Structured inquiry and evidence-led problem solving are visible.
+          - generic [ref=e57]: What to develop
+          - paragraph [ref=e58]: Develop applied analysis projects.
+      - article [ref=e59]:
+        - generic [ref=e60]: "04"
+        - heading "Product Manager" [level=2] [ref=e61]
+        - paragraph [ref=e62]: Worth exploring
+        - generic [ref=e63]:
+          - generic [ref=e64]: Why this
+          - paragraph [ref=e65]: Systems thinking and learning orientation support cross-functional work.
+          - generic [ref=e66]: What to develop
+          - paragraph [ref=e67]: Practice prioritisation and stakeholder communication.
+      - article [ref=e68]:
+        - generic [ref=e69]: "05"
+        - heading "Cybersecurity Analyst" [level=2] [ref=e70]
+        - paragraph [ref=e71]: Worth exploring
+        - generic [ref=e72]:
+          - generic [ref=e73]: Why this
+          - paragraph [ref=e74]: Investigation and precision are relevant to the work.
+          - generic [ref=e75]: What to develop
+          - paragraph [ref=e76]: Add security-domain foundations.
+    - paragraph [ref=e77]: Career alignment is an explainable comparison with curated profiles. It is not a prediction of employability, a hiring recommendation or a guarantee of career success.
+  - contentinfo [ref=e78]:
+    - generic:
+      - generic: EVIDENCE
+      - generic: DIRECTION
+      - generic: TIME
+    - generic [ref=e79]:
+      - link "Personality Assessor" [ref=e80] [cursor=pointer]:
+        - /url: /
+        - text: PersonalityAssessor
+      - paragraph [ref=e81]: Career intelligence built from evidence, not one answer.
+    - navigation "Product" [ref=e82]:
+      - link "How it works" [ref=e84] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=e85] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=e86] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=e87] [cursor=pointer]:
+        - /url: /methodology
+    - navigation "Trust" [ref=e88]:
+      - link "Trust" [ref=e90] [cursor=pointer]:
+        - /url: /trust
+      - link "Privacy" [ref=e91] [cursor=pointer]:
+        - /url: /privacy
+    - navigation "Account" [ref=e92]:
+      - link "Sign in" [ref=e94] [cursor=pointer]:
+        - /url: /login
+      - link "Start assessment" [ref=e95] [cursor=pointer]:
+        - /url: /signup

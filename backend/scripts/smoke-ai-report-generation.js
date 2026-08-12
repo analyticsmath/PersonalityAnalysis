@@ -7,8 +7,10 @@ const { generateResultNarrative } = require('../services/ai-result-narrative.ser
 const maskKey = (key) => (key ? `${String(key).slice(0, 6)}...${String(key).slice(-4)}` : 'missing');
 
 (async () => {
-  const hasKey = Boolean(config.openaiApiKey || process.env.OPENAI_API_KEY);
-  console.log(`[INFO] OPENAI_API_KEY: ${maskKey(config.openaiApiKey || process.env.OPENAI_API_KEY)}`);
+  const provider = config.aiProvider || 'unknown';
+  const hasKey = Boolean(config.aiApiKey);
+  console.log(`[INFO] Active Provider: ${provider}`);
+  console.log(`[INFO] Provider Key: ${maskKey(config.aiApiKey)}`);
 
   const out = await generateResultNarrative({
     aiProfile: { domain: 'software engineering', subdomains: ['backend', 'ai'], skills: ['node.js', 'testing'] },
@@ -24,15 +26,20 @@ const maskKey = (key) => (key ? `${String(key).slice(0, 6)}...${String(key).slic
   if (!hasKey) {
     if (out?.aiStatus?.fallbackUsed !== true) {
       console.error('[FAIL] Expected fallbackUsed=true when key missing');
-      process.exit(1);
+      process.exitCode = 1;
+      return;
     }
     console.log('[PASS] Missing key fallback verified');
-    process.exit(0);
+    return;
   }
 
   if (!out?.summary || !out?.aiStatus) {
     console.error('[FAIL] Missing summary/aiStatus');
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
-  console.log('[PASS] Report generation path returned summary + aiStatus');
+  console.log('[PASS] Live report narrative path returned summary + aiStatus');
+  console.log('[INFO] AI Status Provider:', out.aiStatus.provider);
+  console.log('[INFO] AI Status Model:', out.aiStatus.model);
+  console.log('[INFO] Fallback Used:', out.aiStatus.fallbackUsed);
 })();

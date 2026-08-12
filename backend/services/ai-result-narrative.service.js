@@ -190,7 +190,7 @@ const generateResultNarrative = async ({
       promptId: 'adaptive-result-narrative',
       promptVersion: registry?.version || 'phase5',
       provider: aiStatus.provider,
-      model: aiStatus.provider === AI_PROVIDER.OPENAI ? config.openaiReportModel : String(aiStatus.model || 'n/a'),
+      model: (aiStatus.provider === AI_PROVIDER.OPENAI || aiStatus.provider === AI_PROVIDER.GROQ) ? config.aiReportModel : String(aiStatus.model || 'n/a'),
       schemaId: SCHEMA_IDS.REPORT_NARRATIVE_V1,
       schemaValidated: aiStatus.schemaValidated,
       safetyChecked: aiStatus.safetyChecked,

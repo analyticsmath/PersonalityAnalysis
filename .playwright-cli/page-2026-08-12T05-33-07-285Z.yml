@@ -1,0 +1,34 @@
+- main [ref=e5]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - paragraph [ref=e8]: Personality Assessor
+      - heading "Start building your professional profile." [level=1] [ref=e9]
+      - paragraph [ref=e10]: Create an account, bring your professional context and begin the adaptive assessment.
+    - generic [ref=e12]:
+      - generic [ref=e14]:
+        - heading "Create account" [level=3] [ref=e15]
+        - paragraph [ref=e16]: Begin with your professional context
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - alert
+          - status
+          - generic [ref=e19]:
+            - generic [ref=e20]: Full Name
+            - textbox "Full Name" [ref=e21]:
+              - /placeholder: Alex Johnson
+          - generic [ref=e22]:
+            - generic [ref=e23]: Email
+            - textbox "Email" [ref=e24]:
+              - /placeholder: you@example.com
+          - generic [ref=e25]:
+            - generic [ref=e26]: Password
+            - textbox "Password" [ref=e27]:
+              - /placeholder: Minimum 6 characters
+          - generic [ref=e28]:
+            - checkbox "I agree to the terms and conditions" [ref=e29]
+            - generic [ref=e30]: I agree to the terms and conditions
+          - button "Create Account" [ref=e31] [cursor=pointer]
+        - paragraph [ref=e33]:
+          - text: Already have an account?
+          - link "Sign in" [ref=e34] [cursor=pointer]:
+            - /url: /login

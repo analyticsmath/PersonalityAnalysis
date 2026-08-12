@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "eslint": "^8.57.1",
-    "eslint-plugin-import": "^2.32.0"
+    "eslint-plugin-import": "^2.32.0",
+    "mongodb-memory-server": "^11.2.0"
   }
 }

@@ -10,25 +10,28 @@ const maskKey = (key) => {
 };
 
 (async () => {
-  const key = config.openaiApiKey || process.env.OPENAI_API_KEY;
+  const provider = config.aiProvider || 'unknown';
+  const key = config.aiApiKey;
   if (!key) {
-    console.log('[SKIP] OPENAI_API_KEY missing; provider smoke not executed.');
+    console.log(`[SKIP] ${provider.toUpperCase()}_API_KEY missing; provider smoke not executed.`);
     process.exit(0);
   }
 
-  console.log(`[INFO] OPENAI_API_KEY detected (${maskKey(key)})`);
+  console.log(`[INFO] Active AI Provider: ${provider}`);
+  console.log(`[INFO] Active AI Model: ${config.aiModel}`);
+  console.log(`[INFO] API key detected (${maskKey(key)})`);
 
   try {
     const { text } = await runOpenAiResponses({
-      input: 'Return JSON only: {"ok":true,"source":"openai"}',
+      input: 'Return JSON only: {"ok":true,"source":"ai_provider"}',
       max_output_tokens: 80,
       timeoutMs: 15000,
       maxRetries: 0,
     });
-    console.log('[PASS] Provider returned response text length:', String(text || '').length);
-    process.exit(0);
+    console.log(`[PASS] ${provider.toUpperCase()} Provider returned response text length: ${String(text || '').length}`);
+    console.log(`[INFO] Response payload sample: ${text}`);
   } catch (err) {
-    console.error('[FAIL] OpenAI provider smoke failed:', err?.status || err?.code || err?.message || 'unknown');
-    process.exit(1);
+    console.error(`[FAIL] ${provider.toUpperCase()} provider smoke failed:`, err?.status || err?.code || err?.message || 'unknown');
+    process.exitCode = 1;
   }
 })();

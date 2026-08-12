@@ -106,14 +106,14 @@ const SignupPage = () => {
       <div className="auth-page__content">
         <ScaleIn as="section" className="hero-panel" from={0.97} data-avatar-section="signup-hero">
           <p className="hero-panel__eyebrow">Personality Assessor</p>
-          <h1 className="hero-panel__title">Build your profile and unlock personalized insights</h1>
+          <h1 className="hero-panel__title">Start building your professional profile.</h1>
           <p className="hero-panel__subtitle">
-            Create your account to track assessments over time and prepare for advanced analytics.
+            Create an account, bring your professional context and begin the adaptive assessment.
           </p>
         </ScaleIn>
 
         <div data-avatar-target="signup-form" data-avatar-section="signup-form">
-          <Card className="auth-card" title="Create Account" subtitle="Get started in under a minute">
+          <Card className="auth-card" title="Create account" subtitle="Begin with your professional context">
             <form onSubmit={handleSubmit} className="auth-form" noValidate>
               <div className="auth-form__announce" role="alert" aria-live="assertive">
                 {errorMessage ? <p className="ui-message ui-message--error">{errorMessage}</p> : null}

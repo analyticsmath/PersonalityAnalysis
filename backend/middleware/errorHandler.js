@@ -18,6 +18,20 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
+  if (err?.code === 11000) {
+    return sendError(res, {
+      status: 400,
+      message: 'User or record already exists',
+    });
+  }
+
+  if (err?.name === 'ValidationError') {
+    return sendError(res, {
+      status: 400,
+      message: err.message || 'Validation error',
+    });
+  }
+
   const status = Number.isInteger(err?.status) ? err.status : 500;
   const isProduction = process.env.NODE_ENV === 'production';
   const message =

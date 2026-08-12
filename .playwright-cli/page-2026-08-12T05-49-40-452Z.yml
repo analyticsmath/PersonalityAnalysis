@@ -1,0 +1,28 @@
+- main [ref=e5]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - paragraph [ref=e8]: Personality Assessor
+      - heading "Continue where you left off." [level=1] [ref=e9]
+      - paragraph [ref=e10]: Return to your assessments, career exploration, roadmaps and progress.
+    - generic [ref=e12]:
+      - generic [ref=e14]:
+        - heading "Sign in" [level=3] [ref=e15]
+        - paragraph [ref=e16]: Use your account credentials
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - alert
+          - generic [ref=e19]:
+            - generic [ref=e20]: Email
+            - textbox "Email" [ref=e21]:
+              - /placeholder: you@example.com
+          - generic [ref=e22]:
+            - generic [ref=e23]: Password
+            - generic [ref=e24]:
+              - textbox "Password Show password" [ref=e25]:
+                - /placeholder: Enter your password
+              - button "Show password" [ref=e26] [cursor=pointer]: Show
+          - button "Sign In" [ref=e27] [cursor=pointer]
+        - paragraph [ref=e29]:
+          - text: New here?
+          - link "Create an account" [ref=e30] [cursor=pointer]:
+            - /url: /signup

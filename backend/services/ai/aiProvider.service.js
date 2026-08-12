@@ -28,19 +28,15 @@ const withTimeout = async (promise, ms) => {
   }
 };
 
-/** Models that do not accept a temperature parameter (reasoning/o-series + gpt-5.x). */
-const NO_TEMPERATURE_MODELS = /^(o1|o3|o4|gpt-5)/i;
+const { sanitizeOpenAiParams } = require('./openAiParameterPolicy.service');
 
 const buildResponsesParams = ({ model, input, temperature, max_output_tokens }) => {
-  const params = { model, input, max_output_tokens };
-  if (!NO_TEMPERATURE_MODELS.test(model)) {
-    params.temperature = temperature;
-  }
-  return params;
+  const rawParams = { model, input, temperature, max_output_tokens };
+  return sanitizeOpenAiParams(model, rawParams, config.aiProvider);
 };
 
 /**
- * OpenAI Responses API wrapper with timeout and limited retry.
+ * AI Provider Responses API wrapper with timeout and limited retry.
  */
 const runOpenAiResponses = async ({
   input,
@@ -50,12 +46,13 @@ const runOpenAiResponses = async ({
   timeoutMs = config.openaiTimeoutMs || 55000,
   maxRetries = 1,
 } = {}) => {
-  if (!config.openaiApiKey) {
-    throw createHttpError(503, 'OPENAI_API_KEY missing');
+  if (!config.aiApiKey) {
+    const providerName = (config.aiProvider || 'AI').toUpperCase();
+    throw createHttpError(503, `${providerName}_API_KEY missing`);
   }
 
   const client = getOpenAiClient();
-  const resolvedModel = model || config.openaiModel;
+  const resolvedModel = model || config.aiModel;
   let attempt = 0;
   let lastErr;
   while (attempt <= maxRetries) {

@@ -1,0 +1,189 @@
+- main [ref=f3e4]:
+  - link "Skip to homepage content" [ref=f3e5] [cursor=pointer]:
+    - /url: "#public-content"
+  - generic [ref=f3e6]:
+    - link "Personality Assessor home" [ref=f3e7] [cursor=pointer]:
+      - /url: /
+      - text: PERSONALITYASSESSOR
+    - link "Start assessment" [ref=f3e9] [cursor=pointer]:
+      - /url: /signup
+  - region [ref=f3e10]:
+    - generic [ref=f3e11]: SIGNAL / STRUCTURE / DIRECTION
+    - img "Architectural reflections in an interior." [ref=f3e13]
+    - generic [ref=f3e14]:
+      - paragraph [ref=f3e15]: SIGNAL → STRUCTURE → DIRECTION
+      - heading [level=1] [ref=f3e16]:
+        - text: A professional identityis
+        - emphasis [ref=f3e17]: not one answer.
+      - generic [ref=f3e18]: PA / 01 — FACETS
+    - paragraph [ref=f3e19]: Personality Assessor brings professional context, adaptive responses and behavioral evidence together into an explainable profile for exploring where you fit and what to build next.
+  - generic [ref=f3e20]:
+    - region [ref=f3e21]:
+      - generic [ref=f3e22]:
+        - generic [ref=f3e23]: "02"
+        - text: EVIDENCE / ILLUSTRATIVE
+      - generic [ref=f3e24]:
+        - heading [level=2] [ref=f3e25]:
+          - text: More than a response.
+          - emphasis [ref=f3e26]: A field of evidence.
+        - paragraph [ref=f3e27]: Sources do not compete as cards. They come together, retain their context, then resolve into product structure.
+      - generic [ref=f3e28]:
+        - article [ref=f3e29]:
+          - generic [ref=f3e31]:
+            - generic [ref=f3e32]: MANUAL PROFILE
+            - generic [ref=f3e33]:
+              - generic [ref=f3e34]: illustrative profile
+              - generic [ref=f3e35]: ROLE
+              - generic [ref=f3e36]: Product operations
+              - generic [ref=f3e37]: FIELD
+              - generic [ref=f3e38]: Systems & service
+              - generic [ref=f3e39]: GOAL
+              - generic [ref=f3e40]: Explore direction
+        - article [ref=f3e41]:
+          - generic [ref=f3e43]:
+            - generic [ref=f3e44]: CV CONTEXT
+            - paragraph [ref=f3e45]: EXTRACTED SKILLSfacilitation · research · systems
+            - generic [ref=f3e46]: Illustrative terms
+        - article [ref=f3e47]:
+          - generic [ref=f3e49]:
+            - generic [ref=f3e50]: BEHAVIORAL EVIDENCE
+            - paragraph [ref=f3e51]: Interaction provides contextfor a response.
+    - region [ref=f3e53]:
+      - generic [ref=f3e54]:
+        - generic [ref=f3e55]: "03"
+        - text: ASSESSMENT / LIVE PRODUCT PREVIEW
+      - generic [ref=f3e56]:
+        - generic [ref=f3e57]:
+          - heading [level=2] [ref=f3e58]:
+            - text: Evidence becomes
+            - emphasis [ref=f3e59]: a reading order.
+          - paragraph [ref=f3e60]: Context, adaptive responses and behavior stay separate until they can be explained together.
+        - generic "Illustrative adaptive assessment question" [ref=f3e61]:
+          - generic [ref=f3e62]: ADAPTIVE QUESTION / 04
+          - strong [ref=f3e63]: When a project changes direction, I first look for the constraint that changed.
+          - generic [ref=f3e64]:
+            - text: Usually true
+            - generic [ref=f3e65]: Selected response
+          - generic [ref=f3e66]: Sometimes true
+        - generic [ref=f3e67]:
+          - generic [ref=f3e68]: BEHAVIORAL RESPONSE
+          - paragraph [ref=f3e69]: “I asked the group to name the trade-off before proposing the next step.”
+          - generic [ref=f3e70]: Illustrative response
+    - region [ref=f3e71]:
+      - generic [ref=f3e72]:
+        - generic [ref=f3e73]: "04"
+        - text: PROFESSIONAL PORTRAIT V3
+      - generic [ref=f3e74]:
+        - heading [level=2] [ref=f3e75]:
+          - text: A profile is a system,
+          - emphasis [ref=f3e76]: not a single score.
+        - paragraph [ref=f3e77]: Four legitimate systems remain legible in their own right. Their relationship is the portrait.
+      - 'img "Illustrative Professional Portrait V3 showing four connected systems: Big Five, RIASEC, Work Values and Career Signals." [ref=f3e78]':
+        - generic [ref=f3e81]:
+          - generic [ref=f3e82]: "01"
+          - strong [ref=f3e83]: BIG FIVE
+          - generic [ref=f3e84]: Temperament patterns
+        - generic [ref=f3e85]:
+          - generic [ref=f3e86]: "02"
+          - strong [ref=f3e87]: RIASEC
+          - generic [ref=f3e88]: Work environments
+        - generic [ref=f3e89]:
+          - generic [ref=f3e90]: "03"
+          - strong [ref=f3e91]: WORK VALUES
+          - generic [ref=f3e92]: What sustains effort
+        - generic [ref=f3e93]:
+          - generic [ref=f3e94]: "04"
+          - strong [ref=f3e95]: CAREER SIGNALS
+          - generic [ref=f3e96]: Evidence, not prediction
+        - generic [ref=f3e97]: PROFESSIONALPORTRAIT
+      - generic [ref=f3e98]:
+        - text: READING WITH CARE
+        - generic [ref=f3e99]:
+          - strong [ref=f3e100]: SCORE
+          - strong [ref=f3e102]: EVIDENCE CONFIDENCE
+        - paragraph [ref=f3e103]: An interpretation and the strength of the evidence supporting it are related, but never the same thing.
+    - region [ref=f3e104]:
+      - generic [ref=f3e105]:
+        - generic [ref=f3e106]: "05"
+        - text: CAREER DIRECTION / EXPLAINABLE
+      - heading [level=2] [ref=f3e107]:
+        - text: A career match should explain
+        - emphasis [ref=f3e108]: more than a percentage.
+      - generic [ref=f3e109]:
+        - generic [ref=f3e110]: PROFILE SIGNALS
+        - generic [ref=f3e112]: PRODUCT STRATEGIST
+        - generic [ref=f3e114]: FIT DIMENSIONS
+      - generic [ref=f3e115]:
+        - generic [ref=f3e116]:
+          - text: WHY THIS
+          - paragraph [ref=f3e117]: "Alignment: systems thinkingMatched skill: facilitation"
+        - generic [ref=f3e118]:
+          - text: WHY NOT YET
+          - paragraph [ref=f3e119]: "Difference: domain exposureGap: applied research practice"
+    - region [ref=f3e120]:
+      - generic [ref=f3e121]:
+        - generic [ref=f3e122]: "06"
+        - text: GAP → DEVELOPMENT → TIME
+      - generic [ref=f3e123]:
+        - heading [level=2] [ref=f3e124]:
+          - text: Difference becomes
+          - emphasis [ref=f3e125]: the next milestone.
+        - paragraph [ref=f3e126]: Gaps do not disappear. They travel with the roadmap, becoming specific work you can question and develop.
+      - generic [ref=f3e127]:
+        - generic [ref=f3e128]: RESEARCH PRACTICE
+        - generic [ref=f3e130]: FIELD NOTE
+        - generic [ref=f3e132]: APPLIED PROJECT
+      - figure "EDITORIAL PAUSE / DEVELOPMENT IS A PRACTICE" [ref=f3e133]:
+        - img "Hands holding an open book." [ref=f3e134]
+    - region [ref=f3e136]:
+      - generic [ref=f3e137]:
+        - generic [ref=f3e138]: "07"
+        - text: TIME / ANALYTICS PREVIEW
+      - heading [level=2] [ref=f3e139]:
+        - text: Progress keeps
+        - emphasis [ref=f3e140]: its context.
+      - generic [ref=f3e141]:
+        - generic [ref=f3e142]: ASSESSMENT HISTORY
+        - generic [ref=f3e148]: TRAIT TRENDS
+        - generic [ref=f3e152]:
+          - generic [ref=f3e153]: ROADMAP PROGRESS
+          - generic [ref=f3e154]: Evidence carries forward.
+    - region [ref=f3e155]:
+      - generic [ref=f3e156]:
+        - generic [ref=f3e157]: "08"
+        - text: TRUST / BOUNDARIES
+      - heading [level=2] [ref=f3e158]:
+        - text: Clear about what
+        - emphasis [ref=f3e159]: the system can support.
+      - list [ref=f3e160]:
+        - listitem [ref=f3e161]: +Deterministic core scoring
+        - listitem [ref=f3e162]: +Evidence confidence, separately visible
+        - listitem [ref=f3e163]: +AI enhancement with stated boundaries
+        - listitem [ref=f3e164]: +Non-clinical scope, data export and deletion controls
+      - paragraph [ref=f3e165]:
+        - link "Methodology" [ref=f3e166] [cursor=pointer]:
+          - /url: /trust
+        - link "Privacy" [ref=f3e167] [cursor=pointer]:
+          - /url: /account/privacy
+    - region [ref=f3e168]:
+      - generic [ref=f3e170]:
+        - paragraph [ref=f3e171]: RESOLUTION / PA-01 RETURN
+        - heading [level=2] [ref=f3e172]:
+          - text: A clearer profile.
+          - emphasis [ref=f3e173]: A direction you can question, explore and develop.
+        - generic [ref=f3e174]:
+          - link "Start assessment" [ref=f3e175] [cursor=pointer]:
+            - /url: /signup
+          - link "Sign in" [ref=f3e176] [cursor=pointer]:
+            - /url: /login
+  - generic [ref=f3e177]:
+    - link "PERSONALITY ASSESSOR" [ref=f3e178] [cursor=pointer]:
+      - /url: /
+    - generic [ref=f3e179]: PROFILE / PATH / DEVELOPMENT
+    - navigation [ref=f3e180]:
+      - link "How it works" [ref=f3e181] [cursor=pointer]:
+        - /url: "#how-it-works"
+      - link "Methodology" [ref=f3e182] [cursor=pointer]:
+        - /url: "#methodology"
+      - link "Privacy & trust" [ref=f3e183] [cursor=pointer]:
+        - /url: /trust

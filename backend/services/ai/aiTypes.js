@@ -11,6 +11,7 @@ const AI_STATUS = {
 };
 
 const AI_PROVIDER = {
+  GROQ: 'groq',
   OPENAI: 'openai',
   LOCAL_FALLBACK: 'local_fallback',
   NONE: 'none',

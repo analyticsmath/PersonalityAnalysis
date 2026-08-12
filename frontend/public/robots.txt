@@ -1,3 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /__lab/
+Disallow: /dashboard
+Disallow: /analytics
+Disallow: /assessment/
+Disallow: /account/
+Sitemap: /sitemap.xml

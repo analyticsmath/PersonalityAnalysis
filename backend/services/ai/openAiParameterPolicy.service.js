@@ -7,17 +7,25 @@
  * client.responses.create or client.chat.completions.create.
  */
 
+const { config } = require('../../config/env');
+
 /** Matches gpt-5*, o1*, o3*, o4* model IDs (case-insensitive). */
 const REASONING_PATTERN = /^(o1|o3|o4|gpt-5)/i;
 
 /**
- * Returns true when the model ID belongs to the reasoning / o-series family
+ * Returns true when the model belongs to the OpenAI reasoning / o-series family
  * that does not accept inference-time sampling parameters.
  *
  * @param {string} model
+ * @param {string} [provider]
  * @returns {boolean}
  */
-const isReasoningModel = (model) => REASONING_PATTERN.test(String(model || ''));
+const isReasoningModel = (model, provider = config.aiProvider) => {
+  if (provider === 'groq') {
+    return false;
+  }
+  return REASONING_PATTERN.test(String(model || ''));
+};
 
 /** Parameters that are forbidden for reasoning models. */
 const STRIP_FOR_REASONING = new Set([
@@ -32,16 +40,17 @@ const STRIP_FOR_REASONING = new Set([
 
 /**
  * Returns a clean copy of `params` with forbidden keys removed when the model
- * is a reasoning model.  For non-reasoning models the params are returned
- * unchanged (shallow copy).
+ * is a reasoning model on OpenAI. For non-reasoning models or Groq provider,
+ * parameters are returned unchanged (shallow copy).
  *
  * @param {string} model
  * @param {Record<string, unknown>} params
+ * @param {string} [provider]
  * @returns {Record<string, unknown>}
  */
-const sanitizeOpenAiParams = (model, params) => {
+const sanitizeOpenAiParams = (model, params, provider = config.aiProvider) => {
   const clean = { ...params };
-  if (isReasoningModel(model)) {
+  if (isReasoningModel(model, provider)) {
     for (const key of STRIP_FOR_REASONING) {
       delete clean[key];
     }
