@@ -28,11 +28,6 @@ const AssessmentFlowResultPage = lazy(() => import('./pages/AssessmentFlow/Resul
 const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplorerPage'));
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
-const CinematicLab = lazy(() => import('./labs/personality/CinematicLab'));
-const ProductLab = lazy(() => import('./labs/personality/ProductLab'));
-const PersonalityResetProof = lazy(() => import('./labs/personality/PersonalityResetProof'));
-const enablePersonalityLabs = import.meta.env.DEV;
-const enableDesignReview = import.meta.env.VITE_ENABLE_DESIGN_REVIEW === 'true';
 
 const SuspensePageFallback = () => (
   <main className="app-page">
@@ -55,13 +50,13 @@ const AssessmentRootRedirect = () => {
 
 const AppRoutes = () => {
   const location = useLocation();
-  const isLabRoute = enablePersonalityLabs && location.pathname.startsWith('/__lab/');
   const authenticatedPath = /^(?:\/dashboard|\/analytics|\/account\/privacy|\/assessment(?:\/|$)|\/legacy\/|\/results$|\/reports$|\/result\/)/.test(location.pathname);
   const isPublicPage = !authenticatedPath;
 
   const withTransition = (element) => <PageTransition>{element}</PageTransition>;
 
   useEffect(() => {
+    if (isPublicPage) return undefined;
     const nodes = Array.from(document.querySelectorAll('[data-scroll-reveal]'));
     const animations = [];
 
@@ -99,25 +94,15 @@ const AppRoutes = () => {
         animation.kill();
       });
     };
-  }, [location.pathname]);
+  }, [isPublicPage, location.pathname]);
 
   return (
     <>
-      {!isLabRoute && !isPublicPage && <AnimatedBackground />}
+      {!isPublicPage && <AnimatedBackground />}
       <div data-barba="wrapper">
         <PublicMetadata />
         <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={`${location.pathname}${location.search}`}>
-            {enablePersonalityLabs && (
-              <>
-                <Route path="/__lab/personality-cinematic" element={withSuspense(<CinematicLab />)} />
-                <Route path="/__lab/personality-product" element={withSuspense(<ProductLab />)} />
-                <Route path="/__lab/personality-reset-proof" element={withSuspense(<PersonalityResetProof />)} />
-              </>
-            )}
-            {enableDesignReview && (
-              <Route path="/__review/personality-reset-proof" element={withSuspense(<PersonalityResetProof />)} />
-            )}
             <Route path="/" element={<PublicHomePage />} />
             <Route path="/how-it-works" element={<PublicMarketingPage type="how-it-works" />} />
             <Route path="/career-intelligence" element={<PublicMarketingPage type="career-intelligence" />} />
@@ -273,13 +258,12 @@ const App = () => {
 
 const AppChrome = () => {
   const location = useLocation();
-  const isLabRoute = enablePersonalityLabs && location.pathname.startsWith('/__lab/');
   const authenticatedPath = /^(?:\/dashboard|\/analytics|\/account\/privacy|\/assessment(?:\/|$)|\/legacy\/|\/results$|\/reports$|\/result\/)/.test(location.pathname);
   const isPublicPage = !authenticatedPath;
 
   return (
     <>
-      {!isLabRoute && !isPublicPage && <AvatarController />}
+      {!isPublicPage && <AvatarController />}
       <AppRoutes />
     </>
   );

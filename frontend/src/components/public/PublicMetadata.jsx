@@ -14,30 +14,22 @@ const metadata = {
 };
 const origin = import.meta.env.VITE_SITE_ORIGIN || window.location.origin;
 const indexable = new Set(['/', '/how-it-works', '/career-intelligence', '/progress', '/methodology', '/trust', '/privacy']);
-const enableDesignReview = import.meta.env.VITE_ENABLE_DESIGN_REVIEW === 'true';
 function setMeta(selector, attribute, content) { let node = document.head.querySelector(selector); if (!node) { node = document.createElement('meta'); const [key, value] = attribute.split('='); node.setAttribute(key, value); document.head.append(node); } node.content = content; }
 export default function PublicMetadata() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const isReviewRoute = enableDesignReview && pathname.startsWith('/__review/');
-    const [title, description] = isReviewRoute
-      ? ['Design Review — Personality Assessor', 'Temporary private design review route.']
-      : metadata[pathname] || ['Not found — Personality Assessor', 'The requested page does not exist.'];
+    const [title, description] = metadata[pathname] || ['Not found — Personality Assessor', 'The requested page does not exist.'];
     const url = `${origin}${pathname}`;
     document.title = title;
     setMeta('meta[name="description"]', 'name=description', description);
-    setMeta('meta[name="robots"]', 'name=robots', isReviewRoute ? 'noindex,nofollow' : indexable.has(pathname) ? 'index,follow' : 'noindex,follow');
+    setMeta('meta[name="robots"]', 'name=robots', indexable.has(pathname) ? 'index,follow' : 'noindex,follow');
     setMeta('meta[property="og:title"]', 'property=og:title', title);
     setMeta('meta[property="og:description"]', 'property=og:description', description);
     setMeta('meta[property="og:type"]', 'property=og:type', 'website');
     setMeta('meta[property="og:url"]', 'property=og:url', url);
     setMeta('meta[property="og:image"]', 'property=og:image', `${origin}/media/personality/generated/personality-assessor-og.jpg`);
     const canonical = document.head.querySelector('link[rel="canonical"]');
-    if (isReviewRoute) {
-      canonical?.remove();
-      return;
-    }
     const canonicalNode = canonical || document.createElement('link');
     if (!canonical) { canonicalNode.rel = 'canonical'; document.head.append(canonicalNode); }
     canonicalNode.href = url;
