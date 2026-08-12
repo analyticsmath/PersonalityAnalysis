@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion';
 import ProfessionalPortraitField from './ProfessionalPortraitField';
 import { proofDemo } from './personalityResetProofData';
@@ -58,6 +58,8 @@ export default function PersonalityResetProof() {
   const moved = useRef(false);
   const reduced = usePrefersReducedMotion();
   const [career, setCareer] = useState('ux');
+  const { pathname } = useLocation();
+  const isRemoteReview = pathname.startsWith('/__review/');
 
   useLayoutEffect(() => {
     if (reduced || !root.current) return undefined;
@@ -98,6 +100,7 @@ export default function PersonalityResetProof() {
 
   return <main className={`personality-reset-proof ${reduced ? 'is-reduced' : ''}`} ref={root}>
     <a className="proof-skip" href="#proof-content">Skip proof sequence</a>
+    {isRemoteReview && <span className="proof-review-marker">Design review</span>}
     <ProofHeader />
     <section className="proof-corridor" aria-labelledby="proof-title">
       <div className="proof-stage">

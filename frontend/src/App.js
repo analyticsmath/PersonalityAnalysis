@@ -32,6 +32,7 @@ const CinematicLab = lazy(() => import('./labs/personality/CinematicLab'));
 const ProductLab = lazy(() => import('./labs/personality/ProductLab'));
 const PersonalityResetProof = lazy(() => import('./labs/personality/PersonalityResetProof'));
 const enablePersonalityLabs = import.meta.env.DEV;
+const enableDesignReview = import.meta.env.VITE_ENABLE_DESIGN_REVIEW === 'true';
 
 const SuspensePageFallback = () => (
   <main className="app-page">
@@ -113,6 +114,9 @@ const AppRoutes = () => {
                 <Route path="/__lab/personality-product" element={withSuspense(<ProductLab />)} />
                 <Route path="/__lab/personality-reset-proof" element={withSuspense(<PersonalityResetProof />)} />
               </>
+            )}
+            {enableDesignReview && (
+              <Route path="/__review/personality-reset-proof" element={withSuspense(<PersonalityResetProof />)} />
             )}
             <Route path="/" element={<PublicHomePage />} />
             <Route path="/how-it-works" element={<PublicMarketingPage type="how-it-works" />} />
