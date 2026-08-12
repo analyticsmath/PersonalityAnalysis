@@ -1,0 +1,79 @@
+- main [ref=e4]:
+  - link "Skip proof sequence" [ref=e5] [cursor=pointer]:
+    - /url: "#proof-content"
+  - generic: Design review
+  - generic [ref=e6]:
+    - link "Personality Assessor" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - text: PersonalityAssessor
+    - link "Start assessment →" [ref=e8] [cursor=pointer]:
+      - /url: /signup
+  - region "How you work is more than a job title." [ref=e10]:
+    - generic [ref=e11]:
+      - generic:
+        - region "Software Engineer":
+          - img "Developer working at a computer in a software environment"
+          - heading "Software Engineer" [level=2]
+          - group "Choose demonstration career world" [ref=e25]:
+            - button "UX Designer" [ref=e26] [cursor=pointer]
+            - button "Software Engineer" [active] [pressed] [ref=e27] [cursor=pointer]
+          - paragraph: Alignment is a comparison, not a prediction.
+      - region "Professional portrait":
+        - paragraph: 23 dimensions.One professional portrait.
+        - generic [ref=e28]:
+          - img "Professional Portrait Glyph A single geometric form whose twenty-three perimeter cuts represent the demonstration personality dimensions." [ref=e29]:
+            - 'button "Openness: 76 of 100" [ref=e32] [cursor=pointer]'
+            - 'button "Conscientiousness: 68 of 100" [ref=e33] [cursor=pointer]'
+            - 'button "Extraversion: 54 of 100" [ref=e34] [cursor=pointer]'
+            - 'button "Agreeableness: 63 of 100" [ref=e35] [cursor=pointer]'
+            - 'button "Neuroticism: 41 of 100" [ref=e36] [cursor=pointer]'
+            - 'button "Realistic: 44 of 100" [ref=e37] [cursor=pointer]'
+            - 'button "Investigative: 78 of 100" [ref=e38] [cursor=pointer]'
+            - 'button "Artistic: 70 of 100" [ref=e39] [cursor=pointer]'
+            - 'button "Social: 58 of 100" [ref=e40] [cursor=pointer]'
+            - 'button "Enterprising: 57 of 100" [ref=e41] [cursor=pointer]'
+            - 'button "Conventional: 52 of 100" [ref=e42] [cursor=pointer]'
+            - 'button "Intrinsic: 71 of 100" [ref=e43] [cursor=pointer]'
+            - 'button "Extrinsic: 46 of 100" [ref=e44] [cursor=pointer]'
+            - 'button "Lifestyle: 62 of 100" [ref=e45] [cursor=pointer]'
+            - 'button "Relationships: 59 of 100" [ref=e46] [cursor=pointer]'
+            - 'button "Prestige: 48 of 100" [ref=e47] [cursor=pointer]'
+            - 'button "Independence: 74 of 100" [ref=e48] [cursor=pointer]'
+            - 'button "Security: 66 of 100" [ref=e49] [cursor=pointer]'
+            - 'button "Growth: 82 of 100" [ref=e50] [cursor=pointer]'
+            - 'button "Technical depth: 67 of 100" [ref=e51] [cursor=pointer]'
+            - 'button "Learning orientation: 76 of 100" [ref=e52] [cursor=pointer]'
+            - 'button "Leadership: 55 of 100" [ref=e53] [cursor=pointer]'
+            - 'button "Problem solving: 80 of 100" [ref=e54] [cursor=pointer]'
+          - generic [ref=e55]: Big Five
+          - generic [ref=e56]: RIASEC
+          - generic [ref=e57]: Work values
+          - generic [ref=e58]: Career signals
+          - paragraph [ref=e59]: Explore the perimeter
+          - list [ref=e60]:
+            - listitem [ref=e61]: "Openness: 76 of 100"
+            - listitem [ref=e62]: "Conscientiousness: 68 of 100"
+            - listitem [ref=e63]: "Extraversion: 54 of 100"
+            - listitem [ref=e64]: "Agreeableness: 63 of 100"
+            - listitem [ref=e65]: "Neuroticism: 41 of 100"
+            - listitem [ref=e66]: "Realistic: 44 of 100"
+            - listitem [ref=e67]: "Investigative: 78 of 100"
+            - listitem [ref=e68]: "Artistic: 70 of 100"
+            - listitem [ref=e69]: "Social: 58 of 100"
+            - listitem [ref=e70]: "Enterprising: 57 of 100"
+            - listitem [ref=e71]: "Conventional: 52 of 100"
+            - listitem [ref=e72]: "Intrinsic: 71 of 100"
+            - listitem [ref=e73]: "Extrinsic: 46 of 100"
+            - listitem [ref=e74]: "Lifestyle: 62 of 100"
+            - listitem [ref=e75]: "Relationships: 59 of 100"
+            - listitem [ref=e76]: "Prestige: 48 of 100"
+            - listitem [ref=e77]: "Independence: 74 of 100"
+            - listitem [ref=e78]: "Security: 66 of 100"
+            - listitem [ref=e79]: "Growth: 82 of 100"
+            - listitem [ref=e80]: "Technical depth: 67 of 100"
+            - listitem [ref=e81]: "Learning orientation: 76 of 100"
+            - listitem [ref=e82]: "Leadership: 55 of 100"
+            - listitem [ref=e83]: "Problem solving: 80 of 100"
+  - generic [ref=e22]:
+    - heading "Professional context, responses and behavioral evidence become a readable profile." [level=2] [ref=e23]
+    - paragraph [ref=e24]: Product demonstration — demonstration data. Career relationships are shown as visual comparison only—not an employability prediction or a score.

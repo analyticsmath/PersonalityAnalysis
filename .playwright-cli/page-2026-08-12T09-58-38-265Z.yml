@@ -1,0 +1,24 @@
+- main [ref=e4]:
+  - link "Skip proof sequence" [ref=e5] [cursor=pointer]:
+    - /url: "#proof-content"
+  - generic: Design review
+  - generic [ref=e6]:
+    - link "Personality Assessor" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - text: PersonalityAssessor
+    - link "Start assessment →" [ref=e8] [cursor=pointer]:
+      - /url: /signup
+  - region "How you work is more than a job title." [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - heading "How you work is more than a job title." [level=1]:
+          - generic: How you work
+          - generic: is more than
+          - generic: a job title.
+        - generic "Professional work in progress" [ref=e13]
+        - link "Start assessment →" [ref=e21] [cursor=pointer]:
+          - /url: /signup
+      - region "Demonstration evidence"
+  - generic [ref=e22]:
+    - heading "Professional context, responses and behavioral evidence become a readable profile." [level=2] [ref=e23]
+    - paragraph [ref=e24]: Product demonstration — demonstration data. Career relationships are shown as visual comparison only—not an employability prediction or a score.

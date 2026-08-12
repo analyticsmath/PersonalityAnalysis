@@ -1,0 +1,62 @@
+- generic [ref=e4]:
+  - link "Skip to content" [ref=e5] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e6]:
+    - link "Personality Assessor" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - text: PersonalityAssessor
+    - navigation "Primary navigation" [ref=e8]:
+      - link "How it works" [ref=e9] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=e10] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=e11] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=e12] [cursor=pointer]:
+        - /url: /methodology
+    - generic [ref=e13]:
+      - link "Sign in" [ref=e14] [cursor=pointer]:
+        - /url: /login
+      - link "Start assessment" [ref=e15] [cursor=pointer]:
+        - /url: /signup
+  - main [ref=e16]:
+    - generic:
+      - generic: ROUTE
+      - generic: RETURN
+    - paragraph [ref=e17]: 404 / NOT FOUND
+    - heading "That direction does not exist." [level=1] [ref=e18]
+    - paragraph [ref=e19]: Return to the career-intelligence story or begin an assessment.
+    - generic [ref=e20]:
+      - link "Return home" [ref=e21] [cursor=pointer]:
+        - /url: /
+      - link "Start assessment" [ref=e22] [cursor=pointer]:
+        - /url: /signup
+  - contentinfo [ref=e23]:
+    - generic:
+      - generic: EVIDENCE
+      - generic: DIRECTION
+      - generic: TIME
+    - generic [ref=e24]:
+      - link "Personality Assessor" [ref=e25] [cursor=pointer]:
+        - /url: /
+        - text: PersonalityAssessor
+      - paragraph [ref=e26]: Career intelligence built from evidence, not one answer.
+    - navigation "Product" [ref=e27]:
+      - link "How it works" [ref=e29] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=e30] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=e31] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=e32] [cursor=pointer]:
+        - /url: /methodology
+    - navigation "Trust" [ref=e33]:
+      - link "Trust" [ref=e35] [cursor=pointer]:
+        - /url: /trust
+      - link "Privacy" [ref=e36] [cursor=pointer]:
+        - /url: /privacy
+    - navigation "Account" [ref=e37]:
+      - link "Sign in" [ref=e39] [cursor=pointer]:
+        - /url: /login
+      - link "Start assessment" [ref=e40] [cursor=pointer]:
+        - /url: /signup
