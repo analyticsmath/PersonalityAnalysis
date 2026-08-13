@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@barba/core": "^2.10.3",
-    "@fontsource-variable/source-sans-3": "5.3.0",
-    "@fontsource-variable/source-serif-4": "5.3.0",
+    "@fontsource-variable/source-sans-3": "^5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.0",
     "@react-oauth/google": "^0.13.4",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
@@ -42,8 +42,8 @@
     "preview": "vite preview",
     "lint": "eslint src",
     "typecheck": "echo \"No TypeScript files in frontend\"",
-    "check:theme": "node scripts/check-light-theme-consistency.js"
-    ,"generate:marketing-media": "node scripts/generate-marketing-media.mjs"
+    "check:theme": "node scripts/check-light-theme-consistency.js",
+    "generate:marketing-media": "node scripts/generate-marketing-media.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",

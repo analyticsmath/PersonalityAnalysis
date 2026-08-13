@@ -9,7 +9,7 @@ import queryClient from './store/queryClient';
 import { AuthProvider } from './store/AuthStore';
 import { GOOGLE_CLIENT_ID } from './config/env';
 import '@fontsource-variable/source-sans-3/wght.css';
-import '@fontsource-variable/source-serif-4/full.css';
+import '@fontsource-variable/source-serif-4/opsz.css';
 import './index.css';
 import './styles/theme.css';
 import './styles/phase6-ui.css';
