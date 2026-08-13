@@ -1,39 +1,30 @@
-import { useLayoutEffect } from 'react';
+import { createContext, useContext, useLayoutEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion';
 
-const canSmooth = () => (
-  window.innerWidth >= 1024
-  && window.matchMedia('(pointer: fine)').matches
-  && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-/** Owns the optional public-only GSAP smoother and removes it on every route change. */
+const PublicMotionContext = createContext({ motionReady: false, smoother: null, reducedMotion: false, finePointer: false });
+export const usePublicMotion = () => useContext(PublicMotionContext);
+
 export default function PublicMotionRoot({ children }) {
   const location = useLocation();
   const reducedMotion = usePrefersReducedMotion();
+  const [state, setState] = useState({ motionReady: false, smoother: null, finePointer: false });
 
   useLayoutEffect(() => {
-    if (!canSmooth() || reducedMotion) return undefined;
-    let smoother;
-    let cancelled = false;
-
-    import('gsap/ScrollSmoother').then(({ ScrollSmoother }) => {
-      if (cancelled || !ScrollSmoother) return;
-      gsap.registerPlugin(ScrollSmoother);
-      smoother = ScrollSmoother.create({
-        wrapper: '#smooth-wrapper', content: '#smooth-content', smooth: 0.78, effects: false, smoothTouch: false,
-      });
-    }).catch(() => {
-      // Native scrolling remains the intended fallback when this GSAP distribution omits ScrollSmoother.
-    });
-
-    return () => {
-      cancelled = true;
-      smoother?.kill();
-    };
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    const eligible = window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches && !reducedMotion;
+    let smoother = null;
+    if (eligible) smoother = ScrollSmoother.create({ wrapper: '#smooth-wrapper', content: '#smooth-content', smooth: 0.62, effects: false, smoothTouch: false, normalizeScroll: false });
+    setState({ motionReady: true, smoother, finePointer });
+    document.fonts?.ready?.then(() => ScrollTrigger.refresh());
+    return () => { smoother?.kill(); ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); };
   }, [location.pathname, reducedMotion]);
 
-  return <div id="smooth-wrapper"><div id="smooth-content">{children}</div></div>;
+  const value = useMemo(() => ({ ...state, reducedMotion }), [state, reducedMotion]);
+  return <PublicMotionContext.Provider value={value}><div id="smooth-wrapper"><div id="smooth-content">{children}</div></div></PublicMotionContext.Provider>;
 }

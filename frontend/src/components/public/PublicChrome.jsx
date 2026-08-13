@@ -18,20 +18,19 @@ export function PublicHeader() {
     const updateTone = () => {
       frame = 0;
       const beneath = document.elementFromPoint(window.innerWidth * 0.5, 78)?.closest('[data-header-tone]');
-      const inHero = location.pathname === '/' && window.scrollY < window.innerHeight * 0.86;
-      setTone(inHero || beneath?.dataset.headerTone === 'dark' ? 'dark' : 'light');
+      setTone(beneath?.dataset.headerTone === 'dark' ? 'dark' : 'light');
     };
     const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(updateTone); };
     updateTone(); window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll);
     return () => { window.cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
   }, [location.pathname]);
   return <header className={`pa-header pa-header--${tone} ${open ? 'is-menu-open' : ''}`}>
-    <Link className="pa-brand" to="/">Personality<br />Assessor</Link>
+    <Link className="pa-brand" to="/">Personality Assessor</Link>
     <nav id="pa-menu-links" className={open ? 'is-open' : ''} aria-label="Primary navigation">{nav.map(([label, to]) => <NavLink key={to} to={to}>{label}</NavLink>)}<Link className="pa-mobile-cta" to="/signup">Build my profile</Link></nav>
-    <div className="pa-header__actions"><Link to="/login">Sign in</Link><Link className="pa-button pa-button--accent" to="/signup">Build my profile</Link></div>
+    <div className="pa-header__actions"><Link to="/login">Sign in</Link><Link className="pa-button pa-button--primary" to="/signup">Build my profile</Link></div>
     <button ref={toggle} type="button" className="pa-menu" aria-expanded={open} aria-controls="pa-menu-links" onClick={() => setOpen((value) => !value)}>{open ? 'Close' : 'Menu'}</button>
   </header>;
 }
-export function PublicFooter() { return <footer className="pa-footer"><div><Link className="pa-brand" to="/">Personality<br />Assessor</Link><p>Professional self-understanding and career intelligence built from context, assessment evidence and explainable comparison.</p></div><nav aria-label="Product"><b>Product</b>{nav.map(([label, to]) => <Link key={to} to={to}>{label}</Link>)}</nav><nav aria-label="Trust"><b>Trust</b><Link to="/trust">Trust &amp; transparency</Link><Link to="/privacy">Privacy</Link></nav><nav aria-label="Account"><b>Account</b><Link to="/login">Sign in</Link><Link to="/signup">Build my profile</Link></nav></footer>; }
+export function PublicFooter() { return <footer className="pa-footer"><div><Link className="pa-brand" to="/">Personality Assessor</Link><p>Professional self-understanding and career intelligence built from context, assessment evidence and explainable comparison.</p></div><nav aria-label="Product"><b>Product</b>{nav.map(([label, to]) => <Link key={to} to={to}>{label}</Link>)}</nav><nav aria-label="Trust"><b>Trust</b><Link to="/trust">Trust &amp; transparency</Link><Link to="/privacy">Privacy</Link></nav><nav aria-label="Account"><b>Account</b><Link to="/login">Sign in</Link><Link to="/signup">Build my profile</Link></nav></footer>; }
 export function PublicLayout({ children, page }) { return <div className="pa-public" data-page={page}><a className="pa-skip" href="#main-content">Skip to content</a><PublicHeader /><PublicMotionRoot>{children}<PublicFooter /></PublicMotionRoot></div>; }
 export function ResponsiveImage({ media, folder = 'work', className, alt = '', priority = false, sizes = '(min-width: 1100px) 60vw, 90vw' }) { const path = `/media/personality/${folder}/${media.file}`; return <picture className={className}><source type="image/webp" srcSet={`${path}-480.webp 480w, ${path}-768.webp 768w, ${path}-1200.webp 1200w, ${path}-1600.webp 1600w`} sizes={sizes} /><img src={`${path}.jpg`} width={media.width} height={media.height} loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : 'auto'} decoding={priority ? 'sync' : 'async'} style={{ objectPosition: media.position }} alt={alt} /></picture>; }
