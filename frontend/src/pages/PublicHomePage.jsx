@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { PublicLayout } from '../components/public/PublicChrome';
-import HomeNarrative from '../components/public/marketing/HomeNarrative';
+import { PublicFooter, PublicLayout } from '../components/public/PublicChrome';
+import HomeNarrativeV3 from '../components/public/marketing/HomeNarrativeV3';
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import './PublicHomePage.css';
 
@@ -13,9 +13,9 @@ function TrustChapter() {
 }
 
 function ClosingScene() {
-  return <section className="pa-closing" data-header-tone="dark" aria-labelledby="closing-title"><div className="pa-closing__signature" aria-hidden="true"><span>Graduate</span><span>Software / systems</span><span>Problem solving</span></div><div><h2 id="closing-title">Build a profile you can return to.</h2><p>Start with what you already know. Add context, complete the assessment and keep the record as your work changes.</p><p><Link className="pa-button pa-button--signal" to="/signup">Build my profile</Link><Link className="pa-button pa-button--light" to="/login">Sign in</Link></p></div></section>;
+  return <section className="pa-closing" data-header-tone="dark" aria-labelledby="closing-title"><div className="pa-closing__signature" aria-label="Resolved profile trace"><span>Field <b>Software / systems</b></span><span>Focus <b>Problem solving</b></span><span>Record <b>Ready to revisit</b></span></div><div><h2 id="closing-title">Build a profile you can return to.</h2><p>Start with what you already know. Add context, complete the assessment and keep the record as your work changes.</p><p><Link className="pa-button pa-button--light" to="/signup">Build my profile</Link><Link className="pa-button pa-button--dark-outline" to="/login">Sign in</Link></p></div><PublicFooter integrated /></section>;
 }
 
 export default function PublicHomePage() {
-  return <PublicLayout page="home"><main id="main-content" className="pa-marketing pa-home"><HomeNarrative /><TrustChapter /><ClosingScene /></main></PublicLayout>;
+  return <PublicLayout page="home" footerMode="integrated"><main id="main-content" className="pa-marketing pa-home"><HomeNarrativeV3 /><TrustChapter /><ClosingScene /></main></PublicLayout>;
 }

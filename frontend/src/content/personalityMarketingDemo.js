@@ -24,6 +24,12 @@ export const marketingDemo = {
 };
 
 export const publicMedia = {
+  context: {
+    professional: { id: 'Vvn0OD0IxBM', file: 'pa-context-pro-01', width: 3840, height: 2160, position: '48% 56%', alt: 'Documents and laptop on a professional work surface' },
+    student: { id: 'pLybV75vkP4', file: 'pa-context-student-01', width: 4000, height: 6000, position: '52% 50%', alt: 'Laptop and learning materials in a study context' },
+    engineer: { id: 'ZmDk8tXQRS0', file: 'pa-context-engineer-01', width: 6000, height: 3376, position: '50% 50%', alt: 'Circuit-board design visible in a technical work context' },
+    maker: { id: 'vaz_CQSvTMw', file: 'pa-context-maker-01', width: 4951, height: 3354, position: '50% 52%', alt: 'Electronics workbench in active use' },
+  },
   work: [
     { id: '01', name: 'analysis / planning', file: 'pa-work-01-analysis-plans', width: 5304, height: 7952, position: '48% 47%' },
     { id: '02', name: 'digital creation', file: 'pa-work-02-software-overhead', width: 7890, height: 5263, position: '50% 52%' },

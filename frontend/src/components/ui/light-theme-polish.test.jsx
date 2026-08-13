@@ -72,7 +72,7 @@ describe('StepCV upload section — light theme', () => {
   });
 
   it('renders file pill in light state when file selected', () => {
-    const mockFile = new File(['content'], 'resume.pdf', { type: 'application/pdf' });
+    const mockFile = new window.File(['content'], 'resume.pdf', { type: 'application/pdf' });
     const { container } = render(
       <StepCV
         cvFile={mockFile}

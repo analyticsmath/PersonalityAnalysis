@@ -7,9 +7,7 @@ import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
-import AnimatedBackground from './components/ui/AnimatedBackground';
 import PageTransition from './components/motion/PageTransition';
-import AvatarController from './components/avatar/AvatarController';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
 import { getPrefersReducedMotion } from './utils/motion';
 import PublicHomePage from './pages/PublicHomePage';
@@ -28,6 +26,8 @@ const AssessmentFlowResultPage = lazy(() => import('./pages/AssessmentFlow/Resul
 const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplorerPage'));
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
+const AnimatedBackground = lazy(() => import('./components/ui/AnimatedBackground'));
+const AvatarController = lazy(() => import('./components/avatar/AvatarController'));
 
 const SuspensePageFallback = () => (
   <main className="app-page">
@@ -98,7 +98,7 @@ const AppRoutes = () => {
 
   return (
     <>
-      {!isPublicPage && <AnimatedBackground />}
+      {!isPublicPage && <Suspense fallback={null}><AnimatedBackground /></Suspense>}
       <div data-barba="wrapper">
         <PublicMetadata />
         <AnimatePresence mode="wait" initial={false}>
@@ -263,7 +263,7 @@ const AppChrome = () => {
 
   return (
     <>
-      {!isPublicPage && <AvatarController />}
+      {!isPublicPage && <Suspense fallback={null}><AvatarController /></Suspense>}
       <AppRoutes />
     </>
   );
