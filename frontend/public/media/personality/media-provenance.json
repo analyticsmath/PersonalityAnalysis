@@ -251,7 +251,7 @@
     "creator": "Vitaly Gariev",
     "sourcePlatform": "Unsplash",
     "sourcePage": "https://unsplash.com/photos/Vvn0OD0IxBM",
-    "retrievedAt": "2026-08-13T09:04:59.702Z",
+    "retrievedAt": "2026-08-13T11:17:29.399Z",
     "width": 3840,
     "height": 2160,
     "fileBytes": 706651,
@@ -274,7 +274,7 @@
     "creator": "Hasnain Ayaz",
     "sourcePlatform": "Unsplash",
     "sourcePage": "https://unsplash.com/photos/pLybV75vkP4",
-    "retrievedAt": "2026-08-13T09:05:11.531Z",
+    "retrievedAt": "2026-08-13T11:17:31.664Z",
     "width": 4000,
     "height": 6000,
     "fileBytes": 801625,
@@ -296,7 +296,7 @@
     "creator": "EnCata PD",
     "sourcePlatform": "Unsplash",
     "sourcePage": "https://unsplash.com/photos/ZmDk8tXQRS0",
-    "retrievedAt": "2026-08-13T09:06:24.646Z",
+    "retrievedAt": "2026-08-13T11:17:48.083Z",
     "width": 6000,
     "height": 3376,
     "fileBytes": 6039670,
@@ -318,7 +318,7 @@
     "creator": "Stacey Zinoveva",
     "sourcePlatform": "Unsplash",
     "sourcePage": "https://unsplash.com/photos/vaz_CQSvTMw",
-    "retrievedAt": "2026-08-13T09:06:48.041Z",
+    "retrievedAt": "2026-08-13T11:18:02.870Z",
     "width": 4951,
     "height": 3354,
     "fileBytes": 5720817,
@@ -326,6 +326,144 @@
     "approvedRoles": [
       "Progress context diversity",
       "development supporting imagery"
+    ],
+    "prohibitedContexts": [
+      "do not imply person pictured used Personality Assessor",
+      "do not imply depicted person has a personality trait",
+      "do not imply depicted person has a career match or recommendation",
+      "do not imply endorsement",
+      "do not associate an image with an individual private result"
+    ]
+  },
+  {
+    "id": "NASjMHJ9OhI",
+    "filename": "frontend/public/media/personality/work/pa-work-student-research.jpg",
+    "creator": "Unsplash contributor",
+    "sourcePlatform": "Unsplash",
+    "sourcePage": "https://unsplash.com/photos/NASjMHJ9OhI",
+    "retrievedAt": "2026-08-13T11:18:30.947Z",
+    "width": 6240,
+    "height": 4160,
+    "fileBytes": 6113758,
+    "licenseLabel": "Unsplash License",
+    "approvedRoles": [
+      "student research work world",
+      "Work Worlds crawler"
+    ],
+    "prohibitedContexts": [
+      "do not imply person pictured used Personality Assessor",
+      "do not imply depicted person has a personality trait",
+      "do not imply depicted person has a career match or recommendation",
+      "do not imply endorsement",
+      "do not associate an image with an individual private result"
+    ]
+  },
+  {
+    "id": "w00FkE6e8zE",
+    "filename": "frontend/public/media/personality/work/pa-work-ux-research.jpg",
+    "creator": "Unsplash contributor",
+    "sourcePlatform": "Unsplash",
+    "sourcePage": "https://unsplash.com/photos/w00FkE6e8zE",
+    "retrievedAt": "2026-08-13T11:18:37.647Z",
+    "width": 4896,
+    "height": 3264,
+    "fileBytes": 1577173,
+    "licenseLabel": "Unsplash License",
+    "approvedRoles": [
+      "UX and product work world",
+      "Work Worlds crawler"
+    ],
+    "prohibitedContexts": [
+      "do not imply person pictured used Personality Assessor",
+      "do not imply depicted person has a personality trait",
+      "do not imply depicted person has a career match or recommendation",
+      "do not imply endorsement",
+      "do not associate an image with an individual private result"
+    ]
+  },
+  {
+    "id": "n7tKiugbzaM",
+    "filename": "frontend/public/media/personality/work/pa-work-planning.jpg",
+    "creator": "Unsplash contributor",
+    "sourcePlatform": "Unsplash",
+    "sourcePage": "https://unsplash.com/photos/n7tKiugbzaM",
+    "retrievedAt": "2026-08-13T11:18:40.176Z",
+    "width": 3840,
+    "height": 2160,
+    "fileBytes": 652844,
+    "licenseLabel": "Unsplash License",
+    "approvedRoles": [
+      "collaborative planning work world",
+      "Work Worlds crawler"
+    ],
+    "prohibitedContexts": [
+      "do not imply person pictured used Personality Assessor",
+      "do not imply depicted person has a personality trait",
+      "do not imply depicted person has a career match or recommendation",
+      "do not imply endorsement",
+      "do not associate an image with an individual private result"
+    ]
+  },
+  {
+    "id": "qwtCeJ5cLYs",
+    "filename": "frontend/public/media/personality/careers/pa-career-data-analysis.jpg",
+    "creator": "Unsplash contributor",
+    "sourcePlatform": "Unsplash",
+    "sourcePage": "https://unsplash.com/photos/qwtCeJ5cLYs",
+    "retrievedAt": "2026-08-13T11:18:46.785Z",
+    "width": 2947,
+    "height": 2121,
+    "fileBytes": 673162,
+    "licenseLabel": "Unsplash License",
+    "approvedRoles": [
+      "data-analysis career world",
+      "Career Worlds gallery"
+    ],
+    "prohibitedContexts": [
+      "do not imply person pictured used Personality Assessor",
+      "do not imply depicted person has a personality trait",
+      "do not imply depicted person has a career match or recommendation",
+      "do not imply endorsement",
+      "do not associate an image with an individual private result"
+    ]
+  },
+  {
+    "id": "lAbYmLWrT9o",
+    "filename": "frontend/public/media/personality/careers/pa-career-electronics.jpg",
+    "creator": "Unsplash contributor",
+    "sourcePlatform": "Unsplash",
+    "sourcePage": "https://unsplash.com/photos/lAbYmLWrT9o",
+    "retrievedAt": "2026-08-13T11:19:11.323Z",
+    "width": 7044,
+    "height": 4698,
+    "fileBytes": 5375715,
+    "licenseLabel": "Unsplash License",
+    "approvedRoles": [
+      "engineering career world",
+      "Career Worlds gallery"
+    ],
+    "prohibitedContexts": [
+      "do not imply person pictured used Personality Assessor",
+      "do not imply depicted person has a personality trait",
+      "do not imply depicted person has a career match or recommendation",
+      "do not imply endorsement",
+      "do not associate an image with an individual private result"
+    ]
+  },
+  {
+    "id": "U-Werwf32CM",
+    "filename": "frontend/public/media/personality/careers/pa-career-workstation.jpg",
+    "creator": "Unsplash contributor",
+    "sourcePlatform": "Unsplash",
+    "sourcePage": "https://unsplash.com/photos/U-Werwf32CM",
+    "retrievedAt": "2026-08-13T11:19:34.491Z",
+    "width": 6347,
+    "height": 4233,
+    "fileBytes": 5244198,
+    "licenseLabel": "Unsplash License",
+    "approvedRoles": [
+      "software and operations career world",
+      "Career Worlds gallery"
     ],
     "prohibitedContexts": [
       "do not imply person pictured used Personality Assessor",

@@ -1,0 +1,94 @@
+- generic [ref=e4]:
+  - link "Skip to content" [ref=e5] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e6]:
+    - link "Personality Assessor" [ref=e7] [cursor=pointer]:
+      - /url: /
+    - navigation "Primary navigation" [ref=e8]:
+      - link "How it works" [ref=e9] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=e10] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=e11] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=e12] [cursor=pointer]:
+        - /url: /methodology
+    - generic [ref=e13]:
+      - link "Sign in" [ref=e14] [cursor=pointer]:
+        - /url: /login
+      - link "Build my profile" [ref=e15] [cursor=pointer]:
+        - /url: /signup
+  - generic [ref=e17]:
+    - main [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - heading "Career direction needs reasons you can see." [level=1] [ref=e21]
+          - paragraph [ref=e22]: Compare a current profile with curated career models, then look at why it relates, what differs and what could be developed.
+          - link "Build my profile" [ref=e23] [cursor=pointer]:
+            - /url: /signup
+        - img "Developer working at a computer in a software environment" [ref=e26]
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - heading "Career Worlds" [level=2] [ref=e29]
+          - paragraph [ref=e30]: Different work worlds call for different combinations of interests, values and evidence.
+        - generic [ref=e31]:
+          - button "Developer working at a computer in a software environment Software engineer" [ref=e32]:
+            - img "Developer working at a computer in a software environment" [ref=e34]
+            - generic [ref=e35]: Software engineer
+          - button "Hands working through wireframes beside a laptop UX designer" [ref=e36]:
+            - img "Hands working through wireframes beside a laptop" [ref=e38]
+            - generic [ref=e39]: UX designer
+          - button "Data analysis work surface and dashboard context Data analyst" [ref=e40]:
+            - img "Data analysis work surface and dashboard context" [ref=e42]
+            - generic [ref=e43]: Data analyst
+          - button "Electronics engineering inspection in a technical context Engineering" [ref=e44]:
+            - img "Electronics engineering inspection in a technical context" [ref=e46]
+            - generic [ref=e47]: Engineering
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]: Current profile
+          - generic [ref=e51]:
+            - generic [ref=e52]:
+              - term [ref=e53]: Context
+              - definition [ref=e54]: Field · skills · interests
+            - generic [ref=e55]:
+              - term [ref=e56]: Assessment
+              - definition [ref=e57]: Adaptive evidence gathering
+            - generic [ref=e58]:
+              - term [ref=e59]: Profile
+              - definition [ref=e60]: Four distinct readings
+        - generic [ref=e61]:
+          - generic [ref=e62]: Why Software Engineer relates
+          - heading "Technical depth, problem solving and learning orientation are close to this curated model." [level=2] [ref=e63]
+        - generic [ref=e64]:
+          - generic [ref=e65]: What to develop
+          - paragraph [ref=e66]: Build more evidence of production delivery.
+          - paragraph [ref=e67]: It is a prompt for exploration and work, not a hiring decision or guarantee.
+      - generic [ref=e68]:
+        - heading "Build a profile that changes with you." [level=2] [ref=e69]
+        - link "Build my profile" [ref=e70] [cursor=pointer]:
+          - /url: /signup
+    - contentinfo [ref=e71]:
+      - generic [ref=e72]:
+        - link "Personality Assessor" [ref=e73] [cursor=pointer]:
+          - /url: /
+        - paragraph [ref=e74]: Professional self-understanding and career intelligence built from context, assessment evidence and explainable comparison.
+      - navigation "Product" [ref=e75]:
+        - link "How it works" [ref=e76] [cursor=pointer]:
+          - /url: /how-it-works
+        - link "Career intelligence" [ref=e77] [cursor=pointer]:
+          - /url: /career-intelligence
+        - link "Progress" [ref=e78] [cursor=pointer]:
+          - /url: /progress
+        - link "Methodology" [ref=e79] [cursor=pointer]:
+          - /url: /methodology
+      - navigation "Trust" [ref=e80]:
+        - link "Trust & transparency" [ref=e81] [cursor=pointer]:
+          - /url: /trust
+        - link "Privacy" [ref=e82] [cursor=pointer]:
+          - /url: /privacy
+      - navigation "Account" [ref=e83]:
+        - link "Sign in" [ref=e84] [cursor=pointer]:
+          - /url: /login
+        - link "Build my profile" [ref=e85] [cursor=pointer]:
+          - /url: /signup

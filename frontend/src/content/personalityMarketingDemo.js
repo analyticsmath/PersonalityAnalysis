@@ -37,10 +37,16 @@ export const publicMedia = {
     { id: '04', name: 'investigation / research', file: 'pa-work-04-research-material', width: 5304, height: 7952, position: '52% 52%' },
     { id: '05', name: 'precision / testing', file: 'pa-work-05-precision-test', width: 5472, height: 3648, position: '53% 48%' },
     { id: '06', name: 'operational control', file: 'pa-work-06-control-studio', width: 5249, height: 7869, position: '52% 52%' },
+    { id: '07', name: 'student research', file: 'pa-work-student-research', width: 0, height: 0, position: '50% 50%' },
+    { id: '08', name: 'UX / product', file: 'pa-work-ux-research', width: 0, height: 0, position: '50% 50%' },
+    { id: '09', name: 'collaborative planning', file: 'pa-work-planning', width: 0, height: 0, position: '50% 50%' },
   ],
   careers: {
     ux: { file: 'pa-career-ux-wireframes', width: 4366, height: 2910, alt: 'Hands working through wireframes beside a laptop' },
     software: { file: 'pa-career-software-engineer', width: 7952, height: 5304, alt: 'Developer working at a computer in a software environment' },
+    data: { file: 'pa-career-data-analysis', width: 0, height: 0, alt: 'Data analysis work surface and dashboard context' },
+    engineering: { file: 'pa-career-electronics', width: 0, height: 0, alt: 'Electronics engineering inspection in a technical context' },
+    operations: { file: 'pa-career-workstation', width: 0, height: 0, alt: 'Focused workstation in an operations context' },
   },
 };
 

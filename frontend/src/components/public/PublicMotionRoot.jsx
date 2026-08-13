@@ -17,9 +17,9 @@ export default function PublicMotionRoot({ children }) {
 
   useLayoutEffect(() => {
     const finePointer = window.matchMedia('(pointer: fine)').matches;
-    const eligible = location.pathname === '/' && window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches && !reducedMotion;
+    const eligible = window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches && !reducedMotion;
     let smoother = null;
-    if (eligible) smoother = ScrollSmoother.create({ wrapper: '#smooth-wrapper', content: '#smooth-content', smooth: 0.45, effects: false, smoothTouch: false, normalizeScroll: false });
+    if (eligible) smoother = ScrollSmoother.create({ wrapper: '#smooth-wrapper', content: '#smooth-content', smooth: 0.76, effects: false, smoothTouch: false, normalizeScroll: false });
     setState({ motionReady: true, smoother, finePointer });
     document.fonts?.ready?.then(() => ScrollTrigger.refresh());
     return () => { smoother?.kill(); };

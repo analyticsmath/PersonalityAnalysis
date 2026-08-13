@@ -3,7 +3,6 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const publicRoot = path.resolve(import.meta.dirname, '..', 'public', 'media', 'personality');
-const contextDirectory = path.join(publicRoot, 'context');
 const provenancePath = path.join(publicRoot, 'media-provenance.json');
 
 const prohibitedContexts = [
@@ -19,14 +18,22 @@ const sources = [
   { id: 'pLybV75vkP4', stem: 'pa-context-student-01', creator: 'Hasnain Ayaz', roles: ['How It Works context-state media'], prohibitedContexts },
   { id: 'ZmDk8tXQRS0', stem: 'pa-context-engineer-01', creator: 'EnCata PD', roles: ['homepage contrasting technical context'], prohibitedContexts },
   { id: 'vaz_CQSvTMw', stem: 'pa-context-maker-01', creator: 'Stacey Zinoveva', roles: ['Progress context diversity', 'development supporting imagery'], prohibitedContexts },
+  { id: 'NASjMHJ9OhI', stem: 'pa-work-student-research', folder: 'work', creator: 'Unsplash contributor', roles: ['student research work world', 'Work Worlds crawler'], prohibitedContexts },
+  { id: 'w00FkE6e8zE', stem: 'pa-work-ux-research', folder: 'work', creator: 'Unsplash contributor', roles: ['UX and product work world', 'Work Worlds crawler'], prohibitedContexts },
+  { id: 'n7tKiugbzaM', stem: 'pa-work-planning', folder: 'work', creator: 'Unsplash contributor', roles: ['collaborative planning work world', 'Work Worlds crawler'], prohibitedContexts },
+  { id: 'qwtCeJ5cLYs', stem: 'pa-career-data-analysis', folder: 'careers', creator: 'Unsplash contributor', roles: ['data-analysis career world', 'Career Worlds gallery'], prohibitedContexts },
+  { id: 'lAbYmLWrT9o', stem: 'pa-career-electronics', folder: 'careers', creator: 'Unsplash contributor', roles: ['engineering career world', 'Career Worlds gallery'], prohibitedContexts },
+  { id: 'U-Werwf32CM', stem: 'pa-career-workstation', folder: 'careers', creator: 'Unsplash contributor', roles: ['software and operations career world', 'Career Worlds gallery'], prohibitedContexts },
 ].map((source) => ({ ...source, sourcePage: `https://unsplash.com/photos/${source.id}` }));
 
-await fs.mkdir(contextDirectory, { recursive: true });
 const existing = JSON.parse(await fs.readFile(provenancePath, 'utf8'));
 const nextEntries = [];
 
 for (const source of sources) {
-  const destination = path.join(contextDirectory, `${source.stem}.jpg`);
+  const folder = source.folder || 'context';
+  const destinationDirectory = path.join(publicRoot, folder);
+  await fs.mkdir(destinationDirectory, { recursive: true });
+  const destination = path.join(destinationDirectory, `${source.stem}.jpg`);
   const response = await fetch(`${source.sourcePage}/download?force=true`, { redirect: 'follow' });
   if (!response.ok) throw new Error(`Could not download ${source.id}: ${response.status} ${response.statusText}`);
   const type = response.headers.get('content-type') || '';
@@ -38,7 +45,7 @@ for (const source of sources) {
   if (!metadata.width || !metadata.height) throw new Error(`Could not read dimensions for ${source.id}`);
   nextEntries.push({
     id: source.id,
-    filename: `frontend/public/media/personality/context/${source.stem}.jpg`,
+    filename: `frontend/public/media/personality/${folder}/${source.stem}.jpg`,
     creator: source.creator,
     sourcePlatform: 'Unsplash',
     sourcePage: source.sourcePage,

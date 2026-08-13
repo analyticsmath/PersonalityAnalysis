@@ -1,0 +1,223 @@
+- generic [ref=f1e4]:
+  - link "Skip to content" [ref=f1e5] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=f1e6]:
+    - link "Personality Assessor" [ref=f1e7] [cursor=pointer]:
+      - /url: /
+    - navigation "Primary navigation" [ref=f1e8]:
+      - link "How it works" [ref=f1e9] [cursor=pointer]:
+        - /url: /how-it-works
+      - link "Career intelligence" [ref=f1e10] [cursor=pointer]:
+        - /url: /career-intelligence
+      - link "Progress" [ref=f1e11] [cursor=pointer]:
+        - /url: /progress
+      - link "Methodology" [ref=f1e12] [cursor=pointer]:
+        - /url: /methodology
+    - generic [ref=f1e13]:
+      - link "Sign in" [ref=f1e14] [cursor=pointer]:
+        - /url: /login
+      - link "Build my profile" [ref=f1e15] [cursor=pointer]:
+        - /url: /signup
+  - main [ref=f1e18]:
+    - region [ref=f1e19]:
+      - generic [ref=f1e20]:
+        - heading "Your work leaves clues." [level=1] [ref=f1e21]
+        - paragraph [ref=f1e22]: Personality Assessor turns real professional context into questions, a profile and career direction you can inspect.
+        - generic [ref=f1e23]:
+          - link "Build my profile" [ref=f1e24] [cursor=pointer]:
+            - /url: /signup
+          - link "See how it works" [ref=f1e25] [cursor=pointer]:
+            - /url: /how-it-works
+      - generic "Professional worlds, from study to technical work":
+        - generic:
+          - img "Documents and laptop on a professional work surface"
+        - generic:
+          - img "Study materials around a laptop"
+        - generic:
+          - img "Hands inspecting a circuit board"
+        - generic:
+          - generic: Context, not a label
+          - generic: Field + evidence shape what comes next.
+    - region [ref=f1e26]:
+      - generic [ref=f1e28]:
+        - generic [ref=f1e29]:
+          - heading "Work does not look the same everywhere." [level=2] [ref=f1e30]
+          - paragraph [ref=f1e31]: Begin with the world you are already in. The assessment has more useful places to look from there.
+          - generic [ref=f1e32]: digital creation
+        - generic [ref=f1e34]:
+          - figure "analysis / planning" [ref=f1e35]:
+            - img "analysis / planning professional work context" [ref=f1e37]
+          - figure "digital creation" [ref=f1e39]:
+            - img "digital creation professional work context" [ref=f1e41]
+          - figure "technical depth" [ref=f1e43]:
+            - img "technical depth professional work context" [ref=f1e45]
+          - figure "investigation / research" [ref=f1e47]:
+            - img "investigation / research professional work context" [ref=f1e49]
+          - figure "precision / testing" [ref=f1e51]:
+            - img "precision / testing professional work context" [ref=f1e53]
+          - figure "operational control" [ref=f1e55]:
+            - img "operational control professional work context" [ref=f1e57]
+          - figure "student research" [ref=f1e59]:
+            - img "student research professional work context" [ref=f1e61]
+          - figure "UX / product" [ref=f1e63]:
+            - img "UX / product professional work context" [ref=f1e65]
+          - figure "collaborative planning" [ref=f1e67]:
+            - img "collaborative planning professional work context" [ref=f1e69]
+    - region [ref=f1e71]:
+      - generic [ref=f1e72]:
+        - heading "From a working world to a relevant question." [level=2] [ref=f1e73]
+        - paragraph [ref=f1e74]: The same context remains visible while it becomes structured information, then a question with a reason for being asked.
+      - group "Choose a professional context" [ref=f1e75]:
+        - button "Student / research" [ref=f1e76]
+        - button "Software / systems" [pressed] [ref=f1e77]
+        - button "Engineering" [ref=f1e78]
+      - generic [ref=f1e79]:
+        - img "Documents and laptop on a professional work surface" [ref=f1e82]
+        - generic [ref=f1e83]:
+          - generic [ref=f1e84]:
+            - generic [ref=f1e85]:
+              - term [ref=f1e86]: Stage
+              - definition [ref=f1e87]: Graduate
+            - generic [ref=f1e88]:
+              - term [ref=f1e89]: Field
+              - definition [ref=f1e90]: Software / systems
+            - generic [ref=f1e91]:
+              - term [ref=f1e92]: Skills
+              - definition [ref=f1e93]: JavaScript · analysis · problem solving
+            - generic [ref=f1e94]:
+              - term [ref=f1e95]: Interests
+              - definition [ref=f1e96]: Learning · product building · technology
+          - paragraph [ref=f1e97]: Captured context becomes a focused starting point, rather than a generic form.
+        - generic [ref=f1e98]:
+          - generic [ref=f1e99]: Adapted to Software / systems
+          - heading "When a project changes direction, what do you do first?" [level=3] [ref=f1e100]
+          - button "Clarify the changed constraint, then test the revised path." [ref=f1e101]
+          - button "Gather input before choosing the next step." [ref=f1e102]
+    - region [ref=f1e103]:
+      - generic [ref=f1e104]:
+        - heading "One profile, four lenses." [level=2] [ref=f1e105]
+        - paragraph [ref=f1e106]: Personality, vocational interests, values and career signals are distinct readings of the same evolving record.
+      - tablist "Profile lenses" [ref=f1e107]:
+        - tab "Big Five / OCEAN" [selected] [ref=f1e108]
+        - tab "RIASEC" [ref=f1e109]
+        - tab "Work values" [ref=f1e110]
+        - tab "Career signals" [ref=f1e111]
+      - generic [ref=f1e113]:
+        - generic [ref=f1e114]:
+          - generic [ref=f1e115]: Openness
+          - generic [ref=f1e117]: "76"
+        - generic [ref=f1e118]:
+          - generic [ref=f1e119]: Conscientiousness
+          - generic [ref=f1e121]: "68"
+        - generic [ref=f1e122]:
+          - generic [ref=f1e123]: Extraversion
+          - generic [ref=f1e125]: "54"
+        - generic [ref=f1e126]:
+          - generic [ref=f1e127]: Agreeableness
+          - generic [ref=f1e129]: "63"
+        - generic [ref=f1e130]:
+          - generic [ref=f1e131]: Neuroticism
+          - generic [ref=f1e133]: "41"
+      - paragraph [ref=f1e134]: Big Five / OCEAN visualisation. Values are shown as labelled measures rather than as a diagnostic result.
+    - region [ref=f1e135]:
+      - generic [ref=f1e136]:
+        - heading "Career direction needs reasons." [level=2] [ref=f1e137]
+        - paragraph [ref=f1e138]: Explore curated work worlds, then read the relationship between a profile and the work—not a verdict about a person.
+      - generic [ref=f1e139]:
+        - button "Developer working at a computer in a software environment Software engineer" [ref=f1e140]:
+          - img "Developer working at a computer in a software environment" [ref=f1e142]
+          - generic [ref=f1e143]: Software engineer
+        - button "Hands working through wireframes beside a laptop UX designer" [ref=f1e144]:
+          - img "Hands working through wireframes beside a laptop" [ref=f1e146]
+          - generic [ref=f1e147]: UX designer
+        - button "Data analysis work surface and dashboard context Data analyst" [ref=f1e148]:
+          - img "Data analysis work surface and dashboard context" [ref=f1e150]
+          - generic [ref=f1e151]: Data analyst
+        - button "Electronics engineering inspection in a technical context Engineering" [ref=f1e152]:
+          - img "Electronics engineering inspection in a technical context" [ref=f1e154]
+          - generic [ref=f1e155]: Engineering
+        - button "Focused workstation in an operations context Operations" [ref=f1e156]:
+          - img "Focused workstation in an operations context" [ref=f1e158]
+          - generic [ref=f1e159]: Operations
+      - generic [ref=f1e160]:
+        - generic [ref=f1e161]:
+          - generic [ref=f1e162]: Current profile
+          - generic [ref=f1e163]:
+            - generic [ref=f1e164]:
+              - term [ref=f1e165]: Stage
+              - definition [ref=f1e166]: Graduate
+            - generic [ref=f1e167]:
+              - term [ref=f1e168]: Field
+              - definition [ref=f1e169]: Software / systems
+            - generic [ref=f1e170]:
+              - term [ref=f1e171]: Skills
+              - definition [ref=f1e172]: JavaScript · analysis · problem solving
+            - generic [ref=f1e173]:
+              - term [ref=f1e174]: Interests
+              - definition [ref=f1e175]: Learning · product building · technology
+        - generic [ref=f1e176]:
+          - generic [ref=f1e177]: Relationship to Software engineer
+          - heading "Systems thinking, technical depth and deliberate problem solving." [level=3] [ref=f1e178]
+        - generic [ref=f1e179]:
+          - generic [ref=f1e180]: What to develop
+          - paragraph [ref=f1e181]: Build a visible piece of work that gives this direction more evidence.
+    - region [ref=f1e182]:
+      - generic [ref=f1e183]:
+        - heading "A difference becomes useful work." [level=2] [ref=f1e184]
+        - paragraph [ref=f1e185]: "Development is not a static three-step plan. It is a return: observe what differs, do something deliberate, then bring new evidence back to the profile."
+        - link "See how progress works" [ref=f1e186] [cursor=pointer]:
+          - /url: /progress
+      - generic [ref=f1e187]:
+        - figure "Difference" [ref=f1e188]:
+          - img "Electronics workbench in use" [ref=f1e190]
+        - figure "Deliberate work" [ref=f1e192]:
+          - img "Professional work context" [ref=f1e194]
+        - figure "New evidence" [ref=f1e196]:
+          - img "Professional work context" [ref=f1e198]
+        - figure "Return" [ref=f1e200]:
+          - img "Professional work context" [ref=f1e202]
+    - region [ref=f1e204]:
+      - generic [ref=f1e205]:
+        - heading "Know what the system is doing" [level=2] [ref=f1e206]
+        - paragraph [ref=f1e207]: AI can help interpret professional context, adapt questions and support written explanations. Core assessment scores are calculated through structured scoring logic.
+      - generic [ref=f1e208]:
+        - blockquote [ref=f1e209]: A useful result should make its evidence and limits easier to understand.
+        - paragraph [ref=f1e210]: Personality Assessor is built for professional reflection and career exploration. It does not diagnose mental health, make hiring decisions or guarantee career success.
+        - paragraph [ref=f1e211]:
+          - link "Read the methodology" [ref=f1e212] [cursor=pointer]:
+            - /url: /methodology
+          - link "Trust & transparency" [ref=f1e213] [cursor=pointer]:
+            - /url: /trust
+    - region [ref=f1e214]:
+      - generic [ref=f1e215]:
+        - heading "Build a profile you can return to." [level=2] [ref=f1e216]
+        - paragraph [ref=f1e217]: Start with what you already know. Add context, complete the assessment and keep the record as your work changes.
+        - paragraph [ref=f1e218]:
+          - link "Build my profile" [ref=f1e219] [cursor=pointer]:
+            - /url: /signup
+          - link "Sign in" [ref=f1e220] [cursor=pointer]:
+            - /url: /login
+      - generic [ref=f1e221]:
+        - generic [ref=f1e222]:
+          - link "Personality Assessor" [ref=f1e223] [cursor=pointer]:
+            - /url: /
+          - paragraph [ref=f1e224]: Professional self-understanding and career intelligence built from context, assessment evidence and explainable comparison.
+        - navigation "Product" [ref=f1e225]:
+          - link "How it works" [ref=f1e226] [cursor=pointer]:
+            - /url: /how-it-works
+          - link "Career intelligence" [ref=f1e227] [cursor=pointer]:
+            - /url: /career-intelligence
+          - link "Progress" [ref=f1e228] [cursor=pointer]:
+            - /url: /progress
+          - link "Methodology" [ref=f1e229] [cursor=pointer]:
+            - /url: /methodology
+        - navigation "Trust" [ref=f1e230]:
+          - link "Trust & transparency" [ref=f1e231] [cursor=pointer]:
+            - /url: /trust
+          - link "Privacy" [ref=f1e232] [cursor=pointer]:
+            - /url: /privacy
+        - navigation "Account" [ref=f1e233]:
+          - link "Sign in" [ref=f1e234] [cursor=pointer]:
+            - /url: /login
+          - link "Build my profile" [ref=f1e235] [cursor=pointer]:
+            - /url: /signup

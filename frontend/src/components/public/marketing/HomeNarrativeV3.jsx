@@ -9,89 +9,56 @@ import { marketingDemo, publicMedia } from './publicContent';
 
 gsap.registerPlugin(Flip, ScrollTrigger);
 
-const rawLines = [
-  'BSc Computer Science — final semester',
-  'Built web applications with JavaScript and React',
-  'Worked through debugging, analysis and project delivery',
-  'Interested in learning, product building and technology',
+const fields = [['Stage', 'Graduate'], ['Field', 'Software / systems'], ['Skills', 'JavaScript · analysis · problem solving'], ['Interests', 'Learning · product building · technology']];
+const contexts = [
+  { key: 'student', title: 'Student / research', media: publicMedia.context.student, question: 'When a research path produces a result you did not expect, what do you do next?', choices: ['Trace the evidence and revise the question.', 'Ask for a second perspective before deciding.'] },
+  { key: 'software', title: 'Software / systems', media: publicMedia.context.professional, question: 'When a project changes direction, what do you do first?', choices: ['Clarify the changed constraint, then test the revised path.', 'Gather input before choosing the next step.'] },
+  { key: 'engineering', title: 'Engineering', media: publicMedia.context.engineer, question: 'When a test reveals a fault, what do you reach for first?', choices: ['Inspect the system until the failure is understood.', 'Compare the result with the operating conditions.'] },
 ];
-const structuredRows = [
-  ['Stage', 'Graduate'], ['Field', 'Software / systems'], ['Skills', 'JavaScript · Problem solving · Analysis'], ['Interests', 'Learning · Product building · Technology'],
-];
-const lensRows = { ocean: marketingDemo.profile.bigFive, riasec: marketingDemo.profile.riasec, values: marketingDemo.profile.values, signals: marketingDemo.profile.signals };
-const lensText = { ocean: 'Big Five / OCEAN', riasec: 'RIASEC', values: 'Work values', signals: 'Career signals' };
+const lensNames = { ocean: 'Big Five / OCEAN', riasec: 'RIASEC', values: 'Work values', signals: 'Career signals' };
 
-function ContextTrace({ compact = false }) {
-  return <div className={`pv-context-trace ${compact ? 'is-compact' : ''}`} aria-label="Product demonstration context">
-    <div className="pv-context-trace__raw">{rawLines.map((line) => <p key={line}>{line}</p>)}</div>
-    <dl className="pv-context-trace__structured">{structuredRows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-  </div>;
-}
+function DataFields({ compact = false }) { return <dl className={`pv-fields ${compact ? 'is-compact' : ''}`}>{fields.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>; }
 
-function HeroV3() {
-  return <section className="pv-hero" data-header-tone="light" aria-labelledby="public-title">
-    <h1 id="public-title">Your work leaves clues.</h1>
-    <div className="pv-hero__field">
-      <ResponsiveImage className="pv-hero__image" media={publicMedia.context.professional} folder="context" alt={publicMedia.context.professional.alt} priority sizes="(min-width: 1280px) 68vw, 100vw" />
-      <dl className="pv-hero__output">{structuredRows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-    </div>
-    <div className="pv-hero__support"><p>Add your CV or enter your background, then answer questions shaped around your field. Personality Assessor connects professional context with Big Five, RIASEC, work values and career signals so you can inspect personality and career direction without reducing yourself to one label.</p><div><Link className="pa-button pa-button--primary" to="/signup">Build my profile</Link><Link className="pa-button" to="/how-it-works">See how it works</Link></div></div>
-  </section>;
-}
+function Hero() { return <section className="pv-hero" data-header-tone="light" aria-labelledby="public-title">
+  <div className="pv-hero__copy"><h1 id="public-title">Your work leaves clues.</h1><p>Personality Assessor turns real professional context into questions, a profile and career direction you can inspect.</p><div><Link className="pa-button pa-button--primary" to="/signup">Build my profile</Link><Link className="pa-button" to="/how-it-works">See how it works</Link></div></div>
+  <div className="pv-hero__collage" aria-label="Professional worlds, from study to technical work">
+    <ResponsiveImage className="pv-hero__main" media={publicMedia.context.professional} folder="context" alt="Documents and laptop on a professional work surface" priority sizes="(min-width: 1000px) 53vw, 92vw" />
+    <ResponsiveImage className="pv-hero__tall" media={publicMedia.context.student} folder="context" alt="Study materials around a laptop" sizes="(min-width: 1000px) 19vw, 34vw" />
+    <ResponsiveImage className="pv-hero__edge" media={publicMedia.work[2]} alt="Hands inspecting a circuit board" sizes="(min-width: 1000px) 18vw, 32vw" />
+    <div className="pv-hero__note"><span>Context, not a label</span><b>Field + evidence shape what comes next.</b></div>
+  </div>
+</section>; }
 
-function ContextQuestionStage() {
-  const [answer, setAnswer] = useState('');
-  const choices = ['Clarify the changed constraint, then test the revised path.', 'Gather input before choosing the next step.'];
-  return <section className="pv-context-stage" aria-labelledby="context-title"><div className="pv-context-stage__pin">
-    <div className="pv-context-stage__copy"><h2 id="context-title">The questions should change when the context changes.</h2><p>A student, recent graduate and working professional should not begin from the same assumptions. Field, skills, subjects and interests help shape what the assessment asks next.</p></div>
-    <div className="pv-context-stage__media"><ResponsiveImage media={publicMedia.context.professional} folder="context" alt={publicMedia.context.professional.alt} sizes="(min-width: 1024px) 44vw, 100vw" /><ResponsiveImage media={publicMedia.context.engineer} folder="context" alt={publicMedia.context.engineer.alt} sizes="(min-width: 1024px) 44vw, 100vw" /></div>
-    <ContextTrace />
-    <div className="pv-question"><p>When a project changes direction, what do you do first?</p>{choices.map((choice) => <button key={choice} type="button" className={answer === choice ? 'is-selected' : ''} aria-pressed={answer === choice} onClick={() => setAnswer(choice)}>{choice}</button>)}</div>
-  </div></section>;
-}
-
-function ProfileLenses() {
-  const [lens, setLens] = useState('ocean');
-  const fieldRef = useRef(null);
-  const chooseLens = (next) => {
-    if (next === lens) return;
-    const state = Flip.getState(fieldRef.current?.children || []);
-    setLens(next);
-    window.requestAnimationFrame(() => Flip.from(state, { duration: 0.32, ease: 'power2.inOut', absolute: true }));
-  };
-  return <section className="pv-lenses" aria-labelledby="lenses-title"><div className="pv-lenses__intro"><h2 id="lenses-title">One profile, four lenses.</h2><p>Big Five, RIASEC, work values and career signals stay separate so one score never has to explain everything.</p></div><div className="pv-lenses__controls" role="group" aria-label="Profile lenses">{Object.keys(lensRows).map((key) => <button key={key} type="button" className={lens === key ? 'is-active' : ''} aria-pressed={lens === key} onClick={() => chooseLens(key)}>{lensText[key]}</button>)}</div><div className="pv-lenses__rows" ref={fieldRef} aria-live="polite">{lensRows[lens].map(([label, value]) => <div key={label}><span>{label}</span><i><b style={{ width: `${value}%` }} /></i><strong>{value}</strong></div>)}</div><p className="sr-only">{lensText[lens]} demonstration values are shown in the preceding rows.</p></section>;
-}
-
-function CareerRelationship() {
-  const [career, setCareer] = useState(marketingDemo.careers[0]);
-  const relations = [['Problem solving', 'Visible in current evidence', career.why], ['Development focus', 'More evidence to build', career.gap], ['Career relationship', career.fit, 'Guidance for exploration, not a hiring recommendation.']];
-  return <section className="pv-career" data-header-tone="dark" aria-labelledby="career-title"><div className="pv-career__intro"><h2 id="career-title">Career direction needs reasons.</h2><p>Compare the current profile with curated career models, then inspect where the relationship is strong, what differs and what could be developed next.</p></div><div className="pv-career__selectors" role="group" aria-label="Demonstration careers">{marketingDemo.careers.map((item) => <button key={item.name} type="button" className={item.name === career.name ? 'is-active' : ''} aria-pressed={item.name === career.name} onClick={() => setCareer(item)}>{item.name}</button>)}</div><div className="pv-career__surface"><div><span>Current profile</span><ContextTrace compact /></div><div><span>Career model</span><h3>{career.name}</h3><p>{career.fit}</p></div><div><span>Relationship</span><p>Compare across several dimensions, with reasons kept visible.</p></div></div><div className="pv-career__relations">{relations.map(([label, current, relation]) => <article key={label}><h3>{label}</h3><p><b>{current}</b>{relation}</p></article>)}</div></section>;
-}
-
-function DevelopmentScene() {
-  return <section className="pv-development" aria-labelledby="development-title"><div><h2 id="development-title">A difference is useful when it changes what you do next.</h2><p>Development gaps can become deliberate work, then return as new evidence in a later assessment.</p></div><div className="pv-development__actions">{marketingDemo.roadmap.map(([title, body]) => <article key={title}><h3>{title}</h3><p>{body}</p></article>)}<ResponsiveImage media={publicMedia.context.maker} folder="context" alt={publicMedia.context.maker.alt} sizes="(min-width: 1024px) 28vw, 80vw" /></div><Link to="/progress">See how progress works</Link></section>;
-}
-
-export default function HomeNarrativeV3() {
-  const root = useRef(null);
-  const { motionReady, reducedMotion } = usePublicMotion();
+function WorkWorlds() {
+  const root = useRef(null); const rail = useRef(null); const [active, setActive] = useState(1); const { motionReady, reducedMotion } = usePublicMotion();
   useLayoutEffect(() => {
     if (!motionReady || reducedMotion) return undefined;
-    const context = gsap.context(() => {
-      const media = gsap.matchMedia();
-      media.add('(min-width: 1024px) and (pointer: fine)', () => {
-        const hero = root.current.querySelector('.pv-hero');
-        const stage = root.current.querySelector('.pv-context-stage');
-        const pin = stage.querySelector('.pv-context-stage__pin');
-        const timeline = gsap.timeline({ scrollTrigger: { trigger: stage, start: 'top top', end: () => `+=${window.innerHeight * 1.8}`, pin, pinSpacing: true, scrub: 0.35, anticipatePin: 1, invalidateOnRefresh: true } });
-        timeline.to(stage.querySelector('.pv-context-stage__copy'), { autoAlpha: 0.55, y: -28, duration: 0.22 }, 0.16).to(stage.querySelector('.pv-context-trace__raw'), { autoAlpha: 0, y: -24, duration: 0.22 }, 0.18).fromTo(stage.querySelector('.pv-context-trace__structured'), { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.26 }, 0.26).to(stage.querySelector('.pv-context-stage__media picture:first-child'), { xPercent: -12, autoAlpha: 0, duration: 0.16 }, 0.30).fromTo(stage.querySelector('.pv-context-stage__media picture:last-child'), { xPercent: 12, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1, duration: 0.16 }, 0.30).to(stage.querySelector('.pv-context-trace__structured'), { autoAlpha: 0, y: -18, duration: 0.18 }, 0.50).to(stage.querySelector('.pv-context-stage__copy'), { autoAlpha: 0, duration: 0.14 }, 0.52).fromTo(stage.querySelector('.pv-question'), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.24 }, 0.58);
-        gsap.to(hero.querySelector('h1'), { y: '-6vh', autoAlpha: 0.2, ease: 'none', scrollTrigger: { trigger: hero, start: '58% top', end: 'bottom top', scrub: 0.35 } });
-        gsap.to(hero.querySelector('.pv-hero__support'), { autoAlpha: 0, y: -16, ease: 'none', scrollTrigger: { trigger: hero, start: '58% top', end: 'bottom top', scrub: 0.25 } });
-        return () => timeline.kill();
-      });
-      return () => media.revert();
-    }, root);
-    return () => context.revert();
+    const media = gsap.matchMedia();
+    media.add('(min-width: 1024px) and (pointer: fine)', () => {
+      const track = rail.current; const travel = () => Math.max(0, track.scrollWidth - window.innerWidth + 96);
+      return gsap.to(track, { x: () => -travel(), ease: 'none', scrollTrigger: { trigger: root.current, start: 'top top', end: () => `+=${Math.max(900, travel() * 0.72)}`, scrub: 0.35, pin: root.current.querySelector('.pv-worlds__pin'), invalidateOnRefresh: true, onUpdate: self => setActive(Math.min(publicMedia.work.length - 1, Math.max(0, Math.round(self.progress * (publicMedia.work.length - 1)))))} });
+    });
+    return () => media.revert();
   }, [motionReady, reducedMotion]);
-  return <div ref={root}><HeroV3 /><ContextQuestionStage /><ProfileLenses /><CareerRelationship /><DevelopmentScene /></div>;
+  const move = (direction) => rail.current?.scrollBy({ left: direction * Math.min(rail.current.clientWidth * .75, 540), behavior: 'smooth' });
+  return <section ref={root} className="pv-worlds" aria-labelledby="worlds-title"><div className="pv-worlds__pin"><div className="pv-worlds__head"><h2 id="worlds-title">Work does not look the same everywhere.</h2><p>Begin with the world you are already in. The assessment has more useful places to look from there.</p><span aria-live="polite">{publicMedia.work[active]?.name}</span></div><div className="pv-worlds__viewport"><div className="pv-worlds__rail" ref={rail}>{publicMedia.work.map((item, index) => <figure className={`pv-world ${index === active ? 'is-active' : ''}`} key={item.id}><ResponsiveImage media={item} alt={`${item.name} professional work context`} sizes="(min-width: 1024px) 29vw, 76vw" /><figcaption>{item.name}</figcaption></figure>)}</div></div><div className="pv-worlds__controls"><button type="button" onClick={() => move(-1)} aria-label="Previous work world">Previous</button><button type="button" onClick={() => move(1)} aria-label="Next work world">Next</button></div></div></section>;
 }
+
+function ContextTransformation() { const [context, setContext] = useState(contexts[1]); const [answer, setAnswer] = useState(''); const actor = useRef(null); const choose = (next) => { const state = Flip.getState(actor.current); setContext(next); requestAnimationFrame(() => Flip.from(state, { duration: .45, ease: 'power2.inOut', absolute: true })); };
+ return <section className="pv-transform" aria-labelledby="transform-title"><div className="pv-transform__intro"><h2 id="transform-title">From a working world to a relevant question.</h2><p>The same context remains visible while it becomes structured information, then a question with a reason for being asked.</p></div><div className="pv-transform__switch" role="group" aria-label="Choose a professional context">{contexts.map(item => <button type="button" className={item.key === context.key ? 'is-active' : ''} aria-pressed={item.key === context.key} onClick={() => choose(item)} key={item.key}>{item.title}</button>)}</div><div className="pv-transform__stage"><div className="pv-transform__photo" ref={actor}><ResponsiveImage media={context.media} folder="context" alt={context.media.alt} sizes="(min-width: 1024px) 46vw, 100vw" /></div><div className="pv-transform__evidence"><DataFields /><p>Captured context becomes a focused starting point, rather than a generic form.</p></div><div className="pv-question"><small>Adapted to {context.title}</small><h3>{context.question}</h3>{context.choices.map(choice => <button type="button" key={choice} className={answer === choice ? 'is-selected' : ''} aria-pressed={answer === choice} onClick={() => setAnswer(choice)}>{choice}</button>)}</div></div></section>; }
+
+function LensVisual({ lens }) { const data = lens === 'ocean' ? marketingDemo.profile.bigFive : lens === 'riasec' ? [['R', 56], ['I', 78], ['A', 70], ['S', 51], ['E', 57], ['C', 62]] : lens === 'values' ? marketingDemo.profile.values : marketingDemo.profile.signals;
+ if (lens === 'ocean') return <div className="pv-lens-forms">{data.map(([label, value]) => <div key={label} style={{ '--mass': `${value}%` }}><b>{label}</b><i /><span>{value}</span></div>)}</div>;
+ if (lens === 'riasec') return <div className="pv-lens-radial">{data.map(([label, value], i) => <div key={label} style={{ '--i': i, '--mass': `${value / 100}` }}><b>{label}</b><span>{value}</span></div>)}</div>;
+ return <div className={`pv-lens-words pv-lens-words--${lens}`}>{data.map(([label, value], i) => <div key={label} style={{ '--i': i, '--mass': value }}><b>{label}</b><span>{value}</span></div>)}</div>;
+}
+
+function ProfileLenses() { const [lens, setLens] = useState('ocean'); const field = useRef(null); const choose = next => { if (next === lens) return; const state = Flip.getState(field.current.children); setLens(next); requestAnimationFrame(() => Flip.from(state, { duration: .42, ease: 'power2.inOut', absolute: true })); };
+ return <section className="pv-lenses" aria-labelledby="lenses-title"><div><h2 id="lenses-title">One profile, four lenses.</h2><p>Personality, vocational interests, values and career signals are distinct readings of the same evolving record.</p></div><div className="pv-lenses__tabs" role="tablist" aria-label="Profile lenses">{Object.entries(lensNames).map(([key, label]) => <button key={key} role="tab" aria-selected={lens === key} className={lens === key ? 'is-active' : ''} onClick={() => choose(key)}>{label}</button>)}</div><div className="pv-lens-canvas" ref={field}><LensVisual lens={lens} /></div><p className="sr-only">{lensNames[lens]} visualisation. Values are shown as labelled measures rather than as a diagnostic result.</p></section>; }
+
+function CareerWorlds() { const items = [{ name: 'Software engineer', media: publicMedia.careers.software, folder: 'careers', reason: 'Systems thinking, technical depth and deliberate problem solving.' }, { name: 'UX designer', media: publicMedia.careers.ux, folder: 'careers', reason: 'Research curiosity, synthesis and human-centred experimentation.' }, { name: 'Data analyst', media: publicMedia.careers.data, folder: 'careers', reason: 'Structured inquiry, evidence and patterns that need explanation.' }, { name: 'Engineering', media: publicMedia.careers.engineering, folder: 'careers', reason: 'Precision, hands-on reasoning and complex systems.' }, { name: 'Operations', media: publicMedia.careers.operations, folder: 'careers', reason: 'Attention, priorities and sound decisions in active systems.' }]; const [active, setActive] = useState(0); const rail = useRef(null); const item = items[active];
+ return <section className="pv-career-worlds" data-header-tone="dark" aria-labelledby="career-title"><div className="pv-career-worlds__intro"><h2 id="career-title">Career direction needs reasons.</h2><p>Explore curated work worlds, then read the relationship between a profile and the work—not a verdict about a person.</p></div><div className="pv-career-gallery" ref={rail}>{items.map((entry, index) => <button key={entry.name} type="button" className={active === index ? 'is-active' : ''} onClick={() => { setActive(index); rail.current?.children[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); }}><ResponsiveImage media={entry.media} folder={entry.folder} alt={entry.media.alt} sizes="(min-width: 1024px) 36vw, 84vw" /><span>{entry.name}</span></button>)}</div><div className="pv-career-relationship"><div><span>Current profile</span><DataFields compact /></div><div><span>Relationship to {item.name}</span><h3>{item.reason}</h3></div><div><span>What to develop</span><p>Build a visible piece of work that gives this direction more evidence.</p></div></div></section>; }
+
+function Development() { const strip = [publicMedia.context.maker, publicMedia.work[0], publicMedia.work[3], publicMedia.context.professional]; return <section className="pv-development" aria-labelledby="development-title"><div className="pv-development__heading"><h2 id="development-title">A difference becomes useful work.</h2><p>Development is not a static three-step plan. It is a return: observe what differs, do something deliberate, then bring new evidence back to the profile.</p><Link className="pa-button" to="/progress">See how progress works</Link></div><div className="pv-filmstrip">{strip.map((media, index) => <figure key={media.file}><ResponsiveImage media={media} folder={media.file.includes('context') ? 'context' : 'work'} alt={index === 0 ? 'Electronics workbench in use' : 'Professional work context'} sizes="(min-width: 1024px) 26vw, 68vw" /><figcaption>{['Difference', 'Deliberate work', 'New evidence', 'Return'][index]}</figcaption></figure>)}</div></section>; }
+
+export default function HomeNarrativeV3() { return <><Hero /><WorkWorlds /><ContextTransformation /><ProfileLenses /><CareerWorlds /><Development /></>; }
