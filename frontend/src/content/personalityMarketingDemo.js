@@ -1,58 +1,60 @@
 export const marketingDemo = {
-  label: 'Product demonstration',
   profile: {
-    bigFive: [
-      ['Openness', 76], ['Conscientiousness', 68], ['Extraversion', 54], ['Agreeableness', 63], ['Neuroticism', 41],
-    ],
-    riasec: [['Investigative', 78], ['Artistic', 70], ['Enterprising', 57]],
-    values: [['Growth', 82], ['Independence', 74], ['Intrinsic', 71]],
-    signals: [['Problem solving', 80], ['Learning orientation', 76], ['Technical depth', 67], ['Leadership', 55]],
+    bigFive: [['Openness', 76], ['Conscientiousness', 68], ['Extraversion', 54], ['Agreeableness', 63], ['Emotional steadiness', 71]],
+    riasec: [['Realistic', 56], ['Investigative', 78], ['Artistic', 70], ['Social', 51], ['Enterprising', 57], ['Conventional', 62]],
+    values: [['Autonomy', 82], ['Mastery', 76], ['Purpose', 68], ['Collaboration', 59]],
+    signals: [['Technical Depth', 74], ['Learning Orientation', 81], ['Leadership', 52], ['Problem Solving', 79]],
   },
-  careers: [
-    { name: 'Software Engineer', fit: 'Strong alignment', why: 'Technical depth, problem solving and learning orientation are close to this curated model.', gap: 'Build more evidence of production delivery.' },
-    { name: 'UX Designer', fit: 'Adjacent direction', why: 'Investigative and artistic interests support exploratory design work.', gap: 'Strengthen portfolio evidence and user-research practice.' },
-    { name: 'Data Analyst', fit: 'Strong alignment', why: 'Structured inquiry and evidence-led problem solving are visible.', gap: 'Develop applied analysis projects.' },
-    { name: 'Product Manager', fit: 'Worth exploring', why: 'Systems thinking and learning orientation support cross-functional work.', gap: 'Practice prioritisation and stakeholder communication.' },
-    { name: 'Cybersecurity Analyst', fit: 'Worth exploring', why: 'Investigation and precision are relevant to the work.', gap: 'Add security-domain foundations.' },
-  ],
-  roadmap: [
-    ['Evidence gap', 'Applied research practice'],
-    ['Deliberate work', 'Complete one observed research cycle'],
-    ['Carry forward', 'Record the outcome in your next assessment'],
-  ],
-  history: [42, 56, 51, 69],
 };
+
+const media = (file, folder, alt, position = '50% 50%') => ({ file, folder, alt, position });
 
 export const publicMedia = {
-  context: {
-    professional: { id: 'Vvn0OD0IxBM', file: 'pa-context-pro-01', width: 3840, height: 2160, position: '48% 56%', alt: 'Documents and laptop on a professional work surface' },
-    student: { id: 'pLybV75vkP4', file: 'pa-context-student-01', width: 4000, height: 6000, position: '52% 50%', alt: 'Laptop and learning materials in a study context' },
-    engineer: { id: 'ZmDk8tXQRS0', file: 'pa-context-engineer-01', width: 6000, height: 3376, position: '50% 50%', alt: 'Circuit-board design visible in a technical work context' },
-    maker: { id: 'vaz_CQSvTMw', file: 'pa-context-maker-01', width: 4951, height: 3354, position: '50% 52%', alt: 'Electronics workbench in active use' },
-  },
-  work: [
-    { id: '01', name: 'analysis / planning', file: 'pa-work-01-analysis-plans', width: 5304, height: 7952, position: '48% 47%' },
-    { id: '02', name: 'digital creation', file: 'pa-work-02-software-overhead', width: 7890, height: 5263, position: '50% 52%' },
-    { id: '03', name: 'technical depth', file: 'pa-work-03-hardware-circuit', width: 7952, height: 5304, position: '57% 48%' },
-    { id: '04', name: 'investigation / research', file: 'pa-work-04-research-material', width: 5304, height: 7952, position: '52% 52%' },
-    { id: '05', name: 'precision / testing', file: 'pa-work-05-precision-test', width: 5472, height: 3648, position: '53% 48%' },
-    { id: '06', name: 'operational control', file: 'pa-work-06-control-studio', width: 5249, height: 7869, position: '52% 52%' },
-    { id: '07', name: 'student research', file: 'pa-work-student-research', width: 0, height: 0, position: '50% 50%' },
-    { id: '08', name: 'UX / product', file: 'pa-work-ux-research', width: 0, height: 0, position: '50% 50%' },
-    { id: '09', name: 'collaborative planning', file: 'pa-work-planning', width: 0, height: 0, position: '50% 50%' },
+  hero: [
+    media('hero-h1', 'hero', 'Professional working at a computer in an office environment', '58% 52%'),
+    media('hero-h2', 'hero', 'Professional working on an architectural model at a desk'),
+    media('hero-h3', 'hero', 'Designer sketching with a laptop and tools'),
+    media('hero-h4', 'hero', 'Scientists working at computers in a laboratory'),
+    media('hero-h5', 'hero', 'Hands repairing an electronic device with a soldering iron'),
   ],
-  careers: {
-    ux: { file: 'pa-career-ux-wireframes', width: 4366, height: 2910, alt: 'Hands working through wireframes beside a laptop' },
-    software: { file: 'pa-career-software-engineer', width: 7952, height: 5304, alt: 'Developer working at a computer in a software environment' },
-    data: { file: 'pa-career-data-analysis', width: 0, height: 0, alt: 'Data analysis work surface and dashboard context' },
-    engineering: { file: 'pa-career-electronics', width: 0, height: 0, alt: 'Electronics engineering inspection in a technical context' },
-    operations: { file: 'pa-career-workstation', width: 0, height: 0, alt: 'Focused workstation in an operations context' },
+  worlds: [
+    media('world-w1', 'worlds', 'Colleagues working together in a software office'),
+    media('world-w2', 'worlds', 'Developer working across multiple computer monitors'),
+    media('world-w3', 'worlds', 'Person sketching an idea on paper'),
+    media('world-w4', 'worlds', 'Architect examining a wooden model'),
+    media('world-w5', 'worlds', 'Hand holding a complex electronic circuit board'),
+    media('world-w6', 'worlds', 'Professional presenting data to colleagues'),
+    media('world-w7', 'worlds', 'Control room with monitors and chairs'),
+    media('world-w8', 'worlds', 'Person studying in a modern learning environment'),
+    media('world-w9', 'worlds', 'Professional working at a large workshop table'),
+    media('world-w10', 'worlds', 'Late-night technical environment filled with monitors'),
+  ],
+  careers: [
+    media('career-c1', 'careers', 'Software professional working at a computer'),
+    media('career-c2', 'careers', 'Designer working through wireframes at a desk'),
+    media('career-c3', 'careers', 'Professional reviewing documents at a desk'),
+    media('career-c4', 'careers', 'Professional prioritising work at a whiteboard'),
+    media('career-c5', 'careers', 'Engineer operating factory equipment'),
+    media('career-c6', 'careers', 'Laboratory team looking at a computer screen'),
+    media('career-c7', 'careers', 'Operations control room with monitors'),
+    media('career-c8', 'careers', 'Creative professional working in a studio'),
+  ],
+  progress: [
+    media('progress-p1', 'progress', 'Quiet empty workspace beside a window'),
+    media('progress-p2', 'progress', 'Prototype being made with a 3D printer'),
+    media('progress-p3', 'progress', 'Precision work in a workshop'),
+    media('progress-p4', 'progress', 'Team reviewing project evidence on a desk'),
+    media('progress-p5', 'progress', 'Team collaborating around a whiteboard'),
+    media('progress-p6', 'progress', 'People working in a professional computer environment'),
+  ],
+  howItWorks: [
+    media('hiw-1', 'how-it-works', 'Research library with a person working'),
+    media('hiw-2', 'how-it-works', 'Professional reviewing charts at a desk'),
+    media('hiw-3', 'how-it-works', 'Laptop used as design evidence'),
+    media('hiw-4', 'how-it-works', 'Advanced scientific equipment in a laboratory'),
+  ],
+  auth: {
+    login: media('auth-login', 'auth', 'Person working quietly at a desk'),
+    signup: media('auth-signup', 'auth', 'Colleagues collaborating around a conference table'),
   },
-};
-
-export const methodology = {
-  bigFive: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
-  riasec: ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'],
-  values: ['Intrinsic', 'Extrinsic', 'Lifestyle', 'Relationships', 'Prestige', 'Independence', 'Security', 'Growth'],
-  signals: ['Technical Depth', 'Learning Orientation', 'Leadership', 'Problem Solving'],
 };

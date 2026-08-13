@@ -28,7 +28,7 @@ export default function PublicMetadata() {
     setMeta('meta[property="og:description"]', 'property=og:description', description);
     setMeta('meta[property="og:type"]', 'property=og:type', 'website');
     setMeta('meta[property="og:url"]', 'property=og:url', url);
-    setMeta('meta[property="og:image"]', 'property=og:image', `${origin}/media/personality/generated/personality-assessor-og.jpg`);
+    setMeta('meta[property="og:image"]', 'property=og:image', `${origin}/media/personality-v2/ui/personality-assessor-og.jpg`);
     const canonical = document.head.querySelector('link[rel="canonical"]');
     const canonicalNode = canonical || document.createElement('link');
     if (!canonical) { canonicalNode.rel = 'canonical'; document.head.append(canonicalNode); }

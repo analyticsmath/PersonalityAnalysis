@@ -4,46 +4,46 @@ import { describe, expect, it } from 'vitest';
 const read = (relativePath) => readFileSync(new URL(relativePath, import.meta.url), 'utf8');
 const app = read('../App.js');
 const home = read('./PublicHomePage.jsx');
-const homeNarrative = read('../components/public/marketing/HomeNarrativeV3.jsx');
-const publicChrome = read('../components/public/PublicChrome.jsx');
-const motionRoot = read('../components/public/PublicMotionRoot.jsx');
-const publicCss = read('./PublicSite.css');
+const narrative = read('../components/public/marketing/HomeNarrativeV3.jsx');
+const chrome = read('../components/public/PublicChrome.jsx');
+const motion = read('../components/public/PublicMotionRoot.jsx');
 const homeCss = read('./PublicHomePage.css');
+const siteCss = read('./PublicSite.css');
+const content = read('../content/personalityMarketingDemo.js');
 
-describe('Pass 3 public surface contracts', () => {
-  it('keeps every public marketing route registered', () => {
+describe('Public rebuild visual contract', () => {
+  it('keeps every required public route registered', () => {
     ['/', '/how-it-works', '/career-intelligence', '/progress', '/methodology', '/trust', '/privacy'].forEach((route) => expect(app).toContain(`path="${route}"`));
   });
-
-  it('retires the rejected public font, identity colors, and context architecture', () => {
-    const publicSources = `${publicCss}\n${homeCss}\n${homeNarrative}`;
-    expect(publicSources).not.toMatch(/Source Serif|Source Sans|#F0E84A|pa2-|290svh/i);
+  it('uses the exact home copy and no rejected headline treatment', () => {
+    expect(narrative).toContain('Your work leaves clues.');
+    expect(narrative).toContain('Start with the work you already do. Personality Assessor uses professional context');
+    expect(narrative).toContain('Work changes what matters.');
+    expect(narrative).toContain('One profile. Four ways to read it.');
+    expect(narrative).not.toMatch(/eyebrow|REAL CONTEXT|faded|highlighted/i);
   });
-
-  it('keeps CTA foreground explicit and uses eager priority only through the responsive image contract', () => {
-    expect(publicCss).toContain('.pa-public .pa-button--primary{color:#fff}');
-    expect(publicChrome).toContain("loading={priority ? 'eager' : 'lazy'}");
-    expect(homeNarrative).toContain('priority sizes="(min-width: 1280px) 68vw, 100vw"');
+  it('registers the v2 media system with all required source families', () => {
+    expect(content).toContain('hero-h1');
+    expect(content).toContain('world-w10');
+    expect(content).toContain('career-c8');
+    expect(content).toContain('progress-p6');
+    expect(content).toContain('auth-signup');
+    expect(chrome).toContain('/media/personality-v2/');
   });
-
-  it('preserves accessible interactive states and mobile menu Escape restoration', () => {
-    expect(homeNarrative).toContain('aria-pressed={lens === key}');
-    expect(homeNarrative).toContain('aria-pressed={item.name === career.name}');
-    expect(publicChrome).toContain("event.key === 'Escape'");
-    expect(publicChrome).toContain('toggle.current?.focus()');
+  it('retired the rejected public selectors and image IDs from active source', () => {
+    const source = `${narrative}\n${home}\n${homeCss}\n${siteCss}`;
+    expect(source).not.toMatch(/pv-hero|pv-worlds|pv-transform|pv-lenses|\bpi-|pa-closing|pa-home-trust|pa-context-pro-01|pa-work-01-analysis-plans/i);
   });
-
-  it('limits ScrollSmoother to the desktop fine-pointer homepage and avoids global trigger cleanup', () => {
-    expect(motionRoot).toContain("location.pathname === '/'");
-    expect(motionRoot).toContain("(min-width: 1024px) and (pointer: fine)");
-    expect(motionRoot).toContain('!reducedMotion');
-    expect(motionRoot).not.toContain('ScrollTrigger.getAll()');
+  it('keeps public motion scoped and reduced-motion safe', () => {
+    expect(motion).toContain('gsap.context(');
+    expect(motion).toContain('smooth: 0.85');
+    expect(motion).toContain('if (reducedMotion)');
+    expect(motion).not.toContain('ScrollTrigger.getAll()');
   });
-
-  it('uses one ContextTrace actor and an opaque pinned stage for the controlled handoff', () => {
-    expect(homeNarrative).toContain('function ContextTrace');
-    expect(homeNarrative).not.toContain('EvidencePieces');
-    expect(homeCss).toContain('.pv-context-stage__pin{z-index:2;background:var(--pa-white)}');
-    expect(home).toContain('footerMode="integrated"');
+  it('keeps accessible controls and mobile menu Escape restoration', () => {
+    expect(narrative).toContain('aria-pressed={answered === answer}');
+    expect(narrative).toContain('aria-selected={tab === key}');
+    expect(chrome).toContain("event.key === 'Escape'");
+    expect(chrome).toContain('toggle.current?.focus()');
   });
 });
