@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const metadata = {
-  '/': ['Personality Assessor — Career Intelligence Built from Evidence', 'Career intelligence built from professional context, adaptive assessment and explainable career alignment.'],
-  '/how-it-works': ['How Personality Assessor Works', 'See how professional context, adaptive evidence and a structured profile shape career exploration.'],
-  '/career-intelligence': ['Career Intelligence — Personality Assessor', 'Explore explainable career alignment, curated profiles, development gaps and roadmaps.'],
-  '/progress': ['Track Career Development — Personality Assessor', 'Track assessment history, roadmaps and career development over time.'],
-  '/methodology': ['Assessment Methodology — Personality Assessor', 'Learn what Personality Assessor measures, how confidence and matching work, and their limits.'],
-  '/trust': ['Trust & Transparency — Personality Assessor', 'Understand product boundaries, AI use, confidence and career-match interpretation.'],
-  '/privacy': ['Privacy & Data Control — Personality Assessor', 'Learn how to export and control your Personality Assessor information.'],
-  '/login': ['Sign in — Personality Assessor', 'Return to your assessments, career exploration, roadmaps and progress.'],
-  '/signup': ['Start your profile — Personality Assessor', 'Create an account and begin building your professional profile.'],
+  '/': ['Personality Assessor — Adaptive Personality & Career Intelligence', 'Build a professional profile from CV context, adaptive assessment, Big Five, RIASEC, work values and explainable career relationships.'],
+  '/how-it-works': ['How Personality Assessor Works — From Context to Career Insight', 'See how professional context becomes adaptive questions, multidimensional assessment results and explainable career direction.'],
+  '/career-intelligence': ['Career Intelligence — Explainable Career Relationships | Personality Assessor', 'Compare a current profile with curated career models, inspect alignment and development differences, and explore practical next steps.'],
+  '/progress': ['Track Professional Development | Personality Assessor', 'Keep assessment history, development work and updated professional context connected over time.'],
+  '/methodology': ['Personality Assessment Methodology | Personality Assessor', 'Understand Big Five, RIASEC, work values, career signals, structured scoring, AI participation and product boundaries.'],
+  '/trust': ['AI, Scoring & Transparency | Personality Assessor', 'See where AI participates, how core scoring works, what confidence means and what Personality Assessor does not decide.'],
+  '/privacy': ['Privacy & Data Controls | Personality Assessor', 'Learn about available data export, assessment deletion and account deletion controls.'],
+  '/login': ['Sign in | Personality Assessor', 'Return to your assessments, career comparisons and professional development record.'],
+  '/signup': ['Build Your Profile | Personality Assessor', 'Create an account and begin an adaptive personality and career assessment shaped around your professional context.'],
 };
 const origin = import.meta.env.VITE_SITE_ORIGIN || window.location.origin;
 const indexable = new Set(['/', '/how-it-works', '/career-intelligence', '/progress', '/methodology', '/trust', '/privacy']);
