@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-14T16:38:38.688Z",
+  "total": 8,
+  "assets": [
+    {
+      "key": "welcome-career-1",
+      "requestedName": "Career 1",
+      "actualName": "Career 1",
+      "style": "Colossalflat",
+      "usage": "dashboard first-run / welcome",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef6ee5_1rAgHCzE4Kz1ZsX0dRfa8MjuypOTZiKm4mBBg_aWXsI.svg",
+      "localPath": "frontend/public/illustrations/welcome-career-1.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    },
+    {
+      "key": "analytics-empty-analyst",
+      "requestedName": "Analyst",
+      "actualName": "Analyst",
+      "style": "Birdview",
+      "usage": "analytics empty",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef6dc4_XkJz1YHnj84eChpgpj_4D53jGiXq2OMr6UVa-W8nRnE.svg",
+      "localPath": "frontend/public/illustrations/analytics-empty-analyst.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    },
+    {
+      "key": "profile-analysis",
+      "requestedName": "Profile Analysis",
+      "actualName": "Profile Analysis",
+      "style": "Colossalflat",
+      "usage": "profile/results support",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef73d3_e5MtOAig1vXXf1_iAPKQCHs_rtxtkeJbnlaS1qsPFig.svg",
+      "localPath": "frontend/public/illustrations/profile-analysis.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    },
+    {
+      "key": "development-team-work",
+      "requestedName": "Team Work 2",
+      "actualName": "Team Work 2",
+      "style": "Chromablue",
+      "usage": "development loop",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef761f_-42_yy6kc6uiQMpwZQvDsGFUQMLbdSYc4GhA8Rgd26c.svg",
+      "localPath": "frontend/public/illustrations/development-team-work.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    },
+    {
+      "key": "assessment-completed",
+      "requestedName": "Team Presentation 9",
+      "actualName": "Team Presentation 9",
+      "style": "Playstroke",
+      "usage": "assessment completed",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef760c_iXrIsVX7MlEiok_kW5QuKfVFO22V9TC_iBAcSJg3CPc.svg",
+      "localPath": "frontend/public/illustrations/assessment-completed.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    },
+    {
+      "key": "research-science",
+      "requestedName": "Science",
+      "actualName": "Science",
+      "style": "Azureline",
+      "usage": "research context",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef74c0_qc3O7t3P_XlBRZlGbeRRYh060yJbn4zHqECR8UdIHK4.svg",
+      "localPath": "frontend/public/illustrations/research-science.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    },
+    {
+      "key": "ux-interface",
+      "requestedName": "User Interface 1",
+      "actualName": "User Interface 1",
+      "style": "Chromablue",
+      "usage": "UX/product context",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef7692_T1cfoWj0Up1sANhzR7GvLFDMjBPoqCJD9bdL5x7mVwA.svg",
+      "localPath": "frontend/public/illustrations/ux-interface.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    },
+    {
+      "key": "report-analysis",
+      "requestedName": "Report Analysis 5",
+      "actualName": "Report Analysis 5",
+      "style": "Playstroke",
+      "usage": "report generation",
+      "sourceUrl": "https://cdn.prod.website-files.com/69b15b68fb5a0ea0e6ef48b6/69b15b68fb5a0ea0e6ef745d_TETS4kaqPRbbiz--R97J_nNlWY53DZXzJHG8zQ5-bRU.svg",
+      "localPath": "frontend/public/illustrations/report-analysis.svg",
+      "sourcePlatform": "ManyPixels",
+      "license": "ManyPixels Free-to-Use License"
+    }
+  ]
+}

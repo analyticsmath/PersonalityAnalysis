@@ -6,13 +6,12 @@ import {
   FiCompass,
   FiFileText,
   FiPlay,
-  FiRefreshCw,
   FiShield,
+  FiUploadCloud,
 } from 'react-icons/fi';
 import Button from '../../components/ui/Button';
 import ProductShell from '../../components/product/ProductShell';
 import ProductIllustration from '../../components/ui/ProductIllustration';
-import EmptyProductState from '../../components/ui/EmptyProductState';
 import { useAuth } from '../../hooks/useAuth';
 import {
   useAssessmentHistoryQuery,
@@ -109,6 +108,132 @@ export default function DashboardPage() {
 
   const userName = auth.user?.name || auth.name || 'User';
 
+  /* ── 1. Honest Zero-Data Overview (0 Completed Assessments) ── */
+  if (assessments.length === 0 && !historyQuery.isLoading) {
+    return (
+      <ProductShell
+        title="Dashboard"
+        actions={
+          <Button variant="primary" size="sm" onClick={() => navigate('/assessment/start')}>
+            <FiPlay /> Start Assessment
+          </Button>
+        }
+      >
+        <div className="dashboard-grid">
+          {/* Main Hero Zero-Data Container (8 cols) */}
+          <div className="col-span-8">
+            <section className="dashboard-widget dashboard-widget--hero" aria-labelledby="zero-data-title">
+              <div className="dashboard-widget__head">
+                <div>
+                  <span className="theatre-stage-tag" style={{ color: 'var(--secondary)' }}>
+                    0 Completed Assessments
+                  </span>
+                  <h2 id="zero-data-title" className="dashboard-widget__title" style={{ fontSize: '1.6rem', marginTop: '6px' }}>
+                    Welcome, {userName}. Your professional profile starts here.
+                  </h2>
+                  <p className="dashboard-widget__subtitle">
+                    Calibrated profile readings require verified background context and your first adaptive response session.
+                  </p>
+                </div>
+                <ProductIllustration slotKey="welcome" decorative className="dashboard-hero-illustration" />
+              </div>
+
+              <div className="dashboard-widget__body" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <p style={{ color: 'var(--ink)', fontSize: '0.96875rem', lineHeight: '1.6', margin: 0 }}>
+                  Personality Assessor builds four distinct readings: continuous Big Five dimensions, vocational interest
+                  territories (RIASEC), ranked work values, and career signals.
+                </p>
+
+                <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '8px' }}>
+                  <Button variant="primary" size="md" onClick={() => navigate('/assessment/start')}>
+                    <FiPlay /> Start Your First Assessment <FiArrowRight />
+                  </Button>
+                  <Button variant="secondary" size="md" onClick={() => navigate('/assessment/start')}>
+                    <FiUploadCloud /> Upload or Review Your CV
+                  </Button>
+                </div>
+              </div>
+
+              <div className="dashboard-widget__footer" style={{ justifyContent: 'flex-start', gap: '24px' }}>
+                <span style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>
+                  Deterministic psychometric calibration
+                </span>
+                <span style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>
+                  Strict data privacy &amp; zero training on personal records
+                </span>
+              </div>
+            </section>
+          </div>
+
+          {/* Side Overview & Governance (4 cols) */}
+          <div className="col-span-4">
+            <section className="dashboard-widget" aria-labelledby="zero-guide-title">
+              <div className="dashboard-widget__head">
+                <h2 id="zero-guide-title" className="dashboard-widget__title">
+                  What to Expect
+                </h2>
+              </div>
+              <div className="dashboard-widget__body" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <span className="dev-step-indicator" style={{ background: 'var(--signal-strong)', marginTop: '5px' }} />
+                  <div>
+                    <strong style={{ fontSize: '0.9rem', color: 'var(--ink)' }}>1. Context Intake</strong>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', margin: '2px 0 0' }}>
+                      Share your CV or professional background parameters.
+                    </p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <span className="dev-step-indicator" style={{ background: 'var(--mist)', marginTop: '5px' }} />
+                  <div>
+                    <strong style={{ fontSize: '0.9rem', color: 'var(--ink)' }}>2. Adaptive Questions</strong>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', margin: '2px 0 0' }}>
+                      Respond to scenario-based trade-offs calibrated to your domain.
+                    </p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <span className="dev-step-indicator" style={{ background: 'var(--mist)', marginTop: '5px' }} />
+                  <div>
+                    <strong style={{ fontSize: '0.9rem', color: 'var(--ink)' }}>3. Multidimensional Profile</strong>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', margin: '2px 0 0' }}>
+                      Inspect four independent psychometric and career readings.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="dashboard-widget" style={{ marginTop: '16px' }} aria-labelledby="zero-privacy-title">
+              <div className="dashboard-widget__head">
+                <h2 id="zero-privacy-title" className="dashboard-widget__title">
+                  Data Governance
+                </h2>
+              </div>
+              <div className="dashboard-widget__body" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Link to="/account/privacy" className="analytics-history-row" style={{ textDecoration: 'none' }}>
+                  <div className="analytics-history-row__info">
+                    <strong>Privacy &amp; Data Rights</strong>
+                    <span>Manage export and deletion</span>
+                  </div>
+                  <FiShield style={{ color: 'var(--secondary)' }} />
+                </Link>
+                <Link to="/methodology" className="analytics-history-row" style={{ textDecoration: 'none' }}>
+                  <div className="analytics-history-row__info">
+                    <strong>Methodology Atlas</strong>
+                    <span>Scoring principles and framework details</span>
+                  </div>
+                  <FiFileText style={{ color: 'var(--secondary)' }} />
+                </Link>
+              </div>
+            </section>
+          </div>
+        </div>
+      </ProductShell>
+    );
+  }
+
+  /* ── 2. Populated Macro-Layout Dashboard (>= 1 Assessment) ── */
   return (
     <ProductShell
       title="Profile Overview"
@@ -142,41 +267,31 @@ export default function DashboardPage() {
             <div className="dashboard-widget__head">
               <div>
                 <h2 id="welcome-title" className="dashboard-widget__title">
-                  {auth.isAuthenticated ? `Welcome back, ${userName}` : 'Your Profile Overview'}
+                  Welcome back, {userName}
                 </h2>
                 <p className="dashboard-widget__subtitle">
-                  {latestAssessment
-                    ? `Latest profile recorded on ${formatDate(latestAssessment.completedAt || latestAssessment.createdAt)}.`
-                    : 'Your profile starts with professional context and adaptive questioning.'}
+                  Latest profile recorded on {formatDate(latestAssessment.completedAt || latestAssessment.createdAt)}.
                 </p>
               </div>
-              <ProductIllustration slotKey="profile-start" decorative className="dashboard-hero-illustration" />
+              <ProductIllustration slotKey="profile-analysis" decorative className="dashboard-hero-illustration" />
             </div>
 
             <div className="dashboard-widget__body">
               <p style={{ color: 'var(--ink)', fontSize: '0.96875rem', lineHeight: '1.6', margin: 0 }}>
                 {latestReportQuery.data?.summary ||
                   latestReportQuery.data?.profile_summary ||
-                  (latestAssessment
-                    ? 'Continuous five-factor personality dimensions and vocational interests calibrated from your adaptive responses.'
-                    : 'Upload your CV or enter your background manually to generate calibrated personality readings and career alignment.')}
+                  'Continuous five-factor personality dimensions and vocational interests calibrated from your verified responses.'}
               </p>
             </div>
 
             <div className="dashboard-widget__footer">
-              {latestAssessment ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate(`/result/${latestAssessment.assessmentId}`)}
-                >
-                  Inspect Full Profile <FiArrowRight />
-                </Button>
-              ) : (
-                <Button variant="primary" size="sm" onClick={() => navigate('/assessment/start')}>
-                  Begin First Assessment <FiArrowRight />
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate(`/result/${latestAssessment.assessmentId}`)}
+              >
+                Inspect Full Profile <FiArrowRight />
+              </Button>
             </div>
           </section>
         </div>
@@ -218,57 +333,49 @@ export default function DashboardPage() {
                 <h2 id="snapshot-title" className="dashboard-widget__title">
                   Profile Snapshot
                 </h2>
-                <p className="dashboard-widget__subtitle">Big Five Continuous Dimensions</p>
+                <p className="dashboard-widget__subtitle">Big Five Continuous Dimensions (0–100)</p>
               </div>
-              {latestAssessment && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate(`/result/${latestAssessment.assessmentId}`)}
-                >
-                  View Details
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate(`/result/${latestAssessment.assessmentId}`)}
+              >
+                View Details
+              </Button>
             </div>
 
             <div className="dashboard-widget__body">
               {hasTraits ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div className="lollipop-measures-list">
                   {TRAIT_ORDER.map((traitKey) => {
                     const raw = latestTraits[traitKey];
                     const hasValue = raw !== null && raw !== undefined && raw !== '' && Number.isFinite(Number(raw));
                     const score = hasValue ? Math.round(Number(raw)) : null;
                     const meta = TRAIT_META[traitKey] || { name: traitKey };
                     return (
-                      <div key={traitKey} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-                          <span style={{ fontWeight: 500, color: 'var(--ink)' }}>{meta.name}</span>
-                          <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>
+                      <div key={traitKey} className="lollipop-row">
+                        <div className="lollipop-label-group">
+                          <span className="lollipop-name">{meta.name}</span>
+                          <strong className="lollipop-value tabular-nums">
                             {hasValue ? `${score}%` : 'Not available'}
-                          </span>
+                          </strong>
                         </div>
-                        <div className="profile-dimension-bar">
-                          <div
-                            className="profile-dimension-bar__fill"
-                            style={{ width: hasValue ? `${score}%` : '0%' }}
-                          />
+                        <div className="lollipop-track">
+                          {hasValue && (
+                            <>
+                              <div className="lollipop-bar-fill" style={{ width: `${score}%` }} />
+                              <div className="lollipop-dot" style={{ left: `${score}%` }} />
+                            </>
+                          )}
                         </div>
                       </div>
                     );
                   })}
                 </div>
               ) : (
-                <EmptyProductState
-                  illustrationKey="analytics-empty"
-                  title="No profile readings yet"
-                  description="Complete your first assessment to unlock calibrated five-factor personality measures."
-                  action={
-                    <Button variant="secondary" size="sm" onClick={() => navigate('/assessment/start')}>
-                      Start Assessment
-                    </Button>
-                  }
-                  compact
-                />
+                <p style={{ color: 'var(--secondary)', fontSize: '0.875rem' }}>
+                  Trait readings pending completion of full assessment battery.
+                </p>
               )}
             </div>
           </section>
@@ -291,7 +398,7 @@ export default function DashboardPage() {
                     Resume Assessment <FiArrowRight />
                   </Button>
                 </div>
-              ) : latestAssessment ? (
+              ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <p style={{ fontSize: '0.9375rem', color: 'var(--ink)', margin: 0 }}>
                     Review your career alignment and investigate potential stretch capabilities in the Career Explorer.
@@ -307,15 +414,6 @@ export default function DashboardPage() {
                     }
                   >
                     Explore Careers <FiCompass />
-                  </Button>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <p style={{ fontSize: '0.9375rem', color: 'var(--secondary)', margin: 0 }}>
-                    Provide professional context through CV or manual entry to begin your assessment journey.
-                  </p>
-                  <Button variant="primary" onClick={() => navigate('/assessment/start')}>
-                    Begin Setup <FiPlay />
                   </Button>
                 </div>
               )}
@@ -387,11 +485,9 @@ export default function DashboardPage() {
                   })}
                 </div>
               ) : (
-                <EmptyProductState
-                  title="No career recommendations"
-                  description="Complete an assessment session to generate evidence-based career alignment."
-                  compact
-                />
+                <p style={{ fontSize: '0.875rem', color: 'var(--secondary)' }}>
+                  Career recommendations will appear after assessment completion.
+                </p>
               )}
             </div>
           </section>
@@ -444,12 +540,9 @@ export default function DashboardPage() {
                   ))}
                 </div>
               ) : (
-                <EmptyProductState
-                  illustrationKey="analytics-empty"
-                  title="Not enough history yet"
-                  description="Complete another eligible assessment to compare change over time."
-                  compact
-                />
+                <p style={{ fontSize: '0.875rem', color: 'var(--secondary)', margin: 0 }}>
+                  Complete an additional assessment to observe longitudinal trait changes.
+                </p>
               )}
             </div>
           </section>
@@ -467,31 +560,23 @@ export default function DashboardPage() {
               </span>
             </div>
             <div className="dashboard-widget__body">
-              {assessments.length > 0 ? (
-                <div className="analytics-history-list">
-                  {assessments.slice(0, 4).map((item, idx) => (
-                    <div key={item.assessmentId || idx} className="analytics-history-row">
-                      <div className="analytics-history-row__info">
-                        <strong>Assessment #{assessments.length - idx}</strong>
-                        <span>{formatDate(item.completedAt || item.createdAt)}</span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => navigate(`/result/${item.assessmentId}`)}
-                      >
-                        View Report <FiArrowRight />
-                      </Button>
+              <div className="analytics-history-list">
+                {assessments.slice(0, 4).map((item, idx) => (
+                  <div key={item.assessmentId || idx} className="analytics-history-row">
+                    <div className="analytics-history-row__info">
+                      <strong>Assessment #{assessments.length - idx}</strong>
+                      <span>{formatDate(item.completedAt || item.createdAt)}</span>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <EmptyProductState
-                  title="No historical records"
-                  description="Completed assessment sessions will be securely recorded here."
-                  compact
-                />
-              )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => navigate(`/result/${item.assessmentId}`)}
+                    >
+                      View Report <FiArrowRight />
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
         </div>

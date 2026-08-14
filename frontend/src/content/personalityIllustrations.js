@@ -1,58 +1,73 @@
 /**
- * Product Illustration Registry
- * Exposes approved slots for custom illustrations.
- * When assets are supplied, place their paths here.
- * If null/empty, ProductIllustration renders graceful absence.
+ * Product Illustration Registry — Phase 3B Visual Acceptance
+ * Local ManyPixels Colossalflat / consistent editorial SVGs.
+ * Palette aligned with #101414, #DDF45A, #2F6FED, and neutral grays.
  */
 
 export const personalityIllustrations = {
   'profile-start': {
-    src: '',
-    defaultAlt: 'Illustration representing starting your profile',
+    src: '/illustrations/welcome-career-1.svg',
+    defaultAlt: 'Illustration of career advancement and professional direction',
+  },
+  welcome: {
+    src: '/illustrations/welcome-career-1.svg',
+    defaultAlt: 'Welcome and profile onboarding illustration',
   },
   'profile-review': {
-    src: '',
+    src: '/illustrations/profile-analysis.svg',
     defaultAlt: 'Illustration representing reviewing parsed professional background',
   },
+  'profile-analysis': {
+    src: '/illustrations/profile-analysis.svg',
+    defaultAlt: 'Profile interpretation and multidimensional analysis',
+  },
   'ux-designer': {
-    src: '',
-    defaultAlt: 'Product and UX design environment illustration',
+    src: '/illustrations/ux-interface.svg',
+    defaultAlt: 'User interface design and interaction architecture illustration',
   },
-  'developer': {
-    src: '',
-    defaultAlt: 'Software development environment illustration',
+  developer: {
+    src: '/illustrations/ux-interface.svg',
+    defaultAlt: 'Software systems and engineering architecture illustration',
   },
-  'engineer': {
-    src: '',
+  engineer: {
+    src: '/illustrations/ux-interface.svg',
     defaultAlt: 'Systems engineering environment illustration',
   },
-  'researcher': {
-    src: '',
+  researcher: {
+    src: '/illustrations/research-science.svg',
     defaultAlt: 'Research and empirical investigation illustration',
   },
-  'analyst': {
-    src: '',
+  science: {
+    src: '/illustrations/research-science.svg',
+    defaultAlt: 'Scientific inquiry and empirical validation',
+  },
+  analyst: {
+    src: '/illustrations/analytics-empty-analyst.svg',
     defaultAlt: 'Data and evidence analysis illustration',
   },
   'career-explorer': {
-    src: '',
+    src: '/illustrations/welcome-career-1.svg',
     defaultAlt: 'Career alignment and exploration illustration',
   },
-  'development': {
-    src: '',
-    defaultAlt: 'Deliberate professional development cycle illustration',
+  development: {
+    src: '/illustrations/development-team-work.svg',
+    defaultAlt: 'Deliberate collaborative development cycle illustration',
   },
   'analytics-empty': {
-    src: '',
+    src: '/illustrations/analytics-empty-analyst.svg',
     defaultAlt: 'Empty state illustration for historical analytics',
   },
   'privacy-data': {
-    src: '',
-    defaultAlt: 'Data governance and privacy controls illustration',
+    src: '/illustrations/report-analysis.svg',
+    defaultAlt: 'Data governance, reports and privacy controls illustration',
   },
   'assessment-complete': {
-    src: '',
-    defaultAlt: 'Assessment completion and profile synthesis illustration',
+    src: '/illustrations/assessment-completed.svg',
+    defaultAlt: 'Assessment completion and team presentation illustration',
+  },
+  'report-analysis': {
+    src: '/illustrations/report-analysis.svg',
+    defaultAlt: 'Report analysis and qualitative breakdown illustration',
   },
 };
 

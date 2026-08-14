@@ -87,7 +87,7 @@ export function PublicHeader() {
           <Link className="public-header__signin" to="/login">
             Sign in
           </Link>
-          <Link className="public-cta-button" to="/signup">
+          <Link className="public-cta-button public-cta-button--signal" to="/signup">
             Build my profile
           </Link>
         </div>
@@ -122,7 +122,7 @@ export function PublicHeader() {
               </NavLink>
             </nav>
             <div className="public-header__mobile-actions">
-              <Link className="public-cta-button public-cta-button--wide" to="/signup" onClick={() => setOpen(false)}>
+              <Link className="public-cta-button public-cta-button--signal public-cta-button--wide" to="/signup" onClick={() => setOpen(false)}>
                 Build my profile
               </Link>
               <Link className="public-header__signin" to="/login" onClick={() => setOpen(false)}>
@@ -203,17 +203,40 @@ export function ResponsiveImage({
   alt = '',
   priority = false,
   sizes = '(min-width: 1100px) 60vw, 90vw',
+  artDirectedMobile = false,
 }) {
   if (!mediaItem || !mediaItem.file) {
     return null;
   }
 
-  const widths = mediaItem.file === 'hero-h1' ? [640, 960, 1440, 1920, 2560] : [640, 960, 1440, 1920];
-  const base = `/media/personality-v2/${mediaItem.folder}/${mediaItem.file}`;
-  const srcSet = (extension) => widths.map((width) => `${base}-${width}.${extension} ${width}w`).join(', ');
+  const isV3 = mediaItem.v3 ?? true;
+  const folder = mediaItem.folder || 'hero';
+  const file = mediaItem.file;
+
+  const isHero = file.includes('hero-a') || file.includes('hero-b') || file.includes('hero-h1');
+  const widths = isHero ? [640, 960, 1440, 1920, 2560] : [640, 960, 1440, 1920];
+  const base = isV3 ? `/media/personality-v3/${folder}/${file}` : `/media/personality-v2/${folder}/${file}`;
+  const srcSet = (ext) => widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(', ');
+
+  const mobileBase = `${base}-mobile`;
 
   return (
     <picture className={`responsive-evidence-image ${className}`.trim()}>
+      {artDirectedMobile && (
+        <>
+          <source
+            media="(max-width: 767px)"
+            type="image/webp"
+            srcSet={`${mobileBase}-480.webp 480w, ${mobileBase}-720.webp 720w`}
+            sizes="92vw"
+          />
+          <source
+            media="(max-width: 767px)"
+            srcSet={`${mobileBase}-480.jpg 480w, ${mobileBase}-720.jpg 720w`}
+            sizes="92vw"
+          />
+        </>
+      )}
       <source type="image/avif" srcSet={srcSet('avif')} sizes={sizes} />
       <source type="image/webp" srcSet={srcSet('webp')} sizes={sizes} />
       <img

@@ -1,19 +1,24 @@
 /**
  * Central design tokens for JS consumers (charts, inline styles).
- * CSS variables live in styles/theme.css — keep numeric hex/rgba here aligned with :root.
+ * Aligned with Phase 3B Visual Acceptance token contract.
  */
-import tokens from '../theme/tokens';
+import tokens, { traitColors, chartTokens } from '../theme/tokens';
 
 export const designTokens = {
   ...tokens,
+  traitColors,
+  chartTokens,
   radius: {
-    sm: 8,
-    md: 12,
-    lg: 18,
-    xl: 24,
+    none: 0,
+    sm: 6,
+    md: 10,
+    lg: 14,
+    xl: 18,
+    '2xl': 24,
     pill: 999,
   },
   space: {
+    1: 4,
     2: 8,
     3: 12,
     4: 16,
@@ -21,6 +26,7 @@ export const designTokens = {
     6: 24,
     8: 32,
     10: 40,
+    12: 48,
   },
 };
 

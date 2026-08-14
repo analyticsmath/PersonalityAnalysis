@@ -21,3 +21,5 @@ backend/.env
 frontend/.env
 frontend/build
 frontend/dist
+# Local downloaded reference page
+/frontend/scripts/manypixels-page.html

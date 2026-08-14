@@ -1,172 +1,183 @@
 // Design token registry — single source of truth for all semantic colors,
 // typography, spacing, shadow, and chart palettes.
-// Phase 3A Evidence Field system.
+// Phase 3B Visual Acceptance system.
 
 const tokens = {
   // ── Core Semantic Palette ───────────────────────────────────────────────────
   palette: {
-    canvas: '#F4F6F5',
+    canvas: '#F7F9F8',
     paper: '#FFFFFF',
-    ink: '#111513',
-    secondary: '#56605B',
-    mist: '#D9DFDC',
-    carbon: '#1C201E',
-    success: '#1F6B50',
-    caution: '#8E5B12',
-    error: '#A33A45',
-    focus: '#355C7D',
-    info: '#355C7D',
+    ink: '#101414',
+    secondary: '#566362',
+    mist: '#DCE4E2',
+    softField: '#EEF2F1',
+
+    darkScene: '#0E1717',
+    darkSceneFg: '#F7FAF9',
+    darkSceneMuted: '#B9C4C1',
+
+    signal: '#DDF45A',
+    signalStrong: '#607900',
+
+    info: '#2F6FED',
+    success: '#18785B',
+    warning: '#A45A00',
+    error: '#B43A4A',
+    focus: '#2F6FED',
   },
 
   // ── Surfaces ─────────────────────────────────────────────────────────────
   background: {
-    base: '#F4F6F5',
-    secondary: '#EBEFED',
+    base: '#F7F9F8',
+    secondary: '#EEF2F1',
     surface: '#FFFFFF',
     elevated: '#FFFFFF',
-    carbon: '#1C201E',
+    darkScene: '#0E1717',
     glass: 'rgba(255, 255, 255, 0.96)',
   },
   surface: {
     primary: '#FFFFFF',
-    secondary: '#F4F6F5',
-    tertiary: '#D9DFDC',
+    secondary: '#F7F9F8',
+    tertiary: '#EEF2F1',
     elevated: '#FFFFFF',
-    sidebar: '#F4F6F5',
-    header: '#F4F6F5',
+    sidebar: '#F7F9F8',
+    header: '#F7F9F8',
     input: '#FFFFFF',
-    hover: '#ECEFEF',
-    selected: '#E2E7E5',
-    disabled: '#D9DFDC',
+    hover: '#EEF2F1',
+    selected: '#E4ECE9',
+    disabled: '#DCE4E2',
   },
 
   // ── Borders ───────────────────────────────────────────────────────────────
   border: {
-    subtle: '#E5EAE7',
-    default: '#D9DFDC',
-    strong: '#56605B',
-    divider: '#D9DFDC',
-    focus: '#355C7D',
+    subtle: '#E6EBE9',
+    default: '#DCE4E2',
+    strong: '#566362',
+    divider: '#DCE4E2',
+    focus: '#2F6FED',
   },
 
   // ── Text ─────────────────────────────────────────────────────────────────
   text: {
-    primary: '#111513',
-    secondary: '#56605B',
-    muted: '#56605B',
+    primary: '#101414',
+    secondary: '#566362',
+    muted: '#566362',
     disabled: '#8C9792',
-    inverse: '#FFFFFF',
-    link: '#111513',
-    accent: '#355C7D',
+    inverse: '#F7FAF9',
+    link: '#101414',
+    accent: '#2F6FED',
   },
 
   // ── Action / Interface ────────────────────────────────────────────────────
   action: {
-    primaryBg: '#1C201E',
+    primaryBg: '#101414',
     primaryText: '#FFFFFF',
-    primaryHover: '#111513',
+    primaryHover: '#252D2D',
+    signalBg: '#DDF45A',
+    signalText: '#101414',
+    signalHover: '#D3EA48',
     secondaryBg: '#FFFFFF',
-    secondaryText: '#111513',
-    secondaryBorder: '#D9DFDC',
-    secondaryHover: '#F4F6F5',
-    ghostHover: '#EBEFED',
+    secondaryText: '#101414',
+    secondaryBorder: '#DCE4E2',
+    secondaryHover: '#EEF2F1',
+    ghostHover: '#EEF2F1',
   },
 
   // Legacy mappings for backward compatibility
   primary: {
-    50: '#F4F6F5',
-    100: '#EBEFED',
-    500: '#1C201E',
-    600: '#111513',
-    700: '#111513',
+    50: '#F7F9F8',
+    100: '#EEF2F1',
+    500: '#101414',
+    600: '#101414',
+    700: '#101414',
   },
   secondary: {
-    50: '#F4F6F5',
-    500: '#56605B',
-    600: '#355C7D',
+    50: '#F7F9F8',
+    500: '#566362',
+    600: '#2F6FED',
   },
 
   // ── Accent (Restrained semantic only) ───────────────────────────────────────
   accent: {
-    blue: '#355C7D',
-    blueHover: '#2A4963',
+    blue: '#2F6FED',
+    blueHover: '#1B56C7',
     blueGlow: 'none',
-    cyan: '#355C7D',
-    purple: '#56605B',
-    amber: '#8E5B12',
-    emerald: '#1F6B50',
-    emeraldDark: '#1F6B50',
-    orange: '#8E5B12',
+    cyan: '#2F6FED',
+    purple: '#566362',
+    amber: '#A45A00',
+    emerald: '#18785B',
+    emeraldDark: '#18785B',
+    orange: '#A45A00',
   },
 
   // ── Status ────────────────────────────────────────────────────────────────
   state: {
-    success: '#1F6B50',
-    successBg: '#EFF7F3',
-    successText: '#1F6B50',
-    successBorder: '#C1E3D4',
-    warning: '#8E5B12',
-    warningBg: '#FAF5EE',
-    warningText: '#8E5B12',
-    warningBorder: '#EED9B8',
-    error: '#A33A45',
-    errorBg: '#FDF2F3',
-    errorText: '#A33A45',
-    errorBorder: '#F5C2C7',
-    info: '#355C7D',
-    infoBg: '#F0F5F9',
-    infoText: '#355C7D',
-    infoBorder: '#C7D9E8',
+    success: '#18785B',
+    successBg: '#DEEFEA',
+    successText: '#18785B',
+    successBorder: '#A9D9C9',
+    warning: '#A45A00',
+    warningBg: '#F7EECD',
+    warningText: '#784400',
+    warningBorder: '#E2CF88',
+    error: '#B43A4A',
+    errorBg: '#FCE2E5',
+    errorText: '#8C2534',
+    errorBorder: '#EFA6AF',
+    info: '#2F6FED',
+    infoBg: '#E3EDFD',
+    infoText: '#2F6FED',
+    infoBorder: '#B5CEFC',
   },
 
   // ── Danger shorthand ─────────────────────────────────────────────────────
   danger: {
-    50: '#FDF2F3',
-    500: '#A33A45',
-    600: '#8A2B35',
+    50: '#FCE2E5',
+    500: '#B43A4A',
+    600: '#982A39',
   },
 
   // ── Shadows (Restrained subtle elevation only) ──────────────────────────────
   shadow: {
-    card: '0 12px 36px rgba(17, 21, 19, 0.08)',
-    soft: '0 4px 14px rgba(17, 21, 19, 0.04)',
-    focus: '0 0 0 2px #355C7D',
-    sm: '0 1px 3px rgba(17, 21, 19, 0.05)',
-    md: '0 4px 16px rgba(17, 21, 19, 0.07)',
-    lg: '0 12px 36px rgba(17, 21, 19, 0.10)',
+    card: '0 4px 16px rgba(16, 20, 20, 0.06)',
+    soft: '0 2px 8px rgba(16, 20, 20, 0.04)',
+    focus: '0 0 0 2px #2F6FED',
+    sm: '0 1px 3px rgba(16, 20, 20, 0.04)',
+    md: '0 4px 16px rgba(16, 20, 20, 0.06)',
+    lg: '0 12px 32px rgba(16, 20, 20, 0.08)',
   },
 
-  // ── Radius (Editorial restrained radii: 0 - 18px) ─────────────────────────
+  // ── Radius (Scene-specific radii) ──────────────────────────────────────────
   radius: {
     none: '0px',
     sm: '6px',
     md: '10px',
     lg: '14px',
     xl: '18px',
-    '2xl': '18px',
+    '2xl': '24px',
     full: '9999px',
   },
 
   // ── Typography ───────────────────────────────────────────────────────────
   font: {
-    base: '"PP Neue Montreal Text", "Instrument Sans", system-ui, sans-serif',
-    display: '"PP Neue Montreal", "Instrument Sans", system-ui, sans-serif',
+    base: '"Mona Sans", system-ui, -apple-system, sans-serif',
+    display: '"Mona Sans", system-ui, -apple-system, sans-serif',
   },
 
   // Retired gradients & glows mapped to neutral flat tokens
   gradients: {
-    background: '#F4F6F5',
-    primaryButton: '#1C201E',
-    primaryButtonHover: '#111513',
-    progress: '#111513',
-    cognitiveBars: '#355C7D',
-    behaviorBars: '#56605B',
-    page: '#F4F6F5',
+    background: '#F7F9F8',
+    primaryButton: '#101414',
+    primaryButtonHover: '#252D2D',
+    progress: '#101414',
+    cognitiveBars: '#2F6FED',
+    behaviorBars: '#566362',
+    page: '#F7F9F8',
   },
 
   glass: {
     background: '#FFFFFF',
-    border: '#D9DFDC',
+    border: '#DCE4E2',
     backdropBlur: '0px',
   },
 
@@ -178,110 +189,127 @@ const tokens = {
 
   motion: {
     hoverLift: 'none',
-    transition: '0.2s ease-out',
+    transition: '0.18s ease-out',
   },
 
-  // Chart shorthand — neutral palette
+  // Chart shorthand — canonical chart tokens
   chart: {
-    trait1: '#111513',
-    trait2: '#56605B',
-    trait3: '#355C7D',
-    trait4: '#1F6B50',
-    trait5: '#8E5B12',
+    primary: '#101414',
+    secondary: '#7E8B88',
+    signal: '#607900',
+    info: '#2F6FED',
+    positive: '#18785B',
+    warning: '#A45A00',
+    risk: '#B43A4A',
+    grid: '#E6EBE9',
+    track: '#EEF2F1',
+    trait1: '#101414',
+    trait2: '#566362',
+    trait3: '#2F6FED',
+    trait4: '#18785B',
+    trait5: '#A45A00',
   },
 };
 
 // ── Big Five / Neutral dimensional colors ────────────────────────────────────
 // Direct continuous measurement without permanent decorative colors
 export const traitColors = {
-  O: '#111513',
-  C: '#111513',
-  E: '#111513',
-  A: '#111513',
-  N: '#111513',
+  O: '#101414',
+  C: '#101414',
+  E: '#101414',
+  A: '#101414',
+  N: '#101414',
 };
 
 // ── Semantic chart color tokens ──────────────────────────────────────────────
 export const chartTokens = {
   axis: tokens.text.secondary,
   mutedAxis: tokens.text.muted,
-  grid: '#E5EAE7',
-  axisLine: '#D9DFDC',
+  grid: '#E6EBE9',
+  axisLine: '#DCE4E2',
+  track: '#EEF2F1',
+  primary: '#101414',
+  secondary: '#7E8B88',
+  signal: '#607900',
+  info: '#2F6FED',
+  positive: '#18785B',
+  warning: '#A45A00',
+  risk: '#B43A4A',
   tooltip: {
     background: '#FFFFFF',
-    border: '1px solid #D9DFDC',
-    text: '#111513',
-    shadow: '0 8px 24px rgba(17, 21, 19, 0.08)',
+    border: '1px solid #DCE4E2',
+    text: '#101414',
+    shadow: '0 4px 16px rgba(16, 20, 20, 0.08)',
   },
 
   // OCEAN radar
   ocean: {
-    fill: 'rgba(17, 21, 19, 0.08)',
-    stroke: '#111513',
-    grid: '#D9DFDC',
-    label: '#111513',
+    fill: 'rgba(16, 20, 20, 0.06)',
+    stroke: '#101414',
+    grid: '#DCE4E2',
+    label: '#101414',
   },
 
   // RIASEC neutral relational palette
   riasec: {
-    Realistic: '#111513',
-    Investigative: '#111513',
-    Artistic: '#111513',
-    Social: '#111513',
-    Enterprising: '#111513',
-    Conventional: '#111513',
+    Realistic: '#101414',
+    Investigative: '#101414',
+    Artistic: '#101414',
+    Social: '#101414',
+    Enterprising: '#101414',
+    Conventional: '#101414',
   },
 
   // Cognitive
   cognitive: {
-    Analytical: '#111513',
-    Creative: '#111513',
-    Strategic: '#111513',
-    Systematic: '#111513',
-    Practical: '#111513',
-    Abstract: '#111513',
+    Analytical: '#101414',
+    Creative: '#101414',
+    Strategic: '#101414',
+    Systematic: '#101414',
+    Practical: '#101414',
+    Abstract: '#101414',
   },
 
   // Behavior
   behavior: {
-    Leadership: '#111513',
-    RiskTolerance: '#111513',
-    DecisionSpeed: '#111513',
-    StressTolerance: '#111513',
-    TeamPreference: '#111513',
+    Leadership: '#101414',
+    RiskTolerance: '#101414',
+    DecisionSpeed: '#101414',
+    StressTolerance: '#101414',
+    TeamPreference: '#101414',
   },
 
   // Career match
   career: {
-    OverallFit: '#111513',
-    PersonalityFit: '#355C7D',
-    SkillFit: '#1F6B50',
-    GrowthPotential: '#8E5B12',
-    GapRisk: '#A33A45',
+    OverallFit: '#101414',
+    PersonalityFit: '#2F6FED',
+    SkillFit: '#18785B',
+    GrowthPotential: '#A45A00',
+    GapRisk: '#B43A4A',
   },
 
   // Heatmap
   heatmap: {
-    low: '#F4F6F5',
+    low: '#F7F9F8',
     mid: '#B5C4BE',
-    high: '#111513',
-    text: '#111513',
-    border: '#D9DFDC',
+    high: '#101414',
+    text: '#101414',
+    border: '#DCE4E2',
   },
 
   // Analytics trend
   trend: {
-    primary: '#111513',
-    secondary: '#56605B',
-    focus: '#355C7D',
-    success: '#1F6B50',
-    warning: '#8E5B12',
-    danger: '#A33A45',
-    muted: '#D9DFDC',
+    primary: '#101414',
+    secondary: '#566362',
+    focus: '#2F6FED',
+    success: '#18785B',
+    warning: '#A45A00',
+    danger: '#B43A4A',
+    muted: '#DCE4E2',
   },
 
   // Generic chart palette
-  palette: ['#111513', '#56605B', '#355C7D', '#1F6B50', '#8E5B12', '#A33A45'],
+  palette: ['#101414', '#566362', '#2F6FED', '#18785B', '#A45A00', '#B43A4A'],
 };
 
 export default tokens;

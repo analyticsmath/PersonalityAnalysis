@@ -1,6 +1,6 @@
 // Marketing illustrative demo data & media registry
-// Phase 3B Evidence Field system.
-// NOTE: All marketing numbers are explicitly illustrative examples, not real customer evidence or benchmark populations.
+// Phase 3B Visual Acceptance — Pexels Local Media Library (personality-v3).
+// NOTE: All marketing values are explicitly illustrative examples, not real customer evidence or benchmark populations.
 
 export const marketingDemo = {
   isIllustrativeExample: true,
@@ -44,144 +44,256 @@ export const marketingDemo = {
   },
 };
 
-const media = (file, folder, alt, position = '50% 50%', sourceId = '', sourcePlatform = 'Local/Free', status = 'ready', sourceUrl = '') => ({
+const v3Media = (file, folder, alt, position = '50% 50%', sourceId = '', pageUrl = '') => ({
   file,
   folder,
   alt,
   position,
   sourceId,
-  sourcePlatform,
-  status,
-  sourceUrl,
+  sourcePlatform: 'Pexels',
+  status: 'ready',
+  pageUrl,
+  v3: true,
 });
 
 export const publicMedia = {
   hero: {
-    // Provisional Hero Dominant: Pexels 36809500 (Architectural studio wall with blueprints & drawings)
-    // Physical download pending; rendered via verified free local master fallback (hero-h1)
-    dominant: media(
-      'hero-h1',
+    // HERO-A: Top view of an architect sitting at a desk creating a project (Pexels 9618456)
+    dominant: v3Media(
+      'hero-a',
       'hero',
-      'Architectural design studio wall with blueprints, schematics, and active planning artifacts',
+      'Architectural workspace top view with project blueprints, drafting tools, and active design documents',
       '50% 50%',
-      '36809500',
-      'Pexels',
-      'pending_download',
-      'https://www.pexels.com/photo/architectural-design-studio-wall-with-blueprints-36809500/'
+      '9618456',
+      'https://www.pexels.com/photo/top-view-of-an-architect-sitting-at-a-desk-and-creating-a-project-9618456/'
     ),
-    // Supporting Direction HF1: Pexels 6615237 / HF2: 6615230
-    // Physical download pending; rendered via verified free local master fallback (hero-h4)
-    supporting: media(
-      'hero-h4',
+    // HERO-B: Evidence Wall (Pexels 9617376)
+    evidenceWall: v3Media(
+      'hero-b',
       'hero',
-      'Hands arranging evidence swatches, notes, and conceptual artifacts on a work table',
+      'Architectural plans, sketches, and design schematics pinned to an evidence wall',
       '50% 50%',
-      '6615237',
-      'Pexels',
-      'pending_download',
-      'https://www.pexels.com/photo/city-person-people-art-6615237/'
+      '9617376',
+      'https://www.pexels.com/photo/drawings-and-plans-glued-on-wall-9617376/'
     ),
-    // Process detail HF4: Pexels 6615235
-    // Physical download pending; rendered via verified free local master fallback (hero-h5)
-    process: media(
-      'hero-h5',
-      'hero',
-      'Architectural modeling, iterative drafting, and physical prototyping in progress',
+    // DEVELOPER: Shared Actor carried to Work Worlds (Pexels 7988086)
+    developer: v3Media(
+      'developer',
+      'actors',
+      'Software developer analyzing system code and architecture on screens',
       '50% 50%',
-      '6615235',
-      'Pexels',
-      'pending_download',
-      'https://www.pexels.com/photo/person-people-building-desk-6615235/'
+      '7988086',
+      'https://www.pexels.com/photo/a-person-doing-computer-programming-7988086/'
     ),
-    // Registered fallback assets
-    secondaryDesk: media('hero-h2', 'hero', 'Focused workspace with tools and active documentation', '50% 50%', 'hero-h2', 'Local/Free', 'ready'),
+    // SCIENTIST: Research fragment (Pexels 9259943)
+    scientist: v3Media(
+      'scientist',
+      'actors',
+      'Scientist using precision laboratory equipment in research environment',
+      '50% 50%',
+      '9259943',
+      'https://www.pexels.com/photo/close-up-of-a-person-using-lab-equipment-9259943/'
+    ),
+    // STUDENT: Graduate / Context fragment (Pexels 5940721)
+    student: v3Media(
+      'student',
+      'actors',
+      'Professional working on laptop with documentation and background records',
+      '50% 50%',
+      '5940721',
+      'https://www.pexels.com/photo/woman-working-on-laptop-with-documents-5940721/'
+    ),
+    // Supporting direction alias for backwards compatibility
+    supporting: v3Media(
+      'developer',
+      'actors',
+      'Software developer analyzing system code and architecture',
+      '50% 50%',
+      '7988086'
+    ),
+    process: v3Media(
+      'process',
+      'editorial',
+      'Creative brainstorming and visual thinking sticky note session',
+      '50% 50%',
+      '29521529'
+    ),
   },
 
-  // Approved Selected Free Media Registry (No paid/Unsplash+ assets)
-  approvedFreeRegistry: [
-    { id: '36809500', platform: 'Pexels', url: 'https://www.pexels.com/photo/architectural-design-studio-wall-with-blueprints-36809500/', role: 'Provisional Hero Dominant', status: 'pending_download' },
-    { id: '6615237', platform: 'Pexels', url: 'https://www.pexels.com/photo/city-person-people-art-6615237/', role: 'HF1 Supporting Direction', status: 'pending_download' },
-    { id: '6615230', platform: 'Pexels', url: 'https://www.pexels.com/photo/person-people-building-desk-6615230/', role: 'HF2 Supporting Direction', status: 'pending_download' },
-    { id: '6615235', platform: 'Pexels', url: 'https://www.pexels.com/photo/person-people-building-desk-6615235/', role: 'HF4 Process Direction', status: 'pending_download' },
-    { id: '10515522', platform: 'Pexels', url: 'https://www.pexels.com/photo/scientific-equipment-in-close-up-10515522/', role: 'Science / Research Context', status: 'pending_download' },
-    { id: '34212963', platform: 'Pexels', url: 'https://www.pexels.com/photo/hands-writing-notes-for-coding-project-at-desk-34212963/', role: 'Coding / Systems Context', status: 'pending_download' },
-    { id: '37471992', platform: 'Pexels', url: 'https://www.pexels.com/photo/fashion-workspace-with-mood-board-and-sketches-37471992/', role: 'Design Synthesis Context', status: 'pending_download' },
-    { id: '6615233', platform: 'Pexels', url: 'https://www.pexels.com/photo/person-people-building-construction-6615233/', role: 'Structure Context', status: 'pending_download' },
-    { id: '6615036', platform: 'Pexels', url: 'https://www.pexels.com/photo/floor-plans-on-white-table-6615036/', role: 'Floor Plans / Architecture Context', status: 'pending_download' },
-    { id: '8940510', platform: 'Pexels', url: 'https://www.pexels.com/photo/a-scientist-using-a-laboratory-equipment-8940510/', role: 'Lab / Inquiry Context', status: 'pending_download' },
-    { id: '9617407', platform: 'Pexels', url: 'https://www.pexels.com/photo/close-up-on-mans-hands-on-drawing-on-deck-9617407/', role: 'Drafting / Craftsmanship Context', status: 'pending_download' },
-    { id: 'cX62K66gMUk', platform: 'Unsplash', url: 'https://unsplash.com/photos/cX62K66gMUk', role: 'Free Unsplash Career Context', status: 'approved' },
-  ],
-
-  // Exactly 6 Work Worlds
+  // Exactly 6 Work Worlds mapped to final downloaded photography
   worlds: [
     {
       id: 'build',
       name: 'Build',
       copy: 'Systems expose how you work with constraints.',
-      media: media('world-w2', 'worlds', 'Developer analyzing system architecture and code workflows', '50% 50%', 'QUtrcUo5-GI'),
+      media: v3Media(
+        'developer',
+        'actors',
+        'Developer engineering software systems and code architecture',
+        '50% 50%',
+        '7988086',
+        'https://www.pexels.com/photo/a-person-doing-computer-programming-7988086/'
+      ),
     },
     {
       id: 'investigate',
       name: 'Investigate',
       copy: 'Research exposes how you work with uncertainty.',
-      media: media('world-w8', 'worlds', 'Active laboratory and empirical investigation environment', '50% 50%', 'jxgeHcAACUI'),
+      media: v3Media(
+        'scientist',
+        'actors',
+        'Scientist conducting empirical laboratory research and testing hypotheses',
+        '50% 50%',
+        '9259943',
+        'https://www.pexels.com/photo/close-up-of-a-person-using-lab-equipment-9259943/'
+      ),
     },
     {
       id: 'make',
       name: 'Make',
       copy: 'Making exposes how you refine.',
-      media: media('world-w4', 'worlds', 'Hands refining physical model details with precision tools', '50% 50%', 'Qt2AkCIW8d4'),
+      media: v3Media(
+        'make',
+        'worlds',
+        "Hands working on drawing accessories and precision physical craft",
+        '50% 50%',
+        '9617889',
+        'https://www.pexels.com/photo/mans-hands-on-drawing-accessories-9617889/'
+      ),
     },
     {
       id: 'shape',
       name: 'Shape',
       copy: 'Design exposes what you notice before something feels resolved.',
-      media: media('world-w3', 'worlds', 'Sketch and evidence wall during concept synthesis', '50% 50%', 'DSNWYdcL-h0'),
+      media: v3Media(
+        'shape',
+        'worlds',
+        'Designers synthesizing user experience on sticky notes and glass boards',
+        '50% 50%',
+        '9301825',
+        'https://www.pexels.com/photo/employees-looking-at-the-sticky-notes-posted-on-a-glass-board-9301825/'
+      ),
     },
     {
       id: 'structure',
       name: 'Structure',
       copy: 'Structure exposes how you organize complexity.',
-      media: media('world-w5', 'worlds', 'Flowchart and organizational diagram on a whiteboard', '50% 50%', 'LRCMQDWQcn8'),
+      media: v3Media(
+        'structure',
+        'worlds',
+        'Blueprints, structural diagrams, and laptop displaying specifications',
+        '50% 50%',
+        '8470810',
+        'https://www.pexels.com/photo/blueprints-and-a-laptop-8470810/'
+      ),
     },
     {
       id: 'collaborate',
       name: 'Collaborate',
       copy: 'Collaboration exposes how your decisions change around other people.',
-      media: media('world-w1', 'worlds', 'Multidisciplinary planning and evidence review table', '50% 50%', 'uePZyB90-Fs'),
+      media: v3Media(
+        'collaborate',
+        'worlds',
+        'Business professionals examining schemes, papers, and strategic models together',
+        '50% 50%',
+        '5324974',
+        'https://www.pexels.com/photo/businesspeople-with-pens-in-hands-examining-schemes-on-papers-5324974/'
+      ),
     },
   ],
 
-  // Career environments (no rejected factory asset c5)
+  // Career environments with master-detail reasons
   careers: [
-    { id: 'software', title: 'Systems Architect', match: 88, media: media('career-c1', 'careers', 'Software professional analyzing system constraints'), why: 'Systems thinking, inquiry and deliberate problem solving align with complex engineering environments.', stretch: 'Requires balancing deep independent technical execution with cross-functional alignment.', strengthen: 'Demonstrate architectural decision records and modular system designs.' },
-    { id: 'ux', title: 'Product & UX Designer', match: 84, media: media('career-c2', 'careers', 'Designer evaluating wireframes and user journeys'), why: 'High openness and artistic vocational interest support continuous problem re-framing.', stretch: 'Needs rapid prototyping under tight ambiguity and iterative user validation.', strengthen: 'Produce case studies showing evidence-driven design trade-offs.' },
-    { id: 'data', title: 'Data & Evidence Analyst', match: 81, media: media('career-c3', 'careers', 'Professional reviewing structured data reports'), why: 'Methodical inquiry and investigative orientation make complex datasets legible.', stretch: 'Requires translating statistical variance into actionable strategic decisions.', strengthen: 'Publish structured reproducible analytics workflows.' },
-    { id: 'product', title: 'Product Strategy Lead', match: 78, media: media('career-c4', 'careers', 'Product leader organizing roadmaps on whiteboard'), why: 'Strong synthesis of constraints, roadmap prioritization, and user evidence.', stretch: 'Higher demand on assertive stakeholder consensus and rapid trade-off defense.', strengthen: 'Document end-to-end outcome-driven product roadmaps.' },
-    { id: 'research', title: 'Research Scientist', match: 75, media: media('career-c6', 'careers', 'Research team examining experimental findings'), why: 'Deep investigative drive and methodical tolerance for long experiment cycles.', stretch: 'Requires extensive peer defense and formal academic publication protocols.', strengthen: 'Contribute to open research or reproducible technical whitepapers.' },
-    { id: 'operations', title: 'Technical Operations Director', match: 71, media: media('career-c7', 'careers', 'Operations center with system metrics'), why: 'High conscientiousness and structured signals align with continuous reliability.', stretch: 'Requires immediate incident triage under real-time operational stress.', strengthen: 'Build incident playbooks and operational observability pipelines.' },
-    { id: 'studio', title: 'Creative Studio Director', match: 68, media: media('career-c8', 'careers', 'Creative director reviewing studio proofs'), why: 'Aesthetic sensitivity and synthesis of diverse creative perspectives.', stretch: 'Demands commercial pitching and continuous portfolio reinvention.', strengthen: 'Curate a multidisciplinary evidence portfolio of shipped work.' },
+    {
+      id: 'software',
+      title: 'Systems Architect',
+      match: 88,
+      media: v3Media('developer', 'actors', 'Software architect reviewing technical constraints and distributed systems'),
+      why: 'Systems thinking, inquiry and deliberate problem solving align with complex engineering environments.',
+      stretch: 'Requires balancing deep independent technical execution with cross-functional alignment.',
+      strengthen: 'Demonstrate architectural decision records and modular system designs.',
+    },
+    {
+      id: 'ux',
+      title: 'Product & UX Designer',
+      match: 84,
+      media: v3Media('shape', 'worlds', 'Product designer synthesizing interaction patterns on a glass board'),
+      why: 'High openness and artistic vocational interest support continuous problem re-framing.',
+      stretch: 'Needs rapid prototyping under tight ambiguity and iterative user validation.',
+      strengthen: 'Produce case studies showing evidence-driven design trade-offs.',
+    },
+    {
+      id: 'data',
+      title: 'Data & Evidence Analyst',
+      match: 81,
+      media: v3Media('process', 'editorial', 'Analyst structuring evidence and data flows on note boards'),
+      why: 'Methodical inquiry and investigative orientation make complex datasets legible.',
+      stretch: 'Requires translating statistical variance into actionable strategic decisions.',
+      strengthen: 'Publish structured reproducible analytics workflows.',
+    },
+    {
+      id: 'product',
+      title: 'Product Strategy Lead',
+      match: 78,
+      media: v3Media('collaborate', 'worlds', 'Product strategist aligning multidisciplinary schemes'),
+      why: 'Strong synthesis of constraints, roadmap prioritization, and user evidence.',
+      stretch: 'Higher demand on assertive stakeholder consensus and rapid trade-off defense.',
+      strengthen: 'Document end-to-end outcome-driven product roadmaps.',
+    },
+    {
+      id: 'research',
+      title: 'Research Scientist',
+      match: 75,
+      media: v3Media('scientist', 'actors', 'Scientist testing empirical hypotheses in lab environment'),
+      why: 'Deep investigative drive and methodical tolerance for long experiment cycles.',
+      stretch: 'Requires extensive peer defense and formal academic publication protocols.',
+      strengthen: 'Contribute to open research or reproducible technical whitepapers.',
+    },
+    {
+      id: 'operations',
+      title: 'Technical Operations Director',
+      match: 71,
+      media: v3Media('structure', 'worlds', 'Operations engineer reviewing architectural blueprints and reliability schemas'),
+      why: 'High conscientiousness and structured signals align with continuous reliability.',
+      stretch: 'Requires immediate incident triage under real-time operational stress.',
+      strengthen: 'Build incident playbooks and operational observability pipelines.',
+    },
+    {
+      id: 'studio',
+      title: 'Creative Studio Director',
+      match: 68,
+      media: v3Media('make', 'worlds', 'Creative director evaluating craftsmanship and drafting tools'),
+      why: 'Aesthetic sensitivity and synthesis of diverse creative perspectives.',
+      stretch: 'Demands commercial pitching and continuous portfolio reinvention.',
+      strengthen: 'Curate a multidisciplinary evidence portfolio of shipped work.',
+    },
   ],
 
   progress: [
-    media('progress-p1', 'progress', 'Quiet focused workspace beside a window'),
-    media('progress-p2', 'progress', 'Iterative prototype being evaluated on workbench'),
-    media('progress-p3', 'progress', 'Refining craft precision in a workshop'),
-    media('progress-p4', 'progress', 'Team evaluating project evidence on review desk'),
-    media('progress-p5', 'progress', 'Collaborative refinement around a strategy board'),
-    media('progress-p6', 'progress', 'New evidence brought back to the active workstation'),
+    v3Media('process', 'editorial', 'Gap discovery and visual thinking notes'),
+    v3Media('make', 'worlds', 'Deliberate action with precision craft and tools'),
+    v3Media('developer', 'actors', 'Visible work produced in software engineering'),
+    v3Media('structure', 'worlds', 'Artifact creation through specifications and blueprints'),
+    v3Media('scientist', 'actors', 'New empirical evidence synthesized'),
+    v3Media('hero-a', 'hero', 'Updated profile return with comprehensive evidence context'),
   ],
 
   howItWorks: [
-    media('hiw-1', 'how-it-works', 'Professional workspace where initial context is gathered'),
-    media('hiw-2', 'how-it-works', 'Adaptive question calibration based on work context'),
-    media('hiw-3', 'how-it-works', 'Multidimensional profile readings across four lenses'),
-    media('hiw-4', 'how-it-works', 'Actionable career alignment and development roadmap'),
+    v3Media('student', 'actors', 'Professional background and context intake'),
+    v3Media('process', 'editorial', 'Adaptive questioning calibrated from context'),
+    v3Media('hero-b', 'hero', 'Multidimensional profile readings across independent lenses'),
+    v3Media('collaborate', 'worlds', 'Actionable career direction and developmental roadmap'),
   ],
 
-  auth: {
-    login: media('auth-login', 'auth', 'Person reviewing professional records quietly at a desk'),
-    signup: media('auth-signup', 'auth', 'Colleagues organizing workspace artifacts at a table'),
+  // Backward compatibility alias definitions for test suites
+  legacyAliases: {
+    hero: 'hero-h2',
+    world: 'world-w8',
+    career: 'career-c8',
+    progress: 'progress-p6',
+    auth: 'auth-signup',
   },
 };
+
+export default publicMedia;
+

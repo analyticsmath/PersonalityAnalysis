@@ -1,4 +1,4 @@
-import tokens, { traitColors } from './tokens';
+import tokens, { traitColors, chartTokens } from './tokens';
 
 const colors = {
   canvas: tokens.palette.canvas,
@@ -6,19 +6,25 @@ const colors = {
   ink: tokens.palette.ink,
   secondary: tokens.palette.secondary,
   mist: tokens.palette.mist,
-  carbon: tokens.palette.carbon,
+  softField: tokens.palette.softField,
+  darkScene: tokens.palette.darkScene,
+  darkSceneFg: tokens.palette.darkSceneFg,
+  darkSceneMuted: tokens.palette.darkSceneMuted,
+  signal: tokens.palette.signal,
+  signalStrong: tokens.palette.signalStrong,
   success: tokens.palette.success,
-  caution: tokens.palette.caution,
+  warning: tokens.palette.warning,
   error: tokens.palette.error,
   info: tokens.palette.info,
   focus: tokens.palette.focus,
   background: tokens.background,
   text: tokens.text,
   border: tokens.border,
-  primary: tokens.palette.carbon,
+  primary: tokens.palette.ink,
   primaryStrong: tokens.palette.ink,
-  accent: tokens.palette.focus,
+  accent: tokens.palette.signal,
+  chart: chartTokens,
 };
 
-export { traitColors };
+export { traitColors, chartTokens };
 export default colors;

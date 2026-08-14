@@ -6,6 +6,9 @@ export default defineConfig({
   envPrefix: ['VITE_', 'REACT_APP_'],
   server: {
     historyApiFallback: true,
+    watch: {
+      ignored: ['**/public/fonts/**', '**/*.woff2', '**/*.woff', '**/*.ttf'],
+    },
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:5000',
