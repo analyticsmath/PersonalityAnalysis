@@ -20,7 +20,7 @@ export default function PersonalIntelligenceOverview({ query }) {
         title="No assessments yet"
         description="Complete an adaptive assessment to unlock your personal intelligence dashboard."
         action={
-          <Link className="history-item__link" to="/assessment/start">
+          <Link className="ui-button ui-button--primary ui-button--sm" to="/assessment/start">
             Start assessment
           </Link>
         }
@@ -29,19 +29,18 @@ export default function PersonalIntelligenceOverview({ query }) {
   }
 
   return (
-    <section className="analytics-section" aria-labelledby="pi-overview-heading">
-      <div className="section-header">
-        <div className="section-header__copy">
-          <p className="section-header__eyebrow">Your data</p>
-          <h2 id="pi-overview-heading" className="section-header__title">
-            Personal intelligence
+    <section className="dashboard-widget" aria-labelledby="pi-overview-heading">
+      <div className="dashboard-widget__head">
+        <div>
+          <h2 id="pi-overview-heading" className="dashboard-widget__title">
+            Personal Intelligence
           </h2>
-          <p className="section-header__subtitle">
-            Summaries from your own stored results — never simulated history.
+          <p className="dashboard-widget__subtitle">
+            Summaries synthesized from your stored assessment records.
           </p>
         </div>
       </div>
-      <div className="analytics-metric-grid">
+      <div className="analytics-summary-strip" style={{ marginBottom: '16px' }}>
         <MetricCard label="Assessments" value={String(d.assessmentCount)} hint="Completed runs in your account" />
         <MetricCard
           label="Latest confidence"
@@ -59,9 +58,11 @@ export default function PersonalIntelligenceOverview({ query }) {
         />
         <MetricCard label="Latest report" value={d.latestReportStatus || '—'} hint="AI narrative presence" />
       </div>
-      <p className="ui-message ui-message--neutral" role="status">
-        <strong>Next step:</strong> {d.nextRecommendedAction}
-      </p>
+      {d.nextRecommendedAction && (
+        <p className="ui-message ui-message--neutral" role="status">
+          <strong>Next step:</strong> {d.nextRecommendedAction}
+        </p>
+      )}
     </section>
   );
 }

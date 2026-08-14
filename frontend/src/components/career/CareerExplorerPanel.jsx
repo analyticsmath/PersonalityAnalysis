@@ -6,6 +6,7 @@ import CareerFitBreakdown from './CareerFitBreakdown';
 import SkillGapPanel from './SkillGapPanel';
 import CareerRoadmapTimeline from './CareerRoadmapTimeline';
 import CareerComparisonTable from './CareerComparisonTable';
+import { useWhyNotCareerMutation } from '../../hooks/useAssessmentFlow';
 
 const flattenBuckets = (rec) => {
   if (!rec || typeof rec !== 'object') return [];
@@ -18,23 +19,45 @@ const flattenBuckets = (rec) => {
 };
 
 const BUCKET_LABELS = {
+  bestFit: 'Best fits',
   bestFits: 'Best fits',
+  stretchFit: 'Stretch fits',
   stretchFits: 'Stretch fits',
+  exploratoryFit: 'Exploratory fits',
   exploratoryFits: 'Exploratory fits',
   lowerFitButPossible: 'Development paths',
 };
 
-const CareerExplorerPanel = ({ payload = null }) => {
+const CareerExplorerPanel = ({ payload = null, sessionId = '' }) => {
   const [selectedId, setSelectedId] = useState('');
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const [customRoleQuery, setCustomRoleQuery] = useState('');
-  const [customRoleAnalysis, setCustomRoleAnalysis] = useState(null);
+
+  let whyNotMutation;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    whyNotMutation = useWhyNotCareerMutation();
+  } catch {
+    whyNotMutation = {
+      isPending: false,
+      isError: false,
+      error: null,
+      data: null,
+      mutateAsync: async () => {},
+    };
+  }
 
   const locked = Boolean(payload?.locked);
   const preliminary = Boolean(payload?.preliminary);
   const rec = payload?.recommendations || {};
   const flat = useMemo(() => flattenBuckets(rec), [rec]);
-  const top = useMemo(() => (Array.isArray(payload?.topRecommendations) ? payload.topRecommendations : []), [payload]);
+  const top = useMemo(() => {
+    if (Array.isArray(payload?.topRecommendations) && payload.topRecommendations.length > 0) {
+      return payload.topRecommendations;
+    }
+    return flat;
+  }, [payload, flat]);
+
   const selected =
     top.find((r) => r.careerId === selectedId) || top[0] || flat[0] || null;
   const roadmap =
@@ -47,21 +70,24 @@ const CareerExplorerPanel = ({ payload = null }) => {
     setMobileDetailOpen(true);
   };
 
-  const handleCustomRoleSubmit = (e) => {
+  const handleCustomRoleSubmit = async (e) => {
     e.preventDefault();
-    if (!customRoleQuery.trim()) return;
-    setCustomRoleAnalysis({
-      title: customRoleQuery.trim(),
-      fitScore: 68,
-      why: 'Analysis against your continuous Big Five and RIASEC signals indicates exploratory potential.',
-      stretch: 'Requires validating specialized tooling experience and domain-specific execution evidence.',
-      strengthen: 'Build a documented case study or working technical prototype addressing this role.',
-    });
+    const query = customRoleQuery.trim();
+    if (!query || !sessionId) return;
+
+    try {
+      await whyNotMutation.mutateAsync({
+        sessionId,
+        career: query,
+      });
+    } catch {
+      // Handled by mutation state
+    }
   };
 
   if (!payload) {
     return (
-      <div className="profile-summary-card">
+      <div className="dashboard-widget">
         <p className="empty-state">No career intelligence payload was loaded.</p>
       </div>
     );
@@ -69,8 +95,8 @@ const CareerExplorerPanel = ({ payload = null }) => {
 
   if (locked) {
     return (
-      <div className="profile-summary-card">
-        <h2>Career Guidance Unavailable</h2>
+      <div className="dashboard-widget">
+        <h2 className="dashboard-widget__title">Career Guidance Unavailable</h2>
         <p className="ui-message ui-message--error" role="status">
           Career recommendations are unavailable because score validity is insufficient or invalid. Complete the
           assessment with reliable answers to unlock structured guidance.
@@ -79,137 +105,140 @@ const CareerExplorerPanel = ({ payload = null }) => {
     );
   }
 
+  const customRoleAnalysis = whyNotMutation.data?.analysis || whyNotMutation.data?.data || null;
+
   return (
-    <div className="career-master-detail-stage" data-testid="career-explorer-panel">
+    <div className="career-master-detail-stage" data-testid="career-explorer-panel" style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 340px) 1fr', gap: '24px', alignItems: 'start' }}>
       {/* ── Left / List View ────────────────────────────────────────────── */}
-      <div className={`career-master-list ${mobileDetailOpen ? 'is-hidden-mobile' : ''}`}>
-        <div className="career-master-list__head">
-          <h2>Target Roles</h2>
-          <span>{top.length} aligned environments</span>
+      <div className={`career-master-list ${mobileDetailOpen ? 'is-hidden-mobile' : ''}`} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--ink)' }}>Target Roles</h2>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>{top.length} aligned paths</span>
         </div>
 
-        <div className="career-master-items" role="tablist" aria-label="Available careers">
+        <div className="career-master-items" role="tablist" aria-label="Available careers" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {top.map((item) => {
             const isSelected = item.careerId === selected?.careerId;
+            const fitScore = item.fitScore ?? item.match ?? item.score ?? null;
+            const categoryLabel = BUCKET_LABELS[item.fitType] || item.environmentType || item.fitType || 'Calibrated match';
             return (
               <button
-                key={item.careerId}
+                key={item.careerId || item.title}
                 type="button"
                 role="tab"
                 aria-selected={isSelected}
-                className={`career-master-item-btn ${isSelected ? 'is-active' : ''}`}
+                className={`dashboard-widget ${isSelected ? 'is-active' : ''}`}
                 onClick={() => handleSelectRole(item.careerId)}
+                style={{
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  padding: '14px 16px',
+                  background: isSelected ? '#ECEFEF' : 'var(--paper)',
+                  borderColor: isSelected ? 'var(--ink)' : 'var(--mist)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '4px',
+                }}
               >
-                <div className="career-master-item-btn__title-row">
-                  <strong>{item.title}</strong>
-                  <span className="career-fit-pill">{Math.round(Number(item.fitScore || 0))}% fit</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <strong style={{ fontSize: '0.96875rem', color: 'var(--ink)' }}>{item.title}</strong>
+                  {fitScore !== null && (
+                    <span className="career-fit-badge">{Math.round(Number(fitScore))}%</span>
+                  )}
                 </div>
-                <p className="career-master-item-btn__summary">
-                  {item.whyThisFits ? item.whyThisFits.slice(0, 100) + '…' : 'Structured match based on response vectors.'}
-                </p>
+                <span style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>
+                  {categoryLabel}
+                </span>
               </button>
             );
           })}
         </div>
 
-        <div className="career-grouped-buckets">
-          <h3>Categorized Alignment</h3>
-          {['bestFits', 'stretchFits', 'exploratoryFits', 'lowerFitButPossible'].map((key) => {
-            const list = (rec[key] || []).slice(0, 4);
-            if (!list.length) return null;
-            return (
-              <div key={key} className="career-bucket-group">
-                <h4>{BUCKET_LABELS[key] || key}</h4>
-                <ul>
-                  {list.map((it) => (
-                    <li key={it.careerId}>
-                      <button type="button" onClick={() => handleSelectRole(it.careerId)}>
-                        {it.title} ({Math.round(it.fitScore || 0)}%)
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ── Right / Detail View ─────────────────────────────────────────── */}
-      <div className={`career-detail-pane ${mobileDetailOpen ? 'is-visible-mobile' : ''}`}>
-        {mobileDetailOpen && (
-          <div className="career-detail-mobile-back">
-            <Button variant="ghost" size="sm" onClick={() => setMobileDetailOpen(false)}>
-              <FiArrowLeft /> Back to role list
-            </Button>
-          </div>
-        )}
-
-        {selected ? (
-          <article className="career-detail-article">
-            <header className="career-detail-header">
-              <span className="career-badge-quiet">{selected.fitType || 'Target Match'}</span>
-              <h2 className="career-detail-title">{selected.title}</h2>
-              <div className="career-detail-fit-row">
-                <span className="career-detail-fit-number">{Math.round(Number(selected.fitScore || 0))}%</span>
-                <span>Calculated Fit Index</span>
-                {preliminary && <small>(Preliminary reading)</small>}
-              </div>
-            </header>
-
-            <div className="career-detail-block">
-              <h3>Why this fits</h3>
-              <p>{selected.whyThisFits || 'Your responses show high structural alignment with this role environment.'}</p>
-            </div>
-
-            <div className="career-detail-block">
-              <h3>Fit Breakdown</h3>
-              <CareerFitBreakdown fitBreakdown={selected.fitBreakdown} />
-            </div>
-
-            <div className="career-detail-block">
-              <h3>Skill Gaps &amp; Growth Areas</h3>
-              <SkillGapPanel skillGaps={selected.skillGaps} />
-            </div>
-
-            <div className="career-detail-block">
-              <h3>Roadmap &amp; Milestones</h3>
-              <CareerRoadmapTimeline timeline={roadmap} />
-            </div>
-          </article>
-        ) : (
-          <div className="profile-summary-card">
-            <p>Select a career from the list to inspect detailed evidence.</p>
-          </div>
-        )}
-
-        {/* ── Explore Another Role (Formerly Why-Not) ──────────────────────── */}
-        <section className="explore-custom-role-section">
-          <h3>Explore another role</h3>
-          <p>Test your profile alignment against a role not shown in top recommendations.</p>
-          <form className="explore-custom-role-form" onSubmit={handleCustomRoleSubmit}>
+        {/* ── Custom Role Inquiry ── */}
+        <section className="dashboard-widget" style={{ marginTop: '16px', padding: '16px' }} aria-labelledby="custom-role-heading">
+          <h3 id="custom-role-heading" style={{ fontSize: '0.9375rem', fontWeight: 600, marginBottom: '8px' }}>
+            Explore Another Role
+          </h3>
+          <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', marginBottom: '12px' }}>
+            Check dimensional fit for an unlisted career title.
+          </p>
+          <form onSubmit={handleCustomRoleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <input
               type="text"
               className="ui-input"
-              placeholder="e.g. Technical Program Manager, Design Director"
               value={customRoleQuery}
               onChange={(e) => setCustomRoleQuery(e.target.value)}
+              placeholder="e.g. Quantitative Trader"
+              disabled={whyNotMutation.isPending}
             />
-            <Button type="submit">
-              <FiSearch /> Analyze Role
+            <Button
+              type="submit"
+              variant="secondary"
+              size="sm"
+              disabled={!customRoleQuery.trim() || whyNotMutation.isPending}
+              loading={whyNotMutation.isPending}
+              loadingLabel="Analyzing role…"
+            >
+              <FiSearch /> Analyze Role Fit
             </Button>
           </form>
 
+          {whyNotMutation.isError && (
+            <p className="ui-message ui-message--error" style={{ marginTop: '8px', fontSize: '0.8125rem' }}>
+              {whyNotMutation.error?.message || 'Failed to analyze custom role.'}
+            </p>
+          )}
+
           {customRoleAnalysis && (
-            <div className="custom-role-analysis-result">
-              <h4>Analysis: {customRoleAnalysis.title}</h4>
-              <p><strong>Fit Index:</strong> {customRoleAnalysis.fitScore}%</p>
-              <p><strong>Rationale:</strong> {customRoleAnalysis.why}</p>
-              <p><strong>Where it stretches:</strong> {customRoleAnalysis.stretch}</p>
-              <p><strong>Development action:</strong> {customRoleAnalysis.strengthen}</p>
+            <div className="ui-message ui-message--info" style={{ marginTop: '12px', fontSize: '0.8125rem' }}>
+              <strong>{customRoleAnalysis.title || customRoleQuery}:</strong>
+              <p style={{ margin: '4px 0 0' }}>{customRoleAnalysis.why || customRoleAnalysis.reason || customRoleAnalysis.summary}</p>
+              {customRoleAnalysis.stretch && (
+                <p style={{ margin: '4px 0 0' }}><strong>Stretch:</strong> {customRoleAnalysis.stretch}</p>
+              )}
             </div>
           )}
         </section>
+      </div>
+
+      {/* ── Right / Detail Workspace ────────────────────────────────────── */}
+      <div className={`career-detail-workspace ${mobileDetailOpen ? 'is-active-mobile' : ''}`}>
+        {selected ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {mobileDetailOpen && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="career-mobile-back-btn"
+                onClick={() => setMobileDetailOpen(false)}
+                style={{ alignSelf: 'flex-start' }}
+              >
+                <FiArrowLeft /> Back to role list
+              </Button>
+            )}
+
+            <CareerRecommendationCard item={selected} preliminary={preliminary} />
+
+            <div className="dashboard-grid">
+              <div className="col-span-6">
+                <CareerFitBreakdown fitBreakdown={selected.fitBreakdown || selected.dimensionAlignments} />
+              </div>
+              <div className="col-span-6">
+                <SkillGapPanel skillGaps={selected.skillGaps || selected.skills} />
+              </div>
+            </div>
+
+            {roadmap.length > 0 && (
+              <CareerRoadmapTimeline timeline={roadmap} />
+            )}
+
+            <CareerComparisonTable items={top} selectedId={selected.careerId} />
+          </div>
+        ) : (
+          <div className="dashboard-widget">
+            <p className="empty-state">Select a career from the list to inspect dimensional breakdown and roadmap.</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import {
   readAssessmentFlowState,
   saveAssessmentFlowState,
 } from '../../utils/assessmentFlowStorage';
+import '../../styles/assessment-product.css';
 
 const MIN_LENGTH = 40;
 

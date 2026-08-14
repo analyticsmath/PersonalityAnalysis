@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AssessmentPage from '../Assessment';
+import '../../styles/theme.css';
+import '../../styles/phase6-ui.css';
 
 /**
  * Non-adaptive (legacy) questionnaire UI. Kept for backward compatibility only.

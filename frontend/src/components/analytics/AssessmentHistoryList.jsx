@@ -30,32 +30,36 @@ export default function AssessmentHistoryList({ query }) {
   }
 
   return (
-    <section className="analytics-section" aria-labelledby="hist-heading">
-      <h2 id="hist-heading" className="section-header__title">
-        Assessment history
-      </h2>
-      <ul className="analytics-history-list">
+    <section className="dashboard-widget" aria-labelledby="hist-heading">
+      <div className="dashboard-widget__head">
+        <h2 id="hist-heading" className="dashboard-widget__title">
+          Assessment History
+        </h2>
+        <span style={{ fontSize: '0.875rem', color: 'var(--secondary)' }}>{items.length} records</span>
+      </div>
+      <ul className="analytics-history-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {items.map((row) => (
-          <li key={row.resultId}>
-            <article className="analytics-history-card">
-              <div>
-                <p className="page-header__eyebrow">{formatDate(row.completedAt || row.createdAt)}</p>
-                <p>
-                  <strong>{row.topCareer || 'Career TBD'}</strong> · {row.primaryArchetype || '—'}
-                </p>
-                <p className="ui-message ui-message--neutral">
-                  Validity: {row.scoreValidity} · Status: {row.status}
-                </p>
-                <p className="ui-message ui-message--neutral">
-                  Confidence: {row.confidence != null ? `${Math.round(Number(row.confidence) * 100)}%` : '—'} · AI
-                  report: {row.hasAiReport ? 'yes' : 'no'} · Career intel: {row.hasCareerRecommendations ? 'yes' : 'no'}
-                </p>
+          <li key={row.resultId} style={{ marginBottom: '8px' }}>
+            <article className="analytics-history-row">
+              <div className="analytics-history-row__info">
+                <span style={{ fontSize: '0.75rem', color: 'var(--secondary)', fontWeight: 500 }}>
+                  {formatDate(row.completedAt || row.createdAt)}
+                </span>
+                <strong>{row.topCareer || 'Career TBD'} · {row.primaryArchetype || '—'}</strong>
+                <span style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>
+                  Validity: {row.scoreValidity} · Status: {row.status} · Confidence:{' '}
+                  {row.confidence != null ? `${Math.round(Number(row.confidence) * 100)}%` : '—'}
+                </span>
               </div>
-              <div className="analytics-history-card__actions">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {row.scoreValidity === 'legacy_unverified' ? (
                   <StatusBadge variant="warning" label="Legacy / unverified" />
                 ) : null}
-                <Link className="history-item__link" to={`/result/${row.assessmentId}`}>
+                <Link
+                  className="ui-button ui-button--ghost ui-button--sm"
+                  to={`/result/${row.assessmentId || row.resultId}`}
+                  aria-label="View result"
+                >
                   View result
                 </Link>
               </div>

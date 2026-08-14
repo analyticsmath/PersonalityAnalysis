@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiCompass } from 'react-icons/fi';
 import Button from '../../components/ui/Button';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState from '../../components/ui/ErrorState';
-import EmptyState from '../../components/ui/EmptyState';
+import ProductShell from '../../components/product/ProductShell';
+import EmptyProductState from '../../components/ui/EmptyProductState';
 import CareerExplorerPanel from '../../components/career/CareerExplorerPanel';
 import { useCareerRecommendationsQuery } from '../../hooks/useAssessmentFlow';
 import { readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
 import { useAuth } from '../../hooks/useAuth';
 
-const CareerExplorerPage = () => {
+export default function CareerExplorerPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const auth = useAuth();
@@ -21,49 +22,41 @@ const CareerExplorerPage = () => {
 
   if (!sessionId) {
     return (
-      <main className="app-page">
-        <div className="page-shell">
-          <div className="profile-summary-card">
-            <EmptyState
-              title="No active session"
-              description="Start or resume an assessment to generate personalized career guidance for this explorer."
-              action={
-                <Button onClick={() => navigate('/assessment/start')}>Start assessment</Button>
-              }
-            />
-          </div>
-        </div>
-      </main>
+      <ProductShell title="Career Explorer">
+        <EmptyProductState
+          title="No active session"
+          description="Start or resume an assessment to generate calibrated career alignment."
+          action={
+            <Button variant="primary" onClick={() => navigate('/assessment/start')}>
+              Start assessment
+            </Button>
+          }
+        />
+      </ProductShell>
     );
   }
 
   if (careerQuery.isPending) {
     return (
-      <main className="app-page">
-        <div className="page-shell">
-          <div className="profile-summary-card">
-            <LoadingState message="Loading structured career intelligence…" variant="question" />
-          </div>
-        </div>
-      </main>
+      <ProductShell title="Career Explorer">
+        <LoadingState message="Loading calibrated career intelligence…" variant="question" />
+      </ProductShell>
     );
   }
 
   if (careerQuery.isError) {
     return (
-      <main className="app-page">
-        <div className="page-shell">
-          <div className="profile-summary-card">
-            <ErrorState
-              message={careerQuery.error?.message || 'Unable to load career recommendations.'}
-              onRetry={() => careerQuery.refetch()}
-            />
-            <Button variant="ghost" onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>
-              Back to results
+      <ProductShell title="Career Explorer">
+        <EmptyProductState
+          title="Career Intelligence Unavailable"
+          description={careerQuery.error?.message || 'Unable to load career recommendations.'}
+          action={
+            <Button variant="secondary" onClick={() => careerQuery.refetch()}>
+              Try Again
             </Button>
-          </div>
-        </div>
-      </main>
+          }
+        />
+      </ProductShell>
     );
   }
 
@@ -71,31 +64,38 @@ const CareerExplorerPage = () => {
   const first = top[0];
 
   return (
-    <main className="app-page career-explorer-page">
-      <div className="page-shell career-explorer-shell">
-        <header className="career-explorer-top-bar">
-          <div>
-            <h1 className="career-explorer-main-title">Career Explorer</h1>
-            <p className="career-explorer-main-subtitle">
-              Recommendations are evidence-based guidance from your assessment—not hiring decisions.
-            </p>
-          </div>
-          <Button variant="ghost" size="sm" onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>
-            <FiArrowLeft /> Back to results
+    <ProductShell
+      title="Career Explorer"
+      actions={
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button variant="secondary" size="sm" onClick={() => navigate(`/assessment/result?session=${sessionId}`)}>
+            <FiArrowLeft /> Profile Result
           </Button>
+          <Button variant="secondary" size="sm" onClick={() => navigate('/dashboard')}>
+            Overview
+          </Button>
+        </div>
+      }
+    >
+      <div className="career-explorer-shell">
+        <header style={{ marginBottom: '20px' }}>
+          <h1 className="dashboard-widget__title" style={{ fontSize: '1.75rem', marginBottom: '6px' }}>
+            Career Explorer
+          </h1>
+          <p style={{ color: 'var(--secondary)', fontSize: '0.9375rem', margin: 0 }}>
+            Recommendations represent dimensional alignment with your demonstrated signals—not hiring decisions.
+          </p>
         </header>
 
         {first && (
-          <div className="career-explorer-sticky-pill" role="status">
-            <strong>Top match:</strong> {first.title} · {Math.round(Number(first.fitScore || 0))}% fit
+          <div className="ui-message ui-message--info" role="status" style={{ marginBottom: '20px' }}>
+            <strong>Top alignment:</strong> {first.title} · {first.fitScore != null ? `${Math.round(Number(first.fitScore))}% fit` : 'Calibrated match'}
             {careerQuery.data?.preliminary ? ' · Preliminary' : ''}
           </div>
         )}
 
-        <CareerExplorerPanel payload={careerQuery.data} />
+        <CareerExplorerPanel payload={careerQuery.data} sessionId={sessionId} />
       </div>
-    </main>
+    </ProductShell>
   );
-};
-
-export default CareerExplorerPage;
+}

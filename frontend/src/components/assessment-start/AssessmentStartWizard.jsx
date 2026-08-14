@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import StepRole from './steps/StepRole';
 import StepCV from './steps/StepCV';
 import StepProfile from './steps/StepProfile';
@@ -10,6 +11,7 @@ import {
   useAssessmentWizard,
   WIZARD_STEPS,
 } from '../../hooks/useAssessmentWizard';
+import '../../styles/assessment-product.css';
 
 const AssessmentStartWizard = () => {
   const {
@@ -120,7 +122,7 @@ const AssessmentStartWizard = () => {
                 isSubmitting={step2Analyzing}
                 disabled={step2Analyzing}
               />
-              <footer className="assessment-setup-state__actions">
+              <footer className="assessment-question-actions">
                 <Button type="button" variant="ghost" onClick={goToPreviousStep} disabled={step2Analyzing}>
                   Back
                 </Button>
@@ -187,9 +189,21 @@ const AssessmentStartWizard = () => {
   ]);
 
   return (
-    <main className="app-page assessment-setup-page">
-      <div className="page-shell assessment-setup-shell">
-        <div ref={stepShellRef} className="assessment-setup-content" key={currentStep}>
+    <main className="assessment-focused-page">
+      <div className="assessment-focused-shell">
+        <header className="assessment-quiet-header">
+          <Link to="/" className="assessment-quiet-header__brand">
+            Personality Assessor
+          </Link>
+          <span className="assessment-quiet-step-text">
+            Step {currentStep} of 3
+          </span>
+          <Link to="/dashboard" className="public-text-action" style={{ fontSize: '0.875rem' }}>
+            Exit
+          </Link>
+        </header>
+
+        <div ref={stepShellRef} className="assessment-setup-content" key={currentStep} style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '40px 0 60px' }}>
           {stepView}
         </div>
       </div>

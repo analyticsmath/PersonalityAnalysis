@@ -20,7 +20,7 @@ const footerNav = [
 
 export function Arrow() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" className="public-arrow-icon">
+    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" className="public-arrow-icon" width="16" height="16">
       <path d="M3 9h11M10 4l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -186,8 +186,14 @@ export function PublicLayout({ children, page, footerMode = 'standard' }) {
       </a>
       <PublicHeader />
       <PublicMotionRoot>
-        {children}
-        {footerMode !== 'integrated' && <PublicFooter />}
+        <div id="smooth-wrapper">
+          <div id="smooth-content">
+            <div id="main-content">
+              {children}
+            </div>
+            {footerMode !== 'integrated' && <PublicFooter />}
+          </div>
+        </div>
       </PublicMotionRoot>
     </div>
   );

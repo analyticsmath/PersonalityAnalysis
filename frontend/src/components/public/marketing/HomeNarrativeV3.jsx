@@ -303,7 +303,6 @@ function AdaptiveQuestionDemoScene() {
     <section className="adaptive-question-scene" data-header-scene="light" aria-labelledby="adaptive-question-title">
       <div className="adaptive-question-scene__inner">
         <header className="adaptive-question-scene__header">
-          <span className="public-scene-kicker">Interactive Demonstration</span>
           <h2 id="adaptive-question-title" className="adaptive-question-scene__title">
             Adaptive questioning in action.
           </h2>

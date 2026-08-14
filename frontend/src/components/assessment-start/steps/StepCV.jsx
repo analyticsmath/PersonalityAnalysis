@@ -25,74 +25,107 @@ const StepCV = ({
 }) => {
   const fileRef = useRef(null);
 
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (isAnalyzing) return;
+    const droppedFile = e.dataTransfer?.files?.[0];
+    if (droppedFile) {
+      onCvFileChange?.(droppedFile);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
   return (
-    <div className="wizard-cv-pane">
-      <div className="wizard-upload-box">
+    <div className="wizard-cv-pane" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div
+        className="wizard-upload-box"
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onClick={() => !isAnalyzing && fileRef.current?.click()}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            fileRef.current?.click();
+          }
+        }}
+        aria-label="Upload CV file"
+      >
         <p className="wizard-upload-box__title">Upload CV / Resume</p>
         <p className="wizard-upload-box__subtitle">PDF or DOCX (max 6 MB)</p>
 
         <input
           ref={fileRef}
           type="file"
-          className="wizard-upload-box__input"
+          className="visually-hidden"
           accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           onChange={(event) => onCvFileChange?.(event.target.files?.[0] || null)}
+          aria-label="CV file input"
         />
 
         <Button
           variant="primary"
-          onClick={() => fileRef.current?.click()}
+          onClick={(e) => {
+            e.stopPropagation();
+            fileRef.current?.click();
+          }}
           disabled={isAnalyzing}
         >
           <FiUploadCloud /> {cvFile ? 'Change CV' : 'Upload CV'}
         </Button>
 
         {cvFile && (
-          <div className="wizard-file-pill" role="status" aria-live="polite">
+          <div
+            className="wizard-file-pill"
+            role="status"
+            aria-live="polite"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '8px 14px',
+              background: '#F0F4F2',
+              borderRadius: 'var(--radius-sm)',
+              marginTop: '8px',
+            }}
+          >
             <FiFileText aria-hidden="true" />
-            <div>
-              <strong>{cvFile.name}</strong>
-              <small>{formatBytes(cvFile.size)}</small>
+            <div style={{ textAlign: 'left' }}>
+              <strong style={{ display: 'block', fontSize: '0.875rem' }}>{cvFile.name}</strong>
+              <small style={{ color: 'var(--secondary)' }}>{formatBytes(cvFile.size)}</small>
             </div>
           </div>
         )}
       </div>
 
       {(analysisStatus === 'running' || analysisStatus === 'success') && (
-        <div className="wizard-generate-shell">
-          <div className="wizard-generate-shell__spinner" aria-hidden="true">
-            {analysisStatus === 'success' ? <FiCheckCircle /> : <FiLoader />}
-          </div>
-
-          <div className="wizard-generate-shell__timeline" role="status" aria-live="polite">
-            {analysisMessages.map((label, index) => {
-              const isCompleted = analysisStatus === 'success' || index < analysisIndex;
-              const isActive = analysisStatus === 'running' && index === analysisIndex;
-
-              return (
-                <div
-                  key={label}
-                  className={`wizard-generate-shell__line ${
-                    isCompleted ? 'is-complete' : isActive ? 'is-active' : ''
-                  }`}
-                >
-                  <span className="wizard-generate-shell__line-icon" aria-hidden="true">
-                    {isCompleted ? <FiCheckCircle /> : isActive ? <FiLoader /> : <FiCircle />}
-                  </span>
-                  <span>{label}</span>
-                </div>
-              );
-            })}
+        <div className="ui-message ui-message--info" role="status" aria-live="polite">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {analysisStatus === 'success' ? <FiCheckCircle /> : <span className="ui-loader-ring" style={{ width: 16, height: 16 }} />}
+            <span>{analysisStatus === 'success' ? 'CV context parsed successfully.' : (analysisMessages[analysisIndex] || 'Parsing CV context…')}</span>
           </div>
         </div>
       )}
 
-      <label className="manual-profile-form__consent">
+      <label
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '10px',
+          fontSize: '0.875rem',
+          color: 'var(--secondary)',
+          cursor: 'pointer',
+        }}
+      >
         <input
           type="checkbox"
           checked={Boolean(consentAccepted)}
           onChange={(e) => onConsentChange?.(e.target.checked)}
           disabled={isAnalyzing}
+          style={{ marginTop: '3px' }}
         />
         <span>
           I agree to use my CV/profile details to personalize my assessment and career insights.
@@ -101,7 +134,7 @@ const StepCV = ({
 
       {errorMessage && <p className="ui-message ui-message--error">{errorMessage}</p>}
 
-      <footer className="assessment-setup-state__actions">
+      <footer className="assessment-question-actions">
         <Button variant="ghost" onClick={onBack} disabled={isAnalyzing}>
           Back
         </Button>
@@ -109,6 +142,7 @@ const StepCV = ({
           onClick={onAnalyze}
           disabled={isAnalyzeDisabled || isAnalyzing}
           loading={isAnalyzing}
+          loadingLabel="Parsing context…"
         >
           Analyze CV
         </Button>

@@ -18,7 +18,7 @@ describe('Public rebuild visual contract', () => {
     );
   });
 
-  it('uses the exact Phase 3A home copy and no rejected headline treatment', () => {
+  it('uses the exact Phase 3A/3B home copy and no rejected headline treatment', () => {
     expect(narrative).toContain('Your work');
     expect(narrative).toContain('leaves evidence.');
     expect(narrative).toContain('Personality Assessor brings professional context and adaptive responses together');
@@ -46,10 +46,10 @@ describe('Public rebuild visual contract', () => {
     expect(source).not.toMatch(/pv-hero|pv-worlds|pv-transform|\bpi-|pa-closing|pa-home-trust|pa-context-pro-01/i);
   });
 
-  it('keeps public motion scoped, native, and reduced-motion safe', () => {
+  it('keeps public motion scoped, ScrollSmoother integrated for desktop, and reduced-motion safe', () => {
     expect(motion).toContain('gsap.context(');
     expect(motion).toContain('reducedMotion');
-    expect(motion).not.toContain('ScrollSmoother');
+    expect(motion).toContain('ScrollSmoother');
   });
 
   it('keeps accessible controls and mobile menu Escape restoration', () => {

@@ -15,14 +15,9 @@ import {
   usePreviousAdaptiveQuestionMutation,
 } from '../../hooks/useAssessmentFlow';
 import useAssessmentSessionMachine from '../../hooks/useAssessmentSessionMachine';
-import {
-  clearQuestionDraft,
-  readAssessmentFlowState,
-  readQuestionDraft,
-  saveAssessmentFlowState,
-  saveQuestionDraft,
-} from '../../utils/assessmentFlowStorage';
+import { clearQuestionDraft, readAssessmentFlowState, readQuestionDraft, saveAssessmentFlowState, saveQuestionDraft } from '../../utils/assessmentFlowStorage';
 import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEvents';
+import '../../styles/assessment-product.css';
 
 /** Same gate as the adaptive question polling effect (exported for tests). */
 export function shouldScheduleAdaptiveQuestionPoll({

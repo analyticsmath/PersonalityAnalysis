@@ -1,0 +1,102 @@
+/* Phase 3B — Settings & Privacy Product Styles */
+
+.settings-page {
+  padding: 0;
+}
+
+.settings-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 960px;
+}
+
+.settings-header {
+  margin-bottom: 8px;
+}
+
+.settings-header__title {
+  font-size: clamp(1.85rem, 3vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.settings-header__subtitle {
+  font-size: 1.05rem;
+  color: var(--secondary);
+  max-width: 72ch;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Settings Section Panel ── */
+.settings-section-card {
+  background: var(--paper);
+  border: 1px solid var(--mist);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 2.5vw, 32px);
+  box-shadow: var(--shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-section-card__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid var(--canvas);
+  padding-bottom: 14px;
+}
+
+.settings-section-card__title {
+  font-size: 1.25rem;
+  font-weight: 550;
+  color: var(--ink);
+}
+
+.settings-section-card__desc {
+  font-size: 0.9375rem;
+  color: var(--secondary);
+  margin: 0;
+}
+
+.settings-section-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Danger Zone Panel ── */
+.settings-danger-card {
+  background: var(--paper);
+  border: 1px solid #E5B2A6;
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 2.5vw, 32px);
+  box-shadow: var(--shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-danger-card__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid #F6DCD5;
+  padding-bottom: 14px;
+}
+
+.settings-danger-card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--error);
+}
+
+.settings-danger-card__desc {
+  font-size: 0.9375rem;
+  color: var(--secondary);
+  margin: 0;
+}

@@ -29,20 +29,22 @@ export default function InsightTimeline({ query }) {
   }
 
   return (
-    <section className="analytics-section" aria-labelledby="tl-heading">
-      <h2 id="tl-heading" className="section-header__title">
-        Insight timeline
-      </h2>
-      <div className="analytics-timeline" role="list">
+    <section className="dashboard-widget" aria-labelledby="tl-heading">
+      <div className="dashboard-widget__head">
+        <h2 id="tl-heading" className="dashboard-widget__title">
+          Insight Timeline
+        </h2>
+      </div>
+      <div className="analytics-timeline-events" role="list">
         {events.map((e, i) => (
-          <div className="analytics-timeline__item" role="listitem" key={`${e.type}-${e.resultId}-${i}`}>
-            <p className="page-header__eyebrow">{formatDate(e.date)}</p>
-            <h3>{e.title}</h3>
-            <p>{e.description}</p>
-            <p className="ui-message ui-message--neutral">
+          <div className="analytics-timeline-event" role="listitem" key={`${e.type}-${e.resultId}-${i}`}>
+            <span className="analytics-timeline-event__date">{formatDate(e.date)}</span>
+            <h3 className="analytics-timeline-event__title">{e.title}</h3>
+            <p className="analytics-timeline-event__detail">{e.description}</p>
+            <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>
               {e.type} · {e.severity}
               {e.resultId ? ` · result ${e.resultId}` : ''}
-            </p>
+            </span>
           </div>
         ))}
       </div>

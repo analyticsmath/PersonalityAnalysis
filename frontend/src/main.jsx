@@ -10,8 +10,12 @@ import { AuthProvider } from './store/AuthStore';
 import { GOOGLE_CLIENT_ID } from './config/env';
 import '@fontsource-variable/instrument-sans/wdth.css';
 import './index.css';
-import './styles/theme.css';
-import './styles/phase6-ui.css';
+import './styles/foundation.css';
+import './styles/product-shell.css';
+import './styles/assessment-product.css';
+import './styles/results-product.css';
+import './styles/analytics-product.css';
+import './styles/settings-product.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

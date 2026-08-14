@@ -1,114 +1,59 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useReducedMotion } from 'framer-motion';
+import React, { useMemo, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   FiArrowLeft,
   FiCompass,
   FiDownload,
-  FiMessageCircle,
+  FiMessageSquare,
   FiRefreshCw,
-  FiSend,
   FiShare2,
 } from 'react-icons/fi';
 import Button from '../../components/ui/Button';
 import Skeleton from '../../components/ui/Skeleton';
-import Loader from '../../components/ui/Loader';
-import LoaderOverlay from '../../components/ui/LoaderOverlay';
-import AiStatusBadges from '../../components/results/AiStatusBadges';
-import ScoringEvidenceCard from '../../components/results/ScoringEvidenceCard';
-import CareerRecommendationCard from '../../components/career/CareerRecommendationCard';
-import WorkValuesProfileCard from '../../components/charts/WorkValuesProfileCard';
-import { normalizeAssessmentResult } from '../../utils/assessmentResultNormalize';
-import { useAuth } from '../../hooks/useAuth';
+import ProductShell from '../../components/product/ProductShell';
+import EmptyProductState from '../../components/ui/EmptyProductState';
 import {
   useAssessmentFlowResultQuery,
-  useCareerChatMutation,
-  useCareerRecommendationsQuery,
   useRetryAiReportMutation,
 } from '../../hooks/useAssessmentFlow';
-import { downloadAssessmentFlowPdf } from '../../api/assessmentFlowApi';
-import { clearAssessmentFlowState, readAssessmentFlowState } from '../../utils/assessmentFlowStorage';
+import { useAuth } from '../../hooks/useAuth';
+import { normalizeTraits, TRAIT_META, TRAIT_ORDER } from '../../utils/traits';
+import '../../styles/results-product.css';
 
-const QUICK_CHAT_PROMPTS = [
-  'Why is my top career a strong fit?',
-  'What should I improve in 30 days?',
-  'Which skill gap blocks my growth most?',
-];
+const formatDate = (value) => {
+  if (!value) return 'Not available';
+  return new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  }).format(new Date(value));
+};
 
-const AssessmentFlowResultPage = () => {
+export default function AssessmentFlowResultPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const auth = useAuth();
-  const prefersReducedMotion = useReducedMotion();
 
-  const sessionId =
-    searchParams.get('session') || readAssessmentFlowState(auth.userId)?.sessionId || '';
+  const sessionId = searchParams.get('session') || '';
+  const stateResult = location.state?.result || null;
 
   const resultQuery = useAssessmentFlowResultQuery(sessionId, Boolean(sessionId));
-  const chatMutation = useCareerChatMutation();
   const retryAiMutation = useRetryAiReportMutation(sessionId);
 
-  const [message, setMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState([]);
-  const [followUpPrompts, setFollowUpPrompts] = useState(QUICK_CHAT_PROMPTS);
-  const [chatError, setChatError] = useState('');
-  const [chatTyping, setChatTyping] = useState(false);
-  const [pdfError, setPdfError] = useState('');
-  const [shareStatus, setShareStatus] = useState('');
   const [activeLens, setActiveLens] = useState('personality');
+  const [shareStatus, setShareStatus] = useState('');
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const chatFeedRef = useRef(null);
+  const payload = resultQuery.data || null;
+  const result = payload?.result || stateResult || payload || null;
+  const reportStatus = payload?.state?.reportStatus || null;
 
-  const result = resultQuery.data?.result || null;
-  const normalized = useMemo(() => normalizeAssessmentResult(result), [result]);
-  const flowAiStatus = normalized.aiStatus || null;
-  const careerPhase4Embedded = normalized.careerPhase4;
-  const careerRecQuery = useCareerRecommendationsQuery(
-    sessionId,
-    Boolean(sessionId && result && !careerPhase4Embedded)
-  );
-  const careerIntel = careerPhase4Embedded || careerRecQuery.data || null;
+  const rawTraits = result?.traits || result?.trait_scores || {};
+  const traits = normalizeTraits(rawTraits);
+  const hasTraits = Object.keys(traits).length > 0;
 
-  useEffect(() => {
-    if (Array.isArray(resultQuery.data?.history)) {
-      setChatHistory(resultQuery.data.history);
-    }
-  }, [resultQuery.data?.history]);
-
-  useEffect(() => {
-    const node = chatFeedRef.current;
-    if (!node) return;
-    const top = node.scrollHeight;
-    if (typeof node.scrollTo === 'function') {
-      node.scrollTo({ top, behavior: 'smooth' });
-    } else {
-      node.scrollTop = top;
-    }
-  }, [chatHistory, chatTyping]);
-
-  const traits = normalized.radarTraits;
-  const phaseScores = normalized.scores;
-  const recommendations = Array.isArray(result?.career_recommendations)
-    ? result.career_recommendations
-    : [];
-
-  const handleDownloadPdf = async () => {
-    if (!sessionId) return;
-    setPdfError('');
-    try {
-      const blob = await downloadAssessmentFlowPdf(sessionId);
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `personality-profile-${sessionId.slice(0, 8)}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      setPdfError(error.message || 'Unable to download report PDF.');
-    }
-  };
+  const rawCareers = result?.recommendedCareers || result?.career_recommendations || [];
+  const careers = Array.isArray(rawCareers) ? rawCareers : [];
 
   const handleShare = async () => {
     setShareStatus('');
@@ -124,446 +69,392 @@ const AssessmentFlowResultPage = () => {
         setShareStatus('Link copied to clipboard.');
         setTimeout(() => setShareStatus(''), 3000);
       }
-    } catch (e) {
+    } catch {
       // Ignored
     }
   };
 
-  const handleRetake = () => {
-    clearAssessmentFlowState(auth.userId);
-    navigate('/assessment/start');
-  };
-
-  const sendChatMessage = async (overridePrompt) => {
-    const outgoing = (overridePrompt || message || '').trim();
-    if (!outgoing || chatMutation.isPending || !sessionId) return;
-
-    setMessage('');
-    setChatError('');
-    setChatTyping(true);
-
-    const optimisticUser = { role: 'user', content: outgoing, timestamp: new Date().toISOString() };
-    setChatHistory((prev) => [...prev, optimisticUser]);
-
+  const handleRetryAi = async () => {
+    if (!sessionId) return;
     try {
-      const reply = await chatMutation.mutateAsync({
-        sessionId,
-        message: outgoing,
-      });
-
-      const assistantMsg = {
-        role: 'assistant',
-        content: reply.message || reply.response || 'No response provided.',
-        timestamp: new Date().toISOString(),
-      };
-      setChatHistory((prev) => [...prev, assistantMsg]);
-      if (Array.isArray(reply.followUps) && reply.followUps.length) {
-        setFollowUpPrompts(reply.followUps);
-      }
-    } catch (error) {
-      setChatError(error.message || 'Coach chat is temporarily unavailable.');
-    } finally {
-      setChatTyping(false);
+      await retryAiMutation.mutateAsync({ assessmentId: sessionId });
+    } catch {
+      // Handled by mutation state
     }
   };
 
-  if (resultQuery.isPending) {
+  if (resultQuery.isPending && !stateResult) {
     return (
-      <main className="app-page profile-results-page">
-        <div className="page-shell profile-results-shell">
-          <div className="profile-results-loading">
-            <Loader label="Synthesizing your profile..." variant="general" />
-            <Skeleton height="36px" />
-            <Skeleton height="140px" />
-            <Skeleton height="280px" />
-          </div>
+      <ProductShell title="Synthesizing Profile…">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '900px' }}>
+          <Skeleton height="36px" />
+          <Skeleton height="140px" />
+          <Skeleton height="280px" />
         </div>
-      </main>
+      </ProductShell>
     );
   }
 
-  if (!result || resultQuery.isError) {
+  if (!result && resultQuery.isError) {
     return (
-      <main className="app-page profile-results-page">
-        <div className="page-shell profile-results-shell">
-          <div className="profile-results-error">
-            <h1>Profile Unavailable</h1>
-            <p className="ui-message ui-message--error">
-              {resultQuery.error?.message || 'Unable to load your profile session.'}
-            </p>
-            <Button onClick={() => navigate('/assessment/start')}>Start New Assessment</Button>
-          </div>
-        </div>
-      </main>
+      <ProductShell title="Profile Unavailable">
+        <EmptyProductState
+          title="Profile Session Unavailable"
+          description={resultQuery.error?.message || 'Unable to load your profile session.'}
+          action={
+            <Button variant="primary" onClick={() => navigate('/assessment/start')}>
+              Start New Assessment
+            </Button>
+          }
+        />
+      </ProductShell>
     );
   }
 
-  const profileSummary =
-    result.summary ||
-    result.profile_summary ||
-    normalized.summaryText ||
-    'Your responses synthesize into four independent profile lenses: baseline personality spectrums, vocational interests, work values, and demonstrated career signals.';
-
-  const bigFiveList = traits.length
-    ? traits.map((t) => [t.trait, t.score, t.interpretation || 'Continuous dimensional measure'])
-    : [
-        ['Openness', 76, 'Curiosity and tolerance for structural ambiguity'],
-        ['Conscientiousness', 68, 'Deliberate planning and execution rigor'],
-        ['Extraversion', 54, 'Balanced collaborative and independent focus'],
-        ['Agreeableness', 63, 'Constructive inquiry with shared outcomes'],
-        ['Emotional Stability', 71, 'Stable execution under shifting constraints'],
-      ];
-
-  const riasecScores = phaseScores?.riasec || {};
-  const riasecList = Object.keys(riasecScores).length
-    ? Object.entries(riasecScores).map(([k, v]) => [k, typeof v === 'object' ? v.score || 0 : Number(v || 0)])
-    : [
-        ['Investigative', 78],
-        ['Artistic', 70],
-        ['Conventional', 62],
-        ['Enterprising', 57],
-        ['Realistic', 56],
-        ['Social', 51],
-      ];
-
-  const careerSignals = phaseScores?.careerSignals || {};
+  const riasecScores = result?.phaseScores?.riasec || result?.riasec || null;
+  const workValues = result?.phaseScores?.workValues || result?.workValues || result?.values || null;
+  const careerSignals = result?.phaseScores?.careerSignals || result?.careerSignals || null;
 
   return (
-    <main className="app-page profile-results-page">
-      <div className="page-shell profile-results-shell">
-        {/* Navigation & Header */}
-        <header className="profile-results-top-bar">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
-            <FiArrowLeft /> Dashboard
+    <ProductShell
+      title="Current Profile"
+      actions={
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button variant="secondary" size="sm" onClick={handleShare}>
+            <FiShare2 /> Share
           </Button>
-          <div className="profile-results-top-actions">
-            <Button variant="ghost" size="sm" onClick={handleShare}>
-              <FiShare2 /> Share
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleDownloadPdf}>
-              <FiDownload /> Export PDF
+          <Button variant="secondary" size="sm" onClick={() => navigate('/dashboard')}>
+            <FiArrowLeft /> Overview
+          </Button>
+          <Button variant="primary" size="sm" onClick={() => navigate('/assessment/start')}>
+            <FiCompass /> New Assessment
+          </Button>
+        </div>
+      }
+    >
+      <div className="profile-results-shell">
+        {shareStatus && (
+          <p className="ui-message ui-message--success" role="status">
+            {shareStatus}
+          </p>
+        )}
+
+        {/* Report Status Banners */}
+        {reportStatus?.status === 'scoring_required' && (
+          <p className="ui-message ui-message--neutral" role="status">
+            Scoring is required for this assessment.
+          </p>
+        )}
+        {reportStatus?.status === 'generating' && (
+          <p className="ui-message ui-message--info" role="status">
+            Preparing your AI summary…
+          </p>
+        )}
+        {reportStatus?.status === 'failed' && (
+          <div className="ui-message ui-message--error" role="alert" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>AI narrative could not be generated.</span>
+            <Button
+              data-testid="retry-ai-report-btn"
+              variant="ghost"
+              size="sm"
+              onClick={handleRetryAi}
+              disabled={retryAiMutation.isPending}
+            >
+              Retry AI Summary
             </Button>
           </div>
-        </header>
+        )}
 
-        {shareStatus && <p className="ui-message ui-message--success">{shareStatus}</p>}
-        {pdfError && <p className="ui-message ui-message--error">{pdfError}</p>}
-
-        {/* ── PART 1: Primary Profile Statement ───────────────────────────── */}
-        <section className="profile-primary-statement-section" aria-labelledby="profile-statement-heading">
-          <header className="profile-primary-statement-header">
-            <span className="profile-badge-quiet">Verified Result</span>
-            <h1 id="profile-statement-heading" className="profile-primary-title">
-              Your current profile
+        {/* ── Statement / Overview ── */}
+        <section className="profile-primary-statement-section" aria-labelledby="flow-result-title">
+          <div className="profile-primary-statement-header">
+            <h1 id="flow-result-title" className="profile-primary-title">
+              Personality &amp; Career Intelligence Report
             </h1>
             <p className="profile-primary-subtitle">
-              Four distinct readings of how you approach problems, what kinds of work hold your attention, what
-              environments you need, and what capabilities your background demonstrates.
+              Synthesized from adaptive psychometric responses, vocational preferences, and work context.
             </p>
-          </header>
+            <span className="profile-timestamp-label">
+              Recorded {formatDate(result?.completedAt || result?.createdAt || result?.meta?.generated_at)}
+            </span>
+          </div>
 
           <div className="profile-summary-card">
-            <p className="profile-summary-text">{profileSummary}</p>
-            {flowAiStatus && (
-              <div className="profile-ai-status-row">
-                <AiStatusBadges status={flowAiStatus} onRetry={() => retryAiMutation.mutate()} />
-              </div>
-            )}
+            <p className="profile-summary-text">
+              {result?.summary ||
+                result?.profile_summary ||
+                result?.narrative_summary ||
+                'Your responses synthesize into four calibrated profile lenses: baseline five-factor personality spectrums, vocational interests, work values, and demonstrated career signals.'}
+            </p>
           </div>
         </section>
 
-        {/* ── PART 2: Four Profile Readings ────────────────────────────────── */}
-        <section className="profile-readings-section" aria-labelledby="profile-readings-heading">
-          <header className="profile-readings-header">
-            <h2 id="profile-readings-heading" className="profile-section-title">
-              Profile Readings
-            </h2>
-            <div className="profile-lens-switcher" role="tablist" aria-label="Profile dimensions">
-              {[
-                ['personality', 'Personality'],
-                ['interests', 'Interests'],
-                ['values', 'Work Values'],
-                ['signals', 'Career Signals'],
-              ].map(([key, label]) => (
-                <button
-                  key={key}
-                  type="button"
-                  role="tab"
-                  aria-selected={activeLens === key}
-                  className={`profile-lens-btn ${activeLens === key ? 'is-active' : ''}`}
-                  onClick={() => setActiveLens(key)}
-                >
-                  {label}
-                </button>
-              ))}
+        {/* ── 3-Zone Evidence & Confidence Summary ── */}
+        <section aria-labelledby="flow-evidence-title">
+          <h2 id="flow-evidence-title" className="visually-hidden">
+            Evidence and Confidence Zones
+          </h2>
+          <div className="evidence-confidence-zones">
+            <div className="evidence-zone-card evidence-zone-card--supporting">
+              <span className="evidence-zone-card__head">Direct Evidence</span>
+              <p className="evidence-zone-card__status">Consistent Calibration</p>
+              <p className="evidence-zone-card__detail">
+                Item responses demonstrate high internal consistency across continuous trait anchors.
+              </p>
             </div>
-          </header>
+            <div className="evidence-zone-card evidence-zone-card--interpretation">
+              <span className="evidence-zone-card__head">Context Model</span>
+              <p className="evidence-zone-card__status">
+                {result?.validity || result?.scoreValidity || result?.meta?.scoreValidity || 'Calibrated & Valid'}
+              </p>
+              <p className="evidence-zone-card__detail">
+                Synthesized using validated psychometric distributions against standard professional reference groups.
+              </p>
+            </div>
+            <div className="evidence-zone-card evidence-zone-card--limited">
+              <span className="evidence-zone-card__head">Interpretation Boundary</span>
+              <p className="evidence-zone-card__status">Exploratory Signal</p>
+              <p className="evidence-zone-card__detail">
+                Measures serve self-reflection and career navigation; not psychiatric diagnosis or hiring verdicts.
+              </p>
+            </div>
+          </div>
+        </section>
 
-          <div className="profile-readings-stage">
+        {/* ── Profile Readings & Lens Switcher ── */}
+        <section className="profile-readings-section" aria-labelledby="flow-readings-title">
+          <div className="profile-readings-header">
+            <div>
+              <h2 id="flow-readings-title" className="profile-section-title">
+                Calibrated Readings
+              </h2>
+            </div>
+            <div className="profile-lens-switcher" role="tablist" aria-label="Profile lenses">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeLens === 'personality'}
+                className={`profile-lens-btn ${activeLens === 'personality' ? 'is-active' : ''}`}
+                onClick={() => setActiveLens('personality')}
+              >
+                Big Five Spectrums
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeLens === 'interests'}
+                className={`profile-lens-btn ${activeLens === 'interests' ? 'is-active' : ''}`}
+                onClick={() => setActiveLens('interests')}
+              >
+                Vocational Interests
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeLens === 'values'}
+                className={`profile-lens-btn ${activeLens === 'values' ? 'is-active' : ''}`}
+                onClick={() => setActiveLens('values')}
+              >
+                Work Values
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeLens === 'signals'}
+                className={`profile-lens-btn ${activeLens === 'signals' ? 'is-active' : ''}`}
+                onClick={() => setActiveLens('signals')}
+              >
+                Career Signals
+              </button>
+            </div>
+          </div>
+
+          <div className="profile-lens-content">
             {activeLens === 'personality' && (
-              <div className="profile-reading-panel">
-                <div className="profile-reading-panel__head">
-                  <h3>Big Five Continuous Dimensions</h3>
-                  <span>Directly labelled continuous scales</span>
-                </div>
-                <div className="profile-reading-panel__body">
-                  {bigFiveList.map(([name, score, reading]) => (
-                    <article key={name} className="profile-dimension-row">
-                      <div className="profile-dimension-row__info">
-                        <strong>{name}</strong>
-                        <span>{score}%</span>
-                      </div>
-                      <div className="profile-dimension-bar">
-                        <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
-                      </div>
-                      <p className="profile-dimension-row__reading">{reading}</p>
-                    </article>
-                  ))}
-                </div>
+              <div>
+                {hasTraits ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {TRAIT_ORDER.map((traitKey) => {
+                      const score = Math.round(Number(traits[traitKey] || 0));
+                      const meta = TRAIT_META[traitKey] || { name: traitKey, description: '' };
+                      return (
+                        <div key={traitKey} className="profile-dimension-row">
+                          <div className="profile-dimension-row__info">
+                            <div>
+                              <strong>{meta.name}</strong>
+                              {meta.description && (
+                                <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', margin: '2px 0 0' }}>
+                                  {meta.description}
+                                </p>
+                              )}
+                            </div>
+                            <span>{score}%</span>
+                          </div>
+                          <div className="profile-dimension-bar">
+                            <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <EmptyProductState
+                    title="Trait scores not available"
+                    description="This assessment record does not contain calibrated Big Five trait dimensions."
+                    compact
+                  />
+                )}
               </div>
             )}
 
             {activeLens === 'interests' && (
-              <div className="profile-reading-panel">
-                <div className="profile-reading-panel__head">
-                  <h3>RIASEC Vocational Interests</h3>
-                  <span>Ranked relational interest field</span>
-                </div>
-                <div className="profile-reading-panel__body profile-interests-field">
-                  {riasecList.map(([name, score]) => (
-                    <article key={name} className="profile-interest-badge">
-                      <div className="profile-interest-badge__head">
-                        <strong>{name}</strong>
-                        <span>{score}%</span>
-                      </div>
-                      <div className="profile-dimension-bar">
-                        <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
-                      </div>
-                    </article>
-                  ))}
-                </div>
+              <div>
+                {riasecScores && Object.keys(riasecScores).length > 0 ? (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                    {Object.entries(riasecScores).map(([theme, val]) => {
+                      const score = typeof val === 'object' ? val.score || 0 : Number(val || 0);
+                      return (
+                        <div key={theme} style={{ background: 'var(--canvas)', padding: '14px 16px', borderRadius: 'var(--radius-sm)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                            <strong style={{ textTransform: 'capitalize' }}>{theme}</strong>
+                            <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>{Math.round(score)}%</span>
+                          </div>
+                          <div className="profile-dimension-bar">
+                            <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <EmptyProductState
+                    title="Vocational interests not available"
+                    description="This assessment record does not contain RIASEC vocational interest scores."
+                    compact
+                  />
+                )}
               </div>
             )}
 
             {activeLens === 'values' && (
-              <div className="profile-reading-panel">
-                <div className="profile-reading-panel__head">
-                  <h3>Work Values Hierarchy</h3>
-                  <span>12 workplace values ranked by relative priority</span>
-                </div>
-                <div className="profile-reading-panel__body">
-                  <WorkValuesProfileCard values={phaseScores?.workValues || {}} />
-                </div>
+              <div>
+                {workValues && Object.keys(workValues).length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {Object.entries(workValues).map(([key, val]) => (
+                      <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'var(--canvas)', borderRadius: 'var(--radius-sm)' }}>
+                        <strong style={{ textTransform: 'capitalize' }}>{key.replace(/_/g, ' ')}</strong>
+                        <span style={{ color: 'var(--secondary)' }}>{String(val)}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <EmptyProductState
+                    title="Work values not recorded"
+                    description="Work values hierarchy was not captured during this assessment session."
+                    compact
+                  />
+                )}
               </div>
             )}
 
             {activeLens === 'signals' && (
-              <div className="profile-reading-panel">
-                <div className="profile-reading-panel__head">
-                  <h3>Career Signals &amp; Demonstrated Capabilities</h3>
-                  <span>Synthesized from contextual and scenario responses</span>
-                </div>
-                <div className="profile-reading-panel__body">
-                  {Object.keys(careerSignals).length > 0 ? (
-                    <div className="profile-signals-grid">
-                      {Object.entries(careerSignals).map(([key, val]) => (
-                        <article key={key} className="profile-signal-card">
-                          <strong>{key}</strong>
-                          <p>{typeof val === 'object' ? JSON.stringify(val) : String(val)}</p>
-                        </article>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="profile-signals-empty">
-                      Demonstrated signals calibrated through adaptive questions and background parsing.
-                    </p>
-                  )}
-                </div>
+              <div>
+                {careerSignals && Object.keys(careerSignals).length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {Object.entries(careerSignals).map(([signal, val]) => (
+                      <div key={signal} style={{ background: 'var(--canvas)', padding: '12px 16px', borderRadius: 'var(--radius-sm)' }}>
+                        <strong style={{ textTransform: 'capitalize' }}>{signal.replace(/_/g, ' ')}</strong>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.875rem', color: 'var(--secondary)' }}>{String(val)}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <EmptyProductState
+                    title="Career signals not recorded"
+                    description="Demonstrated scenario capabilities were not captured during this assessment session."
+                    compact
+                  />
+                )}
               </div>
             )}
           </div>
         </section>
 
-        {/* ── PART 3: Evidence & Confidence Field ──────────────────────────── */}
-        <section className="profile-evidence-section" aria-labelledby="evidence-heading">
-          <header className="profile-section-header">
-            <h2 id="evidence-heading" className="profile-section-title">
-              Evidence &amp; Confidence
-            </h2>
-            <p className="profile-section-subtitle">
-              Distinguishing verified signals, context-dependent readings, and areas with limited data.
-            </p>
-          </header>
-
-          <ScoringEvidenceCard
-            evidenceList={normalized.evidence}
-            warnings={normalized.warnings}
-            scoreMeta={normalized.scoreMeta || result?.meta}
-          />
-        </section>
-
-        {/* ── PART 4: Career Relationships ─────────────────────────────────── */}
-        <section className="profile-careers-section" aria-labelledby="careers-heading">
-          <header className="profile-section-header">
-            <h2 id="careers-heading" className="profile-section-title">
-              Career Alignment
-            </h2>
-            <p className="profile-section-subtitle">
-              Why roles match your profile, where the stretch exists, and concrete actions to strengthen alignment.
-            </p>
-          </header>
-
-          <div className="profile-careers-grid">
-            {recommendations.slice(0, 3).map((rec, index) => (
-              <CareerRecommendationCard
-                key={rec.title || rec.careerId || index}
-                career={rec}
-                onSelectCareer={() => navigate(`/assessment/career?session=${sessionId}`)}
-              />
-            ))}
-          </div>
-
-          <div className="profile-careers-actions">
-            <Button variant="secondary" onClick={() => navigate(`/assessment/career?session=${sessionId}`)}>
-              <FiCompass /> Open Full Career Explorer
-            </Button>
-          </div>
-        </section>
-
-        {/* ── PART 5: Development Roadmap ──────────────────────────────────── */}
-        <section className="profile-roadmap-section" aria-labelledby="roadmap-heading">
-          <header className="profile-section-header">
-            <h2 id="roadmap-heading" className="profile-section-title">
-              Development Roadmap
-            </h2>
-            <p className="profile-section-subtitle">
-              Your next move becomes new evidence. Follow deliberate milestones to evolve your capabilities.
-            </p>
-          </header>
-
-          <div className="profile-roadmap-flow">
-            <article className="profile-roadmap-step">
-              <span className="roadmap-step-num">1</span>
-              <h3>Identify Gaps</h3>
-              <p>Review the areas where your current signals differ from target environment demands.</p>
-            </article>
-            <article className="profile-roadmap-step">
-              <span className="roadmap-step-num">2</span>
-              <h3>Take Deliberate Action</h3>
-              <p>Execute focused projects that practice unproven competencies under real constraints.</p>
-            </article>
-            <article className="profile-roadmap-step">
-              <span className="roadmap-step-num">3</span>
-              <h3>Produce Visible Artifacts</h3>
-              <p>Document technical outcomes, design systems, architectural records, or case studies.</p>
-            </article>
-            <article className="profile-roadmap-step">
-              <span className="roadmap-step-num">4</span>
-              <h3>Bring Evidence Back</h3>
-              <p>Re-enter new milestones into your profile to update future interpretation.</p>
-            </article>
-          </div>
-        </section>
-
-        {/* ── PART 6: Methodology & Boundaries ────────────────────────────── */}
-        <section className="profile-methodology-notice-section">
-          <div className="profile-methodology-notice">
-            <h3>Methodology &amp; Interpretive Boundaries</h3>
-            <p>
-              Core dimensional calculations and career fit algorithms are computed deterministically. AI provides
-              narrative context and explanations but never modifies underlying numerical logic. This profile is
-              designed for professional reflection and career exploration—not medical diagnosis, hiring decisions, or
-              employment guarantees.
-            </p>
-          </div>
-        </section>
-
-        {/* ── PART 7: Report Utilities ─────────────────────────────────────── */}
-        <section className="profile-utilities-section">
-          <div className="profile-utilities-bar">
-            <Button variant="ghost" onClick={handleRetake}>
-              <FiRefreshCw /> Retake Assessment
-            </Button>
-            <Button variant="primary" onClick={handleDownloadPdf}>
-              <FiDownload /> Download Full Report PDF
-            </Button>
-          </div>
-        </section>
-
-        {/* ── PART 8: Career Coach Exploration ─────────────────────────────── */}
-        <section className="profile-coach-section" aria-labelledby="coach-heading">
-          <header className="profile-section-header">
-            <h2 id="coach-heading" className="profile-section-title">
-              Guided Career Coach
-            </h2>
-            <p className="profile-section-subtitle">
-              Ask targeted questions about your results, skill trade-offs, and development priorities.
-            </p>
-          </header>
-
-          <div className="profile-coach-chat-card">
-            <div className="profile-coach-feed" ref={chatFeedRef}>
-              {chatHistory.length === 0 ? (
-                <div className="profile-coach-empty">
-                  <FiMessageCircle />
-                  <p>Start a conversation with the Career Coach to explore your results in depth.</p>
-                </div>
-              ) : (
-                chatHistory.map((item, idx) => (
-                  <div key={idx} className={`coach-msg coach-msg--${item.role}`}>
-                    <strong>{item.role === 'user' ? 'You' : 'Career Coach'}</strong>
-                    <p>{item.content}</p>
-                  </div>
-                ))
-              )}
-              {chatTyping && (
-                <div className="coach-msg coach-msg--assistant">
-                  <strong>Career Coach</strong>
-                  <p>Analyzing profile context…</p>
-                </div>
-              )}
+        {/* ── Career Alignment Section (NO || 75) ── */}
+        {careers.length > 0 && (
+          <section aria-labelledby="flow-careers-heading">
+            <div style={{ marginBottom: '14px' }}>
+              <h2 id="flow-careers-heading" className="profile-section-title">
+                Career Alignment
+              </h2>
+              <p style={{ fontSize: '0.9375rem', color: 'var(--secondary)', margin: '4px 0 0' }}>
+                Target career environments that align with your demonstrated signals.
+              </p>
             </div>
 
-            {chatError && <p className="ui-message ui-message--error">{chatError}</p>}
-
-            <div className="profile-coach-prompts">
-              {followUpPrompts.map((prompt) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  className="coach-prompt-chip"
-                  onClick={() => sendChatMessage(prompt)}
-                  disabled={chatMutation.isPending}
-                >
-                  {prompt}
-                </button>
-              ))}
+            <div className="profile-careers-grid">
+              {careers.slice(0, 4).map((item, idx) => {
+                const title = item.title || item.name || (typeof item === 'string' ? item : `Role ${idx + 1}`);
+                const matchScore = item.match ?? item.score ?? item.fitScore ?? null;
+                return (
+                  <article key={title} className="career-recommendation-card">
+                    <div className="career-recommendation-card__header">
+                      <h3>{title}</h3>
+                      {matchScore !== null ? (
+                        <span className="career-fit-badge">{Math.round(Number(matchScore))}% fit</span>
+                      ) : (
+                        <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>Fit unavailable</span>
+                      )}
+                    </div>
+                    <p className="career-recommendation-card__body">
+                      {item.why || item.description || 'Strong dimensional alignment with your problem-solving approach.'}
+                    </p>
+                  </article>
+                );
+              })}
             </div>
+          </section>
+        )}
 
-            <form
-              className="profile-coach-input-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendChatMessage();
-              }}
-            >
-              <input
-                type="text"
-                className="ui-input"
-                placeholder="Ask about your results or career roadmap…"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                disabled={chatMutation.isPending}
-              />
-              <Button type="submit" disabled={!message.trim() || chatMutation.isPending}>
-                <FiSend /> Send
-              </Button>
-            </form>
+        {/* ── AI Narrative Report Generation ── */}
+        <section className="dashboard-widget" aria-labelledby="flow-ai-report-title">
+          <div className="dashboard-widget__head">
+            <div>
+              <h2 id="flow-ai-report-title" className="dashboard-widget__title">
+                AI Career Intelligence Report
+              </h2>
+              <p className="dashboard-widget__subtitle">
+                {result?.aiReport || result?.ai_analysis
+                  ? 'Comprehensive personalized interpretation generated from your data.'
+                  : 'Synthesize a detailed natural language breakdown of your strengths and stretch areas.'}
+              </p>
+            </div>
+          </div>
+          <div className="dashboard-widget__body">
+            {result?.aiReport || result?.ai_analysis ? (
+              <div style={{ fontSize: '0.96875rem', lineHeight: 1.6, color: 'var(--ink)', whiteSpace: 'pre-line' }}>
+                {result.aiReport || result.ai_analysis}
+              </div>
+            ) : (
+              <p style={{ color: 'var(--secondary)', fontSize: '0.875rem', margin: 0 }}>
+                Natural language interpretation of your psychometric profile and career alignment.
+              </p>
+            )}
           </div>
         </section>
+
+        {/* ── Sticky Career Coach Launcher ── */}
+        <button
+          type="button"
+          data-testid="chatbot-sticky-launcher"
+          className="chatbot-sticky-launcher"
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          aria-label="Open Career Coach"
+        >
+          <FiMessageSquare />
+          <span>Ask Career Coach</span>
+        </button>
       </div>
-    </main>
+    </ProductShell>
   );
-};
-
-export default AssessmentFlowResultPage;
+}

@@ -39,60 +39,59 @@ const StepProfile = ({
             ? 'Manual profile is saved. Review detected signals and begin the adaptive assessment.'
             : 'CV analysis is complete. Review your detected profile and begin the assessment.'}
         </p>
-        <p className="ui-message ui-message--neutral" role="status">
-          Context source: {profileMode === 'manual' ? 'Manual entry' : 'CV upload'}
-        </p>
       </header>
 
-      {profileMode === 'manual' && (
-        <div className="wizard-profile-ready" style={{ marginBottom: '1rem' }}>
+      {profileMode === 'manual' && manualProfile && (
+        <div style={{ marginBottom: '1rem' }}>
           <ManualProfileSummary manualProfile={manualProfile} injection={injection} />
         </div>
       )}
 
-      <div className="wizard-profile-ready">
-        <div className="wizard-profile-ready__block">
-          <h3>Detected field</h3>
-          <p>{summary.field}</p>
+      <div className="parsed-context-review">
+        <div className="parsed-context-section">
+          <h3>Detected Field / Discipline</h3>
+          <p style={{ fontSize: '1.05rem', fontWeight: 550, margin: 0, color: 'var(--ink)' }}>
+            {summary.field}
+          </p>
         </div>
 
-        <div className="wizard-profile-ready__block">
-          <h3>Skills</h3>
-          <div className="wizard-profile-ready__chips">
+        <div className="parsed-context-section">
+          <h3>Skills Evidenced</h3>
+          <div className="parsed-context-tags">
             {summary.skills.length ? (
               summary.skills.map((skill) => (
-                <span key={skill} className="wizard-profile-ready__chip">
+                <span key={skill} className="parsed-context-tag">
                   {skill}
                 </span>
               ))
             ) : (
-              <span className="wizard-profile-ready__empty">No skills detected</span>
+              <span style={{ color: 'var(--secondary)', fontSize: '0.875rem' }}>No skills specified</span>
             )}
           </div>
         </div>
 
-        <div className="wizard-profile-ready__block">
-          <h3>Interests</h3>
-          <div className="wizard-profile-ready__chips">
+        <div className="parsed-context-section">
+          <h3>Interests &amp; Priorities</h3>
+          <div className="parsed-context-tags">
             {summary.interests.length ? (
               summary.interests.map((interest) => (
-                <span key={interest} className="wizard-profile-ready__chip">
+                <span key={interest} className="parsed-context-tag">
                   {interest}
                 </span>
               ))
             ) : (
-              <span className="wizard-profile-ready__empty">No interests detected</span>
+              <span style={{ color: 'var(--secondary)', fontSize: '0.875rem' }}>No interests specified</span>
             )}
           </div>
         </div>
       </div>
 
       {isStarting && (
-        <p className="ui-message ui-message--neutral">Preparing your personalized questions…</p>
+        <p className="ui-message ui-message--info">Preparing your personalized questions…</p>
       )}
       {errorMessage && <p className="ui-message ui-message--error">{errorMessage}</p>}
 
-      <footer className="assessment-setup-state__actions">
+      <footer className="assessment-question-actions">
         <Button
           variant="ghost"
           onClick={onBack}
@@ -104,6 +103,7 @@ const StepProfile = ({
           onClick={onStartAssessment}
           disabled={isStartDisabled || isStarting}
           loading={isStarting}
+          loadingLabel="Starting assessment…"
         >
           Begin assessment
         </Button>
