@@ -22,47 +22,78 @@ function HeroScene() {
   const mediaRef = useRef(null);
   const fragmentRef = useRef(null);
   const supportingRef = useRef(null);
+  const carryProxyRef = useRef(null);
   const { reducedMotion } = usePublicMotion();
 
   useLayoutEffect(() => {
     if (reducedMotion) return undefined;
     const context = gsap.context(() => {
-      // 1. LCP dominant visual is present immediately (no generic scale-in / blank state)
-      // 2. Title lines revealed through clean clipping/masking
+      // 1. Initial Reveal Timeline
       const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
       introTl
         .fromTo(
           headlineRef.current?.querySelectorAll('.hero-line-reveal'),
           { y: '108%' },
-          { y: '0%', duration: 0.68, stagger: 0.12 }
+          { y: '0%', duration: 0.72, stagger: 0.12 }
         )
         .fromTo(
-          mediaRef.current?.querySelectorAll('.evidence-hero-scene__fragment-frame'),
-          { y: 16, opacity: 0.6 },
-          { y: 0, opacity: 1, duration: 0.54, stagger: 0.08 },
-          '-=0.3'
+          mediaRef.current?.querySelectorAll('.evidence-hero-fragment-frame'),
+          { y: 20, opacity: 0.4 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
+          '-=0.35'
         );
 
-      // 3. Hero -> Work Worlds Carry on scroll (desktop fine-pointer)
+      // 2. Desktop Cross-Scene Hero -> Work Worlds Carry Transition
       const media = gsap.matchMedia();
       media.add('(min-width: 1024px) and (pointer: fine)', () => {
-        const carryTl = gsap.timeline({
-          scrollTrigger: {
+        const carryProxy = carryProxyRef.current;
+        const heroFragment = fragmentRef.current;
+        const firstWorldPanel = document.querySelector('.work-world-panel[data-world-id="build"] .work-world-panel__media-wrap');
+
+        if (carryProxy && heroFragment) {
+          // ScrollTrigger scrubbed transition across Hero -> Work Worlds boundary
+          ScrollTrigger.create({
             trigger: heroRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 0.5,
-          },
-        });
+            scrub: 0.6,
+            onUpdate: (self) => {
+              const p = self.progress;
+              // Fade quiet region and text slightly as hero completes
+              if (supportingRef.current) {
+                supportingRef.current.style.opacity = String(1 - p * 0.7);
+                supportingRef.current.style.transform = `translateY(${-p * 32}px)`;
+              }
+              if (headlineRef.current) {
+                headlineRef.current.style.opacity = String(1 - p * 0.4);
+                headlineRef.current.style.transform = `translateY(${-p * 48}px)`;
+              }
 
-        carryTl
-          .to(supportingRef.current, { opacity: 0.2, y: -24, ease: 'none' }, 0)
-          .to(headlineRef.current, { y: -32, opacity: 0.8, ease: 'none' }, 0)
-          .to(
-            fragmentRef.current,
-            { y: 60, scale: 1.04, opacity: 0.9, ease: 'none' },
-            0
-          );
+              // True Visual Actor Carry: activate proxy when scrolling beyond 60% of Hero
+              if (p > 0.45 && firstWorldPanel) {
+                const fragRect = heroFragment.getBoundingClientRect();
+                const targetRect = firstWorldPanel.getBoundingClientRect();
+
+                // Compute relative normalized carry progress (0 to 1 between 0.45 and 1.0)
+                const carryT = Math.min(1, Math.max(0, (p - 0.45) / 0.55));
+                carryProxy.style.opacity = String(Math.sin(carryT * Math.PI) * 0.95 + (carryT >= 0.9 ? 0 : 0.05));
+                carryProxy.style.display = 'block';
+
+                const curX = fragRect.left + (targetRect.left - fragRect.left) * carryT;
+                const curY = fragRect.top + (targetRect.top - fragRect.top) * carryT;
+                const curW = fragRect.width + (targetRect.width - fragRect.width) * carryT;
+                const curH = fragRect.height + (targetRect.height - fragRect.height) * carryT;
+
+                carryProxy.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
+                carryProxy.style.width = `${curW}px`;
+                carryProxy.style.height = `${curH}px`;
+              } else {
+                carryProxy.style.display = 'none';
+                carryProxy.style.opacity = '0';
+              }
+            },
+          });
+        }
       });
     }, heroRef);
 
@@ -71,8 +102,58 @@ function HeroScene() {
 
   return (
     <section className="evidence-hero-scene" ref={heroRef} data-header-scene="light" aria-labelledby="hero-heading">
-      <div className="evidence-hero-scene__inner">
-        <div className="evidence-hero-scene__content">
+      {/* Dynamic Shared Carry Proxy (Cross-scene visual actor) */}
+      <div
+        ref={carryProxyRef}
+        className="evidence-hero-carry-proxy"
+        aria-hidden="true"
+        style={{ display: 'none', position: 'fixed', top: 0, left: 0, zIndex: 90, pointerEvents: 'none' }}
+      >
+        <ResponsiveImage
+          media={publicMedia.hero.supporting}
+          alt=""
+          sizes="28vw"
+        />
+      </div>
+
+      {/* ONE Spatial Field: Large Evidence Environment (60-72%) with Direct Overlapping Typography */}
+      <div className="evidence-hero-spatial-stage">
+        {/* Dominant Evidence Visual Layer */}
+        <div className="evidence-hero-environment" ref={mediaRef}>
+          <figure className="evidence-hero-dominant-frame">
+            <ResponsiveImage
+              media={publicMedia.hero.dominant}
+              alt="Architectural design studio wall with blueprints, drawings, and active planning artifacts"
+              priority
+              sizes="(min-width: 1200px) 72vw, 96vw"
+            />
+          </figure>
+
+          {/* Supporting evidence fragments overlapping the main environment */}
+          <figure
+            className="evidence-hero-fragment-frame evidence-hero-fragment-frame--one"
+            ref={fragmentRef}
+          >
+            <ResponsiveImage
+              media={publicMedia.hero.supporting}
+              alt="Hands arranging evidence artifacts and conceptual notes"
+              sizes="(min-width: 1200px) 24vw, 44vw"
+            />
+            <figcaption className="evidence-fragment-caption">Artifact arrangement</figcaption>
+          </figure>
+
+          <figure className="evidence-hero-fragment-frame evidence-hero-fragment-frame--two">
+            <ResponsiveImage
+              media={publicMedia.hero.process}
+              alt="Architectural model-making and process detail"
+              sizes="(min-width: 1200px) 20vw, 38vw"
+            />
+            <figcaption className="evidence-fragment-caption">Process iteration</figcaption>
+          </figure>
+        </div>
+
+        {/* Spatial Typographic Overlay Layer: H1 Invades Quiet Image Territory */}
+        <div className="evidence-hero-overlay-layer">
           <h1 id="hero-heading" className="evidence-hero-scene__title" ref={headlineRef}>
             <span className="hero-line-mask">
               <span className="hero-line-reveal">Your work</span>
@@ -82,7 +163,8 @@ function HeroScene() {
             </span>
           </h1>
 
-          <div ref={supportingRef}>
+          {/* Quieter Lower/Edge Region for Supporting Copy & Actions */}
+          <div className="evidence-hero-quiet-region" ref={supportingRef}>
             <p className="evidence-hero-scene__supporting">
               Personality Assessor brings professional context and adaptive responses together into a profile you can
               inspect—personality, interests, work values, career signals, and the evidence behind them.
@@ -97,38 +179,6 @@ function HeroScene() {
               </Link>
             </div>
           </div>
-        </div>
-
-        <div className="evidence-hero-scene__composition" ref={mediaRef}>
-          <figure className="evidence-hero-scene__dominant-frame">
-            <ResponsiveImage
-              media={publicMedia.hero.dominant}
-              alt="Designer's desk with architectural tools and notebook"
-              priority
-              sizes="(min-width: 1200px) 54vw, 92vw"
-            />
-          </figure>
-
-          <figure
-            className="evidence-hero-scene__fragment-frame evidence-hero-scene__fragment-frame--one"
-            ref={fragmentRef}
-          >
-            <ResponsiveImage
-              media={publicMedia.hero.supporting}
-              alt="Hands arranging mood-board swatches and conceptual notes"
-              sizes="(min-width: 1200px) 24vw, 44vw"
-            />
-            <figcaption className="evidence-fragment-caption">Artifact arrangement</figcaption>
-          </figure>
-
-          <figure className="evidence-hero-scene__fragment-frame evidence-hero-scene__fragment-frame--two">
-            <ResponsiveImage
-              media={publicMedia.hero.process}
-              alt="Architectural model-making process detail"
-              sizes="(min-width: 1200px) 20vw, 38vw"
-            />
-            <figcaption className="evidence-fragment-caption">Process iteration</figcaption>
-          </figure>
         </div>
       </div>
     </section>
@@ -282,16 +332,16 @@ function ContextScene() {
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia();
       media.add('(min-width: 1024px) and (pointer: fine)', () => {
-        // Context -> Question Transition: peripheral annotations fade while anchor survives
-        gsap.to('.context-annotation:not(.context-annotation--anchor)', {
+        // Context -> Question Transition: peripheral annotations fade while anchor carries forward
+        gsap.to('.context-annotation-node:not(.context-annotation-node--anchor)', {
           scrollTrigger: {
             trigger: contextRef.current,
             start: 'bottom 80%',
             end: 'bottom 20%',
             scrub: 0.5,
           },
-          opacity: 0.25,
-          y: -16,
+          opacity: 0.2,
+          y: -20,
         });
       });
     }, contextRef);
@@ -311,30 +361,35 @@ function ContextScene() {
           </p>
         </header>
 
-        {/* Spatial Evidence Field (No big nested card/document grid) */}
-        <div className="context-spatial-canvas">
-          <div className="context-primary-artifact">
-            <span className="context-artifact-tag">Professional Baseline</span>
-            <p className="context-artifact-summary">
-              Parsed baseline context seeds domain calibrations, operational scope, and situational trade-offs.
-            </p>
-          </div>
+        {/* Card-Free Open Spatial Evidence Field */}
+        <div className="context-open-field">
+          <div className="context-document-stage">
+            {/* Primary Document Artifact (Unboxed clean document sheet) */}
+            <div className="context-document-sheet">
+              <span className="context-document-label">Parsed Professional Record</span>
+              <p className="context-document-body">
+                Parsed baseline context seeds domain calibrations, operational scope, and situational trade-offs.
+              </p>
+            </div>
 
-          <div className="context-spatial-annotations">
-            {entities.map((item, idx) => {
-              const isAnchor = item.type === 'Project';
-              return (
-                <div
-                  key={item.type}
-                  ref={isAnchor ? anchorEntityRef : null}
-                  className={`context-annotation ${isAnchor ? 'context-annotation--anchor' : ''}`}
-                >
-                  <span className="context-annotation-type">{item.type}</span>
-                  <strong className="context-annotation-title">{item.title}</strong>
-                  <p className="context-annotation-detail">{item.detail}</p>
-                </div>
-              );
-            })}
+            {/* Open-space spatial annotations positioned around document */}
+            <div className="context-annotation-field">
+              {entities.map((item) => {
+                const isAnchor = item.type === 'Project';
+                return (
+                  <div
+                    key={item.type}
+                    ref={isAnchor ? anchorEntityRef : null}
+                    className={`context-annotation-node ${isAnchor ? 'context-annotation-node--anchor' : ''}`}
+                    data-anchor={isAnchor ? 'project-context' : undefined}
+                  >
+                    <span className="context-node-type">{item.type}</span>
+                    <strong className="context-node-title">{item.title}</strong>
+                    <p className="context-node-detail">{item.detail}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -346,6 +401,7 @@ function AdaptiveQuestionDemoScene() {
   const [selectedResponse, setSelectedResponse] = useState('clarify');
   const [userSelected, setUserSelected] = useState(false);
   const questionSceneRef = useRef(null);
+  const markerRef = useRef(null);
   const { reducedMotion } = usePublicMotion();
 
   const responses = [
@@ -380,6 +436,18 @@ function AdaptiveQuestionDemoScene() {
             if (!userSelected) setSelectedResponse('clarify');
           },
         });
+
+        // Question -> Profile continuity: selected interpretation compresses into opening Profile marker
+        gsap.to(markerRef.current, {
+          scrollTrigger: {
+            trigger: questionSceneRef.current,
+            start: 'bottom 60%',
+            end: 'bottom 10%',
+            scrub: 0.5,
+          },
+          opacity: 0.85,
+          y: 20,
+        });
       });
     }, questionSceneRef);
     return () => ctx.revert();
@@ -390,6 +458,8 @@ function AdaptiveQuestionDemoScene() {
     setSelectedResponse(id);
   };
 
+  const currentFeedback = responses.find((r) => r.id === selectedResponse)?.feedback;
+
   return (
     <section
       className="adaptive-question-scene"
@@ -398,9 +468,10 @@ function AdaptiveQuestionDemoScene() {
       aria-labelledby="adaptive-question-title"
     >
       <div className="adaptive-question-scene__inner">
-        {/* Surviving Anchor from Context */}
-        <div className="adaptive-question-context-anchor" aria-hidden="true">
-          <span>Targeting anchor: Real-time Analytics Migration</span>
+        {/* Context -> Question Shared Element Continuity Line (No rounded badge) */}
+        <div className="adaptive-question-evidence-line" aria-label="Active evidence context">
+          <span className="evidence-line-label">Active evidence context:</span>
+          <span className="evidence-line-content">Real-time Analytics Migration · Decomposed latency constraints into streaming stages.</span>
         </div>
 
         <header className="adaptive-question-scene__header">
@@ -439,11 +510,9 @@ function AdaptiveQuestionDemoScene() {
           </div>
 
           {selectedResponse && (
-            <div className="adaptive-question-interpretation" role="status" aria-live="polite">
-              <span className="adaptive-interpretation-tag">Observed Strategy Signal</span>
-              <p className="adaptive-interpretation-text">
-                {responses.find((r) => r.id === selectedResponse)?.feedback}
-              </p>
+            <div ref={markerRef} className="adaptive-question-interpretation" role="status" aria-live="polite">
+              <span className="adaptive-interpretation-label">Observed Strategy Signal</span>
+              <p className="adaptive-interpretation-text">{currentFeedback}</p>
             </div>
           )}
         </div>
@@ -459,7 +528,7 @@ function ProfileScene() {
   const { reducedMotion } = usePublicMotion();
   const demo = marketingDemo.profile;
 
-  // Scroll-driven progression over 160vh on desktop
+  // Scroll-driven progression over viewport on desktop
   useLayoutEffect(() => {
     if (reducedMotion) return undefined;
     const ctx = gsap.context(() => {
@@ -506,6 +575,12 @@ function ProfileScene() {
       aria-labelledby="profile-heading"
     >
       <div className="profile-scene__inner">
+        {/* Question -> Profile Evidence Continuity Marker */}
+        <div className="profile-evidence-intake" aria-label="Calibrated Strategy Intake">
+          <span className="profile-intake-label">Integrated Strategy Signal:</span>
+          <span className="profile-intake-text">Iterative discovery &amp; rapid constraint testing under uncertainty</span>
+        </div>
+
         <header className="profile-scene__header">
           <h2 id="profile-heading" className="profile-scene__title">
             One profile. Four distinct readings.
@@ -631,24 +706,6 @@ function ProfileScene() {
 }
 
 function EvidenceConfidenceScene() {
-  const evidenceItems = [
-    {
-      category: 'Supporting Evidence',
-      status: 'Strong Signal',
-      details: 'Multiple consistent responses across system architecture, constraint analysis, and project decomposition.',
-    },
-    {
-      category: 'Mixed Evidence',
-      status: 'Context Dependent',
-      details: 'Balanced signals between independent execution and formal consensus-driven coordination.',
-    },
-    {
-      category: 'Missing / Limited Evidence',
-      status: 'Preliminary',
-      details: 'Limited data on high-pressure real-time commercial crisis management.',
-    },
-  ];
-
   return (
     <section className="evidence-confidence-scene" data-header-scene="light" aria-labelledby="evidence-confidence-title">
       <div className="evidence-confidence-scene__inner">
@@ -662,24 +719,46 @@ function EvidenceConfidenceScene() {
           </p>
         </header>
 
-        <div className="evidence-confidence-cards">
-          {evidenceItems.map((item) => (
-            <article key={item.category} className="evidence-confidence-card">
-              <span className="evidence-confidence-card__category">{item.category}</span>
-              <h3 className="evidence-confidence-card__status">{item.status}</h3>
-              <p className="evidence-confidence-card__details">{item.details}</p>
-            </article>
-          ))}
+        {/* ONE Open Inspection Field with Three Spatial ZONES (No Three Cards) */}
+        <div className="evidence-inspection-field">
+          <div className="evidence-spatial-zone evidence-spatial-zone--supporting">
+            <div className="evidence-zone-header">
+              <span className="evidence-zone-mark evidence-zone-mark--strong" aria-hidden="true" />
+              <h3 className="evidence-zone-name">Supporting evidence</h3>
+            </div>
+            <p className="evidence-zone-status">Strong Signal</p>
+            <p className="evidence-zone-detail">
+              Multiple consistent responses across system architecture, constraint analysis, and project decomposition.
+            </p>
+          </div>
+
+          <div className="evidence-spatial-zone evidence-spatial-zone--interpretation">
+            <div className="evidence-zone-header">
+              <span className="evidence-zone-mark evidence-zone-mark--context" aria-hidden="true" />
+              <h3 className="evidence-zone-name">Interpretation</h3>
+            </div>
+            <p className="evidence-zone-status">Mixed context</p>
+            <p className="evidence-zone-detail">
+              Balanced signals between independent execution and formal consensus-driven coordination.
+            </p>
+          </div>
+
+          <div className="evidence-spatial-zone evidence-spatial-zone--limited">
+            <div className="evidence-zone-header">
+              <span className="evidence-zone-mark evidence-zone-mark--limited" aria-hidden="true" />
+              <h3 className="evidence-zone-name">Limited / missing context</h3>
+            </div>
+            <p className="evidence-zone-status">Limited context</p>
+            <p className="evidence-zone-detail">
+              Limited data on high-pressure real-time commercial crisis management.
+            </p>
+          </div>
         </div>
 
-        <div className="evidence-confidence-meta">
-          <div className="evidence-meta-block">
-            <strong>Evidence Points Evaluated:</strong> 24 structured responses + 5 context entities
-          </div>
-          <div className="evidence-meta-block">
-            <strong>Validity Status:</strong> Valid psychometric baseline
-          </div>
-        </div>
+        {/* Plain nearby sentence without badges or fake metrics */}
+        <p className="evidence-confidence-disclaimer">
+          Illustrative example of how evidence states can be presented.
+        </p>
       </div>
     </section>
   );
@@ -762,15 +841,56 @@ function CareerScene() {
 }
 
 function DevelopmentLoopScene() {
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const devSceneRef = useRef(null);
+  const { reducedMotion } = usePublicMotion();
+
   const loopSteps = [
-    { step: '1', name: 'Notice what differs', detail: 'Identify the gap between your current evidence and target environment requirements.' },
-    { step: '2', name: 'Do deliberate work', detail: 'Undertake real projects that exercise unproven skill dimensions under realistic constraints.' },
-    { step: '3', name: 'Make the result visible', detail: 'Produce tangible artifacts—documentation, code repositories, prototypes, case reviews.' },
-    { step: '4', name: 'Bring new evidence back', detail: 'Update your profile context with completed work to evolve future interpretation.' },
+    {
+      name: 'Notice a gap',
+      detail: 'Identify the gap between your current evidence and target environment requirements.',
+    },
+    {
+      name: 'Do deliberate work',
+      detail: 'Undertake real projects that exercise unproven skill dimensions under realistic constraints.',
+    },
+    {
+      name: 'Make the work visible',
+      detail: 'Produce tangible artifacts—documentation, code repositories, prototypes, and case reviews.',
+    },
+    {
+      name: 'Bring evidence back',
+      detail: 'Update your profile context with completed work to evolve future interpretation.',
+    },
   ];
 
+  useLayoutEffect(() => {
+    if (reducedMotion) return undefined;
+    const ctx = gsap.context(() => {
+      const media = gsap.matchMedia();
+      media.add('(min-width: 1024px) and (pointer: fine)', () => {
+        ScrollTrigger.create({
+          trigger: devSceneRef.current,
+          start: 'top 50%',
+          end: 'bottom 70%',
+          scrub: true,
+          onUpdate: (self) => {
+            const idx = Math.min(loopSteps.length - 1, Math.floor(self.progress * loopSteps.length));
+            setActiveStepIndex(idx);
+          },
+        });
+      });
+    }, devSceneRef);
+    return () => ctx.revert();
+  }, [reducedMotion, loopSteps.length]);
+
   return (
-    <section className="development-loop-scene" data-header-scene="light" aria-labelledby="development-heading">
+    <section
+      className="development-loop-scene"
+      ref={devSceneRef}
+      data-header-scene="light"
+      aria-labelledby="development-heading"
+    >
       <div className="development-loop-scene__inner">
         <header className="development-loop-scene__header">
           <h2 id="development-heading" className="development-loop-scene__title">
@@ -782,14 +902,39 @@ function DevelopmentLoopScene() {
           </p>
         </header>
 
-        <div className="development-loop-transformation">
-          {loopSteps.map((item) => (
-            <article key={item.step} className="development-step-card">
-              <span className="development-step-number">{item.step}</span>
-              <h3 className="development-step-name">{item.name}</h3>
-              <p className="development-step-detail">{item.detail}</p>
-            </article>
-          ))}
+        {/* Single Transforming Stage (No Numbered Cards) */}
+        <div className="development-transforming-stage">
+          <div className="development-flow-track" role="tablist" aria-label="Development phases">
+            {loopSteps.map((item, idx) => {
+              const isCurrent = activeStepIndex === idx;
+              return (
+                <button
+                  key={item.name}
+                  type="button"
+                  role="tab"
+                  aria-selected={isCurrent}
+                  className={`development-flow-step ${isCurrent ? 'is-active' : ''}`}
+                  onClick={() => setActiveStepIndex(idx)}
+                >
+                  <span className="development-step-bullet" aria-hidden="true" />
+                  <div className="development-step-body">
+                    <h3 className="development-step-name">{item.name}</h3>
+                    <p className="development-step-detail">{item.detail}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Dedicated Illustration Canvas Slot (Graceful fallback if illustration omitted) */}
+          <div className="development-illustration-slot">
+            <div className="development-canvas-content">
+              <span className="development-canvas-stage-tag">{loopSteps[activeStepIndex]?.name}</span>
+              <p className="development-canvas-stage-lead">
+                {loopSteps[activeStepIndex]?.detail}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

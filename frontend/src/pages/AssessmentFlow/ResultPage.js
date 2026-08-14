@@ -22,10 +22,12 @@ import '../../styles/results-product.css';
 
 const formatDate = (value) => {
   if (!value) return 'Not available';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return 'Not available';
   return new Intl.DateTimeFormat('en-US', {
     dateStyle: 'long',
     timeStyle: 'short',
-  }).format(new Date(value));
+  }).format(d);
 };
 
 const formatObjectValue = (val) => {
@@ -34,16 +36,22 @@ const formatObjectValue = (val) => {
     return String(val);
   }
   if (typeof val === 'object') {
-    if (val.text) return String(val.text);
-    if (val.description) return String(val.description);
-    if (val.summary) return String(val.summary);
-    if (val.label) return String(val.label);
-    if (val.name) return String(val.name);
-    if (val.score !== undefined && Number.isFinite(Number(val.score))) return `${Math.round(Number(val.score))}%`;
-    if (val.rank !== undefined) return `Priority ${val.rank}`;
-    if (val.value !== undefined) return String(val.value);
+    if (typeof val.text === 'string' || typeof val.text === 'number') return String(val.text);
+    if (typeof val.description === 'string' || typeof val.description === 'number') return String(val.description);
+    if (typeof val.summary === 'string' || typeof val.summary === 'number') return String(val.summary);
+    if (typeof val.label === 'string' || typeof val.label === 'number') return String(val.label);
+    if (typeof val.name === 'string' || typeof val.name === 'number') return String(val.name);
+    if (val.score !== undefined && val.score !== null && val.score !== '' && Number.isFinite(Number(val.score))) {
+      return `${Math.round(Number(val.score))}%`;
+    }
+    if (val.rank !== undefined && val.rank !== null && val.rank !== '' && Number.isFinite(Number(val.rank))) {
+      return `Priority ${val.rank}`;
+    }
+    if (val.value !== undefined && val.value !== null && (typeof val.value === 'string' || typeof val.value === 'number' || typeof val.value === 'boolean')) {
+      return String(val.value);
+    }
   }
-  return 'Recorded';
+  return 'Not available';
 };
 
 export default function AssessmentFlowResultPage() {
@@ -65,12 +73,21 @@ export default function AssessmentFlowResultPage() {
   const payload = resultQuery.data || null;
   const result = payload?.result || stateResult || payload || null;
   const reportStatus = payload?.state?.reportStatus || null;
-
-  const rawTraits = result?.traits || result?.trait_scores || {};
+  const rawTraits = result?.traits || result?.trait_scores || result?.scores?.bigFive || {};
   const traits = normalizeTraits(rawTraits);
   const hasTraits = Object.keys(traits).length > 0;
 
-  const rawCareers = result?.recommendedCareers || result?.career_recommendations || [];
+  const rawCareers =
+    (Array.isArray(result?.career_recommendations_phase4?.topRecommendations) && result.career_recommendations_phase4.topRecommendations.length > 0 ? result.career_recommendations_phase4.topRecommendations : null) ||
+    (Array.isArray(result?.scores?.career_recommendations_phase4?.topRecommendations) && result.scores.career_recommendations_phase4.topRecommendations.length > 0 ? result.scores.career_recommendations_phase4.topRecommendations : null) ||
+    (Array.isArray(result?.recommendedCareers) && result.recommendedCareers.length > 0 ? result.recommendedCareers : null) ||
+    (Array.isArray(result?.career_recommendations) && result.career_recommendations.length > 0 ? result.career_recommendations : null) ||
+    (Array.isArray(result?.career_recommendations_phase4?.recommendations?.bestFits) && result.career_recommendations_phase4.recommendations.bestFits.length > 0 ? result.career_recommendations_phase4.recommendations.bestFits : null) ||
+    (Array.isArray(payload?.career_recommendations_phase4?.topRecommendations) && payload.career_recommendations_phase4.topRecommendations.length > 0 ? payload.career_recommendations_phase4.topRecommendations : null) ||
+    (Array.isArray(payload?.scores?.career_recommendations_phase4?.topRecommendations) && payload.scores.career_recommendations_phase4.topRecommendations.length > 0 ? payload.scores.career_recommendations_phase4.topRecommendations : null) ||
+    (Array.isArray(payload?.result?.career_recommendations_phase4?.topRecommendations) && payload.result.career_recommendations_phase4.topRecommendations.length > 0 ? payload.result.career_recommendations_phase4.topRecommendations : null) ||
+    (Array.isArray(payload?.result?.scores?.career_recommendations_phase4?.topRecommendations) && payload.result.scores.career_recommendations_phase4.topRecommendations.length > 0 ? payload.result.scores.career_recommendations_phase4.topRecommendations : null) ||
+    [];
   const careers = Array.isArray(rawCareers) ? rawCareers : [];
 
   const handleShare = async () => {
@@ -225,30 +242,29 @@ export default function AssessmentFlowResultPage() {
             <div className="evidence-zone-card evidence-zone-card--supporting">
               <span className="evidence-zone-card__head">Direct Evidence</span>
               <p className="evidence-zone-card__status">
-                {confidencePct !== null ? `${confidencePct}% Confidence` : 'Evidence Recorded'}
+                {confidencePct !== null ? `Confidence: ${confidencePct}%` : 'Confidence unavailable'}
               </p>
               <p className="evidence-zone-card__detail">
                 {confidencePct !== null
-                  ? `Computed from completed item responses and profile context completeness.`
+                  ? 'See methodology for how scoring metadata is interpreted.'
                   : 'Detailed evidence metrics are not available for this record.'}
               </p>
             </div>
             <div className="evidence-zone-card evidence-zone-card--interpretation">
               <span className="evidence-zone-card__head">Scoring Validity</span>
               <p className="evidence-zone-card__status">
-                {validityState ? `Status: ${validityState}` : 'Standard Evaluation'}
+                {validityState ? `Status: ${validityState}` : 'Validity status unavailable'}
               </p>
               <p className="evidence-zone-card__detail">
-                {result?.meta?.scoreSource
-                  ? `Evaluation source: ${result.meta.scoreSource}.`
-                  : 'Computed deterministically from structured item responses.'}
+                {validityState
+                  ? (result?.meta?.scoreSource ? `Evaluation source: ${result.meta.scoreSource}.` : 'Computed deterministically from structured item responses.')
+                  : 'Detailed evidence metrics are not available for this record.'}
               </p>
             </div>
             <div className="evidence-zone-card evidence-zone-card--limited">
-              <span className="evidence-zone-card__head">Interpretation Boundary</span>
-              <p className="evidence-zone-card__status">Exploratory Signal</p>
+              <span className="evidence-zone-card__head">Use boundary</span>
               <p className="evidence-zone-card__detail">
-                Measures serve self-reflection and career navigation; not psychiatric diagnosis or hiring verdicts.
+                Results support professional reflection and career exploration; they are not clinical diagnoses, hiring decisions or guarantees.
               </p>
             </div>
           </div>
@@ -432,7 +448,7 @@ export default function AssessmentFlowResultPage() {
           <section aria-labelledby="flow-careers-heading">
             <div style={{ marginBottom: '14px' }}>
               <h2 id="flow-careers-heading" className="profile-section-title">
-                Career Alignment
+                Career Intelligence
               </h2>
               <p style={{ fontSize: '0.9375rem', color: 'var(--secondary)', margin: '4px 0 0' }}>
                 Target career environments that align with your demonstrated signals.
@@ -461,6 +477,38 @@ export default function AssessmentFlowResultPage() {
                       </p>
                     ) : null}
                   </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* ── Career Roadmap (if present) ── */}
+        {Array.isArray(result?.career_roadmap) && result.career_roadmap.length > 0 && (
+          <section aria-labelledby="flow-roadmap-heading" style={{ marginTop: '24px' }}>
+            <h2 id="flow-roadmap-heading" className="profile-section-title">
+              Career Roadmap
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+              {result.career_roadmap.map((stage, sIdx) => {
+                const stageLabel = String(stage.stage || `Stage ${sIdx + 1}`).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+                return (
+                  <div key={stage.stage || sIdx} data-testid="roadmap-stage" style={{ background: 'var(--canvas)', padding: '16px 20px', borderRadius: 'var(--radius-sm)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                      <strong style={{ fontSize: '1rem', color: 'var(--ink)' }}>{stageLabel}</strong>
+                      {stage.duration && <span style={{ fontSize: '0.8125rem', color: 'var(--secondary)' }}>{stage.duration}</span>}
+                    </div>
+                    {stage.summary && <p style={{ fontSize: '0.875rem', color: 'var(--secondary)', margin: '0 0 8px 0' }}>{stage.summary}</p>}
+                    {Array.isArray(stage.actions) && stage.actions.length > 0 && (
+                      <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.85rem', color: 'var(--ink)' }}>
+                        {stage.actions.map((act, aIdx) => (
+                          <li key={aIdx} style={{ marginBottom: '4px' }}>
+                            {String(act).replace(/_/g, ' ')}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 );
               })}
             </div>
@@ -500,7 +548,7 @@ export default function AssessmentFlowResultPage() {
           data-testid="chatbot-sticky-launcher"
           className="chatbot-sticky-launcher"
           onClick={() => setIsChatOpen(!isChatOpen)}
-          aria-label="Open Career Coach"
+          aria-label="Ask AI Career Coach"
         >
           <FiMessageSquare />
           <span>Ask Career Coach</span>

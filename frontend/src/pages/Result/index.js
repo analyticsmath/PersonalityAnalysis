@@ -23,10 +23,12 @@ import '../../styles/results-product.css';
 
 const formatDate = (value) => {
   if (!value) return 'Not available';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return 'Not available';
   return new Intl.DateTimeFormat('en-US', {
     dateStyle: 'long',
     timeStyle: 'short',
-  }).format(new Date(value));
+  }).format(d);
 };
 
 const formatObjectValue = (val) => {
@@ -35,16 +37,22 @@ const formatObjectValue = (val) => {
     return String(val);
   }
   if (typeof val === 'object') {
-    if (val.text) return String(val.text);
-    if (val.description) return String(val.description);
-    if (val.summary) return String(val.summary);
-    if (val.label) return String(val.label);
-    if (val.name) return String(val.name);
-    if (val.score !== undefined && Number.isFinite(Number(val.score))) return `${Math.round(Number(val.score))}%`;
-    if (val.rank !== undefined) return `Priority ${val.rank}`;
-    if (val.value !== undefined) return String(val.value);
+    if (typeof val.text === 'string' || typeof val.text === 'number') return String(val.text);
+    if (typeof val.description === 'string' || typeof val.description === 'number') return String(val.description);
+    if (typeof val.summary === 'string' || typeof val.summary === 'number') return String(val.summary);
+    if (typeof val.label === 'string' || typeof val.label === 'number') return String(val.label);
+    if (typeof val.name === 'string' || typeof val.name === 'number') return String(val.name);
+    if (val.score !== undefined && val.score !== null && val.score !== '' && Number.isFinite(Number(val.score))) {
+      return `${Math.round(Number(val.score))}%`;
+    }
+    if (val.rank !== undefined && val.rank !== null && val.rank !== '' && Number.isFinite(Number(val.rank))) {
+      return `Priority ${val.rank}`;
+    }
+    if (val.value !== undefined && val.value !== null && (typeof val.value === 'string' || typeof val.value === 'number' || typeof val.value === 'boolean')) {
+      return String(val.value);
+    }
   }
-  return 'Recorded';
+  return 'Not available';
 };
 
 export default function ResultPage() {
@@ -194,30 +202,29 @@ export default function ResultPage() {
             <div className="evidence-zone-card evidence-zone-card--supporting">
               <span className="evidence-zone-card__head">Direct Evidence</span>
               <p className="evidence-zone-card__status">
-                {confidencePct !== null ? `${confidencePct}% Confidence` : 'Evidence Recorded'}
+                {confidencePct !== null ? `Confidence: ${confidencePct}%` : 'Confidence unavailable'}
               </p>
               <p className="evidence-zone-card__detail">
                 {confidencePct !== null
-                  ? `Computed from completed item responses and profile context completeness.`
+                  ? 'See methodology for how scoring metadata is interpreted.'
                   : 'Detailed evidence metrics are not available for this record.'}
               </p>
             </div>
             <div className="evidence-zone-card evidence-zone-card--interpretation">
               <span className="evidence-zone-card__head">Scoring Validity</span>
               <p className="evidence-zone-card__status">
-                {validityState ? `Status: ${validityState}` : 'Standard Evaluation'}
+                {validityState ? `Status: ${validityState}` : 'Validity status unavailable'}
               </p>
               <p className="evidence-zone-card__detail">
-                {report?.meta?.scoreSource
-                  ? `Evaluation source: ${report.meta.scoreSource}.`
-                  : 'Computed deterministically from structured item responses.'}
+                {validityState
+                  ? (report?.meta?.scoreSource ? `Evaluation source: ${report.meta.scoreSource}.` : 'Computed deterministically from structured item responses.')
+                  : 'Detailed evidence metrics are not available for this record.'}
               </p>
             </div>
             <div className="evidence-zone-card evidence-zone-card--limited">
-              <span className="evidence-zone-card__head">Interpretation Boundary</span>
-              <p className="evidence-zone-card__status">Exploratory Signal</p>
+              <span className="evidence-zone-card__head">Use boundary</span>
               <p className="evidence-zone-card__detail">
-                Measures serve self-reflection and career navigation; not psychiatric diagnosis or hiring verdicts.
+                Results support professional reflection and career exploration; they are not clinical diagnoses, hiring decisions or guarantees.
               </p>
             </div>
           </div>

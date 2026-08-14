@@ -649,7 +649,7 @@ const AdaptiveAssessmentTestPage = () => {
               loadingLabel="Saving…"
               disabled={!canSubmit || !assessmentMachine.canSubmitAnswer || assessmentMachine.isMutating}
             >
-              Continue <FiArrowRight />
+              Next <FiArrowRight />
             </Button>
           </footer>
         </section>

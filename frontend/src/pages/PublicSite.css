@@ -560,15 +560,6 @@ button {
   background: #ECEFEF;
   border-color: var(--color-carbon);
 }
-.framework-layer-tag {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-secondary);
-  font-weight: 600;
-  display: block;
-  margin-bottom: 6px;
-}
 .framework-atlas-layer h2 {
   font-size: 1.3rem;
   font-weight: 550;
@@ -582,7 +573,7 @@ button {
   max-width: 72ch;
 }
 .framework-spectrum-preview {
-  margin-top: 8px;
+  margin-top: 12px;
 }
 .spectrum-track {
   display: flex;
@@ -591,16 +582,31 @@ button {
   font-size: 0.8125rem;
   color: var(--color-secondary);
 }
-.spectrum-bar {
+.spectrum-axis {
   flex: 1;
-  height: 8px;
-  background: var(--color-canvas);
-  border-radius: 4px;
-  overflow: hidden;
+  height: 4px;
+  background: var(--color-mist);
+  border-radius: 2px;
+  position: relative;
 }
-.spectrum-fill {
-  height: 100%;
+.spectrum-marker {
+  position: absolute;
+  top: 50%;
+  left: 48%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
   background: var(--color-carbon);
+}
+.spectrum-anchor {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.spectrum-caption {
+  font-size: 0.8125rem;
+  color: var(--color-secondary);
+  margin: 8px 0 0 0;
 }
 .framework-riasec-tags {
   display: flex;
@@ -640,19 +646,10 @@ button {
   margin-bottom: 40px;
 }
 .trust-chapter {
-  display: flex;
-  gap: 32px;
-  align-items: flex-start;
   padding: 28px 32px;
   background: var(--color-paper);
   border: 1px solid var(--color-mist);
   border-radius: var(--radius-md);
-}
-.trust-chapter__number {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: var(--color-secondary);
 }
 .trust-chapter__content h2 {
   font-size: 1.25rem;

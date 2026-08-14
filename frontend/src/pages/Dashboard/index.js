@@ -352,6 +352,11 @@ export default function DashboardPage() {
                   {recommendedCareers.slice(0, 3).map((item, idx) => {
                     const title = item.title || item.name || (typeof item === 'string' ? item : `Role ${idx + 1}`);
                     const score = item.match ?? item.score ?? item.fitScore ?? null;
+                    const hasScore =
+                      score !== null &&
+                      score !== undefined &&
+                      score !== '' &&
+                      Number.isFinite(Number(score));
                     return (
                       <article
                         key={title}
@@ -366,7 +371,7 @@ export default function DashboardPage() {
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <strong style={{ fontSize: '0.9375rem', color: 'var(--ink)' }}>{title}</strong>
-                          {score !== null ? (
+                          {hasScore ? (
                             <span className="career-fit-badge">{Math.round(Number(score))}% fit</span>
                           ) : (
                             <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>Fit unavailable</span>

@@ -9,6 +9,8 @@ vi.mock('../../hooks/useAuth', () => ({ useAuth: () => ({ userId: 'u1' }) }));
 
 vi.mock('../../hooks/useAssessmentFlow', () => ({
   useCareerRecommendationsQuery: () => mockCareerQuery(),
+  useActiveFlowSessionQuery: () => ({ data: null, isPending: false, isError: false }),
+  useWhyNotCareerMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
 }));
 
 vi.mock('../../utils/assessmentFlowStorage', () => ({

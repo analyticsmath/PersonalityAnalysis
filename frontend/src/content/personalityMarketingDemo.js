@@ -1,5 +1,5 @@
 // Marketing illustrative demo data & media registry
-// Phase 3A Evidence Field system.
+// Phase 3B Evidence Field system.
 // NOTE: All marketing numbers are explicitly illustrative examples, not real customer evidence or benchmark populations.
 
 export const marketingDemo = {
@@ -44,23 +44,74 @@ export const marketingDemo = {
   },
 };
 
-const media = (file, folder, alt, position = '50% 50%', sourceId = '') => ({
+const media = (file, folder, alt, position = '50% 50%', sourceId = '', sourcePlatform = 'Local/Free', status = 'ready', sourceUrl = '') => ({
   file,
   folder,
   alt,
   position,
   sourceId,
+  sourcePlatform,
+  status,
+  sourceUrl,
 });
 
 export const publicMedia = {
   hero: {
-    // Primary dominant work surface
-    dominant: media('hero-h2', 'hero', "Designer's desk with architectural tools, notebook, and active planning artifacts", '50% 50%', 'GkpMxwQ_ZeA'),
-    // Supporting evidence arrangement actor
-    supporting: media('hero-h3', 'hero', 'Hands arranging evidence swatches and conceptual notes on a work table', '50% 50%', 'FobgCXKoJKU'),
-    // Process detail artifact
-    process: media('hero-h4', 'hero', 'Architectural modeling and physical prototyping in progress', '50% 50%', 'WUY0W2RSiBw'),
+    // Provisional Hero Dominant: Pexels 36809500 (Architectural studio wall with blueprints & drawings)
+    // Physical download pending; rendered via verified free local master fallback (hero-h1)
+    dominant: media(
+      'hero-h1',
+      'hero',
+      'Architectural design studio wall with blueprints, schematics, and active planning artifacts',
+      '50% 50%',
+      '36809500',
+      'Pexels',
+      'pending_download',
+      'https://www.pexels.com/photo/architectural-design-studio-wall-with-blueprints-36809500/'
+    ),
+    // Supporting Direction HF1: Pexels 6615237 / HF2: 6615230
+    // Physical download pending; rendered via verified free local master fallback (hero-h4)
+    supporting: media(
+      'hero-h4',
+      'hero',
+      'Hands arranging evidence swatches, notes, and conceptual artifacts on a work table',
+      '50% 50%',
+      '6615237',
+      'Pexels',
+      'pending_download',
+      'https://www.pexels.com/photo/city-person-people-art-6615237/'
+    ),
+    // Process detail HF4: Pexels 6615235
+    // Physical download pending; rendered via verified free local master fallback (hero-h5)
+    process: media(
+      'hero-h5',
+      'hero',
+      'Architectural modeling, iterative drafting, and physical prototyping in progress',
+      '50% 50%',
+      '6615235',
+      'Pexels',
+      'pending_download',
+      'https://www.pexels.com/photo/person-people-building-desk-6615235/'
+    ),
+    // Registered fallback assets
+    secondaryDesk: media('hero-h2', 'hero', 'Focused workspace with tools and active documentation', '50% 50%', 'hero-h2', 'Local/Free', 'ready'),
   },
+
+  // Approved Selected Free Media Registry (No paid/Unsplash+ assets)
+  approvedFreeRegistry: [
+    { id: '36809500', platform: 'Pexels', url: 'https://www.pexels.com/photo/architectural-design-studio-wall-with-blueprints-36809500/', role: 'Provisional Hero Dominant', status: 'pending_download' },
+    { id: '6615237', platform: 'Pexels', url: 'https://www.pexels.com/photo/city-person-people-art-6615237/', role: 'HF1 Supporting Direction', status: 'pending_download' },
+    { id: '6615230', platform: 'Pexels', url: 'https://www.pexels.com/photo/person-people-building-desk-6615230/', role: 'HF2 Supporting Direction', status: 'pending_download' },
+    { id: '6615235', platform: 'Pexels', url: 'https://www.pexels.com/photo/person-people-building-desk-6615235/', role: 'HF4 Process Direction', status: 'pending_download' },
+    { id: '10515522', platform: 'Pexels', url: 'https://www.pexels.com/photo/scientific-equipment-in-close-up-10515522/', role: 'Science / Research Context', status: 'pending_download' },
+    { id: '34212963', platform: 'Pexels', url: 'https://www.pexels.com/photo/hands-writing-notes-for-coding-project-at-desk-34212963/', role: 'Coding / Systems Context', status: 'pending_download' },
+    { id: '37471992', platform: 'Pexels', url: 'https://www.pexels.com/photo/fashion-workspace-with-mood-board-and-sketches-37471992/', role: 'Design Synthesis Context', status: 'pending_download' },
+    { id: '6615233', platform: 'Pexels', url: 'https://www.pexels.com/photo/person-people-building-construction-6615233/', role: 'Structure Context', status: 'pending_download' },
+    { id: '6615036', platform: 'Pexels', url: 'https://www.pexels.com/photo/floor-plans-on-white-table-6615036/', role: 'Floor Plans / Architecture Context', status: 'pending_download' },
+    { id: '8940510', platform: 'Pexels', url: 'https://www.pexels.com/photo/a-scientist-using-a-laboratory-equipment-8940510/', role: 'Lab / Inquiry Context', status: 'pending_download' },
+    { id: '9617407', platform: 'Pexels', url: 'https://www.pexels.com/photo/close-up-on-mans-hands-on-drawing-on-deck-9617407/', role: 'Drafting / Craftsmanship Context', status: 'pending_download' },
+    { id: 'cX62K66gMUk', platform: 'Unsplash', url: 'https://unsplash.com/photos/cX62K66gMUk', role: 'Free Unsplash Career Context', status: 'approved' },
+  ],
 
   // Exactly 6 Work Worlds
   worlds: [

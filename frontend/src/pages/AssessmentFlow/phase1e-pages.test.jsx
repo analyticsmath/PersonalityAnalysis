@@ -41,6 +41,7 @@ vi.mock('../../hooks/useAssessmentFlow', () => ({
   useWhyNotCareerMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
   useRetryAiReportMutation: () => ({ isPending: false, mutateAsync: vi.fn() }),
   useCareerRecommendationsQuery: () => ({ data: null, isPending: false, isError: false }),
+  useActiveFlowSessionQuery: () => ({ data: null, isPending: false, isError: false }),
 }));
 vi.mock('../../components/assessment/QuestionRenderer', () => ({ default: ({ onLikertChange }) => <button onClick={() => onLikertChange(4)}>set</button> }));
 vi.mock('../../components/assessment/QuestionVisualPanel', () => ({ default: () => <div/> }));
