@@ -28,6 +28,24 @@ const formatDate = (value) => {
   }).format(new Date(value));
 };
 
+const formatObjectValue = (val) => {
+  if (val === null || val === undefined) return 'Not available';
+  if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+    return String(val);
+  }
+  if (typeof val === 'object') {
+    if (val.text) return String(val.text);
+    if (val.description) return String(val.description);
+    if (val.summary) return String(val.summary);
+    if (val.label) return String(val.label);
+    if (val.name) return String(val.name);
+    if (val.score !== undefined && Number.isFinite(Number(val.score))) return `${Math.round(Number(val.score))}%`;
+    if (val.rank !== undefined) return `Priority ${val.rank}`;
+    if (val.value !== undefined) return String(val.value);
+  }
+  return 'Recorded';
+};
+
 export default function AssessmentFlowResultPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -115,6 +133,15 @@ export default function AssessmentFlowResultPage() {
   const workValues = result?.phaseScores?.workValues || result?.workValues || result?.values || null;
   const careerSignals = result?.phaseScores?.careerSignals || result?.careerSignals || null;
 
+  const validityState = result?.validity || result?.scoreValidity || result?.meta?.scoreValidity || null;
+  const rawConfidence = result?.confidence ?? result?.confidence_score ?? result?.meta?.confidence_score ?? null;
+  const confidencePct =
+    rawConfidence !== null && Number.isFinite(Number(rawConfidence))
+      ? typeof rawConfidence === 'number' && rawConfidence <= 1
+        ? Math.round(rawConfidence * 100)
+        : Math.round(Number(rawConfidence))
+      : null;
+
   return (
     <ProductShell
       title="Current Profile"
@@ -184,12 +211,12 @@ export default function AssessmentFlowResultPage() {
               {result?.summary ||
                 result?.profile_summary ||
                 result?.narrative_summary ||
-                'Your responses synthesize into four calibrated profile lenses: baseline five-factor personality spectrums, vocational interests, work values, and demonstrated career signals.'}
+                'Your responses synthesize into calibrated profile dimensions, vocational affinities, work values, and demonstrated career signals.'}
             </p>
           </div>
         </section>
 
-        {/* ── 3-Zone Evidence & Confidence Summary ── */}
+        {/* ── 3-Zone Evidence & Confidence Summary (Truthful, No Invented Claims) ── */}
         <section aria-labelledby="flow-evidence-title">
           <h2 id="flow-evidence-title" className="visually-hidden">
             Evidence and Confidence Zones
@@ -197,18 +224,24 @@ export default function AssessmentFlowResultPage() {
           <div className="evidence-confidence-zones">
             <div className="evidence-zone-card evidence-zone-card--supporting">
               <span className="evidence-zone-card__head">Direct Evidence</span>
-              <p className="evidence-zone-card__status">Consistent Calibration</p>
+              <p className="evidence-zone-card__status">
+                {confidencePct !== null ? `${confidencePct}% Confidence` : 'Evidence Recorded'}
+              </p>
               <p className="evidence-zone-card__detail">
-                Item responses demonstrate high internal consistency across continuous trait anchors.
+                {confidencePct !== null
+                  ? `Computed from completed item responses and profile context completeness.`
+                  : 'Detailed evidence metrics are not available for this record.'}
               </p>
             </div>
             <div className="evidence-zone-card evidence-zone-card--interpretation">
-              <span className="evidence-zone-card__head">Context Model</span>
+              <span className="evidence-zone-card__head">Scoring Validity</span>
               <p className="evidence-zone-card__status">
-                {result?.validity || result?.scoreValidity || result?.meta?.scoreValidity || 'Calibrated & Valid'}
+                {validityState ? `Status: ${validityState}` : 'Standard Evaluation'}
               </p>
               <p className="evidence-zone-card__detail">
-                Synthesized using validated psychometric distributions against standard professional reference groups.
+                {result?.meta?.scoreSource
+                  ? `Evaluation source: ${result.meta.scoreSource}.`
+                  : 'Computed deterministically from structured item responses.'}
               </p>
             </div>
             <div className="evidence-zone-card evidence-zone-card--limited">
@@ -275,7 +308,9 @@ export default function AssessmentFlowResultPage() {
                 {hasTraits ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     {TRAIT_ORDER.map((traitKey) => {
-                      const score = Math.round(Number(traits[traitKey] || 0));
+                      const raw = traits[traitKey];
+                      const hasValue = raw !== null && raw !== undefined && raw !== '' && Number.isFinite(Number(raw));
+                      const score = hasValue ? Math.round(Number(raw)) : null;
                       const meta = TRAIT_META[traitKey] || { name: traitKey, description: '' };
                       return (
                         <div key={traitKey} className="profile-dimension-row">
@@ -288,10 +323,13 @@ export default function AssessmentFlowResultPage() {
                                 </p>
                               )}
                             </div>
-                            <span>{score}%</span>
+                            <span>{hasValue ? `${score}%` : 'Not available'}</span>
                           </div>
                           <div className="profile-dimension-bar">
-                            <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
+                            <div
+                              className="profile-dimension-bar__fill"
+                              style={{ width: hasValue ? `${score}%` : '0%' }}
+                            />
                           </div>
                         </div>
                       );
@@ -311,16 +349,23 @@ export default function AssessmentFlowResultPage() {
               <div>
                 {riasecScores && Object.keys(riasecScores).length > 0 ? (
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-                    {Object.entries(riasecScores).map(([theme, val]) => {
-                      const score = typeof val === 'object' ? val.score || 0 : Number(val || 0);
+                    {Object.entries(riasecScores).map(([theme, raw]) => {
+                      const rawScore = typeof raw === 'object' && raw !== null ? raw.score : raw;
+                      const hasScore = rawScore !== null && rawScore !== undefined && rawScore !== '' && Number.isFinite(Number(rawScore));
+                      const score = hasScore ? Math.round(Number(rawScore)) : null;
                       return (
                         <div key={theme} style={{ background: 'var(--canvas)', padding: '14px 16px', borderRadius: 'var(--radius-sm)' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                             <strong style={{ textTransform: 'capitalize' }}>{theme}</strong>
-                            <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>{Math.round(score)}%</span>
+                            <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>
+                              {hasScore ? `${score}%` : 'Not available'}
+                            </span>
                           </div>
                           <div className="profile-dimension-bar">
-                            <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
+                            <div
+                              className="profile-dimension-bar__fill"
+                              style={{ width: hasScore ? `${score}%` : '0%' }}
+                            />
                           </div>
                         </div>
                       );
@@ -340,10 +385,10 @@ export default function AssessmentFlowResultPage() {
               <div>
                 {workValues && Object.keys(workValues).length > 0 ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {Object.entries(workValues).map(([key, val]) => (
+                    {Object.entries(workValues).map(([key, raw]) => (
                       <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'var(--canvas)', borderRadius: 'var(--radius-sm)' }}>
                         <strong style={{ textTransform: 'capitalize' }}>{key.replace(/_/g, ' ')}</strong>
-                        <span style={{ color: 'var(--secondary)' }}>{String(val)}</span>
+                        <span style={{ color: 'var(--secondary)' }}>{formatObjectValue(raw)}</span>
                       </div>
                     ))}
                   </div>
@@ -361,10 +406,12 @@ export default function AssessmentFlowResultPage() {
               <div>
                 {careerSignals && Object.keys(careerSignals).length > 0 ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {Object.entries(careerSignals).map(([signal, val]) => (
+                    {Object.entries(careerSignals).map(([signal, raw]) => (
                       <div key={signal} style={{ background: 'var(--canvas)', padding: '12px 16px', borderRadius: 'var(--radius-sm)' }}>
                         <strong style={{ textTransform: 'capitalize' }}>{signal.replace(/_/g, ' ')}</strong>
-                        <p style={{ margin: '4px 0 0', fontSize: '0.875rem', color: 'var(--secondary)' }}>{String(val)}</p>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.875rem', color: 'var(--secondary)' }}>
+                          {formatObjectValue(raw)}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -395,20 +442,24 @@ export default function AssessmentFlowResultPage() {
             <div className="profile-careers-grid">
               {careers.slice(0, 4).map((item, idx) => {
                 const title = item.title || item.name || (typeof item === 'string' ? item : `Role ${idx + 1}`);
-                const matchScore = item.match ?? item.score ?? item.fitScore ?? null;
+                const rawMatch = item.match ?? item.score ?? item.fitScore ?? null;
+                const hasMatch = rawMatch !== null && Number.isFinite(Number(rawMatch));
+                const matchScore = hasMatch ? Math.round(Number(rawMatch)) : null;
                 return (
                   <article key={title} className="career-recommendation-card">
                     <div className="career-recommendation-card__header">
                       <h3>{title}</h3>
-                      {matchScore !== null ? (
-                        <span className="career-fit-badge">{Math.round(Number(matchScore))}% fit</span>
+                      {hasMatch ? (
+                        <span className="career-fit-badge">{matchScore}% fit</span>
                       ) : (
                         <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>Fit unavailable</span>
                       )}
                     </div>
-                    <p className="career-recommendation-card__body">
-                      {item.why || item.description || 'Strong dimensional alignment with your problem-solving approach.'}
-                    </p>
+                    {item.why || item.description ? (
+                      <p className="career-recommendation-card__body">
+                        {item.why || item.description}
+                      </p>
+                    ) : null}
                   </article>
                 );
               })}

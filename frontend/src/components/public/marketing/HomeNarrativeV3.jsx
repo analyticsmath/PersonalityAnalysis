@@ -20,23 +20,50 @@ function HeroScene() {
   const heroRef = useRef(null);
   const headlineRef = useRef(null);
   const mediaRef = useRef(null);
+  const fragmentRef = useRef(null);
+  const supportingRef = useRef(null);
   const { reducedMotion } = usePublicMotion();
 
   useLayoutEffect(() => {
     if (reducedMotion) return undefined;
     const context = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      tl.fromTo(
-        mediaRef.current,
-        { autoAlpha: 0, scale: 0.97 },
-        { autoAlpha: 1, scale: 1, duration: 0.72 }
-      )
+      // 1. LCP dominant visual is present immediately (no generic scale-in / blank state)
+      // 2. Title lines revealed through clean clipping/masking
+      const introTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      introTl
         .fromTo(
           headlineRef.current?.querySelectorAll('.hero-line-reveal'),
-          { autoAlpha: 0, y: 32 },
-          { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.12 },
-          '-=0.45'
+          { y: '108%' },
+          { y: '0%', duration: 0.68, stagger: 0.12 }
+        )
+        .fromTo(
+          mediaRef.current?.querySelectorAll('.evidence-hero-scene__fragment-frame'),
+          { y: 16, opacity: 0.6 },
+          { y: 0, opacity: 1, duration: 0.54, stagger: 0.08 },
+          '-=0.3'
         );
+
+      // 3. Hero -> Work Worlds Carry on scroll (desktop fine-pointer)
+      const media = gsap.matchMedia();
+      media.add('(min-width: 1024px) and (pointer: fine)', () => {
+        const carryTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.5,
+          },
+        });
+
+        carryTl
+          .to(supportingRef.current, { opacity: 0.2, y: -24, ease: 'none' }, 0)
+          .to(headlineRef.current, { y: -32, opacity: 0.8, ease: 'none' }, 0)
+          .to(
+            fragmentRef.current,
+            { y: 60, scale: 1.04, opacity: 0.9, ease: 'none' },
+            0
+          );
+      });
     }, heroRef);
 
     return () => context.revert();
@@ -47,22 +74,28 @@ function HeroScene() {
       <div className="evidence-hero-scene__inner">
         <div className="evidence-hero-scene__content">
           <h1 id="hero-heading" className="evidence-hero-scene__title" ref={headlineRef}>
-            <span className="hero-line-reveal">Your work</span>
-            <span className="hero-line-reveal">leaves evidence.</span>
+            <span className="hero-line-mask">
+              <span className="hero-line-reveal">Your work</span>
+            </span>
+            <span className="hero-line-mask">
+              <span className="hero-line-reveal">leaves evidence.</span>
+            </span>
           </h1>
 
-          <p className="evidence-hero-scene__supporting">
-            Personality Assessor brings professional context and adaptive responses together into a profile you can
-            inspect—personality, interests, work values, career signals, and the evidence behind them.
-          </p>
+          <div ref={supportingRef}>
+            <p className="evidence-hero-scene__supporting">
+              Personality Assessor brings professional context and adaptive responses together into a profile you can
+              inspect—personality, interests, work values, career signals, and the evidence behind them.
+            </p>
 
-          <div className="evidence-hero-scene__actions">
-            <Link className="public-cta-button" to="/signup">
-              Build my profile <Arrow />
-            </Link>
-            <Link className="public-text-action" to="/how-it-works">
-              See how it works
-            </Link>
+            <div className="evidence-hero-scene__actions">
+              <Link className="public-cta-button" to="/signup">
+                Build my profile <Arrow />
+              </Link>
+              <Link className="public-text-action" to="/how-it-works">
+                See how it works
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -76,7 +109,10 @@ function HeroScene() {
             />
           </figure>
 
-          <figure className="evidence-hero-scene__fragment-frame evidence-hero-scene__fragment-frame--one">
+          <figure
+            className="evidence-hero-scene__fragment-frame evidence-hero-scene__fragment-frame--one"
+            ref={fragmentRef}
+          >
             <ResponsiveImage
               media={publicMedia.hero.supporting}
               alt="Hands arranging mood-board swatches and conceptual notes"
@@ -103,7 +139,7 @@ function WorkWorldsScene() {
   const containerRef = useRef(null);
   const trackRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { reducedMotion } = usePublicMotion();
+  const { reducedMotion, scrollTo } = usePublicMotion();
   const worlds = publicMedia.worlds;
 
   useLayoutEffect(() => {
@@ -117,12 +153,13 @@ function WorkWorldsScene() {
         const count = panels.length;
         if (!count) return;
 
-        const totalScrollDistance = window.innerHeight * 4.6;
+        const totalScrollDistance = window.innerHeight * 4.4;
 
         const scrollTween = gsap.to(trackRef.current, {
           x: () => -(trackRef.current.scrollWidth - window.innerWidth + 80),
           ease: 'none',
           scrollTrigger: {
+            id: 'work-worlds-trigger',
             trigger: containerRef.current,
             start: 'top top',
             end: `+=${totalScrollDistance}`,
@@ -152,11 +189,11 @@ function WorkWorldsScene() {
     const clamped = Math.max(0, Math.min(worlds.length - 1, targetIndex));
     setActiveIndex(clamped);
 
-    const trigger = ScrollTrigger.getById('work-worlds-trigger') || ScrollTrigger.getAll().find((st) => st.trigger === containerRef.current);
-    if (trigger) {
+    const trigger = ScrollTrigger.getById('work-worlds-trigger');
+    if (trigger && typeof scrollTo === 'function') {
       const targetProgress = clamped / (worlds.length - 1);
       const targetScroll = trigger.start + targetProgress * (trigger.end - trigger.start);
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      scrollTo(targetScroll);
     }
   };
 
@@ -228,6 +265,10 @@ function WorkWorldsScene() {
 }
 
 function ContextScene() {
+  const contextRef = useRef(null);
+  const anchorEntityRef = useRef(null);
+  const { reducedMotion } = usePublicMotion();
+
   const entities = [
     { type: 'Project', title: 'Real-time Analytics Migration', detail: 'Decomposed latency constraints into streaming stages.' },
     { type: 'Experience', title: 'Systems Infrastructure Lead', detail: 'Led platform reliability under continuous load.' },
@@ -236,8 +277,29 @@ function ContextScene() {
     { type: 'Interest', title: 'Toolsmithing & Precision Craft', detail: 'Building internal tools to expose invisible friction.' },
   ];
 
+  useLayoutEffect(() => {
+    if (reducedMotion) return undefined;
+    const ctx = gsap.context(() => {
+      const media = gsap.matchMedia();
+      media.add('(min-width: 1024px) and (pointer: fine)', () => {
+        // Context -> Question Transition: peripheral annotations fade while anchor survives
+        gsap.to('.context-annotation:not(.context-annotation--anchor)', {
+          scrollTrigger: {
+            trigger: contextRef.current,
+            start: 'bottom 80%',
+            end: 'bottom 20%',
+            scrub: 0.5,
+          },
+          opacity: 0.25,
+          y: -16,
+        });
+      });
+    }, contextRef);
+    return () => ctx.revert();
+  }, [reducedMotion]);
+
   return (
-    <section className="context-scene" data-header-scene="light" aria-labelledby="context-heading">
+    <section className="context-scene" ref={contextRef} data-header-scene="light" aria-labelledby="context-heading">
       <div className="context-scene__inner">
         <header className="context-scene__header">
           <h2 id="context-heading" className="context-scene__title">
@@ -245,32 +307,34 @@ function ContextScene() {
           </h2>
           <p className="context-scene__copy">
             A CV or a profile you enter yourself gives the assessment a place to begin. Projects, skills, education,
-            experience and interests can shape what it asks next.
+            experience and interests shape what it asks next.
           </p>
         </header>
 
-        <div className="context-scene__evidence-field">
-          <div className="context-scene__primary-document">
-            <header className="context-document-header">
-              <span className="context-document-label">Professional Baseline</span>
-              <span className="context-document-status">Context Parsed</span>
-            </header>
-            <div className="context-document-body">
-              <p className="context-document-intro">
-                Initial background context sets up domain calibration, prior scope, and problem-solving scenarios.
-              </p>
-              <div className="context-entities-list">
-                {entities.map((item) => (
-                  <article key={item.type} className="context-entity-row">
-                    <span className="context-entity-type">{item.type}</span>
-                    <div className="context-entity-body">
-                      <strong>{item.title}</strong>
-                      <p>{item.detail}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
+        {/* Spatial Evidence Field (No big nested card/document grid) */}
+        <div className="context-spatial-canvas">
+          <div className="context-primary-artifact">
+            <span className="context-artifact-tag">Professional Baseline</span>
+            <p className="context-artifact-summary">
+              Parsed baseline context seeds domain calibrations, operational scope, and situational trade-offs.
+            </p>
+          </div>
+
+          <div className="context-spatial-annotations">
+            {entities.map((item, idx) => {
+              const isAnchor = item.type === 'Project';
+              return (
+                <div
+                  key={item.type}
+                  ref={isAnchor ? anchorEntityRef : null}
+                  className={`context-annotation ${isAnchor ? 'context-annotation--anchor' : ''}`}
+                >
+                  <span className="context-annotation-type">{item.type}</span>
+                  <strong className="context-annotation-title">{item.title}</strong>
+                  <p className="context-annotation-detail">{item.detail}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -279,29 +343,66 @@ function ContextScene() {
 }
 
 function AdaptiveQuestionDemoScene() {
-  const [selectedResponse, setSelectedResponse] = useState(null);
+  const [selectedResponse, setSelectedResponse] = useState('clarify');
+  const [userSelected, setUserSelected] = useState(false);
+  const questionSceneRef = useRef(null);
+  const { reducedMotion } = usePublicMotion();
 
   const responses = [
     {
       id: 'clarify',
       text: 'Clarify what changed, then test a revised path.',
-      feedback: 'Emphasizes iterative discovery and rapid constraint testing.',
+      feedback: 'Reflects iterative discovery and rapid constraint testing under uncertainty.',
     },
     {
       id: 'gather',
       text: 'Gather input before choosing the next move.',
-      feedback: 'Emphasizes cross-functional alignment and consultative validation.',
+      feedback: 'Reflects cross-functional alignment and consultative validation.',
     },
     {
       id: 'recheck',
       text: 'Recheck the original assumptions before changing course.',
-      feedback: 'Emphasizes foundational verification and root-cause inquiry.',
+      feedback: 'Reflects foundational verification and root-cause inquiry.',
     },
   ];
 
+  useLayoutEffect(() => {
+    if (reducedMotion) return undefined;
+    const ctx = gsap.context(() => {
+      const media = gsap.matchMedia();
+      media.add('(min-width: 1024px) and (pointer: fine)', () => {
+        // Auto demonstration on scroll if user hasn't manually clicked
+        ScrollTrigger.create({
+          trigger: questionSceneRef.current,
+          start: 'top 60%',
+          end: 'bottom 40%',
+          onEnter: () => {
+            if (!userSelected) setSelectedResponse('clarify');
+          },
+        });
+      });
+    }, questionSceneRef);
+    return () => ctx.revert();
+  }, [reducedMotion, userSelected]);
+
+  const handleSelect = (id) => {
+    setUserSelected(true);
+    setSelectedResponse(id);
+  };
+
   return (
-    <section className="adaptive-question-scene" data-header-scene="light" aria-labelledby="adaptive-question-title">
+    <section
+      className="adaptive-question-scene"
+      ref={questionSceneRef}
+      data-header-scene="light"
+      aria-labelledby="adaptive-question-title"
+    >
       <div className="adaptive-question-scene__inner">
+        {/* Surviving Anchor from Context */}
+        <div className="adaptive-question-context-anchor" aria-hidden="true">
+          <span>Targeting anchor: Real-time Analytics Migration</span>
+        </div>
+
         <header className="adaptive-question-scene__header">
           <h2 id="adaptive-question-title" className="adaptive-question-scene__title">
             Adaptive questioning in action.
@@ -312,13 +413,11 @@ function AdaptiveQuestionDemoScene() {
           </p>
         </header>
 
-        <div className="adaptive-question-card">
-          <div className="adaptive-question-prompt">
-            <span className="adaptive-question-label">Question Scenario</span>
-            <p className="adaptive-question-text">
-              When a project changes direction after you&apos;ve already started, what do you usually do first?
-            </p>
-          </div>
+        {/* The Question Text itself owns the scene — no giant enclosing card */}
+        <div className="adaptive-question-workspace">
+          <p className="adaptive-question-prompt-text">
+            When a project changes direction after you&apos;ve already started, what do you usually do first?
+          </p>
 
           <div className="adaptive-question-options" role="radiogroup" aria-label="Demonstration response options">
             {responses.map((item) => {
@@ -330,7 +429,7 @@ function AdaptiveQuestionDemoScene() {
                   role="radio"
                   aria-checked={isSelected}
                   className={`adaptive-option-button ${isSelected ? 'is-selected' : ''}`}
-                  onClick={() => setSelectedResponse(item.id)}
+                  onClick={() => handleSelect(item.id)}
                 >
                   <span className="adaptive-option-indicator" aria-hidden="true" />
                   <span className="adaptive-option-text">{item.text}</span>
@@ -340,8 +439,9 @@ function AdaptiveQuestionDemoScene() {
           </div>
 
           {selectedResponse && (
-            <div className="adaptive-question-feedback" role="status" aria-live="polite">
-              <p className="adaptive-question-feedback-text">
+            <div className="adaptive-question-interpretation" role="status" aria-live="polite">
+              <span className="adaptive-interpretation-tag">Observed Strategy Signal</span>
+              <p className="adaptive-interpretation-text">
                 {responses.find((r) => r.id === selectedResponse)?.feedback}
               </p>
             </div>
@@ -354,12 +454,40 @@ function AdaptiveQuestionDemoScene() {
 
 function ProfileScene() {
   const [activeLens, setActiveLens] = useState('personality');
-  const lensContainerRef = useRef(null);
+  const profileContainerRef = useRef(null);
+  const lensStageRef = useRef(null);
+  const { reducedMotion } = usePublicMotion();
   const demo = marketingDemo.profile;
+
+  // Scroll-driven progression over 160vh on desktop
+  useLayoutEffect(() => {
+    if (reducedMotion) return undefined;
+    const ctx = gsap.context(() => {
+      const media = gsap.matchMedia();
+      media.add('(min-width: 1024px) and (pointer: fine)', () => {
+        const lensKeys = ['personality', 'interests', 'values', 'signals'];
+        ScrollTrigger.create({
+          trigger: profileContainerRef.current,
+          start: 'top 40%',
+          end: 'bottom 80%',
+          scrub: true,
+          onUpdate: (self) => {
+            const stepIndex = Math.min(lensKeys.length - 1, Math.floor(self.progress * lensKeys.length));
+            const nextKey = lensKeys[stepIndex];
+            setActiveLens((prev) => {
+              if (prev !== nextKey) return nextKey;
+              return prev;
+            });
+          },
+        });
+      });
+    }, profileContainerRef);
+    return () => ctx.revert();
+  }, [reducedMotion]);
 
   const handleSelectLens = (key) => {
     if (key === activeLens) return;
-    const state = Flip.getState(lensContainerRef.current?.querySelectorAll('.profile-lens-item') || []);
+    const state = Flip.getState(lensStageRef.current?.querySelectorAll('.profile-lens-item') || []);
     setActiveLens(key);
     window.requestAnimationFrame(() => {
       Flip.from(state, {
@@ -371,7 +499,12 @@ function ProfileScene() {
   };
 
   return (
-    <section className="profile-scene" data-header-scene="light" aria-labelledby="profile-heading">
+    <section
+      className="profile-scene"
+      ref={profileContainerRef}
+      data-header-scene="light"
+      aria-labelledby="profile-heading"
+    >
       <div className="profile-scene__inner">
         <header className="profile-scene__header">
           <h2 id="profile-heading" className="profile-scene__title">
@@ -398,7 +531,7 @@ function ProfileScene() {
           ))}
         </div>
 
-        <div className="profile-scene__reading-stage" ref={lensContainerRef}>
+        <div className="profile-scene__reading-stage" ref={lensStageRef}>
           {activeLens === 'personality' && (
             <div className="profile-dimension-field profile-dimension-field--personality">
               <div className="profile-dimension-header">

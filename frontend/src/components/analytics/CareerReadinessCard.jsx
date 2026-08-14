@@ -43,8 +43,15 @@ export default function CareerReadinessCard({ query }) {
         <MetricCard label="Top career" value={d.topCareer || '—'} hint="Highest evidence-based match" />
         <MetricCard label="Skill readiness" value={`${d.skillReadiness ?? '—'}`} hint="From skill gap engine" />
         <MetricCard label="Roadmap progress" value={`${d.roadmapProgress ?? 0}%`} hint="Your saved roadmap completions" />
-        <MetricCard label="Evidence completeness" value={`${d.evidenceCompleteness ?? '—'}`} hint="Breadth of stored evidence items" />
-        <MetricCard label="Confidence" value={`${Math.round((d.confidence || 0) * 100)}%`} hint="Model confidence" />
+        <MetricCard
+          label="Confidence"
+          value={
+            d.confidence != null && Number.isFinite(Number(d.confidence))
+              ? `${Math.round(Number(d.confidence) * (d.confidence <= 1 ? 100 : 1))}%`
+              : '—'
+          }
+          hint="Model confidence"
+        />
       </div>
       {(d.warnings || []).length ? (
         <ul className="recommendation-list" aria-label="Warnings">

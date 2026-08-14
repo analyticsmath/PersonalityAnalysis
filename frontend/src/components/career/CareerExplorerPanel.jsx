@@ -33,19 +33,7 @@ const CareerExplorerPanel = ({ payload = null, sessionId = '' }) => {
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const [customRoleQuery, setCustomRoleQuery] = useState('');
 
-  let whyNotMutation;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    whyNotMutation = useWhyNotCareerMutation();
-  } catch {
-    whyNotMutation = {
-      isPending: false,
-      isError: false,
-      error: null,
-      data: null,
-      mutateAsync: async () => {},
-    };
-  }
+  const whyNotMutation = useWhyNotCareerMutation();
 
   const locked = Boolean(payload?.locked);
   const preliminary = Boolean(payload?.preliminary);

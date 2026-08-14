@@ -7,6 +7,16 @@ import SkillGapPanel from './SkillGapPanel';
 import CareerRoadmapTimeline from './CareerRoadmapTimeline';
 import CareerExplorerPanel from './CareerExplorerPanel';
 
+vi.mock('../../hooks/useAssessmentFlow', () => ({
+  useWhyNotCareerMutation: () => ({
+    isPending: false,
+    isError: false,
+    error: null,
+    data: null,
+    mutateAsync: vi.fn(),
+  }),
+}));
+
 describe('Career UI components', () => {
   it('CareerRecommendationCard renders title, fit, confidence, and why-this-fits', () => {
     render(

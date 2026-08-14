@@ -20,16 +20,21 @@ const CareerComparisonTable = ({ rows = [], items = [] }) => {
         </thead>
         <tbody>
           {list.map((r) => {
-            const conf =
-              typeof r.confidence === 'number' && r.confidence <= 1
+            const hasConf = r.confidence !== null && r.confidence !== undefined && Number.isFinite(Number(r.confidence));
+            const conf = hasConf
+              ? typeof r.confidence === 'number' && r.confidence <= 1
                 ? Math.round(r.confidence * 100)
-                : Math.round(Number(r.confidence || 0));
-            const fit = r.fitScore ?? r.match ?? r.score ?? 0;
+                : Math.round(Number(r.confidence))
+              : null;
+            const rawFit = r.fitScore ?? r.match ?? r.score ?? null;
+            const hasFit = rawFit !== null && Number.isFinite(Number(rawFit));
+            const fit = hasFit ? Math.round(Number(rawFit)) : null;
+
             return (
               <tr key={r.careerId || r.title}>
                 <td><strong>{r.title}</strong></td>
-                <td>{Math.round(Number(fit))}%</td>
-                <td>{conf ? `${conf}%` : '—'}</td>
+                <td>{hasFit ? `${fit}%` : '—'}</td>
+                <td>{conf !== null ? `${conf}%` : '—'}</td>
                 <td style={{ textTransform: 'capitalize' }}>{r.fitType || r.environmentType || 'Standard'}</td>
               </tr>
             );

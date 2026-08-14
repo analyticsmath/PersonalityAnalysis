@@ -24,9 +24,16 @@ const WorkValuesProfileCard = ({ workValues = {}, scoreMeta = null, height = 280
 
   const { metrics, labels } = useMemo(() => {
     const entries = Object.entries(workValues || {})
-      .map(([k, v]) => ({ k, score: Number(v?.score || 0), n: Number(v?.evidenceCount || 0) }))
-      .filter((e) => e.n > 0)
-      .sort((a, b) => b.score - a.score)
+      .map(([k, v]) => {
+        const hasScore = v?.score !== null && v?.score !== undefined && Number.isFinite(Number(v?.score));
+        return {
+          k,
+          score: hasScore ? Math.round(Number(v.score)) : null,
+          n: Number(v?.evidenceCount || 0),
+        };
+      })
+      .filter((e) => e.n > 0 && e.score !== null)
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
       .slice(0, 8);
 
     const m = {};

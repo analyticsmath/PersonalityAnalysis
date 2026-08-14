@@ -188,9 +188,7 @@ export function PublicLayout({ children, page, footerMode = 'standard' }) {
       <PublicMotionRoot>
         <div id="smooth-wrapper">
           <div id="smooth-content">
-            <div id="main-content">
-              {children}
-            </div>
+            {children}
             {footerMode !== 'integrated' && <PublicFooter />}
           </div>
         </div>

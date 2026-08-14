@@ -66,18 +66,26 @@ export default function DashboardPage() {
 
   const traitDeltas = useMemo(() => {
     if (!previousTraits || !hasTraits) return null;
-    return TRAIT_ORDER.map((traitKey) => {
-      const current = latestTraits[traitKey] || 0;
-      const prev = previousTraits[traitKey] || 0;
-      const delta = current - prev;
-      return {
-        traitKey,
-        label: TRAIT_META[traitKey]?.name || traitKey,
-        current,
-        previous: prev,
-        delta,
-      };
-    });
+    const comparable = [];
+    for (const traitKey of TRAIT_ORDER) {
+      const curRaw = latestTraits[traitKey];
+      const prevRaw = previousTraits[traitKey];
+      const hasCur = curRaw !== null && curRaw !== undefined && curRaw !== '' && Number.isFinite(Number(curRaw));
+      const hasPrev = prevRaw !== null && prevRaw !== undefined && prevRaw !== '' && Number.isFinite(Number(prevRaw));
+      if (hasCur && hasPrev) {
+        const current = Math.round(Number(curRaw));
+        const prev = Math.round(Number(prevRaw));
+        const delta = current - prev;
+        comparable.push({
+          traitKey,
+          label: TRAIT_META[traitKey]?.name || traitKey,
+          current,
+          previous: prev,
+          delta,
+        });
+      }
+    }
+    return comparable.length >= 3 ? comparable : null;
   }, [latestTraits, previousTraits, hasTraits]);
 
   const rawCareers =
@@ -227,16 +235,23 @@ export default function DashboardPage() {
               {hasTraits ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {TRAIT_ORDER.map((traitKey) => {
-                    const score = Math.round(Number(latestTraits[traitKey] || 0));
+                    const raw = latestTraits[traitKey];
+                    const hasValue = raw !== null && raw !== undefined && raw !== '' && Number.isFinite(Number(raw));
+                    const score = hasValue ? Math.round(Number(raw)) : null;
                     const meta = TRAIT_META[traitKey] || { name: traitKey };
                     return (
                       <div key={traitKey} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
                           <span style={{ fontWeight: 500, color: 'var(--ink)' }}>{meta.name}</span>
-                          <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>{score}%</span>
+                          <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>
+                            {hasValue ? `${score}%` : 'Not available'}
+                          </span>
                         </div>
                         <div className="profile-dimension-bar">
-                          <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
+                          <div
+                            className="profile-dimension-bar__fill"
+                            style={{ width: hasValue ? `${score}%` : '0%' }}
+                          />
                         </div>
                       </div>
                     );
@@ -357,9 +372,11 @@ export default function DashboardPage() {
                             <span style={{ fontSize: '0.75rem', color: 'var(--secondary)' }}>Fit unavailable</span>
                           )}
                         </div>
-                        <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', margin: 0, lineHeight: 1.4 }}>
-                          {item.why || item.description || 'Dimensional alignment with your demonstrated signals.'}
-                        </p>
+                        {item.why || item.description ? (
+                          <p style={{ fontSize: '0.8125rem', color: 'var(--secondary)', margin: 0, lineHeight: 1.4 }}>
+                            {item.why || item.description}
+                          </p>
+                        ) : null}
                       </article>
                     );
                   })}

@@ -225,56 +225,87 @@
   line-height: 1.05;
   margin: 0 0 20px 0;
 }
+.hero-line-mask {
+  display: block;
+  overflow: hidden;
+}
+.hero-line-reveal {
+  display: block;
+  will-change: transform;
+}
+
+/* ── 3. Professional Context (Spatial Evidence Field) ───────────────────────── */
+.context-scene {
+  padding: clamp(80px, 12vh, 140px) clamp(20px, 4.8vw, 64px);
+  background: var(--color-canvas);
+}
+.context-scene__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.context-scene__header {
+  max-width: 780px;
+  margin-bottom: 48px;
+}
+.context-scene__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+  font-weight: 450;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin: 0 0 20px 0;
+}
 .context-scene__copy {
   font-size: clamp(1.05rem, 1.5vw, 1.25rem);
   color: var(--color-secondary);
   line-height: 1.55;
   margin: 0;
 }
-.context-scene__primary-document {
+.context-spatial-canvas {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.context-primary-artifact {
   background: var(--color-paper);
   border: 1px solid var(--color-mist);
   border-radius: var(--radius-lg);
-  padding: clamp(24px, 3.5vw, 44px);
+  padding: 32px;
   box-shadow: var(--shadow-subtle);
 }
-.context-document-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--color-mist);
-  margin-bottom: 24px;
-}
-.context-document-label {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 550;
-}
-.context-document-status {
-  font-size: 0.8rem;
+.context-artifact-tag {
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-success);
-  font-weight: 600;
-}
-.context-document-intro {
+  letter-spacing: 0.06em;
   color: var(--color-secondary);
-  font-size: 0.95rem;
-  margin: 0 0 24px 0;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 12px;
 }
-.context-entities-list {
+.context-artifact-summary {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--color-ink);
+  margin: 0;
+}
+.context-spatial-annotations {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
-.context-entity-row {
-  background: var(--color-canvas);
+.context-annotation {
+  background: var(--color-paper);
   border: 1px solid var(--color-mist);
   border-radius: var(--radius-sm);
-  padding: 16px 18px;
+  padding: 16px 20px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
-.context-entity-type {
+.context-annotation--anchor {
+  border-color: var(--color-carbon);
+  background: #ECEFEF;
+}
+.context-annotation-type {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -283,35 +314,38 @@
   display: block;
   margin-bottom: 6px;
 }
-.context-entity-body strong {
+.context-annotation-title {
   display: block;
   font-size: 0.98rem;
+  font-weight: 600;
   margin-bottom: 4px;
+  color: var(--color-ink);
 }
-.context-entity-body p {
-  font-size: 0.88rem;
+.context-annotation-detail {
+  font-size: 0.86rem;
   color: var(--color-secondary);
   margin: 0;
   line-height: 1.45;
 }
 
-/* ── 4. Adaptive Question Demo ───────────────────────────────────────────── */
+/* ── 4. Adaptive Question Demo (Card-free Workspace) ────────────────────────── */
 .adaptive-question-scene {
   padding: clamp(60px, 10vh, 100px) clamp(20px, 4.8vw, 64px);
   background: #EBEFED;
 }
 .adaptive-question-scene__inner {
-  max-width: 900px;
+  max-width: 860px;
   margin: 0 auto;
 }
-.public-scene-kicker {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.adaptive-question-context-anchor {
+  font-size: 0.8125rem;
   color: var(--color-secondary);
-  font-weight: 600;
-  display: block;
-  margin-bottom: 12px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-sm);
+  display: inline-block;
 }
 .adaptive-question-scene__title {
   font-family: var(--font-display);
@@ -326,28 +360,18 @@
   line-height: 1.55;
   margin: 0 0 36px 0;
 }
-.adaptive-question-card {
-  background: var(--color-paper);
-  border: 1px solid var(--color-mist);
-  border-radius: var(--radius-lg);
-  padding: clamp(28px, 4vw, 44px);
-  box-shadow: var(--shadow-subtle);
+.adaptive-question-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-.adaptive-question-label {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-secondary);
-  font-weight: 600;
-  display: block;
-  margin-bottom: 8px;
-}
-.adaptive-question-text {
+.adaptive-question-prompt-text {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
   font-weight: 500;
   line-height: 1.35;
-  margin: 0 0 28px 0;
+  color: var(--color-ink);
+  margin: 0;
 }
 .adaptive-question-options {
   display: flex;
@@ -358,12 +382,12 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 16px 20px;
-  background: var(--color-canvas);
+  padding: 18px 22px;
+  background: var(--color-paper);
   border: 1px solid var(--color-mist);
   border-radius: var(--radius-md);
   text-align: left;
-  font-size: 0.98rem;
+  font-size: 1rem;
   color: var(--color-ink);
   transition: all 0.2s ease;
 }
@@ -379,11 +403,36 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 2px solid currentColor;
+  border: 1.5px solid var(--color-secondary);
   flex-shrink: 0;
 }
 .adaptive-option-button.is-selected .adaptive-option-indicator {
+  border-color: var(--color-paper);
   background: var(--color-paper);
+}
+.adaptive-option-text {
+  flex: 1;
+}
+.adaptive-question-interpretation {
+  padding: 16px 20px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-sm);
+}
+.adaptive-interpretation-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-secondary);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+.adaptive-interpretation-text {
+  font-size: 0.9375rem;
+  color: var(--color-ink);
+  margin: 0;
+  line-height: 1.45;
 }
 .adaptive-question-feedback {
   margin-top: 24px;

@@ -9,14 +9,17 @@ const CareerSignalsSummary = ({ careerSignals = {}, scoreMeta = null }) => {
   const rows = useMemo(() => {
     const src = careerSignals && typeof careerSignals === 'object' ? careerSignals : {};
     return Object.entries(src)
-      .map(([key, v]) => ({
-        key,
-        score: Math.round(Number(v?.score || 0)),
-        n: Number(v?.evidenceCount || 0),
-        sources: Array.isArray(v?.sources) ? v.sources.join(', ') : '',
-      }))
-      .filter((r) => r.n > 0)
-      .sort((a, b) => b.score - a.score)
+      .map(([key, v]) => {
+        const hasScore = v?.score !== null && v?.score !== undefined && Number.isFinite(Number(v?.score));
+        return {
+          key,
+          score: hasScore ? Math.round(Number(v.score)) : null,
+          n: Number(v?.evidenceCount || 0),
+          sources: Array.isArray(v?.sources) ? v.sources.join(', ') : '',
+        };
+      })
+      .filter((r) => r.n > 0 && r.score !== null)
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
       .slice(0, 10);
   }, [careerSignals]);
 
