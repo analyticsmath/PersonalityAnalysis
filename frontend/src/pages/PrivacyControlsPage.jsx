@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import SectionHeader from '../components/ui/SectionHeader';
+import { FiArrowLeft } from 'react-icons/fi';
 import ProfileDataSourcePanel from '../components/privacy/ProfileDataSourcePanel';
 import DataExportPanel from '../components/privacy/DataExportPanel';
 import DataDeletionPanel from '../components/privacy/DataDeletionPanel';
@@ -13,23 +13,23 @@ export default function PrivacyControlsPage() {
   return (
     <main className="app-page privacy-page">
       <div className="page-shell">
-        <SectionHeader
-          eyebrow="Phase 8"
-          title="Privacy & account controls"
-          subtitle="Transparency-first controls for export, deletion, and AI data handling. Not legal compliance documentation."
-          actions={
-            <Link className="history-item__link" to="/trust">
-              Trust &amp; safety
+        <header className="page-header">
+          <div className="page-header__actions-row">
+            <Link to="/dashboard" className="public-text-action">
+              <FiArrowLeft /> Back to dashboard
             </Link>
-          }
-        />
+          </div>
+          <h1 className="page-header__title">Privacy &amp; Account Controls</h1>
+          <p className="page-header__subtitle">
+            Manage data export, selective record deletion, CV context retention, and permanent account removal.
+          </p>
+        </header>
 
         <section className="analytics-section">
-          <h2 className="section-header__title">Privacy overview</h2>
+          <h2 className="section-header__title">Data Governance Overview</h2>
           <p className="page-header__subtitle">
-            We store account, assessment, analytics, and optional AI artifacts to run the product. Retention is until
-            you delete data here or delete your account. See docs/architecture/privacy-data-governance.md for a full
-            inventory.
+            You maintain direct control over your stored assessments, CV context, and profile records. You can export
+            your full data at any time or selectively delete individual records.
           </p>
         </section>
 
@@ -39,10 +39,10 @@ export default function PrivacyControlsPage() {
         <AiTransparencyPanel />
 
         <section className="analytics-section">
-          <h2 className="section-header__title">Security notes</h2>
+          <h2 className="section-header__title">Security Guidelines</h2>
           <p className="page-header__subtitle">
-            Use a strong unique password, keep your token private, and avoid uploading highly sensitive secrets into CV
-            or manual profile text.
+            Maintain a strong, unique password and keep your credentials secure. Avoid uploading unredacted personal
+            identification numbers or confidential trade secrets in your CV documents.
           </p>
         </section>
       </div>

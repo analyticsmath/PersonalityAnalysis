@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi';
+import Button from '../components/ui/Button';
 import { useAuth } from '../hooks/useAuth';
 import {
   usePersonalAnalyticsHistoryQuery,
@@ -36,16 +38,18 @@ export default function AnalyticsPage() {
   const topCareerId = skillQ.data?.topCareerId || '';
 
   return (
-    <main className="app-page">
-      <div className="page-shell analytics-page">
+    <main className="app-page analytics-page">
+      <div className="page-shell">
         <header className="page-header">
-          <p className="page-header__eyebrow">Phase 7</p>
-          <h1 className="page-header__title">Personal intelligence dashboard</h1>
-          <p className="page-header__subtitle">Analytics are scoped to your account and derived from stored results.</p>
-          <p className="page-header__actions">
-            <Link className="history-item__link" to="/dashboard">
-              Back to dashboard
+          <div className="page-header__actions-row">
+            <Link to="/dashboard" className="public-text-action">
+              <FiArrowLeft /> Back to dashboard
             </Link>
+          </div>
+          <h1 className="page-header__title">Longitudinal Profile Analytics</h1>
+          <p className="page-header__subtitle">
+            Track continuous dimension shifts, career readiness evolution, and verified skill milestones across your
+            historical assessments.
           </p>
         </header>
 

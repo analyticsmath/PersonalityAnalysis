@@ -29,27 +29,26 @@ const StepProfile = ({
   );
 
   return (
-    <section className="assessment-step" aria-labelledby="wizard-ready-title">
-      <header className="assessment-step__header">
-        <p className="assessment-step__eyebrow">Step 3</p>
-        <h2 id="wizard-ready-title" className="assessment-step__title">
-          Your profile ready
-        </h2>
-        <p className="assessment-step__subtitle">
+    <section className="assessment-setup-state" aria-labelledby="wizard-ready-title">
+      <header className="assessment-setup-state__header">
+        <h1 id="wizard-ready-title" className="assessment-setup-state__title">
+          Review the context we&apos;ll use.
+        </h1>
+        <p className="assessment-setup-state__subtitle">
           {profileMode === 'manual'
-            ? 'Manual profile is saved. Review detected signals and start the adaptive assessment.'
-            : 'CV analysis is complete. Review your detected profile and start the assessment.'}
+            ? 'Manual profile is saved. Review detected signals and begin the adaptive assessment.'
+            : 'CV analysis is complete. Review your detected profile and begin the assessment.'}
         </p>
         <p className="ui-message ui-message--neutral" role="status">
-          Profile source: {profileMode === 'manual' ? 'Manual entry' : 'CV upload'}
+          Context source: {profileMode === 'manual' ? 'Manual entry' : 'CV upload'}
         </p>
       </header>
 
-      {profileMode === 'manual' ? (
+      {profileMode === 'manual' && (
         <div className="wizard-profile-ready" style={{ marginBottom: '1rem' }}>
           <ManualProfileSummary manualProfile={manualProfile} injection={injection} />
         </div>
-      ) : null}
+      )}
 
       <div className="wizard-profile-ready">
         <div className="wizard-profile-ready__block">
@@ -88,18 +87,16 @@ const StepProfile = ({
         </div>
       </div>
 
-      {isStarting ? (
+      {isStarting && (
         <p className="ui-message ui-message--neutral">Preparing your personalized questions…</p>
-      ) : null}
-      {errorMessage ? <p className="ui-message ui-message--error">{errorMessage}</p> : null}
+      )}
+      {errorMessage && <p className="ui-message ui-message--error">{errorMessage}</p>}
 
-      <footer className="assessment-step__actions">
+      <footer className="assessment-setup-state__actions">
         <Button
           variant="ghost"
           onClick={onBack}
           disabled={isStarting}
-          data-avatar-action="wizard-back-profile"
-          data-avatar-target="start-assessment-cta"
         >
           Back
         </Button>
@@ -107,11 +104,8 @@ const StepProfile = ({
           onClick={onStartAssessment}
           disabled={isStartDisabled || isStarting}
           loading={isStarting}
-          data-avatar-action="start-assessment"
-          data-avatar-target="start-assessment-cta"
-          data-avatar-hint="Start assessment with first questions."
         >
-          Start Assessment
+          Begin assessment
         </Button>
       </footer>
     </section>

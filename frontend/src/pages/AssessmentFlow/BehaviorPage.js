@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Skeleton from '../../components/ui/Skeleton';
 import { useAuth } from '../../hooks/useAuth';
@@ -12,7 +11,6 @@ import {
   readAssessmentFlowState,
   saveAssessmentFlowState,
 } from '../../utils/assessmentFlowStorage';
-import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEvents';
 
 const MIN_LENGTH = 40;
 
@@ -26,7 +24,6 @@ const BehaviorAssessmentPage = () => {
 
   const questionQuery = useAdaptiveQuestionQuery(sessionId, Boolean(sessionId));
   const answerMutation = useSubmitAdaptiveAnswerMutation();
-  const { emit } = useAvatarEvents();
 
   const prompt = questionQuery.data?.behaviorPrompt || null;
   const stage = questionQuery.data?.session?.stage || 'behavior';
@@ -61,15 +58,6 @@ const BehaviorAssessmentPage = () => {
     });
   }, [auth.userId, questionQuery.data, sessionId]);
 
-  useEffect(() => {
-    if (questionQuery.isPending || answerMutation.isPending) {
-      emit(AVATAR_EVENTS.AI_LOADING, {
-        long: true,
-        targetKey: 'behavior-card',
-      });
-    }
-  }, [answerMutation.isPending, emit, questionQuery.isPending]);
-
   const handleSubmit = async () => {
     if (!prompt) {
       return;
@@ -92,10 +80,6 @@ const BehaviorAssessmentPage = () => {
       });
 
       if (payload.completedAssessment) {
-        emit(AVATAR_EVENTS.ASSESSMENT_COMPLETE, {
-          progress: 100,
-          targetKey: 'behavior-card',
-        });
         saveAssessmentFlowState(auth.userId, {
           sessionId,
           stage: 'result',
@@ -112,13 +96,12 @@ const BehaviorAssessmentPage = () => {
 
   if (questionQuery.isPending) {
     return (
-      <main className="app-page">
-        <div className="page-shell">
-          <Card title="Loading behavior analysis section">
-            <Skeleton height="24px" />
-            <Skeleton height="100px" />
-            <Skeleton height="160px" />
-          </Card>
+      <main className="app-page assessment-focused-page">
+        <div className="page-shell assessment-focused-shell">
+          <div className="assessment-loading-panel">
+            <Skeleton height="32px" />
+            <Skeleton height="120px" />
+          </div>
         </div>
       </main>
     );
@@ -126,65 +109,73 @@ const BehaviorAssessmentPage = () => {
 
   if (!prompt || questionQuery.isError) {
     return (
-      <main className="app-page">
-        <div className="page-shell">
-          <Card title="Behavior prompt unavailable">
+      <main className="app-page assessment-focused-page">
+        <div className="page-shell assessment-focused-shell">
+          <div className="assessment-error-panel">
+            <h2>Behavior prompt unavailable</h2>
             <p className="ui-message ui-message--error">
               {questionQuery.error?.message || 'No behavior prompt found for this session.'}
             </p>
             <Button onClick={() => navigate('/assessment/start')}>Back to Start</Button>
-          </Card>
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="app-page" data-avatar-section="behavior-main">
-      <div className="page-shell">
-        <Card
-          title="Behavioral Paragraph Analysis"
-          subtitle={`Prompt ${prompt.index + 1} of ${prompt.total}`}
-          className="behavior-card"
-        >
-          <div data-avatar-target="behavior-card" data-avatar-section="behavior-prompt">
-            <p style={{ marginBottom: 12 }}>{prompt.prompt}</p>
+    <main className="app-page assessment-focused-page">
+      <div className="assessment-focused-shell">
+        <header className="assessment-quiet-header">
+          <div className="assessment-quiet-header__brand">
+            <span className="public-brand__name">Personality Assessor</span>
           </div>
-          <textarea
-            className="ui-input"
-            style={{ minHeight: 220, width: '100%' }}
-            value={text}
-            onChange={(event) => {
-              setText(event.target.value);
-              emit(AVATAR_EVENTS.INPUT_TYPING, { targetKey: 'behavior-card' });
-            }}
-            placeholder="Write a concrete example with context, action, and outcome."
-          />
-          <p className="ui-message ui-message--neutral">
-            {text.trim().length} characters written. Minimum {MIN_LENGTH} required.
-          </p>
-          {errorMessage ? <p className="ui-message ui-message--error">{errorMessage}</p> : null}
+          <span className="assessment-quiet-step-text">
+            Prompt {prompt.index + 1} of {prompt.total}
+          </span>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
+            Exit
+          </Button>
+        </header>
 
-          <div style={{ marginTop: 14, display: 'flex', gap: 12 }}>
-            <Button
-              onClick={handleSubmit}
-              loading={answerMutation.isPending}
-              data-avatar-action="behavior-submit"
-              data-avatar-target="behavior-card"
-              data-avatar-hint="Save your behavioral response and continue."
-            >
-              Save & Continue
-            </Button>
+        <section className="assessment-behavior-stage">
+          <h1 className="assessment-behavior-heading">Think of a real example.</h1>
+          <p className="assessment-behavior-prompt">{prompt.prompt}</p>
+
+          <div className="assessment-behavior-input-wrap">
+            <textarea
+              className="ui-input assessment-behavior-textarea"
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+              placeholder="Write a concrete example from your work."
+              aria-label="Behavioral example"
+            />
+            <p className="assessment-behavior-support">
+              Include enough context to explain what happened, what you did and what followed.
+            </p>
+            <p className="assessment-behavior-charcount">
+              {text.trim().length} characters written. Minimum {MIN_LENGTH} required.
+            </p>
+          </div>
+
+          {errorMessage && <p className="ui-message ui-message--error">{errorMessage}</p>}
+
+          <footer className="assessment-question-actions">
             <Button
               variant="ghost"
               onClick={() => navigate('/assessment/start')}
-              data-avatar-action="behavior-exit"
-              data-avatar-target="behavior-card"
             >
               Exit
             </Button>
-          </div>
-        </Card>
+            <Button
+              onClick={handleSubmit}
+              loading={answerMutation.isPending}
+              disabled={text.trim().length < MIN_LENGTH || answerMutation.isPending}
+            >
+              Save &amp; continue
+            </Button>
+          </footer>
+        </section>
       </div>
     </main>
   );

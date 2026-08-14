@@ -1,2 +1,9 @@
 export { marketingDemo, publicMedia } from '../../../content/personalityMarketingDemo';
-export const motion = { ui: 0.28, focus: 0.58, scene: 0.72, smoothScrollCatchup: 0.85 };
+export const motionTimings = {
+  small: 0.16,
+  answer: 0.14,
+  exchange: 0.28,
+  lens: 0.45,
+  carry: 0.65,
+  hero: 0.68,
+};

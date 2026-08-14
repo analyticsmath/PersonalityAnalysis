@@ -1,12 +1,8 @@
-import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import Card from '../../components/ui/Card';
+import { FiArrowLeft, FiCompass, FiDownload, FiRefreshCw, FiShare2 } from 'react-icons/fi';
 import Button from '../../components/ui/Button';
 import Skeleton from '../../components/ui/Skeleton';
-import FadeIn from '../../components/motion/FadeIn';
-import TraitRadarChart from '../../components/charts/TraitRadarChart';
-import TraitBarChart from '../../components/charts/TraitBarChart';
-import TraitDeltaChart from '../../components/charts/TraitDeltaChart';
 import {
   useAssessmentComparisonQuery,
   useAssessmentHistoryQuery,
@@ -14,54 +10,15 @@ import {
   useGenerateAiReportMutation,
 } from '../../hooks/useAssessment';
 import { useAuth } from '../../hooks/useAuth';
-import mapTraitsTo3DData from '../../utils/traitMapper';
-import { getPersonalityProfile } from '../../utils/personalityProfiles';
-import { getDominantTrait, normalizeTraits } from '../../utils/traits';
-import { AVATAR_EVENTS, useAvatarEvents } from '../../components/avatar/AvatarEvents';
-
-const TraitSphereLazy = lazy(() => import('../../components/3d/TraitSphere'));
+import { normalizeTraits } from '../../utils/traits';
 
 const formatDate = (value) => {
-  if (!value) {
-    return 'Not available';
-  }
-
+  if (!value) return 'Not available';
   return new Intl.DateTimeFormat('en-US', {
     dateStyle: 'long',
     timeStyle: 'short',
   }).format(new Date(value));
 };
-
-const isLowPowerDevice = () => {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-
-  const reducedMotion =
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const lowMemory =
-    typeof navigator !== 'undefined' &&
-    typeof navigator.deviceMemory === 'number' &&
-    navigator.deviceMemory <= 2;
-
-  const lowThreads =
-    typeof navigator !== 'undefined' &&
-    typeof navigator.hardwareConcurrency === 'number' &&
-    navigator.hardwareConcurrency <= 2;
-
-  const mobileViewport = typeof window.innerWidth === 'number' && window.innerWidth <= 820;
-
-  const saveData =
-    typeof navigator !== 'undefined' &&
-    navigator.connection &&
-    navigator.connection.saveData === true;
-
-  return reducedMotion || lowMemory || lowThreads || mobileViewport || saveData;
-};
-
-const toCareerList = (items) => (Array.isArray(items) ? items : []);
 
 const ResultPage = () => {
   const navigate = useNavigate();
@@ -73,505 +30,256 @@ const ResultPage = () => {
   const historyQuery = useAssessmentHistoryQuery(auth.userId, Boolean(auth.userId));
   const aiReportMutation = useGenerateAiReportMutation();
 
-  const [showComparison, setShowComparison] = useState(false);
-  const [selectedCompareAssessmentId, setSelectedCompareAssessmentId] = useState('');
-  const [aiReportResponse, setAiReportResponse] = useState(null);
-  const [aiStatusMessage, setAiStatusMessage] = useState('');
+  const [activeLens, setActiveLens] = useState('personality');
   const [shareStatus, setShareStatus] = useState('');
-  const { emit } = useAvatarEvents();
 
   const routeResult = location.state?.result || null;
-  const requestedCompareAssessmentId = String(location.state?.compareWith || '');
-  const shouldOpenComparisonFromRoute = Boolean(location.state?.openComparison);
   const report = reportQuery.data || routeResult;
   const traits = normalizeTraits(report?.traits || {});
-  const dominantTrait = report?.dominantTrait || getDominantTrait(traits);
-  const profile = getPersonalityProfile(dominantTrait);
 
   const historyAssessments = useMemo(
     () => historyQuery.data || [],
     [historyQuery.data]
   );
 
-  const comparisonCandidates = useMemo(
-    () =>
-      historyAssessments.filter(
-        (assessment) => assessment.assessmentId !== String(assessmentId)
-      ),
-    [assessmentId, historyAssessments]
-  );
-
-  useEffect(() => {
-    if (!comparisonCandidates.length) {
-      setSelectedCompareAssessmentId('');
-      return;
-    }
-
-    const hasRequestedCandidate = comparisonCandidates.some(
-      (assessment) => assessment.assessmentId === requestedCompareAssessmentId
-    );
-
-    setSelectedCompareAssessmentId((current) => {
-      if (current && comparisonCandidates.some((assessment) => assessment.assessmentId === current)) {
-        return current;
-      }
-
-      if (hasRequestedCandidate) {
-        return requestedCompareAssessmentId;
-      }
-
-      return comparisonCandidates[0].assessmentId;
-    });
-  }, [comparisonCandidates, requestedCompareAssessmentId]);
-
-  useEffect(() => {
-    if (!shouldOpenComparisonFromRoute || !requestedCompareAssessmentId) {
-      return;
-    }
-
-    const canOpenRequestedComparison = comparisonCandidates.some(
-      (assessment) => assessment.assessmentId === requestedCompareAssessmentId
-    );
-
-    if (canOpenRequestedComparison) {
-      setShowComparison(true);
-    }
-  }, [
-    comparisonCandidates,
-    requestedCompareAssessmentId,
-    shouldOpenComparisonFromRoute,
-  ]);
-
-  useEffect(() => {
-    setAiReportResponse(null);
-    setAiStatusMessage('');
-  }, [assessmentId]);
-
-  const comparisonQuery = useAssessmentComparisonQuery(
-    selectedCompareAssessmentId,
-    assessmentId,
-    showComparison && Boolean(selectedCompareAssessmentId)
-  );
-
-  const previousTraits = useMemo(() => {
-    if (comparisonQuery.data?.assessmentA?.traits) {
-      return comparisonQuery.data.assessmentA.traits;
-    }
-
-    const currentIndex = historyAssessments.findIndex(
-      (item) => item.assessmentId === assessmentId
-    );
-
-    if (currentIndex >= 0 && historyAssessments[currentIndex + 1]) {
-      return historyAssessments[currentIndex + 1].traits;
-    }
-
-    if (currentIndex < 0 && historyAssessments.length > 1) {
-      return historyAssessments[1].traits;
-    }
-
-    return null;
-  }, [assessmentId, comparisonQuery.data, historyAssessments]);
-
-  const threeDPayload = useMemo(() => mapTraitsTo3DData(traits), [traits]);
-  const canRender3D = useMemo(() => !isLowPowerDevice(), []);
-
-  const aiReport = aiReportResponse?.aiReport || report?.aiReport || null;
-  const aiReportMeta = aiReportResponse?.aiReportMeta || report?.aiReportMeta || null;
-  const insightEngine = aiReportResponse?.insightEngine || report?.insightEngine || null;
-  const careerEngine = toCareerList(aiReportResponse?.careerEngine || report?.careerEngine);
-
-  useEffect(() => {
-    if (reportQuery.isPending || aiReportMutation.isPending) {
-      emit(AVATAR_EVENTS.AI_LOADING, {
-        long: true,
-        targetKey: 'report-header',
-      });
-    }
-  }, [aiReportMutation.isPending, emit, reportQuery.isPending]);
-
-  useEffect(() => {
-    if (!report) {
-      return;
-    }
-
-    emit(AVATAR_EVENTS.RESULTS_LOADED, {
-      targetKey: 'report-header',
-      message: 'Here is your personality summary and report details.',
-    });
-  }, [emit, report]);
-
-  const handleGenerateAiReport = async (forceRefresh = false) => {
-    if (!assessmentId) {
-      return;
-    }
-
-    setAiStatusMessage('');
-
-    try {
-      const payload = await aiReportMutation.mutateAsync({
-        assessmentId,
-        forceRefresh,
-      });
-
-      setAiReportResponse(payload);
-      setAiStatusMessage(
-        payload.cached
-          ? 'Loaded cached AI report (no extra token cost).'
-          : 'Generated a new AI report successfully.'
-      );
-    } catch (error) {
-      setAiStatusMessage('');
-    }
-  };
-
-  const handleShareReport = async () => {
+  const handleShare = async () => {
     setShareStatus('');
-
-    const sharePayload = {
-      title: 'Personality Assessment Report',
-      text: `${profile.name} profile report`,
-      url: window.location.href,
-    };
-
     try {
-      if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
-        await navigator.share(sharePayload);
-        setShareStatus('Share sheet opened.');
-        return;
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Personality Assessor Profile',
+          text: 'Review my professional profile summary and career alignment.',
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        setShareStatus('Link copied to clipboard.');
+        setTimeout(() => setShareStatus(''), 3000);
       }
-
-      await navigator.clipboard.writeText(window.location.href);
-      setShareStatus('Report link copied to clipboard.');
-    } catch (error) {
-      setShareStatus('Unable to share report on this device.');
+    } catch (e) {
+      // Ignored
     }
   };
 
   if (reportQuery.isPending && !routeResult) {
     return (
-      <main className="app-page">
-        <div className="page-shell">
-          <Card title="Loading report" subtitle="Preparing trait analysis">
-            <Skeleton width="35%" />
-            <Skeleton height="320px" />
-            <Skeleton height="100px" count={2} />
-          </Card>
+      <main className="app-page profile-results-page">
+        <div className="page-shell profile-results-shell">
+          <div className="profile-results-loading">
+            <Skeleton height="36px" />
+            <Skeleton height="140px" />
+            <Skeleton height="280px" />
+          </div>
         </div>
       </main>
     );
   }
 
-  if (!report || reportQuery.isError) {
+  if (!report && reportQuery.isError) {
     return (
-      <main className="app-page">
-        <div className="page-shell">
-          <Card title="Report unavailable">
+      <main className="app-page profile-results-page">
+        <div className="page-shell profile-results-shell">
+          <div className="profile-results-error">
+            <h1>Assessment Record Unavailable</h1>
             <p className="ui-message ui-message--error">
-              {reportQuery.error?.message || 'Unable to fetch this report.'}
+              {reportQuery.error?.message || 'Unable to load this assessment record.'}
             </p>
             <Button onClick={() => navigate('/dashboard')}>Back to Dashboard</Button>
-          </Card>
+          </div>
         </div>
       </main>
     );
   }
 
+  const rawCareers = report?.recommendedCareers || report?.career_recommendations || [];
+  const careers = Array.isArray(rawCareers) ? rawCareers : [];
+
   return (
-    <main className="app-page" data-avatar-section="legacy-report-main">
-      <div className="page-shell result-shell">
-        <header className="page-header" data-avatar-section="legacy-report-summary" data-avatar-target="report-header">
-          <FadeIn>
-            <div data-avatar-target="report-header">
-              <p className="page-header__eyebrow">Assessment Report</p>
-              <h1 className="page-header__title">{profile.name} Profile</h1>
-              <p className="page-header__subtitle">Generated on {formatDate(report.createdAt)}</p>
-            </div>
-          </FadeIn>
-          <FadeIn delay={0.06}>
-            <div className="page-header__actions">
-              <Link className="history-item__link" to="/dashboard" data-avatar-action="back-dashboard" data-avatar-target="report-header">
-                Back to Dashboard
-              </Link>
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/assessment/start')}
-                data-avatar-action="retake-assessment"
-                data-avatar-target="report-header"
-              >
-                Retake Assessment
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={handleShareReport}
-                data-avatar-action="share-report"
-                data-avatar-target="report-header"
-                data-avatar-hint="Share this report link."
-              >
-                Share Report
-              </Button>
-            </div>
-          </FadeIn>
+    <main className="app-page profile-results-page">
+      <div className="page-shell profile-results-shell">
+        <header className="profile-results-top-bar">
+          <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
+            <FiArrowLeft /> Dashboard
+          </Button>
+          <div className="profile-results-top-actions">
+            <Button variant="ghost" size="sm" onClick={handleShare}>
+              <FiShare2 /> Share
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => window.print()}>
+              <FiDownload /> Print / Export
+            </Button>
+          </div>
         </header>
 
-        <section className="result-sections" data-avatar-section="legacy-report-sections">
-          <Card title="Summary" subtitle="Dominant trait highlight">
-            <div className="dominant-trait" data-avatar-target="report-summary">
-              <span className="dominant-trait__badge">{dominantTrait}</span>
-              <div>
-                <h3>{profile.traitName}</h3>
-                <p>{profile.summary}</p>
-              </div>
-            </div>
-          </Card>
+        {shareStatus && <p className="ui-message ui-message--success">{shareStatus}</p>}
 
-          <Card title="Traits Breakdown" subtitle="OCEAN distribution and comparison">
-            <div className="result-charts">
-              <TraitRadarChart traits={traits} />
-              <TraitBarChart
-                traits={traits}
-                comparisonTraits={previousTraits}
-                currentLabel="Current"
-                previousLabel="Compared"
-              />
-            </div>
-          </Card>
+        {/* ── PART 1: Primary Profile Statement ───────────────────────────── */}
+        <section className="profile-primary-statement-section">
+          <header className="profile-primary-statement-header">
+            <span className="profile-badge-quiet">Assessment Record</span>
+            <h1 className="profile-primary-title">Your current profile</h1>
+            <p className="profile-primary-subtitle">
+              Four distinct readings of how you approach problems, what kinds of work hold your attention, what
+              environments you need, and what capabilities your background demonstrates.
+            </p>
+            <p className="profile-timestamp-label">Recorded on {formatDate(report?.completedAt || report?.createdAt)}</p>
+          </header>
 
-          <Card title="Assessment Comparison" subtitle="Compare against a previous report">
-            {comparisonCandidates.length === 0 ? (
-              <p className="empty-state">No previous assessments available for comparison yet.</p>
-            ) : (
-              <>
-                <div className="comparison-controls">
-                  <Button
-                    variant="secondary"
-                    onClick={() => setShowComparison((prev) => !prev)}
-                  >
-                    {showComparison ? 'Hide Comparison' : 'Compare with Previous Assessment'}
-                  </Button>
+          <div className="profile-summary-card">
+            <p className="profile-summary-text">
+              {report?.summary ||
+                report?.profile_summary ||
+                'Your responses synthesize into four independent profile lenses: baseline personality spectrums, vocational interests, work values, and demonstrated career signals.'}
+            </p>
+          </div>
+        </section>
 
-                  {showComparison && (
-                    <label className="comparison-select-wrap">
-                      <span>Select assessment</span>
-                      <select
-                        value={selectedCompareAssessmentId}
-                        onChange={(event) =>
-                          setSelectedCompareAssessmentId(event.target.value)
-                        }
-                      >
-                        {comparisonCandidates.map((candidate) => (
-                          <option
-                            key={candidate.assessmentId}
-                            value={candidate.assessmentId}
-                          >
-                            {formatDate(candidate.createdAt)} ({candidate.dominantTrait})
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                  )}
-                </div>
-
-                {showComparison && comparisonQuery.isPending && <Skeleton height="280px" />}
-                {showComparison && comparisonQuery.isError && (
-                  <p className="ui-message ui-message--error">
-                    {comparisonQuery.error.message}
-                  </p>
-                )}
-                {showComparison && comparisonQuery.data?.comparison && (
-                  <TraitDeltaChart comparison={comparisonQuery.data.comparison} />
-                )}
-              </>
-            )}
-          </Card>
-
-          <Card
-            title="AI Intelligence Report"
-            subtitle="Deep personality analysis with hybrid intelligence"
-            action={
-              <div className="ai-report-actions">
-                <Button
-                  variant={aiReport ? 'ghost' : 'primary'}
-                  onClick={() => handleGenerateAiReport(Boolean(aiReport))}
-                  loading={aiReportMutation.isPending}
-                  data-avatar-action="generate-ai-report"
-                  data-avatar-target="report-summary"
-                  data-avatar-hint="Generate detailed AI insights for this report."
+        {/* ── PART 2: Four Profile Readings ────────────────────────────────── */}
+        <section className="profile-readings-section">
+          <header className="profile-readings-header">
+            <h2 className="profile-section-title">Profile Readings</h2>
+            <div className="profile-lens-switcher" role="tablist">
+              {[
+                ['personality', 'Personality'],
+                ['interests', 'Interests'],
+                ['values', 'Work Values'],
+                ['signals', 'Career Signals'],
+              ].map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeLens === key}
+                  className={`profile-lens-btn ${activeLens === key ? 'is-active' : ''}`}
+                  onClick={() => setActiveLens(key)}
                 >
-                  {aiReport ? 'Regenerate AI Report' : 'Generate AI Report'}
-                </Button>
-              </div>
-            }
-          >
-            {aiStatusMessage && <p className="ui-message ui-message--success">{aiStatusMessage}</p>}
-            {shareStatus && <p className="ui-message ui-message--neutral">{shareStatus}</p>}
-
-            {aiReportMeta?.generatedAt && (
-              <p className="ui-message ui-message--neutral">
-                Cached report generated on {formatDate(aiReportMeta.generatedAt)}
-              </p>
-            )}
-
-            {!aiReport && !aiReportMutation.isPending && !aiReportMutation.isError && (
-              <p className="empty-state">
-                Generate your AI report to unlock personality summary, work style,
-                communication style, growth plan, and career recommendations.
-              </p>
-            )}
-
-            {aiReportMutation.isPending && (
-              <div className="skeleton-stack">
-                <Skeleton width="45%" height="1.2rem" />
-                <Skeleton count={4} height="0.9rem" />
-                <Skeleton height="120px" />
-                <Skeleton height="120px" />
-              </div>
-            )}
-
-            {aiReportMutation.isError && (
-              <div className="ai-report-error">
-                <p className="ui-message ui-message--error">
-                  {aiReportMutation.error?.message ||
-                    'AI report generation failed. Please retry.'}
-                </p>
-                <Button
-                  variant="secondary"
-                  onClick={() => handleGenerateAiReport(Boolean(aiReport))}
-                >
-                  Retry
-                </Button>
-              </div>
-            )}
-
-            {aiReport && (
-              <div className="ai-report-grid">
-                <article className="ai-report-block">
-                  <h4>Personality Summary</h4>
-                  <p>{aiReport.summary}</p>
-                </article>
-
-                <article className="ai-report-block">
-                  <h4>Strengths</h4>
-                  <ul className="recommendation-list">
-                    {(aiReport.strengths || []).map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </article>
-
-                <article className="ai-report-block">
-                  <h4>Weaknesses</h4>
-                  <ul className="recommendation-list">
-                    {(aiReport.weaknesses || []).map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </article>
-
-                <article className="ai-report-block">
-                  <h4>Work Style</h4>
-                  <p>{aiReport.workStyle}</p>
-                </article>
-
-                <article className="ai-report-block">
-                  <h4>Communication Style</h4>
-                  <p>{aiReport.communicationStyle}</p>
-                </article>
-
-                <article className="ai-report-block">
-                  <h4>Growth Plan</h4>
-                  <ul className="recommendation-list">
-                    {(aiReport.growthSuggestions || []).map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </article>
-
-                <article className="ai-report-block ai-report-block--full">
-                  <h4>Career Suggestions</h4>
-                  <div className="career-grid">
-                    {toCareerList(aiReport.careerRecommendations).map((item) => (
-                      <div className="career-card" key={`${item.career}-${item.reason}`}>
-                        <h5>{item.career}</h5>
-                        <p>{item.reason}</p>
-                        {Array.isArray(item.skillsNeeded) && item.skillsNeeded.length > 0 && (
-                          <p className="career-card__skills">
-                            Skills: {item.skillsNeeded.join(', ')}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </article>
-
-                {insightEngine && (
-                  <article className="ai-report-block ai-report-block--full">
-                    <h4>Profile Insights</h4>
-                    <p>{insightEngine.dominantTraitExplanation}</p>
-                    <div className="hybrid-grid">
-                      <div>
-                        <h5>Risk Signals</h5>
-                        <ul className="recommendation-list">
-                          {(insightEngine.riskSignals || []).map((item) => (
-                            <li key={item}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h5>Behavioral Patterns</h5>
-                        <ul className="recommendation-list">
-                          {(insightEngine.behavioralPatterns || []).map((item) => (
-                            <li key={item}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </article>
-                )}
-
-                {careerEngine.length > 0 && (
-                  <article className="ai-report-block ai-report-block--full">
-                    <h4>Career Match Summary</h4>
-                    <div className="career-grid">
-                      {careerEngine.map((item) => (
-                        <div className="career-card" key={`${item.career}-${item.signal || 'base'}`}>
-                          <h5>{item.career}</h5>
-                          {item.signal && <p className="career-card__signal">Signal: {item.signal}</p>}
-                          <p>{item.reason}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </article>
-                )}
-              </div>
-            )}
-          </Card>
-
-          <Card
-            title="Personality Visualization (3D)"
-            subtitle="Interactive OCEAN trait graph with orbit and zoom"
-          >
-            {canRender3D ? (
-              <Suspense fallback={<Skeleton height="280px" aria-label="Loading 3D visualization" />}>
-                <TraitSphereLazy data={threeDPayload} />
-              </Suspense>
-            ) : (
-              <>
-                <p className="empty-state">
-                  3D visualization is disabled on this device to preserve performance.
-                </p>
-                <pre className="payload-preview">{JSON.stringify(threeDPayload, null, 2)}</pre>
-              </>
-            )}
-          </Card>
-
-          <Card title="Recommendations" subtitle="Personalized next steps">
-            <ul className="recommendation-list">
-              {profile.recommendations.map((item) => (
-                <li key={item}>{item}</li>
+                  {label}
+                </button>
               ))}
-            </ul>
-          </Card>
+            </div>
+          </header>
+
+          <div className="profile-readings-stage">
+            {activeLens === 'personality' && (
+              <div className="profile-reading-panel">
+                <div className="profile-reading-panel__head">
+                  <h3>Big Five Continuous Dimensions</h3>
+                  <span>Directly labelled continuous scales</span>
+                </div>
+                <div className="profile-reading-panel__body">
+                  {Object.entries(traits).map(([traitKey, traitValue]) => {
+                    const score = typeof traitValue === 'object' ? traitValue.score || 0 : Number(traitValue || 0);
+                    return (
+                      <article key={traitKey} className="profile-dimension-row">
+                        <div className="profile-dimension-row__info">
+                          <strong>{traitKey}</strong>
+                          <span>{Math.round(score)}%</span>
+                        </div>
+                        <div className="profile-dimension-bar">
+                          <div className="profile-dimension-bar__fill" style={{ width: `${score}%` }} />
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {activeLens === 'interests' && (
+              <div className="profile-reading-panel">
+                <div className="profile-reading-panel__head">
+                  <h3>RIASEC Vocational Interests</h3>
+                  <span>Ranked relational interest field</span>
+                </div>
+                <div className="profile-reading-panel__body">
+                  <p className="profile-signals-empty">
+                    Vocational interest distribution mapped across Holland work environments.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {activeLens === 'values' && (
+              <div className="profile-reading-panel">
+                <div className="profile-reading-panel__head">
+                  <h3>Work Values Hierarchy</h3>
+                  <span>Workplace motivators and priorities</span>
+                </div>
+                <div className="profile-reading-panel__body">
+                  <p className="profile-signals-empty">
+                    Workplace values calibrated against organizational settings.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {activeLens === 'signals' && (
+              <div className="profile-reading-panel">
+                <div className="profile-reading-panel__head">
+                  <h3>Career Signals &amp; Demonstrated Capabilities</h3>
+                  <span>Synthesized problem-solving signals</span>
+                </div>
+                <div className="profile-reading-panel__body">
+                  <p className="profile-signals-empty">
+                    Demonstrated capabilities extracted from adaptive scenario responses.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── PART 4: Career Relationships ─────────────────────────────────── */}
+        {careers.length > 0 && (
+          <section className="profile-careers-section">
+            <header className="profile-section-header">
+              <h2 className="profile-section-title">Career Alignment</h2>
+              <p className="profile-section-subtitle">
+                Target career environments that align with your demonstrated signals.
+              </p>
+            </header>
+
+            <div className="profile-careers-grid">
+              {careers.slice(0, 3).map((item, idx) => {
+                const title = item.title || item.name || (typeof item === 'string' ? item : `Role ${idx + 1}`);
+                const matchScore = Math.round(Number(item.match || item.score || item.fitScore || 75));
+                return (
+                  <article key={title} className="career-recommendation-card">
+                    <header className="career-recommendation-card__header">
+                      <h3>{title}</h3>
+                      <span className="career-fit-badge">{matchScore}% fit</span>
+                    </header>
+                    <p className="career-recommendation-card__body">
+                      {item.why || item.description || 'Strong alignment with problem-solving approach and domain skills.'}
+                    </p>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* ── PART 6: Methodology & Boundaries ────────────────────────────── */}
+        <section className="profile-methodology-notice-section">
+          <div className="profile-methodology-notice">
+            <h3>Methodology &amp; Boundaries</h3>
+            <p>
+              Scoring is calculated deterministically through structured psychometric algorithms. Results support
+              reflection and career exploration—not diagnosis or hiring verdicts.
+            </p>
+          </div>
+        </section>
+
+        {/* ── PART 7: Report Utilities ─────────────────────────────────────── */}
+        <section className="profile-utilities-section">
+          <div className="profile-utilities-bar">
+            <Button variant="ghost" onClick={() => navigate('/assessment/start')}>
+              <FiRefreshCw /> Retake Assessment
+            </Button>
+            <Button variant="primary" onClick={() => navigate('/dashboard')}>
+              Return to Dashboard
+            </Button>
+          </div>
         </section>
       </div>
     </main>

@@ -9,19 +9,12 @@ const MCQOptions = ({ options = [], selectedOptionId = '', onSelect }) => {
     options.forEach((option, index) => {
       const key = option.id || String(index);
       const element = optionRefs.current[key];
-
-      if (!element) {
-        return;
-      }
+      if (!element) return;
 
       const isActive = selectedOptionId === key;
       gsap.to(element, {
-        duration: 0.28,
+        duration: 0.18,
         ease: 'power2.out',
-        scale: isActive ? 1.01 : 1,
-        boxShadow: isActive
-          ? '0 0 0 2px rgba(79, 70, 229, 0.18), 0 4px 14px rgba(79, 70, 229, 0.10)'
-          : '0 0 0 0 rgba(0,0,0,0)',
       });
     });
   }, [options, selectedOptionId]);
@@ -38,45 +31,23 @@ const MCQOptions = ({ options = [], selectedOptionId = '', onSelect }) => {
           <button
             key={optionKey}
             type="button"
+            role="radio"
+            aria-checked={isActive}
             ref={(node) => {
               optionRefs.current[optionKey] = node;
             }}
-            className={`adaptive-option-card ${isActive ? 'is-active' : ''}`}
-            onMouseEnter={() => {
-              const node = optionRefs.current[optionKey];
-              if (!node || isActive) {
-                return;
-              }
-
-              gsap.to(node, {
-                y: -4,
-                duration: 0.22,
-                ease: 'power2.out',
-              });
-            }}
-            onMouseLeave={() => {
-              const node = optionRefs.current[optionKey];
-              if (!node || isActive) {
-                return;
-              }
-
-              gsap.to(node, {
-                y: 0,
-                duration: 0.2,
-                ease: 'power2.out',
-              });
-            }}
+            className={`adaptive-option-card ${isActive ? 'is-active is-selected' : ''}`}
             onClick={() => onSelect(optionKey)}
           >
             <span className="adaptive-option-card__icon" aria-hidden="true">
               {code}
             </span>
             <span className="adaptive-option-card__label">{label}</span>
-            {isActive ? (
+            {isActive && (
               <span className="adaptive-option-card__check" aria-hidden="true">
                 <FiCheck />
               </span>
-            ) : null}
+            )}
           </button>
         );
       })}

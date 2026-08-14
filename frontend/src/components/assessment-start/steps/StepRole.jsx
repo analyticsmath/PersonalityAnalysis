@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { FiBriefcase, FiCheck, FiUser, FiUsers } from 'react-icons/fi';
-import { gsap } from 'gsap';
 import Button from '../../ui/Button';
 
 const ICON_BY_ROLE = {
@@ -16,38 +15,19 @@ const StepRole = ({
   onNext,
   isNextDisabled,
 }) => {
-  const cardRefs = useRef([]);
-
-  useEffect(() => {
-    const cards = cardRefs.current.filter(Boolean);
-    if (!cards.length) {
-      return () => {};
-    }
-
-    const timeline = gsap.timeline();
-    timeline.fromTo(
-      cards,
-      { autoAlpha: 0, y: 18, scale: 0.98 },
-      { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, stagger: 0.08, ease: 'power2.out' }
-    );
-
-    return () => timeline.kill();
-  }, []);
-
   return (
-    <section className="assessment-step" aria-labelledby="wizard-role-title">
-      <header className="assessment-step__header">
-        <p className="assessment-step__eyebrow">Step 1</p>
-        <h2 id="wizard-role-title" className="assessment-step__title">
-          Choose your profile type
-        </h2>
-        <p className="assessment-step__subtitle">
-          This helps calibrate tone and difficulty for your assessment experience.
+    <section className="assessment-setup-state" aria-labelledby="wizard-role-title">
+      <header className="assessment-setup-state__header">
+        <h1 id="wizard-role-title" className="assessment-setup-state__title">
+          What perspective are you bringing?
+        </h1>
+        <p className="assessment-setup-state__subtitle">
+          Select your current professional frame to calibrate initial assessment questions.
         </p>
       </header>
 
-      <div className="wizard-role-grid" role="radiogroup" aria-label="Select role">
-        {roleOptions.map((role, index) => {
+      <div className="wizard-role-grid" role="radiogroup" aria-label="Select perspective">
+        {roleOptions.map((role) => {
           const RoleIcon = ICON_BY_ROLE[role.value] || FiUser;
           const isActive = selectedRole === role.value;
 
@@ -55,35 +35,10 @@ const StepRole = ({
             <button
               key={role.value}
               type="button"
+              role="radio"
+              aria-checked={isActive}
               className={`wizard-role-card ${isActive ? 'is-active' : ''}`}
               onClick={() => onSelectRole?.(role.value)}
-              ref={(node) => {
-                cardRefs.current[index] = node;
-              }}
-              onMouseEnter={() => {
-                const node = cardRefs.current[index];
-                if (!node || isActive) {
-                  return;
-                }
-
-                gsap.to(node, {
-                  y: -5,
-                  duration: 0.22,
-                  ease: 'power2.out',
-                });
-              }}
-              onMouseLeave={() => {
-                const node = cardRefs.current[index];
-                if (!node || isActive) {
-                  return;
-                }
-
-                gsap.to(node, {
-                  y: 0,
-                  duration: 0.22,
-                  ease: 'power2.out',
-                });
-              }}
             >
               <span className="wizard-role-card__icon" aria-hidden="true">
                 <RoleIcon />
@@ -92,25 +47,19 @@ const StepRole = ({
                 <strong>{role.label}</strong>
                 <span>{role.description}</span>
               </div>
-              {isActive ? (
+              {isActive && (
                 <span className="wizard-role-card__check" aria-hidden="true">
                   <FiCheck />
                 </span>
-              ) : null}
+              )}
             </button>
           );
         })}
       </div>
 
-      <footer className="assessment-step__actions">
+      <footer className="assessment-setup-state__actions">
         <div />
-        <Button
-          onClick={onNext}
-          disabled={isNextDisabled}
-          data-avatar-action="wizard-next-role"
-          data-avatar-target="start-assessment-cta"
-          data-avatar-hint="Continue to CV analysis."
-        >
+        <Button onClick={onNext} disabled={isNextDisabled}>
           Next
         </Button>
       </footer>

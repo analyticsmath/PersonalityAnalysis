@@ -1,253 +1,287 @@
 // Design token registry — single source of truth for all semantic colors,
 // typography, spacing, shadow, and chart palettes.
+// Phase 3A Evidence Field system.
 
 const tokens = {
+  // ── Core Semantic Palette ───────────────────────────────────────────────────
+  palette: {
+    canvas: '#F4F6F5',
+    paper: '#FFFFFF',
+    ink: '#111513',
+    secondary: '#56605B',
+    mist: '#D9DFDC',
+    carbon: '#1C201E',
+    success: '#1F6B50',
+    caution: '#8E5B12',
+    error: '#A33A45',
+    focus: '#355C7D',
+    info: '#355C7D',
+  },
+
   // ── Surfaces ─────────────────────────────────────────────────────────────
   background: {
-    base: '#F8FAFC',
-    secondary: '#F1F5F9',
+    base: '#F4F6F5',
+    secondary: '#EBEFED',
     surface: '#FFFFFF',
     elevated: '#FFFFFF',
-    glass: 'rgba(255, 255, 255, 0.80)',
+    carbon: '#1C201E',
+    glass: 'rgba(255, 255, 255, 0.96)',
   },
   surface: {
     primary: '#FFFFFF',
-    secondary: '#F1F5F9',
-    tertiary: '#E0F2FE',
+    secondary: '#F4F6F5',
+    tertiary: '#D9DFDC',
     elevated: '#FFFFFF',
-    sidebar: '#F8FAFC',
-    header: '#FFFFFF',
+    sidebar: '#F4F6F5',
+    header: '#F4F6F5',
     input: '#FFFFFF',
-    hover: '#EEF2FF',
-    selected: '#E0E7FF',
-    disabled: '#E2E8F0',
+    hover: '#ECEFEF',
+    selected: '#E2E7E5',
+    disabled: '#D9DFDC',
   },
 
   // ── Borders ───────────────────────────────────────────────────────────────
   border: {
-    subtle: '#E2E8F0',
-    default: '#CBD5E1',
-    strong: '#94A3B8',
-    divider: '#E2E8F0',
+    subtle: '#E5EAE7',
+    default: '#D9DFDC',
+    strong: '#56605B',
+    divider: '#D9DFDC',
+    focus: '#355C7D',
   },
 
   // ── Text ─────────────────────────────────────────────────────────────────
   text: {
-    primary: '#0F172A',
-    secondary: '#334155',
-    muted: '#64748B',
-    disabled: '#94A3B8',
+    primary: '#111513',
+    secondary: '#56605B',
+    muted: '#56605B',
+    disabled: '#8C9792',
     inverse: '#FFFFFF',
-    link: '#4F46E5',
+    link: '#111513',
+    accent: '#355C7D',
   },
 
-  // ── Brand / Action ────────────────────────────────────────────────────────
+  // ── Action / Interface ────────────────────────────────────────────────────
+  action: {
+    primaryBg: '#1C201E',
+    primaryText: '#FFFFFF',
+    primaryHover: '#111513',
+    secondaryBg: '#FFFFFF',
+    secondaryText: '#111513',
+    secondaryBorder: '#D9DFDC',
+    secondaryHover: '#F4F6F5',
+    ghostHover: '#EBEFED',
+  },
+
+  // Legacy mappings for backward compatibility
   primary: {
-    50: '#EEF2FF',
-    100: '#E0E7FF',
-    500: '#6366F1',
-    600: '#4F46E5',
-    700: '#4338CA',
+    50: '#F4F6F5',
+    100: '#EBEFED',
+    500: '#1C201E',
+    600: '#111513',
+    700: '#111513',
   },
   secondary: {
-    50: '#E0F2FE',
-    500: '#0EA5E9',
-    600: '#0284C7',
+    50: '#F4F6F5',
+    500: '#56605B',
+    600: '#355C7D',
   },
 
-  // ── Accent ────────────────────────────────────────────────────────────────
+  // ── Accent (Restrained semantic only) ───────────────────────────────────────
   accent: {
-    blue: '#4F46E5',
-    blueHover: '#4338CA',
-    blueGlow: '#818CF8',
-    cyan: '#0EA5E9',
-    purple: '#7C3AED',
-    amber: '#F59E0B',
-    emerald: '#10B981',
-    emeraldDark: '#059669',
-    orange: '#F97316',
+    blue: '#355C7D',
+    blueHover: '#2A4963',
+    blueGlow: 'none',
+    cyan: '#355C7D',
+    purple: '#56605B',
+    amber: '#8E5B12',
+    emerald: '#1F6B50',
+    emeraldDark: '#1F6B50',
+    orange: '#8E5B12',
   },
 
   // ── Status ────────────────────────────────────────────────────────────────
   state: {
-    success: '#059669',
-    successBg: '#ECFDF5',
-    successText: '#047857',
-    successBorder: '#A7F3D0',
-    warning: '#F59E0B',
-    warningBg: '#FFFBEB',
-    warningText: '#B45309',
-    warningBorder: '#FDE68A',
-    error: '#F43F5E',
-    errorBg: '#FFF1F2',
-    errorText: '#BE123C',
-    errorBorder: '#FDA4AF',
-    info: '#0EA5E9',
-    infoBg: '#E0F2FE',
-    infoText: '#0369A1',
-    infoBorder: '#BAE6FD',
+    success: '#1F6B50',
+    successBg: '#EFF7F3',
+    successText: '#1F6B50',
+    successBorder: '#C1E3D4',
+    warning: '#8E5B12',
+    warningBg: '#FAF5EE',
+    warningText: '#8E5B12',
+    warningBorder: '#EED9B8',
+    error: '#A33A45',
+    errorBg: '#FDF2F3',
+    errorText: '#A33A45',
+    errorBorder: '#F5C2C7',
+    info: '#355C7D',
+    infoBg: '#F0F5F9',
+    infoText: '#355C7D',
+    infoBorder: '#C7D9E8',
   },
 
   // ── Danger shorthand ─────────────────────────────────────────────────────
   danger: {
-    50: '#FFF1F2',
-    500: '#F43F5E',
-    600: '#E11D48',
+    50: '#FDF2F3',
+    500: '#A33A45',
+    600: '#8A2B35',
   },
 
-  // ── Shadows ──────────────────────────────────────────────────────────────
+  // ── Shadows (Restrained subtle elevation only) ──────────────────────────────
   shadow: {
-    card: '0 10px 30px rgba(15, 23, 42, 0.08)',
-    soft: '0 4px 14px rgba(15, 23, 42, 0.06)',
-    focus: '0 0 0 3px rgba(79, 70, 229, 0.22)',
-    sm: '0 1px 4px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(15, 23, 42, 0.04)',
-    md: '0 4px 16px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.05)',
-    lg: '0 10px 32px rgba(15, 23, 42, 0.10), 0 4px 12px rgba(15, 23, 42, 0.06)',
+    card: '0 12px 36px rgba(17, 21, 19, 0.08)',
+    soft: '0 4px 14px rgba(17, 21, 19, 0.04)',
+    focus: '0 0 0 2px #355C7D',
+    sm: '0 1px 3px rgba(17, 21, 19, 0.05)',
+    md: '0 4px 16px rgba(17, 21, 19, 0.07)',
+    lg: '0 12px 36px rgba(17, 21, 19, 0.10)',
   },
 
-  // ── Radius ───────────────────────────────────────────────────────────────
+  // ── Radius (Editorial restrained radii: 0 - 18px) ─────────────────────────
   radius: {
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
-    xl: '20px',
-    '2xl': '24px',
+    none: '0px',
+    sm: '6px',
+    md: '10px',
+    lg: '14px',
+    xl: '18px',
+    '2xl': '18px',
+    full: '9999px',
   },
 
   // ── Typography ───────────────────────────────────────────────────────────
   font: {
-    base: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    display: 'Plus Jakarta Sans, Inter, system-ui, sans-serif',
+    base: '"PP Neue Montreal Text", "Instrument Sans", system-ui, sans-serif',
+    display: '"PP Neue Montreal", "Instrument Sans", system-ui, sans-serif',
   },
 
-  // ── Gradients ────────────────────────────────────────────────────────────
+  // Retired gradients & glows mapped to neutral flat tokens
   gradients: {
-    background:
-      'radial-gradient(circle at 10% 20%, rgba(79,70,229,0.07), transparent 45%),radial-gradient(circle at 85% 10%, rgba(124,58,237,0.06), transparent 45%),radial-gradient(circle at 50% 90%, rgba(14,165,233,0.05), transparent 45%),#F8FAFC',
-    primaryButton: 'linear-gradient(135deg,#4F46E5,#7C3AED)',
-    primaryButtonHover: 'linear-gradient(135deg,#4338CA,#6D28D9)',
-    progress: 'linear-gradient(90deg, #0EA5E9 0%, #4F46E5 50%, #7C3AED 100%)',
-    cognitiveBars: 'linear-gradient(90deg, #4F46E5 0%, #0EA5E9 100%)',
-    behaviorBars: 'linear-gradient(90deg, #F59E0B 0%, #10B981 100%)',
-    page: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)',
+    background: '#F4F6F5',
+    primaryButton: '#1C201E',
+    primaryButtonHover: '#111513',
+    progress: '#111513',
+    cognitiveBars: '#355C7D',
+    behaviorBars: '#56605B',
+    page: '#F4F6F5',
   },
 
   glass: {
-    background: 'rgba(255, 255, 255, 0.80)',
-    border: 'rgba(79, 70, 229, 0.10)',
-    backdropBlur: '16px',
+    background: '#FFFFFF',
+    border: '#D9DFDC',
+    backdropBlur: '0px',
   },
 
   glow: {
-    primary: '0 0 24px rgba(79,70,229,0.18)',
-    cyan: '0 0 24px rgba(14,165,233,0.18)',
-    purple: '0 0 24px rgba(124,58,237,0.18)',
+    primary: 'none',
+    cyan: 'none',
+    purple: 'none',
   },
 
   motion: {
-    hoverLift: 'translateY(-3px)',
-    transition: '0.28s cubic-bezier(.4,0,.2,1)',
+    hoverLift: 'none',
+    transition: '0.2s ease-out',
   },
 
-  // Legacy chart shorthand — kept for backward-compat with existing chart components
+  // Chart shorthand — neutral palette
   chart: {
-    trait1: '#0EA5E9',
-    trait2: '#4F46E5',
-    trait3: '#7C3AED',
-    trait4: '#059669',
-    trait5: '#F59E0B',
+    trait1: '#111513',
+    trait2: '#56605B',
+    trait3: '#355C7D',
+    trait4: '#1F6B50',
+    trait5: '#8E5B12',
   },
 };
 
-// ── Big Five / OCEAN per-trait colors ────────────────────────────────────────
+// ── Big Five / Neutral dimensional colors ────────────────────────────────────
+// Direct continuous measurement without permanent decorative colors
 export const traitColors = {
-  O: '#7C3AED',
-  C: '#2563EB',
-  E: '#F97316',
-  A: '#10B981',
-  N: '#0EA5E9',
+  O: '#111513',
+  C: '#111513',
+  E: '#111513',
+  A: '#111513',
+  N: '#111513',
 };
 
 // ── Semantic chart color tokens ──────────────────────────────────────────────
 export const chartTokens = {
   axis: tokens.text.secondary,
   mutedAxis: tokens.text.muted,
-  grid: '#E2E8F0',
-  axisLine: '#CBD5E1',
+  grid: '#E5EAE7',
+  axisLine: '#D9DFDC',
   tooltip: {
     background: '#FFFFFF',
-    border: '1px solid #CBD5E1',
-    text: '#0F172A',
-    shadow: '0 10px 30px rgba(15, 23, 42, 0.08)',
+    border: '1px solid #D9DFDC',
+    text: '#111513',
+    shadow: '0 8px 24px rgba(17, 21, 19, 0.08)',
   },
 
   // OCEAN radar
   ocean: {
-    fill: 'rgba(99, 102, 241, 0.18)',
-    stroke: '#4F46E5',
-    grid: '#CBD5E1',
-    label: '#334155',
+    fill: 'rgba(17, 21, 19, 0.08)',
+    stroke: '#111513',
+    grid: '#D9DFDC',
+    label: '#111513',
   },
 
-  // RIASEC
+  // RIASEC neutral relational palette
   riasec: {
-    Realistic: '#64748B',
-    Investigative: '#2563EB',
-    Artistic: '#A855F7',
-    Social: '#10B981',
-    Enterprising: '#F59E0B',
-    Conventional: '#0EA5E9',
+    Realistic: '#111513',
+    Investigative: '#111513',
+    Artistic: '#111513',
+    Social: '#111513',
+    Enterprising: '#111513',
+    Conventional: '#111513',
   },
 
   // Cognitive
   cognitive: {
-    Analytical: '#2563EB',
-    Creative: '#A855F7',
-    Strategic: '#4F46E5',
-    Systematic: '#0EA5E9',
-    Practical: '#10B981',
-    Abstract: '#F59E0B',
+    Analytical: '#111513',
+    Creative: '#111513',
+    Strategic: '#111513',
+    Systematic: '#111513',
+    Practical: '#111513',
+    Abstract: '#111513',
   },
 
   // Behavior
   behavior: {
-    Leadership: '#F59E0B',
-    RiskTolerance: '#F97316',
-    DecisionSpeed: '#A855F7',
-    StressTolerance: '#0EA5E9',
-    TeamPreference: '#10B981',
+    Leadership: '#111513',
+    RiskTolerance: '#111513',
+    DecisionSpeed: '#111513',
+    StressTolerance: '#111513',
+    TeamPreference: '#111513',
   },
 
   // Career match
   career: {
-    OverallFit: '#4F46E5',
-    PersonalityFit: '#0EA5E9',
-    SkillFit: '#10B981',
-    GrowthPotential: '#F59E0B',
-    GapRisk: '#F43F5E',
+    OverallFit: '#111513',
+    PersonalityFit: '#355C7D',
+    SkillFit: '#1F6B50',
+    GrowthPotential: '#8E5B12',
+    GapRisk: '#A33A45',
   },
 
   // Heatmap
   heatmap: {
-    low: '#E0F2FE',
-    mid: '#60A5FA',
-    high: '#4F46E5',
-    text: '#0F172A',
-    border: '#BFDBFE',
+    low: '#F4F6F5',
+    mid: '#B5C4BE',
+    high: '#111513',
+    text: '#111513',
+    border: '#D9DFDC',
   },
 
   // Analytics trend
   trend: {
-    primary: '#4F46E5',
-    secondary: '#0EA5E9',
-    success: '#10B981',
-    warning: '#F59E0B',
-    danger: '#F43F5E',
-    muted: '#94A3B8',
+    primary: '#111513',
+    secondary: '#56605B',
+    focus: '#355C7D',
+    success: '#1F6B50',
+    warning: '#8E5B12',
+    danger: '#A33A45',
+    muted: '#D9DFDC',
   },
 
-  // Generic chart palette (fallback order)
-  palette: ['#4F46E5', '#0EA5E9', '#10B981', '#F59E0B', '#A855F7', '#F97316', '#F43F5E', '#64748B'],
+  // Generic chart palette
+  palette: ['#111513', '#56605B', '#355C7D', '#1F6B50', '#8E5B12', '#A33A45'],
 };
 
 export default tokens;

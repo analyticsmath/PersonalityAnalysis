@@ -1,73 +1,705 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flip } from 'gsap/Flip';
 import { gsap } from 'gsap';
+import { Flip } from 'gsap/Flip';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Arrow, ResponsiveImage } from '../PublicChrome';
 import { usePublicMotion } from '../PublicMotionRoot';
 import { marketingDemo, publicMedia } from './publicContent';
 
 gsap.registerPlugin(Flip, ScrollTrigger);
-const worldNames = ['Collaborative software', 'Software development', 'Product design', 'Architecture', 'Engineering', 'Data interpretation', 'Operations', 'Learning', 'Manufacturing', 'Technical environments'];
-const careerNames = ['Software engineer', 'UX / product design', 'Data analysis', 'Product management', 'Engineering', 'Research', 'Operations', 'Creative studio'];
-const profileTabs = [['big-five', 'Big Five'], ['riasec', 'RIASEC'], ['values', 'Work values'], ['signals', 'Career signals']];
 
-function Hero() {
-  const [h1, h2, h3, h4] = publicMedia.hero;
-  return <section className="cinema-hero" data-header-scene="dark" aria-labelledby="public-title">
-    <ResponsiveImage className="cinema-hero__background" media={h1} alt="Professional working at a computer in an office environment" priority sizes="100vw" />
-    <div className="cinema-hero__shade" aria-hidden="true" />
-    <div className="cinema-hero__copy"><h1 id="public-title">Your work leaves clues.</h1><p>Start with the work you already do. Personality Assessor uses professional context to shape adaptive questions, then turns the result into personality, interests, work values and career direction you can inspect.</p><div className="cinema-hero__actions"><Link className="public-button public-button--light" to="/signup">Build my profile <Arrow /></Link><Link className="public-button public-button--text" to="/how-it-works">See how it works <Arrow /></Link></div></div>
-    <div className="cinema-hero__media" aria-label="Professional environments"><ResponsiveImage className="cinema-hero__frame cinema-hero__frame--one" media={h2} /><ResponsiveImage className="cinema-hero__frame cinema-hero__frame--two" media={h3} /><ResponsiveImage className="cinema-hero__frame cinema-hero__frame--three" media={h4} /></div>
-  </section>;
-}
+const profileLenses = [
+  { key: 'personality', label: 'Personality' },
+  { key: 'interests', label: 'Interests' },
+  { key: 'values', label: 'Work values' },
+  { key: 'signals', label: 'Career signals' },
+];
 
-function WorkWorlds() {
-  const stage = useRef(null); const activeRef = useRef(0); const [active, setActive] = useState(0); const { reducedMotion } = usePublicMotion();
+function HeroScene() {
+  const heroRef = useRef(null);
+  const headlineRef = useRef(null);
+  const mediaRef = useRef(null);
+  const { reducedMotion } = usePublicMotion();
+
   useLayoutEffect(() => {
     if (reducedMotion) return undefined;
     const context = gsap.context(() => {
-      const media = gsap.matchMedia();
-      media.add('(min-width: 1024px) and (pointer: fine)', () => ScrollTrigger.create({
-        trigger: stage.current, start: 'top top', end: () => `+=${Math.round(window.innerHeight * (publicMedia.worlds.length * 0.64))}`,
-        pin: stage.current, scrub: 0.68, invalidateOnRefresh: true,
-        onUpdate: (self) => { const next = Math.round(self.progress * (publicMedia.worlds.length - 1)); if (next !== activeRef.current) { activeRef.current = next; setActive(next); } },
-      }));
-      return () => media.revert();
-    }, stage);
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.fromTo(
+        mediaRef.current,
+        { autoAlpha: 0, scale: 0.97 },
+        { autoAlpha: 1, scale: 1, duration: 0.72 }
+      )
+        .fromTo(
+          headlineRef.current?.querySelectorAll('.hero-line-reveal'),
+          { autoAlpha: 0, y: 32 },
+          { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.12 },
+          '-=0.45'
+        );
+    }, heroRef);
+
     return () => context.revert();
   }, [reducedMotion]);
-  const select = (next) => { const index = Math.max(0, Math.min(publicMedia.worlds.length - 1, next)); activeRef.current = index; setActive(index); };
-  return <section className="world-stage" ref={stage} data-header-scene="dark" aria-labelledby="worlds-title"><div className="world-stage__copy"><h2 id="worlds-title">Work changes what matters.</h2><p>Different environments reveal different kinds of evidence.</p><p className="world-stage__active" aria-live="polite">{worldNames[active]}</p></div><div className="world-stage__gallery">{publicMedia.worlds.map((item, index) => { const offset = index - active; return <figure key={item.file} className="world-stage__item" style={{ '--offset': offset, '--distance': Math.abs(offset) }} aria-hidden={Math.abs(offset) > 2}><ResponsiveImage media={item} sizes="(min-width: 1024px) 52vw, 84vw" /><figcaption>{worldNames[index]}</figcaption></figure>; })}</div><div className="world-stage__controls"><button type="button" onClick={() => select(active - 1)} disabled={active === 0}>Previous</button><button type="button" onClick={() => select(active + 1)} disabled={active === publicMedia.worlds.length - 1}>Next</button></div></section>;
+
+  return (
+    <section className="evidence-hero-scene" ref={heroRef} data-header-scene="light" aria-labelledby="hero-heading">
+      <div className="evidence-hero-scene__inner">
+        <div className="evidence-hero-scene__content">
+          <h1 id="hero-heading" className="evidence-hero-scene__title" ref={headlineRef}>
+            <span className="hero-line-reveal">Your work</span>
+            <span className="hero-line-reveal">leaves evidence.</span>
+          </h1>
+
+          <p className="evidence-hero-scene__supporting">
+            Personality Assessor brings professional context and adaptive responses together into a profile you can
+            inspect—personality, interests, work values, career signals, and the evidence behind them.
+          </p>
+
+          <div className="evidence-hero-scene__actions">
+            <Link className="public-cta-button" to="/signup">
+              Build my profile <Arrow />
+            </Link>
+            <Link className="public-text-action" to="/how-it-works">
+              See how it works
+            </Link>
+          </div>
+        </div>
+
+        <div className="evidence-hero-scene__composition" ref={mediaRef}>
+          <figure className="evidence-hero-scene__dominant-frame">
+            <ResponsiveImage
+              media={publicMedia.hero.dominant}
+              alt="Designer's desk with architectural tools and notebook"
+              priority
+              sizes="(min-width: 1200px) 54vw, 92vw"
+            />
+          </figure>
+
+          <figure className="evidence-hero-scene__fragment-frame evidence-hero-scene__fragment-frame--one">
+            <ResponsiveImage
+              media={publicMedia.hero.supporting}
+              alt="Hands arranging mood-board swatches and conceptual notes"
+              sizes="(min-width: 1200px) 24vw, 44vw"
+            />
+            <figcaption className="evidence-fragment-caption">Artifact arrangement</figcaption>
+          </figure>
+
+          <figure className="evidence-hero-scene__fragment-frame evidence-hero-scene__fragment-frame--two">
+            <ResponsiveImage
+              media={publicMedia.hero.process}
+              alt="Architectural model-making process detail"
+              sizes="(min-width: 1200px) 20vw, 38vw"
+            />
+            <figcaption className="evidence-fragment-caption">Process iteration</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function EvidenceArtifact({ kind, children }) { return <article className={`evidence-artifact evidence-artifact--${kind}`}>{children}</article>; }
+function WorkWorldsScene() {
+  const containerRef = useRef(null);
+  const trackRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const { reducedMotion } = usePublicMotion();
+  const worlds = publicMedia.worlds;
+
+  useLayoutEffect(() => {
+    if (reducedMotion) return undefined;
+
+    const context = gsap.context(() => {
+      const media = gsap.matchMedia();
+
+      media.add('(min-width: 1024px) and (pointer: fine)', () => {
+        const panels = gsap.utils.toArray('.work-world-panel');
+        const count = panels.length;
+        if (!count) return;
+
+        const totalScrollDistance = window.innerHeight * 4.6;
+
+        const scrollTween = gsap.to(trackRef.current, {
+          x: () => -(trackRef.current.scrollWidth - window.innerWidth + 80),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: `+=${totalScrollDistance}`,
+            pin: true,
+            scrub: 0.65,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const current = Math.min(count - 1, Math.floor(self.progress * count));
+              setActiveIndex(current);
+            },
+          },
+        });
+
+        return () => {
+          scrollTween.scrollTrigger?.kill();
+          scrollTween.kill();
+        };
+      });
+
+      return () => media.revert();
+    }, containerRef);
+
+    return () => context.revert();
+  }, [reducedMotion, worlds.length]);
+
+  const scrollToWorld = (targetIndex) => {
+    const clamped = Math.max(0, Math.min(worlds.length - 1, targetIndex));
+    setActiveIndex(clamped);
+
+    const trigger = ScrollTrigger.getById('work-worlds-trigger') || ScrollTrigger.getAll().find((st) => st.trigger === containerRef.current);
+    if (trigger) {
+      const targetProgress = clamped / (worlds.length - 1);
+      const targetScroll = trigger.start + targetProgress * (trigger.end - trigger.start);
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section
+      className="work-worlds-scene"
+      ref={containerRef}
+      data-header-scene="dark"
+      aria-labelledby="work-worlds-title"
+    >
+      <div className="work-worlds-scene__header">
+        <h2 id="work-worlds-title" className="work-worlds-scene__heading">
+          Work Worlds
+        </h2>
+        <div className="work-worlds-scene__nav" role="toolbar" aria-label="Work worlds navigation">
+          <button
+            type="button"
+            className="work-worlds-scene__nav-button"
+            onClick={() => scrollToWorld(activeIndex - 1)}
+            disabled={activeIndex === 0}
+            aria-label="Previous work world"
+          >
+            Previous
+          </button>
+          <span className="work-worlds-scene__nav-indicator" aria-live="polite">
+            {activeIndex + 1} / {worlds.length} · {worlds[activeIndex]?.name}
+          </span>
+          <button
+            type="button"
+            className="work-worlds-scene__nav-button"
+            onClick={() => scrollToWorld(activeIndex + 1)}
+            disabled={activeIndex === worlds.length - 1}
+            aria-label="Next work world"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+
+      <div className="work-worlds-scene__track-wrapper">
+        <div className="work-worlds-scene__track" ref={trackRef}>
+          {worlds.map((world, index) => {
+            const isDominant = activeIndex === index;
+            return (
+              <article
+                key={world.id}
+                className={`work-world-panel ${isDominant ? 'is-dominant' : ''}`}
+                data-world-id={world.id}
+                aria-current={isDominant ? 'step' : undefined}
+              >
+                <div className="work-world-panel__media-wrap">
+                  <ResponsiveImage
+                    media={world.media}
+                    alt={world.media.alt}
+                    sizes="(min-width: 1024px) 58vw, 90vw"
+                  />
+                </div>
+                <div className="work-world-panel__content">
+                  <h3 className="work-world-panel__name">{world.name}</h3>
+                  <p className="work-world-panel__copy">{world.copy}</p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ContextScene() {
-  const [answered, setAnswered] = useState(''); const actor = useRef(null);
-  const choose = (answer) => { const state = Flip.getState(actor.current); setAnswered(answer); window.requestAnimationFrame(() => Flip.from(state, { duration: 0.52, ease: 'power2.inOut', absolute: true })); };
-  return <section className={`context-scene ${answered ? 'has-answer' : ''}`} data-header-scene="light" aria-labelledby="context-title"><div className="context-scene__heading"><h2 id="context-title">The question changes with the context.</h2></div><div className="context-scene__stage" ref={actor}><ResponsiveImage className="context-scene__image" media={publicMedia.worlds[1]} sizes="(min-width: 1024px) 60vw, 100vw" /><div className="context-scene__artifacts"><EvidenceArtifact kind="cv"><strong>Samira Khan</strong><span>Junior software / systems</span><span>JavaScript · analysis · problem solving</span></EvidenceArtifact><EvidenceArtifact kind="project"><strong>Transit desk</strong><span>Built a small tool to surface changing constraints.</span></EvidenceArtifact><EvidenceArtifact kind="education"><strong>Systems studio</strong><span>Data structures · human-computer interaction</span></EvidenceArtifact><EvidenceArtifact kind="role"><strong>Role history</strong><span>Research assistant → product builder</span></EvidenceArtifact></div><div className="context-scene__question"><h3>When a project changes direction, what do you do first?</h3><div>{['Clarify the changed constraint, then test the revised path.', 'Gather input before choosing the next step.'].map((answer) => <button key={answer} type="button" onClick={() => choose(answer)} aria-pressed={answered === answer} className={answered === answer ? 'is-selected' : ''}>{answer}</button>)}</div></div></div></section>;
+  const entities = [
+    { type: 'Project', title: 'Real-time Analytics Migration', detail: 'Decomposed latency constraints into streaming stages.' },
+    { type: 'Experience', title: 'Systems Infrastructure Lead', detail: 'Led platform reliability under continuous load.' },
+    { type: 'Skill', title: 'Distributed Systems & Observability', detail: 'Formalized operational metrics and failure isolation.' },
+    { type: 'Education', title: 'Computer Systems & HCI', detail: 'Structured analysis of computational complexity.' },
+    { type: 'Interest', title: 'Toolsmithing & Precision Craft', detail: 'Building internal tools to expose invisible friction.' },
+  ];
+
+  return (
+    <section className="context-scene" data-header-scene="light" aria-labelledby="context-heading">
+      <div className="context-scene__inner">
+        <header className="context-scene__header">
+          <h2 id="context-heading" className="context-scene__title">
+            Context changes the question.
+          </h2>
+          <p className="context-scene__copy">
+            A CV or a profile you enter yourself gives the assessment a place to begin. Projects, skills, education,
+            experience and interests can shape what it asks next.
+          </p>
+        </header>
+
+        <div className="context-scene__evidence-field">
+          <div className="context-scene__primary-document">
+            <header className="context-document-header">
+              <span className="context-document-label">Professional Baseline</span>
+              <span className="context-document-status">Context Parsed</span>
+            </header>
+            <div className="context-document-body">
+              <p className="context-document-intro">
+                Initial background context sets up domain calibration, prior scope, and problem-solving scenarios.
+              </p>
+              <div className="context-entities-list">
+                {entities.map((item) => (
+                  <article key={item.type} className="context-entity-row">
+                    <span className="context-entity-type">{item.type}</span>
+                    <div className="context-entity-body">
+                      <strong>{item.title}</strong>
+                      <p>{item.detail}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function ProfileVisual({ tab }) {
-  if (tab === 'big-five') return <div className="profile-apertures">{marketingDemo.profile.bigFive.map(([label, value]) => <div key={label} style={{ '--measure': `${value}%` }}><span>{label}</span><i /><b>{value}</b></div>)}</div>;
-  if (tab === 'riasec') return <div className="profile-territories">{marketingDemo.profile.riasec.map(([label, value], index) => <div key={label} style={{ '--index': index, '--measure': value / 100 }}><b>{label}</b><span>{value}</span></div>)}</div>;
-  const entries = tab === 'values' ? marketingDemo.profile.values : marketingDemo.profile.signals;
-  return <div className={`profile-words profile-words--${tab}`}>{entries.map(([label, value], index) => <div key={label} style={{ '--index': index, '--measure': value / 100 }}><b>{label}</b><span>{value}</span></div>)}</div>;
+function AdaptiveQuestionDemoScene() {
+  const [selectedResponse, setSelectedResponse] = useState(null);
+
+  const responses = [
+    {
+      id: 'clarify',
+      text: 'Clarify what changed, then test a revised path.',
+      feedback: 'Emphasizes iterative discovery and rapid constraint testing.',
+    },
+    {
+      id: 'gather',
+      text: 'Gather input before choosing the next move.',
+      feedback: 'Emphasizes cross-functional alignment and consultative validation.',
+    },
+    {
+      id: 'recheck',
+      text: 'Recheck the original assumptions before changing course.',
+      feedback: 'Emphasizes foundational verification and root-cause inquiry.',
+    },
+  ];
+
+  return (
+    <section className="adaptive-question-scene" data-header-scene="light" aria-labelledby="adaptive-question-title">
+      <div className="adaptive-question-scene__inner">
+        <header className="adaptive-question-scene__header">
+          <span className="public-scene-kicker">Interactive Demonstration</span>
+          <h2 id="adaptive-question-title" className="adaptive-question-scene__title">
+            Adaptive questioning in action.
+          </h2>
+          <p className="adaptive-question-scene__copy">
+            Questions adapt to the tension points in your professional approach. Select an option to see how the system
+            interprets different strategic responses.
+          </p>
+        </header>
+
+        <div className="adaptive-question-card">
+          <div className="adaptive-question-prompt">
+            <span className="adaptive-question-label">Question Scenario</span>
+            <p className="adaptive-question-text">
+              When a project changes direction after you&apos;ve already started, what do you usually do first?
+            </p>
+          </div>
+
+          <div className="adaptive-question-options" role="radiogroup" aria-label="Demonstration response options">
+            {responses.map((item) => {
+              const isSelected = selectedResponse === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={isSelected}
+                  className={`adaptive-option-button ${isSelected ? 'is-selected' : ''}`}
+                  onClick={() => setSelectedResponse(item.id)}
+                >
+                  <span className="adaptive-option-indicator" aria-hidden="true" />
+                  <span className="adaptive-option-text">{item.text}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {selectedResponse && (
+            <div className="adaptive-question-feedback" role="status" aria-live="polite">
+              <p className="adaptive-question-feedback-text">
+                {responses.find((r) => r.id === selectedResponse)?.feedback}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
 }
+
 function ProfileScene() {
-  const [tab, setTab] = useState('big-five'); const visual = useRef(null);
-  const choose = (next) => { if (next === tab) return; const state = Flip.getState(visual.current.children); setTab(next); window.requestAnimationFrame(() => Flip.from(state, { duration: 0.5, ease: 'power2.inOut', absolute: true })); };
-  return <section className="profile-scene" data-header-scene="light" aria-labelledby="profile-title"><div className="profile-scene__heading"><h2 id="profile-title">One profile. Four ways to read it.</h2><p>Personality, vocational interests, work values and career signals stay distinct so one score never has to explain everything.</p></div><div className="profile-scene__controls" role="tablist" aria-label="Profile readings">{profileTabs.map(([key, label]) => <button key={key} type="button" role="tab" aria-selected={tab === key} aria-pressed={tab === key} onClick={() => choose(key)}>{label}</button>)}</div><div className="profile-scene__visual" ref={visual}><ProfileVisual tab={tab} /></div><p className="visually-hidden">The selected profile reading is presented with its labelled demo values. It is not a diagnosis.</p></section>;
+  const [activeLens, setActiveLens] = useState('personality');
+  const lensContainerRef = useRef(null);
+  const demo = marketingDemo.profile;
+
+  const handleSelectLens = (key) => {
+    if (key === activeLens) return;
+    const state = Flip.getState(lensContainerRef.current?.querySelectorAll('.profile-lens-item') || []);
+    setActiveLens(key);
+    window.requestAnimationFrame(() => {
+      Flip.from(state, {
+        duration: 0.42,
+        ease: 'power2.out',
+        stagger: 0.04,
+      });
+    });
+  };
+
+  return (
+    <section className="profile-scene" data-header-scene="light" aria-labelledby="profile-heading">
+      <div className="profile-scene__inner">
+        <header className="profile-scene__header">
+          <h2 id="profile-heading" className="profile-scene__title">
+            One profile. Four distinct readings.
+          </h2>
+          <p className="profile-scene__copy">
+            Personality, vocational interests, work values and career signals stay separate so one score never has to
+            explain everything.
+          </p>
+        </header>
+
+        <div className="profile-scene__controls" role="tablist" aria-label="Profile dimension lenses">
+          {profileLenses.map((lens) => (
+            <button
+              key={lens.key}
+              type="button"
+              role="tab"
+              aria-selected={activeLens === lens.key}
+              className={`profile-lens-tab ${activeLens === lens.key ? 'is-active' : ''}`}
+              onClick={() => handleSelectLens(lens.key)}
+            >
+              {lens.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="profile-scene__reading-stage" ref={lensContainerRef}>
+          {activeLens === 'personality' && (
+            <div className="profile-dimension-field profile-dimension-field--personality">
+              <div className="profile-dimension-header">
+                <span className="profile-dimension-framework">Big Five Continuous Dimensions</span>
+                <span className="profile-dimension-note">Directly labelled measures</span>
+              </div>
+              <div className="profile-measures-list">
+                {demo.bigFive.map(([label, score, reading]) => (
+                  <article key={label} className="profile-measure-row profile-lens-item">
+                    <div className="profile-measure-row__head">
+                      <span className="profile-measure-label">{label}</span>
+                      <span className="profile-measure-value">{score}%</span>
+                    </div>
+                    <div className="profile-measure-bar">
+                      <div className="profile-measure-bar__fill" style={{ width: `${score}%` }} />
+                    </div>
+                    <p className="profile-measure-reading">{reading}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeLens === 'interests' && (
+            <div className="profile-dimension-field profile-dimension-field--interests">
+              <div className="profile-dimension-header">
+                <span className="profile-dimension-framework">RIASEC Vocational Interests</span>
+                <span className="profile-dimension-note">Ranked relational interest field</span>
+              </div>
+              <div className="profile-interests-grid">
+                {demo.riasec.map(([label, score, description]) => (
+                  <article key={label} className="profile-interest-card profile-lens-item">
+                    <div className="profile-interest-card__head">
+                      <span className="profile-interest-name">{label}</span>
+                      <span className="profile-interest-score">{score}%</span>
+                    </div>
+                    <div className="profile-interest-bar">
+                      <div className="profile-interest-bar__fill" style={{ width: `${score}%` }} />
+                    </div>
+                    <p className="profile-interest-desc">{description}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeLens === 'values' && (
+            <div className="profile-dimension-field profile-dimension-field--values">
+              <div className="profile-dimension-header">
+                <span className="profile-dimension-framework">Work Values Hierarchy</span>
+                <span className="profile-dimension-note">12 values ranked by relative importance</span>
+              </div>
+              <div className="profile-values-ranked-list">
+                {demo.values.map(([label, score, reading], index) => (
+                  <article key={label} className="profile-value-row profile-lens-item">
+                    <span className="profile-value-rank">#{index + 1}</span>
+                    <div className="profile-value-content">
+                      <div className="profile-value-content__head">
+                        <strong>{label}</strong>
+                        <span>{score}%</span>
+                      </div>
+                      <p>{reading}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeLens === 'signals' && (
+            <div className="profile-dimension-field profile-dimension-field--signals">
+              <div className="profile-dimension-header">
+                <span className="profile-dimension-framework">Career Signals</span>
+                <span className="profile-dimension-note">Evidence-oriented professional capabilities</span>
+              </div>
+              <div className="profile-signals-list">
+                {demo.signals.map(([label, score, reading]) => (
+                  <article key={label} className="profile-signal-row profile-lens-item">
+                    <div className="profile-signal-row__head">
+                      <span className="profile-signal-label">{label}</span>
+                      <span className="profile-signal-value">{score}%</span>
+                    </div>
+                    <p className="profile-signal-reading">{reading}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <p className="profile-scene__illustrative-note">
+          Illustrative example demonstrating profile dimension structure. Not population statistics or personal diagnosis.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function EvidenceConfidenceScene() {
+  const evidenceItems = [
+    {
+      category: 'Supporting Evidence',
+      status: 'Strong Signal',
+      details: 'Multiple consistent responses across system architecture, constraint analysis, and project decomposition.',
+    },
+    {
+      category: 'Mixed Evidence',
+      status: 'Context Dependent',
+      details: 'Balanced signals between independent execution and formal consensus-driven coordination.',
+    },
+    {
+      category: 'Missing / Limited Evidence',
+      status: 'Preliminary',
+      details: 'Limited data on high-pressure real-time commercial crisis management.',
+    },
+  ];
+
+  return (
+    <section className="evidence-confidence-scene" data-header-scene="light" aria-labelledby="evidence-confidence-title">
+      <div className="evidence-confidence-scene__inner">
+        <header className="evidence-confidence-scene__header">
+          <h2 id="evidence-confidence-title" className="evidence-confidence-scene__title">
+            See what shaped the interpretation.
+          </h2>
+          <p className="evidence-confidence-scene__copy">
+            Strong evidence, mixed evidence and missing evidence should look different. Confidence is context—not a truth
+            score.
+          </p>
+        </header>
+
+        <div className="evidence-confidence-cards">
+          {evidenceItems.map((item) => (
+            <article key={item.category} className="evidence-confidence-card">
+              <span className="evidence-confidence-card__category">{item.category}</span>
+              <h3 className="evidence-confidence-card__status">{item.status}</h3>
+              <p className="evidence-confidence-card__details">{item.details}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="evidence-confidence-meta">
+          <div className="evidence-meta-block">
+            <strong>Evidence Points Evaluated:</strong> 24 structured responses + 5 context entities
+          </div>
+          <div className="evidence-meta-block">
+            <strong>Validity Status:</strong> Valid psychometric baseline
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function CareerScene() {
-  const [active, setActive] = useState(0); const image = publicMedia.careers[active];
-  return <section className="career-scene" data-header-scene="dark" aria-labelledby="career-title"><div className="career-scene__media"><ResponsiveImage key={image.file} media={image} sizes="(min-width: 1024px) 68vw, 100vw" /></div><div className="career-scene__content"><h2 id="career-title">Direction needs reasons.</h2><p>Explore how a profile relates to different kinds of work, what differs, and what could be developed next.</p><div className="career-scene__reasons"><p><b>Why it relates</b>Systems thinking, inquiry and deliberate problem solving can be useful here.</p><p><b>What differs</b>Every professional environment asks for a different mix of context and evidence.</p><p><b>What to develop</b>Make a visible piece of work that adds relevant evidence.</p></div><div className="career-scene__choices" role="tablist" aria-label="Career environments">{careerNames.map((name, index) => <button key={name} type="button" aria-selected={index === active} aria-pressed={index === active} onClick={() => setActive(index)}>{name}</button>)}</div></div></section>;
+  const careers = publicMedia.careers;
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const activeRole = careers[selectedIndex] || careers[0];
+
+  return (
+    <section className="career-scene" data-header-scene="light" aria-labelledby="career-heading">
+      <div className="career-scene__inner">
+        <header className="career-scene__header">
+          <h2 id="career-heading" className="career-scene__title">
+            Direction needs reasons.
+          </h2>
+          <p className="career-scene__copy">
+            A fit score becomes useful when you can see what supports it, where the stretch is, and what you could build
+            next.
+          </p>
+        </header>
+
+        <div className="career-scene__stage">
+          <div className="career-scene__list" role="tablist" aria-label="Career roles">
+            {careers.map((career, index) => {
+              const isSelected = selectedIndex === index;
+              return (
+                <button
+                  key={career.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  className={`career-role-item ${isSelected ? 'is-selected' : ''}`}
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  <span className="career-role-item__title">{career.title}</span>
+                  <span className="career-role-item__match">{career.match}% fit</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <article className="career-scene__detail">
+            <figure className="career-scene__media">
+              <ResponsiveImage
+                media={activeRole.media}
+                alt={activeRole.media.alt}
+                sizes="(min-width: 1024px) 46vw, 90vw"
+              />
+            </figure>
+
+            <div className="career-scene__reasons">
+              <div className="career-reason-block">
+                <span className="career-reason-label">Why it relates</span>
+                <p>{activeRole.why}</p>
+              </div>
+
+              <div className="career-reason-block">
+                <span className="career-reason-label">Where it stretches</span>
+                <p>{activeRole.stretch}</p>
+              </div>
+
+              <div className="career-reason-block">
+                <span className="career-reason-label">What could strengthen the fit</span>
+                <p>{activeRole.strengthen}</p>
+              </div>
+
+              <div className="career-supporting-score">
+                <span>Calculated Fit Index:</span>
+                <strong>{activeRole.match}%</strong>
+                <small>(Supporting metric, not a fixed verdict)</small>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function ProgressScene() {
-  const statements = ['Notice what differs.', 'Do deliberate work.', 'Make the result visible.', 'Bring new evidence back.']; const [active, setActive] = useState(0);
-  return <section className="progress-scene" data-header-scene="light" aria-labelledby="progress-title"><div className="progress-scene__heading"><h2 id="progress-title">Your next move becomes new evidence.</h2></div><div className="progress-scene__story"><div className="progress-scene__media"><ResponsiveImage media={publicMedia.progress[active]} sizes="(min-width: 1024px) 58vw, 100vw" /></div><div className="progress-scene__states">{publicMedia.progress.map((item, index) => <button key={item.file} type="button" onClick={() => setActive(index)} aria-pressed={active === index} className={active === index ? 'is-active' : ''}><span>{statements[Math.min(index, statements.length - 1)]}</span><small>{['Before', 'Prototype', 'Practice', 'Review', 'Collaboration', 'Return'][index]}</small></button>)}</div></div></section>;
+function DevelopmentLoopScene() {
+  const loopSteps = [
+    { step: '1', name: 'Notice what differs', detail: 'Identify the gap between your current evidence and target environment requirements.' },
+    { step: '2', name: 'Do deliberate work', detail: 'Undertake real projects that exercise unproven skill dimensions under realistic constraints.' },
+    { step: '3', name: 'Make the result visible', detail: 'Produce tangible artifacts—documentation, code repositories, prototypes, case reviews.' },
+    { step: '4', name: 'Bring new evidence back', detail: 'Update your profile context with completed work to evolve future interpretation.' },
+  ];
+
+  return (
+    <section className="development-loop-scene" data-header-scene="light" aria-labelledby="development-heading">
+      <div className="development-loop-scene__inner">
+        <header className="development-loop-scene__header">
+          <h2 id="development-heading" className="development-loop-scene__title">
+            Your next move becomes new evidence.
+          </h2>
+          <p className="development-loop-scene__copy">
+            A roadmap is not a verdict. Do deliberate work, make the result visible, and future interpretation can begin
+            with more context.
+          </p>
+        </header>
+
+        <div className="development-loop-transformation">
+          {loopSteps.map((item) => (
+            <article key={item.step} className="development-step-card">
+              <span className="development-step-number">{item.step}</span>
+              <h3 className="development-step-name">{item.name}</h3>
+              <p className="development-step-detail">{item.detail}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-export default function HomeNarrativeV3() { return <><Hero /><WorkWorlds /><ContextScene /><ProfileScene /><CareerScene /><ProgressScene /></>; }
+function TrustScene() {
+  return (
+    <section className="trust-reading-scene" data-header-scene="light" aria-labelledby="trust-scene-title">
+      <div className="trust-reading-scene__inner">
+        <h2 id="trust-scene-title" className="trust-reading-scene__title">
+          Know what the system knows—and what it doesn&apos;t.
+        </h2>
+        <div className="trust-reading-scene__body">
+          <p>
+            Core scores and career-fit calculations come from structured logic. AI can help interpret professional
+            context and support written explanations, but it doesn&apos;t replace those numbers. Results support
+            reflection and career exploration—not diagnosis, hiring decisions or guaranteed outcomes.
+          </p>
+          <div className="trust-reading-scene__link-wrap">
+            <Link className="public-text-action" to="/trust">
+              Read our methodology and trust principles <Arrow />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function HomeNarrativeV3() {
+  return (
+    <div className="homepage-evidence-field">
+      <HeroScene />
+      <WorkWorldsScene />
+      <ContextScene />
+      <AdaptiveQuestionDemoScene />
+      <ProfileScene />
+      <EvidenceConfidenceScene />
+      <CareerScene />
+      <DevelopmentLoopScene />
+      <TrustScene />
+    </div>
+  );
+}
