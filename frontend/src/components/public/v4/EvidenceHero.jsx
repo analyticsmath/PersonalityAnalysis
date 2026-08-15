@@ -23,20 +23,20 @@ export default function EvidenceHero() {
         { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12 }
       );
 
-      // Dominant protagonist establishes
+      // Dominant protagonist establishes in spatial canvas
       tl.fromTo(
         '.hero-v4-plane--dominant',
-        { y: 32, opacity: 0, scale: 0.98 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.8 },
-        '-=0.6'
+        { y: 36, opacity: 0, scale: 0.97 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.85 },
+        '-=0.65'
       );
 
-      // Supporting human context & evidence wall arrive
+      // Supporting human context, evidence wall, and material fragments
       tl.fromTo(
-        ['.hero-v4-plane--supporting', '.hero-v4-plane--wall', '.hero-v4-fragment'],
+        ['.hero-v4-plane--supporting', '.hero-v4-plane--wall', '.hero-v4-material-fragment'],
         { y: 24, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.7, stagger: 0.08 },
-        '-=0.5'
+        '-=0.55'
       );
     }, heroRef);
 
@@ -56,7 +56,7 @@ export default function EvidenceHero() {
       aria-labelledby="hero-v4-heading"
     >
       <div className="evidence-hero-v4__stage">
-        {/* Typographic and Primary Action Field */}
+        {/* Typographic and Primary Action Spatial Lead Field */}
         <div className="evidence-hero-v4__lead">
           <h1 id="hero-v4-heading" className="hero-v4-title" ref={headlineRef}>
             <span className="hero-v4-line-mask">
@@ -85,9 +85,9 @@ export default function EvidenceHero() {
           </div>
         </div>
 
-        {/* Spatial Layered Media Composition (3 Approved Pexels Media + Native Fragments) */}
+        {/* Spatial Layered Media Canvas (3 Approved Pexels Media + Natural Material Fragments) */}
         <div className="evidence-hero-v4__world" aria-hidden="true">
-          {/* Plane 3: Evidence Wall Sketched/Pinned Schematics (Pexels 9617376) */}
+          {/* Plane 3: Evidence Wall Schematics (Pexels 9617376) */}
           <figure className="hero-v4-plane hero-v4-plane--wall">
             <ResponsiveImage
               media={publicMedia.hero.evidenceWall}
@@ -116,17 +116,14 @@ export default function EvidenceHero() {
             />
           </figure>
 
-          {/* Professional Artifact Fragment A: Specification Document / Blueprint edge */}
-          <div className="hero-v4-fragment hero-v4-fragment--doc">
-            <div className="hero-v4-fragment__badge">Artifact #01</div>
-            <div className="hero-v4-fragment__line" />
-            <div className="hero-v4-fragment__text">System Architecture &amp; SLA Specs</div>
+          {/* Material Fragment A: Cropped Blueprint Schematic (Natural Material Actor) */}
+          <div className="hero-v4-material-fragment hero-v4-material-fragment--blueprint">
+            <div className="hero-v4-material-edge" />
           </div>
 
-          {/* Professional Artifact Fragment B: Precision Measurement / Calibration Chip */}
-          <div className="hero-v4-fragment hero-v4-fragment--signal">
-            <span className="hero-v4-fragment__dim">Signal: Systematic Reasoning</span>
-            <span className="hero-v4-fragment__score">88/100</span>
+          {/* Material Fragment B: Document Structure Edge */}
+          <div className="hero-v4-material-fragment hero-v4-material-fragment--doc">
+            <div className="hero-v4-material-lines" />
           </div>
         </div>
       </div>

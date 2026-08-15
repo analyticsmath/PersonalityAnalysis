@@ -30,54 +30,43 @@ export function Arrow() {
 
 export function PublicHeader() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [tone, setTone] = useState('light');
+  const [released, setReleased] = useState(false);
   const toggle = useRef(null);
   const location = useLocation();
   const isHome = location.pathname === '/';
 
   useEffect(() => setOpen(false), [location.pathname]);
 
-  // Track scroll position for header surface reveal
-  useEffect(() => {
-    const handleScroll = () => {
-      const isPastHero = window.scrollY > 120;
-      setScrolled(isPastHero);
-    };
+  // Deterministic route tone
+  const tone = location.pathname === '/career-intelligence' ? 'dark' : 'light';
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Header tone observer for explicit route scenes
+  // Homepage hero release detection: derives from hero element geometry rather than arbitrary 120px
   useEffect(() => {
-    const scenes = Array.from(document.querySelectorAll('[data-header-scene]'));
-    if (!scenes.length) {
-      if (location.pathname === '/career-intelligence') {
-        setTone('dark');
-      } else {
-        setTone('light');
-      }
+    if (!isHome) {
+      setReleased(true);
       return undefined;
     }
 
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        const intersecting = entries.filter((e) => e.isIntersecting);
-        if (intersecting.length > 0) {
-          const topScene = intersecting.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-          if (topScene) {
-            setTone(topScene.target.dataset.headerScene || 'light');
-          }
-        }
-      },
-      { rootMargin: '-10% 0px -70% 0px', threshold: [0.1, 0.5] }
-    );
+    const checkHeroRelease = () => {
+      const heroEl = document.querySelector('.evidence-hero-v4');
+      if (!heroEl) {
+        setReleased(window.scrollY > 80);
+        return;
+      }
+      const rect = heroEl.getBoundingClientRect();
+      // Released when hero top half has scrolled past viewport
+      setReleased(rect.bottom < window.innerHeight * 0.55);
+    };
 
-    scenes.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, [location.pathname]);
+    window.addEventListener('scroll', checkHeroRelease, { passive: true });
+    window.addEventListener('resize', checkHeroRelease, { passive: true });
+    checkHeroRelease();
+
+    return () => {
+      window.removeEventListener('scroll', checkHeroRelease);
+      window.removeEventListener('resize', checkHeroRelease);
+    };
+  }, [isHome]);
 
   // Mobile menu body lock and escape key
   useEffect(() => {
@@ -100,7 +89,7 @@ export function PublicHeader() {
   const headerClass = [
     'public-header',
     `public-header--${tone}`,
-    isHome && !scrolled ? 'public-header--hero-transparent' : 'public-header--scrolled',
+    isHome && !released ? 'public-header--hero-transparent' : 'public-header--scrolled',
     open ? 'is-open' : '',
   ]
     .filter(Boolean)
@@ -139,168 +128,123 @@ export function PublicHeader() {
           aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
           onClick={() => setOpen((value) => !value)}
         >
-          <span>{open ? 'Close' : 'Menu'}</span>
+          <span className="public-menu-trigger__bar" />
+          <span className="public-menu-trigger__bar" />
         </button>
       </div>
 
-      {open && (
-        <div className="public-header__mobile-overlay" onClick={() => setOpen(false)}>
-          <div className="public-header__mobile-panel" onClick={(e) => e.stopPropagation()}>
-            <div className="public-header__mobile-head">
-              <span className="public-brand__name">Personality Assessor</span>
-              <button
-                type="button"
-                className="public-mobile-close-btn"
-                onClick={() => setOpen(false)}
-                aria-label="Close menu"
-              >
-                Close
-              </button>
-            </div>
-            <nav className="public-header__mobile-links" aria-label="Mobile navigation">
-              {primaryNav.map(([label, to]) => (
-                <NavLink key={to} to={to} onClick={() => setOpen(false)}>
-                  {label}
-                </NavLink>
-              ))}
-              <NavLink to="/privacy" onClick={() => setOpen(false)}>
-                Privacy
-              </NavLink>
-            </nav>
-            <div className="public-header__mobile-actions">
-              <Link
-                className="public-cta-button public-cta-button--primary public-cta-button--wide"
-                to="/signup"
-                onClick={() => setOpen(false)}
-              >
-                Build my profile
-              </Link>
-              <Link
-                className="public-header__signin public-header__signin--mobile"
-                to="/login"
-                onClick={() => setOpen(false)}
-              >
-                Sign in
-              </Link>
-            </div>
+      {/* Mobile Menu Panel */}
+      <div className="public-mobile-panel" aria-hidden={!open}>
+        <nav className="public-mobile-panel__nav">
+          {primaryNav.map(([label, to]) => (
+            <NavLink key={to} to={to} className={({ isActive }) => (isActive ? 'is-active' : '')}>
+              {label}
+            </NavLink>
+          ))}
+          <div className="public-mobile-panel__actions">
+            <Link className="public-cta-button public-cta-button--primary public-cta-button--wide" to="/signup">
+              Build my profile <Arrow />
+            </Link>
+            <Link className="public-cta-button public-cta-button--inverted public-cta-button--wide" to="/login">
+              Sign in
+            </Link>
           </div>
-        </div>
-      )}
+        </nav>
+      </div>
     </header>
   );
 }
 
-export function PublicFooter({ integrated = false }) {
+export function PublicFooter() {
   return (
-    <footer className={`public-terminal-footer ${integrated ? 'is-integrated' : ''}`} data-header-scene="dark">
-      <div className="public-terminal-footer__inner">
-        <div className="public-terminal-footer__scene">
-          <div className="public-terminal-footer__lead">
-            <h2 className="public-terminal-footer__headline">
-              Build a profile<br />
-              you can return to.
-            </h2>
-            <p className="public-terminal-footer__supporting">
+    <footer className="public-footer" data-header-scene="dark">
+      <div className="public-footer__inner">
+        <div className="public-footer__top">
+          <div className="public-footer__brand-block">
+            <Link className="public-brand public-brand--dark" to="/" aria-label="Personality Assessor home">
+              <span className="public-brand__name">Personality Assessor</span>
+            </Link>
+            <p className="public-footer__statement">
+              Build a profile you can return to.
+            </p>
+            <p className="public-footer__note">
               Your work changes. Your evidence can change with it.
             </p>
-            <div className="public-terminal-footer__cta-wrap">
-              <Link className="public-cta-button public-cta-button--inverted" to="/signup">
-                Build my profile <Arrow />
-              </Link>
-              <Link className="public-terminal-footer__signin-link" to="/login">
-                Sign in
-              </Link>
-            </div>
           </div>
+
+          <nav className="public-footer__nav" aria-label="Footer navigation">
+            <div className="public-footer__col">
+              <span className="public-footer__col-title">Navigation</span>
+              {footerNav.slice(0, 4).map(([label, to]) => (
+                <Link key={to} to={to}>
+                  {label}
+                </Link>
+              ))}
+            </div>
+            <div className="public-footer__col">
+              <span className="public-footer__col-title">Governance</span>
+              {footerNav.slice(4).map(([label, to]) => (
+                <Link key={to} to={to}>
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </nav>
         </div>
 
-        <div className="public-terminal-footer__subordinate">
-          <div className="public-terminal-footer__brand-row">
-            <span className="public-brand__name">Personality Assessor</span>
-            <p className="public-terminal-footer__notice">
-              Professional reflection and career exploration. Not clinical diagnosis, an HR gatekeeping mechanism, or a guarantee of employment success.
-            </p>
+        <div className="public-footer__bottom">
+          <span className="public-footer__copyright">
+            &copy; {new Date().getFullYear()} Personality Assessor. Psychometric instruments and deterministic scoring algorithms.
+          </span>
+          <div className="public-footer__meta">
+            <span>Deterministic Scoring</span>
+            <span>Zero Archetypes</span>
+            <span>Privacy Controlled</span>
           </div>
-          <nav className="public-terminal-footer__nav" aria-label="Footer navigation">
-            {footerNav.map(([label, to]) => (
-              <Link key={to} to={to}>
-                {label}
-              </Link>
-            ))}
-          </nav>
         </div>
       </div>
     </footer>
   );
 }
 
-export function PublicLayout({ children, page, footerMode = 'standard' }) {
+export function ResponsiveImage({ media, alt = '', sizes = '100vw', priority = false, artDirectedMobile = false }) {
+  if (!media) return null;
+
+  const basePath = media.basePath || (media.folder && media.file ? `/media/personality-v3/${media.folder}/${media.file}` : '');
+  const avifPath = `${basePath}-1440.avif`;
+  const webpPath = `${basePath}-1440.webp`;
+  const jpgPath = `${basePath}-1440.jpg`;
+  const mobileJpg = artDirectedMobile && media.mobilePath ? `${media.mobilePath}-800.jpg` : null;
+
+
   return (
-    <div className="public-site-container" data-page={page}>
-      <a className="public-skip-link" href="#main-content">
-        Skip to content
-      </a>
-      <PublicHeader />
-      <PublicMotionRoot>
-        <div className="public-content-flow">
-          {children}
-          {footerMode !== 'integrated' && <PublicFooter />}
-        </div>
-      </PublicMotionRoot>
-    </div>
+    <picture className="public-picture">
+      <source type="image/avif" srcSet={avifPath} sizes={sizes} />
+      <source type="image/webp" srcSet={webpPath} sizes={sizes} />
+      {mobileJpg && (
+        <source media="(max-width: 767px)" srcSet={mobileJpg} />
+      )}
+      <img
+        src={jpgPath}
+        alt={alt}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
+        className="public-img"
+      />
+    </picture>
   );
 }
 
-export function ResponsiveImage({
-  media: mediaItem,
-  className = '',
-  alt = '',
-  priority = false,
-  sizes = '(min-width: 1100px) 60vw, 90vw',
-  artDirectedMobile = false,
-}) {
-  if (!mediaItem || !mediaItem.file) {
-    return null;
-  }
-
-  const isV3 = mediaItem.v3 ?? true;
-  const folder = mediaItem.folder || 'hero';
-  const file = mediaItem.file;
-
-  const isHero = file.includes('hero-a') || file.includes('hero-b') || file.includes('hero-h1');
-  const widths = isHero ? [640, 960, 1440, 1920, 2560] : [640, 960, 1440, 1920];
-  const base = isV3 ? `/media/personality-v3/${folder}/${file}` : `/media/personality-v2/${folder}/${file}`;
-  const srcSet = (ext) => widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(', ');
-
-  const mobileBase = `${base}-mobile`;
-
+export function PublicLayout({ children }) {
   return (
-    <picture className={`responsive-evidence-image ${className}`.trim()}>
-      {artDirectedMobile && (
-        <>
-          <source
-            media="(max-width: 767px)"
-            type="image/webp"
-            srcSet={`${mobileBase}-480.webp 480w, ${mobileBase}-720.webp 720w`}
-            sizes="92vw"
-          />
-          <source
-            media="(max-width: 767px)"
-            srcSet={`${mobileBase}-480.jpg 480w, ${mobileBase}-720.jpg 720w`}
-            sizes="92vw"
-          />
-        </>
-      )}
-      <source type="image/avif" srcSet={srcSet('avif')} sizes={sizes} />
-      <source type="image/webp" srcSet={srcSet('webp')} sizes={sizes} />
-      <img
-        src={`${base}-1440.jpg`}
-        loading={priority ? 'eager' : 'lazy'}
-        fetchPriority={priority ? 'high' : 'auto'}
-        decoding={priority ? 'sync' : 'async'}
-        style={{ objectPosition: mediaItem.position || '50% 50%' }}
-        alt={alt || mediaItem.alt || ''}
-      />
-    </picture>
+    <PublicMotionRoot>
+      <div className="public-site-root">
+        <PublicHeader />
+        <main id="main-content" className="public-main-content">
+          {children}
+        </main>
+        <PublicFooter />
+      </div>
+    </PublicMotionRoot>
   );
 }

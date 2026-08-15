@@ -10,42 +10,36 @@ const worldsData = [
     id: 'build',
     name: 'Build',
     statement: 'Constraints reveal how you construct systems.',
-    detail: 'Engineering and architecture environments expose trade-offs between speed, durability and scalability.',
     media: publicMedia.worlds[0]?.media,
   },
   {
     id: 'investigate',
     name: 'Investigate',
     statement: 'Uncertainty reveals how you search for proof.',
-    detail: 'Research and empirical inquiry expose how you test hypotheses and resolve ambiguous findings.',
     media: publicMedia.worlds[1]?.media,
   },
   {
     id: 'make',
     name: 'Make',
     statement: 'Iteration reveals how you refine.',
-    detail: 'Tangible craft and hands-on fabrication expose how feedback directly reshapes your execution.',
     media: publicMedia.worlds[2]?.media,
   },
   {
     id: 'shape',
     name: 'Shape',
     statement: 'Ambiguity reveals what you notice.',
-    detail: 'Design and user-centered exploration expose what patterns you prioritize before a solution is proven.',
     media: publicMedia.worlds[3]?.media,
   },
   {
     id: 'structure',
     name: 'Structure',
     statement: 'Complexity reveals how you organize.',
-    detail: 'Systems design and operational planning expose how you decompose intricate multi-stakeholder dependencies.',
     media: publicMedia.worlds[4]?.media,
   },
   {
     id: 'collaborate',
     name: 'Collaborate',
     statement: 'Shared pressure reveals how you align.',
-    detail: 'High-stakes team environments expose situational leadership, constructive disagreement and consensus building.',
     media: publicMedia.worlds[5]?.media,
   },
 ];
@@ -69,16 +63,11 @@ export default function WorkWorldsTheatre() {
             id: 'work-worlds-stage',
             trigger: containerRef.current,
             start: 'top top',
-            end: '+=480vh',
+            end: '+=420vh',
             pin: true,
             scrub: 0.35,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const progress = self.progress;
-              const idx = Math.min(worldsData.length - 1, Math.floor(progress * worldsData.length));
-              setActiveWorldIndex(idx);
-            },
           },
         });
 
@@ -90,6 +79,11 @@ export default function WorkWorldsTheatre() {
           const settledLabel = `${world.id}-settled`;
 
           tl.addLabel(enterLabel);
+
+          // Callback to guarantee UI state matches exact timeline label
+          tl.add(() => {
+            setActiveWorldIndex(i);
+          }, enterLabel);
 
           // Transition to active world slot
           tl.to(
@@ -107,7 +101,7 @@ export default function WorkWorldsTheatre() {
 
           // Settle and dwell
           tl.addLabel(settledLabel);
-          tl.to({}, { duration: 1.1 }); // Dwell plateau
+          tl.to({}, { duration: 1.2 }); // Dwell plateau
 
           if (i < worldsData.length - 1) {
             // Recede previous slot
@@ -172,25 +166,26 @@ export default function WorkWorldsTheatre() {
             </p>
           </div>
 
-          {/* Direct World Selector Pills */}
-          <nav className="work-worlds-theatre-v4__nav" aria-label="Work Worlds switcher">
+          {/* Open World Index (No Pill Background, Text Controls with Active Marker) */}
+          <nav className="work-worlds-index" aria-label="Work Worlds switcher">
             {worldsData.map((world, idx) => (
               <button
                 key={world.id}
                 type="button"
-                className={`world-nav-pill ${activeWorldIndex === idx ? 'is-active' : ''}`}
+                className={`world-index-btn ${activeWorldIndex === idx ? 'is-active' : ''}`}
                 onClick={() => handleSelectWorld(idx)}
                 aria-pressed={activeWorldIndex === idx}
               >
-                {world.name}
+                <span className="world-index-btn__name">{world.name}</span>
+                <span className="world-index-btn__indicator" aria-hidden="true" />
               </button>
             ))}
           </nav>
         </header>
 
-        {/* Persistent Desktop Stage & Mobile Flow */}
+        {/* Persistent Stage: Protagonist Image + Open Statement Typography */}
         <div className="work-worlds-theatre-v4__stage" ref={stageRef}>
-          {/* Spatial World Media Stage (Slots rather than 6 separate flex cards) */}
+          {/* Spatial World Media Stage */}
           <div className="work-worlds-theatre-v4__media-canvas" aria-live="polite">
             {worldsData.map((world, idx) => {
               const isCurrent = activeWorldIndex === idx;
@@ -214,7 +209,7 @@ export default function WorkWorldsTheatre() {
                       <ResponsiveImage
                         media={world.media}
                         alt={`Work environment: ${world.name}`}
-                        sizes="(min-width: 1024px) 46vw, 92vw"
+                        sizes="(min-width: 1024px) 52vw, 92vw"
                       />
                     )}
                   </figure>
@@ -223,12 +218,12 @@ export default function WorkWorldsTheatre() {
             })}
           </div>
 
-          {/* Dwell Narrative Panel */}
-          <div className="work-worlds-theatre-v4__narrative">
-            <div className="world-narrative-card">
-              <span className="world-narrative-card__tag">World: {activeWorld.name}</span>
-              <h3 className="world-narrative-card__statement">{activeWorld.statement}</h3>
-              <p className="world-narrative-card__detail">{activeWorld.detail}</p>
+          {/* Open Typography Dwell Statement */}
+          <div className="work-worlds-theatre-v4__dwell-statement">
+
+            <div className="world-open-narrative">
+              <span className="world-open-narrative__name">{activeWorld.name}</span>
+              <h3 className="world-open-narrative__statement">{activeWorld.statement}</h3>
             </div>
           </div>
         </div>

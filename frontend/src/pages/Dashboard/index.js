@@ -28,6 +28,12 @@ const formatDate = (value) => {
   }).format(new Date(value));
 };
 
+const toFiniteNumberOrNull = (value) => {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
 export default function DashboardPage() {
   const navigate = useNavigate();
   const auth = useAuth();
@@ -66,13 +72,11 @@ export default function DashboardPage() {
     if (!previousTraits || !hasTraits) return null;
     const comparable = [];
     for (const traitKey of TRAIT_ORDER) {
-      const curRaw = latestTraits[traitKey];
-      const prevRaw = previousTraits[traitKey];
-      const hasCur = curRaw !== null && curRaw !== undefined && curRaw !== '' && Number.isFinite(Number(curRaw));
-      const hasPrev = prevRaw !== null && prevRaw !== undefined && prevRaw !== '' && Number.isFinite(Number(prevRaw));
-      if (hasCur && hasPrev) {
-        const current = Math.round(Number(curRaw));
-        const prev = Math.round(Number(prevRaw));
+      const curNum = toFiniteNumberOrNull(latestTraits[traitKey]);
+      const prevNum = toFiniteNumberOrNull(previousTraits[traitKey]);
+      if (curNum !== null && prevNum !== null) {
+        const current = Math.round(curNum);
+        const prev = Math.round(prevNum);
         const delta = current - prev;
         comparable.push({
           traitKey,
@@ -107,7 +111,7 @@ export default function DashboardPage() {
 
   const userName = auth.user?.name || auth.name || 'User';
 
-  /* ── 1. D0 Maturity: Zero Completed Assessments (Authored Unstarted State) ── */
+  /* ── 1. D0 Maturity: Single Authored Onboarding Workspace (No Dashboard Grid / No Empty Cards) ── */
   if (assessments.length === 0 && !historyQuery.isLoading) {
     return (
       <ProductShell
@@ -118,88 +122,61 @@ export default function DashboardPage() {
           </Button>
         }
       >
-        <div className="dashboard-grid">
-          {/* Main Hero Unstarted Evidence Container (8 cols) */}
-          <div className="col-span-8">
-            <section className="dashboard-widget dashboard-widget--hero" aria-labelledby="zero-data-title">
-              <div className="dashboard-widget__head">
-                <div>
-                  <h2 id="zero-data-title" className="dashboard-widget__title" style={{ fontSize: '1.5rem' }}>
-                    Welcome, {userName}. Your professional profile starts here.
-                  </h2>
-                  <p className="dashboard-widget__subtitle">
-                    Calibrated profile readings require verified background context and your first adaptive response session.
-                  </p>
-                </div>
-              </div>
+        <div className="dashboard-d0-workspace">
+          {/* Main Hero Unstarted Narrative Stage */}
+          <section className="dashboard-d0-hero" aria-labelledby="d0-heading">
+            <header className="dashboard-d0-header">
+              <h2 id="d0-heading" className="dashboard-d0-title">
+                Welcome, {userName}. Your professional profile starts here.
+              </h2>
+              <p className="dashboard-d0-lead">
+                Calibrated profile readings require verified background context and your first adaptive response session.
+              </p>
+            </header>
 
-              <div className="dashboard-widget__body" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <p style={{ color: 'var(--pa-text, #4F5358)', fontSize: '0.9375rem', lineHeight: '1.55', margin: 0 }}>
-                  Personality Assessor builds four distinct readings: continuous Big Five dimensions, vocational interest territories (RIASEC), ranked work values, and demonstrated career signals.
-                </p>
+            <div className="dashboard-d0-actions">
+              <Button variant="primary" size="md" onClick={() => navigate('/assessment/start')}>
+                <FiPlay /> Start Your First Assessment <FiArrowRight />
+              </Button>
+              <Button variant="secondary" size="md" onClick={() => navigate('/assessment/start')}>
+                <FiUploadCloud /> Upload or Review Your CV
+              </Button>
+            </div>
+          </section>
 
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                  <Button variant="primary" size="md" onClick={() => navigate('/assessment/start')}>
-                    <FiPlay /> Start Your First Assessment <FiArrowRight />
-                  </Button>
-                  <Button variant="secondary" size="md" onClick={() => navigate('/assessment/start')}>
-                    <FiUploadCloud /> Upload or Review Your CV
-                  </Button>
-                </div>
-              </div>
-
-              <div className="dashboard-widget__footer" style={{ justifyContent: 'flex-start', gap: '24px' }}>
-                <span style={{ fontSize: '0.8125rem', color: 'var(--pa-muted, #767B81)' }}>
-                  Deterministic psychometric calibration
-                </span>
-                <Link to="/methodology" style={{ fontSize: '0.8125rem', color: 'var(--pa-ink, #0B0B0B)', textDecoration: 'underline' }}>
-                  Inspect methodology
-                </Link>
-              </div>
-            </section>
+          {/* 3-Step Open Guidance Sequence (Not a Generic Sidebar Widget) */}
+          <div className="dashboard-d0-sequence" aria-label="Onboarding sequence">
+            <div className="dashboard-d0-step">
+              <span className="dashboard-d0-step__num">01</span>
+              <strong className="dashboard-d0-step__title">Add Context</strong>
+              <p className="dashboard-d0-step__desc">Upload a CV or enter professional background anchors.</p>
+            </div>
+            <div className="dashboard-d0-step">
+              <span className="dashboard-d0-step__num">02</span>
+              <strong className="dashboard-d0-step__title">Adaptive Questions</strong>
+              <p className="dashboard-d0-step__desc">Complete 22–26 scenario-driven decision prompts.</p>
+            </div>
+            <div className="dashboard-d0-step">
+              <span className="dashboard-d0-step__num">03</span>
+              <strong className="dashboard-d0-step__title">Inspect Readings</strong>
+              <p className="dashboard-d0-step__desc">Explore your four independent readings and career fit.</p>
+            </div>
           </div>
 
-          {/* Side Guidance / What to Expect (4 cols) */}
-          <div className="col-span-4">
-            <section className="dashboard-widget" aria-labelledby="guide-title">
-              <div className="dashboard-widget__head">
-                <h3 id="guide-title" className="dashboard-widget__title" style={{ fontSize: '1.1rem' }}>
-                  What happens next
-                </h3>
-              </div>
-              <div className="dashboard-widget__body" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                  <span style={{ fontWeight: '600', color: 'var(--pa-ink, #0B0B0B)' }}>01</span>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--pa-text, #4F5358)', margin: 0 }}>
-                    <strong>Add Context:</strong> Upload a CV or enter professional background anchors.
-                  </p>
-                </div>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                  <span style={{ fontWeight: '600', color: 'var(--pa-ink, #0B0B0B)' }}>02</span>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--pa-text, #4F5358)', margin: 0 }}>
-                    <strong>Adaptive Questions:</strong> Complete 22–26 scenario-driven questions.
-                  </p>
-                </div>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                  <span style={{ fontWeight: '600', color: 'var(--pa-ink, #0B0B0B)' }}>03</span>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--pa-text, #4F5358)', margin: 0 }}>
-                    <strong>Inspect Readings:</strong> Explore your four independent readings and career fit.
-                  </p>
-                </div>
-              </div>
-              <div className="dashboard-widget__footer">
-                <Link to="/account/privacy" style={{ fontSize: '0.8125rem', color: 'var(--pa-muted, #767B81)' }}>
-                  <FiShield style={{ verticalAlign: 'middle', marginRight: '4px' }} /> Privacy &amp; Data Controls
-                </Link>
-              </div>
-            </section>
-          </div>
+          <footer className="dashboard-d0-footer">
+            <Link to="/methodology" className="dashboard-quiet-link">
+              Inspect psychometric methodology
+            </Link>
+            <Link to="/account/privacy" className="dashboard-quiet-link">
+              <FiShield style={{ verticalAlign: 'middle', marginRight: '4px' }} /> Privacy &amp; Data Governance
+            </Link>
+          </footer>
         </div>
       </ProductShell>
     );
   }
 
-  /* ── 2. D1 Maturity: Exactly 1 Completed Assessment ──────────────────────── */
+  /* ── 2. D1 Maturity: Dominant Current Profile Stage (~64% Desktop) + Adjacent Career Index ── */
   if (assessments.length === 1) {
     return (
       <ProductShell
@@ -217,105 +194,95 @@ export default function DashboardPage() {
           </div>
         }
       >
-        <div className="dashboard-grid">
-          {/* Active Profile Readings (8 cols) */}
-          <div className="col-span-8">
-            <section className="dashboard-widget" aria-labelledby="d1-profile-title">
-              <div className="dashboard-widget__head">
-                <div>
-                  <h2 id="d1-profile-title" className="dashboard-widget__title">
-                    Current Calibrated Profile
-                  </h2>
-                  <p className="dashboard-widget__subtitle">
-                    Recorded on {formatDate(latestAssessment.createdAt || latestAssessment.date)}
-                  </p>
-                </div>
-                <Link
-                  to={`/result/${latestAssessment.assessmentId}`}
-                  className="public-text-action"
-                  style={{ fontSize: '0.875rem' }}
-                >
-                  Full Report <FiArrowRight />
-                </Link>
+        <div className="dashboard-d1-layout">
+          {/* Dominant Calibrated Profile Field (Left / Main) */}
+          <section className="dashboard-d1-profile" aria-labelledby="d1-profile-title">
+            <header className="dashboard-section-header">
+              <div>
+                <h2 id="d1-profile-title" className="dashboard-section-title">
+                  Current Calibrated Profile
+                </h2>
+                <p className="dashboard-section-meta">
+                  Recorded on {formatDate(latestAssessment.createdAt || latestAssessment.date)}
+                </p>
               </div>
+              <Link
+                to={`/result/${latestAssessment.assessmentId}`}
+                className="public-text-action"
+                style={{ fontSize: '0.875rem' }}
+              >
+                Full Report <FiArrowRight />
+              </Link>
+            </header>
 
-              <div className="dashboard-widget__body">
-                {hasTraits ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {TRAIT_ORDER.map((traitKey) => {
-                      const score = Math.round(Number(latestTraits[traitKey] ?? 50));
-                      const meta = TRAIT_META[traitKey] || { name: traitKey };
-                      return (
-                        <div key={traitKey} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-                            <span style={{ fontWeight: '550', color: 'var(--pa-ink, #0B0B0B)' }}>{meta.name}</span>
-                            <span style={{ fontWeight: '600', color: 'var(--pa-ink, #0B0B0B)' }} className="tabular-nums">{score}/100</span>
-                          </div>
-                          <div style={{ position: 'relative', width: '100%', height: '6px', background: '#D9DDE1', borderRadius: '3px' }}>
-                            <div style={{ width: `${score}%`, height: '100%', background: 'var(--pa-ink, #0B0B0B)', borderRadius: '3px' }} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p style={{ color: 'var(--pa-text, #4F5358)' }}>Profile dimensions are being calculated.</p>
-                )}
-              </div>
-
-              <div className="dashboard-widget__footer">
-                <span style={{ fontSize: '0.8125rem', color: 'var(--pa-muted, #767B81)' }}>
-                  Single assessment calibration. Complete subsequent assessments to unlock longitudinal trend analytics.
-                </span>
-              </div>
-            </section>
-          </div>
-
-          {/* Top Career Relationships (4 cols) */}
-          <div className="col-span-4">
-            <section className="dashboard-widget" aria-labelledby="d1-careers-title">
-              <div className="dashboard-widget__head">
-                <h3 id="d1-careers-title" className="dashboard-widget__title" style={{ fontSize: '1.1rem' }}>
-                  Top Career Relationships
-                </h3>
-              </div>
-
-              <div className="dashboard-widget__body" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {recommendedCareers.slice(0, 4).map((career, i) => {
-                  const title = career.title || career.careerTitle || career.name || `Role #${i + 1}`;
-                  const fit = Math.round(Number(career.match || career.fitScore || career.score || 80));
+            <div className="dashboard-profile-traits-list">
+              {hasTraits ? (
+                TRAIT_ORDER.map((traitKey) => {
+                  const score = toFiniteNumberOrNull(latestTraits[traitKey]);
+                  const meta = TRAIT_META[traitKey] || { name: traitKey };
                   return (
-                    <div
-                      key={title}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '12px 14px',
-                        background: 'var(--pa-bg-soft, #F4F5F6)',
-                        borderRadius: '6px',
-                      }}
-                    >
-                      <span style={{ fontSize: '0.875rem', fontWeight: '550', color: 'var(--pa-ink, #0B0B0B)' }}>{title}</span>
-                      <span style={{ fontSize: '0.8125rem', fontWeight: '600', color: 'var(--pa-ink, #0B0B0B)' }} className="tabular-nums">{fit}% Fit</span>
+                    <div key={traitKey} className="dashboard-trait-row">
+                      <div className="dashboard-trait-row__info">
+                        <span className="dashboard-trait-name">{meta.name}</span>
+                        {score !== null ? (
+                          <span className="dashboard-trait-val tabular-nums">{Math.round(score)}/100</span>
+                        ) : (
+                          <span className="dashboard-trait-na">Not available</span>
+                        )}
+                      </div>
+                      <div className="dashboard-trait-track">
+                        {score !== null && (
+                          <div className="dashboard-trait-fill" style={{ width: `${Math.round(score)}%` }} />
+                        )}
+                      </div>
                     </div>
                   );
-                })}
-              </div>
+                })
+              ) : (
+                <p style={{ color: 'var(--pa-text, #4F5358)' }}>Profile dimensions are being calculated.</p>
+              )}
+            </div>
 
-              <div className="dashboard-widget__footer">
-                <Link to="/assessment/career" style={{ fontSize: '0.8125rem', color: 'var(--pa-ink, #0B0B0B)', textDecoration: 'underline' }}>
-                  Explore all career matches
-                </Link>
-              </div>
-            </section>
-          </div>
+            <footer className="dashboard-profile-footer">
+              <span>Single assessment calibration. Complete subsequent assessments to unlock longitudinal trajectory.</span>
+            </footer>
+          </section>
+
+          {/* Adjacent Career Relationships Index (Right Rail) */}
+          <section className="dashboard-d1-careers" aria-labelledby="d1-careers-title">
+            <header className="dashboard-section-header">
+              <h3 id="d1-careers-title" className="dashboard-section-title" style={{ fontSize: '1.1rem' }}>
+                Top Career Relationships
+              </h3>
+            </header>
+
+            <div className="dashboard-careers-index">
+              {recommendedCareers.slice(0, 4).map((career, i) => {
+                const title = career.title || career.careerTitle || career.name || `Role #${i + 1}`;
+                const fitScore = toFiniteNumberOrNull(career.match ?? career.fitScore ?? career.score);
+                return (
+                  <div key={title} className="dashboard-career-row">
+                    <span className="dashboard-career-title">{title}</span>
+                    {fitScore !== null && (
+                      <span className="dashboard-career-fit tabular-nums">{Math.round(fitScore)}% Fit</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <footer className="dashboard-section-footer">
+              <Link to="/assessment/career" className="dashboard-quiet-link">
+                Explore all aligned careers
+              </Link>
+            </footer>
+          </section>
         </div>
       </ProductShell>
     );
   }
 
-  /* ── 3. D2+ Maturity: Multiple Assessments (Real Longitudinal Insights) ── */
+  /* ── 3. D2+ Maturity: Dominant Longitudinal Change Visualization + History Timeline ── */
   return (
     <ProductShell
       title="Overview"
@@ -330,123 +297,109 @@ export default function DashboardPage() {
         </div>
       }
     >
-      <div className="dashboard-grid">
-        {/* Longitudinal Dimension Comparison (8 cols) */}
-        <div className="col-span-8">
-          <section className="dashboard-widget" aria-labelledby="d2-profile-title">
-            <div className="dashboard-widget__head">
-              <div>
-                <h2 id="d2-profile-title" className="dashboard-widget__title">
-                  Longitudinal Profile &amp; Shifts
-                </h2>
-                <p className="dashboard-widget__subtitle">
-                  Comparing latest assessment ({formatDate(latestAssessment?.createdAt)}) against baseline ({formatDate(previousAssessment?.createdAt)})
-                </p>
-              </div>
-              <Link to="/analytics" className="public-text-action" style={{ fontSize: '0.875rem' }}>
-                Trajectory Details <FiArrowRight />
-              </Link>
+      <div className="dashboard-d2-layout">
+        {/* Dominant Longitudinal Shift Field */}
+        <section className="dashboard-d2-trajectory" aria-labelledby="d2-profile-title">
+          <header className="dashboard-section-header">
+            <div>
+              <h2 id="d2-profile-title" className="dashboard-section-title">
+                Longitudinal Trajectory &amp; Shifts
+              </h2>
+              <p className="dashboard-section-meta">
+                Comparing latest assessment ({formatDate(latestAssessment?.createdAt)}) against baseline ({formatDate(previousAssessment?.createdAt)})
+              </p>
             </div>
+            <Link to="/analytics" className="public-text-action" style={{ fontSize: '0.875rem' }}>
+              Trajectory Details <FiArrowRight />
+            </Link>
+          </header>
 
-            <div className="dashboard-widget__body">
-              {traitDeltas && traitDeltas.length > 0 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {traitDeltas.map((item) => (
-                    <div key={item.traitKey} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-                        <span style={{ fontWeight: '550', color: 'var(--pa-ink, #0B0B0B)' }}>{item.label}</span>
-                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                          <span className="tabular-nums" style={{ color: 'var(--pa-text, #4F5358)' }}>
-                            {item.previous} → {item.current}
-                          </span>
-                          <span
-                            className="tabular-nums"
-                            style={{
-                              fontWeight: '600',
-                              color: item.delta > 0 ? 'var(--pa-success, #15704E)' : item.delta < 0 ? 'var(--pa-warning, #94610C)' : 'var(--pa-muted, #767B81)',
-                            }}
-                          >
-                            {item.delta > 0 ? `+${item.delta}` : item.delta}
-                          </span>
-                        </div>
-                      </div>
-                      <div style={{ position: 'relative', width: '100%', height: '6px', background: '#D9DDE1', borderRadius: '3px' }}>
-                        <div style={{ width: `${item.current}%`, height: '100%', background: 'var(--pa-ink, #0B0B0B)', borderRadius: '3px' }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : hasTraits ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {TRAIT_ORDER.map((traitKey) => {
-                    const score = Math.round(Number(latestTraits[traitKey] ?? 50));
-                    const meta = TRAIT_META[traitKey] || { name: traitKey };
-                    return (
-                      <div key={traitKey} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-                        <span style={{ fontWeight: '550', color: 'var(--pa-ink, #0B0B0B)' }}>{meta.name}</span>
-                        <span style={{ fontWeight: '600' }} className="tabular-nums">{score}/100</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : null}
-            </div>
-
-            <div className="dashboard-widget__footer">
-              <span style={{ fontSize: '0.8125rem', color: 'var(--pa-muted, #767B81)' }}>
-                {assessments.length} assessments on record.
-              </span>
-            </div>
-          </section>
-        </div>
-
-        {/* Career & Assessment History (4 cols) */}
-        <div className="col-span-4">
-          <section className="dashboard-widget" aria-labelledby="history-summary-title">
-            <div className="dashboard-widget__head">
-              <h3 id="history-summary-title" className="dashboard-widget__title" style={{ fontSize: '1.1rem' }}>
-                Assessment Records
-              </h3>
-            </div>
-
-            <div className="dashboard-widget__body" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {assessments.slice(0, 4).map((ass) => (
-                <div
-                  key={ass.assessmentId}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '10px 12px',
-                    background: 'var(--pa-bg-soft, #F4F5F6)',
-                    borderRadius: '6px',
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: '0.875rem', fontWeight: '550', color: 'var(--pa-ink, #0B0B0B)' }}>
-                      Assessment #{ass.assessmentId?.slice(-4) || '1'}
-                    </div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--pa-muted, #767B81)' }}>
-                      {formatDate(ass.createdAt || ass.date)}
+          <div className="dashboard-deltas-list">
+            {traitDeltas && traitDeltas.length > 0 ? (
+              traitDeltas.map((item) => (
+                <div key={item.traitKey} className="dashboard-delta-row">
+                  <div className="dashboard-delta-head">
+                    <span className="dashboard-delta-name">{item.label}</span>
+                    <div className="dashboard-delta-numbers">
+                      <span className="tabular-nums" style={{ color: 'var(--pa-text, #4F5358)' }}>
+                        {item.previous} → {item.current}
+                      </span>
+                      <span
+                        className="tabular-nums dashboard-delta-badge"
+                        style={{
+                          fontWeight: '600',
+                          color: item.delta > 0 ? 'var(--pa-success, #15704E)' : item.delta < 0 ? 'var(--pa-warning, #94610C)' : 'var(--pa-muted, #767B81)',
+                        }}
+                      >
+                        {item.delta > 0 ? `+${item.delta}` : item.delta}
+                      </span>
                     </div>
                   </div>
-                  <Link
-                    to={`/result/${ass.assessmentId}`}
-                    style={{ fontSize: '0.8125rem', color: 'var(--pa-ink, #0B0B0B)', textDecoration: 'underline' }}
-                  >
-                    View
-                  </Link>
+                  <div className="dashboard-trait-track">
+                    <div className="dashboard-trait-fill" style={{ width: `${item.current}%` }} />
+                  </div>
                 </div>
-              ))}
-            </div>
+              ))
+            ) : hasTraits ? (
+              TRAIT_ORDER.map((traitKey) => {
+                const score = toFiniteNumberOrNull(latestTraits[traitKey]);
+                const meta = TRAIT_META[traitKey] || { name: traitKey };
+                return (
+                  <div key={traitKey} className="dashboard-trait-row">
+                    <div className="dashboard-trait-row__info">
+                      <span className="dashboard-trait-name">{meta.name}</span>
+                      {score !== null ? (
+                        <span className="dashboard-trait-val tabular-nums">{Math.round(score)}/100</span>
+                      ) : (
+                        <span className="dashboard-trait-na">Not available</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            ) : null}
+          </div>
 
-            <div className="dashboard-widget__footer">
-              <Link to="/analytics" style={{ fontSize: '0.8125rem', color: 'var(--pa-ink, #0B0B0B)', textDecoration: 'underline' }}>
-                View complete history timeline
-              </Link>
-            </div>
-          </section>
-        </div>
+          <footer className="dashboard-profile-footer">
+            <span>{assessments.length} assessment sessions on record.</span>
+          </footer>
+        </section>
+
+        {/* Assessment Records Timeline (Right Rail) */}
+        <section className="dashboard-d2-history" aria-labelledby="history-summary-title">
+          <header className="dashboard-section-header">
+            <h3 id="history-summary-title" className="dashboard-section-title" style={{ fontSize: '1.1rem' }}>
+              Assessment Records
+            </h3>
+          </header>
+
+          <div className="dashboard-history-list">
+            {assessments.slice(0, 4).map((ass) => (
+              <div key={ass.assessmentId} className="dashboard-history-item">
+                <div>
+                  <strong className="dashboard-history-title">
+                    Assessment #{ass.assessmentId?.slice(-4) || '1'}
+                  </strong>
+                  <span className="dashboard-history-date">
+                    {formatDate(ass.createdAt || ass.date)}
+                  </span>
+                </div>
+                <Link
+                  to={`/result/${ass.assessmentId}`}
+                  className="dashboard-quiet-link"
+                >
+                  View
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <footer className="dashboard-section-footer">
+            <Link to="/analytics" className="dashboard-quiet-link">
+              View complete history timeline
+            </Link>
+          </footer>
+        </section>
       </div>
     </ProductShell>
   );

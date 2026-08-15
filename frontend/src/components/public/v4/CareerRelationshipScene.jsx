@@ -16,18 +16,20 @@ export default function CareerRelationshipScene() {
     >
       <div className="career-relationship-v4-inner">
         <header className="career-relationship-v4-header">
-          <h2 id="career-scene-title" className="career-relationship-v4-title">
-            A fit score should explain itself.
-          </h2>
-          <p className="career-relationship-v4-support">
-            Inspect where a role aligns, where it stretches and what could strengthen the relationship.
-          </p>
+          <div className="career-relationship-v4-heading-wrap">
+            <h2 id="career-scene-title" className="career-relationship-v4-title">
+              A fit score should explain itself.
+            </h2>
+            <p className="career-relationship-v4-support">
+              Inspect where a role aligns, where it stretches and what could strengthen the relationship.
+            </p>
+          </div>
+          <span className="career-relationship-v4-demo-label">Illustrative role relationship</span>
         </header>
 
         <div className="career-relationship-v4-grid">
           {/* Role Index Left Rail */}
           <nav className="career-role-index" aria-label="Career role environments">
-            <span className="career-index-heading">Explore Role Relationships</span>
             {careers.map((career, idx) => {
               const isSelected = selectedIdx === idx;
               return (
@@ -45,7 +47,7 @@ export default function CareerRelationshipScene() {
             })}
           </nav>
 
-          {/* Active Career Stage: Media + Open Reasoning Typography */}
+          {/* Active Career Stage: Media + Open Reasoning Typography (No Badges) */}
           <div className="career-active-stage">
             {/* Active Profession Media Frame */}
             <figure className="career-active-media">
@@ -53,16 +55,12 @@ export default function CareerRelationshipScene() {
                 <ResponsiveImage
                   media={currentCareer.media}
                   alt={`Environment for ${currentCareer.title}`}
-                  sizes="(min-width: 1024px) 48vw, 92vw"
+                  sizes="(min-width: 1024px) 50vw, 92vw"
                 />
               )}
-              <div className="career-active-badge">
-                <span className="career-active-badge__title">{currentCareer?.title}</span>
-                <span className="career-active-badge__score tabular-nums">{currentCareer?.match}% Dimensional Fit</span>
-              </div>
             </figure>
 
-            {/* Open Semantic Rationale (No 3 repeated container cards) */}
+            {/* Open Semantic Rationale Typography (No Container Cards) */}
             <div className="career-rationale-flow">
               <div className="career-rationale-block">
                 <h3 className="career-rationale-label">Why it relates</h3>
@@ -80,7 +78,7 @@ export default function CareerRelationshipScene() {
               </div>
 
               <footer className="career-methodology-note">
-                <span>Methodology Boundary:</span> Recommendations represent dimensional alignment for career exploration, not an absolute guarantee of hiring success.
+                Recommendations represent dimensional alignment for career exploration, not an absolute guarantee of hiring success.
               </footer>
             </div>
           </div>

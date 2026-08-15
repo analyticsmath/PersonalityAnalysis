@@ -45,8 +45,9 @@ describe('Phase 4 Public Rebuild visual contract', () => {
     expect(content).toContain('collaborate');
     // Ensure rejected 7988086 is never used
     expect(content).not.toContain('7988086');
-    expect(chrome).toContain('/media/personality-v3/');
+    expect(content).toContain('/media/personality-v3/');
   });
+
 
   it('uses native scrolling with GSAP ScrollTrigger and reduced-motion safety', () => {
     expect(motion).toContain('reducedMotion');

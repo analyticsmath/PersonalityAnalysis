@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-describe('Phase 4 Production Redesign Contract Verification', () => {
+describe('Phase 4 Production Corrective Contract Verification', () => {
   it('verifies all 13 local Pexels photographic assets (including locked build 34804003) and derivatives exist', () => {
     const mediaManifestPath = resolve(process.cwd(), 'public/media/personality-v3/media-provenance.json');
     expect(existsSync(mediaManifestPath)).toBe(true);
@@ -63,7 +63,7 @@ describe('Phase 4 Production Redesign Contract Verification', () => {
     expect(foundationCss).toContain('--pa-focus: #245BD6');
   });
 
-  it('verifies Phase 4 Homepage scenes comply with all negative and positive controls', () => {
+  it('verifies Phase 4 Corrective contract rules: no fake scores, no prohibited class patterns, honest data fallbacks', () => {
     const hero = readFileSync(resolve(process.cwd(), 'src/components/public/v4/EvidenceHero.jsx'), 'utf8');
     const worlds = readFileSync(resolve(process.cwd(), 'src/components/public/v4/WorkWorldsTheatre.jsx'), 'utf8');
     const eqs = readFileSync(resolve(process.cwd(), 'src/components/public/v4/EvidenceQuestionSignal.jsx'), 'utf8');
@@ -71,39 +71,56 @@ describe('Phase 4 Production Redesign Contract Verification', () => {
     const career = readFileSync(resolve(process.cwd(), 'src/components/public/v4/CareerRelationshipScene.jsx'), 'utf8');
     const devLoop = readFileSync(resolve(process.cwd(), 'src/components/public/v4/DevelopmentEvidenceLoop.jsx'), 'utf8');
     const trust = readFileSync(resolve(process.cwd(), 'src/components/public/v4/TrustResolution.jsx'), 'utf8');
+    const chrome = readFileSync(resolve(process.cwd(), 'src/components/public/PublicChrome.jsx'), 'utf8');
+    const motion = readFileSync(resolve(process.cwd(), 'src/components/public/PublicMotionRoot.jsx'), 'utf8');
+    const marketing = readFileSync(resolve(process.cwd(), 'src/pages/PublicMarketingPage.jsx'), 'utf8');
+    const dashboard = readFileSync(resolve(process.cwd(), 'src/pages/Dashboard/index.js'), 'utf8');
 
-    // 1. Scene 1: Evidence Studio Hero (3 approved Pexels media layers + native fragments)
-    expect(hero).toContain('evidence-hero-v4');
-    expect(hero).toContain('hero-v4-plane--dominant');
-    expect(hero).toContain('hero-v4-plane--supporting');
-    expect(hero).toContain('hero-v4-plane--wall');
-    expect(hero).toContain('Your work');
-    expect(hero).toContain('leaves evidence.');
+    // 1. Hero contains no 88/100, Artifact #, or fake signal score
+    expect(hero).not.toContain('88/100');
+    expect(hero).not.toContain('Artifact #');
+    expect(hero).not.toContain('Signal:');
 
-    // 2. Scene 2: Work Worlds Theatre (6 worlds with persistent stage)
-    expect(worlds).toContain('work-worlds-theatre-v4');
-    expect(worlds).toContain('Work changes the evidence.');
-    expect(worlds).toContain('world-stage-slot');
+    // 2. Context demo starts with zero selected radio choices and contains no fabricated weights/records
+    expect(eqs).toContain('useState(null)');
+    expect(eqs).not.toContain('Reliability Weight');
+    expect(eqs).not.toContain('Agility Weight');
+    expect(eqs).not.toContain('Governance Weight');
+    expect(eqs).not.toContain('Verified Background Record #');
 
-    // 3. Scene 3: Evidence -> Question -> Signal
-    expect(eqs).toContain('evidence-question-signal-v4');
-    expect(eqs).toContain('Context changes the question.');
-    expect(eqs).toContain('eqs-responses-group');
+    // 3. Work Worlds contains semantic settled labels and no pills / World: tag
+    expect(worlds).toContain('-settled');
+    expect(worlds).not.toContain('world-nav-pill');
+    expect(worlds).not.toContain('World:');
 
-    // 4. Scene 4: Living Profile Field (4 independent lenses)
-    expect(profile).toContain('living-profile-field-v4');
-    expect(profile).toContain('Four readings. Kept separate.');
+    // 4. Living Profile contains no value cells
+    expect(profile).not.toContain('profile-value-cell');
 
-    // 5. Scene 5: Career Relationship
-    expect(career).toContain('career-relationship-v4');
-    expect(career).toContain('A fit score should explain itself.');
+    // 5. Career scene contains no badges
+    expect(career).not.toContain('career-active-badge');
+    expect(career).not.toContain('Methodology Boundary:');
 
-    // 6. Scene 6: Continuous Development Loop
-    expect(devLoop).toContain('development-evidence-loop-v4');
-    expect(devLoop).toContain('New work changes the profile.');
+    // 6. Development loop contains no 01-05 numbered steps
+    expect(devLoop).not.toContain('01');
+    expect(devLoop).not.toContain('05');
 
-    // 7. Scene 7: Trust Resolution
-    expect(trust).toContain('trust-resolution-v4');
-    expect(trust).toContain('See what shaped the result.');
+    // 7. Trust resolution contains single provenance flow, no pipeline cards
+    expect(trust).toContain('trust-provenance-flow');
+    expect(trust).not.toContain('trust-pipeline-node');
+
+    // 8. Methodology route does not render .methodology-atlas-card or Framework #
+    expect(marketing).not.toContain('methodology-atlas-card');
+    expect(marketing).not.toContain('Framework #');
+
+    // 9. Public header does not use window.scrollY > 120 as hero release logic
+    expect(chrome).not.toContain('window.scrollY > 120');
+
+    // 10. Global PublicMotionRoot does not instantiate ScrollSmoother
+    expect(motion).not.toContain('ScrollSmoother.create');
+
+    // 11. Dashboard presentation does not fall back missing trait to 50 or career fit to 80
+    expect(dashboard).not.toContain('?? 50');
+    expect(dashboard).not.toContain('|| 80');
+    expect(dashboard).toContain('toFiniteNumberOrNull');
   });
 });

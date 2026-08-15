@@ -1,9 +1,9 @@
-/* Phase 4 Production — Longitudinal Analytics Product Styles */
+/* Phase 4 Production — Longitudinal Analytics Product Styles (Corrected) */
 
 .analytics-v4-workspace {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 40px;
 }
 
 .analytics-v4-header {
@@ -27,50 +27,55 @@
   margin: 0;
 }
 
-.analytics-v4-section {
+.analytics-v4-chapter {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
-.analytics-section-title-row {
+.analytics-chapter-header {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.analytics-section-tag {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--pa-muted, #767B81);
-}
-
-.analytics-section-title {
-  font-size: 1.25rem;
+.analytics-chapter-title {
+  font-size: 1.35rem;
   font-weight: 600;
   color: var(--pa-ink, #0B0B0B);
   margin: 0;
 }
 
-.analytics-section-grid {
+/* ── 1. Trajectory Layout: Dominant Trend + Side Card ── */
+.analytics-trend-layout {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(16px, 1.8vw, 24px);
+  grid-template-columns: minmax(340px, 66%) 1fr;
+  gap: clamp(16px, 2vw, 24px);
   align-items: start;
 }
 
-.analytics-grid-main {
-  grid-column: span 8;
+/* ── 2. Capabilities Layout: 2 Columns ── */
+.analytics-capabilities-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 2vw, 24px);
+  align-items: start;
 }
 
-.analytics-grid-side {
-  grid-column: span 4;
+/* ── 3. Timeline Layout: 2 Columns ── */
+.analytics-timeline-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 2vw, 24px);
+  align-items: start;
 }
 
-.analytics-grid-col {
-  grid-column: span 6;
+/* ── 4. Actions Layout: 2 Columns ── */
+.analytics-actions-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 2vw, 24px);
+  align-items: start;
 }
 
 /* ── Top Summary Metric Strip ── */
@@ -222,9 +227,10 @@
 }
 
 @media (max-width: 1023px) {
-  .analytics-grid-main,
-  .analytics-grid-side,
-  .analytics-grid-col {
-    grid-column: span 12;
+  .analytics-trend-layout,
+  .analytics-capabilities-layout,
+  .analytics-timeline-layout,
+  .analytics-actions-layout {
+    grid-template-columns: 1fr;
   }
 }

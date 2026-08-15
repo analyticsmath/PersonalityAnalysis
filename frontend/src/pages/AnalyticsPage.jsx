@@ -62,83 +62,67 @@ export default function AnalyticsPage() {
           </p>
         </header>
 
-        {/* Section 1: Overview Summary */}
-        <section className="analytics-v4-section" aria-labelledby="overview-heading">
+        {/* Section 1: Overview Summary Strip */}
+        <section className="analytics-v4-chapter" aria-labelledby="overview-heading">
           <PersonalIntelligenceOverview query={overviewQ} />
         </section>
 
-        {/* Section 2: How has the profile changed? */}
-        <section className="analytics-v4-section" aria-labelledby="profile-shifts-heading">
-          <div className="analytics-section-title-row">
-            <span className="analytics-section-tag">01. Trajectory Analysis</span>
-            <h2 id="profile-shifts-heading" className="analytics-section-title">
+        {/* Question 1: How has your profile evolved? (Dominant Full-Width Trend Visualization) */}
+        <section className="analytics-v4-chapter analytics-v4-chapter--trend" aria-labelledby="profile-shifts-heading">
+          <div className="analytics-chapter-header">
+            <h2 id="profile-shifts-heading" className="analytics-chapter-title">
               How has your profile evolved?
             </h2>
           </div>
-          <div className="analytics-section-grid">
-            <div className="analytics-grid-main">
+          <div className="analytics-trend-layout">
+            <div className="analytics-trend-main">
               <TraitTrendChart query={trendsQ} />
             </div>
-            <div className="analytics-grid-side">
+            <div className="analytics-trend-side">
               <CareerReadinessCard query={readinessQ} />
             </div>
           </div>
         </section>
 
-        {/* Section 3: What skills & milestones changed? */}
-        <section className="analytics-v4-section" aria-labelledby="skills-milestones-heading">
-          <div className="analytics-section-title-row">
-            <span className="analytics-section-tag">02. Verified Progress</span>
-            <h2 id="skills-milestones-heading" className="analytics-section-title">
-              What capabilities and milestones have advanced?
+        {/* Question 2: How has career direction changed? (Verified Progress) */}
+        <section className="analytics-v4-chapter" aria-labelledby="skills-milestones-heading">
+          <div className="analytics-chapter-header">
+            <h2 id="skills-milestones-heading" className="analytics-chapter-title">
+              How has career direction changed?
             </h2>
           </div>
-          <div className="analytics-section-grid">
-            <div className="analytics-grid-col">
-              <SkillProgressPanel query={skillQ} />
-            </div>
-            <div className="analytics-grid-col">
-              <RoadmapProgressPanel resultId={latestResultId} careerId={topCareerId} />
-            </div>
+          <div className="analytics-capabilities-layout">
+            <SkillProgressPanel query={skillQ} />
+            <RoadmapProgressPanel resultId={latestResultId} careerId={topCareerId} />
           </div>
         </section>
 
-        {/* Section 4: What happened when? */}
-        <section className="analytics-v4-section" aria-labelledby="timeline-heading">
-          <div className="analytics-section-title-row">
-            <span className="analytics-section-tag">03. Evidence Timeline</span>
-            <h2 id="timeline-heading" className="analytics-section-title">
-              What milestones occurred when?
+        {/* Question 3: What evidence changed? (Timeline) */}
+        <section className="analytics-v4-chapter" aria-labelledby="timeline-heading">
+          <div className="analytics-chapter-header">
+            <h2 id="timeline-heading" className="analytics-chapter-title">
+              What evidence changed?
             </h2>
           </div>
-          <div className="analytics-section-grid">
-            <div className="analytics-grid-col">
-              <AssessmentHistoryList query={historyQ} />
-            </div>
-            <div className="analytics-grid-col">
-              <InsightTimeline query={timelineQ} />
-            </div>
+          <div className="analytics-timeline-layout">
+            <AssessmentHistoryList query={historyQ} />
+            <InsightTimeline query={timelineQ} />
           </div>
         </section>
 
-        {/* Section 5: Reports & Recommendations */}
-        <section className="analytics-v4-section" aria-labelledby="reports-heading">
-          <div className="analytics-section-title-row">
-            <span className="analytics-section-tag">04. Deliverables &amp; Direction</span>
-            <h2 id="reports-heading" className="analytics-section-title">
-              Reports and strategic recommendations
+        {/* Question 4: What should you inspect next? (Deliverables & Actions) */}
+        <section className="analytics-v4-chapter" aria-labelledby="reports-heading">
+          <div className="analytics-chapter-header">
+            <h2 id="reports-heading" className="analytics-chapter-title">
+              What should you inspect next?
             </h2>
           </div>
-          <div className="analytics-section-grid">
-            <div className="analytics-grid-col">
-              <ReportHistoryPanel query={reportHistQ} />
-            </div>
-            <div className="analytics-grid-col">
-              <GrowthRecommendationsPanel
-                query={reportHistQ}
-                items={reportHistQ.data?.growthRecommendations || []}
-              />
-            </div>
+          <div className="analytics-actions-layout">
+            <ReportHistoryPanel query={reportHistQ} />
+            <GrowthRecommendationsPanel
+              query={reportHistQ}
+              items={reportHistQ.data?.growthRecommendations || []}
+            />
           </div>
         </section>
       </div>

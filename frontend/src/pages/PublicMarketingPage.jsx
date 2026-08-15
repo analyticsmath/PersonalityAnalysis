@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Arrow, PublicLayout, ResponsiveImage } from '../components/public/PublicChrome';
 import { publicMedia } from '../content/personalityMarketingDemo';
 import './PublicSite.css';
-
 
 /* ── 1. How It Works: Persistent Process Stage ─────────────────────────────── */
 function HowItWorksRoute() {
@@ -13,37 +14,67 @@ function HowItWorksRoute() {
   const steps = [
     {
       id: 'context',
-      tag: '01. Context Ingestion',
-      title: 'Professional Context',
-      summary: 'Your CV or manual work history gives the assessment a concrete baseline.',
-      detail: 'Instead of starting from zero, the engine parses project complexity, tools, domain depth, and operational constraints.',
+      name: 'Context Ingestion',
+      statement: 'Verified background context provides an authentic baseline.',
       media: publicMedia.hero.dominant,
     },
     {
       id: 'questions',
-      tag: '02. Adaptive Calibration',
-      title: 'Adaptive Questioning',
-      summary: 'Questions adapt based on previous responses and domain complexity.',
-      detail: 'The engine isolates behavioral nuances, trade-off decisions, and leadership style rather than asking generic Likert questions.',
+      name: 'Adaptive Inversion',
+      statement: 'Questions adapt to your real domain complexity and trade-offs.',
       media: publicMedia.worlds[0]?.media,
     },
     {
       id: 'readings',
-      tag: '03. Independent Dimensions',
-      title: 'Four Profile Readings',
-      summary: 'Personality, interests, values, and career signals remain separate.',
-      detail: 'We never collapse your multidimensional profile into a simplistic archetype or single score.',
+      name: 'Four Independent Readings',
+      statement: 'Personality, interests, values, and career signals remain uncollapsed.',
       media: publicMedia.hero.process,
     },
     {
       id: 'direction',
-      tag: '04. Career Alignment',
-      title: 'Career Direction & Rationale',
-      summary: 'Inspect why a role relates, where it stretches, and how to build readiness.',
-      detail: 'Fit scores are backed by transparent dimensional contributions, capability gaps, and actionable roadmap milestones.',
+      name: 'Explainable Career Fit',
+      statement: 'Inspect dimensional alignment, stretch areas, and growth paths.',
       media: publicMedia.careers[0]?.media,
     },
   ];
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      mm.add('(min-width: 1024px) and (pointer: fine)', () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            id: 'hiw-persistent-timeline',
+            trigger: containerRef.current,
+            start: 'top 80px',
+            end: '+=280vh',
+            pin: true,
+            scrub: 0.35,
+            anticipatePin: 1,
+            onUpdate: (self) => {
+              const idx = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
+              setActiveStep(idx);
+            },
+          },
+        });
+
+        steps.forEach((_, i) => {
+          tl.addLabel(`step-${i}`);
+          tl.to({}, { duration: 1 });
+        });
+
+        return () => {
+          tl.scrollTrigger?.kill();
+          tl.kill();
+        };
+      });
+
+      return () => mm.revert();
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [steps.length]);
 
   return (
     <section className="secondary-route hiw-stage-route" data-header-scene="light">
@@ -63,16 +94,14 @@ function HowItWorksRoute() {
       <div className="hiw-persistent-stage" ref={containerRef}>
         <div className="hiw-rail-column">
           {steps.map((step, idx) => (
-            <article
+            <div
               key={step.id}
-              className={`hiw-step-block ${activeStep === idx ? 'is-active' : ''}`}
+              className={`hiw-step-row ${activeStep === idx ? 'is-active' : ''}`}
               onClick={() => setActiveStep(idx)}
             >
-              <span className="hiw-step-tag">{step.tag}</span>
-              <h2 className="hiw-step-title">{step.title}</h2>
-              <p className="hiw-step-summary">{step.summary}</p>
-              <p className="hiw-step-detail">{step.detail}</p>
-            </article>
+              <h2 className="hiw-step-name">{step.name}</h2>
+              <p className="hiw-step-statement">{step.statement}</p>
+            </div>
           ))}
         </div>
 
@@ -82,14 +111,13 @@ function HowItWorksRoute() {
               {steps[activeStep]?.media && (
                 <ResponsiveImage
                   media={steps[activeStep].media}
-                  alt={steps[activeStep].title}
-                  sizes="(min-width: 1024px) 46vw, 92vw"
+                  alt={steps[activeStep].name}
+                  sizes="(min-width: 1024px) 48vw, 92vw"
                 />
               )}
             </figure>
             <div className="hiw-visual-stage__caption">
-              <span className="hiw-visual-stage__tag">{steps[activeStep]?.tag}</span>
-              <span className="hiw-visual-stage__label">{steps[activeStep]?.title}</span>
+              <span className="hiw-visual-stage__label">{steps[activeStep]?.name}</span>
             </div>
           </div>
         </div>
@@ -133,7 +161,7 @@ function CareerIntelligenceRoute() {
             ))}
           </nav>
 
-          {/* Active Career Stage */}
+          {/* Active Career Stage (No Badges / Open Typography) */}
           <div className="career-atlas-detail">
             <figure className="career-atlas-environment-media">
               {activeRole?.media && (
@@ -143,10 +171,6 @@ function CareerIntelligenceRoute() {
                   sizes="(min-width: 1024px) 50vw, 92vw"
                 />
               )}
-              <div className="career-atlas-environment-badge">
-                <span className="career-atlas-badge-title">{activeRole?.title}</span>
-                <span className="career-atlas-badge-score tabular-nums">{activeRole?.match}% Dimensional Fit</span>
-              </div>
             </figure>
 
             <div className="career-atlas-reasoning-flow">
@@ -166,7 +190,7 @@ function CareerIntelligenceRoute() {
               </div>
 
               <div className="career-atlas-methodology-note">
-                <span>Methodology Boundary:</span> Recommendations represent dimensional alignment for career exploration, not an absolute hiring endorsement.
+                Recommendations represent dimensional alignment for career exploration, not an absolute hiring endorsement.
               </div>
             </div>
           </div>
@@ -176,38 +200,43 @@ function CareerIntelligenceRoute() {
   );
 }
 
-/* ── 3. Progress: Longitudinal Development Journey ─────────────────────────── */
+/* ── 3. Progress: Mixed-Scale Visual Journey ───────────────────────────────── */
 function ProgressRoute() {
   const steps = [
     {
-      num: '01',
+      id: 'gap',
       name: 'Gap Discovery',
       body: 'Identify specific dimensional stretches or unproven competencies between your current profile and target roles.',
       media: publicMedia.hero.dominant,
+      scale: 'large',
     },
     {
-      num: '02',
+      id: 'action',
       name: 'Deliberate Action',
-      body: 'Engage in targeted challenges and initiatives designed to test and develop required capabilities.',
+      body: 'Engage in targeted initiatives designed to develop unproven capabilities through real constraints.',
       media: publicMedia.worlds[0]?.media,
+      scale: 'detail',
     },
     {
-      num: '03',
+      id: 'artifact',
       name: 'Visible Artifact Creation',
-      body: 'Produce tangible deliverables—system architectures, codebases, research analyses, or operational plans.',
+      body: 'Produce tangible deliverables—system architectures, codebases, research syntheses, or operational frameworks.',
       media: publicMedia.hero.process,
+      scale: 'fragment',
     },
     {
-      num: '04',
+      id: 'evidence',
       name: 'New Evidence Ingestion',
-      body: 'Incorporate verified project deliverables and expanded work context back into your assessment records.',
+      body: 'Incorporate verified project deliverables and expanded work context back into your profile record.',
       media: publicMedia.hero.evidenceWall,
+      scale: 'wide',
     },
     {
-      num: '05',
-      name: 'Profile Re-calibration',
+      id: 'recalibration',
+      name: 'Profile Return',
       body: 'Re-calibrate dimensional scores and updated career alignment as your verified work portfolio expands.',
       media: publicMedia.careers[0]?.media,
+      scale: 'end',
     },
   ];
 
@@ -220,24 +249,24 @@ function ProgressRoute() {
         </p>
       </header>
 
-      <div className="progress-staggered-flow">
+      {/* Mixed-Scale Visual Journey (No 01-05 Numbered Cards with Identical Silhouettes) */}
+      <div className="progress-mixed-flow">
         {steps.map((st) => (
-          <article key={st.num} className="progress-staggered-node">
-            <div className="progress-node-text">
-              <span className="progress-node-num">{st.num}</span>
-              <h2 className="progress-node-title">{st.name}</h2>
-              <p className="progress-node-body">{st.body}</p>
+          <div key={st.id} className={`progress-moment progress-moment--${st.scale}`}>
+            <div className="progress-moment-text">
+              <h2 className="progress-moment-title">{st.name}</h2>
+              <p className="progress-moment-body">{st.body}</p>
             </div>
-            <figure className="progress-node-media">
+            <figure className="progress-moment-media">
               {st.media && (
                 <ResponsiveImage
                   media={st.media}
                   alt={st.name}
-                  sizes="(min-width: 1024px) 36vw, 90vw"
+                  sizes="(min-width: 1024px) 44vw, 90vw"
                 />
               )}
             </figure>
-          </article>
+          </div>
         ))}
       </div>
     </section>
@@ -246,6 +275,41 @@ function ProgressRoute() {
 
 /* ── 4. Methodology: Analytical Atlas ──────────────────────────────────────── */
 function MethodologyRoute() {
+  const [activeFramework, setActiveFramework] = useState('bigfive');
+
+  const frameworks = [
+    {
+      id: 'bigfive',
+      name: 'Big Five Spectrum',
+      desc: 'Evaluates Openness, Conscientiousness, Extraversion, Agreeableness, and Emotional Stability as continuous spectrums on a 0–100 scale, rejecting arbitrary binary labels or archetypes.',
+      scale: '0–100 Continuous Scale',
+      basis: 'Empirical Psychometrics',
+    },
+    {
+      id: 'riasec',
+      name: 'RIASEC Vocational Territories',
+      desc: 'Measures alignment across Realistic, Investigative, Artistic, Social, Enterprising, and Conventional work environments to assess affinity with specific day-to-day operational tasks.',
+      scale: '6 Distinct Operational Territories',
+      basis: 'Holland Vocational Theory',
+    },
+    {
+      id: 'values',
+      name: 'Work Values Hierarchy',
+      desc: 'Ranks core workplace motivations—such as Autonomy, Mastery, Purpose, and Collaboration—to identify cultural and operational preferences that sustain long-term engagement.',
+      scale: '12 Ordered Motivational Dimensions',
+      basis: 'Workplace Psychology',
+    },
+    {
+      id: 'signals',
+      name: 'Demonstrated Career Signals',
+      desc: 'Synthesizes practical problem solving, technical depth, learning agility, and situational leadership derived directly from structured adaptive scenario responses.',
+      scale: 'Synthesized Competency Vectors',
+      basis: 'Behavioral Scenario Calibration',
+    },
+  ];
+
+  const current = frameworks.find((f) => f.id === activeFramework) || frameworks[0];
+
   return (
     <section className="secondary-route methodology-atlas-route" data-header-scene="light">
       <header className="secondary-route__header">
@@ -255,214 +319,189 @@ function MethodologyRoute() {
         </p>
       </header>
 
-      <div className="methodology-atlas-grid">
-        {/* Framework 1: Big Five */}
-        <article className="methodology-atlas-card">
-          <div className="methodology-card-head">
-            <span className="methodology-card-tag">Framework #01</span>
-            <h2 className="methodology-card-title">Big Five Dimensional Spectrum</h2>
-          </div>
-          <p className="methodology-card-desc">
-            Evaluates Openness, Conscientiousness, Extraversion, Agreeableness, and Emotional Stability as continuous spectrums on a 0–100 scale, rejecting arbitrary binary labels or archetypes.
-          </p>
-          <div className="methodology-spec-row">
-            <span>Scale: 0–100 Continuous</span>
-            <span>Anchor: Empirical psychometrics</span>
-          </div>
-        </article>
+      {/* Analytical Reference Atlas (Left Index Rail + Right Native Representation Field) */}
+      <div className="methodology-atlas-layout">
+        <nav className="methodology-atlas-nav" aria-label="Methodology frameworks">
+          {frameworks.map((fw) => (
+            <button
+              key={fw.id}
+              type="button"
+              className={`methodology-atlas-nav-btn ${activeFramework === fw.id ? 'is-active' : ''}`}
+              onClick={() => setActiveFramework(fw.id)}
+            >
+              <span className="methodology-atlas-nav-title">{fw.name}</span>
+            </button>
+          ))}
+        </nav>
 
-        {/* Framework 2: RIASEC */}
-        <article className="methodology-atlas-card">
-          <div className="methodology-card-head">
-            <span className="methodology-card-tag">Framework #02</span>
-            <h2 className="methodology-card-title">RIASEC Vocational Territories</h2>
+        <div className="methodology-atlas-field">
+          <div className="methodology-atlas-field__head">
+            <h2 className="methodology-atlas-field__title">{current.name}</h2>
+            <p className="methodology-atlas-field__desc">{current.desc}</p>
           </div>
-          <p className="methodology-card-desc">
-            Measures alignment across Realistic, Investigative, Artistic, Social, Enterprising, and Conventional work environments to assess affinity with specific day-to-day operational tasks.
-          </p>
-          <div className="methodology-spec-row">
-            <span>6 Territories</span>
-            <span>Anchor: Holland vocational theory</span>
-          </div>
-        </article>
 
-        {/* Framework 3: Work Values */}
-        <article className="methodology-atlas-card">
-          <div className="methodology-card-head">
-            <span className="methodology-card-tag">Framework #03</span>
-            <h2 className="methodology-card-title">Work Values Priority Hierarchy</h2>
+          <div className="methodology-atlas-specs">
+            <div className="methodology-spec-item">
+              <span className="methodology-spec-label">Measurement Scale</span>
+              <strong className="methodology-spec-value">{current.scale}</strong>
+            </div>
+            <div className="methodology-spec-item">
+              <span className="methodology-spec-label">Theoretical Anchor</span>
+              <strong className="methodology-spec-value">{current.basis}</strong>
+            </div>
           </div>
-          <p className="methodology-card-desc">
-            Ranks twelve core workplace motivations—such as Autonomy, Mastery, Purpose, and Collaboration—to identify cultural and operational preferences that sustain long-term engagement.
-          </p>
-          <div className="methodology-spec-row">
-            <span>12 Core Dimensions</span>
-            <span>Anchor: Workplace psychology</span>
-          </div>
-        </article>
 
-        {/* Framework 4: Career Signals */}
-        <article className="methodology-atlas-card">
-          <div className="methodology-card-head">
-            <span className="methodology-card-tag">Framework #04</span>
-            <h2 className="methodology-card-title">Demonstrated Career Signals</h2>
-          </div>
-          <p className="methodology-card-desc">
-            Synthesizes practical problem solving, technical depth, learning agility, and situational leadership derived directly from structured adaptive scenario responses.
-          </p>
-          <div className="methodology-spec-row">
-            <span>Practical Competencies</span>
-            <span>Anchor: Behavioral scenario evaluation</span>
-          </div>
-        </article>
+          {/* Details Disclosure for In-depth Specifications */}
+          <details className="methodology-details-disclosure">
+            <summary className="methodology-details-summary">View calibration specifics &amp; formulas</summary>
+            <div className="methodology-details-content">
+              <p>
+                Scores are calibrated deterministically using item-response weights bounded between 0 and 100.
+                No qualitative LLM generation modifies numeric calculations.
+              </p>
+            </div>
+          </details>
+        </div>
       </div>
 
-      {/* Deterministic Scoring vs AI Narrative Separation */}
-      <div className="methodology-boundary-panel">
-        <h2 className="methodology-boundary-title">Deterministic Scoring &amp; AI Separation</h2>
-        <p className="methodology-boundary-body">
-          All core psychometric scores and career-fit metrics are computed deterministically through versioned algorithms. AI provides qualitative written summaries and context reflections; it never modifies, overrides, or fabricates numeric score outputs.
-        </p>
-      </div>
-
-      <div className="methodology-scope-note">
-        <h3>Scope &amp; Limitations</h3>
-        <p>
-          Personality Assessor is engineered for professional reflection and career exploration. It is not a clinical diagnostic tool, an HR gatekeeping test, or a guarantee of hiring outcomes.
-        </p>
+      {/* Separation & Scope Boundary */}
+      <div className="methodology-scope-footer">
+        <div className="methodology-scope-block">
+          <h3>Deterministic Scoring &amp; AI Separation</h3>
+          <p>
+            All core psychometric scores and career-fit metrics are computed deterministically through versioned algorithms. AI provides qualitative written summaries and context reflections; it never modifies, overrides, or fabricates numeric score outputs.
+          </p>
+        </div>
+        <div className="methodology-scope-block">
+          <h3>Scope &amp; Limitations</h3>
+          <p>
+            Personality Assessor is engineered for professional reflection and career exploration. It is not a clinical diagnostic tool, an HR gatekeeping test, or a guarantee of hiring outcomes.
+          </p>
+        </div>
       </div>
     </section>
   );
 }
 
-/* ── 5. Trust: Provenance Flow ─────────────────────────────────────────────── */
+/* ── 5. Trust: Inspectable Provenance Architecture ──────────────────────────── */
 function TrustRoute() {
-  const steps = [
-    {
-      num: '01',
-      title: 'Context & Baseline Input',
-      desc: 'Resume parsing or manual background inputs create the initial baseline. Adaptive questions emerge from verified domain anchors.',
-    },
-    {
-      num: '02',
-      title: 'Deterministic Scoring Logic',
-      desc: 'Psychometric scores across Big Five, RIASEC, Work Values, and Career Signals are computed via versioned deterministic algorithms.',
-    },
-    {
-      num: '03',
-      title: 'AI Narrative Role & Boundaries',
-      desc: 'AI drafts qualitative summaries and context reflections. If AI services are delayed or unavailable, structured scores remain fully accessible.',
-    },
-    {
-      num: '04',
-      title: 'Evidence Completeness Signals',
-      desc: 'Confidence describes available data completeness and scoring consistency. Missing information is explicitly surfaced rather than hidden.',
-    },
-    {
-      num: '05',
-      title: 'Account Data Governance',
-      desc: 'You maintain direct control over your stored assessments, CV context, and profile records with immediate export and deletion options.',
-    },
-  ];
-
   return (
     <section className="secondary-route trust-provenance-route" data-header-scene="light">
       <header className="secondary-route__header">
-        <h1 className="secondary-route__title">Know what shaped the result.</h1>
+        <h1 className="secondary-route__title">See what shaped the result.</h1>
         <p className="secondary-route__lead">
-          Our psychometric models, AI role, and data boundaries are explicitly defined, inspectable, and verifiable.
+          Clear separation between verified background context, deterministic psychometric computation, qualitative AI narrative assistance, and your direct data controls.
         </p>
       </header>
 
-      <div className="trust-pipeline-flow">
-        {steps.map((st) => (
-          <div key={st.num} className="trust-pipeline-card">
-            <span className="trust-pipeline-num">{st.num}</span>
-            <h2 className="trust-pipeline-name">{st.title}</h2>
-            <p className="trust-pipeline-body">{st.desc}</p>
+      {/* Single Inspectable Provenance Architecture */}
+      <div className="trust-architecture-flow">
+        <div className="trust-arch-step">
+          <div className="trust-arch-step__head">
+            <span className="trust-arch-step__marker" />
+            <h2 className="trust-arch-step__title">1. Context Ingestion</h2>
           </div>
-        ))}
-      </div>
+          <p className="trust-arch-step__body">
+            CV documents and manual work history provide authentic starting anchors without forced zero-baselines.
+          </p>
+        </div>
 
-      <div className="trust-route-actions">
-        <Link className="public-cta-button public-cta-button--primary" to="/privacy">
-          Review Privacy Controls <Arrow />
-        </Link>
+        <div className="trust-arch-step">
+          <div className="trust-arch-step__head">
+            <span className="trust-arch-step__marker" />
+            <h2 className="trust-arch-step__title">2. Deterministic Scoring</h2>
+          </div>
+          <p className="trust-arch-step__body">
+            Big Five, RIASEC, Work Values, and Career Signals use versioned deterministic algorithms, never black-box guesses.
+          </p>
+        </div>
+
+        <div className="trust-arch-step">
+          <div className="trust-arch-step__head">
+            <span className="trust-arch-step__marker" />
+            <h2 className="trust-arch-step__title">3. Narrative Assistance</h2>
+          </div>
+          <p className="trust-arch-step__body">
+            AI generates qualitative summaries and contextual reflections. It is strictly air-gapped from numeric scoring.
+          </p>
+        </div>
+
+        <div className="trust-arch-step">
+          <div className="trust-arch-step__head">
+            <span className="trust-arch-step__marker" />
+            <h2 className="trust-arch-step__title">4. Direct User Governance</h2>
+          </div>
+          <p className="trust-arch-step__body">
+            You maintain full ownership. Export your complete data ledger, delete individual assessments, or erase your profile.
+          </p>
+        </div>
       </div>
     </section>
   );
 }
 
-/* ── 6. Privacy: Data Control Map ─────────────────────────────────────────── */
+/* ── 6. Privacy: Data-Control Map ──────────────────────────────────────────── */
 function PrivacyRoute() {
-  const controls = [
+  const commitments = [
     {
-      scope: 'Data Portability',
-      title: 'Export Stored Records',
-      desc: 'Download a complete JSON export of your profile, assessments, roadmap milestones, and analytics history at any time.',
+      title: 'Full Export Portability',
+      body: 'Download your entire assessment history, scores, and context documents in open JSON and printable formats anytime.',
     },
     {
-      scope: 'Context Management',
-      title: 'Remove CV & Background Context',
-      desc: 'Purge uploaded resumes and parsed background context while preserving your baseline account settings.',
+      title: 'Granular Record Deletion',
+      body: 'Selectively remove individual assessments or uploaded resume documents without losing your account identity.',
     },
     {
-      scope: 'Selective Deletion',
-      title: 'Delete Individual Assessments',
-      desc: 'Selectively delete individual historical assessment sessions from your profile without losing your account history.',
+      title: 'No Advertising or Model Training',
+      body: 'Your psychometric data and career history are never sold to third parties or used to train public machine learning models.',
     },
     {
-      scope: 'Account Removal',
-      title: 'Permanent Account Deletion',
-      desc: 'Irrevocably erase your entire account, credentials, and all associated analytical records across our databases.',
+      title: 'Zero Permanent Lock-in',
+      body: 'Close and permanently erase your account in one click. All associated scores and vectors are purged from active databases.',
     },
   ];
 
   return (
-    <section className="secondary-route privacy-map-route" data-header-scene="light">
+    <section className="secondary-route privacy-ledger-route" data-header-scene="light">
       <header className="secondary-route__header">
-        <h1 className="secondary-route__title">Your data. Your controls.</h1>
+        <h1 className="secondary-route__title">Your data stays yours.</h1>
         <p className="secondary-route__lead">
-          Account controls let you export stored records, remove CV context, delete individual assessments, or permanently erase your account.
+          We treat psychometric and career records as sensitive personal data. You maintain direct control over ingestion, storage, export, and deletion.
         </p>
       </header>
 
-      <div className="privacy-map-grid">
-        {controls.map((ctrl) => (
-          <article key={ctrl.title} className="privacy-map-card">
-            <span className="privacy-map-scope">{ctrl.scope}</span>
-            <h2 className="privacy-map-title">{ctrl.title}</h2>
-            <p className="privacy-map-desc">{ctrl.desc}</p>
-          </article>
+      <div className="privacy-ledger-grid">
+        {commitments.map((com) => (
+          <div key={com.title} className="privacy-ledger-item">
+            <h2 className="privacy-ledger-title">{com.title}</h2>
+            <p className="privacy-ledger-body">{com.body}</p>
+          </div>
         ))}
-      </div>
-
-      <div className="privacy-route-actions">
-        <Link className="public-cta-button public-cta-button--primary" to="/login">
-          Sign in to manage your data <Arrow />
-        </Link>
       </div>
     </section>
   );
 }
 
-const routeMap = {
-  'how-it-works': HowItWorksRoute,
-  'career-intelligence': CareerIntelligenceRoute,
-  progress: ProgressRoute,
-  methodology: MethodologyRoute,
-  trust: TrustRoute,
-  privacy: PrivacyRoute,
-};
+/* ── Secondary Public Route Container ──────────────────────────────────────── */
+export default function PublicMarketingPage({ route = 'how-it-works' }) {
+  const renderRoute = () => {
+    switch (route) {
+      case 'how-it-works':
+        return <HowItWorksRoute />;
+      case 'career-intelligence':
+        return <CareerIntelligenceRoute />;
+      case 'progress':
+        return <ProgressRoute />;
+      case 'methodology':
+        return <MethodologyRoute />;
+      case 'trust':
+        return <TrustRoute />;
+      case 'privacy':
+        return <PrivacyRoute />;
+      default:
+        return <HowItWorksRoute />;
+    }
+  };
 
-export default function PublicMarketingPage({ type }) {
-  const Component = routeMap[type] || HowItWorksRoute;
-
-  return (
-    <PublicLayout page={type}>
-      <main id="main-content" className={`marketing-page-container marketing-page--${type}`}>
-        <Component />
-      </main>
-    </PublicLayout>
-  );
+  return <PublicLayout>{renderRoute()}</PublicLayout>;
 }

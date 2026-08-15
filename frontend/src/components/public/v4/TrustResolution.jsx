@@ -2,26 +2,22 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Arrow } from '../PublicChrome';
 
-const trustPillars = [
+const trustStages = [
   {
-    tag: '01. Input',
-    title: 'Professional Context',
-    desc: 'CV uploads or manual career history provide authentic starting anchors without forced zero-baselines.',
+    label: 'Context',
+    line: 'Authentic starting anchors from verified background records.',
   },
   {
-    tag: '02. Compute',
-    title: 'Deterministic Scoring',
-    desc: 'Big Five, RIASEC, Work Values and Career Signals use versioned deterministic algorithms, never black-box guesses.',
+    label: 'Structured scoring',
+    line: 'Deterministic psychometric algorithms across four separate readings.',
   },
   {
-    tag: '03. Separation',
-    title: 'Narrative Assistance Role',
-    desc: 'AI drafts qualitative summaries and context reflections; it never modifies, fabricates or overrides numeric scores.',
+    label: 'Narrative assistance',
+    line: 'AI drafts qualitative summaries; it never overrides numeric scores.',
   },
   {
-    tag: '04. Governance',
-    title: 'Direct User Controls',
-    desc: 'You can export data, selectively delete assessments, or permanently erase your account at any time.',
+    label: 'Your controls',
+    line: 'Direct data export, granular deletion, and account erasure.',
   },
 ];
 
@@ -43,13 +39,18 @@ export default function TrustResolution() {
           </p>
         </header>
 
-        {/* Provenance Pipeline Cards / Nodes */}
-        <div className="trust-pipeline-flow">
-          {trustPillars.map((pillar) => (
-            <div key={pillar.tag} className="trust-pipeline-node">
-              <span className="trust-pipeline-tag">{pillar.tag}</span>
-              <h3 className="trust-pipeline-title">{pillar.title}</h3>
-              <p className="trust-pipeline-desc">{pillar.desc}</p>
+        {/* Single Connected Provenance Line (No Individual Cards / No 01-04 Tags) */}
+        <div className="trust-provenance-flow" aria-label="Data and governance provenance">
+          {trustStages.map((stage, idx) => (
+            <div key={stage.label} className="trust-provenance-stage">
+              <div className="trust-provenance-head">
+                <span className="trust-provenance-node-marker" aria-hidden="true" />
+                <strong className="trust-provenance-label">{stage.label}</strong>
+              </div>
+              <p className="trust-provenance-line">{stage.line}</p>
+              {idx < trustStages.length - 1 && (
+                <div className="trust-provenance-connector" aria-hidden="true" />
+              )}
             </div>
           ))}
         </div>

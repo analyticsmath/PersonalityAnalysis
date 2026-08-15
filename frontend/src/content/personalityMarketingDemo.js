@@ -64,8 +64,10 @@ const v3Media = (
   pageUrl,
   cropNotes,
   maxDimensions,
+  basePath: `/media/personality-v3/${folder}/${file}`,
   v3: true,
 });
+
 
 export const publicMedia = {
   hero: {
