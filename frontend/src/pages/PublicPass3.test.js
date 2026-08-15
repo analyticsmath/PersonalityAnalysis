@@ -18,10 +18,10 @@ describe('Public rebuild visual contract', () => {
     );
   });
 
-  it('uses the exact Phase 3A/3B home copy and no rejected headline treatment', () => {
+  it('uses the exact Phase 3C home copy and no rejected headline treatment', () => {
     expect(narrative).toContain('Your work');
     expect(narrative).toContain('leaves evidence.');
-    expect(narrative).toContain('Personality Assessor brings professional context and adaptive responses together');
+    expect(narrative).toContain('Professional context and adaptive responses become independent readings');
     expect(narrative).toContain('Context changes the question.');
     expect(narrative).toContain('One profile. Four distinct readings.');
     expect(narrative).toContain('Direction needs reasons.');
@@ -30,15 +30,16 @@ describe('Public rebuild visual contract', () => {
     expect(chrome).toContain('Your profile can change when your work does.');
   });
 
-  it('registers the v2 media system with required source families and no rejected factory assets', () => {
-    expect(content).toContain('hero-h2');
-    expect(content).toContain('world-w8');
-    expect(content).toContain('career-c8');
-    expect(content).toContain('progress-p6');
-    expect(content).toContain('auth-signup');
-    expect(content).not.toContain('RLDjPI-r5fU');
-    expect(content).not.toContain('career-c5');
-    expect(chrome).toContain('/media/personality-v2/');
+  it('registers the v3 media system with locked Pexels 34804003 build asset and no rejected assets', () => {
+    expect(content).toContain('34804003');
+    expect(content).toContain('build');
+    expect(content).toContain('make');
+    expect(content).toContain('shape');
+    expect(content).toContain('structure');
+    expect(content).toContain('collaborate');
+    // Ensure rejected 7988086 is never used
+    expect(content).not.toContain('7988086');
+    expect(chrome).toContain('/media/personality-v3/');
   });
 
   it('retired the rejected public selectors and image IDs from active source', () => {

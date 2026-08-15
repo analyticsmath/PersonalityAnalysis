@@ -87,7 +87,7 @@ export function PublicHeader() {
           <Link className="public-header__signin" to="/login">
             Sign in
           </Link>
-          <Link className="public-cta-button public-cta-button--signal" to="/signup">
+          <Link className="public-cta-button public-cta-button--primary" to="/signup">
             Build my profile
           </Link>
         </div>
@@ -122,7 +122,7 @@ export function PublicHeader() {
               </NavLink>
             </nav>
             <div className="public-header__mobile-actions">
-              <Link className="public-cta-button public-cta-button--signal public-cta-button--wide" to="/signup" onClick={() => setOpen(false)}>
+              <Link className="public-cta-button public-cta-button--primary public-cta-button--wide" to="/signup" onClick={() => setOpen(false)}>
                 Build my profile
               </Link>
               <Link className="public-header__signin" to="/login" onClick={() => setOpen(false)}>

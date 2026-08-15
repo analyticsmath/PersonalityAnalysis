@@ -61,11 +61,13 @@ const SignupPage = () => {
     signupMutation.mutate({ name: form.name, email: form.email, password: form.password });
   };
 
+  const signupMedia = publicMedia?.auth?.signup || publicMedia?.hero?.process || null;
+
   return (
     <main className="pa-auth" data-page="signup">
       <div className="pa-auth__editorial">
         <div className="pa-auth__heading">
-          <Link className="public-brand" to="/">
+          <Link className="public-brand" to="/" aria-label="Personality Assessor home">
             <span className="public-brand__name">Personality Assessor</span>
           </Link>
           <h1>Start with the work you already know.</h1>
@@ -73,13 +75,15 @@ const SignupPage = () => {
             Create an account, add professional context, and begin a profile you can return to as your work changes.
           </p>
         </div>
-        <figure className="pa-auth__fragment-frame">
-          <ResponsiveImage
-            media={publicMedia.auth.signup}
-            alt="Colleagues organizing workspace artifacts at a table"
-            sizes="360px"
-          />
-        </figure>
+        {signupMedia && (
+          <figure className="pa-auth__fragment-frame">
+            <ResponsiveImage
+              media={signupMedia}
+              alt="Visual thinking board with structured sticky notes"
+              sizes="380px"
+            />
+          </figure>
+        )}
       </div>
 
       <section className="pa-auth__form-wrap">
@@ -135,7 +139,6 @@ const SignupPage = () => {
               required
             />
           </label>
-          <p className="pa-auth__helper">Use at least 6 characters.</p>
 
           <label className="pa-auth__check" htmlFor="signup-terms">
             <input

@@ -12,7 +12,6 @@ import PublicHomePage from './pages/PublicHomePage';
 import PublicMarketingPage from './pages/PublicMarketingPage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
-import { isPhase3CLabEnabled } from './pages/Phase3CLab/labRoute';
 import './pages/PublicSite.css';
 
 const DashboardPage = lazy(() => import('./pages/Dashboard'));
@@ -25,11 +24,6 @@ const AssessmentFlowResultPage = lazy(() => import('./pages/AssessmentFlow/Resul
 const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplorerPage'));
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
-const Phase3CLabPage = lazy(() => import('./pages/Phase3CLab/Phase3CLabPage'));
-const Phase3CTransitionSpecimen = lazy(() =>
-  import('./pages/Phase3CLab/Phase3CMotionLab').then((module) => ({ default: module.Phase3CTransitionSpecimen }))
-);
-const phase3cLabEnabled = isPhase3CLabEnabled(import.meta.env.VITE_PHASE3C_LAB);
 
 const SuspensePageFallback = () => (
   <main className="app-page">
@@ -68,8 +62,6 @@ const AppRoutes = () => {
         <Route path="/trust" element={<PublicMarketingPage type="trust" />} />
         <Route path="/login" element={withTransition(<LoginPage />)} />
         <Route path="/signup" element={withTransition(<SignupPage />)} />
-        {phase3cLabEnabled ? <Route path="/__phase3c-lab" element={withSuspense(<Phase3CLabPage />)} /> : null}
-        {phase3cLabEnabled ? <Route path="/__phase3c-lab/transition" element={withSuspense(<Phase3CTransitionSpecimen />)} /> : null}
 
         <Route
           path="/dashboard"

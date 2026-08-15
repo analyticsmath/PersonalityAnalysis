@@ -1,8 +1,8 @@
 {
   "version": 3,
   "system": "Personality Assessor Phase 3B Visual Acceptance Media Library",
-  "generatedAt": "2026-08-14T16:25:16.510Z",
-  "totalAssets": 12,
+  "generatedAt": "2026-08-15T09:14:19.324Z",
+  "totalAssets": 13,
   "assets": [
     {
       "key": "hero-a",
@@ -14,7 +14,7 @@
       "usage": "Dominant hero professional evidence environment (wide 16:10 / 55–65% mass)",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 6091,
         "height": 4061
@@ -58,7 +58,7 @@
       "usage": "Hero evidence wall tall supporting actor",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 4117,
         "height": 6176
@@ -102,7 +102,7 @@
       "usage": "Developer hero fragment / shared actor carried to Work Worlds: Build",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 4016,
         "height": 6016
@@ -134,6 +134,47 @@
       "nonEndorsementNote": "Pexels subjects are not Personality Assessor customers, assessment subjects, endorsers, or people who received career matches."
     },
     {
+      "key": "build",
+      "folder": "worlds",
+      "id": "34804003",
+      "sourcePlatform": "Pexels",
+      "pageUrl": "https://www.pexels.com/photo/34804003/",
+      "title": "Modern workspace with laptop code display and analog notebook",
+      "usage": "Work Worlds: Build (engineering software systems under constraints)",
+      "creator": "Pexels Contributor",
+      "license": "Pexels Free-to-Use License",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
+      "intrinsicDimensions": {
+        "width": 4928,
+        "height": 3280
+      },
+      "localMaster": "frontend/public/media/personality-v3/worlds/build-master.jpg",
+      "derivatives": [
+        "frontend/public/media/personality-v3/worlds/build-640.avif",
+        "frontend/public/media/personality-v3/worlds/build-640.webp",
+        "frontend/public/media/personality-v3/worlds/build-640.jpg",
+        "frontend/public/media/personality-v3/worlds/build-960.avif",
+        "frontend/public/media/personality-v3/worlds/build-960.webp",
+        "frontend/public/media/personality-v3/worlds/build-960.jpg",
+        "frontend/public/media/personality-v3/worlds/build-1440.avif",
+        "frontend/public/media/personality-v3/worlds/build-1440.webp",
+        "frontend/public/media/personality-v3/worlds/build-1440.jpg",
+        "frontend/public/media/personality-v3/worlds/build-1920.avif",
+        "frontend/public/media/personality-v3/worlds/build-1920.webp",
+        "frontend/public/media/personality-v3/worlds/build-1920.jpg",
+        "frontend/public/media/personality-v3/worlds/build-mobile-480.webp",
+        "frontend/public/media/personality-v3/worlds/build-mobile-480.jpg",
+        "frontend/public/media/personality-v3/worlds/build-mobile-720.webp",
+        "frontend/public/media/personality-v3/worlds/build-mobile-720.jpg"
+      ],
+      "cropNotes": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "nonEndorsementNote": "Pexels subjects are not Personality Assessor customers, assessment subjects, endorsers, or people who received career matches."
+    },
+    {
       "key": "scientist",
       "folder": "actors",
       "id": "9259943",
@@ -143,7 +184,7 @@
       "usage": "Scientist hero fragment / Work Worlds: Investigate",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 4800,
         "height": 6000
@@ -184,7 +225,7 @@
       "usage": "Student / graduate hero fragment / context intake",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 3808,
         "height": 2539
@@ -225,7 +266,7 @@
       "usage": "Work Worlds: Make (precision craftsmanship & refinement)",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 6240,
         "height": 4160
@@ -266,7 +307,7 @@
       "usage": "Work Worlds: Shape (UX & synthesis)",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 5813,
         "height": 3875
@@ -307,7 +348,7 @@
       "usage": "Work Worlds: Structure (organizing complexity)",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 4480,
         "height": 6720
@@ -348,7 +389,7 @@
       "usage": "Work Worlds: Collaborate (shared decisions & alignment)",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 6240,
         "height": 4160
@@ -389,7 +430,7 @@
       "usage": "Collaborative learning and development intake",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 3024,
         "height": 4032
@@ -430,7 +471,7 @@
       "usage": "Process iteration / visual thinking environment",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 3000,
         "height": 2000
@@ -471,7 +512,7 @@
       "usage": "Empirical research & inquiry evidence detail",
       "creator": "Pexels Contributor",
       "license": "Pexels Free-to-Use License",
-      "retrievedAt": "2026-08-14T16:25:16.510Z",
+      "retrievedAt": "2026-08-15T09:14:19.324Z",
       "intrinsicDimensions": {
         "width": 4500,
         "height": 3001

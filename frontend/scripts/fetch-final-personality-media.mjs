@@ -41,6 +41,16 @@ const sources = [
     creator: 'Pexels Contributor',
   },
   {
+    key: 'build',
+    folder: 'worlds',
+    id: '34804003',
+    pageUrl: 'https://www.pexels.com/photo/34804003/',
+    title: 'Modern workspace with laptop code display and analog notebook',
+    usage: 'Work Worlds: Build (engineering software systems under constraints)',
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    creator: 'Pexels Contributor',
+  },
+  {
     key: 'scientist',
     folder: 'actors',
     id: '9259943',

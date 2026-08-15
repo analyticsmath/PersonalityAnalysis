@@ -1,153 +1,126 @@
-// Design token registry — single source of truth for all semantic colors,
-// typography, spacing, shadow, and chart palettes.
-// Phase 3B Visual Acceptance system.
+// Design token registry — Phase 3C Production System
+// Mineral / Chromaless Editorial token system
 
 const tokens = {
   // ── Core Semantic Palette ───────────────────────────────────────────────────
   palette: {
-    canvas: '#F7F9F8',
+    canvas: '#F6F8F7',
     paper: '#FFFFFF',
-    ink: '#101414',
-    secondary: '#566362',
-    mist: '#DCE4E2',
-    softField: '#EEF2F1',
+    ink: '#101313',
+    inkDense: '#2B3230',
+    secondary: '#596360',
+    mist: '#DDE3E1',
+    softField: '#EEF2F0',
 
-    darkScene: '#0E1717',
-    darkSceneFg: '#F7FAF9',
-    darkSceneMuted: '#B9C4C1',
+    darkScene: '#101615',
+    darkSceneFg: '#F6F8F7',
+    darkSceneMuted: '#BBC4C1',
 
-    signal: '#DDF45A',
-    signalStrong: '#607900',
+    info: '#315E8A',
+    success: '#1E6B50',
+    warning: '#9A630F',
+    error: '#A33A45',
+    focus: '#285FD0',
+  },
 
-    info: '#2F6FED',
-    success: '#18785B',
-    warning: '#A45A00',
-    error: '#B43A4A',
-    focus: '#2F6FED',
+  accent: {
+    primary: '#101313',
+    blue: '#315E8A',
+    blueGlow: '#315E8A',
+    cyan: '#315E8A',
+    teal: '#1E6B50',
+    purple: '#315E8A',
+    orange: '#9A630F',
+    amber: '#9A630F',
+    emerald: '#1E6B50',
+    rose: '#A33A45',
   },
 
   // ── Surfaces ─────────────────────────────────────────────────────────────
   background: {
-    base: '#F7F9F8',
-    secondary: '#EEF2F1',
+    base: '#F6F8F7',
+    secondary: '#EEF2F0',
     surface: '#FFFFFF',
     elevated: '#FFFFFF',
-    darkScene: '#0E1717',
-    glass: 'rgba(255, 255, 255, 0.96)',
+    darkScene: '#101615',
+    glass: 'rgba(255, 255, 255, 0.98)',
   },
   surface: {
     primary: '#FFFFFF',
-    secondary: '#F7F9F8',
-    tertiary: '#EEF2F1',
+    secondary: '#F6F8F7',
+    tertiary: '#EEF2F0',
     elevated: '#FFFFFF',
-    sidebar: '#F7F9F8',
-    header: '#F7F9F8',
+    sidebar: '#F6F8F7',
+    header: '#F6F8F7',
     input: '#FFFFFF',
-    hover: '#EEF2F1',
+    hover: '#EEF2F0',
     selected: '#E4ECE9',
-    disabled: '#DCE4E2',
+    disabled: '#DDE3E1',
   },
 
   // ── Borders ───────────────────────────────────────────────────────────────
   border: {
     subtle: '#E6EBE9',
-    default: '#DCE4E2',
-    strong: '#566362',
-    divider: '#DCE4E2',
-    focus: '#2F6FED',
+    default: '#DDE3E1',
+    strong: '#596360',
+    divider: '#DDE3E1',
+    focus: '#285FD0',
   },
 
   // ── Text ─────────────────────────────────────────────────────────────────
   text: {
-    primary: '#101414',
-    secondary: '#566362',
-    muted: '#566362',
+    primary: '#101313',
+    secondary: '#596360',
+    muted: '#596360',
     disabled: '#8C9792',
-    inverse: '#F7FAF9',
-    link: '#101414',
-    accent: '#2F6FED',
+    inverse: '#F6F8F7',
+    link: '#101313',
+    accent: '#315E8A',
   },
 
   // ── Action / Interface ────────────────────────────────────────────────────
   action: {
-    primaryBg: '#101414',
+    primaryBg: '#101313',
     primaryText: '#FFFFFF',
-    primaryHover: '#252D2D',
-    signalBg: '#DDF45A',
-    signalText: '#101414',
-    signalHover: '#D3EA48',
+    primaryHover: '#2B3230',
     secondaryBg: '#FFFFFF',
-    secondaryText: '#101414',
-    secondaryBorder: '#DCE4E2',
-    secondaryHover: '#EEF2F1',
-    ghostHover: '#EEF2F1',
-  },
-
-  // Legacy mappings for backward compatibility
-  primary: {
-    50: '#F7F9F8',
-    100: '#EEF2F1',
-    500: '#101414',
-    600: '#101414',
-    700: '#101414',
-  },
-  secondary: {
-    50: '#F7F9F8',
-    500: '#566362',
-    600: '#2F6FED',
-  },
-
-  // ── Accent (Restrained semantic only) ───────────────────────────────────────
-  accent: {
-    blue: '#2F6FED',
-    blueHover: '#1B56C7',
-    blueGlow: 'none',
-    cyan: '#2F6FED',
-    purple: '#566362',
-    amber: '#A45A00',
-    emerald: '#18785B',
-    emeraldDark: '#18785B',
-    orange: '#A45A00',
+    secondaryText: '#101313',
+    secondaryBorder: '#DDE3E1',
+    secondaryHover: '#EEF2F0',
+    ghostHover: '#EEF2F0',
   },
 
   // ── Status ────────────────────────────────────────────────────────────────
   state: {
-    success: '#18785B',
+    success: '#1E6B50',
     successBg: '#DEEFEA',
-    successText: '#18785B',
+    successText: '#1E6B50',
     successBorder: '#A9D9C9',
-    warning: '#A45A00',
+    warning: '#9A630F',
     warningBg: '#F7EECD',
     warningText: '#784400',
     warningBorder: '#E2CF88',
-    error: '#B43A4A',
+    error: '#A33A45',
     errorBg: '#FCE2E5',
     errorText: '#8C2534',
     errorBorder: '#EFA6AF',
-    info: '#2F6FED',
+    info: '#315E8A',
     infoBg: '#E3EDFD',
-    infoText: '#2F6FED',
+    infoText: '#315E8A',
     infoBorder: '#B5CEFC',
   },
 
-  // ── Danger shorthand ─────────────────────────────────────────────────────
-  danger: {
-    50: '#FCE2E5',
-    500: '#B43A4A',
-    600: '#982A39',
-  },
-
-  // ── Shadows (Restrained subtle elevation only) ──────────────────────────────
+  // ── Shadows (Restrained elevation) ──────────────────────────────────────
   shadow: {
-    card: '0 4px 16px rgba(16, 20, 20, 0.06)',
-    soft: '0 2px 8px rgba(16, 20, 20, 0.04)',
-    focus: '0 0 0 2px #2F6FED',
-    sm: '0 1px 3px rgba(16, 20, 20, 0.04)',
-    md: '0 4px 16px rgba(16, 20, 20, 0.06)',
-    lg: '0 12px 32px rgba(16, 20, 20, 0.08)',
+    card: '0 4px 16px rgba(16, 19, 19, 0.04)',
+    soft: '0 1px 3px rgba(16, 19, 19, 0.04)',
+    focus: '0 0 0 2px #285FD0',
+    sm: '0 1px 3px rgba(16, 19, 19, 0.04)',
+    md: '0 4px 16px rgba(16, 19, 19, 0.04)',
+    lg: '0 12px 32px rgba(16, 19, 19, 0.06)',
   },
 
-  // ── Radius (Scene-specific radii) ──────────────────────────────────────────
+  // ── Radius (Restrained consistent radii) ─────────────────────────────────
   radius: {
     none: '0px',
     sm: '6px',
@@ -164,152 +137,113 @@ const tokens = {
     display: '"Mona Sans", system-ui, -apple-system, sans-serif',
   },
 
-  // Retired gradients & glows mapped to neutral flat tokens
-  gradients: {
-    background: '#F7F9F8',
-    primaryButton: '#101414',
-    primaryButtonHover: '#252D2D',
-    progress: '#101414',
-    cognitiveBars: '#2F6FED',
-    behaviorBars: '#566362',
-    page: '#F7F9F8',
-  },
-
-  glass: {
-    background: '#FFFFFF',
-    border: '#DCE4E2',
-    backdropBlur: '0px',
-  },
-
-  glow: {
-    primary: 'none',
-    cyan: 'none',
-    purple: 'none',
-  },
-
-  motion: {
-    hoverLift: 'none',
-    transition: '0.18s ease-out',
-  },
-
   // Chart shorthand — canonical chart tokens
   chart: {
-    primary: '#101414',
-    secondary: '#7E8B88',
-    signal: '#607900',
-    info: '#2F6FED',
-    positive: '#18785B',
-    warning: '#A45A00',
-    risk: '#B43A4A',
-    grid: '#E6EBE9',
-    track: '#EEF2F1',
-    trait1: '#101414',
-    trait2: '#566362',
-    trait3: '#2F6FED',
-    trait4: '#18785B',
-    trait5: '#A45A00',
+    primary: '#101313',
+    secondary: '#596360',
+    info: '#315E8A',
+    positive: '#1E6B50',
+    warning: '#9A630F',
+    risk: '#A33A45',
+    grid: '#DDE3E1',
+    track: '#EEF2F0',
+    trait1: '#101313',
+    trait2: '#596360',
+    trait3: '#315E8A',
+    trait4: '#1E6B50',
+    trait5: '#9A630F',
   },
 };
 
 // ── Big Five / Neutral dimensional colors ────────────────────────────────────
-// Direct continuous measurement without permanent decorative colors
 export const traitColors = {
-  O: '#101414',
-  C: '#101414',
-  E: '#101414',
-  A: '#101414',
-  N: '#101414',
+  O: '#101313',
+  C: '#101313',
+  E: '#101313',
+  A: '#101313',
+  N: '#101313',
 };
 
 // ── Semantic chart color tokens ──────────────────────────────────────────────
 export const chartTokens = {
   axis: tokens.text.secondary,
   mutedAxis: tokens.text.muted,
-  grid: '#E6EBE9',
-  axisLine: '#DCE4E2',
-  track: '#EEF2F1',
-  primary: '#101414',
-  secondary: '#7E8B88',
-  signal: '#607900',
-  info: '#2F6FED',
-  positive: '#18785B',
-  warning: '#A45A00',
-  risk: '#B43A4A',
+  grid: '#DDE3E1',
+  axisLine: '#DDE3E1',
+  track: '#EEF2F0',
+  primary: '#101313',
+  secondary: '#596360',
+  info: '#315E8A',
+  positive: '#1E6B50',
+  warning: '#9A630F',
+  risk: '#A33A45',
   tooltip: {
     background: '#FFFFFF',
-    border: '1px solid #DCE4E2',
-    text: '#101414',
-    shadow: '0 4px 16px rgba(16, 20, 20, 0.08)',
+    border: '1px solid #DDE3E1',
+    text: '#101313',
+    shadow: '0 4px 16px rgba(16, 19, 19, 0.08)',
   },
 
-  // OCEAN radar
   ocean: {
-    fill: 'rgba(16, 20, 20, 0.06)',
-    stroke: '#101414',
-    grid: '#DCE4E2',
-    label: '#101414',
+    fill: 'rgba(16, 19, 19, 0.06)',
+    stroke: '#101313',
+    grid: '#DDE3E1',
+    label: '#101313',
   },
 
-  // RIASEC neutral relational palette
   riasec: {
-    Realistic: '#101414',
-    Investigative: '#101414',
-    Artistic: '#101414',
-    Social: '#101414',
-    Enterprising: '#101414',
-    Conventional: '#101414',
+    Realistic: '#101313',
+    Investigative: '#101313',
+    Artistic: '#101313',
+    Social: '#101313',
+    Enterprising: '#101313',
+    Conventional: '#101313',
   },
 
-  // Cognitive
   cognitive: {
-    Analytical: '#101414',
-    Creative: '#101414',
-    Strategic: '#101414',
-    Systematic: '#101414',
-    Practical: '#101414',
-    Abstract: '#101414',
+    Analytical: '#101313',
+    Creative: '#101313',
+    Strategic: '#101313',
+    Systematic: '#101313',
+    Practical: '#101313',
+    Abstract: '#101313',
   },
 
-  // Behavior
   behavior: {
-    Leadership: '#101414',
-    RiskTolerance: '#101414',
-    DecisionSpeed: '#101414',
-    StressTolerance: '#101414',
-    TeamPreference: '#101414',
+    Leadership: '#101313',
+    RiskTolerance: '#101313',
+    DecisionSpeed: '#101313',
+    StressTolerance: '#101313',
+    TeamPreference: '#101313',
   },
 
-  // Career match
   career: {
-    OverallFit: '#101414',
-    PersonalityFit: '#2F6FED',
-    SkillFit: '#18785B',
-    GrowthPotential: '#A45A00',
-    GapRisk: '#B43A4A',
+    OverallFit: '#101313',
+    PersonalityFit: '#315E8A',
+    SkillFit: '#1E6B50',
+    GrowthPotential: '#9A630F',
+    GapRisk: '#A33A45',
   },
 
-  // Heatmap
   heatmap: {
-    low: '#F7F9F8',
-    mid: '#B5C4BE',
-    high: '#101414',
-    text: '#101414',
-    border: '#DCE4E2',
+    low: '#F6F8F7',
+    mid: '#BBC4C1',
+    high: '#101313',
+    text: '#101313',
+    border: '#DDE3E1',
   },
 
-  // Analytics trend
   trend: {
-    primary: '#101414',
-    secondary: '#566362',
-    focus: '#2F6FED',
-    success: '#18785B',
-    warning: '#A45A00',
-    danger: '#B43A4A',
-    muted: '#DCE4E2',
+    primary: '#101313',
+    secondary: '#596360',
+    focus: '#315E8A',
+    success: '#1E6B50',
+    warning: '#9A630F',
+    danger: '#A33A45',
+    muted: '#DDE3E1',
   },
 
-  // Generic chart palette
-  palette: ['#101414', '#566362', '#2F6FED', '#18785B', '#A45A00', '#B43A4A'],
+  palette: ['#101313', '#596360', '#315E8A', '#1E6B50', '#9A630F', '#A33A45'],
 };
 
 export default tokens;

@@ -55,23 +55,27 @@ const LoginPage = () => {
     loginMutation.mutate(form);
   };
 
+  const loginMedia = publicMedia?.auth?.login || publicMedia?.hero?.student || null;
+
   return (
     <main className="pa-auth" data-page="login">
       <div className="pa-auth__editorial">
         <div className="pa-auth__heading">
-          <Link className="public-brand" to="/">
+          <Link className="public-brand" to="/" aria-label="Personality Assessor home">
             <span className="public-brand__name">Personality Assessor</span>
           </Link>
           <h1>Return to your profile.</h1>
           <p>Continue your assessments, career exploration and development record.</p>
         </div>
-        <figure className="pa-auth__fragment-frame">
-          <ResponsiveImage
-            media={publicMedia.auth.login}
-            alt="Person reviewing professional records quietly at a desk"
-            sizes="360px"
-          />
-        </figure>
+        {loginMedia && (
+          <figure className="pa-auth__fragment-frame">
+            <ResponsiveImage
+              media={loginMedia}
+              alt="Person reviewing professional records quietly at a desk"
+              sizes="380px"
+            />
+          </figure>
+        )}
       </div>
 
       <section className="pa-auth__form-wrap">
