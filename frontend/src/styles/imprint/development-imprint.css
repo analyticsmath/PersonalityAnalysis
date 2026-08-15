@@ -1,0 +1,116 @@
+/* frontend/src/styles/imprint/development-imprint.css */
+/* Personality Assessor — Development Return Loop Styles */
+
+.development-return-loop {
+  position: relative;
+  width: 100%;
+  background-color: var(--pa-white);
+  color: var(--pa-ink);
+  padding: clamp(64px, 10svh, 120px) 0;
+  border-top: 1px solid var(--pa-rule);
+}
+
+.development-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4.5vw, 64px);
+}
+
+.development-header {
+  margin-bottom: clamp(36px, 5svh, 56px);
+  max-width: 680px;
+}
+
+.development-title {
+  font-family: var(--font-narrative);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 450;
+  letter-spacing: -0.02em;
+  color: var(--pa-ink);
+}
+
+/* ── Spatial Loop Stage ── */
+.development-loop-stage {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+  min-height: 480px;
+}
+
+/* ── 5 Scene States as Navigable Sequence ── */
+.development-states-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.development-state-item {
+  background: none;
+  border: none;
+  padding: 12px 0;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 2px solid var(--pa-rule);
+  padding-left: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.development-state-item.is-active {
+  border-left-color: var(--pa-ink);
+}
+
+.development-state-name {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 550;
+  color: var(--pa-muted);
+  transition: color 0.15s ease;
+}
+
+.development-state-item.is-active .development-state-name {
+  color: var(--pa-ink);
+}
+
+.development-state-desc {
+  font-size: 14px;
+  color: var(--pa-text);
+  line-height: 1.4;
+}
+
+/* ── Spatial Interactive Protagonist Frame ── */
+.development-visual-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(340px, 46svh, 480px);
+  background-color: var(--pa-soft);
+  border-radius: var(--radius-actor);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.development-visual-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.development-loop-svg-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (max-width: 840px) {
+  .development-loop-stage {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,95 @@
+/* frontend/src/styles/imprint/foundation-imprint.css */
+/* Personality Assessor — Evidence Imprint Design Foundation */
+
+:root {
+  /* ── Core Color System (True Neutral Lock) ── */
+  --pa-white: #FFFFFF;
+  --pa-soft: #F4F5F6;
+  --pa-ink: #0B0B0B;
+  --pa-ink-2: #171717;
+  --pa-text: #4F5358;
+  --pa-muted: #767B81;
+  --pa-rule: #D9DDE1;
+  --pa-focus: #0B0B0B;
+
+  /* ── Typography System ── */
+  --font-narrative: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
+  --font-sans: 'Source Sans 3 Variable', 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* ── Controlled Geometric Radii (No Pill Containers) ── */
+  --radius-sharp: 0px;
+  --radius-subtle: 4px;
+  --radius-actor: 6px;
+  --radius-container: 8px;
+
+  /* ── Spatial Units ── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* ── Header Heights ── */
+  --header-height-desktop: 68px;
+  --header-height-mobile: 60px;
+
+  /* ── Base Layer Transitions ── */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ── Global Layout Reset & Source Scroll Truth ── */
+html {
+  font-family: var(--font-sans);
+  background-color: var(--pa-white);
+  color: var(--pa-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: auto; /* Native scroll is source of truth */
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--pa-white);
+  color: var(--pa-ink);
+  overflow-x: hidden;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ── Typographic Foundations ── */
+h1, h2, h3, h4, p, figure, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Focus Management ── */
+:focus-visible {
+  outline: 2px solid var(--pa-focus);
+  outline-offset: 3px;
+}
+
+/* ── Refined Reduced Motion Model (Preserves useful UI feedback, removes macro pins) ── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .imprint-scroll-pin {
+    height: auto !important;
+    position: static !important;
+  }
+
+  .imprint-actor-motion {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

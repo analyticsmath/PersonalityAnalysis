@@ -6,13 +6,16 @@ import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
-import PageTransition from './components/motion/PageTransition';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
 import PublicHomePage from './pages/PublicHomePage';
-import PublicMarketingPage from './pages/PublicMarketingPage';
+import HowItWorksPage from './pages/public/HowItWorksPage';
+import CareerIntelligencePage from './pages/public/CareerIntelligencePage';
+import ProgressPage from './pages/public/ProgressPage';
+import MethodologyPage from './pages/public/MethodologyPage';
+import TrustPage from './pages/public/TrustPage';
+import PrivacyPage from './pages/public/PrivacyPage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
-import './pages/PublicSite.css';
 
 const DashboardPage = lazy(() => import('./pages/Dashboard'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
@@ -47,144 +50,124 @@ const AssessmentRootRedirect = () => {
 const AppRoutes = () => {
   const location = useLocation();
 
-  const withTransition = (element) => <PageTransition>{element}</PageTransition>;
-
   return (
     <div className="app-root-container">
       <PublicMetadata />
       <Routes location={location} key={`${location.pathname}${location.search}`}>
+        {/* ── Public Routes (Dedicated Modular Pages) ── */}
         <Route path="/" element={<PublicHomePage />} />
-        <Route path="/how-it-works" element={<PublicMarketingPage type="how-it-works" />} />
-        <Route path="/career-intelligence" element={<PublicMarketingPage type="career-intelligence" />} />
-        <Route path="/progress" element={<PublicMarketingPage type="progress" />} />
-        <Route path="/methodology" element={<PublicMarketingPage type="methodology" />} />
-        <Route path="/privacy" element={<PublicMarketingPage type="privacy" />} />
-        <Route path="/trust" element={<PublicMarketingPage type="trust" />} />
-        <Route path="/login" element={withTransition(<LoginPage />)} />
-        <Route path="/signup" element={withTransition(<SignupPage />)} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/career-intelligence" element={<CareerIntelligencePage />} />
+        <Route path="/progress" element={<ProgressPage />} />
+        <Route path="/methodology" element={<MethodologyPage />} />
+        <Route path="/trust" element={<TrustPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
 
+        {/* ── Protected Application Routes ── */}
         <Route
           path="/dashboard"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/analytics"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <AnalyticsPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <AnalyticsPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/account/privacy"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <PrivacyControlsPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <PrivacyControlsPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/assessment"
-          element={withTransition(
+          element={
             <ProtectedRoute>
               <AssessmentRootRedirect />
             </ProtectedRoute>
-          )}
+          }
         />
         <Route
           path="/legacy/assessment-static"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <LegacyStaticAssessmentPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <LegacyStaticAssessmentPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/assessment/start"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <StartAssessmentFlowPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <StartAssessmentFlowPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/assessment/test"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <AdaptiveAssessmentTestPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <AdaptiveAssessmentTestPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/assessment/behavior"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <BehaviorAssessmentPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <BehaviorAssessmentPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/assessment/career"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <CareerExplorerPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <CareerExplorerPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/assessment/result"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <AssessmentFlowResultPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <AssessmentFlowResultPage />
+            </ProtectedRoute>
           )}
         />
         <Route
           path="/results"
-          element={withTransition(
+          element={
             <ProtectedRoute>
               <Navigate to="/assessment/result" replace />
             </ProtectedRoute>
-          )}
+          }
         />
         <Route
           path="/reports"
-          element={withTransition(
+          element={
             <ProtectedRoute>
               <Navigate to="/dashboard" replace />
             </ProtectedRoute>
-          )}
+          }
         />
         <Route
           path="/result/:assessmentId"
-          element={withTransition(
-            withSuspense(
-              <ProtectedRoute>
-                <ResultPage />
-              </ProtectedRoute>
-            )
+          element={withSuspense(
+            <ProtectedRoute>
+              <ResultPage />
+            </ProtectedRoute>
           )}
         />
 

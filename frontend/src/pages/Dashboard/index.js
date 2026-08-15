@@ -111,7 +111,7 @@ export default function DashboardPage() {
 
   const userName = auth.user?.name || auth.name || 'User';
 
-  /* ── 1. D0 Maturity: Single Authored Onboarding Workspace (No Dashboard Grid / No Empty Cards) ── */
+  /* ── 1. D0 Maturity: Single Authored Onboarding Workspace (No 01/02/03 Numbered Cards / No Empty Boxes) ── */
   if (assessments.length === 0 && !historyQuery.isLoading) {
     return (
       <ProductShell
@@ -139,27 +139,24 @@ export default function DashboardPage() {
                 <FiPlay /> Start Your First Assessment <FiArrowRight />
               </Button>
               <Button variant="secondary" size="md" onClick={() => navigate('/assessment/start')}>
-                <FiUploadCloud /> Upload or Review Your CV
+                <FiUploadCloud /> Upload or Review Your Context
               </Button>
             </div>
           </section>
 
-          {/* 3-Step Open Guidance Sequence (Not a Generic Sidebar Widget) */}
-          <div className="dashboard-d0-sequence" aria-label="Onboarding sequence">
+          {/* Quiet Inline Process Nouns (Not Numbered 01/02/03 Cards) */}
+          <div className="dashboard-d0-sequence" aria-label="Process Overview">
             <div className="dashboard-d0-step">
-              <span className="dashboard-d0-step__num">01</span>
-              <strong className="dashboard-d0-step__title">Add Context</strong>
-              <p className="dashboard-d0-step__desc">Upload a CV or enter professional background anchors.</p>
+              <strong className="dashboard-d0-step__title">Context &amp; Evidence</strong>
+              <p className="dashboard-d0-step__desc">Upload verifiable background anchors or input manual experience.</p>
             </div>
             <div className="dashboard-d0-step">
-              <span className="dashboard-d0-step__num">02</span>
-              <strong className="dashboard-d0-step__title">Adaptive Questions</strong>
-              <p className="dashboard-d0-step__desc">Complete 22–26 scenario-driven decision prompts.</p>
+              <strong className="dashboard-d0-step__title">Adaptive Calibration</strong>
+              <p className="dashboard-d0-step__desc">Complete 22–26 decision prompts that adapt to your domain.</p>
             </div>
             <div className="dashboard-d0-step">
-              <span className="dashboard-d0-step__num">03</span>
-              <strong className="dashboard-d0-step__title">Inspect Readings</strong>
-              <p className="dashboard-d0-step__desc">Explore your four independent readings and career fit.</p>
+              <strong className="dashboard-d0-step__title">Four Readings</strong>
+              <p className="dashboard-d0-step__desc">Inspect personality, interests, values, and explainable career fit.</p>
             </div>
           </div>
 
@@ -263,8 +260,10 @@ export default function DashboardPage() {
                 return (
                   <div key={title} className="dashboard-career-row">
                     <span className="dashboard-career-title">{title}</span>
-                    {fitScore !== null && (
+                    {fitScore !== null ? (
                       <span className="dashboard-career-fit tabular-nums">{Math.round(fitScore)}% Fit</span>
+                    ) : (
+                      <span className="dashboard-career-na">Not enough evidence</span>
                     )}
                   </div>
                 );
@@ -324,11 +323,12 @@ export default function DashboardPage() {
                       <span className="tabular-nums" style={{ color: 'var(--pa-text, #4F5358)' }}>
                         {item.previous} → {item.current}
                       </span>
+                      {/* Neutral delta display: No green/red moral judgments on trait shift */}
                       <span
                         className="tabular-nums dashboard-delta-badge"
                         style={{
                           fontWeight: '600',
-                          color: item.delta > 0 ? 'var(--pa-success, #15704E)' : item.delta < 0 ? 'var(--pa-warning, #94610C)' : 'var(--pa-muted, #767B81)',
+                          color: 'var(--pa-ink, #0B0B0B)',
                         }}
                       >
                         {item.delta > 0 ? `+${item.delta}` : item.delta}
@@ -357,7 +357,9 @@ export default function DashboardPage() {
                   </div>
                 );
               })
-            ) : null}
+            ) : (
+              <p style={{ color: 'var(--pa-text, #4F5358)' }}>Not enough history to compute trait shifts.</p>
+            )}
           </div>
 
           <footer className="dashboard-profile-footer">

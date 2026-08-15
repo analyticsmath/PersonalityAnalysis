@@ -1,0 +1,190 @@
+/* frontend/src/styles/imprint/work-worlds-imprint.css */
+/* Personality Assessor — Work Worlds Experience Styles */
+
+.work-worlds-experience {
+  position: relative;
+  width: 100%;
+  background-color: var(--pa-white);
+  color: var(--pa-ink);
+  padding: clamp(64px, 10svh, 120px) 0;
+  border-top: 1px solid var(--pa-rule);
+}
+
+.work-worlds-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4.5vw, 64px);
+}
+
+/* ── Section Header ── */
+.worlds-header {
+  margin-bottom: clamp(36px, 5svh, 56px);
+  max-width: 680px;
+}
+
+.worlds-title {
+  font-family: var(--font-narrative);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 450;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--pa-ink);
+  margin-bottom: 12px;
+}
+
+.worlds-support {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.45;
+  color: var(--pa-text);
+}
+
+/* ── Persistent Stage Architecture ── */
+.worlds-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: clamp(32px, 4vw, 64px);
+  align-items: start;
+  min-height: 58svh;
+}
+
+/* ── Open Text World Index (No Pills, No '1 of 6') ── */
+.worlds-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.world-nav-item {
+  background: none;
+  border: none;
+  padding: 8px 0;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--pa-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.world-nav-item:hover {
+  color: var(--pa-ink);
+}
+
+.world-nav-item.is-active {
+  color: var(--pa-ink);
+  font-weight: 600;
+}
+
+.world-nav-marker {
+  width: 0;
+  height: 2px;
+  background-color: var(--pa-ink);
+  transition: width 0.25s var(--ease-out-quint);
+}
+
+.world-nav-item.is-active .world-nav-marker {
+  width: 16px;
+}
+
+/* ── Active Scene Canvas ── */
+.worlds-canvas {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.worlds-media-frame {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  height: clamp(320px, 44svh, 480px);
+  background-color: var(--pa-soft);
+  border-radius: var(--radius-actor);
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.worlds-media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Anime.js SVG Trace & Contour Overlay ── */
+.worlds-trace-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.worlds-trace-overlay svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Active Statement ── */
+.world-statement-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: 780px;
+}
+
+.world-active-statement {
+  font-family: var(--font-narrative);
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 400;
+  color: var(--pa-ink);
+  line-height: 1.25;
+}
+
+.world-behavior-verb {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pa-muted);
+}
+
+/* ── Responsive Tablet & Mobile ── */
+@media (max-width: 900px) {
+  .worlds-stage {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .worlds-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-bottom: 1px solid var(--pa-rule);
+    padding-bottom: 12px;
+  }
+  .world-nav-item {
+    font-size: 16px;
+  }
+  .worlds-media-frame {
+    height: 36svh;
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 600px) {
+  .work-worlds-experience {
+    padding: 48px 0;
+  }
+  .world-statement-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

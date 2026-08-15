@@ -1,0 +1,66 @@
+/* frontend/src/styles/imprint/mobile-imprint.css */
+/* Personality Assessor — Mobile-First App Quality Gate (390×844 Canvas) */
+
+@media (max-width: 768px) {
+  /* ── Root & Safe Areas ── */
+  :root {
+    --header-height-mobile: 60px;
+  }
+
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* ── Header Mobile Drawer & Trigger ── */
+  .imprint-header {
+    height: var(--header-height-mobile);
+  }
+
+  .imprint-nav-mobile-toggle {
+    background: none;
+    border: none;
+    padding: 8px;
+    font-size: 24px;
+    color: var(--pa-ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .imprint-header--dark .imprint-nav-mobile-toggle {
+    color: var(--pa-white);
+  }
+
+  .imprint-mobile-drawer {
+    position: fixed;
+    top: var(--header-height-mobile);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--pa-white);
+    z-index: 99;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .imprint-mobile-drawer .imprint-nav-link {
+    font-size: 20px;
+    font-weight: 550;
+    color: var(--pa-ink);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--pa-rule);
+  }
+
+  /* ── Touch Targets & Readability ── */
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+
+  /* ── Prevent Horizontal Overflow Across All Mobile Elements ── */
+  img, svg, figure, section, div {
+    max-width: 100%;
+  }
+}

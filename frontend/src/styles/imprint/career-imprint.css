@@ -1,0 +1,156 @@
+/* frontend/src/styles/imprint/career-imprint.css */
+/* Personality Assessor — Career Relationship Field Styles */
+
+.career-relationship-field {
+  position: relative;
+  width: 100%;
+  background-color: var(--pa-ink);
+  color: var(--pa-white);
+  padding: clamp(64px, 10svh, 120px) 0;
+}
+
+.career-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4.5vw, 64px);
+}
+
+.career-header {
+  margin-bottom: clamp(36px, 5svh, 56px);
+  max-width: 720px;
+}
+
+.career-title {
+  font-family: var(--font-narrative);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 450;
+  letter-spacing: -0.02em;
+  color: var(--pa-white);
+  margin-bottom: 12px;
+}
+
+.career-support {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.2vw, 18px);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Spatial Layout: Open Role Index + Dominant Environment + Relationship Reasoning ── */
+.career-field-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr 340px;
+  gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+  min-height: 520px;
+}
+
+/* ── Role Index Left ── */
+.career-role-index {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.career-role-item {
+  background: none;
+  border: none;
+  padding: 10px 0;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: color 0.15s ease;
+}
+
+.career-role-item:hover {
+  color: var(--pa-white);
+}
+
+.career-role-item.is-active {
+  color: var(--pa-white);
+  font-weight: 600;
+}
+
+.career-role-marker {
+  width: 0;
+  height: 2px;
+  background-color: var(--pa-white);
+  transition: width 0.25s var(--ease-out-quint);
+}
+
+.career-role-item.is-active .career-role-marker {
+  width: 14px;
+}
+
+/* ── Dominant Environment Canvas ── */
+.career-media-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(340px, 46svh, 500px);
+  background-color: var(--pa-ink-2);
+  border-radius: var(--radius-actor);
+  overflow: hidden;
+}
+
+.career-media-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Reasoning & Dimension Alignment ── */
+.career-reasoning-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.career-active-role-name {
+  font-family: var(--font-narrative);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--pa-white);
+}
+
+.career-relationship-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.career-dimension-line {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 14px;
+}
+
+.career-dimension-tag {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.career-dimension-desc {
+  font-size: 15px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 1024px) {
+  .career-field-layout {
+    grid-template-columns: 1fr;
+  }
+  .career-role-index {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 16px;
+  }
+}

@@ -1,42 +1,48 @@
+// frontend/src/pages/PublicHomePage.jsx
+// Personality Assessor — Evidence Imprint Homepage
+
 import React from 'react';
-import { PublicFooter, PublicLayout } from '../components/public/PublicChrome';
-import EvidenceHero from '../components/public/v4/EvidenceHero';
-import WorkWorldsTheatre from '../components/public/v4/WorkWorldsTheatre';
-import EvidenceQuestionSignal from '../components/public/v4/EvidenceQuestionSignal';
-import LivingProfileField from '../components/public/v4/LivingProfileField';
-import CareerRelationshipScene from '../components/public/v4/CareerRelationshipScene';
-import DevelopmentEvidenceLoop from '../components/public/v4/DevelopmentEvidenceLoop';
-import TrustResolution from '../components/public/v4/TrustResolution';
-import './PublicHomePage.css';
+import { ImprintSceneProvider } from '../components/public/imprint/ImprintSceneContext';
+import PublicHeader from '../components/public/imprint/PublicHeader';
+import EvidenceHero from '../components/public/imprint/EvidenceHero';
+import WorkWorldsExperience from '../components/public/imprint/WorkWorldsExperience';
+import EvidenceQuestionTransform from '../components/public/imprint/EvidenceQuestionTransform';
+import ProfileInstrumentField from '../components/public/imprint/ProfileInstrumentField';
+import CareerRelationshipField from '../components/public/imprint/CareerRelationshipField';
+import DevelopmentReturnLoop from '../components/public/imprint/DevelopmentReturnLoop';
+import TrustCutaway from '../components/public/imprint/TrustCutaway';
+import '../styles/imprint/foundation-imprint.css';
 
 export default function PublicHomePage() {
   return (
-    <PublicLayout page="home" footerMode="integrated">
-      <main id="main-content" className="marketing-home-v4">
-        {/* Scene 1: Evidence Studio Hero */}
-        <EvidenceHero />
+    <ImprintSceneProvider>
+      <div className="imprint-home-root">
+        {/* Header with Scene-Aware Tone Negotiation */}
+        <PublicHeader />
 
-        {/* Scene 2: Work Worlds Theatre (6 Worlds, persistent stage) */}
-        <WorkWorldsTheatre />
+        <main id="main-content">
+          {/* Act 1: Evidence Hero */}
+          <EvidenceHero />
 
-        {/* Scene 3: Evidence → Question → Signal */}
-        <EvidenceQuestionSignal />
+          {/* Act 2: Work Worlds Experience */}
+          <WorkWorldsExperience />
 
-        {/* Scene 4: Living Profile Field (4 independent lenses) */}
-        <LivingProfileField />
+          {/* Act 3: Context → Question Signature Transformation */}
+          <EvidenceQuestionTransform />
 
-        {/* Scene 5: Career Relationship */}
-        <CareerRelationshipScene />
+          {/* Act 4: Profile Instrument Field */}
+          <ProfileInstrumentField />
 
-        {/* Scene 6: Development / New Evidence Loop */}
-        <DevelopmentEvidenceLoop />
+          {/* Act 5: Career Relationship Field */}
+          <CareerRelationshipField />
 
-        {/* Scene 7: Trust Resolution */}
-        <TrustResolution />
+          {/* Act 6: Development Return Loop */}
+          <DevelopmentReturnLoop />
 
-        {/* Integrated Terminal Footer */}
-        <PublicFooter integrated />
-      </main>
-    </PublicLayout>
+          {/* Act 7: Trust Cutaway & Integrated Terminal Footer */}
+          <TrustCutaway />
+        </main>
+      </div>
+    </ImprintSceneProvider>
   );
 }

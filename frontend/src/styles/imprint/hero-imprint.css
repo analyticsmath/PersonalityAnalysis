@@ -1,0 +1,280 @@
+/* frontend/src/styles/imprint/hero-imprint.css */
+/* Personality Assessor — Evidence Imprint Hero Styles */
+
+.evidence-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  background-color: var(--pa-white);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-world {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+/* ── Typographic / Action Group ── */
+.hero-copy-group {
+  position: absolute;
+  top: clamp(24svh, 28svh, 32svh);
+  left: clamp(24px, 4.5vw, 64px);
+  width: min(52vw, 680px);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.hero-title {
+  font-family: var(--font-narrative);
+  font-weight: 460;
+  font-size: clamp(48px, 6.2vw, 92px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--pa-ink);
+  margin-bottom: clamp(16px, 2.2svh, 24px);
+}
+
+.hero-support {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.45;
+  color: var(--pa-text);
+  max-width: 44ch;
+  margin-bottom: clamp(24px, 3.2svh, 36px);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.imprint-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radius-subtle);
+  padding: 12px 22px;
+  transition: background-color 0.2s ease, transform 0.15s ease, color 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.imprint-btn--primary {
+  background-color: var(--pa-ink);
+  color: var(--pa-white);
+  border-color: var(--pa-ink);
+}
+
+.imprint-btn--primary:hover {
+  background-color: var(--pa-ink-2);
+  transform: translateY(-1px);
+}
+
+.imprint-btn--text {
+  background-color: transparent;
+  color: var(--pa-text);
+  padding: 12px 14px;
+}
+
+.imprint-btn--text:hover {
+  color: var(--pa-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ── Photographic Spatial Actors (Single Canvas Composition) ── */
+.hero-actor {
+  position: absolute;
+  overflow: hidden;
+  background-color: var(--pa-soft);
+  border-radius: var(--radius-actor);
+}
+
+.hero-actor img,
+.hero-actor picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Actor 1: Dominant Work Environment (Pexels 9618456) */
+.hero-actor--dominant {
+  top: 22svh;
+  left: 45vw;
+  width: 50vw;
+  height: 52svh;
+  max-height: 520px;
+  z-index: 2;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.05);
+}
+
+/* Actor 2: Evidence Source (Pexels 9617376) */
+.hero-actor--evidence-source {
+  top: 11svh;
+  left: 81vw;
+  width: 17vw;
+  height: 28svh;
+  z-index: 1;
+  opacity: 0.88;
+}
+
+/* Actor 3: Human Proximity (Pexels 5940721) */
+.hero-actor--human {
+  top: 60svh;
+  left: 65vw;
+  width: 20vw;
+  height: 28svh;
+  z-index: 4;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Actor 4: Lifted Photographic Blueprint Fragment (The Protagonist) */
+.hero-lifted-imprint {
+  position: absolute;
+  top: 50svh;
+  left: 42vw;
+  width: 14vw;
+  height: 20svh;
+  z-index: 15;
+  pointer-events: none;
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.12));
+}
+
+.hero-lifted-imprint img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── 1366×768 Viewport Adjustments ── */
+@media (max-width: 1366px) and (min-width: 1025px) {
+  .hero-title {
+    font-size: clamp(44px, 5.8vw, 82px);
+  }
+  .hero-actor--dominant {
+    height: 48svh;
+  }
+}
+
+/* ── 1024×768 Tablet Art Direction ── */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .hero-copy-group {
+    top: 14svh;
+    left: 4vw;
+    width: 64vw;
+  }
+  .hero-title {
+    font-size: 56px;
+  }
+  .hero-actor--dominant {
+    top: 48svh;
+    left: 20vw;
+    width: 74vw;
+    height: 44svh;
+  }
+  .hero-actor--evidence-source {
+    top: 40svh;
+    left: 68vw;
+    width: 28vw;
+    height: 24svh;
+  }
+  .hero-actor--human {
+    top: 66svh;
+    left: 8vw;
+    width: 28vw;
+    height: 24svh;
+  }
+  .hero-lifted-imprint {
+    top: 45svh;
+    left: 40vw;
+    width: 22vw;
+    height: 16svh;
+  }
+}
+
+/* ── 390×844 Primary Mobile Art Direction ── */
+@media (max-width: 768px) {
+  .evidence-hero {
+    min-height: 100svh;
+    height: auto;
+    padding-bottom: 48px;
+  }
+  .hero-world {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    padding-top: calc(var(--header-height-mobile) + 20px);
+  }
+  .hero-copy-group {
+    position: static;
+    width: 100%;
+    padding: 0 20px;
+    margin-bottom: 24px;
+  }
+  .hero-title {
+    font-size: clamp(42px, 12vw, 56px);
+    line-height: 0.94;
+    margin-bottom: 14px;
+  }
+  .hero-support {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .imprint-btn {
+    width: 100%;
+    height: 48px;
+  }
+  .hero-mobile-media-stage {
+    position: relative;
+    width: 100%;
+    height: 38svh;
+    min-height: 280px;
+    margin-top: auto;
+    padding: 0 20px;
+  }
+  .hero-actor--dominant {
+    top: 0;
+    left: 20px;
+    right: 20px;
+    width: calc(100% - 40px);
+    height: 34svh;
+  }
+  .hero-actor--evidence-source {
+    top: -16px;
+    right: 12px;
+    left: auto;
+    width: 38vw;
+    height: 16svh;
+  }
+  .hero-actor--human {
+    bottom: 0;
+    top: auto;
+    left: 32px;
+    width: 36vw;
+    height: 18svh;
+  }
+  .hero-lifted-imprint {
+    top: 20%;
+    left: 45%;
+    width: 32vw;
+    height: 14svh;
+  }
+}
