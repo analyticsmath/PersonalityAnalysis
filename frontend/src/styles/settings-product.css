@@ -1,4 +1,4 @@
-/* Phase 3B — Settings & Privacy Product Styles */
+/* Phase 4 Production — Settings & Privacy Product Styles */
 
 .settings-page {
   padding: 0;
@@ -16,16 +16,17 @@
 }
 
 .settings-header__title {
-  font-size: clamp(1.85rem, 3vw, 2.5rem);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  color: var(--ink);
-  margin-bottom: 8px;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--pa-ink, #0B0B0B);
+  margin-bottom: 6px;
 }
 
 .settings-header__subtitle {
-  font-size: 1.05rem;
-  color: var(--secondary);
+  font-size: 1rem;
+  color: var(--pa-text, #4F5358);
   max-width: 72ch;
   line-height: 1.5;
   margin: 0;
@@ -33,11 +34,11 @@
 
 /* ── Settings Section Panel ── */
 .settings-section-card {
-  background: var(--paper);
-  border: 1px solid var(--mist);
-  border-radius: var(--radius-lg);
+  background: #FFFFFF;
+  border: 1px solid var(--pa-rule, #D9DDE1);
+  border-radius: var(--radius-sm, 6px);
   padding: clamp(20px, 2.5vw, 32px);
-  box-shadow: var(--shadow-subtle);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(11, 11, 11, 0.03));
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -47,19 +48,20 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  border-bottom: 1px solid var(--canvas);
+  border-bottom: 1px solid var(--pa-bg-soft, #F4F5F6);
   padding-bottom: 14px;
 }
 
 .settings-section-card__title {
   font-size: 1.25rem;
-  font-weight: 550;
-  color: var(--ink);
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
 }
 
 .settings-section-card__desc {
   font-size: 0.9375rem;
-  color: var(--secondary);
+  color: var(--pa-text, #4F5358);
   margin: 0;
 }
 
@@ -71,11 +73,11 @@
 
 /* ── Danger Zone Panel ── */
 .settings-danger-card {
-  background: var(--paper);
-  border: 1px solid #E5B2A6;
-  border-radius: var(--radius-lg);
+  background: #FFFFFF;
+  border: 1px solid #F2B8BD;
+  border-radius: var(--radius-sm, 6px);
   padding: clamp(20px, 2.5vw, 32px);
-  box-shadow: var(--shadow-subtle);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(11, 11, 11, 0.03));
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -85,18 +87,19 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  border-bottom: 1px solid #F6DCD5;
+  border-bottom: 1px solid #FDF0F1;
   padding-bottom: 14px;
 }
 
 .settings-danger-card__title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--error);
+  color: var(--pa-error, #A33A45);
+  margin: 0;
 }
 
 .settings-danger-card__desc {
   font-size: 0.9375rem;
-  color: var(--secondary);
+  color: var(--pa-text, #4F5358);
   margin: 0;
 }

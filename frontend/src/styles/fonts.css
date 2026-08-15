@@ -1,19 +1,4 @@
-/* Official Mona Sans 2 Local Font Faces */
-@font-face {
-  font-family: 'Mona Sans';
-  src: url('/fonts/MonaSansVF_wdth_wght_opsz_ital_.woff2') format('woff2-variations'),
-       url('/fonts/MonaSansVF_wdth_opsz_wght_.woff2') format('woff2');
-  font-weight: 200 900;
-  font-stretch: 75% 125%;
-  font-style: normal;
-  font-display: swap;
-}
+/* Phase 4 Official Typography — Source Sans 3 Variable & Source Serif 4 Variable */
+@import '@fontsource-variable/source-sans-3';
+@import '@fontsource-variable/source-serif-4';
 
-@font-face {
-  font-family: 'Mona Sans';
-  src: url('/fonts/MonaSansVF-Italic_wdth_opsz_wght_.woff2') format('woff2');
-  font-weight: 200 900;
-  font-stretch: 75% 125%;
-  font-style: italic;
-  font-display: swap;
-}

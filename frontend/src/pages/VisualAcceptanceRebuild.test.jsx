@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-describe('Phase 3C Production Redesign Contract Verification', () => {
+describe('Phase 4 Production Redesign Contract Verification', () => {
   it('verifies all 13 local Pexels photographic assets (including locked build 34804003) and derivatives exist', () => {
     const mediaManifestPath = resolve(process.cwd(), 'public/media/personality-v3/media-provenance.json');
     expect(existsSync(mediaManifestPath)).toBe(true);
@@ -37,103 +37,73 @@ describe('Phase 3C Production Redesign Contract Verification', () => {
     }
   });
 
-  it('verifies all 8 ManyPixels editorial character illustrations exist in public/illustrations', () => {
-    const illusManifestPath = resolve(process.cwd(), 'public/illustrations/illustrations-provenance.json');
-    expect(existsSync(illusManifestPath)).toBe(true);
-
-    const manifest = JSON.parse(readFileSync(illusManifestPath, 'utf8'));
-    expect(manifest.assets).toHaveLength(8);
-
-    const expectedSvgs = [
-      'welcome-career-1.svg',
-      'analytics-empty-analyst.svg',
-      'profile-analysis.svg',
-      'development-team-work.svg',
-      'assessment-completed.svg',
-      'research-science.svg',
-      'ux-interface.svg',
-      'report-analysis.svg',
-    ];
-
-    for (const svgName of expectedSvgs) {
-      const svgPath = resolve(process.cwd(), `public/illustrations/${svgName}`);
-      expect(existsSync(svgPath), `Missing ${svgName}`).toBe(true);
-      const content = readFileSync(svgPath, 'utf8');
-      expect(content).toContain('<svg');
-      expect(content).toContain('</svg>');
-    }
+  it('verifies Source Sans 3 and Source Serif 4 variable font packages are imported', () => {
+    const fontsCss = readFileSync(resolve(process.cwd(), 'src/styles/fonts.css'), 'utf8');
+    expect(fontsCss).toContain('@fontsource-variable/source-sans-3');
+    expect(fontsCss).toContain('@fontsource-variable/source-serif-4');
   });
 
-  it('verifies Mona Sans 2 variable font files and OFL license are present', () => {
-    const fontWoff2 = resolve(process.cwd(), 'public/fonts/MonaSansVF_wdth_wght_opsz_ital_.woff2');
-    const oflLicense = resolve(process.cwd(), 'public/fonts/OFL.txt');
-
-    expect(existsSync(fontWoff2)).toBe(true);
-    expect(existsSync(oflLicense)).toBe(true);
-
-    const oflContent = readFileSync(oflLicense, 'utf8');
-    expect(oflContent).toContain('SIL OPEN FONT LICENSE Version 1.1');
-  });
-
-  it('verifies color tokens in foundation.css match exact Phase 3C Mineral Editorial specification', () => {
+  it('verifies color tokens in foundation.css match exact Phase 4 Neutral Gallery specification', () => {
     const foundationCss = readFileSync(resolve(process.cwd(), 'src/styles/foundation.css'), 'utf8');
-    expect(foundationCss).toContain('--pa-canvas: #F6F8F7');
-    expect(foundationCss).toContain('--pa-paper: #FFFFFF');
-    expect(foundationCss).toContain('--pa-ink: #101313');
-    expect(foundationCss).toContain('--pa-ink-dense: #2B3230');
-    expect(foundationCss).toContain('--pa-text-secondary: #596360');
-    expect(foundationCss).toContain('--pa-mist: #DDE3E1');
-    expect(foundationCss).toContain('--pa-field: #EEF2F0');
-    expect(foundationCss).toContain('--pa-dark: #101615');
-    expect(foundationCss).toContain('--pa-dark-text: #F6F8F7');
-    expect(foundationCss).toContain('--pa-dark-muted: #BBC4C1');
-    expect(foundationCss).toContain('--pa-info: #315E8A');
-    expect(foundationCss).toContain('--pa-success: #1E6B50');
-    expect(foundationCss).toContain('--pa-warning: #9A630F');
+    expect(foundationCss).toContain('--pa-bg: #FFFFFF');
+    expect(foundationCss).toContain('--pa-bg-soft: #F4F5F6');
+    expect(foundationCss).toContain('--pa-surface: #ECEFF1');
+    expect(foundationCss).toContain('--pa-ink: #0B0B0B');
+    expect(foundationCss).toContain('--pa-ink-2: #171717');
+    expect(foundationCss).toContain('--pa-text: #4F5358');
+    expect(foundationCss).toContain('--pa-muted: #767B81');
+    expect(foundationCss).toContain('--pa-rule: #D9DDE1');
+    expect(foundationCss).toContain('--pa-dark: #0B0B0B');
+    expect(foundationCss).toContain('--pa-dark-text: #F7F7F5');
+    expect(foundationCss).toContain('--pa-dark-muted: #B7BBC0');
+    expect(foundationCss).toContain('--pa-info: #2F5D91');
+    expect(foundationCss).toContain('--pa-success: #15704E');
+    expect(foundationCss).toContain('--pa-warning: #94610C');
     expect(foundationCss).toContain('--pa-error: #A33A45');
-    expect(foundationCss).toContain('--pa-focus: #285FD0');
+    expect(foundationCss).toContain('--pa-focus: #245BD6');
   });
 
-  it('verifies Phase 3C Homepage scenes in HomeNarrativeV3 comply with all negative and positive controls', () => {
-    const narrative = readFileSync(resolve(process.cwd(), 'src/components/public/marketing/HomeNarrativeV3.jsx'), 'utf8');
+  it('verifies Phase 4 Homepage scenes comply with all negative and positive controls', () => {
+    const hero = readFileSync(resolve(process.cwd(), 'src/components/public/v4/EvidenceHero.jsx'), 'utf8');
+    const worlds = readFileSync(resolve(process.cwd(), 'src/components/public/v4/WorkWorldsTheatre.jsx'), 'utf8');
+    const eqs = readFileSync(resolve(process.cwd(), 'src/components/public/v4/EvidenceQuestionSignal.jsx'), 'utf8');
+    const profile = readFileSync(resolve(process.cwd(), 'src/components/public/v4/LivingProfileField.jsx'), 'utf8');
+    const career = readFileSync(resolve(process.cwd(), 'src/components/public/v4/CareerRelationshipScene.jsx'), 'utf8');
+    const devLoop = readFileSync(resolve(process.cwd(), 'src/components/public/v4/DevelopmentEvidenceLoop.jsx'), 'utf8');
+    const trust = readFileSync(resolve(process.cwd(), 'src/components/public/v4/TrustResolution.jsx'), 'utf8');
 
-    // 1. Scene 1: 2-actor hero
-    expect(narrative).toContain('evidence-hero-field');
-    expect(narrative).toContain('hero-actor-plane--dominant');
-    expect(narrative).toContain('hero-actor-plane--supporting');
-    expect(narrative).toContain('Your work');
-    expect(narrative).toContain('leaves evidence.');
+    // 1. Scene 1: Evidence Studio Hero (3 approved Pexels media layers + native fragments)
+    expect(hero).toContain('evidence-hero-v4');
+    expect(hero).toContain('hero-v4-plane--dominant');
+    expect(hero).toContain('hero-v4-plane--supporting');
+    expect(hero).toContain('hero-v4-plane--wall');
+    expect(hero).toContain('Your work');
+    expect(hero).toContain('leaves evidence.');
 
-    // Negative control: No 5-actor constellation or eyebrow pill
-    expect(narrative).not.toContain('evidence-hero-constellation');
+    // 2. Scene 2: Work Worlds Theatre (6 worlds with persistent stage)
+    expect(worlds).toContain('work-worlds-theatre-v4');
+    expect(worlds).toContain('Work changes the evidence.');
+    expect(worlds).toContain('world-stage-slot');
 
-    // 2. Scene 2: Work Worlds Theatre (6 worlds, Build = 34804003, no decorative World 01 numbers)
-    expect(narrative).toContain('work-worlds-theatre-scene');
-    expect(narrative).toContain('Different work. Same signal.');
-    expect(narrative).not.toContain('World 0');
+    // 3. Scene 3: Evidence -> Question -> Signal
+    expect(eqs).toContain('evidence-question-signal-v4');
+    expect(eqs).toContain('Context changes the question.');
+    expect(eqs).toContain('eqs-responses-group');
 
-    // 3. Scene 4: Persistent Context -> Question -> Signal Artifact
-    expect(narrative).toContain('context-question-signal-scene');
-    expect(narrative).toContain('cqs-persistent-artifact');
-    expect(narrative).toContain('Demonstrated Signal:');
+    // 4. Scene 4: Living Profile Field (4 independent lenses)
+    expect(profile).toContain('living-profile-field-v4');
+    expect(profile).toContain('Four readings. Kept separate.');
 
-    // 4. Scene 5: Living Multidimensional Profile
-    expect(narrative).toContain('living-profile-scene');
-    expect(narrative).toContain('One profile. Four distinct readings.');
+    // 5. Scene 5: Career Relationship
+    expect(career).toContain('career-relationship-v4');
+    expect(career).toContain('A fit score should explain itself.');
 
-    // 5. Scene 6: Evidence & Confidence Open Field
-    expect(narrative).toContain('evidence-inspection-scene');
-    expect(narrative).toContain('See what shaped the interpretation.');
+    // 6. Scene 6: Continuous Development Loop
+    expect(devLoop).toContain('development-evidence-loop-v4');
+    expect(devLoop).toContain('New work changes the profile.');
 
-    // 6. Scene 7: Career Relationships Master-Detail
-    expect(narrative).toContain('career-relationships-scene');
-    expect(narrative).toContain('Direction needs reasons.');
-
-    // 7. Scene 8: Continuous Development Loop
-    expect(narrative).toContain('development-loop-scene');
-    expect(narrative).toContain('Your next move becomes new evidence.');
-
-    // 8. Scene 9: Trust & Boundaries
-    expect(narrative).toContain('trust-boundaries-scene');
+    // 7. Scene 7: Trust Resolution
+    expect(trust).toContain('trust-resolution-v4');
+    expect(trust).toContain('See what shaped the result.');
   });
 });

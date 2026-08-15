@@ -8,7 +8,6 @@ import {
   FiLogOut,
   FiPlay,
   FiShield,
-  FiUser,
 } from 'react-icons/fi';
 import { useAuth } from '../../hooks/useAuth';
 import { useActiveFlowSessionQuery } from '../../hooks/useAssessmentFlow';
@@ -69,7 +68,7 @@ export default function ProductShell({
 
   return (
     <div className="product-shell">
-      {/* ── Desktop Sidebar ── */}
+      {/* ── Desktop Sidebar (Phase 4: 224px, True Neutral Dark #0B0B0B) ── */}
       <aside className="product-sidebar" aria-label="Product Navigation">
         <div className="product-sidebar__head">
           <Link to="/" className="product-sidebar__brand">
@@ -148,9 +147,9 @@ export default function ProductShell({
           </div>
           <button
             type="button"
-            className="product-sidebar__link"
+            className="product-sidebar__logout-btn"
             onClick={handleLogout}
-            style={{ width: '100%', border: 'none', background: 'transparent' }}
+            aria-label="Sign out of account"
           >
             <FiLogOut className="product-sidebar__icon" />
             <span>Sign out</span>
@@ -174,7 +173,7 @@ export default function ProductShell({
         </main>
       </div>
 
-      {/* ── Mobile Bottom Navigation ── */}
+      {/* ── Mobile Bottom Navigation (App-like, safe-area-aware) ── */}
       <nav className="product-mobile-nav" aria-label="Mobile Navigation">
         <NavLink
           to="/dashboard"

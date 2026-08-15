@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import PublicMotionRoot from './PublicMotionRoot';
 
 const primaryNav = [
   ['How it works', '/how-it-works'],
   ['Career intelligence', '/career-intelligence'],
+  ['Progress', '/progress'],
   ['Methodology', '/methodology'],
   ['Trust', '/trust'],
 ];
@@ -12,6 +13,7 @@ const primaryNav = [
 const footerNav = [
   ['How it works', '/how-it-works'],
   ['Career intelligence', '/career-intelligence'],
+  ['Progress', '/progress'],
   ['Methodology', '/methodology'],
   ['Trust', '/trust'],
   ['Privacy', '/privacy'],
@@ -28,12 +30,56 @@ export function Arrow() {
 
 export function PublicHeader() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [tone, setTone] = useState('light');
   const toggle = useRef(null);
   const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => setOpen(false), [location.pathname]);
 
+  // Track scroll position for header surface reveal
+  useEffect(() => {
+    const handleScroll = () => {
+      const isPastHero = window.scrollY > 120;
+      setScrolled(isPastHero);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Header tone observer for explicit route scenes
+  useEffect(() => {
+    const scenes = Array.from(document.querySelectorAll('[data-header-scene]'));
+    if (!scenes.length) {
+      if (location.pathname === '/career-intelligence') {
+        setTone('dark');
+      } else {
+        setTone('light');
+      }
+      return undefined;
+    }
+
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        const intersecting = entries.filter((e) => e.isIntersecting);
+        if (intersecting.length > 0) {
+          const topScene = intersecting.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (topScene) {
+            setTone(topScene.target.dataset.headerScene || 'light');
+          }
+        }
+      },
+      { rootMargin: '-10% 0px -70% 0px', threshold: [0.1, 0.5] }
+    );
+
+    scenes.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [location.pathname]);
+
+  // Mobile menu body lock and escape key
   useEffect(() => {
     if (!open) return undefined;
     const previous = document.body.style.overflow;
@@ -51,25 +97,17 @@ export function PublicHeader() {
     };
   }, [open]);
 
-  useEffect(() => {
-    const scenes = Array.from(document.querySelectorAll('[data-header-scene]'));
-    if (!scenes.length) return undefined;
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        const current = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (current) setTone(current.target.dataset.headerScene || 'light');
-      },
-      { rootMargin: '-1px 0px -76% 0px', threshold: [0, 0.15, 0.5] }
-    );
-    scenes.forEach((scene) => observer.observe(scene));
-    setTone(scenes[0]?.dataset.headerScene || 'light');
-    return () => observer.disconnect();
-  }, [location.pathname]);
+  const headerClass = [
+    'public-header',
+    `public-header--${tone}`,
+    isHome && !scrolled ? 'public-header--hero-transparent' : 'public-header--scrolled',
+    open ? 'is-open' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <header className={`public-header public-header--${tone} ${open ? 'is-open' : ''}`}>
+    <header className={headerClass}>
       <div className="public-header__inner">
         <Link className="public-brand" to="/" aria-label="Personality Assessor home">
           <span className="public-brand__name">Personality Assessor</span>
@@ -98,7 +136,7 @@ export function PublicHeader() {
           className="public-menu-trigger"
           aria-expanded={open}
           aria-controls="public-nav"
-          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
           onClick={() => setOpen((value) => !value)}
         >
           <span>{open ? 'Close' : 'Menu'}</span>
@@ -108,24 +146,40 @@ export function PublicHeader() {
       {open && (
         <div className="public-header__mobile-overlay" onClick={() => setOpen(false)}>
           <div className="public-header__mobile-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="public-header__mobile-head">
+              <span className="public-brand__name">Personality Assessor</span>
+              <button
+                type="button"
+                className="public-mobile-close-btn"
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+              >
+                Close
+              </button>
+            </div>
             <nav className="public-header__mobile-links" aria-label="Mobile navigation">
               {primaryNav.map(([label, to]) => (
                 <NavLink key={to} to={to} onClick={() => setOpen(false)}>
                   {label}
                 </NavLink>
               ))}
-              <NavLink to="/progress" onClick={() => setOpen(false)}>
-                Progress
-              </NavLink>
               <NavLink to="/privacy" onClick={() => setOpen(false)}>
                 Privacy
               </NavLink>
             </nav>
             <div className="public-header__mobile-actions">
-              <Link className="public-cta-button public-cta-button--primary public-cta-button--wide" to="/signup" onClick={() => setOpen(false)}>
+              <Link
+                className="public-cta-button public-cta-button--primary public-cta-button--wide"
+                to="/signup"
+                onClick={() => setOpen(false)}
+              >
                 Build my profile
               </Link>
-              <Link className="public-header__signin" to="/login" onClick={() => setOpen(false)}>
+              <Link
+                className="public-header__signin public-header__signin--mobile"
+                to="/login"
+                onClick={() => setOpen(false)}
+              >
                 Sign in
               </Link>
             </div>
@@ -143,16 +197,18 @@ export function PublicFooter({ integrated = false }) {
         <div className="public-terminal-footer__scene">
           <div className="public-terminal-footer__lead">
             <h2 className="public-terminal-footer__headline">
-              Bring new<br />
-              evidence<br />
-              back.
+              Build a profile<br />
+              you can return to.
             </h2>
             <p className="public-terminal-footer__supporting">
-              Your profile can change when your work does.
+              Your work changes. Your evidence can change with it.
             </p>
             <div className="public-terminal-footer__cta-wrap">
               <Link className="public-cta-button public-cta-button--inverted" to="/signup">
                 Build my profile <Arrow />
+              </Link>
+              <Link className="public-terminal-footer__signin-link" to="/login">
+                Sign in
               </Link>
             </div>
           </div>
@@ -162,7 +218,7 @@ export function PublicFooter({ integrated = false }) {
           <div className="public-terminal-footer__brand-row">
             <span className="public-brand__name">Personality Assessor</span>
             <p className="public-terminal-footer__notice">
-              Professional reflection and career exploration. Not diagnosis, a hiring decision, or a guarantee of career success.
+              Professional reflection and career exploration. Not clinical diagnosis, an HR gatekeeping mechanism, or a guarantee of employment success.
             </p>
           </div>
           <nav className="public-terminal-footer__nav" aria-label="Footer navigation">
@@ -186,11 +242,9 @@ export function PublicLayout({ children, page, footerMode = 'standard' }) {
       </a>
       <PublicHeader />
       <PublicMotionRoot>
-        <div id="smooth-wrapper">
-          <div id="smooth-content">
-            {children}
-            {footerMode !== 'integrated' && <PublicFooter />}
-          </div>
+        <div className="public-content-flow">
+          {children}
+          {footerMode !== 'integrated' && <PublicFooter />}
         </div>
       </PublicMotionRoot>
     </div>

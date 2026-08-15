@@ -1,35 +1,37 @@
-/* Phase 3C Production — Global Public Site Styles */
+/* Phase 4 Production — Global Public Site Styles */
 @import '../styles/fonts.css';
 
 :root {
-  --pa-canvas: #F6F8F7;
-  --pa-paper: #FFFFFF;
-  --pa-ink: #101313;
-  --pa-ink-dense: #2B3230;
-  --pa-text-secondary: #596360;
-  --pa-mist: #DDE3E1;
-  --pa-field: #EEF2F0;
-  --pa-dark: #101615;
-  --pa-dark-text: #F6F8F7;
-  --pa-dark-muted: #BBC4C1;
+  --pa-bg: #FFFFFF;
+  --pa-bg-soft: #F4F5F6;
+  --pa-surface: #ECEFF1;
+  --pa-ink: #0B0B0B;
+  --pa-ink-2: #171717;
+  --pa-text: #4F5358;
+  --pa-muted: #767B81;
+  --pa-rule: #D9DDE1;
+  --pa-dark: #0B0B0B;
+  --pa-dark-text: #F7F7F5;
+  --pa-dark-muted: #B7BBC0;
 
-  --pa-info: #315E8A;
-  --pa-success: #1E6B50;
-  --pa-warning: #9A630F;
+  --pa-info: #2F5D91;
+  --pa-success: #15704E;
+  --pa-warning: #94610C;
   --pa-error: #A33A45;
-  --pa-focus: #285FD0;
+  --pa-focus: #245BD6;
 
-  --font-display: "Mona Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-text: "Mona Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Source Sans 3 Variable", "Source Sans 3", system-ui, -apple-system, sans-serif;
+  --font-text: "Source Sans 3 Variable", "Source Sans 3", system-ui, -apple-system, sans-serif;
+  --font-editorial: "Source Serif 4 Variable", "Source Serif 4", Georgia, serif;
 
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
 
-  --shadow-subtle: 0 1px 3px rgba(16, 19, 19, 0.04);
-  --shadow-card: 0 4px 16px rgba(16, 19, 19, 0.04);
-  --shadow-elevated: 0 12px 32px rgba(16, 19, 19, 0.06);
+  --shadow-subtle: 0 1px 3px rgba(11, 11, 11, 0.03);
+  --shadow-card: 0 2px 10px rgba(11, 11, 11, 0.04);
+  --shadow-elevated: 0 12px 32px rgba(11, 11, 11, 0.06);
 }
 
 *, *::before, *::after {
@@ -39,11 +41,11 @@
 body {
   margin: 0;
   padding: 0;
-  background: var(--pa-canvas);
-  color: var(--pa-ink);
+  background: var(--pa-bg, #FFFFFF);
+  color: var(--pa-ink, #0B0B0B);
   font-family: var(--font-text);
   font-size: 1rem;
-  line-height: 1.55;
+  line-height: 1.52;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -63,14 +65,14 @@ button {
   align-items: center;
   gap: 8px;
   font-family: var(--font-display);
-  font-weight: 550;
+  font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: -0.02em;
   color: inherit;
 }
 
 .public-brand__name {
-  font-weight: 550;
+  font-weight: 600;
 }
 
 /* ── Public Header ────────────────────────────────────────────────────────── */
@@ -80,20 +82,22 @@ button {
   top: 0;
   left: 0;
   right: 0;
-  height: 72px;
-  background-color: transparent;
+  height: 68px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--pa-rule, #D9DDE1);
+  color: var(--pa-ink, #0B0B0B);
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.public-header--light {
-  color: var(--pa-ink);
-  background-color: rgba(246, 248, 247, 0.94);
-  border-bottom: 1px solid var(--pa-mist);
+.public-header--hero-transparent {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  color: var(--pa-ink, #0B0B0B);
 }
 
 .public-header--dark {
-  color: var(--pa-dark-text);
-  background-color: rgba(16, 22, 21, 0.94);
+  color: var(--pa-dark-text, #F7F7F5);
+  background-color: var(--pa-dark, #0B0B0B);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -101,7 +105,7 @@ button {
   max-width: 1440px;
   margin: 0 auto;
   height: 100%;
-  padding: 0 48px;
+  padding: 0 clamp(20px, 4.5vw, 64px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -110,14 +114,14 @@ button {
 .public-header__nav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
 }
 
 .public-header__nav a {
   font-size: 0.9375rem;
-  font-weight: 480;
+  font-weight: 450;
   color: inherit;
-  opacity: 0.75;
+  opacity: 0.72;
   transition: opacity 0.15s ease;
 }
 
@@ -149,7 +153,7 @@ button {
   border: 1px solid currentColor;
   color: inherit;
   padding: 6px 14px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm, 6px);
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -158,47 +162,74 @@ button {
 .public-header__mobile-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(16, 19, 19, 0.5);
-  z-index: 1001;
+  background: rgba(11, 11, 11, 0.6);
+  z-index: 1010;
   display: flex;
   justify-content: flex-end;
 }
 
 .public-header__mobile-panel {
-  width: 300px;
+  width: min(340px, 85vw);
   height: 100%;
-  background-color: var(--pa-paper);
-  color: var(--pa-ink);
-  padding: 32px 24px;
+  background: #FFFFFF;
+  color: var(--pa-ink, #0B0B0B);
   display: flex;
   flex-direction: column;
+  padding: 24px 20px;
+  gap: 24px;
+  box-shadow: -4px 0 24px rgba(11, 11, 11, 0.12);
+}
+
+.public-header__mobile-head {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--pa-rule, #D9DDE1);
+}
+
+.public-mobile-close-btn {
+  background: transparent;
+  border: 1px solid var(--pa-rule, #D9DDE1);
+  border-radius: var(--radius-sm, 6px);
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  color: var(--pa-ink, #0B0B0B);
 }
 
 .public-header__mobile-links {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding-top: 40px;
+  gap: 16px;
+  flex: 1;
 }
 
 .public-header__mobile-links a {
   font-size: 1.125rem;
   font-weight: 500;
+  color: var(--pa-ink, #0B0B0B);
+  padding: 6px 0;
 }
 
 .public-header__mobile-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--pa-rule, #D9DDE1);
 }
 
-/* ── Public Footer ────────────────────────────────────────────────────────── */
+.public-header__signin--mobile {
+  text-align: center;
+  padding: 10px;
+}
+
+/* ── Terminal Integrated Footer ───────────────────────────────────────────── */
 .public-terminal-footer {
   width: 100%;
-  background-color: var(--pa-dark);
-  color: var(--pa-dark-text);
-  padding: 80px 48px 48px 48px;
+  background-color: var(--pa-dark, #0B0B0B);
+  color: var(--pa-dark-text, #F7F7F5);
+  padding: 80px clamp(20px, 4.5vw, 64px) 48px;
 }
 
 .public-terminal-footer__inner {
@@ -209,37 +240,51 @@ button {
   gap: 64px;
 }
 
-.public-terminal-footer__scene {
+.public-terminal-footer__lead {
+  max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .public-terminal-footer__headline {
-  font-family: var(--font-display);
-  font-size: clamp(2.25rem, 4vw, 3.75rem);
-  font-weight: 520;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-  color: var(--pa-dark-text);
+  font-family: var(--font-editorial, 'Source Serif 4', Georgia, serif);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 450;
+  line-height: 1.05;
+  color: var(--pa-dark-text, #F7F7F5);
+  margin: 0;
 }
 
 .public-terminal-footer__supporting {
   font-size: 1.125rem;
-  color: var(--pa-dark-muted);
+  color: var(--pa-dark-muted, #B7BBC0);
+  margin: 0;
 }
 
 .public-terminal-footer__cta-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
   margin-top: 8px;
+}
+
+.public-terminal-footer__signin-link {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--pa-dark-text, #F7F7F5);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .public-terminal-footer__subordinate {
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 32px;
+  justify-content: space-between;
   gap: 32px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
 }
 
 .public-terminal-footer__brand-row {
@@ -251,582 +296,643 @@ button {
 
 .public-terminal-footer__notice {
   font-size: 0.8125rem;
-  color: var(--pa-dark-muted);
+  color: var(--pa-dark-muted, #B7BBC0);
   line-height: 1.5;
   margin: 0;
 }
 
 .public-terminal-footer__nav {
   display: flex;
-  align-items: center;
-  gap: 24px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
 .public-terminal-footer__nav a {
   font-size: 0.875rem;
-  color: var(--pa-dark-muted);
+  color: var(--pa-dark-muted, #B7BBC0);
   transition: color 0.15s ease;
 }
 
 .public-terminal-footer__nav a:hover {
-  color: var(--pa-dark-text);
+  color: #FFFFFF;
 }
 
-/* ── Secondary Route Global Layout ────────────────────────────────────────── */
-.marketing-page-container {
-  width: 100%;
-  min-height: 100vh;
-  padding-top: 72px;
-}
-
+/* ── Secondary Route Base ─────────────────────────────────────────────────── */
 .secondary-route {
   width: 100%;
+  padding: calc(68px + 48px) clamp(20px, 4.5vw, 64px) 80px;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 64px 48px 96px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
 }
 
 .secondary-route__header {
-  max-width: 800px;
-  margin-bottom: 56px;
+  max-width: 720px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .secondary-route__title {
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
   font-size: clamp(2.25rem, 3.8vw, 3.25rem);
-  font-weight: 520;
+  font-weight: 500;
   line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: var(--pa-ink);
+  letter-spacing: -0.025em;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
+}
+
+.secondary-route__title--dark {
+  color: var(--pa-dark-text, #F7F7F5);
 }
 
 .secondary-route__lead {
   font-size: 1.125rem;
-  color: var(--pa-text-secondary);
-  line-height: 1.6;
+  line-height: 1.55;
+  color: var(--pa-text, #4F5358);
+  margin: 0;
+}
+
+.secondary-route__lead--dark {
+  color: var(--pa-dark-muted, #B7BBC0);
 }
 
 .secondary-route__cta {
   margin-top: 8px;
 }
 
-/* ── 1. How It Works Route Styles ─────────────────────────────────────────── */
-.hiw-stage-nav {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
+/* ── Route 1: How It Works Persistent Stage ───────────────────────────────── */
+.hiw-persistent-stage {
+  display: grid;
+  grid-template-columns: minmax(320px, 42%) 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
 }
 
-.hiw-stage-nav-item {
-  padding: 8px 18px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border-radius: var(--radius-sm);
-  background-color: var(--pa-paper);
-  border: 1px solid var(--pa-mist);
-  color: var(--pa-text-secondary);
+.hiw-rail-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hiw-step-block {
+  padding: 24px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid var(--pa-rule, #D9DDE1);
+  background: var(--pa-bg, #FFFFFF);
   cursor: pointer;
   transition: all 0.15s ease;
-}
-
-.hiw-stage-nav-item.is-active {
-  background-color: var(--pa-ink);
-  color: var(--pa-paper);
-  border-color: var(--pa-ink);
-}
-
-.hiw-artifact-flow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: start;
-}
-
-.hiw-story-column {
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-
-.hiw-story-act {
-  padding: 28px 32px;
-  background-color: var(--pa-paper);
-  border: 1px solid var(--pa-mist);
-  border-radius: var(--radius-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.hiw-story-act.is-current {
-  border-color: var(--pa-ink);
-  box-shadow: var(--shadow-card);
-}
-
-.hiw-act-title {
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-  font-weight: 600;
-  color: var(--pa-ink);
-}
-
-.hiw-act-summary {
-  font-size: 0.96875rem;
-  font-weight: 500;
-  color: var(--pa-ink);
-  line-height: 1.5;
-}
-
-.hiw-act-detail {
-  font-size: 0.875rem;
-  color: var(--pa-text-secondary);
-  line-height: 1.55;
-  margin: 0;
-}
-
-.hiw-visual-column {
-  position: sticky;
-  top: 100px;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  background-color: var(--pa-field);
-}
-
-/* ── 2. Career Intelligence Route Styles ──────────────────────────────────── */
-.career-intelligence-route {
-  background-color: var(--pa-dark);
-  color: var(--pa-dark-text);
-}
-
-.career-intelligence-route .secondary-route__title {
-  color: var(--pa-dark-text);
-}
-
-.career-intelligence-route .secondary-route__lead {
-  color: var(--pa-dark-muted);
-}
-
-.career-atlas-environment {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 40px;
-  align-items: start;
-}
-
-.career-atlas-role-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.career-atlas-role-btn {
+.hiw-step-block:hover {
+  border-color: var(--pa-ink, #0B0B0B);
+}
+
+.hiw-step-block.is-active {
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-color: var(--pa-ink, #0B0B0B);
+}
+
+.hiw-step-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--pa-muted, #767B81);
+}
+
+.hiw-step-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
+}
+
+.hiw-step-summary {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--pa-text, #4F5358);
+  margin: 0;
+}
+
+.hiw-step-detail {
+  font-size: 0.875rem;
+  color: var(--pa-muted, #767B81);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.hiw-visual-stage {
+  position: sticky;
+  top: 96px;
+}
+
+.hiw-visual-stage__frame {
+  width: 100%;
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-radius: var(--radius-sm, 6px);
+  overflow: hidden;
+  border: 1px solid var(--pa-rule, #D9DDE1);
+}
+
+.hiw-visual-stage__media {
+  width: 100%;
+  height: 48svh;
+  min-height: 360px;
+  margin: 0;
+}
+
+.hiw-visual-stage__caption {
+  padding: 16px 20px;
+  background: #FFFFFF;
+  border-top: 1px solid var(--pa-rule, #D9DDE1);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 14px 18px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-sm);
-  color: var(--pa-dark-text);
-  cursor: pointer;
+  justify-content: space-between;
+}
+
+.hiw-visual-stage__tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pa-muted, #767B81);
+}
+
+.hiw-visual-stage__label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+}
+
+/* ── Route 2: Career Intelligence Career Atlas ────────────────────────────── */
+.career-atlas-route {
+  background: var(--pa-dark, #0B0B0B);
+  color: var(--pa-dark-text, #F7F7F5);
+  max-width: 100%;
+  padding-left: clamp(20px, 4.5vw, 64px);
+  padding-right: clamp(20px, 4.5vw, 64px);
+}
+
+.career-atlas-route__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.career-atlas-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 30%) 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.career-atlas-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.career-atlas-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm, 6px);
+  color: var(--pa-dark-text, #F7F7F5);
   text-align: left;
+  cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.career-atlas-role-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.career-atlas-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.career-atlas-role-btn.is-active {
-  background-color: var(--pa-paper);
-  color: var(--pa-ink);
+.career-atlas-nav-item.is-active {
+  background: #FFFFFF;
+  color: var(--pa-ink, #0B0B0B);
+  border-color: #FFFFFF;
 }
 
-.career-atlas-role-title {
+.career-atlas-nav-title {
   font-size: 0.9375rem;
-  font-weight: 520;
+  font-weight: 600;
 }
 
-.career-atlas-role-badge {
-  font-size: 0.75rem;
+.career-atlas-nav-match {
+  font-size: 0.8125rem;
   opacity: 0.75;
 }
 
-.career-atlas-stage {
+.career-atlas-detail {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
 
-.career-atlas-media {
+.career-atlas-environment-media {
+  position: relative;
   width: 100%;
-  max-height: 48svh;
-  aspect-ratio: 16 / 10;
-  border-radius: var(--radius-sm);
+  height: 44svh;
+  min-height: 340px;
+  border-radius: var(--radius-sm, 6px);
   overflow: hidden;
-  background-color: #1a2221;
+  margin: 0;
 }
 
-.career-atlas-reasoning {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+.career-atlas-environment-badge {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  background: rgba(11, 11, 11, 0.92);
+  color: #FFFFFF;
+  padding: 12px 18px;
+  border-radius: var(--radius-sm, 6px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.career-atlas-badge-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.career-atlas-badge-score {
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+.career-atlas-reasoning-flow {
+  display: flex;
+  flex-direction: column;
   gap: 24px;
 }
 
-.career-atlas-section {
+.career-atlas-block {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background-color: rgba(255, 255, 255, 0.04);
-  padding: 20px;
-  border-radius: var(--radius-sm);
+  gap: 6px;
 }
 
-.career-atlas-section-title {
+.career-atlas-block-title {
   font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--pa-dark-muted);
-}
-
-.career-atlas-section-body {
-  font-size: 0.9375rem;
-  color: var(--pa-dark-text);
-  line-height: 1.5;
+  color: var(--pa-dark-muted, #B7BBC0);
   margin: 0;
 }
 
-.career-atlas-boundary-note {
-  grid-column: 1 / -1;
+.career-atlas-block-body {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--pa-dark-text, #F7F7F5);
+  margin: 0;
+}
+
+.career-atlas-methodology-note {
   font-size: 0.8125rem;
-  color: var(--pa-dark-muted);
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--pa-dark-muted, #B7BBC0);
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* ── 3. Progress Route Styles ─────────────────────────────────────────────── */
-.progress-journey-filmstrip {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
+.career-atlas-methodology-note span {
+  font-weight: 600;
 }
 
-.progress-journey-node {
-  background-color: var(--pa-paper);
-  border: 1px solid var(--pa-mist);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+/* ── Route 3: Progress Longitudinal Development Journey ───────────────────── */
+.progress-staggered-flow {
   display: flex;
   flex-direction: column;
+  gap: 40px;
 }
 
-.progress-journey-media {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background-color: var(--pa-field);
+.progress-staggered-node {
+  display: grid;
+  grid-template-columns: minmax(300px, 45%) 1fr;
+  gap: clamp(24px, 3.5vw, 48px);
+  align-items: center;
+  padding: 32px;
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-radius: var(--radius-sm, 6px);
 }
 
-.progress-journey-body {
-  padding: 24px;
+.progress-node-text {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.progress-journey-name {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--pa-ink);
-}
-
-.progress-journey-copy {
-  font-size: 0.875rem;
-  color: var(--pa-text-secondary);
-  line-height: 1.55;
-  margin: 0;
-}
-
-/* ── 4. Methodology Route Styles ──────────────────────────────────────────── */
-.methodology-framework-atlas {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  margin-bottom: 48px;
-}
-
-.methodology-layer-card {
-  background-color: var(--pa-paper);
-  border: 1px solid var(--pa-mist);
-  border-radius: var(--radius-sm);
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.methodology-layer-card--engine {
-  border-left: 3px solid var(--pa-info);
-}
-
-.methodology-layer-head h2 {
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-  font-weight: 600;
-  color: var(--pa-ink);
-  margin-bottom: 8px;
-}
-
-.methodology-layer-head p {
-  font-size: 0.9375rem;
-  color: var(--pa-text-secondary);
-  line-height: 1.55;
-  margin: 0;
-}
-
-.methodology-spectrum-field {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  background-color: var(--pa-field);
-  border-radius: var(--radius-sm);
-}
-
-.spectrum-bound-label {
-  font-size: 0.75rem;
-  color: var(--pa-text-secondary);
-}
-
-.spectrum-track-bar {
-  flex: 1;
-  height: 6px;
-  background-color: var(--pa-mist);
-  border-radius: 3px;
-  position: relative;
-}
-
-.spectrum-pin {
-  position: absolute;
-  left: 65%;
-  top: -4px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: var(--pa-ink);
-}
-
-.methodology-tags-cluster {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.methodology-tags-cluster span {
-  padding: 6px 14px;
-  background-color: var(--pa-field);
-  border-radius: var(--radius-sm);
+.progress-node-num {
   font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--pa-ink);
-}
-
-.methodology-scope-box {
-  background-color: var(--pa-field);
-  padding: 24px 28px;
-  border-radius: var(--radius-sm);
-}
-
-.methodology-scope-box h3 {
-  font-size: 1rem;
   font-weight: 600;
-  color: var(--pa-ink);
-  margin-bottom: 6px;
+  color: var(--pa-muted, #767B81);
 }
 
-.methodology-scope-box p {
-  font-size: 0.875rem;
-  color: var(--pa-text-secondary);
-  line-height: 1.5;
+.progress-node-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
   margin: 0;
 }
 
-/* ── 5. Trust Route Styles ────────────────────────────────────────────────── */
-.trust-provenance-ledger {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 48px;
-}
-
-.trust-ledger-row {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  gap: 24px;
-  align-items: flex-start;
-  padding: 24px 28px;
-  background-color: var(--pa-paper);
-  border: 1px solid var(--pa-mist);
-  border-radius: var(--radius-sm);
-}
-
-.trust-ledger-marker {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--pa-field);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.progress-node-body {
   font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--pa-ink);
-}
-
-.trust-ledger-content h2 {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--pa-ink);
-  margin-bottom: 6px;
-}
-
-.trust-ledger-content p {
-  font-size: 0.9375rem;
-  color: var(--pa-text-secondary);
+  color: var(--pa-text, #4F5358);
   line-height: 1.55;
   margin: 0;
 }
 
-.trust-action-footer {
-  display: flex;
+.progress-node-media {
+  width: 100%;
+  height: 28svh;
+  min-height: 220px;
+  border-radius: var(--radius-sm, 6px);
+  overflow: hidden;
+  margin: 0;
+  background: #FFFFFF;
 }
 
-/* ── 6. Privacy Route Styles ──────────────────────────────────────────────── */
-.privacy-control-grid {
+/* ── Route 4: Methodology Analytical Atlas ─────────────────────────────────── */
+.methodology-atlas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
-  margin-bottom: 48px;
 }
 
-.privacy-control-card {
-  padding: 28px 24px;
-  background-color: var(--pa-paper);
-  border: 1px solid var(--pa-mist);
-  border-radius: var(--radius-sm);
+.methodology-atlas-card {
+  padding: 28px;
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-radius: var(--radius-sm, 6px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.methodology-card-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--pa-muted, #767B81);
+}
+
+.methodology-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
+}
+
+.methodology-card-desc {
+  font-size: 0.9375rem;
+  color: var(--pa-text, #4F5358);
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+
+.methodology-spec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--pa-rule, #D9DDE1);
+  font-size: 0.75rem;
+  color: var(--pa-muted, #767B81);
+}
+
+.methodology-boundary-panel {
+  padding: 32px;
+  background: #FFFFFF;
+  border: 1px solid var(--pa-rule, #D9DDE1);
+  border-left: 4px solid var(--pa-info, #2F5D91);
+  border-radius: var(--radius-sm, 6px);
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.privacy-card-scope {
+.methodology-boundary-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
+}
+
+.methodology-boundary-body {
+  font-size: 0.9375rem;
+  color: var(--pa-text, #4F5358);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.methodology-scope-note {
+  font-size: 0.875rem;
+  color: var(--pa-muted, #767B81);
+  padding: 20px 0;
+  border-top: 1px solid var(--pa-rule, #D9DDE1);
+}
+
+.methodology-scope-note h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0 0 6px 0;
+}
+
+/* ── Route 5: Trust Provenance Route ───────────────────────────────────────── */
+.trust-provenance-route .trust-pipeline-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trust-pipeline-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px 28px;
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.trust-pipeline-num {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+}
+
+.trust-pipeline-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0 0 4px 0;
+}
+
+.trust-pipeline-body {
+  font-size: 0.9375rem;
+  color: var(--pa-text, #4F5358);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.trust-route-actions,
+.privacy-route-actions {
+  margin-top: 16px;
+}
+
+/* ── Route 6: Privacy Control Map ─────────────────────────────────────────── */
+.privacy-map-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.privacy-map-card {
+  padding: 28px;
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-radius: var(--radius-sm, 6px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.privacy-map-scope {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--pa-text-secondary);
+  color: var(--pa-muted, #767B81);
 }
 
-.privacy-card-title {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
+.privacy-map-title {
+  font-size: 1.15rem;
   font-weight: 600;
-  color: var(--pa-ink);
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
 }
 
-.privacy-card-desc {
-  font-size: 0.875rem;
-  color: var(--pa-text-secondary);
+.privacy-map-desc {
+  font-size: 0.9375rem;
+  color: var(--pa-text, #4F5358);
   line-height: 1.55;
   margin: 0;
 }
 
-.privacy-action-footer {
-  display: flex;
+/* ── Responsive Adaptations for Secondary Routes ───────────────────────────── */
+@media (max-width: 1023px) {
+  .hiw-persistent-stage,
+  .career-atlas-layout,
+  .progress-staggered-node {
+    grid-template-columns: 1fr;
+  }
+
+  .hiw-visual-stage {
+    position: static;
+  }
+
+  .progress-staggered-node {
+    padding: 24px;
+  }
 }
 
-/* ── Authentication Pages (Login & Signup) ────────────────────────────────── */
+@media (max-width: 900px) {
+  .public-header__nav,
+  .public-header__actions {
+    display: none;
+  }
+
+  .public-menu-trigger {
+    display: block;
+  }
+}
+
+/* ── Phase 4 Authentication Layout & Forms ─────────────────────────────────── */
 .pa-auth {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(340px, 48%) 1fr;
+  gap: clamp(32px, 5vw, 72px);
   min-height: 100vh;
-  background-color: var(--pa-canvas);
+  padding: 48px clamp(20px, 4.5vw, 64px);
+  background: var(--pa-bg, #FFFFFF);
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 .pa-auth__editorial {
-  padding: 64px 56px;
-  background-color: var(--pa-field);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 32px;
 }
 
 .pa-auth__heading {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .pa-auth__heading h1 {
-  font-family: var(--font-display);
-  font-size: 2.25rem;
-  font-weight: 520;
-  letter-spacing: -0.03em;
-  color: var(--pa-ink);
+  font-family: var(--font-editorial, 'Source Serif 4', Georgia, serif);
+  font-size: clamp(2.25rem, 3.5vw, 3rem);
+  font-weight: 450;
+  line-height: 1.1;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
 }
 
 .pa-auth__heading p {
   font-size: 1.0625rem;
-  color: var(--pa-text-secondary);
-  line-height: 1.55;
+  color: var(--pa-text, #4F5358);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .pa-auth__fragment-frame {
   width: 100%;
-  max-width: 420px;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius-sm);
+  height: 36svh;
+  min-height: 260px;
+  border-radius: var(--radius-sm, 6px);
   overflow: hidden;
-  background-color: var(--pa-paper);
+  margin: 0;
+  background: var(--pa-bg-soft, #F4F5F6);
 }
 
 .pa-auth__form-wrap {
-  padding: 64px 56px;
+  max-width: 460px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  max-width: 480px;
-  margin: 0 auto;
-  width: 100%;
+  gap: 20px;
 }
 
 .pa-auth__form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
 .pa-auth__form h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
   font-size: 1.75rem;
   font-weight: 600;
-  color: var(--pa-ink);
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
 }
 
 .pa-auth__form p {
   font-size: 0.9375rem;
-  color: var(--pa-text-secondary);
-  margin-top: -12px;
+  color: var(--pa-text, #4F5358);
+  margin: 0;
 }
 
 .pa-auth__form label {
@@ -834,187 +940,155 @@ button {
   flex-direction: column;
   gap: 6px;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--pa-ink);
+  font-weight: 550;
+  color: var(--pa-ink, #0B0B0B);
 }
 
 .pa-auth__form input[type="text"],
 .pa-auth__form input[type="email"],
 .pa-auth__form input[type="password"] {
-  padding: 12px 14px;
-  border: 1px solid var(--pa-mist);
-  border-radius: var(--radius-sm);
-  background-color: var(--pa-paper);
-  font-family: var(--font-text);
+  height: 48px;
+  padding: 0 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--pa-rule, #D9DDE1);
+  border-radius: var(--radius-sm, 6px);
   font-size: 0.9375rem;
-  color: var(--pa-ink);
+  font-family: inherit;
+  color: var(--pa-ink, #0B0B0B);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .pa-auth__form input:focus {
   outline: none;
-  border-color: var(--pa-focus);
-  box-shadow: 0 0 0 2px rgba(40, 95, 208, 0.15);
+  border-color: var(--pa-focus, #245BD6);
+  box-shadow: 0 0 0 2px rgba(36, 91, 214, 0.2);
 }
 
 .pa-auth__password {
   position: relative;
   display: flex;
-  align-items: center;
 }
 
 .pa-auth__password input {
   width: 100%;
-  padding-right: 64px;
+  padding-right: 64px !important;
 }
 
 .pa-auth__password button {
   position: absolute;
   right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   background: transparent;
   border: none;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--pa-text-secondary);
+  color: var(--pa-text, #4F5358);
+  cursor: pointer;
 }
 
 .pa-auth__check {
   flex-direction: row !important;
   align-items: center;
   gap: 10px !important;
+  cursor: pointer;
+}
+
+.pa-auth__check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--pa-ink, #0B0B0B);
+}
+
+.pa-auth__check span {
   font-size: 0.875rem;
-  color: var(--pa-text-secondary);
+  font-weight: 400;
+  color: var(--pa-text, #4F5358);
 }
 
 .pa-auth__submit {
-  padding: 14px 20px;
-  background-color: var(--pa-ink);
-  color: var(--pa-paper);
+  height: 48px;
+  background: var(--pa-ink, #0B0B0B);
+  color: #FFFFFF;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm, 6px);
   font-size: 0.9375rem;
   font-weight: 550;
   cursor: pointer;
   transition: background-color 0.15s ease;
+  margin-top: 4px;
 }
 
-.pa-auth__submit:hover:not(:disabled) {
-  background-color: var(--pa-ink-dense);
+.pa-auth__submit:hover {
+  background: var(--pa-ink-2, #171717);
 }
 
 .pa-auth__submit:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
-}
-
-.pa-auth__google {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--pa-mist);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-align: center;
-}
-
-.pa-auth__google p {
-  font-size: 0.8125rem;
-  color: var(--pa-text-secondary);
-  margin: 0;
-}
-
-.pa-auth__footer {
-  font-size: 0.875rem;
-  color: var(--pa-text-secondary);
-  margin-top: 24px;
-  text-align: center;
-}
-
-.pa-auth__footer a {
-  color: var(--pa-ink);
-  font-weight: 550;
-  text-decoration: underline;
 }
 
 .pa-auth__message {
   display: block;
   padding: 10px 14px;
-  background-color: #FCE2E5;
-  color: #8C2534;
-  border-radius: var(--radius-sm);
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-left: 3px solid var(--pa-error, #A33A45);
+  border-radius: var(--radius-sm, 6px);
   font-size: 0.875rem;
+  color: var(--pa-error, #A33A45);
 }
 
 .pa-auth__success {
   display: block;
   padding: 10px 14px;
-  background-color: #DEEFEA;
-  color: #18785B;
-  border-radius: var(--radius-sm);
+  background: var(--pa-bg-soft, #F4F5F6);
+  border-left: 3px solid var(--pa-success, #15704E);
+  border-radius: var(--radius-sm, 6px);
   font-size: 0.875rem;
+  color: var(--pa-success, #15704E);
 }
 
-/* ── Responsive Secondary & Auth ──────────────────────────────────────────── */
-@media (max-width: 1023px) {
-  .public-header__inner {
-    padding: 0 32px;
-  }
+.pa-auth__google {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
 
-  .public-header__nav {
-    display: none;
-  }
+.pa-auth__google p {
+  font-size: 0.8125rem;
+  color: var(--pa-muted, #767B81);
+}
 
-  .public-menu-trigger {
-    display: block;
-  }
+.pa-auth__footer {
+  font-size: 0.875rem;
+  color: var(--pa-text, #4F5358);
+}
 
-  .secondary-route {
-    padding: 48px 32px 64px 32px;
-  }
+.pa-auth__footer a {
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
-  .hiw-artifact-flow {
-    grid-template-columns: 1fr;
-  }
-
-  .hiw-visual-column {
-    position: static;
-  }
-
-  .career-atlas-environment {
-    grid-template-columns: 1fr;
-  }
-
+@media (max-width: 900px) {
   .pa-auth {
     grid-template-columns: 1fr;
+    padding-top: 32px;
   }
 
   .pa-auth__editorial {
-    display: none;
+    order: 2;
   }
 
   .pa-auth__form-wrap {
-    padding: 48px 24px;
+    order: 1;
+    max-width: 100%;
+  }
+
+  .pa-auth__fragment-frame {
+    display: none;
   }
 }
 
-@media (max-width: 767px) {
-  .public-header__inner {
-    padding: 0 18px;
-  }
-
-  .secondary-route {
-    padding: 32px 18px 48px 18px;
-  }
-
-  .secondary-route__title {
-    font-size: 2rem;
-  }
-
-  .public-terminal-footer {
-    padding: 48px 18px 32px 18px;
-  }
-
-  .public-terminal-footer__subordinate {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}

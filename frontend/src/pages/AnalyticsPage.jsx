@@ -42,7 +42,7 @@ export default function AnalyticsPage() {
 
   return (
     <ProductShell
-      title="Longitudinal Analytics"
+      title="Analytics"
       actions={
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button variant="secondary" size="sm" onClick={() => navigate('/dashboard')}>
@@ -54,55 +54,93 @@ export default function AnalyticsPage() {
         </div>
       }
     >
-      <div className="analytics-shell">
-        <header className="analytics-header">
-          <h1 className="analytics-header__title">Longitudinal Profile Analytics</h1>
-          <p className="analytics-header__subtitle">
-            Track continuous dimension shifts, career readiness evolution, and verified skill milestones across your historical assessments.
+      <div className="analytics-v4-workspace">
+        <header className="analytics-v4-header">
+          <h1 className="analytics-v4-title">Longitudinal Intelligence</h1>
+          <p className="analytics-v4-subtitle">
+            Sequential analysis of dimensional shifts, career readiness, and verified skill milestones across your history.
           </p>
         </header>
 
-        <div className="dashboard-grid">
-          {/* Top overview widget (12 cols) */}
-          <div className="col-span-12">
-            <PersonalIntelligenceOverview query={overviewQ} />
-          </div>
+        {/* Section 1: Overview Summary */}
+        <section className="analytics-v4-section" aria-labelledby="overview-heading">
+          <PersonalIntelligenceOverview query={overviewQ} />
+        </section>
 
-          {/* Trait Trends (8 cols) + Career Readiness (4 cols) */}
-          <div className="col-span-8">
-            <TraitTrendChart query={trendsQ} />
+        {/* Section 2: How has the profile changed? */}
+        <section className="analytics-v4-section" aria-labelledby="profile-shifts-heading">
+          <div className="analytics-section-title-row">
+            <span className="analytics-section-tag">01. Trajectory Analysis</span>
+            <h2 id="profile-shifts-heading" className="analytics-section-title">
+              How has your profile evolved?
+            </h2>
           </div>
-          <div className="col-span-4">
-            <CareerReadinessCard query={readinessQ} />
+          <div className="analytics-section-grid">
+            <div className="analytics-grid-main">
+              <TraitTrendChart query={trendsQ} />
+            </div>
+            <div className="analytics-grid-side">
+              <CareerReadinessCard query={readinessQ} />
+            </div>
           </div>
+        </section>
 
-          {/* Skill Progress (6 cols) + Roadmap Progress (6 cols) */}
-          <div className="col-span-6">
-            <SkillProgressPanel query={skillQ} />
+        {/* Section 3: What skills & milestones changed? */}
+        <section className="analytics-v4-section" aria-labelledby="skills-milestones-heading">
+          <div className="analytics-section-title-row">
+            <span className="analytics-section-tag">02. Verified Progress</span>
+            <h2 id="skills-milestones-heading" className="analytics-section-title">
+              What capabilities and milestones have advanced?
+            </h2>
           </div>
-          <div className="col-span-6">
-            <RoadmapProgressPanel resultId={latestResultId} careerId={topCareerId} />
+          <div className="analytics-section-grid">
+            <div className="analytics-grid-col">
+              <SkillProgressPanel query={skillQ} />
+            </div>
+            <div className="analytics-grid-col">
+              <RoadmapProgressPanel resultId={latestResultId} careerId={topCareerId} />
+            </div>
           </div>
+        </section>
 
-          {/* Assessment History (7 cols) + Insight Timeline (5 cols) */}
-          <div className="col-span-7">
-            <AssessmentHistoryList query={historyQ} />
+        {/* Section 4: What happened when? */}
+        <section className="analytics-v4-section" aria-labelledby="timeline-heading">
+          <div className="analytics-section-title-row">
+            <span className="analytics-section-tag">03. Evidence Timeline</span>
+            <h2 id="timeline-heading" className="analytics-section-title">
+              What milestones occurred when?
+            </h2>
           </div>
-          <div className="col-span-5">
-            <InsightTimeline query={timelineQ} />
+          <div className="analytics-section-grid">
+            <div className="analytics-grid-col">
+              <AssessmentHistoryList query={historyQ} />
+            </div>
+            <div className="analytics-grid-col">
+              <InsightTimeline query={timelineQ} />
+            </div>
           </div>
+        </section>
 
-          {/* Report History (6 cols) + Growth Recs (6 cols) */}
-          <div className="col-span-6">
-            <ReportHistoryPanel query={reportHistQ} />
+        {/* Section 5: Reports & Recommendations */}
+        <section className="analytics-v4-section" aria-labelledby="reports-heading">
+          <div className="analytics-section-title-row">
+            <span className="analytics-section-tag">04. Deliverables &amp; Direction</span>
+            <h2 id="reports-heading" className="analytics-section-title">
+              Reports and strategic recommendations
+            </h2>
           </div>
-          <div className="col-span-6">
-            <GrowthRecommendationsPanel
-              query={reportHistQ}
-              items={reportHistQ.data?.growthRecommendations || []}
-            />
+          <div className="analytics-section-grid">
+            <div className="analytics-grid-col">
+              <ReportHistoryPanel query={reportHistQ} />
+            </div>
+            <div className="analytics-grid-col">
+              <GrowthRecommendationsPanel
+                query={reportHistQ}
+                items={reportHistQ.data?.growthRecommendations || []}
+              />
+            </div>
           </div>
-        </div>
+        </section>
       </div>
     </ProductShell>
   );

@@ -1,4 +1,4 @@
-/* Base CSS Reset */
+/* Base CSS Reset — Phase 4 */
 * {
   box-sizing: border-box;
 }
@@ -17,9 +17,9 @@ body,
 }
 
 body {
-  color: var(--ink, #111513);
-  background: var(--canvas, #F4F6F5);
-  font-family: var(--font-text, system-ui, sans-serif);
+  color: var(--pa-ink, #0B0B0B);
+  background: var(--pa-bg, #FFFFFF);
+  font-family: var(--font-body, system-ui, sans-serif);
 }
 
 a {

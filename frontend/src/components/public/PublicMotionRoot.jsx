@@ -1,17 +1,15 @@
-import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion';
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger);
 
 const PublicMotionContext = createContext({
   motionReady: false,
   reducedMotion: false,
   finePointer: false,
-  smoother: null,
   scrollTo: () => {},
 });
 
@@ -21,56 +19,28 @@ export default function PublicMotionRoot({ children }) {
   const location = useLocation();
   const reducedMotion = usePrefersReducedMotion();
   const root = useRef(null);
-  const smootherRef = useRef(null);
-  const [state, setState] = useState({ motionReady: false, finePointer: false, smoother: null });
+  const [state, setState] = useState({ motionReady: false, finePointer: false });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const finePointer = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
-    let smootherInstance = null;
 
-    const context = gsap.context(() => {
-      const wrapperEl = document.getElementById('smooth-wrapper');
-      const contentEl = document.getElementById('smooth-content');
+    // Refresh ScrollTrigger when layout or fonts settle
+    setState({ motionReady: true, finePointer });
 
-      if (wrapperEl && contentEl && finePointer && !reducedMotion) {
-        try {
-          smootherInstance = ScrollSmoother.create({
-            wrapper: '#smooth-wrapper',
-            content: '#smooth-content',
-            smooth: 0.65,
-            effects: true,
-            smoothTouch: 0,
-          });
-          smootherRef.current = smootherInstance;
-        } catch {
-          // Fallback to native scrolling if smoother fails
-        }
-      }
-
-      setState({ motionReady: true, finePointer, smoother: smootherInstance });
-
-      if (typeof document !== 'undefined' && document.fonts?.ready) {
-        document.fonts.ready.then(() => ScrollTrigger.refresh());
-      }
-    }, root);
+    if (typeof document !== 'undefined' && document.fonts?.ready) {
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    }
 
     return () => {
-      if (smootherRef.current) {
-        smootherRef.current.kill();
-        smootherRef.current = null;
-      }
-      context.revert();
+      // Revert ScrollTrigger instances attached to this context if needed
     };
-  }, [location.pathname, reducedMotion]);
+  }, [location.pathname, location.search, reducedMotion]);
 
   const scrollTo = (target, smooth = true) => {
-    if (smootherRef.current) {
-      smootherRef.current.scrollTo(target, smooth);
-    } else {
-      const el = typeof target === 'string' ? document.querySelector(target) : target;
-      if (el) {
-        el.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
-      }
+    if (typeof window === 'undefined') return;
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    if (el) {
+      el.scrollIntoView({ behavior: smooth && !reducedMotion ? 'smooth' : 'auto' });
     }
   };
 

@@ -1,39 +1,49 @@
-/* Phase 3C Production — Mineral / Chromaless Editorial Foundation */
+/* Phase 4 Production — Neutral Gallery + Media Color Foundation */
 @import './fonts.css';
 
 :root {
-  /* ── Core Mineral / Chromaless Editorial Palette (Contract Section 6.1) ── */
-  --pa-canvas: #F6F8F7;
-  --pa-paper: #FFFFFF;
-  --pa-ink: #101313;
-  --pa-ink-dense: #2B3230;
-  --pa-text-secondary: #596360;
-  --pa-mist: #DDE3E1;
-  --pa-field: #EEF2F0;
-  --pa-dark: #101615;
-  --pa-dark-text: #F6F8F7;
-  --pa-dark-muted: #BBC4C1;
+  /* ── Core Neutral Gallery Palette (Phase 4 Specification Section 8) ── */
+  --pa-bg: #FFFFFF;
+  --pa-bg-soft: #F4F5F6;
+  --pa-surface: #ECEFF1;
+  --pa-ink: #0B0B0B;
+  --pa-ink-2: #171717;
+  --pa-text: #4F5358;
+  --pa-muted: #767B81;
+  --pa-rule: #D9DDE1;
+  --pa-dark: #0B0B0B;
+  --pa-dark-text: #F7F7F5;
+  --pa-dark-muted: #B7BBC0;
 
-  --pa-info: #315E8A;
-  --pa-success: #1E6B50;
-  --pa-warning: #9A630F;
+  --pa-info: #2F5D91;
+  --pa-success: #15704E;
+  --pa-warning: #94610C;
   --pa-error: #A33A45;
-  --pa-focus: #285FD0;
+  --pa-focus: #245BD6;
 
   /* Backward Compatibility Aliases */
-  --canvas: var(--pa-canvas);
-  --paper: var(--pa-paper);
+  --pa-canvas: var(--pa-bg);
+  --pa-paper: var(--pa-bg);
+  --pa-ink-dense: var(--pa-ink-2);
+  --pa-text-secondary: var(--pa-text);
+  --pa-mist: var(--pa-rule);
+  --pa-field: var(--pa-bg-soft);
+
+  --canvas: var(--pa-bg);
+  --paper: var(--pa-bg);
   --ink: var(--pa-ink);
-  --ink-dense: var(--pa-ink-dense);
-  --secondary: var(--pa-text-secondary);
-  --text-secondary: var(--pa-text-secondary);
-  --mist: var(--pa-mist);
-  --soft-field: var(--pa-field);
-  --field: var(--pa-field);
+  --ink-dense: var(--pa-ink-2);
+  --secondary: var(--pa-text);
+  --text-secondary: var(--pa-text);
+  --mist: var(--pa-rule);
+  --soft-field: var(--pa-bg-soft);
+  --field: var(--pa-bg-soft);
+  --surface: var(--pa-surface);
 
   --dark-scene: var(--pa-dark);
   --dark-scene-fg: var(--pa-dark-text);
   --dark-scene-muted: var(--pa-dark-muted);
+  --carbon: var(--pa-dark);
 
   --info: var(--pa-info);
   --success: var(--pa-success);
@@ -42,42 +52,45 @@
   --focus: var(--pa-focus);
 
   /* Chart Palettes — Restrained relational, non-decorative */
-  --chart-primary: #101313;
-  --chart-secondary: #596360;
-  --chart-track: #EEF2F0;
-  --chart-grid: #DDE3E1;
-  --chart-info: #315E8A;
-  --chart-positive: #1E6B50;
-  --chart-warning: #9A630F;
+  --chart-primary: #0B0B0B;
+  --chart-secondary: #4F5358;
+  --chart-track: #F4F5F6;
+  --chart-grid: #D9DDE1;
+  --chart-info: #2F5D91;
+  --chart-positive: #15704E;
+  --chart-warning: #94610C;
   --chart-risk: #A33A45;
 
   /* Soft Status Backgrounds */
-  --info-soft: rgba(49, 94, 138, 0.08);
-  --progress-soft: rgba(30, 107, 80, 0.08);
-  --roadmap-soft: rgba(154, 99, 15, 0.08);
+  --info-soft: rgba(47, 93, 145, 0.08);
+  --progress-soft: rgba(21, 112, 78, 0.08);
+  --roadmap-soft: rgba(148, 97, 12, 0.08);
   --attention-soft: rgba(163, 58, 69, 0.08);
 
-  /* ── Typography (Mona Sans 2 Variable) ── */
-  --font-display: "Mona Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-text: "Mona Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-body: var(--font-text);
-  --font-heading: var(--font-display);
-  --font-mono: "Mona Sans", ui-monospace, monospace;
+  /* ── Typography (Phase 4: Source Sans 3 Variable + Source Serif 4 Variable) ── */
+  --font-sans: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-display: var(--font-sans);
+  --font-text: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-sans);
+  --font-editorial: var(--font-serif);
+  --font-mono: 'Source Code Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* ── Spacing & Geometry ── */
+  /* ── Spacing & Geometry (Phase 4 Contract Section 9) ── */
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
   --radius-pill: 9999px;
 
-  --shadow-subtle: 0 1px 3px rgba(16, 19, 19, 0.04);
-  --shadow-card: 0 4px 16px rgba(16, 19, 19, 0.04);
-  --shadow-elevated: 0 12px 32px rgba(16, 19, 19, 0.06);
+  --shadow-subtle: 0 1px 3px rgba(11, 11, 11, 0.03);
+  --shadow-card: 0 2px 10px rgba(11, 11, 11, 0.04);
+  --shadow-elevated: 0 12px 32px rgba(11, 11, 11, 0.06);
 
   /* ── Responsive Dual-Axis Media Constraints ── */
   --hero-media-max-h: 56svh;
-  --world-media-max-h: 56svh;
+  --world-media-max-h: 46svh;
 }
 
 *, *::before, *::after {
@@ -90,7 +103,7 @@ html {
   font-family: var(--font-body);
   font-size: 16px;
   color: var(--pa-ink);
-  background-color: var(--pa-canvas);
+  background-color: var(--pa-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -100,7 +113,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-color: var(--pa-canvas);
+  background-color: var(--pa-bg);
   color: var(--pa-ink);
   line-height: 1.5;
 }
@@ -117,7 +130,7 @@ body {
   top: -100px;
   left: 20px;
   background: var(--pa-ink);
-  color: var(--pa-paper);
+  color: var(--pa-bg);
   padding: 10px 16px;
   font-size: 0.875rem;
   font-weight: 500;

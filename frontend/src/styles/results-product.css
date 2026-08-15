@@ -1,4 +1,4 @@
-/* Phase 3B — Results & Profile Lenses Product Styles */
+/* Phase 4 Production — Results & Profile Lenses Product Styles */
 
 .profile-results-page {
   padding: 0;
@@ -7,7 +7,7 @@
 .profile-results-shell {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
 }
 
 /* ── Top Bar & Actions ── */
@@ -16,7 +16,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .profile-results-top-actions {
@@ -35,51 +35,53 @@
 .profile-primary-statement-header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .profile-primary-title {
-  font-size: clamp(1.85rem, 3.2vw, 2.5rem);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
 }
 
 .profile-primary-subtitle {
-  font-size: 1.05rem;
-  color: var(--secondary);
-  max-width: 78ch;
+  font-size: 1rem;
+  color: var(--pa-text, #4F5358);
+  max-width: 76ch;
   line-height: 1.5;
   margin: 0;
 }
 
 .profile-timestamp-label {
   font-size: 0.8125rem;
-  color: var(--secondary);
+  color: var(--pa-muted, #767B81);
 }
 
 .profile-summary-card {
-  background: var(--paper);
-  border: 1px solid var(--mist);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-subtle);
+  background: #FFFFFF;
+  border: 1px solid var(--pa-rule, #D9DDE1);
+  border-radius: var(--radius-sm, 6px);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(11, 11, 11, 0.03));
 }
 
 .profile-summary-text {
   font-size: 1.05rem;
   line-height: 1.6;
-  color: var(--ink);
+  color: var(--pa-ink, #0B0B0B);
   margin: 0;
 }
 
 /* ── Profile Readings & Lens Switcher ── */
 .profile-readings-section {
-  background: var(--paper);
-  border: 1px solid var(--mist);
-  border-radius: var(--radius-lg);
+  background: #FFFFFF;
+  border: 1px solid var(--pa-rule, #D9DDE1);
+  border-radius: var(--radius-sm, 6px);
   padding: clamp(20px, 2.5vw, 32px);
-  box-shadow: var(--shadow-subtle);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgba(11, 11, 11, 0.03));
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -91,42 +93,46 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
-  border-bottom: 1px solid var(--canvas);
+  border-bottom: 1px solid var(--pa-rule, #D9DDE1);
   padding-bottom: 18px;
 }
 
 .profile-section-title {
-  font-size: 1.35rem;
-  font-weight: 550;
-  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--pa-ink, #0B0B0B);
+  margin: 0;
 }
 
 .profile-lens-switcher {
   display: flex;
   gap: 6px;
-  background: var(--canvas);
+  background: var(--pa-bg-soft, #F4F5F6);
   padding: 4px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm, 6px);
 }
 
 .profile-lens-btn {
   padding: 8px 16px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm, 6px);
+  border: none;
+  background: transparent;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--secondary);
-  transition: background-color 0.16s ease, color 0.16s ease;
+  color: var(--pa-text, #4F5358);
+  transition: all 0.15s ease;
+  cursor: pointer;
 }
 
 .profile-lens-btn:hover {
-  color: var(--ink);
+  color: var(--pa-ink, #0B0B0B);
 }
 
 .profile-lens-btn.is-active {
-  background: var(--paper);
-  color: var(--ink);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  font-weight: 550;
+  background: #FFFFFF;
+  color: var(--pa-ink, #0B0B0B);
+  box-shadow: 0 1px 3px rgba(11, 11, 11, 0.08);
+  font-weight: 600;
 }
 
 /* Big Five Dimensions View */
@@ -135,7 +141,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 14px 0;
-  border-bottom: 1px solid var(--canvas);
+  border-bottom: 1px solid var(--pa-bg-soft, #F4F5F6);
 }
 
 .profile-dimension-row:last-child {
@@ -149,187 +155,39 @@
 }
 
 .profile-dimension-row__info strong {
-  font-size: 0.96875rem;
-  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--pa-ink, #0B0B0B);
 }
 
 .profile-dimension-row__info span {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--secondary);
+  color: var(--pa-ink, #0B0B0B);
 }
 
-.profile-dimension-bar {
-  height: 8px;
-  background: #E8EDE9;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.profile-dimension-bar__fill {
-  height: 100%;
-  background: var(--ink);
-  border-radius: 999px;
-  transition: width 0.4s ease;
-}
-
-/* ── 3-Zone Evidence & Confidence Summary ── */
-.evidence-confidence-zones {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.evidence-zone-card {
-  background: var(--paper);
-  border: 1px solid var(--mist);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.evidence-zone-card--supporting {
-  border-top: 3px solid var(--success);
-}
-
-.evidence-zone-card--interpretation {
-  border-top: 3px solid var(--info);
-}
-
-.evidence-zone-card--limited {
-  border-top: 3px solid var(--caution);
-}
-
-.evidence-zone-card__head {
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-weight: 600;
-  color: var(--secondary);
-}
-
-.evidence-zone-card__status {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0;
-}
-
-.evidence-zone-card__detail {
-  font-size: 0.875rem;
-  color: var(--secondary);
-  line-height: 1.45;
-  margin: 0;
-}
-
-/* ── Career Alignment Cards ── */
-.profile-careers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.career-recommendation-card {
-  background: var(--paper);
-  border: 1px solid var(--mist);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.career-recommendation-card__header {
-  display: flex;
+/* Provenance / AI Status Badge */
+.ai-status-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.career-recommendation-card__header h3 {
-  font-size: 1.1rem;
-  font-weight: 550;
-  color: var(--ink);
-}
-
-.career-fit-badge {
-  font-size: 0.8125rem;
-  font-weight: 600;
+  gap: 6px;
   padding: 4px 10px;
-  background: #ECEFEF;
-  color: var(--ink);
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-}
-
-.career-recommendation-card__body {
-  font-size: 0.9375rem;
-  color: var(--secondary);
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* ── Roadmap Timeline ── */
-.roadmap-timeline-stage {
-  display: flex;
-  gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--canvas);
-}
-
-.roadmap-timeline-stage:last-child {
-  border-bottom: none;
-}
-
-.roadmap-stage-duration {
-  font-size: 0.8125rem;
+  border-radius: var(--radius-pill, 9999px);
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--secondary);
-  min-width: 90px;
+  background: var(--pa-bg-soft, #F4F5F6);
+  color: var(--pa-text, #4F5358);
+  border: 1px solid var(--pa-rule, #D9DDE1);
 }
 
-.roadmap-stage-body h4 {
-  font-size: 1rem;
-  font-weight: 550;
-  color: var(--ink);
-  margin-bottom: 4px;
+.ai-status-badge--deterministic {
+  background: #E8F5EE;
+  color: #15704E;
+  border-color: #B1DFC9;
 }
 
-.roadmap-stage-body p {
-  font-size: 0.875rem;
-  color: var(--secondary);
-  margin: 0;
-}
-
-/* ── Chatbot Sticky Launcher ── */
-.chatbot-sticky-launcher {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 12px 20px;
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-elevated);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  font-size: 0.9375rem;
-  z-index: 60;
-  cursor: pointer;
-  border: 1px solid var(--carbon);
-  transition: transform 0.18s ease;
-}
-
-.chatbot-sticky-launcher:hover {
-  transform: translateY(-2px);
-}
-
-@media (max-width: 960px) {
-  .evidence-confidence-zones {
-    grid-template-columns: 1fr;
-  }
+.ai-status-badge--assistance {
+  background: #EDF3FA;
+  color: #2F5D91;
+  border-color: #BDD2EA;
 }

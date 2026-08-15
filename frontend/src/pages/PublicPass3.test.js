@@ -3,31 +3,37 @@ import { describe, expect, it } from 'vitest';
 
 const read = (relativePath) => readFileSync(new URL(relativePath, import.meta.url), 'utf8');
 const app = read('../App.js');
-const home = read('./PublicHomePage.jsx');
-const narrative = read('../components/public/marketing/HomeNarrativeV3.jsx');
+const hero = read('../components/public/v4/EvidenceHero.jsx');
+
+const worlds = read('../components/public/v4/WorkWorldsTheatre.jsx');
+const eqs = read('../components/public/v4/EvidenceQuestionSignal.jsx');
+const profile = read('../components/public/v4/LivingProfileField.jsx');
+const career = read('../components/public/v4/CareerRelationshipScene.jsx');
+const devLoop = read('../components/public/v4/DevelopmentEvidenceLoop.jsx');
+const trust = read('../components/public/v4/TrustResolution.jsx');
 const chrome = read('../components/public/PublicChrome.jsx');
 const motion = read('../components/public/PublicMotionRoot.jsx');
-const homeCss = read('./PublicHomePage.css');
-const siteCss = read('./PublicSite.css');
 const content = read('../content/personalityMarketingDemo.js');
 
-describe('Public rebuild visual contract', () => {
+describe('Phase 4 Public Rebuild visual contract', () => {
   it('keeps every required public route registered', () => {
     ['/', '/how-it-works', '/career-intelligence', '/progress', '/methodology', '/trust', '/privacy'].forEach((route) =>
       expect(app).toContain(`path="${route}"`)
     );
   });
 
-  it('uses the exact Phase 3C home copy and no rejected headline treatment', () => {
-    expect(narrative).toContain('Your work');
-    expect(narrative).toContain('leaves evidence.');
-    expect(narrative).toContain('Professional context and adaptive responses become independent readings');
-    expect(narrative).toContain('Context changes the question.');
-    expect(narrative).toContain('One profile. Four distinct readings.');
-    expect(narrative).toContain('Direction needs reasons.');
-    expect(narrative).toContain('Your next move becomes new evidence.');
-    expect(chrome).toContain('Bring new');
-    expect(chrome).toContain('Your profile can change when your work does.');
+  it('uses the exact Phase 4 home copy and no rejected headline treatment', () => {
+    expect(hero).toContain('Your work');
+    expect(hero).toContain('leaves evidence.');
+    expect(hero).toContain('Professional context becomes adaptive questions, distinct profile readings and career direction you can inspect.');
+    expect(worlds).toContain('Work changes the evidence.');
+    expect(eqs).toContain('Context changes the question.');
+    expect(profile).toContain('Four readings. Kept separate.');
+    expect(career).toContain('A fit score should explain itself.');
+    expect(devLoop).toContain('New work changes the profile.');
+    expect(trust).toContain('See what shaped the result.');
+    expect(chrome).toContain('Build a profile');
+    expect(chrome).toContain('Your work changes. Your evidence can change with it.');
   });
 
   it('registers the v3 media system with locked Pexels 34804003 build asset and no rejected assets', () => {
@@ -42,20 +48,15 @@ describe('Public rebuild visual contract', () => {
     expect(chrome).toContain('/media/personality-v3/');
   });
 
-  it('retired the rejected public selectors and image IDs from active source', () => {
-    const source = `${narrative}\n${home}\n${homeCss}\n${siteCss}`;
-    expect(source).not.toMatch(/pv-hero|pv-worlds|pv-transform|\bpi-|pa-closing|pa-home-trust|pa-context-pro-01/i);
-  });
-
-  it('keeps public motion scoped, ScrollSmoother integrated for desktop, and reduced-motion safe', () => {
-    expect(motion).toContain('gsap.context(');
+  it('uses native scrolling with GSAP ScrollTrigger and reduced-motion safety', () => {
     expect(motion).toContain('reducedMotion');
-    expect(motion).toContain('ScrollSmoother');
+    expect(motion).toContain('scrollTo');
+    expect(motion).toContain('ScrollTrigger');
   });
 
   it('keeps accessible controls and mobile menu Escape restoration', () => {
-    expect(narrative).toContain('role="radiogroup"');
-    expect(narrative).toContain('role="tablist"');
+    expect(eqs).toContain('role="radiogroup"');
+    expect(profile).toContain('role="tablist"');
     expect(chrome).toContain("event.key === 'Escape'");
     expect(chrome).toContain('toggle.current?.focus()');
   });
