@@ -26,11 +26,11 @@
   --ed-border-dark: rgba(255, 255, 255, 0.12);
   --ed-border-dark-hover: rgba(255, 255, 255, 0.28);
   
-  /* Accent — Used selectively for focused actions/markers */
-  --ed-accent: #FF4800;
-  --ed-accent-hover: #E03E00;
-  --ed-accent-subtle: rgba(255, 72, 0, 0.08);
-  --ed-accent-glow: rgba(255, 72, 0, 0.2);
+  /* Neutral Focus / Interaction Marker — No pre-locked chromatic accent */
+  --ed-accent: #111827;
+  --ed-accent-hover: #000000;
+  --ed-accent-subtle: rgba(17, 24, 39, 0.06);
+  --ed-accent-glow: rgba(0, 0, 0, 0.12);
   
   /* Typography Families */
   --ed-font-display: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

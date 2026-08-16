@@ -1,5 +1,5 @@
 // frontend/src/content/editorial/editorialContent.js
-// Personality Assessor — Reference-Locked Editorial Copy & Content
+// Personality Assessor — Reference-Locked Editorial Copy & Truthful Content
 
 export const EDITORIAL_CONTENT = {
   header: {
@@ -22,7 +22,7 @@ export const EDITORIAL_CONTENT = {
     secondaryLink: 'Explore methodology',
   },
   adaptive: {
-    chapterTag: '01 · ADAPTIVE ASSESSMENT',
+    chapterTag: 'ADAPTIVE ASSESSMENT',
     headline: 'Questions change when the evidence changes.',
     lead: 'Instead of repetitive questionnaires, scenarios branch based on the technical and collaborative context you share.',
     sampleQuestion: {
@@ -63,7 +63,7 @@ export const EDITORIAL_CONTENT = {
     ],
   },
   readings: {
-    chapterTag: '02 · FOUR READINGS',
+    chapterTag: 'FOUR READINGS',
     headline: 'One profile. Four ways of reading the work behind it.',
     lead: 'We keep four distinct psychometric frameworks separated so you can inspect behavioral tendencies, vocational interests, work values, and career signals independently.',
     items: [
@@ -117,12 +117,12 @@ export const EDITORIAL_CONTENT = {
     ],
   },
   careers: {
-    chapterTag: '03 · CAREER WORLDS',
+    chapterTag: 'CAREER WORLDS',
     headline: 'See where your patterns fit — and where they could grow.',
     lead: 'Hover over a role to inspect its core profile demand, dimensional alignment, and growth stretch.',
   },
   progress: {
-    chapterTag: '04 · LONGITUDINAL PROGRESS',
+    chapterTag: 'LONGITUDINAL PROGRESS',
     headline: 'Your profile should move when your work does.',
     lead: 'Personality and professional strengths are not static labels. As your projects, responsibilities, and skills evolve, your profile reflects that growth.',
     bullets: [
@@ -133,15 +133,15 @@ export const EDITORIAL_CONTENT = {
     ctaText: 'Explore progress tracking →',
   },
   story: {
-    chapterTag: '05 · CASE STUDY',
-    headline: 'Clarity on where your strengths make the highest impact.',
-    quote: 'The assessment surfaced multidimensional alignment between my technical execution and strategic communication that generic tests completely missed.',
-    author: 'Elena Vance',
-    role: 'Lead Systems Architect · Illustrative product case',
-    disclaimer: 'Illustrative product case based on composite assessment telemetry.',
+    chapterTag: 'ILLUSTRATIVE SCENARIO',
+    headline: 'Multi-dimensional signals in practice.',
+    context: 'When transitioning into systems architecture, standard personality quizzes often classify practitioners as either purely technical or purely managerial.',
+    insight: 'By separating Big Five, RIASEC interests, and Work Values, the assessment captures high autonomy and structural reasoning without flattening strategic communication signals.',
+    badge: 'Illustrative Scenario: Systems & Architecture Track',
+    disclaimer: 'Illustrative product scenario demonstrating dimensional trait separation.',
   },
   trust: {
-    chapterTag: '06 · TRUST & METHODOLOGY',
+    chapterTag: 'TRUST & INSPECTABILITY',
     headline: 'Psychometrics built on inspectable evidence.',
     items: [
       {
@@ -153,12 +153,12 @@ export const EDITORIAL_CONTENT = {
         desc: 'Every recommendation traces back to specific responses and validated framework metrics.',
       },
       {
-        title: 'Export controls',
-        desc: 'Download your full profile, answers, and longitudinal history as portable JSON at any time.',
+        title: 'Profile export',
+        desc: 'Download your profile and assessment responses as JSON from your account.',
       },
       {
         title: 'Account deletion',
-        desc: 'One-click permanent purge of your profile and assessment history across our servers.',
+        desc: 'Delete your profile data or entire account from your account settings at any time.',
       },
     ],
   },

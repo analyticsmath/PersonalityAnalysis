@@ -11,7 +11,7 @@ export default function ChapterAdaptiveAssessment() {
   const { adaptive } = EDITORIAL_MEDIA_ASSETS.chapters;
 
   const [activeAccordion, setActiveAccordion] = useState(0);
-  const [selectedOption, setSelectedOption] = useState('opt-b');
+  const [selectedOption, setSelectedOption] = useState(null);
 
   return (
     <section id="adaptive-chapter" className="ed-chapter-container" aria-labelledby="adaptive-headline">

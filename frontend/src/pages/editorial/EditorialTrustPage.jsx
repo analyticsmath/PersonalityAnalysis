@@ -13,22 +13,22 @@ export default function EditorialTrustPage() {
     {
       stage: '01',
       name: 'Evidence Intake',
-      desc: 'You provide verified contextual signals: resume documents, role preferences, or direct scenario trade-offs. Nothing is inferred without direct user input.',
+      desc: 'You provide contextual inputs: optional profile text, role preferences, or scenario trade-offs. Responses are processed strictly in the context of the assessment session.',
     },
     {
       stage: '02',
       name: 'Structured Psychometrics',
-      desc: 'Validated algorithms compute scores for Big Five, RIASEC, and Work Values deterministically. Weight mappings are consistent, inspectable, and reproducible.',
+      desc: 'Validated deterministic algorithms compute scores across Big Five, RIASEC, and Work Values. Weight mappings are consistent, inspectable, and reproducible.',
     },
     {
       stage: '03',
       name: 'Narrative Synthesis',
-      desc: 'Qualitative insights summarize trait combinations to highlight practical team dynamics and growth avenues without altering calculated scores.',
+      desc: 'Qualitative synthesis summarizes trait combinations to highlight practical team dynamics and growth avenues without altering calculated scores.',
     },
     {
       stage: '04',
-      name: 'User Data Ownership',
-      desc: 'You maintain 100% control over your data. Export your entire assessment history anytime or delete your account permanently with one click.',
+      name: 'User Data Controls',
+      desc: 'You maintain direct control over your stored assessments and profile records. You can export your data as JSON or delete your records and account at any time.',
     },
   ];
 
@@ -39,7 +39,7 @@ export default function EditorialTrustPage() {
       <header className="ed-route-hero">
         <span className="ed-tag">TRUST &amp; TRANSPARENCY</span>
         <h1 className="ed-route-hero__headline">
-          Transparency in scoring. Absolute user data ownership.
+          Transparency in scoring. Direct user data control.
         </h1>
         <p className="ed-route-hero__lead">
           We believe psychometric assessments should never function as opaque gatekeepers. Every calculation, framework mapping, and recommendation is fully inspectable.

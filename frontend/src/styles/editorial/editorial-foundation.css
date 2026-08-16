@@ -23,7 +23,6 @@ body {
   padding: 0;
   background-color: var(--ed-canvas);
   color: var(--ed-text);
-  overflow-x: hidden;
 }
 
 /* Base Editorial Page Wrapper */
@@ -32,6 +31,7 @@ body {
   background-color: var(--ed-canvas);
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .ed-main-content {
@@ -103,7 +103,7 @@ body {
 }
 
 .ed-tag--accent {
-  color: var(--ed-accent);
+  color: var(--ed-ink);
 }
 
 .ed-tag--inverse {
@@ -188,15 +188,14 @@ body {
 }
 
 .ed-btn--accent {
-  background-color: var(--ed-accent);
+  background-color: var(--ed-ink);
   color: #FFFFFF;
-  box-shadow: 0 4px 14px var(--ed-accent-glow);
+  box-shadow: var(--ed-shadow-sm);
 }
 
 .ed-btn--accent:hover {
-  background-color: var(--ed-accent-hover);
+  background-color: #000000;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 72, 0, 0.35);
   color: #FFFFFF;
 }
 
@@ -271,7 +270,7 @@ body {
 
 /* Focus and Accessibility */
 :focus-visible {
-  outline: 2px solid var(--ed-accent);
+  outline: 2px solid var(--ed-ink);
   outline-offset: 3px;
 }
 
@@ -293,12 +292,17 @@ body {
   top: 16px;
 }
 
-/* Reduced Motion Support */
+/* Component-level reduced motion overrides */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  .ed-hero__micro-svg {
+    animation: none;
+  }
+
+  .ed-hero__actor-card,
+  .ed-btn,
+  .ed-readings__image,
+  .ed-careers__floating-card {
+    transition: opacity 120ms ease;
+    transform: none !important;
   }
 }

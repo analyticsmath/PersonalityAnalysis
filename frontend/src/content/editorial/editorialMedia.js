@@ -34,14 +34,14 @@ export const EDITORIAL_MEDIA_ASSETS = {
       focal: '50% 50%',
     },
     actor4: {
-      id: 'developer',
-      title: 'Software systems development and focused engineering',
-      role: 'Actor 4 — center medium protagonist (systems thinking)',
-      src: '/media/personality-v3/actors/developer-1440.webp',
-      srcSet: '/media/personality-v3/actors/developer-640.webp 640w, /media/personality-v3/actors/developer-960.webp 960w, /media/personality-v3/actors/developer-1440.webp 1440w',
-      fallback: '/media/personality-v3/actors/developer-1440.jpg',
+      id: 'build',
+      title: 'Modern engineering workspace with systems code and notebook',
+      role: 'Actor 4 — center protagonist (systems thinking & architecture)',
+      src: '/media/personality-v3/worlds/build-1440.webp',
+      srcSet: '/media/personality-v3/worlds/build-640.webp 640w, /media/personality-v3/worlds/build-960.webp 960w, /media/personality-v3/worlds/build-1440.webp 1440w',
+      fallback: '/media/personality-v3/worlds/build-1440.jpg',
       aspect: 'portrait-hero',
-      focal: '50% 40%',
+      focal: '50% 50%',
     },
     actor5: {
       id: 'collaborate',
@@ -75,10 +75,10 @@ export const EDITORIAL_MEDIA_ASSETS = {
     },
     mobileGroup: [
       {
-        id: 'developer-m',
-        src: '/media/personality-v3/actors/developer-mobile-720.webp',
-        fallback: '/media/personality-v3/actors/developer-mobile-720.jpg',
-        title: 'Systems Engineering',
+        id: 'build-m',
+        src: '/media/personality-v3/worlds/build-mobile-720.webp',
+        fallback: '/media/personality-v3/worlds/build-mobile-720.jpg',
+        title: 'Systems Architecture',
       },
       {
         id: 'collaborate-m',
@@ -103,7 +103,7 @@ export const EDITORIAL_MEDIA_ASSETS = {
     },
     readings: {
       personality: {
-        src: '/media/personality-v3/actors/developer-1440.webp',
+        src: '/media/personality-v3/worlds/build-1440.webp',
         title: 'Behavioral and cognitive tendencies in technical problem solving',
       },
       interests: {

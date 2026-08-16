@@ -23,35 +23,33 @@
   margin-top: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .ed-adaptive__accordion-item {
-  border: 1px solid var(--ed-border);
-  border-radius: var(--ed-radius-md);
-  padding: 16px 20px;
-  background-color: var(--ed-canvas);
+  border-left: 2px solid var(--ed-border);
+  padding: 12px 18px;
+  background-color: transparent;
   cursor: pointer;
   transition: all var(--ed-transition-fast);
 }
 
 .ed-adaptive__accordion-item:hover,
 .ed-adaptive__accordion-item--active {
-  background-color: #FFFFFF;
-  border-color: var(--ed-text-muted);
-  box-shadow: var(--ed-shadow-sm);
+  border-left-color: var(--ed-ink);
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .ed-adaptive__accordion-title {
   font-family: var(--ed-font-display);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--ed-ink);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .ed-adaptive__accordion-desc {
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 1.45;
   color: var(--ed-text-secondary);
   margin: 0;
@@ -252,15 +250,18 @@
 .ed-readings__nav-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   margin-top: 10px;
 }
 
 .ed-readings__nav-btn {
-  padding: 14px 20px;
-  border-radius: var(--ed-radius-md);
-  background: var(--ed-canvas);
-  border: 1px solid var(--ed-border);
+  padding: 14px 18px;
+  border-left: 2px solid var(--ed-border);
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -271,15 +272,14 @@
 
 .ed-readings__nav-btn:hover,
 .ed-readings__nav-btn--active {
-  background: #FFFFFF;
-  border-color: var(--ed-ink);
-  box-shadow: var(--ed-shadow-sm);
+  border-left-color: var(--ed-ink);
+  background: rgba(0, 0, 0, 0.02);
   transform: translateX(4px);
 }
 
 .ed-readings__nav-title {
   font-family: var(--ed-font-display);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--ed-ink);
 }
@@ -388,7 +388,7 @@
 }
 
 /* ==========================================================================
-   CHAPTER 6 — RESULT / TESTIMONIAL STORY (Reference B Testimonial)
+   CHAPTER 6 — RESULT / ILLUSTRATIVE SCENARIO (Reference B Story)
    ========================================================================== */
 .ed-story-chapter {
   display: grid;
@@ -400,34 +400,20 @@
 .ed-story__quote-wrap {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
-.ed-story__quote {
+.ed-story__scenario-badge {
   font-family: var(--ed-font-display);
-  font-size: clamp(22px, 2.8vw, 34px);
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
   color: var(--ed-ink);
-  margin: 0;
 }
 
 .ed-story__author-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-
-.ed-story__author-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--ed-ink);
-}
-
-.ed-story__author-role {
-  font-size: 13px;
-  color: var(--ed-text-muted);
+  gap: 2px;
 }
 
 .ed-story__visual-wrap {

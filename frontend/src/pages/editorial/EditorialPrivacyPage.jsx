@@ -13,27 +13,27 @@ export default function EditorialPrivacyPage() {
     {
       badge: 'Collection',
       title: 'Contextual Intake & Session Answers',
-      desc: 'We only collect data you actively submit during an assessment session (CV text, scenario choices, domain preferences). No passive surveillance or third-party tracking.',
+      desc: 'We store the information you submit during assessment sessions: manual profile text, scenario responses, and selected domain areas.',
     },
     {
       badge: 'Processing',
-      title: 'Deterministic Computation & Telemetry',
-      desc: 'Your answers are scored deterministically against validated psychometric frameworks (Big Five, RIASEC, Work Values). Processing occurs securely on isolated application servers.',
+      title: 'Deterministic Computation',
+      desc: 'Your answers are processed deterministically against validated psychometric frameworks (Big Five, RIASEC, and Work Values) to derive trait vectors and career fit indicators.',
     },
     {
-      badge: 'Storage',
-      title: 'Encrypted Persistence & Isolation',
-      desc: 'Profiles, assessment history, and career fit mappings are stored with database encryption at rest. Records are isolated to your authenticated account credentials.',
+      badge: 'Retention',
+      title: 'User-Governed Retention',
+      desc: 'We keep your assessment, profile, and analytics data until you delete it from Privacy controls or delete your account. No automatic purge is applied by default.',
     },
     {
       badge: 'Export',
-      title: 'Portable Data Export (JSON)',
-      desc: 'You can download your entire assessment record, raw answers, psychometric dimensions, and longitudinal history as portable JSON at any time.',
+      title: 'Profile Data Export (JSON)',
+      desc: 'You can download your stored profile and assessment data in structured JSON format directly from your account privacy controls.',
     },
     {
       badge: 'Deletion',
-      title: 'Permanent Account & Data Purge',
-      desc: 'You can execute an irreversible deletion of your account and all associated assessment records directly from your account settings with immediate cascade.',
+      title: 'Account & Data Deletion',
+      desc: 'You can delete individual assessment results, clear manual profile data, or permanently delete your user account and associated records through account settings.',
     },
   ];
 
@@ -44,7 +44,7 @@ export default function EditorialPrivacyPage() {
       <header className="ed-route-hero">
         <span className="ed-tag">DATA OWNERSHIP LIFECYCLE</span>
         <h1 className="ed-route-hero__headline">
-          You own your psychometric profile and all associated data.
+          Inspectable policies. Verifiable data controls.
         </h1>
         <p className="ed-route-hero__lead">
           This public page explains our data ownership policy and available controls. If you are signed in, you can execute data export and deletion controls directly in your account.
@@ -79,7 +79,7 @@ export default function EditorialPrivacyPage() {
           <div>
             <h3 className="ed-h3" style={{ margin: '0 0 6px 0' }}>Execute Privacy &amp; Account Actions</h3>
             <p style={{ margin: 0, fontSize: '14px', color: 'var(--ed-text-secondary)' }}>
-              Signed-in users can manage data export, revoke session access, or trigger permanent account deletion.
+              Signed-in users can manage data export, clear manual profile data, or permanently delete their account.
             </p>
           </div>
 

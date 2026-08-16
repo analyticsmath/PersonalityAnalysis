@@ -237,7 +237,6 @@ body {
   background: var(--color-bg);
   font-family: var(--font-body);
   font-weight: 400;
-  overflow-x: hidden;
 }
 
 a {
