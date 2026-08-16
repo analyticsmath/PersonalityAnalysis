@@ -7,13 +7,13 @@ import SignupPage from './pages/Auth/SignupPage';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
-import PublicHomePage from './pages/PublicHomePage';
-import HowItWorksPage from './pages/public/HowItWorksPage';
-import CareerIntelligencePage from './pages/public/CareerIntelligencePage';
-import ProgressPage from './pages/public/ProgressPage';
-import MethodologyPage from './pages/public/MethodologyPage';
-import TrustPage from './pages/public/TrustPage';
-import PrivacyPage from './pages/public/PrivacyPage';
+import EditorialHomePage from './pages/editorial/EditorialHomePage';
+import EditorialHowItWorksPage from './pages/editorial/EditorialHowItWorksPage';
+import EditorialCareerIntelligencePage from './pages/editorial/EditorialCareerIntelligencePage';
+import EditorialProgressPage from './pages/editorial/EditorialProgressPage';
+import EditorialMethodologyPage from './pages/editorial/EditorialMethodologyPage';
+import EditorialTrustPage from './pages/editorial/EditorialTrustPage';
+import EditorialPrivacyPage from './pages/editorial/EditorialPrivacyPage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
 
@@ -54,14 +54,14 @@ const AppRoutes = () => {
     <div className="app-root-container">
       <PublicMetadata />
       <Routes location={location} key={`${location.pathname}${location.search}`}>
-        {/* ── Public Routes (Dedicated Modular Pages) ── */}
-        <Route path="/" element={<PublicHomePage />} />
-        <Route path="/how-it-works" element={<HowItWorksPage />} />
-        <Route path="/career-intelligence" element={<CareerIntelligencePage />} />
-        <Route path="/progress" element={<ProgressPage />} />
-        <Route path="/methodology" element={<MethodologyPage />} />
-        <Route path="/trust" element={<TrustPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
+        {/* ── Public Routes (Reference-Locked Editorial Visual Architecture) ── */}
+        <Route path="/" element={<EditorialHomePage />} />
+        <Route path="/how-it-works" element={<EditorialHowItWorksPage />} />
+        <Route path="/career-intelligence" element={<EditorialCareerIntelligencePage />} />
+        <Route path="/progress" element={<EditorialProgressPage />} />
+        <Route path="/methodology" element={<EditorialMethodologyPage />} />
+        <Route path="/trust" element={<EditorialTrustPage />} />
+        <Route path="/privacy" element={<EditorialPrivacyPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 

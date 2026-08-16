@@ -1,0 +1,117 @@
+/* frontend/src/styles/editorial/editorial-footer.css */
+/* Personality Assessor — Designed Oversized Wordmark Footer */
+
+@import './tokens.css';
+
+.ed-footer {
+  background-color: var(--ed-surface);
+  border-top: 1px solid var(--ed-border);
+  padding: clamp(48px, 6vw, 80px) clamp(20px, 4vw, 56px) 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ed-footer__inner {
+  max-width: var(--ed-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 5vw, 64px);
+}
+
+/* Top Utility Row */
+.ed-footer__top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.ed-footer__brand-statement {
+  font-family: var(--ed-font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ed-ink);
+}
+
+.ed-footer__nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.ed-footer__link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ed-text-secondary);
+  text-decoration: none;
+  transition: color var(--ed-transition-fast);
+}
+
+.ed-footer__link:hover {
+  color: var(--ed-ink);
+}
+
+/* Massive Typographic Wordmark */
+.ed-footer__wordmark-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ed-footer__wordmark-primary {
+  font-family: var(--ed-font-display);
+  font-size: clamp(48px, 12vw, 170px);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  color: var(--ed-ink);
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+}
+
+.ed-footer__wordmark-secondary {
+  font-family: var(--ed-font-display);
+  font-size: clamp(24px, 6vw, 84px);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 0.9;
+  color: var(--ed-text-light);
+  text-transform: uppercase;
+  text-align: right;
+  margin-top: -8px;
+}
+
+/* Bottom Legal Bar */
+.ed-footer__bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-top: 1px solid var(--ed-border-subtle);
+  padding-top: 24px;
+  font-size: 13px;
+  color: var(--ed-text-muted);
+}
+
+.ed-footer__legal-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.ed-footer__legal-link {
+  color: var(--ed-text-muted);
+  text-decoration: none;
+  transition: color var(--ed-transition-fast);
+}
+
+.ed-footer__legal-link:hover {
+  color: var(--ed-ink);
+}

@@ -1,0 +1,304 @@
+/* frontend/src/styles/editorial/editorial-foundation.css */
+/* Personality Assessor — Editorial Foundation & Chapter Architecture */
+
+@import './tokens.css';
+
+/* Global Reset & Base Typography */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--ed-font-body);
+  color: var(--ed-text);
+  background-color: var(--ed-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--ed-canvas);
+  color: var(--ed-text);
+  overflow-x: hidden;
+}
+
+/* Base Editorial Page Wrapper */
+.ed-page-root {
+  min-height: 100vh;
+  background-color: var(--ed-canvas);
+  display: flex;
+  flex-direction: column;
+}
+
+.ed-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ed-chapter-gap);
+  padding: 0 0 var(--ed-chapter-gap) 0;
+  width: 100%;
+}
+
+/* Chapter Base Structures — Varied silhouettes as in Reference B */
+.ed-chapter-container {
+  width: 100%;
+  max-width: var(--ed-max-width);
+  margin: 0 auto;
+  padding: 0 var(--ed-section-padding-x);
+}
+
+/* Chapter Silhouette 1: White Rounded Module on Gray Canvas */
+.ed-chapter-module {
+  background-color: var(--ed-surface);
+  border-radius: var(--ed-radius-chapter);
+  padding: clamp(36px, 6vw, 72px) clamp(24px, 5vw, 64px);
+  box-shadow: var(--ed-shadow-sm);
+  border: 1px solid var(--ed-border-subtle);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chapter Silhouette 2: Black Immersive Chapter */
+.ed-chapter-black {
+  background-color: var(--ed-ink);
+  color: var(--ed-text-inverse);
+  border-radius: var(--ed-radius-chapter);
+  padding: clamp(48px, 7vw, 92px) clamp(24px, 5vw, 64px);
+  box-shadow: var(--ed-shadow-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chapter Silhouette 3: Fluid Band / Edge-to-Edge */
+.ed-chapter-fluid {
+  background-color: transparent;
+  padding: clamp(32px, 5vw, 64px) 0;
+  position: relative;
+}
+
+/* Chapter Silhouette 4: Designed Wordmark Footer */
+.ed-chapter-footer {
+  background-color: var(--ed-surface);
+  padding: clamp(48px, 6vw, 84px) clamp(24px, 5vw, 64px) 24px;
+  border-top: 1px solid var(--ed-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Typography Utility Hierarchy */
+.ed-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ed-font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ed-text-muted);
+  margin-bottom: 12px;
+}
+
+.ed-tag--accent {
+  color: var(--ed-accent);
+}
+
+.ed-tag--inverse {
+  color: var(--ed-text-inverse-muted);
+}
+
+.ed-h1 {
+  font-family: var(--ed-font-display);
+  font-size: clamp(38px, 5.2vw, 76px);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--ed-ink);
+  margin: 0;
+}
+
+.ed-h2 {
+  font-family: var(--ed-font-display);
+  font-size: clamp(28px, 3.8vw, 48px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--ed-ink);
+  margin: 0 0 16px 0;
+}
+
+.ed-h2--inverse {
+  color: var(--ed-text-inverse);
+}
+
+.ed-h3 {
+  font-family: var(--ed-font-display);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--ed-ink);
+  margin: 0 0 10px 0;
+}
+
+.ed-lead {
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.5;
+  color: var(--ed-text-secondary);
+  max-width: 620px;
+  margin: 0;
+}
+
+.ed-lead--inverse {
+  color: var(--ed-text-inverse-muted);
+}
+
+/* Button & Interaction Design */
+.ed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--ed-font-body);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 13px 24px;
+  border-radius: var(--ed-radius-md);
+  transition: all var(--ed-transition-base);
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.ed-btn--primary {
+  background-color: var(--ed-ink);
+  color: var(--ed-text-inverse);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.ed-btn--primary:hover {
+  background-color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  color: var(--ed-text-inverse);
+}
+
+.ed-btn--accent {
+  background-color: var(--ed-accent);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px var(--ed-accent-glow);
+}
+
+.ed-btn--accent:hover {
+  background-color: var(--ed-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 72, 0, 0.35);
+  color: #FFFFFF;
+}
+
+.ed-btn--secondary {
+  background-color: var(--ed-canvas);
+  color: var(--ed-text);
+  border-color: var(--ed-border);
+}
+
+.ed-btn--secondary:hover {
+  background-color: #FFFFFF;
+  border-color: var(--ed-text-muted);
+  color: var(--ed-ink);
+}
+
+.ed-btn--ghost-inverse {
+  background-color: transparent;
+  color: var(--ed-text-inverse);
+  border: 1px solid var(--ed-border-dark);
+}
+
+.ed-btn--ghost-inverse:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--ed-border-dark-hover);
+  color: var(--ed-text-inverse);
+}
+
+.ed-btn--circular {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Image Card Base Styling */
+.ed-image-card {
+  position: relative;
+  border-radius: var(--ed-radius-card);
+  overflow: hidden;
+  background-color: var(--ed-canvas-subtle);
+}
+
+.ed-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--ed-transition-slow);
+}
+
+/* Floating UI Overlay Base */
+.ed-floating-overlay {
+  position: absolute;
+  background: var(--ed-surface-translucent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--ed-radius-md);
+  padding: 14px 18px;
+  box-shadow: var(--ed-shadow-md);
+  z-index: 10;
+}
+
+.ed-floating-overlay--dark {
+  background: rgba(15, 17, 20, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+/* Focus and Accessibility */
+:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: 3px;
+}
+
+.ed-skip-link {
+  position: absolute;
+  top: -100px;
+  left: 20px;
+  background: var(--ed-ink);
+  color: #FFFFFF;
+  padding: 10px 18px;
+  border-radius: var(--ed-radius-sm);
+  z-index: 9999;
+  text-decoration: none;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.ed-skip-link:focus {
+  top: 16px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
