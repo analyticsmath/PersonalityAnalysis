@@ -1,27 +1,39 @@
 import React, { useMemo, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { login as loginApi, googleLogin as googleLoginApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { ResponsiveImage } from '../../components/public/PublicChrome';
-import { publicMedia } from '../../content/personalityMarketingDemo';
-import '../PublicSite.css';
+import { MEDIA_ASSETS } from '../../content/personality-v4/mediaManifest';
+import { getSafeNextUrl } from '../../utils/personality-v4/navigation';
+import AuthLayout from '../../components/personality-v4/auth/AuthLayout';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const auth = useAuth();
+
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState('');
+
+  const safeNext = useMemo(() => {
+    const params = typeof window !== 'undefined' && window.URLSearchParams ? new window.URLSearchParams(location.search) : { get: () => null };
+    return getSafeNextUrl(params.get('next'), '/dashboard');
+  }, [location.search]);
 
   const loginMutation = useMutation({
     mutationFn: loginApi,
     onSuccess: (payload) => {
       auth.login(payload);
-      navigate('/dashboard');
+      navigate(safeNext, { replace: true });
+    },
+    onError: (error) => {
+      const message = error?.message || 'Invalid email or password. Please try again.';
+      setFormError(message);
+      toast.error(message);
     },
   });
 
@@ -29,7 +41,7 @@ const LoginPage = () => {
     mutationFn: googleLoginApi,
     onSuccess: (payload) => {
       auth.login(payload);
-      navigate('/dashboard');
+      navigate(safeNext, { replace: true });
     },
     onError: (error) => {
       const message = error?.message || 'Google sign-in failed. Please try again.';
@@ -43,115 +55,104 @@ const LoginPage = () => {
     [formError, loginMutation.error?.message, googleMutation.error?.message]
   );
 
-  if (auth.isAuthenticated) return <Navigate to="/dashboard" replace />;
+  if (auth.isAuthenticated) {
+    return <Navigate to={safeNext} replace />;
+  }
 
   const submit = (event) => {
     event.preventDefault();
     setFormError('');
     if (!form.email || !form.password) {
-      setFormError('Enter your email and password.');
+      setFormError('Please enter both your email and password.');
       return;
     }
     loginMutation.mutate(form);
   };
 
-  const loginMedia = publicMedia?.auth?.login || publicMedia?.hero?.student || null;
-
   return (
-    <main className="pa-auth" data-page="login">
-      <div className="pa-auth__editorial">
-        <div className="pa-auth__heading">
-          <Link className="public-brand" to="/" aria-label="Personality Assessor home">
-            <span className="public-brand__name">Personality Assessor</span>
-          </Link>
-          <h1>Return to your profile.</h1>
-          <p>Continue your assessments, career exploration and development record.</p>
-        </div>
-        {loginMedia && (
-          <figure className="pa-auth__fragment-frame">
-            <ResponsiveImage
-              media={loginMedia}
-              alt="Person reviewing professional records quietly at a desk"
-              sizes="380px"
-            />
-          </figure>
-        )}
-      </div>
-
-      <section className="pa-auth__form-wrap">
-        <form onSubmit={submit} className="pa-auth__form" noValidate>
-          <h2>Sign in</h2>
-          <p>Continue with your account credentials.</p>
-
-          <div role="alert" aria-live="assertive">
-            {errorMessage && <span className="pa-auth__message">{errorMessage}</span>}
+    <AuthLayout
+      mediaAsset={MEDIA_ASSETS.a09}
+      pageType="login"
+      heading="Return to the profile you are building."
+      subtitle="Sign in to continue your assessment, review previous evidence or update your profile."
+    >
+      <form onSubmit={submit} className="pa-auth-form" noValidate>
+        {errorMessage && (
+          <div role="alert" aria-live="assertive" className="pa-auth-error-banner">
+            {errorMessage}
           </div>
+        )}
 
-          <label htmlFor="login-email">
-            Email
+        <div className="pa-auth-field">
+          <label htmlFor="login-email">Email address</label>
+          <input
+            id="login-email"
+            type="email"
+            name="email"
+            className="pa-auth-input"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            placeholder="name@example.com"
+            autoComplete="email"
+            required
+          />
+        </div>
+
+        <div className="pa-auth-field">
+          <label htmlFor="login-password">Password</label>
+          <div className="pa-auth-password-wrap">
             <input
-              id="login-email"
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={(event) => setForm({ ...form, email: event.target.value })}
-              placeholder="you@example.com"
-              autoComplete="email"
+              id="login-password"
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              className="pa-auth-input"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              placeholder="Enter your password"
+              autoComplete="current-password"
               required
             />
-          </label>
-
-          <label htmlFor="login-password">
-            Password
-            <span className="pa-auth__password">
-              <input
-                id="login-password"
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={form.password}
-                onChange={(event) => setForm({ ...form, password: event.target.value })}
-                placeholder="Enter your password"
-                autoComplete="current-password"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((value) => !value)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
-            </span>
-          </label>
-
-          <button
-            className="pa-auth__submit"
-            type="submit"
-            disabled={loginMutation.isPending || googleMutation.isPending}
-          >
-            {loginMutation.isPending || googleMutation.isPending ? 'Signing in…' : 'Sign in'}
-          </button>
-        </form>
-
-        {GOOGLE_CLIENT_ID && (
-          <div className="pa-auth__google">
-            <p>or continue with</p>
-            <GoogleLoginButton
-              onCredential={(token) => googleMutation.mutate(token)}
-              onError={(message) => {
-                const next = message || 'Google sign-in failed. Please retry.';
-                setFormError(next);
-                toast.error(next);
-              }}
-            />
+            <button
+              type="button"
+              className="pa-auth-password-toggle"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
           </div>
-        )}
+        </div>
 
-        <p className="pa-auth__footer">
-          New to Personality Assessor? <Link to="/signup">Build your profile</Link>
-        </p>
-      </section>
-    </main>
+        <button
+          className="pa-btn pa-btn--primary pa-auth-submit-btn"
+          type="submit"
+          disabled={loginMutation.isPending || googleMutation.isPending}
+        >
+          {loginMutation.isPending ? 'Signing in…' : 'Sign in'}
+        </button>
+      </form>
+
+      {GOOGLE_CLIENT_ID && (
+        <div style={{ marginTop: '16px' }}>
+          <div className="pa-auth-divider">
+            <span>or continue with</span>
+          </div>
+          <GoogleLoginButton
+            onCredential={(token) => googleMutation.mutate(token)}
+            onError={(message) => {
+              const nextErr = message || 'Google sign-in failed. Please retry.';
+              setFormError(nextErr);
+              toast.error(nextErr);
+            }}
+          />
+        </div>
+      )}
+
+      <p className="pa-auth-footer-text">
+        New to Personality Assessor?{' '}
+        <Link to={`/signup?next=${encodeURIComponent(safeNext)}`}>Build your profile</Link>
+      </p>
+    </AuthLayout>
   );
 };
 

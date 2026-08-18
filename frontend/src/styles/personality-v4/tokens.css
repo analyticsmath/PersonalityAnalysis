@@ -1,0 +1,87 @@
+/* Personality Assessor — V4 Design Tokens */
+@import '@fontsource-variable/source-sans-3';
+@import '@fontsource-variable/source-serif-4';
+
+:root {
+  /* ── Color System (True Neutral + Photographic Environment) ── */
+  --pa-black: #050506;
+  --pa-ink: #0c0d0f;
+  --pa-ink-soft: #292d32;
+  --pa-paper: #f7f8fa;
+  --pa-white: #ffffff;
+  --pa-cool-100: #eef1f4;
+  --pa-cool-200: #dde1e6;
+  --pa-cool-400: #a4abb4;
+  --pa-cool-600: #626a74;
+  --pa-cool-800: #272b30;
+  --pa-focus: #1d4ed8;
+  --pa-error: #b42318;
+  --pa-success: #067647;
+
+  /* Data-only psychometric colors */
+  --pa-data-openness: #6758c9;
+  --pa-data-conscientiousness: #247f6b;
+  --pa-data-extraversion: #c76536;
+  --pa-data-agreeableness: #b64f70;
+  --pa-data-stability: #3f6fa7;
+
+  /* ── Typography Roles ── */
+  --pa-font-serif: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --pa-font-sans: 'Source Sans 3 Variable', 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pa-font-mono: 'Source Code Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Type Scale */
+  --pa-text-hero: clamp(76px, 9.4vw, 154px);
+  --pa-text-hero-mobile: clamp(48px, 13.5vw, 68px);
+  --pa-text-route-title: clamp(68px, 7.4vw, 118px);
+  --pa-text-scene-title: clamp(52px, 5.7vw, 92px);
+  --pa-text-quote: clamp(40px, 4.6vw, 74px);
+  --pa-text-large-body: 22px;
+  --pa-text-body: 17px;
+  --pa-text-nav: 14px;
+  --pa-text-ui: 15px;
+  --pa-text-data-label: 13px;
+  --pa-text-num: clamp(20px, 2.5vw, 42px);
+
+  /* Line Heights */
+  --pa-lh-hero: 0.88;
+  --pa-lh-route: 0.91;
+  --pa-lh-scene: 0.94;
+  --pa-lh-quote: 1.02;
+  --pa-lh-large-body: 1.38;
+  --pa-lh-body: 1.58;
+  --pa-lh-ui: 1.2;
+
+  /* Tracking */
+  --pa-track-hero: -0.045em;
+  --pa-track-route: -0.038em;
+  --pa-track-scene: -0.03em;
+  --pa-track-quote: -0.025em;
+  --pa-track-large-body: -0.01em;
+  --pa-track-body: -0.006em;
+  --pa-track-data: 0.02em;
+  --pa-track-status: 0.05em;
+
+  /* ── Spatial Constraints ── */
+  --pa-max-width: 1600px;
+  --pa-gutter-desktop: clamp(24px, 3vw, 48px);
+  --pa-gutter-tablet: 24px;
+  --pa-gutter-mobile: 18px;
+  --pa-header-height: 78px;
+  --pa-header-height-mobile: 64px;
+
+  /* Control Geometry */
+  --pa-radius-btn: 2px;
+  --pa-radius-input: 6px;
+  --pa-radius-none: 0px;
+  --pa-btn-h-desktop: 48px;
+  --pa-btn-h-mobile: 52px;
+  --pa-touch-min: 44px;
+
+  /* Motion Timings */
+  --pa-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pa-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --pa-duration-fast: 0.24s;
+  --pa-duration-mid: 0.4s;
+  --pa-duration-reveal: 0.7s;
+}

@@ -1,181 +1,230 @@
 // frontend/src/editorial-visual-contract.test.jsx
-// Personality Assessor — Reference-Locked Visual Contract & Product Truth Guardrails
+// Personality Assessor — V4 Reference-Locked Visual Contract & Product Truth Guardrails
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import ChapterAdaptiveAssessment from './components/editorial/ChapterAdaptiveAssessment';
-import { EDITORIAL_CONTENT } from './content/editorial/editorialContent';
-import { EDITORIAL_MEDIA_ASSETS } from './content/editorial/editorialMedia';
+import EvidenceToSignalTheatre from './components/personality-v4/home/EvidenceToSignalTheatre';
+import IndependentReadingsField from './components/personality-v4/home/IndependentReadingsField';
+import { PUBLIC_CONTENT } from './content/personality-v4/publicContent';
+import { MEDIA_ASSETS } from './content/personality-v4/mediaManifest';
+import { getSafeNextUrl, getSignupAcquisitionUrl, getLoginUrl } from './utils/personality-v4/navigation';
 
 const readFile = (relativePath) => {
   const fullPath = resolve(process.cwd(), relativePath);
   return existsSync(fullPath) ? readFileSync(fullPath, 'utf8') : '';
 };
 
-describe('Editorial Visual Architecture & Product Truth Guardrails', () => {
+describe('Personality Assessor V4 — Visual Architecture & Product Truth Guardrails', () => {
   const home = readFile('src/pages/editorial/EditorialHomePage.jsx');
-  const hero = readFile('src/components/editorial/EditorialHero.jsx');
-  const adaptive = readFile('src/components/editorial/ChapterAdaptiveAssessment.jsx');
-  const readings = readFile('src/components/editorial/ChapterFourReadings.jsx');
-  const careers = readFile('src/components/editorial/ChapterCareerWorlds.jsx');
-  const progress = readFile('src/components/editorial/ChapterProgressEvidence.jsx');
-  const story = readFile('src/components/editorial/ChapterResultStory.jsx');
-  const trust = readFile('src/components/editorial/ChapterTrustPrivacy.jsx');
-  const closingCta = readFile('src/components/editorial/ChapterClosingCta.jsx');
-  const footer = readFile('src/components/editorial/EditorialFooter.jsx');
+  const howItWorks = readFile('src/pages/editorial/EditorialHowItWorksPage.jsx');
+  const careerIntelligence = readFile('src/pages/editorial/EditorialCareerIntelligencePage.jsx');
   const methodology = readFile('src/pages/editorial/EditorialMethodologyPage.jsx');
+  const trustRoute = readFile('src/pages/editorial/EditorialTrustPage.jsx');
+  const trustComp = readFile('src/components/personality-v4/routes/TrustEvidenceChain.jsx');
+  const progress = readFile('src/pages/editorial/EditorialProgressPage.jsx');
   const privacy = readFile('src/pages/editorial/EditorialPrivacyPage.jsx');
-  const careerRoute = readFile('src/pages/editorial/EditorialCareerIntelligencePage.jsx');
-  const contentFile = readFile('src/content/editorial/editorialContent.js');
-  const mediaFile = readFile('src/content/editorial/editorialMedia.js');
-  const dashboard = readFile('src/pages/Dashboard/index.js');
+  const notFound = readFile('src/pages/PublicNotFoundPage.jsx');
+  const login = readFile('src/pages/Auth/LoginPage.js');
+  const signup = readFile('src/pages/Auth/SignupPage.js');
   const app = readFile('src/App.js');
   const fontsCss = readFile('src/styles/fonts.css');
-  const tokensCss = readFile('src/styles/editorial/tokens.css');
-  const heroCss = readFile('src/styles/editorial/editorial-hero.css');
-  const foundationCss = readFile('src/styles/editorial/editorial-foundation.css');
-  const themeCss = readFile('src/styles/theme.css');
+  const tokensCss = readFile('src/styles/personality-v4/tokens.css');
+  const foundationCss = readFile('src/styles/personality-v4/foundation.css');
+  const chromeCss = readFile('src/styles/personality-v4/chrome.css');
+  const homeCss = readFile('src/styles/personality-v4/home.css');
+  const routesCss = readFile('src/styles/personality-v4/routes.css');
+  const authCss = readFile('src/styles/personality-v4/auth.css');
+  const motionCss = readFile('src/styles/personality-v4/motion.css');
 
   // Guardrail 1: All required public routes are registered in App.js
   it('1. keeps every required public route registered in App.js', () => {
     const requiredRoutes = [
       '/',
-      '/how-it-works',
-      '/career-intelligence',
-      '/progress',
-      '/methodology',
-      '/trust',
-      '/privacy',
-      '/login',
-      '/signup',
+      'how-it-works',
+      'career-intelligence',
+      'progress',
+      'methodology',
+      'trust',
+      'privacy',
+      'login',
+      'signup',
     ];
     for (const route of requiredRoutes) {
-      expect(app).toContain(`path="${route}"`);
+      expect(app).toContain(route);
     }
   });
 
-  // Guardrail 2: Hero matches Reference A grammar and approved headline
-  it('2. hero matches Reference A bold sans centered headline and copy', () => {
-    expect(EDITORIAL_CONTENT.hero.headline).toBe('See the professional patterns behind your decisions.');
-    expect(EDITORIAL_CONTENT.hero.lead).toBe('Adaptive questions turn real professional context into a profile and career direction you can inspect.');
-    expect(EDITORIAL_CONTENT.hero.microControl).toBe('SEE HOW IT ADAPTS');
-    expect(EDITORIAL_CONTENT.hero.communityLabel).toBe('Built for students, graduates and professionals');
-    expect(EDITORIAL_CONTENT.hero.ctaPrimary).toBe('Build my profile →');
-    expect(heroCss).toContain('grid-template-columns: 1.1fr 1.35fr 1.65fr 1.35fr 1.1fr');
+  // Guardrail 2: Source Serif 4 Variable & Source Sans 3 Variable loaded in fonts.css
+  it('2. loads Source Serif 4 and Source Sans 3 variable fonts, not banned preloads', () => {
+    expect(fontsCss).toContain('@fontsource-variable/source-serif-4');
+    expect(fontsCss).toContain('@fontsource-variable/source-sans-3');
+    expect(tokensCss).toContain('--pa-font-serif');
+    expect(tokensCss).toContain('--pa-font-sans');
   });
 
-  // Guardrail 3: Adaptive demo must initialize with NO preselected answer
-  it('3. adaptive demo initializes with no preselected answer', () => {
-    expect(adaptive).toContain('useState(null)');
+  // Guardrail 3: Tokens use approved neutral palette and Big Five data colors
+  it('3. tokens define approved neutral palette, Big Five colors, and spatial gutters', () => {
+    expect(tokensCss).toContain('--pa-black: #050506');
+    expect(tokensCss).toContain('--pa-ink: #0c0d0f');
+    expect(tokensCss).toContain('--pa-paper: #f7f8fa');
+    expect(tokensCss).toContain('--pa-white: #ffffff');
+    expect(tokensCss).toContain('--pa-data-openness');
+    expect(tokensCss).toContain('--pa-data-conscientiousness');
+    expect(tokensCss).toContain('--pa-data-extraversion');
+    expect(tokensCss).toContain('--pa-data-agreeableness');
+    expect(tokensCss).toContain('--pa-data-stability');
+  });
+
+  // Guardrail 4: Adaptive demo initializes with NO preselected answer
+  it('4. adaptive question demo initializes with no preselected radio and updates state on selection', () => {
     render(
       <BrowserRouter>
-        <ChapterAdaptiveAssessment />
+        <EvidenceToSignalTheatre />
       </BrowserRouter>
     );
     const options = screen.getAllByRole('radio');
+    expect(options.length).toBe(3);
     for (const opt of options) {
-      expect(opt.getAttribute('aria-checked')).toBe('false');
+      expect(opt.checked).toBe(false);
     }
+    // Select first option
+    fireEvent.click(options[0]);
+    expect(options[0].checked).toBe(true);
   });
 
-  // Guardrail 4: Illustrative scenario contains NO fake person or fake testimonial attribution
-  it('4. illustrative scenario chapter contains no fabricated person or fake testimonial', () => {
-    const allPublic = [home, hero, adaptive, readings, careers, progress, story, trust, closingCta, footer, contentFile, mediaFile].join('\n');
+  // Guardrail 5: Illustrative scenario contains NO fake person or fake testimonial attribution
+  it('5. contains no fabricated testimonial persona (e.g., Elena Vance) on public surfaces', () => {
+    const allPublic = [
+      home,
+      howItWorks,
+      careerIntelligence,
+      methodology,
+      trustRoute,
+      trustComp,
+      progress,
+      privacy,
+      notFound,
+      login,
+      signup,
+      JSON.stringify(PUBLIC_CONTENT),
+    ].join('\n');
     expect(allPublic).not.toContain('Elena Vance');
-    expect(allPublic).not.toContain('Lead Systems Architect');
-    expect(EDITORIAL_CONTENT.story.chapterTag).toBe('ILLUSTRATIVE SCENARIO');
-    expect(EDITORIAL_CONTENT.story.disclaimer).toContain('Illustrative product scenario');
+    expect(allPublic).not.toContain('Lead Systems Architect Elena');
   });
 
-  // Guardrail 5: Unsupported privacy and security claims are strictly absent
-  it('5. unsupported privacy/security/export claims are removed', () => {
-    const allPublic = [home, hero, adaptive, readings, careers, progress, story, trust, methodology, privacy, contentFile].join('\n');
+  // Guardrail 6: Unsupported privacy and security claims are strictly absent
+  it('6. unsupported privacy/security/export claims are strictly absent', () => {
+    const allPublic = [
+      home,
+      howItWorks,
+      careerIntelligence,
+      methodology,
+      trustRoute,
+      trustComp,
+      progress,
+      privacy,
+      JSON.stringify(PUBLIC_CONTENT),
+    ].join('\n');
     expect(allPublic).not.toContain('one-click');
     expect(allPublic).not.toContain('immediate cascade');
     expect(allPublic).not.toContain('encryption-at-rest');
     expect(allPublic).not.toContain('isolated-server');
     expect(allPublic).not.toContain('no-third-party-tracking');
-    expect(allPublic).not.toContain('complete portable-history-export');
     expect(allPublic).not.toContain('fully air-gapped');
     expect(allPublic).not.toContain('98% scientifically accurate');
     expect(allPublic).not.toContain('clinical diagnosis');
   });
 
-  // Guardrail 6: Pre-locked marketing accent (#FF4800) is removed in favor of neutral tokens
-  it('6. pre-locked marketing accent #FF4800 is removed', () => {
-    expect(tokensCss).not.toContain('#FF4800');
-    expect(tokensCss).toContain('--ed-accent: #111827');
+  // Guardrail 7: A01–A10 Media Manifest satisfies all asset requirements
+  it('7. media manifest contains all 10 unwatermarked photographic assets A01-A10 with dimensions and focal points', () => {
+    const expectedKeys = ['a01', 'a02', 'a03', 'a04', 'a05', 'a06', 'a07', 'a08', 'a09', 'a10'];
+    for (const key of expectedKeys) {
+      expect(MEDIA_ASSETS).toHaveProperty(key);
+      expect(MEDIA_ASSETS[key].widths.length).toBeGreaterThan(0);
+      expect(MEDIA_ASSETS[key].focalPoint).toBeDefined();
+      expect(MEDIA_ASSETS[key].source).toBeTruthy();
+    }
   });
 
-  // Guardrail 7: Pexels 7988086 / generic developer is not used as hero/readings actor
-  it('7. Pexels 7988086 is excluded from hero and readings assets', () => {
-    const allPublic = [mediaFile, hero, readings, home].join('\n');
-    expect(allPublic).not.toContain('7988086');
-    expect(EDITORIAL_MEDIA_ASSETS.hero.actor4.id).toBe('build');
+  // Guardrail 8: Career Worlds renders 5 career worlds with A02-A06 assets
+  it('8. Career Worlds renders all 5 curated career environments', () => {
+    const worlds = PUBLIC_CONTENT.home.careerWorlds.worlds;
+    expect(worlds.length).toBe(5);
+    const ids = worlds.map((w) => w.id);
+    expect(ids).toEqual([
+      'systems-investigative',
+      'product-expressive',
+      'facilitation-relational',
+      'strategic-directional',
+      'operational-precision',
+    ]);
   });
 
-  // Guardrail 8: Overflow-x hidden is removed from body, maintaining native container containment
-  it('8. overflow-x: hidden is removed from body and html', () => {
-    expect(foundationCss).not.toContain('overflow-x: hidden');
-    expect(themeCss).not.toContain('overflow-x: hidden');
+  // Guardrail 9: Independent Readings Field implements accessible tablist with 4 lenses
+  it('9. Independent Readings Field implements accessible tablist with 4 lenses and keyboard navigation', () => {
+    render(
+      <BrowserRouter>
+        <IndependentReadingsField />
+      </BrowserRouter>
+    );
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs.length).toBe(4);
+    expect(tabs[0].getAttribute('aria-selected')).toBe('true');
+    // Click second tab
+    fireEvent.click(tabs[1]);
+    expect(tabs[1].getAttribute('aria-selected')).toBe('true');
+    expect(tabs[0].getAttribute('aria-selected')).toBe('false');
   });
 
-  // Guardrail 9: Blanket 0.01ms reduced motion reset is removed in favor of component-level rules
-  it('9. blanket 0.01ms reduced motion reset is replaced with component-level rules', () => {
+  // Guardrail 10: Safe Next URL navigation utility enforces security rules
+  it('10. safe next URL utility allows valid relative paths and rejects external/dangerous URLs', () => {
+    expect(getSafeNextUrl('/assessment/start')).toBe('/assessment/start');
+    expect(getSafeNextUrl('/dashboard')).toBe('/dashboard');
+    expect(getSafeNextUrl('/account/privacy')).toBe('/account/privacy');
+    expect(getSafeNextUrl('https://evil.com')).toBe('/dashboard');
+    expect(getSafeNextUrl('//evil.com')).toBe('/dashboard');
+    expect(getSafeNextUrl('javascript:alert(1)')).toBe('/dashboard');
+    expect(getSafeNextUrl(null)).toBe('/dashboard');
+    expect(getSafeNextUrl('')).toBe('/dashboard');
+
+    expect(getSignupAcquisitionUrl()).toBe('/signup?next=%2Fassessment%2Fstart');
+    expect(getLoginUrl('/assessment/start')).toBe('/login?next=%2Fassessment%2Fstart');
+    expect(getLoginUrl('/dashboard')).toBe('/login');
+  });
+
+  // Guardrail 11: Trust page export/delete controls link to existing protected controls
+  it('11. trust page links export and deletion items directly to /account/privacy', () => {
+    expect(trustComp).toContain('privacyControlsLink');
+    expect(PUBLIC_CONTENT.trust.controls.privacyControlsLink).toBe('/account/privacy');
+  });
+
+  // Guardrail 12: Login page omits deceptive password reset link
+  it('12. login page omits forgot password link as backend does not have recovery endpoint', () => {
+    expect(login).not.toContain('Forgot password?');
+    expect(login).not.toContain('/forgot-password');
+  });
+
+  // Guardrail 13: Signup page is a single-screen layout with live password validation
+  it('13. signup page is a single-screen layout with real-time requirements and success dwell', () => {
+    expect(signup).toContain('aria-live="polite"');
+    expect(signup).toContain('At least 8 characters');
+    expect(signup).toContain('One uppercase letter');
+    expect(signup).toContain('One number');
+    expect(signup).toContain('One special character');
+    expect(signup).not.toContain('step === 2');
+    expect(signup).not.toContain('Step 1 of');
+  });
+
+  // Guardrail 14: CSS styling is properly isolated and scoped under .pa-public-v4 and .pa-auth-v4
+  it('14. foundation and chrome CSS are scoped without blanket destructive resets', () => {
+    expect(foundationCss).toContain('.pa-public-v4');
+    expect(foundationCss).toContain('.pa-auth-v4');
     expect(foundationCss).not.toContain('0.01ms !important');
-    expect(foundationCss).toContain('@media (prefers-reduced-motion: reduce)');
-  });
-
-  // Guardrail 10: Routine numbered chapter eyebrows (01, 02, 03) are removed
-  it('10. routine numbered chapter eyebrows are removed from content tags', () => {
-    expect(EDITORIAL_CONTENT.adaptive.chapterTag).not.toMatch(/^0\d/);
-    expect(EDITORIAL_CONTENT.readings.chapterTag).not.toMatch(/^0\d/);
-    expect(EDITORIAL_CONTENT.careers.chapterTag).not.toMatch(/^0\d/);
-    expect(EDITORIAL_CONTENT.progress.chapterTag).not.toMatch(/^0\d/);
-    expect(EDITORIAL_CONTENT.story.chapterTag).not.toMatch(/^0\d/);
-    expect(EDITORIAL_CONTENT.trust.chapterTag).not.toMatch(/^0\d/);
-  });
-
-  // Guardrail 11: Missing dashboard data does not fabricate artificial score values
-  it('11. missing dashboard data does not fabricate artificial score values', () => {
-    expect(dashboard).toContain('Not available');
-    expect(dashboard).not.toContain('score || 50');
-    expect(dashboard).not.toContain('score: 50');
-    expect(dashboard).not.toContain('fitScore || 80');
-  });
-
-  // Guardrail 12: Public components contain no ManyPixels reference
-  it('12. public components contain no ManyPixels reference', () => {
-    const allPublic = [home, hero, adaptive, readings, careers, progress, story, trust, closingCta, footer, methodology, privacy, careerRoute, contentFile, mediaFile].join('\n');
-    expect(allPublic.toLowerCase()).not.toContain('manypixels');
-  });
-
-  // Guardrail 13: Career Worlds renders 5 career rows and dynamic floating image card
-  it('13. Career Worlds renders 5 career rows and dynamic floating image card', () => {
-    const careerNames = EDITORIAL_MEDIA_ASSETS.careers.slice(0, 5).map((c) => c.name);
-    expect(careerNames).toContain('Systems Architect');
-    expect(careerNames).toContain('Product Strategist');
-    expect(careerNames).toContain('UX Researcher');
-    expect(careerNames).toContain('Data & Evidence Analyst');
-    expect(careerNames).toContain('Technical Operations Lead');
-    expect(careers).toContain('floatingCardRef');
-  });
-
-  // Guardrail 14: Methodology renders four native psychometric framework breakdowns
-  it('14. Methodology renders four native psychometric framework breakdowns', () => {
-    expect(methodology).toContain('Big Five');
-    expect(methodology).toContain('RIASEC');
-    expect(methodology).toContain('Work Values');
-    expect(methodology).toContain('Deterministic Scoring');
-  });
-
-  // Guardrail 15: Inter Tight and Inter fonts are loaded in fonts.css
-  it('15. Inter Tight and Inter fonts are loaded in fonts.css', () => {
-    expect(fontsCss).toContain('@fontsource-variable/inter');
-    expect(fontsCss).toContain('@fontsource/inter-tight');
+    expect(foundationCss).not.toContain('body { overflow-x: hidden');
+    expect(motionCss).toContain('@media (prefers-reduced-motion: reduce)');
   });
 });

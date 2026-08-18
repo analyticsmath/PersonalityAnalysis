@@ -1,38 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { PublicLayout } from '../components/public/PublicChrome';
+import PublicLayout from '../components/personality-v4/chrome/PublicLayout';
+import ResponsivePicture from '../components/personality-v4/media/ResponsivePicture';
+import { MEDIA_ASSETS } from '../content/personality-v4/mediaManifest';
+import { PUBLIC_CONTENT } from '../content/personality-v4/publicContent';
+import { getSignupAcquisitionUrl } from '../utils/personality-v4/navigation';
 
-export default function PublicNotFoundPage() {
+export const PublicNotFoundPage = () => {
+  const { notFound } = PUBLIC_CONTENT;
+
   return (
-    <PublicLayout page="not-found">
-      <main
-        id="main-content"
-        className="secondary-route"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '60vh',
-          textAlign: 'center',
-          padding: '80px 20px',
-        }}
-      >
-        <h1 style={{ fontSize: '4rem', fontWeight: 600, letterSpacing: '-0.04em', margin: 0 }}>
-          404
-        </h1>
-        <p style={{ fontSize: '1.25rem', color: 'var(--secondary)', margin: '16px 0 32px', maxWidth: '40ch' }}>
-          This page does not exist or has moved. Return to the overview or begin your profile.
-        </p>
-        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Link className="ui-button ui-button--primary" to="/">
-            Return Home
-          </Link>
-          <Link className="ui-button ui-button--secondary" to="/signup">
-            Build My Profile
-          </Link>
+    <PublicLayout headerTheme="dark">
+      <div className="pa-404-container">
+        <div className="pa-404-bg" aria-hidden="true">
+          <ResponsivePicture
+            asset={MEDIA_ASSETS.a01}
+            alt=""
+            sizes="100vw"
+            objectPosition="50% 38%"
+          />
         </div>
-      </main>
+
+        <div className="pa-404-content">
+          <h1>{notFound.title}</h1>
+          <p>{notFound.message}</p>
+
+          <div className="pa-404-actions">
+            <Link to="/" className="pa-btn pa-btn--primary">
+              {notFound.returnHome}
+            </Link>
+            <Link to={getSignupAcquisitionUrl()} className="pa-btn pa-btn--inverse">
+              {notFound.buildProfile}
+            </Link>
+          </div>
+        </div>
+      </div>
     </PublicLayout>
   );
-}
+};
+
+export default PublicNotFoundPage;

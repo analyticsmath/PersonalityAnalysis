@@ -1,0 +1,975 @@
+/* Personality Assessor — V4 Homepage 7-Scene Narrative Styles */
+
+/* ── Scene 01: Profile Hero Theatre ── */
+.pa-hero-envelope {
+  position: relative;
+  height: 230svh;
+  background-color: var(--pa-black);
+  color: var(--pa-white);
+}
+
+.pa-hero-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(84px, 12vh, 120px) var(--pa-gutter-desktop) clamp(32px, 5vh, 60px);
+}
+
+.pa-hero-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.pa-hero-actor-frame {
+  position: absolute;
+  top: 11svh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42vw;
+  height: 80svh;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.pa-hero-actor-frame .pa-picture,
+.pa-hero-actor-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+}
+
+.pa-hero-headline-wrap {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--pa-max-width);
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.pa-hero-h1 {
+  font-family: var(--pa-font-serif);
+  font-size: var(--pa-text-hero);
+  font-weight: 420;
+  line-height: var(--pa-lh-hero);
+  letter-spacing: var(--pa-track-hero);
+  color: var(--pa-white);
+  max-width: 15ch;
+  text-wrap: balance;
+  transition: filter 0.3s ease;
+}
+
+.pa-hero-h1 span.pa-hero-highlight {
+  font-style: italic;
+  font-weight: 360;
+  color: var(--pa-cool-100);
+}
+
+.pa-hero-footer-grid {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: var(--pa-max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pa-hero-lead {
+  font-family: var(--pa-font-sans);
+  font-size: clamp(16px, 1.3vw, 20px);
+  line-height: 1.45;
+  color: var(--pa-cool-200);
+  max-width: 32ch;
+}
+
+.pa-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pa-hero-trace-words {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-around;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.pa-hero-trace-word {
+  font-family: var(--pa-font-sans);
+  font-size: var(--pa-text-data-label);
+  font-weight: 600;
+  letter-spacing: var(--pa-track-status);
+  text-transform: uppercase;
+  color: var(--pa-cool-400);
+  background: rgba(5, 5, 6, 0.6);
+  padding: 4px 10px;
+  border: 1px solid var(--pa-cool-800);
+}
+
+@media (max-width: 900px) {
+  .pa-hero-envelope {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .pa-hero-stage {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    padding-top: 100px;
+  }
+
+  .pa-hero-actor-frame {
+    position: absolute;
+    top: 0;
+    right: -10vw;
+    left: auto;
+    transform: none;
+    width: 80vw;
+    height: 100%;
+    opacity: 0.35;
+  }
+
+  .pa-hero-h1 {
+    font-size: var(--pa-text-hero-mobile);
+    max-width: 100%;
+  }
+
+  .pa-hero-footer-grid {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    margin-top: 48px;
+  }
+
+  .pa-hero-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .pa-hero-actions .pa-btn {
+    width: 100%;
+  }
+}
+
+/* ── Scene 02: Evidence to Signal Theatre ── */
+.pa-evidence-envelope {
+  position: relative;
+  height: 260svh;
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+}
+
+.pa-evidence-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.pa-evidence-grid {
+  width: 100%;
+  max-width: var(--pa-max-width);
+  margin: 0 auto;
+  padding: 0 var(--pa-gutter-desktop);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(32px, 6vw, 80px);
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.pa-evidence-header h2 {
+  font-size: var(--pa-text-scene-title);
+  line-height: var(--pa-lh-scene);
+  letter-spacing: var(--pa-track-scene);
+  margin-bottom: 16px;
+}
+
+.pa-evidence-header p {
+  font-size: var(--pa-text-large-body);
+  color: var(--pa-cool-600);
+  max-width: 38ch;
+  margin-bottom: 40px;
+}
+
+.pa-evidence-document {
+  background: var(--pa-white);
+  border: 1px solid var(--pa-cool-200);
+  padding: clamp(24px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pa-evidence-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pa-evidence-label {
+  font-size: var(--pa-text-data-label);
+  font-weight: 600;
+  letter-spacing: var(--pa-track-status);
+  text-transform: uppercase;
+  color: var(--pa-cool-600);
+}
+
+.pa-evidence-value {
+  font-size: 16px;
+  color: var(--pa-ink);
+}
+
+.pa-evidence-interactive-stage {
+  background: var(--pa-white);
+  border: 1px solid var(--pa-cool-200);
+  padding: clamp(24px, 4vw, 40px);
+}
+
+.pa-evidence-question {
+  font-family: var(--pa-font-serif);
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.25;
+  color: var(--pa-ink);
+  margin-bottom: 28px;
+}
+
+.pa-evidence-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pa-evidence-opt-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid var(--pa-cool-200);
+  border-radius: var(--pa-radius-btn);
+  cursor: pointer;
+  background: var(--pa-paper);
+  transition: all var(--pa-duration-fast) var(--pa-ease-out);
+}
+
+.pa-evidence-opt-label:hover {
+  background: var(--pa-white);
+  border-color: var(--pa-cool-400);
+}
+
+.pa-evidence-opt-label input[type="radio"] {
+  margin-top: 4px;
+  accent-color: var(--pa-ink);
+}
+
+.pa-evidence-opt-label input[type="radio"]:checked + .pa-evidence-opt-content {
+  color: var(--pa-ink);
+  font-weight: 560;
+}
+
+.pa-evidence-opt-content {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--pa-ink-soft);
+}
+
+.pa-evidence-signal-result {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--pa-cool-200);
+}
+
+.pa-evidence-spectrum-bar {
+  height: 6px;
+  background: var(--pa-cool-200);
+  position: relative;
+  margin: 16px 0 8px;
+  border-radius: 3px;
+}
+
+.pa-evidence-spectrum-point {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: var(--pa-data-conscientiousness);
+  border: 2px solid var(--pa-white);
+  box-shadow: 0 0 0 2px var(--pa-ink);
+  border-radius: 50%;
+}
+
+.pa-evidence-bg-fragment {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25vw;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+@media (max-width: 960px) {
+  .pa-evidence-envelope {
+    height: auto;
+  }
+
+  .pa-evidence-stage {
+    position: relative;
+    height: auto;
+    padding: 80px 0;
+  }
+
+  .pa-evidence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-evidence-bg-fragment {
+    display: none;
+  }
+}
+
+/* ── Scene 03: Independent Readings Field ── */
+.pa-readings-section {
+  padding: clamp(80px, 14vh, 160px) 0;
+  background-color: var(--pa-paper);
+  position: relative;
+}
+
+.pa-readings-header {
+  text-align: center;
+  max-width: 48ch;
+  margin: 0 auto clamp(48px, 8vh, 80px);
+}
+
+.pa-readings-header h2 {
+  font-size: var(--pa-text-scene-title);
+  line-height: var(--pa-lh-scene);
+  letter-spacing: var(--pa-track-scene);
+  margin-bottom: 16px;
+}
+
+.pa-readings-header p {
+  font-size: var(--pa-text-large-body);
+  color: var(--pa-cool-600);
+}
+
+.pa-readings-theatre-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+.pa-readings-visual-wrap {
+  position: relative;
+  height: 68svh;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.pa-readings-tabs-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pa-readings-tablist {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--pa-cool-200);
+  padding-bottom: 12px;
+  overflow-x: auto;
+}
+
+.pa-readings-tab {
+  font-family: var(--pa-font-sans);
+  font-size: 15px;
+  font-weight: 560;
+  color: var(--pa-cool-600);
+  background: transparent;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: var(--pa-radius-btn);
+  transition: all var(--pa-duration-fast) var(--pa-ease-out);
+}
+
+.pa-readings-tab:hover {
+  color: var(--pa-ink);
+  background: var(--pa-cool-100);
+}
+
+.pa-readings-tab[aria-selected="true"] {
+  color: var(--pa-white);
+  background: var(--pa-ink);
+}
+
+.pa-readings-panel {
+  background: var(--pa-white);
+  border: 1px solid var(--pa-cool-200);
+  padding: clamp(24px, 4vw, 40px);
+  min-height: 380px;
+}
+
+.pa-readings-panel h3 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.pa-readings-panel p.pa-readings-summary {
+  font-size: 16px;
+  color: var(--pa-cool-600);
+  margin-bottom: 28px;
+}
+
+/* Big Five Spectrum Bars */
+.pa-trait-row {
+  margin-bottom: 20px;
+}
+
+.pa-trait-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 560;
+  margin-bottom: 6px;
+}
+
+.pa-trait-spectrum {
+  height: 8px;
+  background: var(--pa-cool-100);
+  position: relative;
+  border-radius: 4px;
+}
+
+.pa-trait-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.pa-trait-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--pa-cool-400);
+  margin-top: 4px;
+}
+
+/* RIASEC Grid */
+.pa-riasec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pa-riasec-card {
+  padding: 14px;
+  background: var(--pa-paper);
+  border: 1px solid var(--pa-cool-200);
+}
+
+.pa-riasec-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pa-ink);
+  margin-bottom: 4px;
+}
+
+.pa-riasec-desc {
+  font-size: 13px;
+  color: var(--pa-cool-600);
+  line-height: 1.35;
+}
+
+/* Work Values Hierarchy */
+.pa-values-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pa-values-item {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pa-cool-100);
+}
+
+.pa-values-rank {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pa-cool-400);
+}
+
+.pa-values-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pa-ink);
+  min-width: 140px;
+}
+
+.pa-values-desc {
+  font-size: 14px;
+  color: var(--pa-cool-600);
+}
+
+@media (max-width: 900px) {
+  .pa-readings-theatre-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-readings-visual-wrap {
+    height: 40svh;
+    min-height: 300px;
+  }
+
+  .pa-riasec-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Scene 04: Career Worlds Theatre ── */
+.pa-career-envelope {
+  position: relative;
+  height: 320svh;
+  background-color: var(--pa-black);
+  color: var(--pa-white);
+}
+
+.pa-career-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(80px, 10vh, 120px) var(--pa-gutter-desktop) clamp(32px, 5vh, 60px);
+  overflow: hidden;
+}
+
+.pa-career-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  position: relative;
+  z-index: 3;
+}
+
+.pa-career-top h2 {
+  font-size: var(--pa-text-scene-title);
+  line-height: var(--pa-lh-scene);
+  letter-spacing: var(--pa-track-scene);
+  color: var(--pa-white);
+}
+
+.pa-career-index {
+  font-family: var(--pa-font-sans);
+  font-size: clamp(24px, 3vw, 42px);
+  font-weight: 540;
+  color: var(--pa-cool-400);
+}
+
+.pa-career-theatre-view {
+  position: relative;
+  width: 100%;
+  height: 58svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pa-career-active-frame {
+  width: 42vw;
+  height: 56svh;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  transition: all 0.5s var(--pa-ease-out);
+}
+
+.pa-career-peek-left,
+.pa-career-peek-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12vw;
+  height: 46svh;
+  opacity: 0.35;
+  filter: blur(6px);
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pa-career-peek-left { left: 4vw; }
+.pa-career-peek-right { right: 4vw; }
+
+.pa-career-bottom-details {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  position: relative;
+  z-index: 3;
+}
+
+.pa-career-world-title {
+  font-family: var(--pa-font-serif);
+  font-size: clamp(24px, 2.5vw, 36px);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.pa-career-world-theme {
+  font-family: var(--pa-font-sans);
+  font-size: var(--pa-text-data-label);
+  font-weight: 600;
+  letter-spacing: var(--pa-track-status);
+  text-transform: uppercase;
+  color: var(--pa-cool-400);
+  margin-bottom: 12px;
+}
+
+.pa-career-world-stmt {
+  font-size: 16px;
+  color: var(--pa-cool-200);
+  line-height: 1.45;
+}
+
+.pa-career-reqs-wrap p {
+  font-size: var(--pa-text-data-label);
+  font-weight: 600;
+  letter-spacing: var(--pa-track-status);
+  text-transform: uppercase;
+  color: var(--pa-cool-400);
+  margin-bottom: 10px;
+}
+
+.pa-career-reqs-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pa-career-reqs-list li {
+  font-size: 14px;
+  color: var(--pa-cool-100);
+  position: relative;
+  padding-left: 16px;
+}
+
+.pa-career-reqs-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--pa-cool-600);
+}
+
+@media (max-width: 900px) {
+  .pa-career-envelope {
+    height: auto;
+  }
+
+  .pa-career-stage {
+    position: relative;
+    height: auto;
+    padding: 80px var(--pa-gutter-mobile);
+  }
+
+  .pa-career-theatre-view {
+    height: auto;
+    margin: 32px 0;
+  }
+
+  .pa-career-active-frame {
+    width: 100%;
+    height: 44svh;
+  }
+
+  .pa-career-peek-left,
+  .pa-career-peek-right {
+    display: none;
+  }
+
+  .pa-career-bottom-details {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* ── Scene 05: Development Echo ── */
+.pa-echo-section {
+  padding: clamp(80px, 14vh, 160px) 0;
+  background-color: var(--pa-paper);
+}
+
+.pa-echo-header {
+  text-align: center;
+  max-width: 48ch;
+  margin: 0 auto clamp(48px, 8vh, 80px);
+}
+
+.pa-echo-header h2 {
+  font-size: var(--pa-text-scene-title);
+  line-height: var(--pa-lh-scene);
+  letter-spacing: var(--pa-track-scene);
+  margin-bottom: 16px;
+}
+
+.pa-echo-header p {
+  font-size: var(--pa-text-large-body);
+  color: var(--pa-cool-600);
+}
+
+.pa-echo-field {
+  background: var(--pa-white);
+  border: 1px solid var(--pa-cool-200);
+  padding: clamp(24px, 5vw, 60px);
+}
+
+.pa-echo-dates-header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--pa-cool-200);
+  margin-bottom: 32px;
+}
+
+.pa-echo-date-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.pa-echo-date-label {
+  font-size: var(--pa-text-data-label);
+  font-weight: 600;
+  letter-spacing: var(--pa-track-status);
+  text-transform: uppercase;
+  color: var(--pa-cool-600);
+}
+
+.pa-echo-date-val {
+  font-size: clamp(18px, 2vw, 24px);
+  font-family: var(--pa-font-serif);
+  color: var(--pa-ink);
+}
+
+.pa-echo-comparison-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.pa-echo-row {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 1.5fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.pa-echo-row-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pa-ink);
+}
+
+.pa-echo-track {
+  height: 8px;
+  background: var(--pa-cool-100);
+  position: relative;
+  border-radius: 4px;
+}
+
+.pa-echo-dot-earlier {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: var(--pa-cool-400);
+  border-radius: 50%;
+}
+
+.pa-echo-dot-current {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: var(--pa-ink);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--pa-white), 0 0 0 3px var(--pa-ink);
+}
+
+.pa-echo-status {
+  font-size: 13px;
+  color: var(--pa-cool-600);
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .pa-echo-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .pa-echo-status {
+    text-align: left;
+  }
+}
+
+/* ── Scene 06: Inspectable Trust Scene ── */
+.pa-trust-section {
+  padding: clamp(80px, 14vh, 160px) 0;
+  background-color: var(--pa-paper);
+}
+
+.pa-trust-theatre {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(32px, 6vw, 80px);
+  align-items: center;
+}
+
+.pa-trust-media-wrap {
+  position: relative;
+  height: 52svh;
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.pa-trust-content h2 {
+  font-size: var(--pa-text-scene-title);
+  line-height: var(--pa-lh-scene);
+  letter-spacing: var(--pa-track-scene);
+  margin-bottom: 32px;
+}
+
+.pa-trust-chain {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  padding-left: 24px;
+}
+
+.pa-trust-chain::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 4px;
+  width: 2px;
+  background: var(--pa-cool-200);
+}
+
+.pa-trust-node {
+  position: relative;
+}
+
+.pa-trust-node::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pa-white);
+  border: 2px solid var(--pa-ink);
+}
+
+.pa-trust-node h4 {
+  font-family: var(--pa-font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pa-ink);
+  margin-bottom: 2px;
+}
+
+.pa-trust-node p {
+  font-size: 14px;
+  color: var(--pa-cool-600);
+  line-height: 1.4;
+}
+
+.pa-trust-links {
+  display: flex;
+  gap: 24px;
+  margin-top: 36px;
+}
+
+.pa-trust-links a {
+  font-size: 15px;
+  font-weight: 560;
+  color: var(--pa-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .pa-trust-theatre {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-trust-media-wrap {
+    height: 35svh;
+    min-height: 260px;
+  }
+}
+
+/* ── Scene 07: Final Profile Scene ── */
+.pa-final-scene {
+  padding: clamp(80px, 14vh, 160px) 0;
+  background-color: var(--pa-paper);
+  text-align: center;
+  border-bottom: 1px solid var(--pa-cool-200);
+}
+
+.pa-final-scene-inner {
+  max-width: 52ch;
+  margin: 0 auto;
+}
+
+.pa-final-scene h2 {
+  font-size: var(--pa-text-scene-title);
+  line-height: var(--pa-lh-scene);
+  letter-spacing: var(--pa-track-scene);
+  margin-bottom: 16px;
+}
+
+.pa-final-scene p {
+  font-size: var(--pa-text-large-body);
+  color: var(--pa-cool-600);
+  margin-bottom: 36px;
+}

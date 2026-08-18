@@ -1,27 +1,50 @@
-import React, { useMemo, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { googleLogin as googleLoginApi, signup as signupApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { ResponsiveImage } from '../../components/public/PublicChrome';
-import { publicMedia } from '../../content/personalityMarketingDemo';
-import '../PublicSite.css';
+import { MEDIA_ASSETS } from '../../content/personality-v4/mediaManifest';
+import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../utils/personality-v4/navigation';
+import AuthLayout from '../../components/personality-v4/auth/AuthLayout';
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const auth = useAuth();
+  const timerRef = useRef(null);
+
   const [form, setForm] = useState({ name: '', email: '', password: '', terms: false });
+  const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  const safeNext = useMemo(() => {
+    const params = typeof window !== 'undefined' && window.URLSearchParams ? new window.URLSearchParams(location.search) : { get: () => null };
+    return getSafeNextUrl(params.get('next'), DEFAULT_ACQUISITION_TARGET);
+  }, [location.search]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const signupMutation = useMutation({
     mutationFn: signupApi,
     onSuccess: () => {
-      setSuccessMessage('Account created. Sign in to start your first assessment.');
-      setTimeout(() => navigate('/login'), 500);
+      setSuccessMessage('Account created successfully. Navigating to sign-in…');
+      // Intentional readable dwell plateau (1400ms) before navigating to login with preserved next path
+      timerRef.current = setTimeout(() => {
+        navigate(`/login?next=${encodeURIComponent(safeNext)}`, { replace: true });
+      }, 1400);
+    },
+    onError: (error) => {
+      const message = error?.message || 'Could not create account. Please check your details.';
+      setFormError(message);
+      toast.error(message);
     },
   });
 
@@ -29,7 +52,7 @@ const SignupPage = () => {
     mutationFn: googleLoginApi,
     onSuccess: (payload) => {
       auth.login(payload);
-      navigate('/dashboard');
+      navigate(safeNext, { replace: true });
     },
     onError: (error) => {
       const message = error?.message || 'Google sign-up failed. Please try again.';
@@ -43,142 +66,185 @@ const SignupPage = () => {
     [formError, signupMutation.error?.message, googleMutation.error?.message]
   );
 
-  if (auth.isAuthenticated) return <Navigate to="/dashboard" replace />;
+  const passwordRules = useMemo(() => {
+    const p = form.password;
+    return {
+      hasLength: p.length >= 8,
+      hasUpper: /[A-Z]/.test(p),
+      hasNumber: /[0-9]/.test(p),
+      hasSpecial: /[^A-Za-z0-9]/.test(p),
+    };
+  }, [form.password]);
+
+  if (auth.isAuthenticated) {
+    return <Navigate to={safeNext} replace />;
+  }
 
   const change = (event) => {
     const { name, value, checked, type } = event.target;
     setFormError('');
     setSuccessMessage('');
-    setForm((previous) => ({ ...previous, [name]: type === 'checkbox' ? checked : value }));
+    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const submit = (event) => {
     event.preventDefault();
     setFormError('');
-    if (!form.name || !form.email || !form.password) return setFormError('Complete all required fields.');
-    if (form.password.length < 6) return setFormError('Password must be at least 6 characters.');
-    if (!form.terms) return setFormError('Accept terms and conditions to continue.');
-    signupMutation.mutate({ name: form.name, email: form.email, password: form.password });
+    if (!form.name.trim()) return setFormError('Please enter your full name.');
+    if (!form.email.trim()) return setFormError('Please enter a valid email address.');
+    if (form.password.length < 6) return setFormError('Password must be at least 6 characters long.');
+    if (!form.terms) return setFormError('Please accept the terms and privacy policy to continue.');
+
+    signupMutation.mutate({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      password: form.password,
+    });
   };
 
-  const signupMedia = publicMedia?.auth?.signup || publicMedia?.hero?.process || null;
-
   return (
-    <main className="pa-auth" data-page="signup">
-      <div className="pa-auth__editorial">
-        <div className="pa-auth__heading">
-          <Link className="public-brand" to="/" aria-label="Personality Assessor home">
-            <span className="public-brand__name">Personality Assessor</span>
-          </Link>
-          <h1>Start with the work you already know.</h1>
-          <p>
-            Create an account, add professional context, and begin a profile you can return to as your work changes.
-          </p>
-        </div>
-        {signupMedia && (
-          <figure className="pa-auth__fragment-frame">
-            <ResponsiveImage
-              media={signupMedia}
-              alt="Visual thinking board with structured sticky notes"
-              sizes="380px"
-            />
-          </figure>
+    <AuthLayout
+      mediaAsset={MEDIA_ASSETS.a10}
+      pageType="signup"
+      heading="Start with the work you already know."
+      subtitle="Create your account, then begin with a role, project or professional context."
+    >
+      <form onSubmit={submit} className="pa-auth-form" noValidate>
+        {errorMessage && (
+          <div role="alert" aria-live="assertive" className="pa-auth-error-banner">
+            {errorMessage}
+          </div>
         )}
-      </div>
 
-      <section className="pa-auth__form-wrap">
-        <form onSubmit={submit} className="pa-auth__form" noValidate>
-          <h2>Create account</h2>
-          <p>Begin a professional profile you can return to.</p>
-
-          <div role="alert" aria-live="assertive">
-            {errorMessage && <span className="pa-auth__message">{errorMessage}</span>}
+        {successMessage && (
+          <div role="status" aria-live="polite" className="pa-auth-success-banner">
+            <p style={{ marginBottom: '8px' }}>{successMessage}</p>
+            <Link
+              to={`/login?next=${encodeURIComponent(safeNext)}`}
+              className="pa-btn pa-btn--primary"
+              style={{ height: '36px', fontSize: '13px', padding: '0 16px' }}
+            >
+              Continue to sign in →
+            </Link>
           </div>
-          <div role="status" aria-live="polite">
-            {successMessage && <span className="pa-auth__success">{successMessage}</span>}
-          </div>
+        )}
 
-          <label htmlFor="signup-name">
-            Full name
-            <input
-              id="signup-name"
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={change}
-              placeholder="Alex Johnson"
-              autoComplete="name"
-              required
-            />
-          </label>
+        <div className="pa-auth-field">
+          <label htmlFor="signup-name">Full name</label>
+          <input
+            id="signup-name"
+            type="text"
+            name="name"
+            className="pa-auth-input"
+            value={form.name}
+            onChange={change}
+            placeholder="Alex Mercer"
+            autoComplete="name"
+            required
+          />
+        </div>
 
-          <label htmlFor="signup-email">
-            Email
-            <input
-              id="signup-email"
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={change}
-              placeholder="you@example.com"
-              autoComplete="email"
-              required
-            />
-          </label>
+        <div className="pa-auth-field">
+          <label htmlFor="signup-email">Email address</label>
+          <input
+            id="signup-email"
+            type="email"
+            name="email"
+            className="pa-auth-input"
+            value={form.email}
+            onChange={change}
+            placeholder="name@example.com"
+            autoComplete="email"
+            required
+          />
+        </div>
 
-          <label htmlFor="signup-password">
-            Password
+        <div className="pa-auth-field">
+          <label htmlFor="signup-password">Password</label>
+          <div className="pa-auth-password-wrap">
             <input
               id="signup-password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
+              className="pa-auth-input"
               value={form.password}
               onChange={change}
-              placeholder="Minimum 6 characters"
+              placeholder="Create a secure password"
               autoComplete="new-password"
+              aria-describedby="password-requirements"
               required
             />
-          </label>
-
-          <label className="pa-auth__check" htmlFor="signup-terms">
-            <input
-              id="signup-terms"
-              type="checkbox"
-              name="terms"
-              checked={form.terms}
-              onChange={change}
-            />
-            <span>I agree to the terms and conditions</span>
-          </label>
-
-          <button
-            className="pa-auth__submit"
-            type="submit"
-            disabled={signupMutation.isPending || googleMutation.isPending}
-          >
-            {signupMutation.isPending || googleMutation.isPending ? 'Creating account…' : 'Create account'}
-          </button>
-        </form>
-
-        {GOOGLE_CLIENT_ID && (
-          <div className="pa-auth__google">
-            <p>or continue with</p>
-            <GoogleLoginButton
-              onCredential={(token) => googleMutation.mutate(token)}
-              onError={(message) => {
-                const next = message || 'Google sign-up failed. Please retry.';
-                setFormError(next);
-                toast.error(next);
-              }}
-            />
+            <button
+              type="button"
+              className="pa-auth-password-toggle"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
           </div>
-        )}
+          <div id="password-requirements" className="pa-auth-password-rules">
+            <span style={{ display: 'block', marginBottom: '4px', fontWeight: 600 }}>Password requirements:</span>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', fontSize: '11px' }}>
+              <li style={{ color: passwordRules.hasLength ? '#2D6A4F' : 'inherit' }}>
+                {passwordRules.hasLength ? '✓' : '•'} At least 8 characters
+              </li>
+              <li style={{ color: passwordRules.hasUpper ? '#2D6A4F' : 'inherit' }}>
+                {passwordRules.hasUpper ? '✓' : '•'} One uppercase letter
+              </li>
+              <li style={{ color: passwordRules.hasNumber ? '#2D6A4F' : 'inherit' }}>
+                {passwordRules.hasNumber ? '✓' : '•'} One number
+              </li>
+              <li style={{ color: passwordRules.hasSpecial ? '#2D6A4F' : 'inherit' }}>
+                {passwordRules.hasSpecial ? '✓' : '•'} One special character
+              </li>
+            </ul>
+          </div>
+        </div>
 
-        <p className="pa-auth__footer">
-          Already have an account? <Link to="/login">Sign in</Link>
-        </p>
-      </section>
-    </main>
+        <label className="pa-auth-checkbox-field" htmlFor="signup-terms">
+          <input
+            id="signup-terms"
+            type="checkbox"
+            name="terms"
+            checked={form.terms}
+            onChange={change}
+          />
+          <span>
+            I agree to the <Link to="/privacy">Privacy Policy & Terms</Link>
+          </span>
+        </label>
+
+        <button
+          className="pa-btn pa-btn--primary pa-auth-submit-btn"
+          type="submit"
+          disabled={signupMutation.isPending || googleMutation.isPending}
+        >
+          {signupMutation.isPending ? 'Creating account…' : 'Create account'}
+        </button>
+      </form>
+
+      {GOOGLE_CLIENT_ID && (
+        <div style={{ marginTop: '16px' }}>
+          <div className="pa-auth-divider">
+            <span>or continue with</span>
+          </div>
+          <GoogleLoginButton
+            onCredential={(token) => googleMutation.mutate(token)}
+            onError={(message) => {
+              const nextErr = message || 'Google sign-up failed. Please retry.';
+              setFormError(nextErr);
+              toast.error(nextErr);
+            }}
+          />
+        </div>
+      )}
+
+      <p className="pa-auth-footer-text">
+        Already have an account?{' '}
+        <Link to={`/login?next=${encodeURIComponent(safeNext)}`}>Sign in</Link>
+      </p>
+    </AuthLayout>
   );
 };
 
