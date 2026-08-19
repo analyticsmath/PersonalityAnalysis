@@ -10,7 +10,7 @@ import InspectabilityEntryChapter from '../../components/personality-v7/home/Ins
 export const EditorialHomePage = () => {
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="dark" withFooter={false}>
+      <PublicLayout headerTheme="light" withFooter={false} withMobileAtlasDock={false}>
         {/* Chapter 01 & 02 — Continuous Opening: Orientation through Evidence */}
         <OrientationChapter />
 

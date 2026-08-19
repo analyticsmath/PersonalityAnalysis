@@ -79,7 +79,7 @@ describe('Personality Assessor V7 Signal Atlas — Visual Architecture & Product
   });
 
   // Guardrail 4: Adaptive demo initializes with NO preselected answer
-  it('4. adaptive question demo initializes with no preselected radio and updates state on selection', () => {
+  it('4. adaptive question demo initializes with no preselected radio and remains a native radio group', () => {
     render(
       <BrowserRouter>
         <EvidenceChapter />
@@ -90,7 +90,7 @@ describe('Personality Assessor V7 Signal Atlas — Visual Architecture & Product
     for (const opt of options) {
       expect(opt.checked).toBe(false);
     }
-    // Select first option
+    // The browser, rather than React state, owns the native selection.
     fireEvent.click(options[0]);
     expect(options[0].checked).toBe(true);
   });
@@ -223,7 +223,7 @@ describe('Personality Assessor V7 Signal Atlas — Visual Architecture & Product
     expect(foundationCss).toContain('.pa-v7-root');
     expect(foundationCss).toContain('.pa-public-v4');
     expect(foundationCss).not.toContain('0.01ms !important');
-    expect(foundationCss).toContain('overflow-x: clip');
+    expect(foundationCss).not.toMatch(/\.pa-v7-root[\s\S]*overflow-x:\s*(hidden|clip)/);
     expect(chromeCss).toContain('.pa-v7-atlas-dock');
     expect(homeCss).toContain('.pa-v7-chapter-orientation');
   });

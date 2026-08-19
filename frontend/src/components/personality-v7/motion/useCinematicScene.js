@@ -15,31 +15,17 @@ export const useCinematicScene = (setupTimeline, deps = []) => {
   useLayoutEffect(() => {
     if (!scopeRef.current) return;
 
-    // Check prefers-reduced-motion
-    const prefersReducedMotion = typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
-      return;
-    }
-
+    const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-
-      mm.add('(min-width: 901px)', (context) => {
-        if (typeof setupTimeline === 'function') {
-          setupTimeline({ isDesktop: true, context, scope: scopeRef.current });
-        }
-      });
-
-      mm.add('(max-width: 900px)', (context) => {
-        if (typeof setupTimeline === 'function') {
-          setupTimeline({ isDesktop: false, context, scope: scopeRef.current });
-        }
-      });
+      mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', (context) => (
+        typeof setupTimeline === 'function'
+          ? setupTimeline({ isDesktop: true, context, scope: scopeRef.current })
+          : undefined
+      ));
     }, scopeRef);
 
     return () => {
+      mm.revert();
       ctx.revert();
     };
   }, deps);

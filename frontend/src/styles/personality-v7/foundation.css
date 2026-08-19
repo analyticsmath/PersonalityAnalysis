@@ -16,7 +16,6 @@
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   width: 100%;
-  overflow-x: clip;
   position: relative;
 }
 
@@ -30,7 +29,7 @@
 
 /* Accessibility: Focus Visible */
 :focus-visible {
-  outline: 2px solid var(--pa-bone);
+  outline: 2px solid currentColor;
   outline-offset: 3px;
 }
 

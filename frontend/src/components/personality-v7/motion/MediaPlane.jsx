@@ -12,6 +12,12 @@ export const MediaPlane = ({
   alt = '',
   className = '',
   style = {},
+  sizes,
+  fetchPriority,
+  width,
+  height,
+  loading,
+  decoding,
 }) => {
   if (!asset) {
     return <div className={`pa-v7-media-plane ${className}`} style={style} />;
@@ -28,7 +34,13 @@ export const MediaPlane = ({
     .map(([w, src]) => `${src} ${w}w`)
     .join(', ');
 
-  const fallbackSrc = asset.source || (webpEntries.length > 0 ? webpEntries[0][1] : '');
+  const intrinsicDimensions = typeof asset.aspectRatio === 'string'
+    ? asset.aspectRatio.match(/^(\d+)\s*\/\s*(\d+)$/)
+    : null;
+  const intrinsicWidth = width || asset.width || intrinsicDimensions?.[1];
+  const intrinsicHeight = height || asset.height || intrinsicDimensions?.[2];
+  const responsiveSizes = sizes || '100vw';
+  const fallbackSrc = webpEntries.at(-1)?.[1] || asset.source || '';
 
   return (
     <div
@@ -39,13 +51,17 @@ export const MediaPlane = ({
       }}
     >
       <picture>
-        {avifSrcset && <source type="image/avif" srcSet={avifSrcset} sizes="100vw" />}
-        {webpSrcset && <source type="image/webp" srcSet={webpSrcset} sizes="100vw" />}
+        {avifSrcset && <source type="image/avif" srcSet={avifSrcset} sizes={responsiveSizes} />}
+        {webpSrcset && <source type="image/webp" srcSet={webpSrcset} sizes={responsiveSizes} />}
         <img
           src={fallbackSrc}
           alt={alt || asset.alt || ''}
-          loading={priority ? 'eager' : 'lazy'}
-          decoding={priority ? 'sync' : 'async'}
+          width={intrinsicWidth}
+          height={intrinsicHeight}
+          sizes={responsiveSizes}
+          fetchPriority={fetchPriority || (priority ? 'high' : undefined)}
+          loading={loading || (priority ? 'eager' : 'lazy')}
+          decoding={decoding || 'async'}
           style={{
             objectPosition: objectPosition || asset.focalPoint?.desktop || '50% 50%',
           }}

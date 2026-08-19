@@ -15,21 +15,21 @@ export const SmoothScrollProvider = ({ children }) => {
 
   useEffect(() => {
     // Only initialize on desktop with fine pointer
-    const isDesktop = window.matchMedia('(min-width: 901px) and (hover: hover) and (pointer: fine)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canSmoothScroll = window.matchMedia(
+      '(min-width: 901px) and (pointer: fine) and (hover: hover) and (prefers-reduced-motion: no-preference)'
+    ).matches;
 
-    if (!isDesktop || prefersReducedMotion) {
+    if (!canSmoothScroll) {
       return;
     }
 
     const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.12,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 0.9,
-      touchMultiplier: 1.5,
+      autoRaf: false,
     });
 
     lenisRef.current = lenis;
@@ -42,9 +42,9 @@ export const SmoothScrollProvider = ({ children }) => {
     };
 
     gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
 
     return () => {
+      lenis.off('scroll', ScrollTrigger.update);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       lenisRef.current = null;
