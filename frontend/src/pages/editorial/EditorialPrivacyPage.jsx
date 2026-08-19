@@ -1,6 +1,6 @@
 import React from 'react';
-import PublicLayout from '../../components/personality-v4/chrome/PublicLayout';
-import PrivacyDocument from '../../components/personality-v4/routes/PrivacyDocument';
+import PublicLayout from '../../components/personality-v6/chrome/PublicLayout';
+import PrivacyDocument from '../../components/personality-v6/routes/PrivacyDocument';
 
 export const EditorialPrivacyPage = () => {
   return (

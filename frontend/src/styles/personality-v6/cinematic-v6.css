@@ -1,0 +1,1014 @@
+/* ==========================================================================
+   Personality Assessor — V6 Cinematic System Tokens & Base Styles
+   Warm Editorial Neutral Palette & Strict Typographic Hierarchy
+   ========================================================================== */
+
+:root {
+  /* Warm Editorial Neutral Palette */
+  --pa-obsidian: #111210;
+  --pa-charcoal: #1D1E1A;
+  --pa-paper: #F0EEE7;
+  --pa-bone: #FBFAF5;
+  --pa-stone: #B8B7AE;
+  --pa-muted: #686A64;
+  --pa-rule-dark: rgb(17 18 16 / 20%);
+  --pa-rule-light: rgb(251 250 245 / 24%);
+
+  /* Controlled Functional / Psychometric Accents */
+  --pa-accent-openness: #764A62;        /* Plum */
+  --pa-accent-conscientiousness: #2D5D4B; /* Pine */
+  --pa-accent-extraversion: #A64B2A;     /* Rust */
+  --pa-accent-agreeableness: #AF5B68;    /* Rose */
+  --pa-accent-stability: #43657D;        /* Slate Blue */
+
+  /* Typography variables */
+  --pa-font-serif: 'Source Serif 4 Variable', Georgia, Cambria, serif;
+  --pa-font-sans: 'Source Sans 3 Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Display Clamp Rules */
+  --pa-display-headline: clamp(4rem, 8.5vw, 8.25rem); /* 64px–132px */
+  --pa-display-lh: 0.88;
+  --pa-display-tracking: -0.045em;
+
+  --pa-display-headline-mobile: clamp(3rem, 11vw, 4.5rem); /* 48px–72px */
+  --pa-display-lh-mobile: 0.93;
+  --pa-display-tracking-mobile: -0.04em;
+
+  /* Z-Index Hierarchy */
+  --pa-z-base-media: 1;
+  --pa-z-overlay-slice: 5;
+  --pa-z-stage-content: 10;
+  --pa-z-edge-anchors: 15;
+  --pa-z-chrome: 100;
+  --pa-z-modal: 200;
+}
+
+/* Global Reset & Base */
+html {
+  background-color: var(--pa-obsidian);
+  color: var(--pa-bone);
+  font-family: var(--pa-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--pa-obsidian);
+  color: var(--pa-bone);
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.5;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Typographic Defaults */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--pa-font-serif);
+  font-weight: 400;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0 0 1rem 0;
+  line-height: 1.55;
+  color: var(--pa-stone);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Lenis Scroll Smoothness container classes */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Focus Visibility & Accessibility */
+:focus-visible {
+  outline: 2px solid var(--pa-bone);
+  outline-offset: 3px;
+}
+
+.pa-skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 1000;
+  background: var(--pa-bone);
+  color: var(--pa-obsidian);
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: top 0.2s ease;
+  border-radius: 2px;
+}
+.pa-skip-link:focus {
+  top: 1rem;
+}
+
+/* Button & Control Contracts */
+.pa-v6-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--pa-font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.85rem 1.6rem;
+  min-height: 48px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.pa-v6-btn:active {
+  transform: scale(0.985);
+}
+
+/* Primary CTA: High contrast bone on obsidian or inverse paper */
+.pa-v6-btn--primary {
+  background-color: var(--pa-bone);
+  color: var(--pa-obsidian);
+  border-color: var(--pa-bone);
+}
+.pa-v6-btn--primary:hover {
+  background-color: #E2E0D8;
+  color: var(--pa-obsidian);
+}
+
+.pa-v6-btn--secondary {
+  background-color: transparent;
+  color: var(--pa-bone);
+  border-color: var(--pa-rule-light);
+}
+.pa-v6-btn--secondary:hover {
+  background-color: rgba(251, 250, 245, 0.08);
+  border-color: var(--pa-bone);
+}
+
+.pa-v6-btn--ink {
+  background-color: var(--pa-obsidian);
+  color: var(--pa-bone);
+  border-color: var(--pa-obsidian);
+}
+.pa-v6-btn--ink:hover {
+  background-color: var(--pa-charcoal);
+  color: var(--pa-bone);
+}
+
+.pa-v6-btn--outline-ink {
+  background-color: transparent;
+  color: var(--pa-obsidian);
+  border-color: var(--pa-rule-dark);
+}
+.pa-v6-btn--outline-ink:hover {
+  background-color: rgba(17, 18, 16, 0.06);
+  border-color: var(--pa-obsidian);
+}
+
+/* ==========================================================================
+   Chrome: Header & Mobile Bottom Nav
+   ========================================================================== */
+
+.pa-v6-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  z-index: var(--pa-z-chrome);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.pa-v6-header > * {
+  pointer-events: auto;
+}
+
+.pa-v6-header[data-theme="dark"] {
+  color: var(--pa-bone);
+}
+
+.pa-v6-header[data-theme="light"] {
+  color: var(--pa-obsidian);
+}
+
+.pa-v6-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--pa-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pa-v6-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.pa-v6-header__link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  opacity: 0.82;
+  transition: opacity 0.2s ease;
+}
+.pa-v6-header__link:hover {
+  opacity: 1;
+}
+
+.pa-v6-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Mobile Bottom Navigation */
+.pa-v6-mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(56px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-color: var(--pa-charcoal);
+  border-top: 1px solid var(--pa-rule-dark);
+  z-index: var(--pa-z-chrome);
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .pa-v6-mobile-bottom-nav {
+    display: grid;
+  }
+  .pa-v6-header__nav {
+    display: none;
+  }
+  .pa-v6-header {
+    padding: 0 1.25rem;
+    height: 56px;
+  }
+}
+
+.pa-v6-bottom-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 48px;
+  color: var(--pa-stone);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.pa-v6-bottom-tab[aria-current="page"],
+.pa-v6-bottom-tab.active {
+  color: var(--pa-bone);
+}
+
+.pa-v6-bottom-tab svg {
+  font-size: 1.125rem;
+}
+
+/* ==========================================================================
+   Motion Primitives: MediaPlane, PlaneHandoff, SliceOverlay
+   ========================================================================== */
+
+.pa-v6-media-plane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pa-v6-media-plane__picture,
+.pa-v6-media-plane__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pa-v6-plane-handoff {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pa-v6-plane-handoff__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+}
+
+/* Slice Overlay (tactile fragment cuts during handoff) */
+.pa-v6-slice-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  pointer-events: none;
+  z-index: var(--pa-z-overlay-slice);
+}
+
+.pa-v6-slice-overlay--3x4 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.pa-v6-slice-overlay--2x3 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.pa-v6-slice-overlay__fragment {
+  overflow: hidden;
+  position: relative;
+  background-color: var(--pa-obsidian);
+  will-change: transform, opacity;
+}
+
+.pa-v6-slice-overlay__fragment img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   Scene 1: Profile Emergence
+   ========================================================================== */
+
+.pa-v6-scene-hero {
+  position: relative;
+  width: 100%;
+  height: 230svh;
+  background-color: var(--pa-obsidian);
+}
+
+.pa-v6-scene-hero__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+  padding: 0 4rem;
+}
+
+.pa-v6-scene-hero__clear-field {
+  grid-column: 1 / 6;
+  z-index: var(--pa-z-stage-content);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 580px;
+}
+
+.pa-v6-scene-hero__title {
+  font-size: var(--pa-display-headline);
+  line-height: var(--pa-display-lh);
+  letter-spacing: var(--pa-display-tracking);
+  color: var(--pa-bone);
+  font-weight: 400;
+}
+
+.pa-v6-scene-hero__lead {
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  color: var(--pa-stone);
+  max-width: 460px;
+}
+
+.pa-v6-scene-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.pa-v6-scene-hero__signin-quiet {
+  font-size: 0.875rem;
+  color: var(--pa-stone);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.pa-v6-scene-hero__signin-quiet:hover {
+  color: var(--pa-bone);
+}
+
+.pa-v6-scene-hero__actor-stage {
+  grid-column: 7 / 13;
+  height: 78svh;
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+  will-change: transform, width, height, left, top;
+}
+
+@media (max-width: 900px) {
+  .pa-v6-scene-hero {
+    height: auto;
+    min-height: 100svh;
+    padding-bottom: 3rem;
+  }
+  .pa-v6-scene-hero__sticky {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    padding: 5rem 1.5rem 2rem 1.5rem;
+    gap: 2.5rem;
+  }
+  .pa-v6-scene-hero__clear-field {
+    max-width: 100%;
+    grid-column: auto;
+  }
+  .pa-v6-scene-hero__title {
+    font-size: var(--pa-display-headline-mobile);
+    line-height: var(--pa-display-lh-mobile);
+    letter-spacing: var(--pa-display-tracking-mobile);
+  }
+  .pa-v6-scene-hero__actor-stage {
+    width: 100%;
+    height: 52svh;
+    grid-column: auto;
+  }
+}
+
+/* ==========================================================================
+   Scene 2: Evidence Canvas
+   ========================================================================== */
+
+.pa-v6-scene-evidence {
+  position: relative;
+  width: 100%;
+  min-height: 220svh;
+  background-color: var(--pa-obsidian);
+}
+
+.pa-v6-scene-evidence__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 4rem;
+}
+
+.pa-v6-scene-evidence__stage {
+  position: relative;
+  width: 100%;
+  max-width: 1380px;
+  height: 82svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pa-v6-scene-evidence__central-image {
+  position: relative;
+  width: 55vw;
+  max-width: 780px;
+  height: 75svh;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pa-v6-evidence-anchor {
+  position: absolute;
+  z-index: var(--pa-z-edge-anchors);
+  max-width: 260px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--pa-stone);
+  border-left: 2px solid var(--pa-bone);
+  padding-left: 0.75rem;
+  background: rgba(17, 18, 16, 0.4);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+.pa-v6-evidence-anchor__label {
+  font-weight: 700;
+  color: var(--pa-bone);
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+
+.pa-v6-evidence-anchor--top-left {
+  top: 10%;
+  left: 3%;
+}
+.pa-v6-evidence-anchor--bottom-left {
+  bottom: 18%;
+  left: 3%;
+}
+.pa-v6-evidence-anchor--top-right {
+  top: 10%;
+  right: 3%;
+}
+.pa-v6-evidence-anchor--bottom-right {
+  bottom: 18%;
+  right: 3%;
+}
+
+.pa-v6-scene-evidence__inquiry-bay {
+  grid-column: 1 / 4;
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 820px;
+  background: rgba(29, 30, 26, 0.95);
+  border: 1px solid var(--pa-rule-light);
+  padding: 1.5rem 2rem;
+  border-radius: 2px;
+  z-index: 25;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.pa-v6-inquiry__prompt {
+  font-family: var(--pa-font-serif);
+  font-size: 1.1875rem;
+  color: var(--pa-bone);
+  margin-bottom: 1rem;
+}
+
+.pa-v6-inquiry__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.pa-v6-inquiry__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--pa-stone);
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 2px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.pa-v6-inquiry__option:hover {
+  background-color: rgba(251, 250, 245, 0.06);
+  color: var(--pa-bone);
+}
+.pa-v6-inquiry__option input[type="radio"] {
+  accent-color: var(--pa-bone);
+  margin-top: 3px;
+}
+
+/* ==========================================================================
+   Scene 3: Independent Readings Canvas (Big Five, RIASEC, O*NET, Signals)
+   ========================================================================== */
+
+.pa-v6-scene-readings {
+  position: relative;
+  width: 100%;
+  min-height: 340svh;
+  background-color: var(--pa-obsidian);
+}
+
+.pa-v6-scene-readings__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  padding: 4.5rem 4rem 2rem 4rem;
+  gap: 3.5rem;
+}
+
+.pa-v6-readings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: var(--pa-z-stage-content);
+}
+
+.pa-v6-readings-tab {
+  text-align: left;
+  background: none;
+  border: none;
+  border-left: 2px solid var(--pa-rule-light);
+  padding: 0.5rem 0 0.5rem 1rem;
+  color: var(--pa-stone);
+  font-family: var(--pa-font-sans);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pa-v6-readings-tab__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--pa-stone);
+  display: block;
+}
+
+.pa-v6-readings-tab__sub {
+  font-size: 0.8125rem;
+  color: var(--pa-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.pa-v6-readings-tab.active {
+  border-left-color: var(--pa-bone);
+  color: var(--pa-bone);
+}
+.pa-v6-readings-tab.active .pa-v6-readings-tab__title {
+  color: var(--pa-bone);
+}
+
+.pa-v6-readings-stage {
+  position: relative;
+  width: 100%;
+  height: 80svh;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Big Five 5-Part Image Slice Field */
+.pa-v6-big-five-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.pa-v6-big-five-slice {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+
+.pa-v6-big-five-slice.active {
+  filter: brightness(1.08);
+}
+
+.pa-v6-big-five-slice__info {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 2;
+  color: var(--pa-bone);
+  background: rgba(17, 18, 16, 0.7);
+  padding: 0.75rem;
+  border-radius: 2px;
+}
+
+/* RIASEC 2x3 Work Environment Atlas */
+.pa-v6-riasec-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.pa-v6-riasec-cell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.3s ease, z-index 0.3s ease;
+}
+
+.pa-v6-riasec-cell.active {
+  z-index: 10;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--pa-bone);
+}
+
+.pa-v6-riasec-cell__meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(to top, rgba(17, 18, 16, 0.85), transparent);
+  color: var(--pa-bone);
+  font-size: 0.8125rem;
+}
+
+/* O*NET Vertical Values Index on B12 */
+.pa-v6-onet-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.pa-v6-onet-index-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: var(--pa-z-stage-content);
+}
+
+.pa-v6-onet-item {
+  padding: 0.75rem 1rem;
+  border-left: 2px solid var(--pa-rule-light);
+  background: rgba(29, 30, 26, 0.6);
+  color: var(--pa-stone);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pa-v6-onet-item.active {
+  border-left-color: var(--pa-bone);
+  background: rgba(29, 30, 26, 0.9);
+  color: var(--pa-bone);
+}
+
+/* ==========================================================================
+   Scene 4: Career Worlds
+   ========================================================================== */
+
+.pa-v6-scene-careers {
+  position: relative;
+  width: 100%;
+  min-height: 420svh;
+  background-color: var(--pa-obsidian);
+}
+
+.pa-v6-scene-careers__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0;
+}
+
+.pa-v6-career-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.pa-v6-career-canvas__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--pa-z-base-media);
+}
+
+.pa-v6-career-canvas__overlay-copy {
+  position: absolute;
+  bottom: 10%;
+  left: 4rem;
+  max-width: 580px;
+  z-index: var(--pa-z-stage-content);
+  background: rgba(17, 18, 16, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--pa-rule-light);
+  padding: 2.25rem;
+  border-radius: 2px;
+  color: var(--pa-bone);
+}
+
+.pa-v6-career-canvas__controls {
+  position: absolute;
+  top: 5rem;
+  left: 4rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: var(--pa-z-stage-content);
+}
+
+.pa-v6-career-tab {
+  background: rgba(29, 30, 26, 0.8);
+  border: 1px solid var(--pa-rule-light);
+  color: var(--pa-stone);
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pa-v6-career-tab.active {
+  background: var(--pa-bone);
+  color: var(--pa-obsidian);
+  border-color: var(--pa-bone);
+}
+
+/* ==========================================================================
+   Scene 5: Development Echo
+   ========================================================================== */
+
+.pa-v6-scene-echo {
+  position: relative;
+  width: 100%;
+  min-height: 220svh;
+  background-color: var(--pa-charcoal);
+  color: var(--pa-bone);
+}
+
+.pa-v6-scene-echo__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  padding: 4.5rem 4rem 2rem 4rem;
+  gap: 4rem;
+}
+
+/* ==========================================================================
+   Scene 6: Trust & Governance
+   ========================================================================== */
+
+.pa-v6-scene-trust {
+  position: relative;
+  width: 100%;
+  min-height: 180svh;
+  background-color: var(--pa-obsidian);
+}
+
+.pa-v6-scene-trust__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 4rem;
+}
+
+/* ==========================================================================
+   Scene 7: Final Callback & Footer
+   ========================================================================== */
+
+.pa-v6-scene-final {
+  position: relative;
+  width: 100%;
+  background-color: var(--pa-obsidian);
+  color: var(--pa-bone);
+  padding: 8rem 4rem 4rem 4rem;
+  border-top: 1px solid var(--pa-rule-light);
+}
+
+.pa-v6-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem;
+  margin-top: 6rem;
+  padding-top: 4rem;
+  border-top: 1px solid var(--pa-rule-light);
+}
+
+/* ==========================================================================
+   Auth Architecture (55/45 Desktop Seam)
+   ========================================================================== */
+
+.pa-v6-auth-stage {
+  display: grid;
+  grid-template-columns: 55vw 45vw;
+  min-height: 100svh;
+  width: 100%;
+  background-color: var(--pa-obsidian);
+}
+
+.pa-v6-auth-media-pane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+.pa-v6-auth-media-pane__caption {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  max-width: 440px;
+  z-index: 2;
+  color: var(--pa-bone);
+  font-family: var(--pa-font-serif);
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.pa-v6-auth-form-pane {
+  background-color: var(--pa-paper);
+  color: var(--pa-obsidian);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 5rem;
+  border-left: 1px solid var(--pa-rule-dark);
+}
+
+.pa-v6-auth-form-pane h1 {
+  font-size: 2.25rem;
+  color: var(--pa-obsidian);
+  margin-bottom: 0.75rem;
+}
+
+.pa-v6-auth-form-pane p.lead {
+  color: var(--pa-muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  .pa-v6-auth-stage {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .pa-v6-auth-media-pane {
+    height: 38dvh;
+    min-height: 38dvh;
+  }
+  .pa-v6-auth-form-pane {
+    padding: 3rem 1.5rem 5rem 1.5rem;
+    border-left: none;
+  }
+}

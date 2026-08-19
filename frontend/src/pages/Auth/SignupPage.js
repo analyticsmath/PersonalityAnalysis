@@ -6,9 +6,9 @@ import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { googleLogin as googleLoginApi, signup as signupApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { MEDIA_ASSETS } from '../../content/personality-v4/mediaManifest';
+import { MEDIA_ASSETS_V6 } from '../../content/personality-v6/mediaManifest';
 import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../utils/personality-v4/navigation';
-import EntrySceneLayout from '../../components/personality-v5/auth/EntrySceneLayout';
+import EntrySceneLayout from '../../components/personality-v6/auth/EntrySceneLayout';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -104,33 +104,35 @@ const SignupPage = () => {
 
   return (
     <EntrySceneLayout
-      asset={MEDIA_ASSETS.a10}
+      asset={MEDIA_ASSETS_V6.a10}
       title="Start with the work you already know."
       subtitle="Create your account, then begin with a role, project or professional context."
       objectPosition="51% 45%"
     >
       <form onSubmit={submit} className="pa-auth-form" noValidate>
         {errorMessage && (
-          <div role="alert" aria-live="assertive" className="pa-auth-error-banner">
+          <div role="alert" aria-live="assertive" className="pa-auth-error-banner" style={{ background: '#FCE8E6', color: '#C5221F', padding: '0.75rem 1rem', borderRadius: '2px', marginBottom: '1rem', fontSize: '0.875rem' }}>
             {errorMessage}
           </div>
         )}
 
         {successMessage && (
-          <div role="status" aria-live="polite" className="pa-auth-success-banner">
-            <p style={{ marginBottom: '8px' }}>{successMessage}</p>
+          <div role="status" aria-live="polite" className="pa-auth-success-banner" style={{ background: '#E6F4EA', color: '#137333', padding: '0.75rem 1rem', borderRadius: '2px', marginBottom: '1rem', fontSize: '0.875rem' }}>
+            <p style={{ margin: '0 0 8px 0' }}>{successMessage}</p>
             <Link
               to={`/login?next=${encodeURIComponent(safeNext)}`}
-              className="pa-btn pa-btn--primary"
-              style={{ height: '36px', fontSize: '13px', padding: '0 16px' }}
+              className="pa-v6-btn pa-v6-btn--ink"
+              style={{ minHeight: '36px', fontSize: '13px', padding: '0 16px' }}
             >
               Continue to sign in →
             </Link>
           </div>
         )}
 
-        <div className="pa-auth-field">
-          <label htmlFor="signup-name">Full name</label>
+        <div className="pa-auth-field" style={{ marginBottom: '1rem' }}>
+          <label htmlFor="signup-name" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--pa-charcoal)', marginBottom: '0.35rem' }}>
+            Full name
+          </label>
           <input
             id="signup-name"
             type="text"
@@ -141,11 +143,14 @@ const SignupPage = () => {
             placeholder="Alex Mercer"
             autoComplete="name"
             required
+            style={{ width: '100%', height: '42px', padding: '0 0.875rem', border: '1px solid var(--pa-rule-dark)', background: '#fff', borderRadius: '2px', fontSize: '0.9375rem', color: 'var(--pa-obsidian)' }}
           />
         </div>
 
-        <div className="pa-auth-field">
-          <label htmlFor="signup-email">Email address</label>
+        <div className="pa-auth-field" style={{ marginBottom: '1rem' }}>
+          <label htmlFor="signup-email" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--pa-charcoal)', marginBottom: '0.35rem' }}>
+            Email address
+          </label>
           <input
             id="signup-email"
             type="email"
@@ -156,12 +161,15 @@ const SignupPage = () => {
             placeholder="name@example.com"
             autoComplete="email"
             required
+            style={{ width: '100%', height: '42px', padding: '0 0.875rem', border: '1px solid var(--pa-rule-dark)', background: '#fff', borderRadius: '2px', fontSize: '0.9375rem', color: 'var(--pa-obsidian)' }}
           />
         </div>
 
-        <div className="pa-auth-field">
-          <label htmlFor="signup-password">Password</label>
-          <div className="pa-auth-password-wrap">
+        <div className="pa-auth-field" style={{ marginBottom: '1rem' }}>
+          <label htmlFor="signup-password" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--pa-charcoal)', marginBottom: '0.35rem' }}>
+            Password
+          </label>
+          <div className="pa-auth-password-wrap" style={{ position: 'relative' }}>
             <input
               id="signup-password"
               type={showPassword ? 'text' : 'password'}
@@ -173,61 +181,66 @@ const SignupPage = () => {
               autoComplete="new-password"
               aria-describedby="password-requirements"
               required
+              style={{ width: '100%', height: '42px', padding: '0 3.5rem 0 0.875rem', border: '1px solid var(--pa-rule-dark)', background: '#fff', borderRadius: '2px', fontSize: '0.9375rem', color: 'var(--pa-obsidian)' }}
             />
             <button
               type="button"
               className="pa-auth-password-toggle"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
+              style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--pa-muted)', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600 }}
             >
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
-          <div id="password-requirements" className="pa-auth-password-rules">
-            <span style={{ display: 'block', marginBottom: '4px', fontWeight: 600 }}>Password requirements:</span>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', fontSize: '11px' }}>
-              <li style={{ color: passwordRules.hasLength ? '#247f6b' : 'inherit' }}>
+          <div id="password-requirements" className="pa-auth-password-rules" style={{ marginTop: '0.5rem' }}>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', fontSize: '11px', color: 'var(--pa-muted)' }}>
+              <li style={{ color: passwordRules.hasLength ? '#137333' : 'inherit' }}>
                 {passwordRules.hasLength ? '✓' : '•'} At least 8 characters
               </li>
-              <li style={{ color: passwordRules.hasUpper ? '#247f6b' : 'inherit' }}>
+              <li style={{ color: passwordRules.hasUpper ? '#137333' : 'inherit' }}>
                 {passwordRules.hasUpper ? '✓' : '•'} One uppercase letter
               </li>
-              <li style={{ color: passwordRules.hasNumber ? '#247f6b' : 'inherit' }}>
+              <li style={{ color: passwordRules.hasNumber ? '#137333' : 'inherit' }}>
                 {passwordRules.hasNumber ? '✓' : '•'} One number
               </li>
-              <li style={{ color: passwordRules.hasSpecial ? '#247f6b' : 'inherit' }}>
+              <li style={{ color: passwordRules.hasSpecial ? '#137333' : 'inherit' }}>
                 {passwordRules.hasSpecial ? '✓' : '•'} One special character
               </li>
             </ul>
           </div>
         </div>
 
-        <label className="pa-auth-checkbox-field" htmlFor="signup-terms">
+        <label className="pa-auth-checkbox-field" htmlFor="signup-terms" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', fontSize: '0.8125rem', color: 'var(--pa-charcoal)', cursor: 'pointer' }}>
           <input
             id="signup-terms"
             type="checkbox"
             name="terms"
             checked={form.terms}
             onChange={change}
+            style={{ accentColor: 'var(--pa-obsidian)' }}
           />
           <span>
-            I agree to the <Link to="/privacy">Privacy Policy & Terms</Link>
+            I agree to the <Link to="/privacy" style={{ textDecoration: 'underline', color: 'inherit' }}>Privacy Policy & Terms</Link>
           </span>
         </label>
 
         <button
-          className="pa-btn pa-btn--primary pa-auth-submit-btn"
+          className="pa-v6-btn pa-v6-btn--ink"
           type="submit"
           disabled={signupMutation.isPending || googleMutation.isPending}
+          style={{ width: '100%', height: '46px', fontSize: '0.9375rem' }}
         >
           {signupMutation.isPending ? 'Creating account…' : 'Create account'}
         </button>
       </form>
 
       {GOOGLE_CLIENT_ID && (
-        <div style={{ marginTop: '16px' }}>
-          <div className="pa-auth-divider">
-            <span>or continue with</span>
+        <div style={{ marginTop: '1.25rem' }}>
+          <div style={{ textAlign: 'center', margin: '1rem 0', position: 'relative' }}>
+            <span style={{ background: 'var(--pa-paper)', padding: '0 0.75rem', fontSize: '0.75rem', color: 'var(--pa-muted)', textTransform: 'uppercase' }}>
+              or continue with
+            </span>
           </div>
           <GoogleLoginButton
             onCredential={(token) => googleMutation.mutate(token)}
@@ -240,9 +253,11 @@ const SignupPage = () => {
         </div>
       )}
 
-      <p className="pa-auth-footer-text">
+      <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--pa-muted)', textAlign: 'center' }}>
         Already have an account?{' '}
-        <Link to={`/login?next=${encodeURIComponent(safeNext)}`}>Sign in</Link>
+        <Link to={`/login?next=${encodeURIComponent(safeNext)}`} style={{ color: 'var(--pa-obsidian)', fontWeight: 600, textDecoration: 'underline' }}>
+          Sign in
+        </Link>
       </p>
     </EntrySceneLayout>
   );

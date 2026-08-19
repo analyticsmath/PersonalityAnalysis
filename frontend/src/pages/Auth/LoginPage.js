@@ -6,9 +6,9 @@ import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { login as loginApi, googleLogin as googleLoginApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { MEDIA_ASSETS } from '../../content/personality-v4/mediaManifest';
+import { MEDIA_ASSETS_V6 } from '../../content/personality-v6/mediaManifest';
 import { getSafeNextUrl } from '../../utils/personality-v4/navigation';
-import EntrySceneLayout from '../../components/personality-v5/auth/EntrySceneLayout';
+import EntrySceneLayout from '../../components/personality-v6/auth/EntrySceneLayout';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -71,20 +71,22 @@ const LoginPage = () => {
 
   return (
     <EntrySceneLayout
-      asset={MEDIA_ASSETS.a09}
+      asset={MEDIA_ASSETS_V6.a09}
       title="Return to the profile you are building."
       subtitle="Sign in to continue your assessment, review previous evidence or update your profile."
       objectPosition="50% 39%"
     >
       <form onSubmit={submit} className="pa-auth-form" noValidate>
         {errorMessage && (
-          <div role="alert" aria-live="assertive" className="pa-auth-error-banner">
+          <div role="alert" aria-live="assertive" className="pa-auth-error-banner" style={{ background: '#FCE8E6', color: '#C5221F', padding: '0.75rem 1rem', borderRadius: '2px', marginBottom: '1rem', fontSize: '0.875rem' }}>
             {errorMessage}
           </div>
         )}
 
-        <div className="pa-auth-field">
-          <label htmlFor="login-email">Email address</label>
+        <div className="pa-auth-field" style={{ marginBottom: '1.25rem' }}>
+          <label htmlFor="login-email" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--pa-charcoal)', marginBottom: '0.35rem' }}>
+            Email address
+          </label>
           <input
             id="login-email"
             type="email"
@@ -95,12 +97,15 @@ const LoginPage = () => {
             placeholder="name@example.com"
             autoComplete="email"
             required
+            style={{ width: '100%', height: '44px', padding: '0 0.875rem', border: '1px solid var(--pa-rule-dark)', background: '#fff', borderRadius: '2px', fontSize: '0.9375rem', color: 'var(--pa-obsidian)' }}
           />
         </div>
 
-        <div className="pa-auth-field">
-          <label htmlFor="login-password">Password</label>
-          <div className="pa-auth-password-wrap">
+        <div className="pa-auth-field" style={{ marginBottom: '1.5rem' }}>
+          <label htmlFor="login-password" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--pa-charcoal)', marginBottom: '0.35rem' }}>
+            Password
+          </label>
+          <div className="pa-auth-password-wrap" style={{ position: 'relative' }}>
             <input
               id="login-password"
               type={showPassword ? 'text' : 'password'}
@@ -111,12 +116,14 @@ const LoginPage = () => {
               placeholder="Enter your password"
               autoComplete="current-password"
               required
+              style={{ width: '100%', height: '44px', padding: '0 3.5rem 0 0.875rem', border: '1px solid var(--pa-rule-dark)', background: '#fff', borderRadius: '2px', fontSize: '0.9375rem', color: 'var(--pa-obsidian)' }}
             />
             <button
               type="button"
               className="pa-auth-password-toggle"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
+              style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--pa-muted)', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600 }}
             >
               {showPassword ? 'Hide' : 'Show'}
             </button>
@@ -124,18 +131,21 @@ const LoginPage = () => {
         </div>
 
         <button
-          className="pa-btn pa-btn--primary pa-auth-submit-btn"
+          className="pa-v6-btn pa-v6-btn--ink"
           type="submit"
           disabled={loginMutation.isPending || googleMutation.isPending}
+          style={{ width: '100%', height: '46px', fontSize: '0.9375rem' }}
         >
           {loginMutation.isPending ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
 
       {GOOGLE_CLIENT_ID && (
-        <div style={{ marginTop: '16px' }}>
-          <div className="pa-auth-divider">
-            <span>or continue with</span>
+        <div style={{ marginTop: '1.25rem' }}>
+          <div style={{ textAlign: 'center', margin: '1rem 0', position: 'relative' }}>
+            <span style={{ background: 'var(--pa-paper)', padding: '0 0.75rem', fontSize: '0.75rem', color: 'var(--pa-muted)', textTransform: 'uppercase' }}>
+              or continue with
+            </span>
           </div>
           <GoogleLoginButton
             onCredential={(token) => googleMutation.mutate(token)}
@@ -148,9 +158,11 @@ const LoginPage = () => {
         </div>
       )}
 
-      <p className="pa-auth-footer-text">
+      <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--pa-muted)', textAlign: 'center' }}>
         New to Personality Assessor?{' '}
-        <Link to={`/signup?next=${encodeURIComponent(safeNext)}`}>Build your profile</Link>
+        <Link to={`/signup?next=${encodeURIComponent(safeNext)}`} style={{ color: 'var(--pa-obsidian)', fontWeight: 600, textDecoration: 'underline' }}>
+          Build your profile
+        </Link>
       </p>
     </EntrySceneLayout>
   );

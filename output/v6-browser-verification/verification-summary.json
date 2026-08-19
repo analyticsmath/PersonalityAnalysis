@@ -1,0 +1,144 @@
+{
+  "viewportsTested": [],
+  "routesTested": [],
+  "assertions": [
+    {
+      "check": "Desktop 1440px scrollWidth <= clientWidth + 1",
+      "passed": true
+    },
+    {
+      "check": "Desktop 1440px Evidence radio selection",
+      "passed": true
+    },
+    {
+      "check": "Desktop 1440px How It Works Header ink color",
+      "passed": true
+    },
+    {
+      "check": "Desktop 1024px scrollWidth <= clientWidth + 1",
+      "passed": true
+    },
+    {
+      "check": "Desktop 1024px Evidence radio selection",
+      "passed": true
+    },
+    {
+      "check": "Desktop 1024px How It Works Header ink color",
+      "passed": true
+    },
+    {
+      "check": "Mobile 360px scrollWidth <= clientWidth + 1",
+      "passed": true
+    },
+    {
+      "check": "Mobile 360px bottom nav visible",
+      "passed": true
+    },
+    {
+      "check": "Mobile 390px scrollWidth <= clientWidth + 1",
+      "passed": true
+    },
+    {
+      "check": "Mobile 390px bottom nav visible",
+      "passed": true
+    },
+    {
+      "check": "Mobile 412px scrollWidth <= clientWidth + 1",
+      "passed": true
+    },
+    {
+      "check": "Mobile 412px bottom nav visible",
+      "passed": true
+    },
+    {
+      "check": "Mobile 768px scrollWidth <= clientWidth + 1",
+      "passed": true
+    },
+    {
+      "check": "Mobile 768px bottom nav visible",
+      "passed": true
+    },
+    {
+      "check": "prefers-reduced-motion: reduce layout safe",
+      "passed": true
+    },
+    {
+      "check": "Signup preserves safe next forwarding to /login?next=%2Fassessment%2Fstart",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "desktop-1440-hero-00.png",
+    "desktop-1440-hero-progress-13.png",
+    "desktop-1440-hero-progress-25.png",
+    "desktop-1440-hero-progress-38.png",
+    "desktop-1440-hero-progress-50.png",
+    "desktop-1440-hero-progress-63.png",
+    "desktop-1440-hero-progress-75.png",
+    "desktop-1440-hero-progress-88.png",
+    "desktop-1440-hero-progress-100.png",
+    "desktop-1440-evidence.png",
+    "desktop-1440-readings-bigfive.png",
+    "desktop-1440-readings-riasec.png",
+    "desktop-1440-readings-onet.png",
+    "desktop-1440-career-world-01.png",
+    "desktop-1440-career-world-02.png",
+    "desktop-1440-how-it-works.png",
+    "desktop-1440-methodology.png",
+    "desktop-1440-career-intelligence.png",
+    "desktop-1440-trust.png",
+    "desktop-1440-privacy.png",
+    "desktop-1440-login.png",
+    "desktop-1440-signup.png",
+    "desktop-1024-hero-00.png",
+    "desktop-1024-hero-progress-13.png",
+    "desktop-1024-hero-progress-25.png",
+    "desktop-1024-hero-progress-38.png",
+    "desktop-1024-hero-progress-50.png",
+    "desktop-1024-hero-progress-63.png",
+    "desktop-1024-hero-progress-75.png",
+    "desktop-1024-hero-progress-88.png",
+    "desktop-1024-hero-progress-100.png",
+    "desktop-1024-evidence.png",
+    "desktop-1024-readings-bigfive.png",
+    "desktop-1024-readings-riasec.png",
+    "desktop-1024-readings-onet.png",
+    "desktop-1024-career-world-01.png",
+    "desktop-1024-career-world-02.png",
+    "desktop-1024-how-it-works.png",
+    "desktop-1024-methodology.png",
+    "desktop-1024-career-intelligence.png",
+    "desktop-1024-trust.png",
+    "desktop-1024-privacy.png",
+    "desktop-1024-login.png",
+    "desktop-1024-signup.png",
+    "mobile-360-home-start.png",
+    "mobile-360-home-mid.png",
+    "mobile-360-how-it-works.png",
+    "mobile-360-methodology.png",
+    "mobile-360-career-intelligence.png",
+    "mobile-360-login.png",
+    "mobile-360-signup.png",
+    "mobile-390-home-start.png",
+    "mobile-390-home-mid.png",
+    "mobile-390-how-it-works.png",
+    "mobile-390-methodology.png",
+    "mobile-390-career-intelligence.png",
+    "mobile-390-login.png",
+    "mobile-390-signup.png",
+    "mobile-412-home-start.png",
+    "mobile-412-home-mid.png",
+    "mobile-412-how-it-works.png",
+    "mobile-412-methodology.png",
+    "mobile-412-career-intelligence.png",
+    "mobile-412-login.png",
+    "mobile-412-signup.png",
+    "mobile-768-home-start.png",
+    "mobile-768-home-mid.png",
+    "mobile-768-how-it-works.png",
+    "mobile-768-methodology.png",
+    "mobile-768-career-intelligence.png",
+    "mobile-768-login.png",
+    "mobile-768-signup.png"
+  ]
+}
