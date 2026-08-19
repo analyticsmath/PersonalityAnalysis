@@ -26,13 +26,13 @@
   --pa-font-sans: 'Source Sans 3 Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Display Clamp Rules */
-  --pa-display-headline: clamp(4rem, 8.5vw, 8.25rem); /* 64px–132px */
-  --pa-display-lh: 0.88;
-  --pa-display-tracking: -0.045em;
+  --pa-display-headline: clamp(3.8rem, 6.4vw, 7rem);
+  --pa-display-lh: 0.92;
+  --pa-display-tracking: -0.04em;
 
-  --pa-display-headline-mobile: clamp(3rem, 11vw, 4.5rem); /* 48px–72px */
-  --pa-display-lh-mobile: 0.93;
-  --pa-display-tracking-mobile: -0.04em;
+  --pa-display-headline-mobile: clamp(3rem, 13vw, 4.6rem);
+  --pa-display-lh-mobile: 0.95;
+  --pa-display-tracking-mobile: -0.035em;
 
   /* Z-Index Hierarchy */
   --pa-z-base-media: 1;
@@ -67,6 +67,18 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   width: 100%;
+}
+
+/* Eyebrow utility */
+.pa-v6-eyebrow {
+  display: block;
+  font-family: var(--pa-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pa-stone);
+  margin-bottom: 0.25rem;
 }
 
 /* Typographic Defaults */
@@ -264,7 +276,7 @@ html.lenis, html.lenis body {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: calc(56px + env(safe-area-inset-bottom, 0px));
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
   background-color: var(--pa-charcoal);
   border-top: 1px solid var(--pa-rule-dark);
@@ -273,7 +285,7 @@ html.lenis, html.lenis body {
   align-items: center;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   .pa-v6-mobile-bottom-nav {
     display: grid;
   }
@@ -284,6 +296,9 @@ html.lenis, html.lenis body {
     padding: 0 1.25rem;
     height: 56px;
   }
+  .pa-v6-shell {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 .pa-v6-bottom-tab {
@@ -291,7 +306,7 @@ html.lenis, html.lenis body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   min-height: 48px;
   color: var(--pa-stone);
   font-size: 0.6875rem;
@@ -307,8 +322,9 @@ html.lenis, html.lenis body {
 }
 
 .pa-v6-bottom-tab svg {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
 }
+
 
 /* ==========================================================================
    Motion Primitives: MediaPlane, PlaneHandoff, SliceOverlay
@@ -400,7 +416,7 @@ html.lenis, html.lenis body {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   align-items: center;
-  padding: 0 4rem;
+  padding: 104px 4rem 2rem 4rem; /* Header 64px + 40px clearance */
 }
 
 .pa-v6-scene-hero__clear-field {
@@ -408,7 +424,7 @@ html.lenis, html.lenis body {
   z-index: var(--pa-z-stage-content);
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.5rem;
   max-width: 580px;
 }
 
@@ -446,7 +462,7 @@ html.lenis, html.lenis body {
 
 .pa-v6-scene-hero__actor-stage {
   grid-column: 7 / 13;
-  height: 78svh;
+  height: 75svh;
   position: relative;
   border-radius: 2px;
   overflow: hidden;
@@ -465,8 +481,15 @@ html.lenis, html.lenis body {
     min-height: 100svh;
     display: flex;
     flex-direction: column;
-    padding: 5rem 1.5rem 2rem 1.5rem;
-    gap: 2.5rem;
+    padding: 80px 1.5rem 2rem 1.5rem; /* Mobile header 56px + 24px clearance */
+    gap: 2rem;
+  }
+  .pa-v6-scene-hero__actor-stage {
+    order: -1;
+    width: 100%;
+    height: 44dvh;
+    max-height: 44dvh;
+    grid-column: auto;
   }
   .pa-v6-scene-hero__clear-field {
     max-width: 100%;
@@ -477,12 +500,8 @@ html.lenis, html.lenis body {
     line-height: var(--pa-display-lh-mobile);
     letter-spacing: var(--pa-display-tracking-mobile);
   }
-  .pa-v6-scene-hero__actor-stage {
-    width: 100%;
-    height: 52svh;
-    grid-column: auto;
-  }
 }
+
 
 /* ==========================================================================
    Scene 2: Evidence Canvas
@@ -1012,3 +1031,51 @@ html.lenis, html.lenis body {
     border-left: none;
   }
 }
+
+/* ==========================================================================
+   How It Works Continuous Stage
+   ========================================================================== */
+
+.pa-v6-hiw-stage-section {
+  position: relative;
+  width: 100%;
+  min-height: 340svh;
+  background-color: var(--pa-obsidian);
+}
+
+.pa-v6-hiw-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  padding: 104px 4rem 2rem 4rem;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .pa-v6-hiw-stage-section {
+    min-height: auto !important;
+    height: auto !important;
+  }
+  .pa-v6-hiw-sticky {
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 1.5rem 3rem 1.5rem;
+    gap: 2rem;
+  }
+  .pa-v6-hiw-media-bay {
+    height: 44dvh !important;
+    width: 100% !important;
+  }
+  .pa-v6-hiw-content-bay {
+    height: auto !important;
+  }
+}
+

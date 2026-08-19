@@ -76,7 +76,7 @@ export const PlaneHandoff = ({
       )}
 
       {/* Base A (Outgoing / On Top) */}
-      {assetA && opacityA > 0.001 && (
+      {assetA && (
         <div
           className="pa-v6-plane-handoff__layer pa-v6-plane-handoff__layer--a"
           style={{
@@ -87,6 +87,7 @@ export const PlaneHandoff = ({
             zIndex: 2,
             opacity: opacityA,
             transform: `scale(${scaleA})`,
+            pointerEvents: opacityA > 0.1 ? 'auto' : 'none',
             willChange: 'transform, opacity',
           }}
         >
@@ -97,6 +98,7 @@ export const PlaneHandoff = ({
           />
         </div>
       )}
+
 
       {/* Optional Slice Overlay mounted during middle transition */}
       {overlay && (

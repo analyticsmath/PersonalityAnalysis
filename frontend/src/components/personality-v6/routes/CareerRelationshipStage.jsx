@@ -67,18 +67,38 @@ export const CareerRelationshipStage = () => {
       {/* Expanded Single-State World Stage */}
       <section style={{ padding: '4rem 4rem 6rem 4rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '4rem', alignItems: 'center' }}>
-          {/* Dominant Visual Field for Selected World */}
+          {/* Dominant Visual Field for Selected World (Stacked Persistent Planes) */}
           <div style={{ position: 'relative', height: '620px', borderRadius: '2px', overflow: 'hidden' }}>
-            <MediaPlane
-              asset={activeAsset}
-              objectPosition={activeAsset.focalPoint?.desktop || 'center center'}
-              alt={activeWorld.name}
-              priority={true}
-            />
-            <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', background: 'rgba(17, 18, 16, 0.85)', padding: '0.5rem 1rem', borderRadius: '2px', color: 'var(--pa-bone)', fontSize: '0.8125rem' }}>
+            {worlds.map((w, idx) => {
+              const asset = MEDIA_ASSETS_V6[w.imageKey] || MEDIA_ASSETS_V6.a03;
+              const isCurrent = w.id === activeWorldId;
+              return (
+                <div
+                  key={w.id}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: isCurrent ? 1 : 0,
+                    zIndex: isCurrent ? 2 : 1,
+                    transition: 'opacity 0.35s ease',
+                  }}
+                >
+                  <MediaPlane
+                    asset={asset}
+                    objectPosition={asset.focalPoint?.desktop || 'center center'}
+                    alt={w.name}
+                    priority={idx === 0}
+                  />
+                </div>
+              );
+            })}
+            <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', zIndex: 5, background: 'rgba(17, 18, 16, 0.85)', padding: '0.5rem 1rem', borderRadius: '2px', color: 'var(--pa-bone)', fontSize: '0.8125rem' }}>
               World {activeWorld.index} · {activeWorld.theme}
             </div>
           </div>
+
 
           {/* Structural Detail Bay for Selected World */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>

@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { MEDIA_ASSETS_V6 } from '../../../content/personality-v6/mediaManifest';
 import { PUBLIC_CONTENT } from '../../../content/personality-v4/publicContent';
-import PlaneHandoff from '../motion/PlaneHandoff';
+import MediaPlane from '../motion/MediaPlane';
 import useCinematicScene from '../motion/useCinematicScene';
 
 export const CareerWorldsCanvas = () => {
@@ -10,26 +10,35 @@ export const CareerWorldsCanvas = () => {
   const worlds = careerWorlds.worlds;
 
   const [activeWorldIndex, setActiveWorldIndex] = useState(0);
-  const [transitionProgress, setTransitionProgress] = useState(0);
-  const prevIndexRef = useRef(0);
+  const mediaPlanesRef = useRef([]);
 
   const activeWorld = worlds[activeWorldIndex] || worlds[0];
-  const prevWorld = worlds[prevIndexRef.current] || worlds[0];
 
-  const activeAsset = MEDIA_ASSETS_V6[activeWorld.imageKey] || MEDIA_ASSETS_V6.a03;
-  const prevAsset = MEDIA_ASSETS_V6[prevWorld.imageKey] || MEDIA_ASSETS_V6.a03;
-
-  // Single atomic selection handler: updates tab, image, and copy in same render
-  const selectWorld = (index) => {
-    if (index === activeWorldIndex) return;
-    prevIndexRef.current = activeWorldIndex;
+  // Atomic world selector: updates tab, media, requirements, and copy synchronously
+  const selectWorld = useCallback((index) => {
+    if (index < 0 || index >= worlds.length) return;
     setActiveWorldIndex(index);
-    setTransitionProgress(0);
-  };
 
-  // GSAP Macro Scroll Timeline
+    // Cross-fade media planes deterministically
+    mediaPlanesRef.current.forEach((planeEl, idx) => {
+      if (!planeEl) return;
+      if (idx === index) {
+        gsap.to(planeEl, { opacity: 1, zIndex: 2, duration: 0.4, overwrite: 'auto' });
+      } else {
+        gsap.to(planeEl, { opacity: 0, zIndex: 1, duration: 0.4, overwrite: 'auto' });
+      }
+    });
+  }, [worlds.length]);
+
+  // GSAP Macro Scroll Timeline with empty deps
   const containerRef = useCinematicScene(({ mm, el }) => {
-    mm.add('(min-width: 901px)', () => {
+    mm.add('(min-width: 901px) and (pointer: fine)', () => {
+      // Initialize planes: first plane is visible
+      mediaPlanesRef.current.forEach((planeEl, idx) => {
+        if (!planeEl) return;
+        gsap.set(planeEl, { opacity: idx === 0 ? 1 : 0, zIndex: idx === 0 ? 2 : 1 });
+      });
+
       gsap.timeline({
         scrollTrigger: {
           trigger: el,
@@ -38,21 +47,36 @@ export const CareerWorldsCanvas = () => {
           scrub: 0.6,
           pin: true,
           anticipatePin: 1,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             const p = self.progress;
             const targetIdx = Math.min(worlds.length - 1, Math.floor(p * worlds.length));
-            if (targetIdx !== activeWorldIndex) {
-              prevIndexRef.current = activeWorldIndex;
-              setActiveWorldIndex(targetIdx);
-            }
-            // Sub-progress within current world transition
-            const subP = (p * worlds.length) % 1;
-            setTransitionProgress(subP);
+            selectWorld(targetIdx);
           },
         },
       });
     });
-  }, [activeWorldIndex, worlds.length]);
+
+    mm.add('(max-width: 900px), (pointer: coarse)', () => {
+      mediaPlanesRef.current.forEach((planeEl, idx) => {
+        if (!planeEl) return;
+        gsap.set(planeEl, { opacity: idx === 0 ? 1 : 0 });
+      });
+    });
+  }, [selectWorld, worlds.length]);
+
+  // Keyboard navigation for Career Worlds tablist
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIdx = (activeWorldIndex + 1) % worlds.length;
+      selectWorld(nextIdx);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prevIdx = (activeWorldIndex - 1 + worlds.length) % worlds.length;
+      selectWorld(prevIdx);
+    }
+  };
 
   return (
     <section
@@ -64,23 +88,46 @@ export const CareerWorldsCanvas = () => {
     >
       <div className="pa-v6-scene-careers__sticky">
         <div className="pa-v6-career-canvas">
-          {/* Dominant Full-Bleed Media Field with Overlap-Safe Handoff */}
-          <div className="pa-v6-career-canvas__backdrop">
-            <PlaneHandoff
-              assetA={prevAsset}
-              assetB={activeAsset}
-              progress={transitionProgress}
-              objectPositionA={prevAsset.focalPoint?.desktop || 'center center'}
-              objectPositionB={activeAsset.focalPoint?.desktop || 'center center'}
-            />
+          {/* Dominant Full-Bleed Media Field with Stacked Persistent Planes */}
+          <div className="pa-v6-career-canvas__backdrop" style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+            {worlds.map((w, idx) => {
+              const asset = MEDIA_ASSETS_V6[w.imageKey] || MEDIA_ASSETS_V6.a03;
+              return (
+                <div
+                  key={w.id}
+                  ref={(el) => (mediaPlanesRef.current[idx] = el)}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: idx === activeWorldIndex ? 1 : 0,
+                    zIndex: idx === activeWorldIndex ? 2 : 1,
+                  }}
+                >
+                  <MediaPlane
+                    asset={asset}
+                    priority={idx === 0}
+                    objectPosition={asset.focalPoint?.desktop || 'center center'}
+                    alt={w.name}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           {/* Top Edge Selector Controls */}
-          <div className="pa-v6-career-canvas__controls" role="tablist" aria-label="Career Worlds">
+          <div
+            className="pa-v6-career-canvas__controls"
+            role="tablist"
+            aria-label="Career Worlds"
+            onKeyDown={handleKeyDown}
+          >
             {worlds.map((w, idx) => (
               <button
                 key={w.id}
                 role="tab"
+                id={`tab-world-${w.id}`}
                 aria-selected={idx === activeWorldIndex}
                 className={`pa-v6-career-tab ${idx === activeWorldIndex ? 'active' : ''}`}
                 onClick={() => selectWorld(idx)}
@@ -90,10 +137,10 @@ export const CareerWorldsCanvas = () => {
             ))}
           </div>
 
-          {/* Edge-Anchored Direct Structural Copy (Never below photo) */}
+          {/* Edge-Anchored Translucent Reading Surface */}
           <div className="pa-v6-career-canvas__overlay-copy">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.8125rem', letterSpacing: '0.12em', color: 'var(--pa-stone)', textTransform: 'uppercase', fontWeight: 600 }}>
+              <span className="pa-v6-eyebrow">
                 World {activeWorld.index}
               </span>
               <span style={{ fontSize: '0.8125rem', color: 'var(--pa-bone)', fontWeight: 600 }}>
@@ -131,3 +178,4 @@ export const CareerWorldsCanvas = () => {
 };
 
 export default CareerWorldsCanvas;
+

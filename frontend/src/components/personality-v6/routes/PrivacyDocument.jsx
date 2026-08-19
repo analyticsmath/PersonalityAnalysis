@@ -5,8 +5,13 @@ export const PrivacyDocument = () => {
   const { privacy } = PUBLIC_CONTENT;
 
   return (
-    <div className="pa-v6-privacy-page" style={{ backgroundColor: 'var(--pa-bone)', color: 'var(--pa-obsidian)', minHeight: '100svh', padding: '7rem 4rem 6rem 4rem' }}>
+    <div
+      className="pa-v6-privacy-page"
+      data-header-theme="light"
+      style={{ backgroundColor: 'var(--pa-bone)', color: 'var(--pa-obsidian)', minHeight: '100svh', padding: '7rem 4rem 6rem 4rem' }}
+    >
       <article style={{ maxWidth: '820px', margin: '0 auto' }}>
+
         <header style={{ marginBottom: '3.5rem', borderBottom: '1px solid var(--pa-rule-dark)', paddingBottom: '2rem' }}>
           <span style={{ fontSize: '0.8125rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--pa-muted)', fontWeight: 600 }}>
             Governance & Privacy Policy

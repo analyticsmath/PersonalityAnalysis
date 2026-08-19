@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
  * - Encapsulates GSAP context (gsap.context), matchMedia responsive handling,
  *   visibility observer pause/resume, and deterministic cleanup.
  * - Guarantees ScrollTrigger timelines are killed cleanly on unmount and breakpoint changes.
+ * - Reduced-motion mode fallback: stable document flow without pinned choreography.
  */
 export const useCinematicScene = (setupTimeline, deps = []) => {
   const containerRef = useRef(null);
@@ -17,23 +18,26 @@ export const useCinematicScene = (setupTimeline, deps = []) => {
     const el = containerRef.current;
     if (!el) return;
 
+    // Create GSAP context scoped to this container
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
       setupTimeline({ gsap, ScrollTrigger, mm, el });
     }, el);
 
-    // Refresh ScrollTrigger after DOM has settled
+    // Refresh ScrollTrigger deterministically once DOM layout has stabilized
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 120);
+    }, 100);
 
     return () => {
       clearTimeout(refreshTimer);
-      ctx.revert();
+      ctx.revert(); // Completely reverts all GSAP properties, kills ScrollTriggers, restores original DOM styles
     };
   }, deps);
 
   return containerRef;
+
 };
 
 export default useCinematicScene;
+
