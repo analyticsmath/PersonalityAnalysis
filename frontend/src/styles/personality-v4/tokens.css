@@ -1,24 +1,29 @@
-/* Personality Assessor — V4 Design Tokens */
+/* Personality Assessor — V5 Design Tokens */
 @import '@fontsource-variable/source-sans-3';
 @import '@fontsource-variable/source-serif-4';
 
 :root {
-  /* ── Color System (True Neutral + Photographic Environment) ── */
-  --pa-black: #050506;
-  --pa-ink: #0c0d0f;
-  --pa-ink-soft: #292d32;
-  --pa-paper: #f7f8fa;
-  --pa-white: #ffffff;
-  --pa-cool-100: #eef1f4;
-  --pa-cool-200: #dde1e6;
-  --pa-cool-400: #a4abb4;
-  --pa-cool-600: #626a74;
-  --pa-cool-800: #272b30;
-  --pa-focus: #1d4ed8;
-  --pa-error: #b42318;
-  --pa-success: #067647;
+  /* ── Color System (Disciplined Neutral & Photographic Ground) ── */
+  --pa-black: #070807;
+  --pa-ink: #10110f;
+  --pa-paper: #f4f3ee;
+  --pa-white: #fffef9;
+  --pa-fog: #dcdcd4;
+  --pa-quiet: #71736e;
+  --pa-line-dark: rgba(255, 254, 249, 0.22);
+  --pa-line-light: rgba(16, 17, 15, 0.18);
 
-  /* Data-only psychometric colors */
+  --pa-cool-100: #eaeae4;
+  --pa-cool-200: #dcdcd4;
+  --pa-cool-400: #9da09b;
+  --pa-cool-600: #575a55;
+  --pa-cool-800: #1e201d;
+
+  --pa-focus: #2563eb;
+  --pa-error: #b91c1c;
+  --pa-success: #047857;
+
+  /* Data-only psychometric hues (strictly for traces, dots, charts) */
   --pa-data-openness: #6758c9;
   --pa-data-conscientiousness: #247f6b;
   --pa-data-extraversion: #c76536;
@@ -31,12 +36,12 @@
   --pa-font-mono: 'Source Code Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Type Scale */
-  --pa-text-hero: clamp(76px, 9.4vw, 154px);
-  --pa-text-hero-mobile: clamp(48px, 13.5vw, 68px);
-  --pa-text-route-title: clamp(68px, 7.4vw, 118px);
-  --pa-text-scene-title: clamp(52px, 5.7vw, 92px);
-  --pa-text-quote: clamp(40px, 4.6vw, 74px);
-  --pa-text-large-body: 22px;
+  --pa-text-hero: clamp(64px, 8.8vw, 140px);
+  --pa-text-hero-mobile: clamp(40px, 11vw, 56px);
+  --pa-text-route-title: clamp(52px, 6.8vw, 104px);
+  --pa-text-scene-title: clamp(42px, 5.2vw, 84px);
+  --pa-text-quote: clamp(32px, 4vw, 64px);
+  --pa-text-large-body: 21px;
   --pa-text-body: 17px;
   --pa-text-nav: 14px;
   --pa-text-ui: 15px;
@@ -44,12 +49,12 @@
   --pa-text-num: clamp(20px, 2.5vw, 42px);
 
   /* Line Heights */
-  --pa-lh-hero: 0.88;
-  --pa-lh-route: 0.91;
-  --pa-lh-scene: 0.94;
-  --pa-lh-quote: 1.02;
-  --pa-lh-large-body: 1.38;
-  --pa-lh-body: 1.58;
+  --pa-lh-hero: 0.90;
+  --pa-lh-route: 0.92;
+  --pa-lh-scene: 0.96;
+  --pa-lh-quote: 1.05;
+  --pa-lh-large-body: 1.42;
+  --pa-lh-body: 1.60;
   --pa-lh-ui: 1.2;
 
   /* Tracking */
@@ -64,24 +69,25 @@
 
   /* ── Spatial Constraints ── */
   --pa-max-width: 1600px;
-  --pa-gutter-desktop: clamp(24px, 3vw, 48px);
+  --pa-gutter-desktop: clamp(24px, 3.5vw, 56px);
   --pa-gutter-tablet: 24px;
   --pa-gutter-mobile: 18px;
-  --pa-header-height: 78px;
+  --pa-header-height: 80px;
   --pa-header-height-mobile: 64px;
 
   /* Control Geometry */
   --pa-radius-btn: 2px;
-  --pa-radius-input: 6px;
+  --pa-radius-input: 4px;
   --pa-radius-none: 0px;
   --pa-btn-h-desktop: 48px;
-  --pa-btn-h-mobile: 52px;
-  --pa-touch-min: 44px;
+  --pa-btn-h-mobile: 50px;
+  --pa-touch-min: 48px;
 
   /* Motion Timings */
   --pa-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pa-ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
   --pa-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --pa-duration-fast: 0.24s;
-  --pa-duration-mid: 0.4s;
-  --pa-duration-reveal: 0.7s;
+  --pa-duration-fast: 0.22s;
+  --pa-duration-mid: 0.45s;
+  --pa-duration-reveal: 0.85s;
 }

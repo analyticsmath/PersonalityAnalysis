@@ -1,5 +1,5 @@
 // frontend/src/editorial-visual-contract.test.jsx
-// Personality Assessor — V4 Reference-Locked Visual Contract & Product Truth Guardrails
+// Personality Assessor — V5 Cinematic Architecture & Product Truth Guardrails
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -7,8 +7,8 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import EvidenceToSignalTheatre from './components/personality-v4/home/EvidenceToSignalTheatre';
-import IndependentReadingsField from './components/personality-v4/home/IndependentReadingsField';
+import EvidenceCanvasScene from './components/personality-v5/home/EvidenceCanvasScene';
+import IndependentReadingsCanvas from './components/personality-v5/home/IndependentReadingsCanvas';
 import { PUBLIC_CONTENT } from './content/personality-v4/publicContent';
 import { MEDIA_ASSETS } from './content/personality-v4/mediaManifest';
 import { getSafeNextUrl, getSignupAcquisitionUrl, getLoginUrl } from './utils/personality-v4/navigation';
@@ -18,7 +18,7 @@ const readFile = (relativePath) => {
   return existsSync(fullPath) ? readFileSync(fullPath, 'utf8') : '';
 };
 
-describe('Personality Assessor V4 — Visual Architecture & Product Truth Guardrails', () => {
+describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardrails', () => {
   const home = readFile('src/pages/editorial/EditorialHomePage.jsx');
   const howItWorks = readFile('src/pages/editorial/EditorialHowItWorksPage.jsx');
   const careerIntelligence = readFile('src/pages/editorial/EditorialCareerIntelligencePage.jsx');
@@ -34,11 +34,8 @@ describe('Personality Assessor V4 — Visual Architecture & Product Truth Guardr
   const fontsCss = readFile('src/styles/fonts.css');
   const tokensCss = readFile('src/styles/personality-v4/tokens.css');
   const foundationCss = readFile('src/styles/personality-v4/foundation.css');
-  const chromeCss = readFile('src/styles/personality-v4/chrome.css');
-  const homeCss = readFile('src/styles/personality-v4/home.css');
-  const routesCss = readFile('src/styles/personality-v4/routes.css');
-  const authCss = readFile('src/styles/personality-v4/auth.css');
-  const motionCss = readFile('src/styles/personality-v4/motion.css');
+  const cinematicCss = readFile('src/styles/personality-v5/cinematic.css');
+  const mobileCss = readFile('src/styles/personality-v5/mobile.css');
 
   // Guardrail 1: All required public routes are registered in App.js
   it('1. keeps every required public route registered in App.js', () => {
@@ -68,10 +65,10 @@ describe('Personality Assessor V4 — Visual Architecture & Product Truth Guardr
 
   // Guardrail 3: Tokens use approved neutral palette and Big Five data colors
   it('3. tokens define approved neutral palette, Big Five colors, and spatial gutters', () => {
-    expect(tokensCss).toContain('--pa-black: #050506');
-    expect(tokensCss).toContain('--pa-ink: #0c0d0f');
-    expect(tokensCss).toContain('--pa-paper: #f7f8fa');
-    expect(tokensCss).toContain('--pa-white: #ffffff');
+    expect(tokensCss).toContain('--pa-black: #070807');
+    expect(tokensCss).toContain('--pa-ink: #10110f');
+    expect(tokensCss).toContain('--pa-paper: #f4f3ee');
+    expect(tokensCss).toContain('--pa-white: #fffef9');
     expect(tokensCss).toContain('--pa-data-openness');
     expect(tokensCss).toContain('--pa-data-conscientiousness');
     expect(tokensCss).toContain('--pa-data-extraversion');
@@ -83,7 +80,7 @@ describe('Personality Assessor V4 — Visual Architecture & Product Truth Guardr
   it('4. adaptive question demo initializes with no preselected radio and updates state on selection', () => {
     render(
       <BrowserRouter>
-        <EvidenceToSignalTheatre />
+        <EvidenceCanvasScene />
       </BrowserRouter>
     );
     const options = screen.getAllByRole('radio');
@@ -168,7 +165,7 @@ describe('Personality Assessor V4 — Visual Architecture & Product Truth Guardr
   it('9. Independent Readings Field implements accessible tablist with 4 lenses and keyboard navigation', () => {
     render(
       <BrowserRouter>
-        <IndependentReadingsField />
+        <IndependentReadingsCanvas />
       </BrowserRouter>
     );
     const tabs = screen.getAllByRole('tab');
@@ -220,11 +217,20 @@ describe('Personality Assessor V4 — Visual Architecture & Product Truth Guardr
   });
 
   // Guardrail 14: CSS styling is properly isolated and scoped under .pa-public-v4 and .pa-auth-v4
-  it('14. foundation and chrome CSS are scoped without blanket destructive resets', () => {
+  it('14. foundation and cinematic CSS are scoped without blanket destructive resets', () => {
     expect(foundationCss).toContain('.pa-public-v4');
     expect(foundationCss).toContain('.pa-auth-v4');
     expect(foundationCss).not.toContain('0.01ms !important');
-    expect(foundationCss).not.toContain('body { overflow-x: hidden');
-    expect(motionCss).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(foundationCss).toContain('overflow-x: clip');
+    expect(cinematicCss).toContain('.pa-hero-v5');
+    expect(mobileCss).toContain('@media (max-width: 640px)');
+  });
+
+  // Guardrail 15: Button selector specificity guarantees intended foreground color
+  it('15. button selector specificity overrides generic link resets', () => {
+    expect(foundationCss).toContain('.pa-public-v4 .pa-btn.pa-btn--primary');
+    expect(foundationCss).toContain('color: var(--pa-white)');
+    expect(foundationCss).toContain('.pa-public-v4 .pa-btn.pa-btn--inverse');
+    expect(foundationCss).toContain('color: var(--pa-black)');
   });
 });

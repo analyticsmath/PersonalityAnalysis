@@ -1,4 +1,4 @@
-/* Personality Assessor — V4 Foundation & Scoped Reset */
+/* Personality Assessor — V5 Foundation & Scoped Reset */
 @import './tokens.css';
 
 /* Scoped root containers for marketing and auth surfaces */
@@ -16,8 +16,10 @@
   text-rendering: optimizeLegibility;
   box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   position: relative;
+  overflow-x: clip;
 }
 
 .pa-public-v4 *,
@@ -31,19 +33,21 @@
   padding: 0;
 }
 
-/* Headings within V4 surfaces */
+/* Headings within V5 surfaces */
 .pa-public-v4 h1,
 .pa-public-v4 h2,
 .pa-public-v4 h3,
+.pa-public-v4 h4,
 .pa-auth-v4 h1,
-.pa-auth-v4 h2 {
+.pa-auth-v4 h2,
+.pa-auth-v4 h3 {
   font-family: var(--pa-font-serif);
-  font-weight: 420;
-  color: var(--pa-ink);
+  font-weight: 400;
+  color: inherit;
   text-wrap: balance;
 }
 
-/* Links */
+/* Generic links reset */
 .pa-public-v4 a,
 .pa-auth-v4 a {
   color: inherit;
@@ -67,7 +71,7 @@
   color: var(--pa-white);
   padding: 12px 20px;
   font-size: var(--pa-text-ui);
-  font-weight: 560;
+  font-weight: 500;
   border-radius: var(--pa-radius-btn);
   z-index: 10000;
   text-decoration: none;
@@ -94,8 +98,9 @@
   object-fit: cover;
 }
 
-/* Button & Action Primitives */
-.pa-btn {
+/* ── Button & Action Primitives with High Selector Specificity ── */
+.pa-public-v4 .pa-btn,
+.pa-auth-v4 .pa-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -104,7 +109,7 @@
   padding: 0 28px;
   font-family: var(--pa-font-sans);
   font-size: var(--pa-text-ui);
-  font-weight: 560;
+  font-weight: 500;
   line-height: var(--pa-lh-ui);
   border-radius: var(--pa-radius-btn);
   border: 1px solid transparent;
@@ -116,55 +121,80 @@
               transform var(--pa-duration-fast) var(--pa-ease-out);
 }
 
-.pa-btn--primary {
-  background-color: var(--pa-ink);
+/* Specificity overrides for button variants over link inheritance */
+.pa-public-v4 .pa-btn.pa-btn--primary,
+.pa-auth-v4 .pa-btn.pa-btn--primary {
+  background-color: var(--pa-black);
   color: var(--pa-white);
-  border-color: var(--pa-ink);
+  border-color: var(--pa-black);
 }
 
-.pa-btn--primary:hover {
-  background-color: var(--pa-black);
+.pa-public-v4 .pa-btn.pa-btn--primary:hover,
+.pa-auth-v4 .pa-btn.pa-btn--primary:hover {
+  background-color: var(--pa-ink);
+  border-color: var(--pa-ink);
   transform: translateY(-1px);
 }
 
-.pa-btn--secondary {
+.pa-public-v4 .pa-btn.pa-btn--secondary,
+.pa-auth-v4 .pa-btn.pa-btn--secondary {
   background-color: transparent;
   color: var(--pa-ink);
-  border-color: var(--pa-cool-200);
+  border-color: var(--pa-line-light);
 }
 
-.pa-btn--secondary:hover {
-  background-color: var(--pa-cool-100);
-  border-color: var(--pa-cool-400);
+.pa-public-v4 .pa-btn.pa-btn--secondary:hover,
+.pa-auth-v4 .pa-btn.pa-btn--secondary:hover {
+  background-color: rgba(16, 17, 15, 0.04);
+  border-color: var(--pa-ink);
 }
 
-.pa-btn--inverse {
+.pa-public-v4 .pa-btn.pa-btn--inverse,
+.pa-auth-v4 .pa-btn.pa-btn--inverse {
   background-color: var(--pa-white);
   color: var(--pa-black);
   border-color: var(--pa-white);
 }
 
-.pa-btn--inverse:hover {
-  background-color: var(--pa-cool-100);
+.pa-public-v4 .pa-btn.pa-btn--inverse:hover,
+.pa-auth-v4 .pa-btn.pa-btn--inverse:hover {
+  background-color: var(--pa-fog);
   color: var(--pa-black);
+  border-color: var(--pa-fog);
 }
 
-.pa-btn--ghost {
+.pa-public-v4 .pa-btn.pa-btn--inverse-outline,
+.pa-auth-v4 .pa-btn.pa-btn--inverse-outline {
+  background-color: transparent;
+  color: var(--pa-white);
+  border-color: var(--pa-line-dark);
+}
+
+.pa-public-v4 .pa-btn.pa-btn--inverse-outline:hover,
+.pa-auth-v4 .pa-btn.pa-btn--inverse-outline:hover {
+  background-color: rgba(255, 254, 249, 0.08);
+  border-color: var(--pa-white);
+}
+
+.pa-public-v4 .pa-btn.pa-btn--ghost,
+.pa-auth-v4 .pa-btn.pa-btn--ghost {
   background: transparent;
   color: inherit;
   border: none;
   padding: 0 16px;
 }
 
-.pa-btn--ghost:hover {
+.pa-public-v4 .pa-btn.pa-btn--ghost:hover,
+.pa-auth-v4 .pa-btn.pa-btn--ghost:hover {
   opacity: 0.75;
 }
 
-/* Section Grid & Container Primitives */
+/* ── Container & Layout Primitives ── */
 .pa-container {
   width: 100%;
   max-width: var(--pa-max-width);
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   padding-left: var(--pa-gutter-desktop);
   padding-right: var(--pa-gutter-desktop);
 }
@@ -182,7 +212,8 @@
     padding-right: var(--pa-gutter-mobile);
   }
 
-  .pa-btn {
+  .pa-public-v4 .pa-btn,
+  .pa-auth-v4 .pa-btn {
     height: var(--pa-btn-h-mobile);
   }
 }

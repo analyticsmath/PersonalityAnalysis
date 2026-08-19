@@ -18,6 +18,8 @@ import './styles/personality-v4/home.css';
 import './styles/personality-v4/routes.css';
 import './styles/personality-v4/auth.css';
 import './styles/personality-v4/motion.css';
+import './styles/personality-v5/cinematic.css';
+import './styles/personality-v5/mobile.css';
 import './styles/product-shell.css';
 import './styles/assessment-product.css';
 import './styles/results-product.css';

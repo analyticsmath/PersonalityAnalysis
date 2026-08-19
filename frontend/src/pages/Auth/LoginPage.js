@@ -8,7 +8,7 @@ import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
 import { MEDIA_ASSETS } from '../../content/personality-v4/mediaManifest';
 import { getSafeNextUrl } from '../../utils/personality-v4/navigation';
-import AuthLayout from '../../components/personality-v4/auth/AuthLayout';
+import EntrySceneLayout from '../../components/personality-v5/auth/EntrySceneLayout';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -70,11 +70,11 @@ const LoginPage = () => {
   };
 
   return (
-    <AuthLayout
-      mediaAsset={MEDIA_ASSETS.a09}
-      pageType="login"
-      heading="Return to the profile you are building."
+    <EntrySceneLayout
+      asset={MEDIA_ASSETS.a09}
+      title="Return to the profile you are building."
       subtitle="Sign in to continue your assessment, review previous evidence or update your profile."
+      objectPosition="50% 39%"
     >
       <form onSubmit={submit} className="pa-auth-form" noValidate>
         {errorMessage && (
@@ -152,7 +152,7 @@ const LoginPage = () => {
         New to Personality Assessor?{' '}
         <Link to={`/signup?next=${encodeURIComponent(safeNext)}`}>Build your profile</Link>
       </p>
-    </AuthLayout>
+    </EntrySceneLayout>
   );
 };
 

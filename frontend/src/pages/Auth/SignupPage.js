@@ -8,7 +8,7 @@ import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
 import { MEDIA_ASSETS } from '../../content/personality-v4/mediaManifest';
 import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../utils/personality-v4/navigation';
-import AuthLayout from '../../components/personality-v4/auth/AuthLayout';
+import EntrySceneLayout from '../../components/personality-v5/auth/EntrySceneLayout';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -103,11 +103,11 @@ const SignupPage = () => {
   };
 
   return (
-    <AuthLayout
-      mediaAsset={MEDIA_ASSETS.a10}
-      pageType="signup"
-      heading="Start with the work you already know."
+    <EntrySceneLayout
+      asset={MEDIA_ASSETS.a10}
+      title="Start with the work you already know."
       subtitle="Create your account, then begin with a role, project or professional context."
+      objectPosition="51% 45%"
     >
       <form onSubmit={submit} className="pa-auth-form" noValidate>
         {errorMessage && (
@@ -186,16 +186,16 @@ const SignupPage = () => {
           <div id="password-requirements" className="pa-auth-password-rules">
             <span style={{ display: 'block', marginBottom: '4px', fontWeight: 600 }}>Password requirements:</span>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '4px', fontSize: '11px' }}>
-              <li style={{ color: passwordRules.hasLength ? '#2D6A4F' : 'inherit' }}>
+              <li style={{ color: passwordRules.hasLength ? '#247f6b' : 'inherit' }}>
                 {passwordRules.hasLength ? '✓' : '•'} At least 8 characters
               </li>
-              <li style={{ color: passwordRules.hasUpper ? '#2D6A4F' : 'inherit' }}>
+              <li style={{ color: passwordRules.hasUpper ? '#247f6b' : 'inherit' }}>
                 {passwordRules.hasUpper ? '✓' : '•'} One uppercase letter
               </li>
-              <li style={{ color: passwordRules.hasNumber ? '#2D6A4F' : 'inherit' }}>
+              <li style={{ color: passwordRules.hasNumber ? '#247f6b' : 'inherit' }}>
                 {passwordRules.hasNumber ? '✓' : '•'} One number
               </li>
-              <li style={{ color: passwordRules.hasSpecial ? '#2D6A4F' : 'inherit' }}>
+              <li style={{ color: passwordRules.hasSpecial ? '#247f6b' : 'inherit' }}>
                 {passwordRules.hasSpecial ? '✓' : '•'} One special character
               </li>
             </ul>
@@ -244,7 +244,7 @@ const SignupPage = () => {
         Already have an account?{' '}
         <Link to={`/login?next=${encodeURIComponent(safeNext)}`}>Sign in</Link>
       </p>
-    </AuthLayout>
+    </EntrySceneLayout>
   );
 };
 
