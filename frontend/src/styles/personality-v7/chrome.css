@@ -42,13 +42,15 @@
 
 .pa-v7-header[data-theme="dark"] {
   color: var(--pa-bone);
-  background-color: transparent;
+  background-color: rgba(12, 14, 12, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--pa-rule-dark);
 }
 
 .pa-v7-header[data-theme="light"] {
   color: var(--pa-ink);
-  background-color: rgba(238, 236, 227, 0.92);
-  backdrop-filter: blur(8px);
+  background-color: rgba(238, 236, 227, 0.94);
+  backdrop-filter: blur(12px);
   border-bottom-color: var(--pa-rule-paper);
 }
 

@@ -18,16 +18,16 @@ export const EvidenceChapter = () => {
     if (!isDesktop || !containerRef.current) return;
 
     gsap.fromTo(
-      containerRef.current.querySelectorAll('.pa-v7-evidence-annotation'),
-      { opacity: 0.7, y: 10 },
+      containerRef.current.querySelectorAll('.pa-v7-evidence-hairline-annotation'),
+      { opacity: 0.6, y: 8 },
       {
         opacity: 1,
         y: 0,
-        stagger: 0.15,
+        stagger: 0.1,
         scrollTrigger: {
           trigger: containerRef.current,
-          start: 'top 70%',
-          end: 'bottom 80%',
+          start: 'top 75%',
+          end: 'bottom 85%',
           scrub: 1,
         },
       }
@@ -37,7 +37,7 @@ export const EvidenceChapter = () => {
   return (
     <section ref={containerRef} className="pa-v7-chapter-evidence" aria-label="Chapter 02 — Evidence Is the Material">
       <div className="pa-v7-evidence__stage-wrap">
-        {/* Columns 2–11: Large Contextual Evidence Plane (A02) */}
+        {/* Dominant Visual Field: A02 Contextual Evidence Plane (>= 70% Unobstructed) */}
         <div className="pa-v7-evidence__central-plane">
           <MediaPlane
             asset={MEDIA_ASSETS_V7.a02}
@@ -46,45 +46,39 @@ export const EvidenceChapter = () => {
             alt="Contextual work evidence plane"
           />
 
-          {/* 4 Perimeter Edge Annotations */}
-          <div className="pa-v7-evidence-annotation pa-v7-evidence-annotation--top-left">
-            <span className="pa-v7-evidence-annotation__title">Context</span>
-            <span>{evidence.demoEvidence.context}</span>
+          {/* 4 Perimeter Edge Hairline Annotations (No filled backgrounds, no all-caps) */}
+          <div className="pa-v7-evidence-hairline-annotation pa-v7-evidence-hairline-annotation--top-left">
+            <span className="pa-v7-evidence-hairline-annotation__label">Context</span>
+            <span className="pa-v7-evidence-hairline-annotation__text">{evidence.demoEvidence.context}</span>
           </div>
 
-          <div className="pa-v7-evidence-annotation pa-v7-evidence-annotation--top-right">
-            <span className="pa-v7-evidence-annotation__title">Observed Pattern</span>
-            <span>{evidence.demoEvidence.observedPattern}</span>
+          <div className="pa-v7-evidence-hairline-annotation pa-v7-evidence-hairline-annotation--top-right">
+            <span className="pa-v7-evidence-hairline-annotation__label">Observed pattern</span>
+            <span className="pa-v7-evidence-hairline-annotation__text">{evidence.demoEvidence.observedPattern}</span>
           </div>
 
-          <div className="pa-v7-evidence-annotation pa-v7-evidence-annotation--role-anchor">
-            <span className="pa-v7-evidence-annotation__title">Role Anchor</span>
-            <span>{evidence.demoEvidence.role}</span>
+          <div className="pa-v7-evidence-hairline-annotation pa-v7-evidence-hairline-annotation--mid-right">
+            <span className="pa-v7-evidence-hairline-annotation__label">Role anchor</span>
+            <span className="pa-v7-evidence-hairline-annotation__text">{evidence.demoEvidence.role}</span>
           </div>
 
-          <div className="pa-v7-evidence-annotation pa-v7-evidence-annotation--bottom-right">
-            <span className="pa-v7-evidence-annotation__title">Trade-off</span>
-            <span>{evidence.demoEvidence.tradeoff}</span>
+          <div className="pa-v7-evidence-hairline-annotation pa-v7-evidence-hairline-annotation--bottom-right">
+            <span className="pa-v7-evidence-hairline-annotation__label">Trade-off</span>
+            <span className="pa-v7-evidence-hairline-annotation__text">{evidence.demoEvidence.tradeoff}</span>
           </div>
         </div>
 
-        {/* Lower-Left Editorial Margin Question Module */}
-        <div className="pa-v7-evidence__question-module">
-          <span className="pa-v7-eyebrow" style={{ color: 'var(--pa-stone)' }}>
-            Calibrated Inquiry
-          </span>
-          <h3 className="pa-v7-evidence__prompt">
+        {/* Calm Paper Strip Anchored Below Image */}
+        <div className="pa-v7-evidence__paper-strip">
+          <p className="pa-v7-evidence__paper-prompt">
             {evidence.demoQuestion}
-          </h3>
+          </p>
 
-          <div className="pa-v7-evidence__options" role="radiogroup" aria-label="Sample assessment question">
+          <div className="pa-v7-evidence__paper-options" role="radiogroup" aria-label="Sample assessment question">
             {evidence.demoOptions.map((opt) => (
               <label
                 key={opt.id}
-                className="pa-v7-evidence__option"
-                style={{
-                  backgroundColor: selectedOption === opt.id ? 'rgba(251, 250, 244, 0.08)' : 'transparent',
-                }}
+                className={`pa-v7-evidence__paper-option ${selectedOption === opt.id ? 'is-selected' : ''}`}
               >
                 <input
                   type="radio"
@@ -93,15 +87,15 @@ export const EvidenceChapter = () => {
                   onChange={() => setSelectedOption(opt.id)}
                   value={opt.id}
                 />
-                <span>{opt.label}</span>
+                <span className="pa-v7-evidence__paper-option-text">{opt.label}</span>
               </label>
             ))}
           </div>
 
           {selectedOption && (
-            <div className="pa-v7-evidence__live-marker" aria-live="polite">
+            <div className="pa-v7-evidence__paper-marker" aria-live="polite">
               <span className="pa-v7-evidence__marker-dot" />
-              <span>Calibrated Weight: {evidence.demoOptions.find(o => o.id === selectedOption)?.weightSignal}</span>
+              <span>Signal: {evidence.demoOptions.find(o => o.id === selectedOption)?.weightSignal}</span>
             </div>
           )}
         </div>

@@ -20,16 +20,20 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CHAPTER 01: The Orientation Field
-   Envelope: 185svh max; one pinned desktop stage.
-   First paint: A01 in columns 7–12, top: header + 32px to bottom margin.
-   Copy in columns 1–5; eyebrow starts below header + 56px.
+   CHAPTER 01 & 02: Continuous Image-Led Opening Composition
+   Desktop: Light, quiet opening field with A01 clean and visible at first paint.
+   Interlocked type field (cols 1–8) and offset A01 plane (cols 5–12).
+   Persistent A01/A02 mount. GSAP scrubbed vertical seam reveal.
+   A02 dominant field (>= 70% unobstructed). Perimeter hairline annotations.
+   Calm paper questionnaire strip beneath image with native radio controls.
    ══════════════════════════════════════════════════════════════════════════ */
 .pa-v7-chapter-orientation {
   position: relative;
   width: 100%;
-  height: 185svh;
-  background-color: var(--pa-ground);
+  height: 240svh;
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  transition: background-color 0.4s ease;
 }
 
 .pa-v7-chapter-orientation__sticky {
@@ -42,37 +46,39 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: var(--pa-grid-gutter);
-  padding: calc(var(--pa-header-height) + 32px) var(--pa-grid-margin) var(--pa-grid-margin);
+  padding: calc(var(--pa-header-height) + 36px) var(--pa-grid-margin) calc(var(--pa-grid-margin) + 12px);
   align-items: center;
 }
 
+/* Quiet Type Field (Cols 1–8, Interlocking with Offset Media Plane) */
 .pa-v7-orientation__copy-rail {
-  grid-column: 1 / 6;
+  grid-column: 1 / 8;
+  grid-row: 1;
   z-index: var(--pa-z-stage-content);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 580px;
+  max-width: 520px;
   will-change: transform, opacity;
 }
 
-.pa-v7-orientation__eyebrow {
-  margin-top: 1rem;
-}
-
 .pa-v7-orientation__h1 {
-  font-size: var(--pa-display-headline);
-  line-height: var(--pa-display-lh);
-  letter-spacing: var(--pa-display-tracking);
-  color: var(--pa-bone);
+  font-family: var(--pa-font-serif);
+  font-size: clamp(2.35rem, 3.8vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--pa-ink);
   font-weight: 400;
+  max-width: 17ch;
+  text-wrap: balance;
 }
 
 .pa-v7-orientation__lead {
-  font-size: 1.125rem;
-  line-height: 1.5;
-  color: var(--pa-stone);
-  max-width: 480px;
+  font-family: var(--pa-font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: rgba(58, 60, 54, 0.85);
+  max-width: 440px;
 }
 
 .pa-v7-orientation__actions {
@@ -82,13 +88,24 @@
   margin-top: 0.5rem;
 }
 
+/* Persistent Media Stage: Starts in Cols 5–12 (Offset Interlocking), Expands to Cols 2–11 */
 .pa-v7-orientation__media-stage {
-  grid-column: 7 / 13;
-  height: 100%;
+  grid-column: 5 / 13;
+  grid-row: 1;
+  height: 74svh;
+  min-height: 500px;
   position: relative;
   overflow: hidden;
   border-radius: 2px;
-  will-change: transform, width, height, left, top;
+  z-index: 1;
+  will-change: grid-column, transform, width;
+}
+
+.pa-v7-orientation__base-plane {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .pa-v7-orientation__aperture-overlay {
@@ -101,186 +118,142 @@
   will-change: clip-path;
 }
 
-/* Mobile Chapter 01 Composition */
-@media (max-width: 900px) {
-  .pa-v7-chapter-orientation {
-    height: auto;
-    min-height: 100dvh;
-  }
-
-  .pa-v7-chapter-orientation__sticky {
-    position: relative;
-    height: auto;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    padding: calc(var(--pa-header-height-mobile) + 20px) var(--pa-grid-margin) 2rem;
-    gap: 1.75rem;
-  }
-
-  .pa-v7-orientation__copy-rail {
-    grid-column: auto;
-    max-width: 100%;
-    gap: 1.25rem;
-  }
-
-  .pa-v7-orientation__h1 {
-    font-size: var(--pa-display-mobile);
-    line-height: var(--pa-display-mobile-lh);
-    letter-spacing: var(--pa-display-mobile-tracking);
-  }
-
-  .pa-v7-orientation__media-stage {
-    grid-column: auto;
-    width: 100%;
-    height: 48dvh;
-    min-height: 280px;
-    border-radius: 2px;
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   CHAPTER 02: Evidence Is the Material
-   Envelope: 150svh; not pinned for full length.
-   A02 contextual plane, columns 2–11, >=65% unobstructed.
-   4 edge perimeter annotations. Lower-left hairline margin question module.
-   ══════════════════════════════════════════════════════════════════════════ */
-.pa-v7-chapter-evidence {
-  position: relative;
-  width: 100%;
-  min-height: 150svh;
-  background-color: var(--pa-ground);
-  padding: 4rem 0;
-}
-
-.pa-v7-evidence__stage-wrap {
-  width: 100%;
-  max-width: 1720px;
-  margin: 0 auto;
-  padding: 0 var(--pa-grid-margin);
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: var(--pa-grid-gutter);
-  align-items: center;
-}
-
-.pa-v7-evidence__central-plane {
-  grid-column: 2 / 12;
-  position: relative;
-  height: 76svh;
-  min-height: 520px;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-/* Edge Perimeter Annotations */
-.pa-v7-evidence-annotation {
+/* 4 Perimeter Hairline Edge Annotations (No filled background, no all-caps) */
+.pa-v7-evidence-hairline-annotation {
   position: absolute;
   z-index: var(--pa-z-edge-anchors);
-  max-width: 250px;
+  max-width: 240px;
   font-size: 0.8125rem;
   line-height: 1.45;
   color: var(--pa-stone);
-  border-left: 2px solid var(--pa-bone);
-  padding-left: 0.75rem;
-  background: rgba(12, 14, 12, 0.65);
-  backdrop-filter: blur(6px);
+  border-left: 1px solid var(--pa-rule-dark);
+  padding-left: 0.65rem;
+  background: transparent;
   pointer-events: none;
 }
 
-.pa-v7-evidence-annotation__title {
+.pa-v7-evidence-hairline-annotation__label {
   display: block;
   font-family: var(--pa-font-sans);
   font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
+  font-weight: 600;
   color: var(--pa-bone);
   margin-bottom: 2px;
+  text-transform: none;
 }
 
-.pa-v7-evidence-annotation--top-left {
-  top: 8%;
+.pa-v7-evidence-hairline-annotation__text {
+  display: block;
+  color: var(--pa-stone);
+  font-size: 0.8125rem;
+}
+
+.pa-v7-evidence-hairline-annotation--top-left {
+  top: 6%;
   left: 3%;
 }
 
-.pa-v7-evidence-annotation--top-right {
-  top: 8%;
+.pa-v7-evidence-hairline-annotation--top-right {
+  top: 6%;
   right: 3%;
 }
 
-.pa-v7-evidence-annotation--bottom-right {
-  bottom: 12%;
+.pa-v7-evidence-hairline-annotation--mid-right {
+  top: 46%;
   right: 3%;
 }
 
-.pa-v7-evidence-annotation--role-anchor {
-  top: 48%;
+.pa-v7-evidence-hairline-annotation--bottom-right {
+  bottom: 6%;
   right: 3%;
 }
 
-/* Lower-Left Editorial Margin Question Module */
-.pa-v7-evidence__question-module {
-  grid-column: 2 / 7;
-  margin-top: -6rem;
+/* Calm Paper Strip Questionnaire Module */
+.pa-v7-evidence__paper-strip-wrapper {
+  grid-column: 1 / 13;
+  width: 100%;
+  position: absolute;
+  bottom: 1.25rem;
+  left: 0;
+  right: 0;
+  padding: 0 var(--pa-grid-margin);
   z-index: var(--pa-z-stage-content);
-  background-color: var(--pa-surface-deep);
-  border: 1px solid var(--pa-rule-dark);
-  padding: 1.5rem 1.75rem;
+  pointer-events: auto;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.pa-v7-evidence__paper-strip {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  border: 1px solid var(--pa-rule-paper);
   border-radius: 2px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-}
-
-.pa-v7-evidence__prompt {
-  font-family: var(--pa-font-serif);
-  font-size: 1.125rem;
-  color: var(--pa-bone);
-  margin-bottom: 1rem;
-  line-height: 1.4;
-}
-
-.pa-v7-evidence__options {
+  padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.65rem;
+  box-shadow: none;
 }
 
-.pa-v7-evidence__option {
+.pa-v7-evidence__paper-prompt {
+  font-family: var(--pa-font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  color: var(--pa-ink);
+  font-weight: 500;
+  margin: 0;
+}
+
+.pa-v7-evidence__paper-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pa-v7-evidence__paper-option {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 0.65rem;
   font-size: 0.875rem;
-  color: var(--pa-stone);
+  line-height: 1.4;
+  color: var(--pa-ink);
   cursor: pointer;
-  padding: 0.5rem 0.65rem;
-  border: 1px solid transparent;
+  padding: 0.35rem 0.5rem;
   border-radius: 2px;
-  transition: background-color 0.15s var(--pa-ease-micro), color 0.15s var(--pa-ease-micro);
+  transition: background-color 0.15s ease;
 }
 
-.pa-v7-evidence__option:hover {
-  background-color: rgba(251, 250, 244, 0.05);
-  color: var(--pa-bone);
+.pa-v7-evidence__paper-option:hover {
+  background-color: rgba(58, 60, 54, 0.05);
 }
 
-.pa-v7-evidence__option input[type="radio"] {
-  accent-color: var(--pa-bone);
+.pa-v7-evidence__paper-option.is-selected {
+  background-color: rgba(58, 60, 54, 0.08);
+  font-weight: 500;
+}
+
+.pa-v7-evidence__paper-option input[type="radio"] {
+  accent-color: var(--pa-ink);
   margin-top: 3px;
   cursor: pointer;
 }
 
-.pa-v7-evidence__live-marker {
+.pa-v7-evidence__paper-option-text {
+  flex: 1;
+}
+
+.pa-v7-evidence__paper-marker {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--pa-bone);
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--pa-rule-dark);
+  color: var(--pa-ink);
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--pa-rule-paper);
 }
 
 .pa-v7-evidence__marker-dot {
@@ -290,33 +263,160 @@
   background-color: var(--pa-data-conscientiousness);
 }
 
+/* ── Mobile Layout (< 900px): Native Scrolling & Image-First 72dvh Composition ── */
+.pa-v7-opening-mobile {
+  display: none;
+}
+
 @media (max-width: 900px) {
-  .pa-v7-chapter-evidence {
+  .pa-v7-chapter-orientation {
+    height: auto;
     min-height: auto;
-    padding: 2rem 0;
+    background-color: var(--pa-paper);
+    color: var(--pa-ink);
   }
 
-  .pa-v7-evidence__stage-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .pa-v7-evidence__central-plane {
-    grid-column: auto;
-    width: 100%;
-    height: 48dvh;
-    min-height: 280px;
-  }
-
-  .pa-v7-evidence-annotation {
+  .pa-v7-chapter-orientation__sticky {
     display: none;
   }
 
-  .pa-v7-evidence__question-module {
-    grid-column: auto;
+  .pa-v7-opening-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    padding: calc(var(--pa-header-height-mobile) + 16px) var(--pa-grid-margin) 2.5rem;
+  }
+
+  .pa-v7-opening-mobile__hero-media {
     width: 100%;
-    margin-top: 0;
+    height: 72dvh;
+    min-height: 320px;
+    max-height: 560px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .pa-v7-opening-mobile__hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .pa-v7-opening-mobile__h1 {
+    font-family: var(--pa-font-serif);
+    font-size: clamp(1.85rem, 6.5vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--pa-ink);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  .pa-v7-opening-mobile__lead {
+    font-family: var(--pa-font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: rgba(58, 60, 54, 0.85);
+  }
+
+  .pa-v7-opening-mobile__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .pa-v7-opening-mobile__evidence-media {
+    width: 100%;
+    height: 52dvh;
+    min-height: 280px;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 0.75rem;
+  }
+
+  .pa-v7-opening-mobile__annotations {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .pa-v7-opening-mobile__annotation-item {
+    border-left: 1px solid var(--pa-rule-paper);
+    padding-left: 0.65rem;
+    font-size: 0.8125rem;
+    color: rgba(58, 60, 54, 0.8);
+    line-height: 1.4;
+  }
+
+  .pa-v7-opening-mobile__annotation-label {
+    display: block;
+    font-family: var(--pa-font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--pa-ink);
+    margin-bottom: 2px;
+  }
+
+  .pa-v7-opening-mobile__paper-strip {
+    width: 100%;
+    background-color: var(--pa-paper);
+    color: var(--pa-ink);
+    border: 1px solid var(--pa-rule-paper);
+    border-radius: 2px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .pa-v7-opening-mobile__annotations {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Standalone CHAPTER 02 (Used for isolated components/tests)
+   Dominant A02 contextual plane, hairline annotations, calm paper strip.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-chapter-evidence {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  background-color: var(--pa-ground);
+  padding: 4rem 0;
+}
+
+.pa-v7-evidence__stage-wrap {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.pa-v7-evidence__central-plane {
+  width: 100%;
+  max-width: 1040px;
+  height: 68svh;
+  min-height: 440px;
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-chapter-evidence {
+    padding: 2rem 0;
+    min-height: auto;
+  }
+
+  .pa-v7-evidence__central-plane {
+    height: 48dvh;
+    min-height: 280px;
   }
 }
 
