@@ -57,7 +57,7 @@ export const OrientationChapter = () => {
       scrollTrigger: {
         trigger: scope,
         start: 'top top',
-        end: () => `+=${Math.round(window.innerHeight * 1.65)}`,
+        end: () => `+=${Math.round(window.innerHeight * 1.85)}`,
         pin: stageRef.current,
         pinSpacing: true,
         scrub: true,
@@ -76,7 +76,7 @@ export const OrientationChapter = () => {
         ease: 'none',
       }, 0.12)
       .to(a01Image, {
-        scale: 1,
+        scale: 1.04,
         yPercent: 0,
         duration: 0.26,
         ease: 'none',
@@ -92,19 +92,29 @@ export const OrientationChapter = () => {
         duration: 0.4,
         ease: 'none',
       }, 0.32)
+      .to(copyRef.current, {
+        autoAlpha: 0,
+        duration: 0.14,
+        ease: 'none',
+      }, 0.56)
       .to(annotations, {
         autoAlpha: 1,
         y: 0,
         stagger: 0.035,
-        duration: 0.2,
+        duration: 0.12,
         ease: 'none',
       }, 0.62)
-      .set(questionRef.current, { autoAlpha: 1, pointerEvents: 'auto' }, 0.74)
+      .set(questionRef.current, { autoAlpha: 1, pointerEvents: 'auto' }, 0.76)
       .to(questionRef.current, {
         y: 0,
-        duration: 0.16,
+        duration: 0.14,
         ease: 'none',
-      }, 0.74);
+      }, 0.76)
+      .to(stageRef.current, {
+        opacity: 1,
+        duration: 0.18,
+        ease: 'none',
+      }, 0.9);
 
     const nextChapter = scope.nextElementSibling;
     const headerTrigger = header && nextChapter
@@ -133,7 +143,7 @@ export const OrientationChapter = () => {
             <MediaPlane
               asset={MEDIA_ASSETS_V7.a01}
               alt="A blurred profile seen through textured glass."
-              objectPosition="51% 38%"
+              objectPosition="54% 42%"
               loading="eager"
               fetchPriority="high"
               decoding="async"

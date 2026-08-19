@@ -434,7 +434,7 @@
   --pa-header-h-mobile: 56px;
   --pa-page-pad-desktop: clamp(36px, 4.4vw, 64px);
   --pa-page-pad-mobile: 20px;
-  --pa-opening-media-top: clamp(92px, 10svh, 104px);
+  --pa-opening-media-top: clamp(112px, 12svh, 128px);
   --pa-opening-question-h: clamp(112px, 13svh, 128px);
   position: relative;
   width: 100%;
@@ -453,12 +453,12 @@
   position: absolute;
   z-index: 1;
   top: var(--pa-opening-media-top);
-  right: 12vw;
-  left: 12vw;
-  height: calc(100svh - var(--pa-opening-media-top) - var(--pa-opening-question-h) - 56px);
-  min-height: 440px;
-  transform: translateX(25vw) translateY(3.5svh) scaleX(0.77) scaleY(0.91);
-  transform-origin: top left;
+  right: 14vw;
+  left: 14vw;
+  height: calc(100svh - var(--pa-opening-media-top) - var(--pa-opening-question-h) - 80px);
+  min-height: 0;
+  transform: translateX(10.5vw) translateY(3.5svh) scaleX(0.74) scaleY(0.91);
+  transform-origin: right center;
   will-change: transform;
 }
 
@@ -474,7 +474,7 @@
 }
 
 .pa-opening__plane--a01 .pa-v7-media-plane img {
-  transform: translateY(-1.5%) scale(1.06);
+  transform: translateY(-1.5%) scale(1.16);
 }
 
 .pa-opening__plane--a02 {
@@ -502,23 +502,23 @@
 }
 
 .pa-opening__annotation--1 {
-  top: 14px;
-  left: 14px;
+  top: -42px;
+  left: 0;
 }
 
 .pa-opening__annotation--2 {
-  top: 14px;
-  right: 14px;
+  top: -42px;
+  right: 0;
 }
 
 .pa-opening__annotation--3 {
-  right: 14px;
-  bottom: 32%;
+  bottom: -42px;
+  left: 0;
 }
 
 .pa-opening__annotation--4 {
-  right: 14px;
-  bottom: 14px;
+  right: 0;
+  bottom: -42px;
 }
 
 .pa-opening__copy {
@@ -537,7 +537,7 @@
 .pa-opening__title {
   margin: 0;
   font-family: var(--pa-font-serif);
-  font-size: clamp(3.5rem, 4.8vw, 4.65rem);
+  font-size: clamp(2.25rem, 3.7vw, 3.4rem);
   font-weight: 460;
   letter-spacing: -0.035em;
   line-height: 0.98;
@@ -568,9 +568,9 @@
 .pa-opening__question {
   position: absolute;
   z-index: 4;
-  right: 12vw;
+  right: 14vw;
   bottom: 32px;
-  left: 12vw;
+  left: 14vw;
   min-height: var(--pa-opening-question-h);
   margin: 0;
   padding: 18px 0;
@@ -668,6 +668,7 @@
 
   .pa-opening__plane--a01 .pa-v7-media-plane img {
     transform: none;
+    object-position: 51% 34% !important;
   }
 
   .pa-opening__copy {
