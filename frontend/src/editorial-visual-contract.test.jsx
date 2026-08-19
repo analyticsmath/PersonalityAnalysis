@@ -1,5 +1,5 @@
 // frontend/src/editorial-visual-contract.test.jsx
-// Personality Assessor — V5 Cinematic Architecture & Product Truth Guardrails
+// Personality Assessor — V7 Signal Atlas Architecture & Product Truth Guardrails
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -7,10 +7,10 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import EvidenceCanvasScene from './components/personality-v5/home/EvidenceCanvasScene';
-import IndependentReadingsCanvas from './components/personality-v5/home/IndependentReadingsCanvas';
-import { PUBLIC_CONTENT } from './content/personality-v4/publicContent';
-import { MEDIA_ASSETS } from './content/personality-v4/mediaManifest';
+import EvidenceChapter from './components/personality-v7/home/EvidenceChapter';
+import FourLensesAtlasChapter from './components/personality-v7/home/FourLensesAtlasChapter';
+import { PUBLIC_CONTENT } from './content/personality-v7/publicContent';
+import { MEDIA_ASSETS_V7 } from './content/personality-v7/mediaManifest';
 import { getSafeNextUrl, getSignupAcquisitionUrl, getLoginUrl } from './utils/personality-v4/navigation';
 
 const readFile = (relativePath) => {
@@ -18,13 +18,13 @@ const readFile = (relativePath) => {
   return existsSync(fullPath) ? readFileSync(fullPath, 'utf8') : '';
 };
 
-describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardrails', () => {
+describe('Personality Assessor V7 Signal Atlas — Visual Architecture & Product Truth Guardrails', () => {
   const home = readFile('src/pages/editorial/EditorialHomePage.jsx');
   const howItWorks = readFile('src/pages/editorial/EditorialHowItWorksPage.jsx');
   const careerIntelligence = readFile('src/pages/editorial/EditorialCareerIntelligencePage.jsx');
   const methodology = readFile('src/pages/editorial/EditorialMethodologyPage.jsx');
   const trustRoute = readFile('src/pages/editorial/EditorialTrustPage.jsx');
-  const trustComp = readFile('src/components/personality-v4/routes/TrustEvidenceChain.jsx');
+  const trustComp = readFile('src/components/personality-v7/routes/TrustLedger.jsx');
   const progress = readFile('src/pages/editorial/EditorialProgressPage.jsx');
   const privacy = readFile('src/pages/editorial/EditorialPrivacyPage.jsx');
   const notFound = readFile('src/pages/PublicNotFoundPage.jsx');
@@ -32,10 +32,10 @@ describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardr
   const signup = readFile('src/pages/Auth/SignupPage.js');
   const app = readFile('src/App.js');
   const fontsCss = readFile('src/styles/fonts.css');
-  const tokensCss = readFile('src/styles/personality-v4/tokens.css');
-  const foundationCss = readFile('src/styles/personality-v4/foundation.css');
-  const cinematicCss = readFile('src/styles/personality-v5/cinematic.css');
-  const mobileCss = readFile('src/styles/personality-v5/mobile.css');
+  const tokensCss = readFile('src/styles/personality-v7/tokens.css');
+  const foundationCss = readFile('src/styles/personality-v7/foundation.css');
+  const homeCss = readFile('src/styles/personality-v7/home.css');
+  const chromeCss = readFile('src/styles/personality-v7/chrome.css');
 
   // Guardrail 1: All required public routes are registered in App.js
   it('1. keeps every required public route registered in App.js', () => {
@@ -65,10 +65,12 @@ describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardr
 
   // Guardrail 3: Tokens use approved neutral palette and Big Five data colors
   it('3. tokens define approved neutral palette, Big Five colors, and spatial gutters', () => {
-    expect(tokensCss).toContain('--pa-black: #070807');
-    expect(tokensCss).toContain('--pa-ink: #10110f');
-    expect(tokensCss).toContain('--pa-paper: #f4f3ee');
-    expect(tokensCss).toContain('--pa-white: #fffef9');
+    expect(tokensCss).toContain('--pa-ground: #0c0e0c');
+    expect(tokensCss).toContain('--pa-surface-deep: #171a16');
+    expect(tokensCss).toContain('--pa-paper: #eeece3');
+    expect(tokensCss).toContain('--pa-bone: #fbfaf4');
+    expect(tokensCss).toContain('--pa-stone: #a5a79e');
+    expect(tokensCss).toContain('--pa-ink: #3a3c36');
     expect(tokensCss).toContain('--pa-data-openness');
     expect(tokensCss).toContain('--pa-data-conscientiousness');
     expect(tokensCss).toContain('--pa-data-extraversion');
@@ -80,7 +82,7 @@ describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardr
   it('4. adaptive question demo initializes with no preselected radio and updates state on selection', () => {
     render(
       <BrowserRouter>
-        <EvidenceCanvasScene />
+        <EvidenceChapter />
       </BrowserRouter>
     );
     const options = screen.getAllByRole('radio');
@@ -140,10 +142,10 @@ describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardr
   it('7. media manifest contains all 10 unwatermarked photographic assets A01-A10 with dimensions and focal points', () => {
     const expectedKeys = ['a01', 'a02', 'a03', 'a04', 'a05', 'a06', 'a07', 'a08', 'a09', 'a10'];
     for (const key of expectedKeys) {
-      expect(MEDIA_ASSETS).toHaveProperty(key);
-      expect(MEDIA_ASSETS[key].widths.length).toBeGreaterThan(0);
-      expect(MEDIA_ASSETS[key].focalPoint).toBeDefined();
-      expect(MEDIA_ASSETS[key].source).toBeTruthy();
+      expect(MEDIA_ASSETS_V7).toHaveProperty(key);
+      expect(MEDIA_ASSETS_V7[key].widths.length).toBeGreaterThan(0);
+      expect(MEDIA_ASSETS_V7[key].focalPoint).toBeDefined();
+      expect(MEDIA_ASSETS_V7[key].source).toBeTruthy();
     }
   });
 
@@ -165,7 +167,7 @@ describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardr
   it('9. Independent Readings Field implements accessible tablist with 4 lenses and keyboard navigation', () => {
     render(
       <BrowserRouter>
-        <IndependentReadingsCanvas />
+        <FourLensesAtlasChapter />
       </BrowserRouter>
     );
     const tabs = screen.getAllByRole('tab');
@@ -216,21 +218,21 @@ describe('Personality Assessor V5 — Visual Architecture & Product Truth Guardr
     expect(signup).not.toContain('Step 1 of');
   });
 
-  // Guardrail 14: CSS styling is properly isolated and scoped under .pa-public-v4 and .pa-auth-v4
-  it('14. foundation and cinematic CSS are scoped without blanket destructive resets', () => {
+  // Guardrail 14: CSS styling is properly isolated and scoped
+  it('14. foundation and V7 CSS are scoped without blanket destructive resets', () => {
+    expect(foundationCss).toContain('.pa-v7-root');
     expect(foundationCss).toContain('.pa-public-v4');
-    expect(foundationCss).toContain('.pa-auth-v4');
     expect(foundationCss).not.toContain('0.01ms !important');
     expect(foundationCss).toContain('overflow-x: clip');
-    expect(cinematicCss).toContain('.pa-hero-v5');
-    expect(mobileCss).toContain('@media (max-width: 640px)');
+    expect(chromeCss).toContain('.pa-v7-atlas-dock');
+    expect(homeCss).toContain('.pa-v7-chapter-orientation');
   });
 
   // Guardrail 15: Button selector specificity guarantees intended foreground color
   it('15. button selector specificity overrides generic link resets', () => {
-    expect(foundationCss).toContain('.pa-public-v4 .pa-btn.pa-btn--primary');
-    expect(foundationCss).toContain('color: var(--pa-white)');
-    expect(foundationCss).toContain('.pa-public-v4 .pa-btn.pa-btn--inverse');
-    expect(foundationCss).toContain('color: var(--pa-black)');
+    expect(foundationCss).toContain('.pa-v7-btn--primary');
+    expect(foundationCss).toContain('color: var(--pa-ground)');
+    expect(foundationCss).toContain('.pa-v7-btn--ink');
+    expect(foundationCss).toContain('color: var(--pa-bone)');
   });
 });

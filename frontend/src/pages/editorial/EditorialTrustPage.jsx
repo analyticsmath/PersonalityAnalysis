@@ -1,12 +1,15 @@
 import React from 'react';
-import PublicLayout from '../../components/personality-v6/chrome/PublicLayout';
-import TrustEvidenceChain from '../../components/personality-v6/routes/TrustEvidenceChain';
+import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import TrustLedger from '../../components/personality-v7/routes/TrustLedger';
 
 export const EditorialTrustPage = () => {
   return (
-    <PublicLayout headerTheme="dark">
-      <TrustEvidenceChain />
-    </PublicLayout>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light" withFooter={true}>
+        <TrustLedger />
+      </PublicLayout>
+    </SmoothScrollProvider>
   );
 };
 

@@ -1,0 +1,160 @@
+/* ==========================================================================
+   Personality Assessor — V7 Signal Atlas Authentication Styles
+   Desktop: 58% Photo Field / 42% Flush Paper Ground Form
+   Mobile: 40dvh Media Lead + Seamless Paper Form (No Bottom Dock)
+   ========================================================================== */
+
+.pa-v7-auth-stage {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 58vw 42vw;
+  background-color: var(--pa-paper);
+}
+
+/* 58vw Photographic Field */
+.pa-v7-auth-media-pane {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--pa-ground);
+}
+
+.pa-v7-auth-media-pane__caption {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  right: 3rem;
+  z-index: 3;
+  color: var(--pa-bone);
+  font-family: var(--pa-font-serif);
+  font-size: 1.5rem;
+  line-height: 1.25;
+  max-width: 480px;
+}
+
+/* 42vw Flush Paper Ground Form Volume */
+.pa-v7-auth-form-pane {
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  padding: clamp(3rem, 16vh, 6rem) clamp(2rem, 5vw, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.pa-v7-auth-form-pane__inner {
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.pa-v7-auth-form-pane h1 {
+  font-size: 2.25rem;
+  color: var(--pa-ink);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.pa-v7-auth-form-pane .lead {
+  color: var(--pa-stone);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+/* Form inputs & controls */
+.pa-v7-auth-field {
+  margin-bottom: 1.25rem;
+}
+
+.pa-v7-auth-field label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--pa-ink);
+  margin-bottom: 0.35rem;
+}
+
+.pa-v7-auth-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 0.875rem;
+  border: 1px solid var(--pa-rule-paper);
+  background: #fff;
+  border-radius: 2px;
+  font-size: 0.9375rem;
+  color: var(--pa-ink);
+  font-family: var(--pa-font-sans);
+  transition: border-color 0.2s var(--pa-ease-micro);
+}
+
+.pa-v7-auth-input:focus {
+  border-color: var(--pa-ink);
+  outline: none;
+}
+
+.pa-v7-auth-password-wrap {
+  position: relative;
+}
+
+.pa-v7-auth-password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--pa-stone);
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.pa-v7-auth-error-banner {
+  background: #fce8e6;
+  color: #c5221f;
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.pa-v7-auth-success-banner {
+  background: #e6f4ea;
+  color: #137333;
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+/* Mobile Auth Layout */
+@media (max-width: 900px) {
+  .pa-v7-auth-stage {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+    min-height: 100dvh;
+  }
+
+  .pa-v7-auth-media-pane {
+    width: 100%;
+    height: 40dvh;
+    min-height: 240px;
+  }
+
+  .pa-v7-auth-media-pane__caption {
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.125rem;
+  }
+
+  .pa-v7-auth-form-pane {
+    padding: 2.5rem 1.5rem 4rem;
+    min-height: auto;
+  }
+}

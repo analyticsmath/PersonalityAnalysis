@@ -1,13 +1,13 @@
 import React from 'react';
-import PublicLayout from '../../components/personality-v6/chrome/PublicLayout';
-import SmoothScrollProvider from '../../components/personality-v6/motion/SmoothScrollProvider';
-import HowItWorksCanvas from '../../components/personality-v6/routes/HowItWorksCanvas';
+import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import HowItWorksSequence from '../../components/personality-v7/routes/HowItWorksSequence';
 
 export const EditorialHowItWorksPage = () => {
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="light">
-        <HowItWorksCanvas />
+      <PublicLayout headerTheme="dark" withFooter={true}>
+        <HowItWorksSequence />
       </PublicLayout>
     </SmoothScrollProvider>
   );

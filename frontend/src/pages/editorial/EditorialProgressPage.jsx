@@ -1,12 +1,15 @@
 import React from 'react';
-import PublicLayout from '../../components/personality-v6/chrome/PublicLayout';
-import ProgressRecord from '../../components/personality-v6/routes/ProgressRecord';
+import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import ProgressRecord from '../../components/personality-v7/routes/ProgressRecord';
 
 export const EditorialProgressPage = () => {
   return (
-    <PublicLayout headerTheme="dark">
-      <ProgressRecord />
-    </PublicLayout>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light" withFooter={true}>
+        <ProgressRecord />
+      </PublicLayout>
+    </SmoothScrollProvider>
   );
 };
 

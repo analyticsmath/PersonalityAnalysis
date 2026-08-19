@@ -1,12 +1,15 @@
 import React from 'react';
-import PublicLayout from '../../components/personality-v6/chrome/PublicLayout';
-import CareerRelationshipStage from '../../components/personality-v6/routes/CareerRelationshipStage';
+import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import CareerIntelligenceIndex from '../../components/personality-v7/routes/CareerIntelligenceIndex';
 
 export const EditorialCareerIntelligencePage = () => {
   return (
-    <PublicLayout headerTheme="dark">
-      <CareerRelationshipStage />
-    </PublicLayout>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="dark" withFooter={true}>
+        <CareerIntelligenceIndex />
+      </PublicLayout>
+    </SmoothScrollProvider>
   );
 };
 

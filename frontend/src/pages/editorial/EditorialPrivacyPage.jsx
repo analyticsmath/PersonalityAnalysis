@@ -1,12 +1,15 @@
 import React from 'react';
-import PublicLayout from '../../components/personality-v6/chrome/PublicLayout';
-import PrivacyDocument from '../../components/personality-v6/routes/PrivacyDocument';
+import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import PrivacyDocument from '../../components/personality-v7/routes/PrivacyDocument';
 
 export const EditorialPrivacyPage = () => {
   return (
-    <PublicLayout headerTheme="light">
-      <PrivacyDocument />
-    </PublicLayout>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light" withFooter={true}>
+        <PrivacyDocument />
+      </PublicLayout>
+    </SmoothScrollProvider>
   );
 };
 

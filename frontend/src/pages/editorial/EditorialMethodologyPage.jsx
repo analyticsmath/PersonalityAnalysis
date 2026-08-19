@@ -1,12 +1,15 @@
 import React from 'react';
-import PublicLayout from '../../components/personality-v6/chrome/PublicLayout';
-import MethodAtlas from '../../components/personality-v6/routes/MethodAtlas';
+import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import MethodologyReadingRoom from '../../components/personality-v7/routes/MethodologyReadingRoom';
 
 export const EditorialMethodologyPage = () => {
   return (
-    <PublicLayout headerTheme="dark">
-      <MethodAtlas />
-    </PublicLayout>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light" withFooter={true}>
+        <MethodologyReadingRoom />
+      </PublicLayout>
+    </SmoothScrollProvider>
   );
 };
 

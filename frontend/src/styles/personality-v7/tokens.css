@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Personality Assessor — V7 Signal Atlas Design Tokens
+   Calm Authority & Editorial Intelligence Publication System
+   ========================================================================== */
+
+:root {
+  /* ── Core Mineral & Paper Palette ── */
+  --pa-ground: #0c0e0c;          /* Deep mineral charcoal */
+  --pa-surface-deep: #171a16;    /* Secondary deep surface */
+  --pa-paper: #eeece3;           /* Warm tactile paper */
+  --pa-bone: #fbfaf4;            /* Primary bone foreground on dark */
+  --pa-stone: #a5a79e;           /* Stone annotation & secondary copy */
+  --pa-ink: #3a3c36;             /* Quiet ink foreground on paper */
+
+  /* Structural Rules & Borders */
+  --pa-rule-dark: rgba(251, 250, 244, 0.18);
+  --pa-rule-paper: rgba(24, 26, 22, 0.16);
+
+  /* Big Five Analytical Hue Markers (Data colours only) */
+  --pa-data-openness: #764a62;
+  --pa-data-conscientiousness: #2d5d4b;
+  --pa-data-extraversion: #a64b2a;
+  --pa-data-agreeableness: #af5b68;
+  --pa-data-stability: #43657d;
+
+  /* Backward Compatibility Aliases */
+  --pa-black: #0c0e0c;
+  --pa-charcoal: #171a16;
+  --pa-obsidian: #0c0e0c;
+  --pa-white: #fbfaf4;
+  --pa-muted: #a5a79e;
+  --pa-rule-light: rgba(251, 250, 244, 0.18);
+
+  /* ── Typography Tokens ── */
+  --pa-font-serif: 'Source Serif 4 Variable', Georgia, Cambria, serif;
+  --pa-font-sans: 'Source Sans 3 Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Desktop Display */
+  --pa-display-headline: clamp(4.25rem, 7vw, 8.25rem);
+  --pa-display-lh: 0.92;
+  --pa-display-tracking: -0.045em;
+
+  /* Route Display */
+  --pa-display-route: clamp(3.1rem, 5vw, 6rem);
+  --pa-display-route-lh: 0.94;
+  --pa-display-route-tracking: -0.038em;
+
+  /* Mobile Display */
+  --pa-display-mobile: clamp(3rem, 13vw, 4.8rem);
+  --pa-display-mobile-lh: 0.93;
+  --pa-display-mobile-tracking: -0.035em;
+
+  /* Body & Annotation Sizes */
+  --pa-body-size-desktop: 17px;
+  --pa-body-size-mobile: 16px;
+  --pa-body-lh: 1.52;
+  --pa-meta-size: 11.5px;
+  --pa-meta-tracking: 0.10em;
+
+  /* ── Grid & Spacing ── */
+  --pa-grid-cols: 12;
+  --pa-grid-margin: clamp(24px, 4.4vw, 72px);
+  --pa-grid-gutter: clamp(20px, 2vw, 28px);
+
+  --pa-header-height: 64px;
+  --pa-header-height-mobile: 56px;
+  --pa-dock-height: 68px;
+
+  /* ── Motion & Easing Curves ── */
+  --pa-ease-default: cubic-bezier(0.22, 1, 0.36, 1);
+  --pa-ease-micro: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Z-Index Hierarchy ── */
+  --pa-z-base-media: 1;
+  --pa-z-overlay: 5;
+  --pa-z-stage-content: 10;
+  --pa-z-edge-anchors: 15;
+  --pa-z-chrome: 100;
+  --pa-z-dock: 110;
+  --pa-z-modal: 200;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --pa-grid-cols: 8;
+    --pa-grid-margin: 24px;
+    --pa-grid-gutter: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --pa-grid-cols: 4;
+    --pa-grid-margin: 16px;
+    --pa-grid-gutter: 12px;
+  }
+}

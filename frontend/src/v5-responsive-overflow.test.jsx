@@ -1,5 +1,5 @@
 // frontend/src/v5-responsive-overflow.test.jsx
-// Personality Assessor — V5 Responsive Viewport & Computed Overflow Matrix
+// Personality Assessor — V7 Signal Atlas Responsive Viewport & Computed Overflow Matrix
 
 import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
@@ -37,7 +37,7 @@ const renderWithProviders = (ui) => {
   );
 };
 
-describe('Personality Assessor V5 — Responsive Overflow & Viewport Matrix', () => {
+describe('Personality Assessor V7 Signal Atlas — Responsive Overflow & Viewport Matrix', () => {
   const routes = [
     { name: 'Home Page', path: '/', component: <EditorialHomePage /> },
     { name: 'How It Works', path: '/how-it-works', component: <EditorialHowItWorksPage /> },

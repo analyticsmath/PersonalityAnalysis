@@ -1,0 +1,1118 @@
+/* ==========================================================================
+   Personality Assessor — V7 Signal Atlas Homepage Chapters
+   Precise 6-Chapter Editorial Architecture & Choreography
+   ========================================================================== */
+
+/* ── Media Plane Base Styles ── */
+.pa-v7-media-plane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pa-v7-media-plane picture,
+.pa-v7-media-plane img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHAPTER 01: The Orientation Field
+   Envelope: 185svh max; one pinned desktop stage.
+   First paint: A01 in columns 7–12, top: header + 32px to bottom margin.
+   Copy in columns 1–5; eyebrow starts below header + 56px.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-chapter-orientation {
+  position: relative;
+  width: 100%;
+  height: 185svh;
+  background-color: var(--pa-ground);
+}
+
+.pa-v7-chapter-orientation__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--pa-grid-gutter);
+  padding: calc(var(--pa-header-height) + 32px) var(--pa-grid-margin) var(--pa-grid-margin);
+  align-items: center;
+}
+
+.pa-v7-orientation__copy-rail {
+  grid-column: 1 / 6;
+  z-index: var(--pa-z-stage-content);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 580px;
+  will-change: transform, opacity;
+}
+
+.pa-v7-orientation__eyebrow {
+  margin-top: 1rem;
+}
+
+.pa-v7-orientation__h1 {
+  font-size: var(--pa-display-headline);
+  line-height: var(--pa-display-lh);
+  letter-spacing: var(--pa-display-tracking);
+  color: var(--pa-bone);
+  font-weight: 400;
+}
+
+.pa-v7-orientation__lead {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--pa-stone);
+  max-width: 480px;
+}
+
+.pa-v7-orientation__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.pa-v7-orientation__media-stage {
+  grid-column: 7 / 13;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  will-change: transform, width, height, left, top;
+}
+
+.pa-v7-orientation__aperture-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: inset(0 0 0 100%);
+  z-index: 2;
+  will-change: clip-path;
+}
+
+/* Mobile Chapter 01 Composition */
+@media (max-width: 900px) {
+  .pa-v7-chapter-orientation {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .pa-v7-chapter-orientation__sticky {
+    position: relative;
+    height: auto;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--pa-header-height-mobile) + 20px) var(--pa-grid-margin) 2rem;
+    gap: 1.75rem;
+  }
+
+  .pa-v7-orientation__copy-rail {
+    grid-column: auto;
+    max-width: 100%;
+    gap: 1.25rem;
+  }
+
+  .pa-v7-orientation__h1 {
+    font-size: var(--pa-display-mobile);
+    line-height: var(--pa-display-mobile-lh);
+    letter-spacing: var(--pa-display-mobile-tracking);
+  }
+
+  .pa-v7-orientation__media-stage {
+    grid-column: auto;
+    width: 100%;
+    height: 48dvh;
+    min-height: 280px;
+    border-radius: 2px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHAPTER 02: Evidence Is the Material
+   Envelope: 150svh; not pinned for full length.
+   A02 contextual plane, columns 2–11, >=65% unobstructed.
+   4 edge perimeter annotations. Lower-left hairline margin question module.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-chapter-evidence {
+  position: relative;
+  width: 100%;
+  min-height: 150svh;
+  background-color: var(--pa-ground);
+  padding: 4rem 0;
+}
+
+.pa-v7-evidence__stage-wrap {
+  width: 100%;
+  max-width: 1720px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--pa-grid-gutter);
+  align-items: center;
+}
+
+.pa-v7-evidence__central-plane {
+  grid-column: 2 / 12;
+  position: relative;
+  height: 76svh;
+  min-height: 520px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Edge Perimeter Annotations */
+.pa-v7-evidence-annotation {
+  position: absolute;
+  z-index: var(--pa-z-edge-anchors);
+  max-width: 250px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--pa-stone);
+  border-left: 2px solid var(--pa-bone);
+  padding-left: 0.75rem;
+  background: rgba(12, 14, 12, 0.65);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+.pa-v7-evidence-annotation__title {
+  display: block;
+  font-family: var(--pa-font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--pa-bone);
+  margin-bottom: 2px;
+}
+
+.pa-v7-evidence-annotation--top-left {
+  top: 8%;
+  left: 3%;
+}
+
+.pa-v7-evidence-annotation--top-right {
+  top: 8%;
+  right: 3%;
+}
+
+.pa-v7-evidence-annotation--bottom-right {
+  bottom: 12%;
+  right: 3%;
+}
+
+.pa-v7-evidence-annotation--role-anchor {
+  top: 48%;
+  right: 3%;
+}
+
+/* Lower-Left Editorial Margin Question Module */
+.pa-v7-evidence__question-module {
+  grid-column: 2 / 7;
+  margin-top: -6rem;
+  z-index: var(--pa-z-stage-content);
+  background-color: var(--pa-surface-deep);
+  border: 1px solid var(--pa-rule-dark);
+  padding: 1.5rem 1.75rem;
+  border-radius: 2px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+}
+
+.pa-v7-evidence__prompt {
+  font-family: var(--pa-font-serif);
+  font-size: 1.125rem;
+  color: var(--pa-bone);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.pa-v7-evidence__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pa-v7-evidence__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--pa-stone);
+  cursor: pointer;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: background-color 0.15s var(--pa-ease-micro), color 0.15s var(--pa-ease-micro);
+}
+
+.pa-v7-evidence__option:hover {
+  background-color: rgba(251, 250, 244, 0.05);
+  color: var(--pa-bone);
+}
+
+.pa-v7-evidence__option input[type="radio"] {
+  accent-color: var(--pa-bone);
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.pa-v7-evidence__live-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pa-bone);
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--pa-rule-dark);
+}
+
+.pa-v7-evidence__marker-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--pa-data-conscientiousness);
+}
+
+@media (max-width: 900px) {
+  .pa-v7-chapter-evidence {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+
+  .pa-v7-evidence__stage-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .pa-v7-evidence__central-plane {
+    grid-column: auto;
+    width: 100%;
+    height: 48dvh;
+    min-height: 280px;
+  }
+
+  .pa-v7-evidence-annotation {
+    display: none;
+  }
+
+  .pa-v7-evidence__question-module {
+    grid-column: auto;
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHAPTER 03: Four Lenses Atlas
+   Envelope: 280svh; one pinned desktop stage.
+   Left rail (cols 1–4): title, explanation, vertical 01–04 index.
+   Right field (cols 5–12): active visual composition (Big Five, RIASEC, O*NET, Signals).
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-chapter-lenses {
+  position: relative;
+  width: 100%;
+  height: 280svh;
+  background-color: var(--pa-ground);
+}
+
+.pa-v7-chapter-lenses__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--pa-grid-gutter);
+  padding: calc(var(--pa-header-height) + 24px) var(--pa-grid-margin) var(--pa-grid-margin);
+  align-items: center;
+}
+
+.pa-v7-lenses__left-rail {
+  grid-column: 1 / 5;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  z-index: var(--pa-z-stage-content);
+}
+
+.pa-v7-lenses__h2 {
+  font-size: clamp(2.5rem, 4vw, 3.75rem);
+  line-height: 1.02;
+  color: var(--pa-bone);
+}
+
+.pa-v7-lenses__desc {
+  font-size: 0.9375rem;
+  color: var(--pa-stone);
+  line-height: 1.55;
+}
+
+.pa-v7-lenses__index-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-left: 1px solid var(--pa-rule-dark);
+  padding-left: 1rem;
+}
+
+.pa-v7-lenses__index-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.4rem 0;
+  color: var(--pa-stone);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: color 0.2s var(--pa-ease-micro);
+}
+
+.pa-v7-lenses__index-btn:hover,
+.pa-v7-lenses__index-btn[aria-selected="true"] {
+  color: var(--pa-bone);
+}
+
+.pa-v7-lenses__index-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pa-v7-lenses__index-sub {
+  font-size: 0.75rem;
+  color: var(--pa-stone);
+  opacity: 0.8;
+}
+
+.pa-v7-lenses__right-field {
+  grid-column: 5 / 13;
+  height: 76svh;
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* 01 Big Five: 5 Weighted Vertical Bands */
+.pa-v7-lens-bigfive {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 4px;
+  height: 100%;
+}
+
+.pa-v7-bigfive-band {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.pa-v7-bigfive-band__caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 0.75rem;
+  background: linear-gradient(to top, rgba(12, 14, 12, 0.92) 0%, rgba(12, 14, 12, 0.4) 60%, transparent 100%);
+  color: var(--pa-bone);
+  font-size: 0.75rem;
+}
+
+.pa-v7-bigfive-band__name {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.pa-v7-bigfive-band__score {
+  font-size: 0.6875rem;
+  color: var(--pa-stone);
+}
+
+/* 02 RIASEC: 2x3 Work Environment Atlas */
+.pa-v7-lens-riasec {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  height: 100%;
+}
+
+.pa-v7-riasec-cell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.3s var(--pa-ease-default);
+}
+
+.pa-v7-riasec-cell.active {
+  transform: scale(1.02);
+  z-index: 2;
+}
+
+.pa-v7-riasec-cell__meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(to top, rgba(12, 14, 12, 0.9), transparent);
+  color: var(--pa-bone);
+  font-size: 0.75rem;
+}
+
+/* 03 O*NET Values: B12 + Translucent Paper Strip */
+.pa-v7-lens-onet {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+}
+
+.pa-v7-onet-image-frame {
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pa-v7-onet-strip {
+  background-color: rgba(238, 236, 227, 0.92);
+  color: var(--pa-ink);
+  padding: 1.5rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.pa-v7-onet-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--pa-rule-paper);
+  padding-bottom: 0.4rem;
+}
+
+.pa-v7-onet-rank {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pa-stone);
+}
+
+.pa-v7-onet-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pa-ink);
+}
+
+/* 04 Behavioural Signals: A07 + Ledger Lines */
+.pa-v7-lens-signals {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+}
+
+.pa-v7-signals-image-frame {
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pa-v7-signals-ledger {
+  background-color: var(--pa-surface-deep);
+  border: 1px solid var(--pa-rule-dark);
+  padding: 1.5rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pa-v7-signals-item {
+  border-left: 2px solid var(--pa-bone);
+  padding-left: 0.75rem;
+}
+
+.pa-v7-signals-source {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--pa-stone);
+  display: block;
+}
+
+.pa-v7-signals-metric {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pa-bone);
+  margin: 2px 0;
+}
+
+.pa-v7-signals-desc {
+  font-size: 0.8125rem;
+  color: var(--pa-stone);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-chapter-lenses {
+    height: auto;
+  }
+
+  .pa-v7-chapter-lenses__sticky {
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem var(--pa-grid-margin);
+    gap: 1.5rem;
+  }
+
+  .pa-v7-lenses__left-rail {
+    grid-column: auto;
+    width: 100%;
+  }
+
+  .pa-v7-lenses__right-field {
+    grid-column: auto;
+    width: 100%;
+    height: 52dvh;
+    min-height: 320px;
+  }
+
+  .pa-v7-lens-onet,
+  .pa-v7-lens-signals {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-v7-onet-strip,
+  .pa-v7-signals-ledger {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHAPTER 04: Career Environments
+   Envelope: 230svh; one pinned desktop stage.
+   Slow-moving field atlas. Central media 72vw max, 66svh.
+   5 worlds: Systems (A03), Product (A04), Coaching (A05), Direction (A06), Operations (A02).
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-chapter-careers {
+  position: relative;
+  width: 100%;
+  height: 230svh;
+  background-color: var(--pa-ground);
+}
+
+.pa-v7-chapter-careers__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--pa-header-height) + 20px) var(--pa-grid-margin) var(--pa-grid-margin);
+}
+
+.pa-v7-careers__atlas-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1540px;
+  height: 76svh;
+  display: grid;
+  grid-template-columns: 240px 1fr 320px;
+  column-gap: 2rem;
+  align-items: center;
+}
+
+.pa-v7-careers__left-edge {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: var(--pa-z-stage-content);
+}
+
+.pa-v7-careers__counter {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--pa-bone);
+  text-transform: uppercase;
+}
+
+.pa-v7-careers__world-name {
+  font-family: var(--pa-font-serif);
+  font-size: 1.75rem;
+  line-height: 1.15;
+  color: var(--pa-bone);
+}
+
+.pa-v7-careers__theme-tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pa-stone);
+}
+
+.pa-v7-careers__central-media-field {
+  position: relative;
+  width: 100%;
+  height: 66svh;
+  max-width: 72vw;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pa-v7-careers__world-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+}
+
+.pa-v7-careers__right-edge {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: var(--pa-z-stage-content);
+}
+
+.pa-v7-careers__evidence-line {
+  border-left: 2px solid var(--pa-rule-dark);
+  padding-left: 0.75rem;
+}
+
+.pa-v7-careers__evidence-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--pa-bone);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.pa-v7-careers__evidence-text {
+  font-size: 0.8125rem;
+  color: var(--pa-stone);
+  line-height: 1.4;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-chapter-careers {
+    height: auto;
+  }
+
+  .pa-v7-chapter-careers__sticky {
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem var(--pa-grid-margin);
+    gap: 1.5rem;
+  }
+
+  .pa-v7-careers__atlas-stage {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 1.25rem;
+  }
+
+  .pa-v7-careers__central-media-field {
+    width: 100%;
+    max-width: 100%;
+    height: 48dvh;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHAPTER 05: A Profile Can Change
+   Envelope: normal scroll, 120svh max. No pin.
+   Shift from dark ground to paper without a hard flash.
+   A05 (upper left) and A06 (lower right) offset paper-mounted photographs.
+   Measurement line with 4 deltas.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-chapter-change {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  padding: 6rem 0;
+  transition: background-color 0.4s ease;
+}
+
+.pa-v7-change__container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--pa-grid-gutter);
+  align-items: center;
+}
+
+.pa-v7-change__header-rail {
+  grid-column: 1 / 13;
+  margin-bottom: 3rem;
+  max-width: 680px;
+}
+
+.pa-v7-change__h2 {
+  font-size: clamp(2.5rem, 4.5vw, 4rem);
+  line-height: 1.02;
+  color: var(--pa-ink);
+  margin-bottom: 1rem;
+}
+
+.pa-v7-change__lead {
+  font-size: 1.0625rem;
+  color: var(--pa-ink);
+  opacity: 0.85;
+  line-height: 1.55;
+}
+
+.pa-v7-change__plates-system {
+  grid-column: 1 / 13;
+  display: grid;
+  grid-template-columns: 1fr 340px 1fr;
+  column-gap: 2rem;
+  align-items: center;
+}
+
+.pa-v7-change__plate {
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(24, 26, 22, 0.12);
+}
+
+.pa-v7-change__plate--earlier {
+  height: 380px;
+  margin-top: -2rem;
+}
+
+.pa-v7-change__plate--current {
+  height: 380px;
+  margin-top: 2rem;
+}
+
+.pa-v7-change__plate-meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(to top, rgba(238, 236, 227, 0.95), transparent);
+  color: var(--pa-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pa-v7-change__measurement-line {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border-left: 2px solid var(--pa-rule-paper);
+  padding-left: 1.25rem;
+}
+
+.pa-v7-change__delta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pa-v7-change__delta-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--pa-ink);
+}
+
+.pa-v7-change__delta-values {
+  font-size: 0.75rem;
+  color: var(--pa-stone);
+  display: flex;
+  gap: 8px;
+}
+
+.pa-v7-change__delta-note {
+  font-size: 0.75rem;
+  color: var(--pa-ink);
+  opacity: 0.75;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-chapter-change {
+    padding: 3rem 0;
+  }
+
+  .pa-v7-change__plates-system {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .pa-v7-change__plate--earlier,
+  .pa-v7-change__plate--current {
+    width: 100%;
+    height: 240px;
+    margin-top: 0;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHAPTER 06: Inspectability and Entry
+   Landscape handoff A08 on paper. 4 verbs continuous path.
+   Secondary links: Trust and Methodology.
+   Final CTA on dark field with cropped return of A01.
+   Footer 72svh max.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-chapter-inspectability {
+  position: relative;
+  width: 100%;
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  padding-top: 4rem;
+}
+
+.pa-v7-inspectability__container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin);
+}
+
+.pa-v7-inspectability__handoff-plate {
+  width: 100%;
+  height: 48svh;
+  min-height: 320px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4rem;
+  box-shadow: 0 16px 40px rgba(24, 26, 22, 0.12);
+}
+
+.pa-v7-inspectability__verbs-path {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: var(--pa-grid-gutter);
+  margin-bottom: 4rem;
+}
+
+.pa-v7-inspectability__verb-item {
+  border-top: 2px solid var(--pa-ink);
+  padding-top: 1rem;
+}
+
+.pa-v7-inspectability__verb-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pa-stone);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.pa-v7-inspectability__verb-title {
+  font-family: var(--pa-font-serif);
+  font-size: 1.25rem;
+  color: var(--pa-ink);
+  margin-bottom: 0.5rem;
+}
+
+.pa-v7-inspectability__verb-desc {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--pa-ink);
+  opacity: 0.8;
+}
+
+.pa-v7-inspectability__secondary-links {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.pa-v7-inspectability__secondary-links a {
+  color: var(--pa-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Final Entry Dark Stage with Cropped A01 Return */
+.pa-v7-final-cta-field {
+  background-color: var(--pa-ground);
+  color: var(--pa-bone);
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.pa-v7-final-cta__grid {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--pa-grid-gutter);
+  align-items: center;
+}
+
+.pa-v7-final-cta__copy {
+  grid-column: 1 / 8;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pa-v7-final-cta__h2 {
+  font-size: clamp(3rem, 5.5vw, 5.5rem);
+  line-height: 0.95;
+  color: var(--pa-bone);
+}
+
+.pa-v7-final-cta__lead {
+  font-size: 1.125rem;
+  color: var(--pa-stone);
+  max-width: 520px;
+}
+
+.pa-v7-final-cta__media-crop {
+  grid-column: 9 / 13;
+  height: 380px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Compact Editorial Footer (Max 72svh) */
+.pa-v7-editorial-footer {
+  background-color: var(--pa-surface-deep);
+  color: var(--pa-stone);
+  border-top: 1px solid var(--pa-rule-dark);
+  padding: 3.5rem 0 2.5rem;
+  max-height: 72svh;
+}
+
+.pa-v7-footer__grid {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin);
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.pa-v7-footer__brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pa-v7-footer__brand-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pa-bone);
+}
+
+.pa-v7-footer__col-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--pa-bone);
+  margin-bottom: 0.75rem;
+}
+
+.pa-v7-footer__nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.pa-v7-footer__nav-list a {
+  color: var(--pa-stone);
+  text-decoration: none;
+  transition: color 0.2s var(--pa-ease-micro);
+}
+
+.pa-v7-footer__nav-list a:hover {
+  color: var(--pa-bone);
+}
+
+@media (max-width: 900px) {
+  .pa-v7-inspectability__verbs-path {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .pa-v7-final-cta__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .pa-v7-final-cta__media-crop {
+    width: 100%;
+    height: 240px;
+  }
+
+  .pa-v7-footer__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

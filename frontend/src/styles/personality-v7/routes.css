@@ -1,0 +1,413 @@
+/* ==========================================================================
+   Personality Assessor — V7 Signal Atlas Supporting Routes Styles
+   /how-it-works, /methodology, /career-intelligence, /trust, /privacy, /progress, 404
+   ========================================================================== */
+
+/* ── Generic Route Layout Containers ── */
+.pa-v7-route-stage {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+.pa-v7-route-header {
+  padding: calc(var(--pa-header-height) + 40px) var(--pa-grid-margin) 3rem;
+  max-width: 1540px;
+  margin: 0 auto;
+}
+
+.pa-v7-route-title {
+  font-size: var(--pa-display-route);
+  line-height: var(--pa-display-route-lh);
+  letter-spacing: var(--pa-display-route-tracking);
+  margin-bottom: 1.5rem;
+}
+
+.pa-v7-route-lead {
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  color: var(--pa-stone);
+  max-width: 680px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROUTE: /how-it-works (The Method Sequence)
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-hiw-stage {
+  position: relative;
+  width: 100%;
+}
+
+.pa-v7-hiw-chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  padding: 2rem var(--pa-grid-margin) 6rem;
+  max-width: 1540px;
+  margin: 0 auto;
+}
+
+.pa-v7-hiw-chapter {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  column-gap: 4rem;
+  align-items: center;
+}
+
+.pa-v7-hiw-chapter:nth-child(even) {
+  grid-template-columns: 1.2fr 1fr;
+}
+
+.pa-v7-hiw-chapter__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pa-v7-hiw-chapter__step {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--pa-stone);
+  text-transform: uppercase;
+}
+
+.pa-v7-hiw-chapter__title {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.1;
+  color: var(--pa-bone);
+}
+
+.pa-v7-hiw-chapter__media {
+  height: 480px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Paper FAQ Appendix */
+.pa-v7-hiw-faq {
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  padding: 5rem var(--pa-grid-margin);
+}
+
+.pa-v7-hiw-faq__inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.pa-v7-faq-row {
+  border-bottom: 1px solid var(--pa-rule-paper);
+  padding: 1.5rem 0;
+}
+
+.pa-v7-faq-row__question {
+  font-family: var(--pa-font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--pa-ink);
+  margin-bottom: 0.5rem;
+}
+
+.pa-v7-faq-row__answer {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--pa-ink);
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-hiw-chapter,
+  .pa-v7-hiw-chapter:nth-child(even) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .pa-v7-hiw-chapter__media {
+    width: 100%;
+    height: 260px;
+    order: -1;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROUTE: /methodology (The Reading Room)
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-methodology-stage {
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  min-height: 100vh;
+}
+
+.pa-v7-methodology-header {
+  padding: calc(var(--pa-header-height) + 40px) var(--pa-grid-margin) 2rem;
+  max-width: 1540px;
+  margin: 0 auto;
+}
+
+.pa-v7-methodology__opening-plate {
+  max-width: 1540px;
+  margin: 0 auto 4rem;
+  padding: 0 var(--pa-grid-margin);
+  height: 48svh;
+  min-height: 320px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pa-v7-methodology__content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin) 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.pa-v7-methodology-section {
+  border-top: 1px solid var(--pa-rule-paper);
+  padding-top: 2rem;
+}
+
+.pa-v7-methodology-section__title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--pa-ink);
+}
+
+.pa-v7-methodology-section__text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--pa-ink);
+  opacity: 0.88;
+  margin-bottom: 1.5rem;
+}
+
+.pa-v7-methodology-limits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  background-color: rgba(24, 26, 22, 0.04);
+  padding: 1.5rem;
+  border-radius: 2px;
+}
+
+.pa-v7-methodology-limit-col h4 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pa-ink);
+  margin-bottom: 0.5rem;
+}
+
+.pa-v7-methodology-limit-col p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--pa-ink);
+  opacity: 0.8;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-methodology-limits {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROUTE: /career-intelligence (The Environment Index)
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-career-index-stage {
+  padding: calc(var(--pa-header-height) + 32px) var(--pa-grid-margin) 5rem;
+  max-width: 1540px;
+  margin: 0 auto;
+}
+
+.pa-v7-career-index__layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+  align-items: start;
+}
+
+.pa-v7-career-index__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pa-v7-career-index__btn {
+  background: none;
+  border: 1px solid var(--pa-rule-dark);
+  padding: 1.25rem 1.5rem;
+  border-radius: 2px;
+  text-align: left;
+  color: var(--pa-stone);
+  cursor: pointer;
+  transition: all 0.2s var(--pa-ease-micro);
+}
+
+.pa-v7-career-index__btn:hover,
+.pa-v7-career-index__btn.active {
+  background-color: var(--pa-surface-deep);
+  border-color: var(--pa-bone);
+  color: var(--pa-bone);
+}
+
+.pa-v7-career-index__btn-title {
+  font-family: var(--pa-font-serif);
+  font-size: 1.125rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.pa-v7-career-index__btn-theme {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+}
+
+.pa-v7-career-index__detail-card {
+  background-color: var(--pa-surface-deep);
+  border: 1px solid var(--pa-rule-dark);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pa-v7-career-index__detail-media {
+  height: 420px;
+  position: relative;
+}
+
+.pa-v7-career-index__detail-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-career-index__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-v7-career-index__detail-media {
+    height: 240px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROUTE: /trust & /privacy (The Control Ledger)
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-document-stage {
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  min-height: 100vh;
+  padding-bottom: 6rem;
+}
+
+.pa-v7-document-header {
+  padding: calc(var(--pa-header-height) + 40px) var(--pa-grid-margin) 2.5rem;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.pa-v7-document-body {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin);
+}
+
+.pa-v7-document-rail-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 4rem;
+}
+
+.pa-v7-document-toc {
+  position: sticky;
+  top: calc(var(--pa-header-height) + 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-left: 2px solid var(--pa-rule-paper);
+  padding-left: 1rem;
+}
+
+.pa-v7-document-toc a {
+  color: var(--pa-stone);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.2s var(--pa-ease-micro);
+}
+
+.pa-v7-document-toc a:hover {
+  color: var(--pa-ink);
+}
+
+.pa-v7-document-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.pa-v7-document-section {
+  border-top: 1px solid var(--pa-rule-paper);
+  padding-top: 1.5rem;
+}
+
+.pa-v7-document-section h2 {
+  font-size: 1.5rem;
+  color: var(--pa-ink);
+  margin-bottom: 1rem;
+}
+
+.pa-v7-document-section p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--pa-ink);
+  opacity: 0.88;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-document-rail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-v7-document-toc {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROUTE: /progress & 404
+   ══════════════════════════════════════════════════════════════════════════ */
+.pa-v7-progress-stage {
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  min-height: 100vh;
+  padding: calc(var(--pa-header-height) + 40px) var(--pa-grid-margin) 6rem;
+}
+
+.pa-v7-404-stage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pa-grid-margin);
+  background-color: var(--pa-ground);
+  color: var(--pa-bone);
+}
+
+.pa-v7-404-card {
+  max-width: 540px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}

@@ -1,0 +1,200 @@
+/* ==========================================================================
+   Personality Assessor — V7 Signal Atlas Chrome Styles
+   Dedicated Header Clearance & Architectural Mobile Atlas Dock
+   ========================================================================== */
+
+/* ── Public Master Shell & Route Container ── */
+.pa-v7-shell {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  background-color: var(--pa-ground);
+  color: var(--pa-bone);
+}
+
+@media (max-width: 900px) {
+  .pa-v7-shell {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ── Fixed Architectural Header ── */
+.pa-v7-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--pa-header-height);
+  z-index: var(--pa-z-chrome);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: var(--pa-grid-margin);
+  padding-right: var(--pa-grid-margin);
+  pointer-events: none;
+  transition: color 0.3s var(--pa-ease-default), background-color 0.3s var(--pa-ease-default), border-color 0.3s var(--pa-ease-default);
+  border-bottom: 1px solid transparent;
+}
+
+.pa-v7-header > * {
+  pointer-events: auto;
+}
+
+.pa-v7-header[data-theme="dark"] {
+  color: var(--pa-bone);
+  background-color: transparent;
+}
+
+.pa-v7-header[data-theme="light"] {
+  color: var(--pa-ink);
+  background-color: rgba(238, 236, 227, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom-color: var(--pa-rule-paper);
+}
+
+.pa-v7-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--pa-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+}
+
+.pa-v7-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.pa-v7-header__link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  opacity: 0.75;
+  transition: opacity 0.2s var(--pa-ease-micro);
+  text-decoration: none;
+  color: inherit;
+}
+
+.pa-v7-header__link:hover,
+.pa-v7-header__link[aria-current="page"] {
+  opacity: 1;
+}
+
+.pa-v7-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.pa-v7-header__signin {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.8;
+  transition: opacity 0.2s var(--pa-ease-micro);
+  text-decoration: none;
+  color: inherit;
+}
+
+.pa-v7-header__signin:hover {
+  opacity: 1;
+}
+
+.pa-v7-header__cta {
+  font-size: 0.8125rem;
+  padding: 0.6rem 1.15rem;
+  min-height: 38px;
+}
+
+/* Mobile Header Adjustment */
+@media (max-width: 900px) {
+  .pa-v7-header {
+    height: var(--pa-header-height-mobile);
+    background-color: rgba(12, 14, 12, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--pa-rule-dark);
+  }
+
+  .pa-v7-header[data-theme="light"] {
+    background-color: rgba(238, 236, 227, 0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--pa-rule-paper);
+  }
+
+  .pa-v7-header__nav,
+  .pa-v7-header__actions {
+    display: none;
+  }
+}
+
+/* ── Architectural Mobile Atlas Dock ── */
+.pa-v7-atlas-dock {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(var(--pa-dock-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-color: var(--pa-surface-deep);
+  border-top: 1px solid var(--pa-rule-dark);
+  z-index: var(--pa-z-dock);
+  grid-template-columns: repeat(4, 1fr);
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .pa-v7-atlas-dock {
+    display: grid;
+  }
+}
+
+.pa-v7-dock-target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 48px;
+  color: var(--pa-stone);
+  font-family: var(--pa-font-sans);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s var(--pa-ease-micro);
+}
+
+.pa-v7-dock-target__marker {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 0.2s var(--pa-ease-micro);
+}
+
+.pa-v7-dock-target[aria-current="page"],
+.pa-v7-dock-target.active {
+  color: var(--pa-bone);
+}
+
+.pa-v7-dock-target[aria-current="page"] .pa-v7-dock-target__marker,
+.pa-v7-dock-target.active .pa-v7-dock-target__marker {
+  background-color: var(--pa-bone);
+}
+
+.pa-v7-dock-target svg {
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.75;
+}
