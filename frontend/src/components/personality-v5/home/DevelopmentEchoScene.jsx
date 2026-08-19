@@ -15,7 +15,11 @@ export const DevelopmentEchoScene = () => {
   const comparisons = developmentEcho?.traitsComparison || [];
 
   return (
-    <section className="pa-echo-v5" aria-label="Development Echo">
+    <section
+      className="pa-echo-v5"
+      data-header-theme="light"
+      aria-label="Development Echo"
+    >
       <div className="pa-container">
         <div className="pa-echo-grid">
           {/* Photographic Anchor */}

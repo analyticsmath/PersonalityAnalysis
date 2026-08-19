@@ -3,26 +3,40 @@ import { Link, useLocation } from 'react-router-dom';
 import { getSignupAcquisitionUrl, getLoginUrl } from '../../../utils/personality-v4/navigation';
 import PersonalityMenu from './PersonalityMenu';
 
+/**
+ * PersonalityHeader — V5 Luminance-Aware Global Chrome
+ *
+ * Dynamically detects whether the header is currently positioned over a light
+ * or dark section (via data-header-theme="light" | "dark") and adjusts contrast,
+ * text color, backdrop blur, and CTA button styling.
+ */
 export const PersonalityHeader = ({ theme = 'dark' }) => {
   const location = useLocation();
+  const [currentTheme, setCurrentTheme] = useState(theme);
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const [isSolid, setIsSolid] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
   const menuBtnRef = useRef(null);
 
+  // Sync initial theme when route changes
+  useEffect(() => {
+    setCurrentTheme(theme);
+  }, [location.pathname, theme]);
+
+  // Dynamic luminance detection based on scroll position
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
 
-      // Solid background after initial hero scroll
-      setIsSolid(currentY > 80);
+      // Solid background after initial scroll
+      setIsSolid(currentY > 60);
 
-      // Hide on downscroll (past 200px), show on upscroll
+      // Hide on fast downscroll, reveal on upscroll
       if (currentY > 200) {
-        if (currentY > lastScrollY.current + 8) {
+        if (currentY > lastScrollY.current + 10) {
           setIsScrolledDown(true);
-        } else if (currentY < lastScrollY.current - 8) {
+        } else if (currentY < lastScrollY.current - 10) {
           setIsScrolledDown(false);
         }
       } else {
@@ -30,20 +44,40 @@ export const PersonalityHeader = ({ theme = 'dark' }) => {
       }
 
       lastScrollY.current = currentY;
+
+      // Detect luminance from underlying DOM element at header center
+      if (typeof document !== 'undefined') {
+        const headerY = 40;
+        const headerX = window.innerWidth / 2;
+        const elements = document.elementsFromPoint ? document.elementsFromPoint(headerX, headerY) : [];
+        for (const el of elements) {
+          const themedAncestor = el.closest ? el.closest('[data-header-theme]') : null;
+          if (themedAncestor) {
+            const detectedTheme = themedAncestor.getAttribute('data-header-theme');
+            if (detectedTheme && (detectedTheme === 'light' || detectedTheme === 'dark')) {
+              setCurrentTheme(detectedTheme);
+              break;
+            }
+          }
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    // Initial check
+    handleScroll();
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isLight = theme === 'light';
+  const isLight = currentTheme === 'light';
 
   return (
     <>
       <header
         className={`pa-header ${isScrolledDown ? 'pa-header--scrolled-down' : ''} ${
           isSolid ? 'pa-header--solid' : ''
-        } ${isLight ? 'pa-header--light' : ''}`}
+        } ${isLight ? 'pa-header--light' : 'pa-header--dark'}`}
         role="banner"
       >
         <div className="pa-header__inner">

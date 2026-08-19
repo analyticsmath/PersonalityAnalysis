@@ -8,9 +8,9 @@ import useCinematicScene from '../motion/useCinematicScene';
 /**
  * Scene 02 — Evidence Canvas (V5)
  *
- * Replaces card documents with one sparse photographic evidence canvas:
- * - A02 backdrop.
- * - Sparse typographic evidence anchors revealed sequentially.
+ * Structurally Active Photographic Evidence Canvas:
+ * - A02 acts as an active spatial ground with continuous parallax scale and crop shifts.
+ * - Sparse typographic evidence anchors revealed sequentially across scroll.
  * - Minimalist accessible radio options on dark ground.
  * - Single psychometric data mark responding to interaction.
  */
@@ -18,6 +18,7 @@ export const EvidenceCanvasScene = () => {
   const { evidenceSignal } = PUBLIC_CONTENT.home;
   const [selectedOption, setSelectedOption] = useState(null);
 
+  const backdropRef = useRef(null);
   const anchorListRef = useRef(null);
   const promptRef = useRef(null);
 
@@ -36,14 +37,32 @@ export const EvidenceCanvasScene = () => {
         },
       });
 
-      // Reveal sparse evidence anchors one by one
+      // Structurally active photographic parallax and scale breathing
+      tl.fromTo(
+        backdropRef.current,
+        { scale: 1.0, yPercent: 0 },
+        { scale: 1.10, yPercent: -4, ease: 'none' },
+        0
+      );
+
+      // Reveal sparse evidence anchors one by one across scroll
       anchors.forEach((anchor, i) => {
-        tl.to(anchor, { opacity: 1, y: 0, duration: 0.3 }, i * 0.2);
+        tl.fromTo(
+          anchor,
+          { opacity: 0.25, x: -20 },
+          { opacity: 1, x: 0, duration: 0.35 },
+          i * 0.22
+        );
       });
 
-      // Bring focus to prompt
+      // Bring focus and prominence to prompt
       if (promptRef.current) {
-        tl.fromTo(promptRef.current, { opacity: 0.6, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, 0.4);
+        tl.fromTo(
+          promptRef.current,
+          { opacity: 0.4, y: 30 },
+          { opacity: 1, y: 0, duration: 0.45 },
+          0.35
+        );
       }
     });
   }, []);
@@ -60,10 +79,15 @@ export const EvidenceCanvasScene = () => {
   const markerLeft = selectedOption !== null ? `${markerPositions[selectedOption]}%` : '50%';
 
   return (
-    <section ref={containerRef} className="pa-evidence-v5" aria-label="Evidence to Signal">
+    <section
+      ref={containerRef}
+      className="pa-evidence-v5"
+      data-header-theme="dark"
+      aria-label="Evidence to Signal"
+    >
       <div className="pa-evidence-v5__viewport">
-        {/* Background Photographic Actor */}
-        <div className="pa-evidence-v5__backdrop">
+        {/* Structurally Active Background Photographic Actor */}
+        <div ref={backdropRef} className="pa-evidence-v5__backdrop">
           <ResponsivePicture
             asset={MEDIA_ASSETS.a02}
             alt={MEDIA_ASSETS.a02.alt}

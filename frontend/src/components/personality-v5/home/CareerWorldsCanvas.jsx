@@ -58,7 +58,12 @@ export const CareerWorldsCanvas = () => {
   }, [activeIdx, isTransitioning, worlds.length]);
 
   return (
-    <section ref={containerRef} className="pa-career-canvas-v5" aria-label="Career Worlds Theatre">
+    <section
+      ref={containerRef}
+      className="pa-career-canvas-v5"
+      data-header-theme="dark"
+      aria-label="Career Worlds Theatre"
+    >
       <div className="pa-career-canvas-v5__viewport">
         {/* Core Stage Image Plane */}
         <div className="pa-career-canvas-stage">

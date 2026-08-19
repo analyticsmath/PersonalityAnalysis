@@ -56,7 +56,12 @@ export const IndependentReadingsCanvas = () => {
   const currentModel = models[activeTab] || models[0] || {};
 
   return (
-    <section ref={containerRef} className="pa-readings-v5" aria-label="Four Independent Readings">
+    <section
+      ref={containerRef}
+      className="pa-readings-v5"
+      data-header-theme="light"
+      aria-label="Four Independent Readings"
+    >
       <div className="pa-readings-v5__viewport">
         {/* Collage Photographic Plane */}
         <div ref={collageRef} className="pa-readings-v5__collage">

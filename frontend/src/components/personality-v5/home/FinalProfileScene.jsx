@@ -15,7 +15,11 @@ export const FinalProfileScene = () => {
   const config = finalProfile || closingCta || {};
 
   return (
-    <section className="pa-final-profile-v5" aria-label="Begin Assessment">
+    <section
+      className="pa-final-profile-v5"
+      data-header-theme="dark"
+      aria-label="Begin Assessment"
+    >
       <div className="pa-container">
         {/* A01 Callback Fragment */}
         <div className="pa-final-callback-plane">

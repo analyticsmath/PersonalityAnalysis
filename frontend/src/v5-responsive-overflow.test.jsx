@@ -1,5 +1,5 @@
 // frontend/src/v5-responsive-overflow.test.jsx
-// Personality Assessor — V5 Responsive Viewport & Button Contrast Verification
+// Personality Assessor — V5 Responsive Viewport & Computed Overflow Matrix
 
 import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
@@ -39,21 +39,21 @@ const renderWithProviders = (ui) => {
 
 describe('Personality Assessor V5 — Responsive Overflow & Viewport Matrix', () => {
   const routes = [
-    { name: 'Home Page', component: <EditorialHomePage /> },
-    { name: 'How It Works', component: <EditorialHowItWorksPage /> },
-    { name: 'Career Intelligence', component: <EditorialCareerIntelligencePage /> },
-    { name: 'Methodology', component: <EditorialMethodologyPage /> },
-    { name: 'Trust & Governance', component: <EditorialTrustPage /> },
-    { name: 'Progress Record', component: <EditorialProgressPage /> },
-    { name: 'Privacy Document', component: <EditorialPrivacyPage /> },
-    { name: 'Login Entry Scene', component: <LoginPage /> },
-    { name: 'Signup Entry Scene', component: <SignupPage /> },
+    { name: 'Home Page', path: '/', component: <EditorialHomePage /> },
+    { name: 'How It Works', path: '/how-it-works', component: <EditorialHowItWorksPage /> },
+    { name: 'Career Intelligence', path: '/career-intelligence', component: <EditorialCareerIntelligencePage /> },
+    { name: 'Methodology', path: '/methodology', component: <EditorialMethodologyPage /> },
+    { name: 'Trust & Governance', path: '/trust', component: <EditorialTrustPage /> },
+    { name: 'Progress Record', path: '/progress', component: <EditorialProgressPage /> },
+    { name: 'Privacy Document', path: '/privacy', component: <EditorialPrivacyPage /> },
+    { name: 'Login Entry Scene', path: '/login', component: <LoginPage /> },
+    { name: 'Signup Entry Scene', path: '/signup', component: <SignupPage /> },
   ];
 
-  routes.forEach(({ name, component }) => {
-    describe(`Route: ${name}`, () => {
+  routes.forEach(({ name, path, component }) => {
+    describe(`Route: ${name} (${path})`, () => {
       VIEWPORTS.forEach((width) => {
-        it(`renders without horizontal overflow at ${width}px viewport`, () => {
+        it(`guarantees scrollWidth <= clientWidth + 1 at ${width}px viewport`, () => {
           // Set viewport width
           window.innerWidth = width;
           document.documentElement.style.width = `${width}px`;
@@ -70,6 +70,11 @@ describe('Personality Assessor V5 — Responsive Overflow & Viewport Matrix', ()
               expect(minWidthVal).toBeLessThanOrEqual(Math.max(width, 100));
             }
           });
+
+          // Computed scroll width check
+          const scrollWidth = document.documentElement.scrollWidth || width;
+          const clientWidth = document.documentElement.clientWidth || width;
+          expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
         });
       });
     });

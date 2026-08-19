@@ -55,6 +55,28 @@
   }
 }
 
+@media (max-width: 900px) {
+  .pa-auth-entry-scene {
+    flex-direction: column !important;
+    min-height: 100svh;
+  }
+
+  .pa-auth-photo-stage {
+    min-height: 38svh !important;
+    height: 38svh !important;
+    padding: 24px var(--pa-gutter-mobile) !important;
+    flex: none !important;
+  }
+
+  .pa-auth-form-stage {
+    min-height: auto !important;
+    padding: 36px var(--pa-gutter-mobile) 48px !important;
+    border-left: none !important;
+    border-top: 1px solid var(--pa-line-light);
+    flex: none !important;
+  }
+}
+
 @media (max-width: 640px) {
   /* ── Strict Mobile Viewport Isolation (Zero Overflow) ── */
   html, body, #root, .app-root-container, .pa-public-v4, .pa-auth-v4 {

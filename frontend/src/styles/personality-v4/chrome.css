@@ -24,9 +24,17 @@
 }
 
 .pa-header--solid {
-  background-color: rgba(5, 5, 6, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.pa-header--dark {
+  color: var(--pa-white);
+}
+
+.pa-header--dark.pa-header--solid {
+  background-color: rgba(7, 8, 7, 0.88);
+  border-bottom: 1px solid var(--pa-line-dark);
 }
 
 .pa-header--light {
@@ -34,8 +42,8 @@
 }
 
 .pa-header--light.pa-header--solid {
-  background-color: rgba(247, 248, 250, 0.9);
-  border-bottom: 1px solid var(--pa-cool-200);
+  background-color: rgba(244, 243, 238, 0.92);
+  border-bottom: 1px solid var(--pa-line-light);
 }
 
 .pa-header__inner {

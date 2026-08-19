@@ -17,7 +17,11 @@ export const InspectableTrustScene = () => {
   const stages = trustScene?.stages || [];
 
   return (
-    <section className="pa-trust-v5" aria-label="Trust & Governance">
+    <section
+      className="pa-trust-v5"
+      data-header-theme="dark"
+      aria-label="Trust & Governance"
+    >
       <div className="pa-container">
         {/* Broad Environmental Photographic Plane */}
         <div className="pa-trust-handoff-plane">
