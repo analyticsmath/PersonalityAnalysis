@@ -19,7 +19,6 @@ export const AuthSplitLayout = ({
 }) => {
   return (
     <div className="pa-v7-auth-stage pa-auth-v4">
-      {/* 58vw Photographic Field */}
       <div className="pa-v7-auth-media-pane">
         <MediaPlane
           asset={asset}
@@ -27,25 +26,21 @@ export const AuthSplitLayout = ({
           alt=""
           priority={true}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(12,14,12,0.85) 0%, rgba(12,14,12,0.2) 60%, rgba(12,14,12,0.4) 100%)' }} />
-
-        {/* Brand / Back Affordance */}
-        <div style={{ position: 'absolute', top: '2rem', left: '2.5rem', zIndex: 3 }}>
+        <div className="pa-v7-auth-media-pane__brand">
           <Link
             to="/"
             style={{
-              color: 'var(--pa-bone)',
+              color: 'var(--pa-ink)',
               fontSize: '0.8125rem',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
+              fontWeight: 600,
+              letterSpacing: '.02em',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
               textDecoration: 'none',
             }}
           >
-            ← PERSONALITY ASSESSOR
+            ← Personality Assessor
           </Link>
         </div>
 
@@ -55,7 +50,6 @@ export const AuthSplitLayout = ({
         </div>
       </div>
 
-      {/* 42vw Flush Paper Ground Form Volume */}
       <div className="pa-v7-auth-form-pane">
         <div className="pa-v7-auth-form-pane__inner">
           <h1>{title}</h1>

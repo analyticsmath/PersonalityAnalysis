@@ -46,14 +46,14 @@
 
 .pa-v7-header[data-theme="dark"] {
   color: var(--pa-bone);
-  background-color: rgba(12, 14, 12, 0.94);
-  backdrop-filter: blur(12px);
+  background-color: transparent;
+  backdrop-filter: none;
   border-bottom-color: var(--pa-rule-dark);
 }
 
 .pa-v7-header[data-theme="light"] {
   color: var(--pa-ink);
-  background-color: rgba(241, 238, 230, 0.92);
+  background-color: transparent;
   backdrop-filter: none;
   border-bottom-color: var(--pa-rule-paper);
 }
@@ -71,8 +71,8 @@
   font-family: var(--pa-font-sans);
   font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-transform: none;
   text-decoration: none;
   color: inherit;
 }
@@ -228,3 +228,10 @@
   height: 19px;
   stroke-width: 1.75;
 }
+
+html[data-public-field='dark'] .pa-v7-header { color: var(--pa-bone); border-color: rgba(245,242,234,.3); }
+html[data-public-field='dark'] .pa-v7-header a { color: var(--pa-bone); }
+.pa-terminal-footer { position: relative; display: flex; min-height: 78svh; padding: 8svh var(--pa-grid-margin) 24px; overflow: hidden; flex-direction: column; justify-content: space-between; background: #171914; color: var(--pa-bone); }
+.pa-terminal-footer__upper { display: grid; grid-template-columns: 1.8fr repeat(3, 1fr); gap: 36px; max-width: 1420px; width: 100%; }
+.pa-terminal-footer__upper p { max-width: 30ch; margin: 0; color: #c8c8be; font-size: .95rem; line-height: 1.5; }.pa-terminal-footer nav { display: grid; align-content: start; gap: 11px; }.pa-terminal-footer a { color: var(--pa-bone); font-size: .84rem; text-decoration: none; }.pa-terminal-footer a:hover, .pa-terminal-footer a:focus-visible { text-decoration: underline; }.pa-terminal-footer__wordmark { margin: auto -2.5vw -1vw; white-space: nowrap; color: #f5f2ea; font: 600 clamp(3.8rem, 11vw, 12rem)/.78 var(--pa-font-sans); letter-spacing: -.075em; }.pa-terminal-footer__bottom { display: flex; justify-content: space-between; gap: 16px; padding-top: 18px; border-top: 1px solid rgba(245,242,234,.25); color: #b7b8ae; font-size: .75rem; }
+@media (max-width: 900px) { .pa-terminal-footer { min-height: 0; padding: 64px 20px 24px; }.pa-terminal-footer__upper { grid-template-columns: 1fr 1fr; gap: 32px 20px; }.pa-terminal-footer__upper p { grid-column: span 2; }.pa-terminal-footer__wordmark { margin: 72px -12px 38px; font-size: clamp(2.55rem, 11vw, 4.4rem); }.pa-terminal-footer__bottom { align-items: flex-start; flex-direction: column; } }

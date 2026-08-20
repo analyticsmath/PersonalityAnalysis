@@ -9,7 +9,7 @@ export const V7Header = ({ headerTheme = 'dark' }) => {
   return (
     <header className="pa-v7-header" data-theme={headerTheme} role="banner">
       <Link to="/" className="pa-v7-header__brand" aria-label="Personality Assessor Home">
-        <span>PERSONALITY ASSESSOR</span>
+        <span>Personality Assessor</span>
       </Link>
 
       <nav className="pa-v7-header__nav" aria-label="Public site navigation">

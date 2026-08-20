@@ -6,7 +6,7 @@ import HowItWorksSequence from '../../components/personality-v7/routes/HowItWork
 export const EditorialHowItWorksPage = () => {
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="dark" withFooter={true}>
+      <PublicLayout headerTheme="light" withFooter={true}>
         <HowItWorksSequence />
       </PublicLayout>
     </SmoothScrollProvider>

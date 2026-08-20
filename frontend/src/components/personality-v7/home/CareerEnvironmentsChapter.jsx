@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useCallback, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import MediaPlane from '../motion/MediaPlane';
@@ -7,105 +7,27 @@ import { PUBLIC_CONTENT } from '../../../content/personality-v7/publicContent';
 import useCinematicScene from '../motion/useCinematicScene';
 
 gsap.registerPlugin(ScrollTrigger);
+const assets = [MEDIA_ASSETS_V7.a03, MEDIA_ASSETS_V7.a04, MEDIA_ASSETS_V7.a05, MEDIA_ASSETS_V7.a06, MEDIA_ASSETS_V7.a02];
 
 export const CareerEnvironmentsChapter = () => {
-  const containerRef = useRef(null);
-  const stickyRef = useRef(null);
-  const [activeWorldIndex, setActiveWorldIndex] = useState(0);
-
+  const [selected, setSelected] = useState(0);
   const worlds = PUBLIC_CONTENT.home.careerWorlds.worlds;
-  const activeWorld = worlds[activeWorldIndex] || worlds[0];
-
-  const worldAssets = [
-    MEDIA_ASSETS_V7.a03, // Systems
-    MEDIA_ASSETS_V7.a04, // Product
-    MEDIA_ASSETS_V7.a05, // Coaching
-    MEDIA_ASSETS_V7.a06, // Direction
-    MEDIA_ASSETS_V7.a02, // Operations
-  ];
-
-  useCinematicScene(({ isDesktop }) => {
-    if (!isDesktop || !containerRef.current || !stickyRef.current) return;
-
-    ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: 'top top',
-      end: 'bottom bottom',
-      pin: stickyRef.current,
-      pinSpacing: false,
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const count = worlds.length;
-        const nextIdx = Math.min(Math.floor(progress * count), count - 1);
-        setActiveWorldIndex(nextIdx);
-      },
-    });
+  const sceneRef = useCinematicScene(({ scope }) => {
+    const layers = gsap.utils.toArray('.pa-role-field__image', scope);
+    gsap.set(layers, { autoAlpha: 0, xPercent: 12, scale: 1.04, pointerEvents: 'none' });
+    gsap.set(layers[0], { autoAlpha: 1, xPercent: 0, scale: 1, pointerEvents: 'auto' });
+    const timeline = gsap.timeline({ defaults: { ease: 'none' } });
+    layers.slice(1).forEach((layer, index) => timeline.to(layer, { autoAlpha: 1, xPercent: 0, scale: 1, pointerEvents: 'auto', duration: .32 }, index + .7).to(layers[index], { autoAlpha: .25, xPercent: -5, duration: .32 }, index + .88));
+    ScrollTrigger.create({ trigger: scope, start: 'top top', end: 'bottom bottom', pin: scope.querySelector('.pa-role-field__stage'), pinSpacing: false, scrub: true, animation: timeline, onEnter: () => { document.documentElement.dataset.publicField = 'dark'; }, onLeaveBack: () => { delete document.documentElement.dataset.publicField; } });
+    return () => { delete document.documentElement.dataset.publicField; };
   }, []);
-
-  return (
-    <section
-      ref={containerRef}
-      className="pa-v7-chapter-careers"
-      aria-label="Chapter 04 — Career Environments"
-    >
-      <div ref={stickyRef} className="pa-v7-chapter-careers__sticky">
-        <div className="pa-v7-careers__atlas-stage">
-          {/* Left Edge: 01 / 05 Counter & Environment Title */}
-          <div className="pa-v7-careers__left-edge">
-            <div className="pa-v7-careers__counter">
-              {activeWorld.index}
-            </div>
-            <h2 className="pa-v7-careers__world-name">
-              {activeWorld.name}
-            </h2>
-            <div className="pa-v7-careers__theme-tag">
-              {activeWorld.theme}
-            </div>
-          </div>
-
-          {/* Central Media Field: 72vw max, 66svh with Lateral Plane Pass */}
-          <div className="pa-v7-careers__central-media-field">
-            {worlds.map((w, idx) => (
-              <div
-                key={w.id}
-                className="pa-v7-careers__world-layer"
-                style={{
-                  opacity: activeWorldIndex === idx ? 1 : 0,
-                  transform: activeWorldIndex === idx ? 'translateX(0) scale(1)' : 'translateX(7%) scale(0.98)',
-                  transition: 'opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
-                  zIndex: activeWorldIndex === idx ? 2 : 1,
-                }}
-              >
-                <MediaPlane
-                  asset={worldAssets[idx]}
-                  priority={idx === 0}
-                  alt={`Career environment: ${w.name}`}
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Right Edge: 3 Concise Evidence Lines */}
-          <div className="pa-v7-careers__right-edge">
-            <div className="pa-v7-careers__evidence-line">
-              <span className="pa-v7-careers__evidence-label">Fitting Condition</span>
-              <p className="pa-v7-careers__evidence-text">{activeWorld.whyItFits}</p>
-            </div>
-
-            <div className="pa-v7-careers__evidence-line">
-              <span className="pa-v7-careers__evidence-label">Stretch Tension</span>
-              <p className="pa-v7-careers__evidence-text">{activeWorld.whereItStretches}</p>
-            </div>
-
-            <div className="pa-v7-careers__evidence-line">
-              <span className="pa-v7-careers__evidence-label">Development Priority</span>
-              <p className="pa-v7-careers__evidence-text">{activeWorld.whatToStrengthen}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  const selectWorld = useCallback((index) => {
+    setSelected(index);
+    const layers = sceneRef.current?.querySelectorAll('.pa-role-field__image');
+    if (!layers) return;
+    gsap.to(layers, { autoAlpha: .18, xPercent: -4, duration: .22, overwrite: true });
+    gsap.to(layers[index], { autoAlpha: 1, xPercent: 0, scale: 1, duration: .32, pointerEvents: 'auto', overwrite: true });
+  }, [sceneRef]);
+  return <section ref={sceneRef} className="pa-role-field" aria-labelledby="role-field-title"><div className="pa-role-field__stage"><div className="pa-role-field__index"><h2 id="role-field-title">Career environments make a profile legible.</h2><p>These are examples of conditions a person may want to investigate, not a live match result.</p>{worlds.map((world, index) => <button key={world.id} className={selected === index ? 'is-selected' : ''} onClick={() => selectWorld(index)} onFocus={() => selectWorld(index)}><strong>{world.name}</strong><span>{world.theme}</span></button>)}</div><div className="pa-role-field__media">{worlds.map((world, index) => <figure className={`pa-role-field__image ${selected === index ? 'is-mobile-selected' : ''}`} key={world.id}><MediaPlane asset={assets[index]} priority={index === 0} alt={`Career environment: ${world.name}`} /><figcaption>{world.statement}</figcaption></figure>)}</div></div></section>;
 };
-
 export default CareerEnvironmentsChapter;

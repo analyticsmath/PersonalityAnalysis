@@ -184,15 +184,10 @@ export const PUBLIC_CONTENT = {
       title: 'A profile should change when the evidence changes.',
       body: 'Add a new role, project or assessment later. See what shifted, what stayed stable and why.',
       earlierLabel: 'Earlier baseline',
-      earlierDate: 'Recorded Oct 2024',
+      earlierDate: 'Earlier context',
       currentLabel: 'Current state',
-      currentDate: 'Updated Aug 2026',
-      traitsComparison: [
-        { label: 'Investigative Inquiry', earlier: 76, current: 88, status: 'Expanded through R&D lead role' },
-        { label: 'Systematic Conscientiousness', earlier: 84, current: 84, status: 'Stable core methodology' },
-        { label: 'Strategic Agency', earlier: 54, current: 66, status: 'Developed through cross-team ownership' },
-        { label: 'Emotional Steadiness', earlier: 72, current: 74, status: 'Stable baseline under pressure' },
-      ],
+      currentDate: 'Revisited context',
+      traitsComparison: [],
     },
     trustScene: {
       title: 'Inspect the method, not just the result.',
@@ -274,7 +269,7 @@ export const PUBLIC_CONTENT = {
       },
       {
         q: 'Is this a personality type quiz like MBTI?',
-        a: 'No. Personality Assessor uses dimensional psychometrics (Big Five) and established vocational science (Holland RIASEC, O*NET). You receive continuous percentile scores along dimensional spectrums, not a fixed four-letter typology.',
+        a: 'No. Personality Assessor uses dimensional psychometrics (Big Five) and established vocational science (Holland RIASEC and O*NET). It keeps those frameworks distinct rather than presenting a fixed four-letter type.',
       },
       {
         q: 'Can I update my profile as my role changes?',
@@ -328,7 +323,7 @@ export const PUBLIC_CONTENT = {
       {
         stage: '02',
         title: 'Structured Psychometrics',
-        description: 'Mathematical scoring algorithms calculate percentiles across Big Five, RIASEC, and O*NET models independently.',
+        description: 'The product keeps its Big Five, RIASEC and O*NET readings separate so their different purposes remain inspectable.',
         type: 'Verified Scoring Engine',
       },
       {

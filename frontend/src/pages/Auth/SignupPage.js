@@ -230,7 +230,7 @@ export const SignupPage = () => {
       {GOOGLE_CLIENT_ID && (
         <div style={{ marginTop: '1.25rem' }}>
           <div style={{ textAlign: 'center', margin: '1rem 0', position: 'relative' }}>
-            <span style={{ background: 'var(--pa-paper)', padding: '0 0.75rem', fontSize: '0.75rem', color: 'var(--pa-stone)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <span style={{ background: 'var(--pa-paper)', padding: '0 0.75rem', fontSize: '0.75rem', color: 'var(--pa-stone)' }}>
               or continue with
             </span>
           </div>

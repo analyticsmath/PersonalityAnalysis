@@ -8,7 +8,7 @@
   min-height: 100vh;
   width: 100%;
   display: grid;
-  grid-template-columns: 58vw 42vw;
+  grid-template-columns: 56vw 44vw;
   background-color: var(--pa-paper);
 }
 
@@ -17,7 +17,7 @@
   position: relative;
   height: 100vh;
   overflow: hidden;
-  background-color: var(--pa-ground);
+  background-color: var(--pa-paper);
 }
 
 .pa-v7-auth-media-pane__caption {
@@ -26,12 +26,16 @@
   left: 3rem;
   right: 3rem;
   z-index: 3;
-  color: var(--pa-bone);
+  color: var(--pa-ink);
   font-family: var(--pa-font-serif);
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 1.25;
-  max-width: 480px;
+  max-width: 360px;
+  padding-top: .55rem;
+  border-top: 1px solid currentColor;
 }
+
+.pa-v7-auth-media-pane__brand { position: absolute; top: 2rem; left: 2.5rem; z-index: 3; }
 
 /* 42vw Flush Paper Ground Form Volume */
 .pa-v7-auth-form-pane {
@@ -80,7 +84,7 @@
 
 .pa-v7-auth-input {
   width: 100%;
-  height: 44px;
+  height: 48px;
   padding: 0 0.875rem;
   border: 1px solid var(--pa-rule-paper);
   background: #fff;
@@ -108,6 +112,8 @@
   background: none;
   border: none;
   color: var(--pa-stone);
+  min-width: 44px;
+  min-height: 44px;
   font-size: 0.75rem;
   cursor: pointer;
   font-weight: 600;
@@ -142,19 +148,16 @@
 
   .pa-v7-auth-media-pane {
     width: 100%;
-    height: 40dvh;
-    min-height: 240px;
+    height: 27dvh;
+    min-height: 180px;
   }
 
   .pa-v7-auth-media-pane__caption {
-    bottom: 1.5rem;
-    left: 1.5rem;
-    right: 1.5rem;
-    font-size: 1.125rem;
+    display: none;
   }
 
   .pa-v7-auth-form-pane {
-    padding: 2.5rem 1.5rem 4rem;
+    padding: 2rem 1.25rem 3rem;
     min-height: auto;
   }
 }
