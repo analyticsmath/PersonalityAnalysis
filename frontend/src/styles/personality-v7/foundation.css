@@ -1,35 +1,44 @@
 /* ==========================================================================
-   Personality Assessor — V7 Signal Atlas Foundation Styles
-   Accessible Semantics, Strict Typographic Scale & Button Contracts
+   Personality Assessor — Evidence in Context Foundation Styles
+   Accessible Semantics, Typographic Hierarchy & Action Systems
    ========================================================================== */
 
 /* Base Root & Global Page Structure */
 .pa-v7-root,
 .pa-public-v4,
 .pa-auth-v4 {
-  background-color: var(--pa-ground);
-  color: var(--pa-bone);
-  font-family: var(--pa-font-sans);
-  font-size: var(--pa-body-size-desktop);
+  background-color: var(--pa-mineral);
+  color: var(--pa-carbon);
+  font-family: var(--pa-font-functional);
+  font-size: var(--pa-body);
   line-height: var(--pa-body-lh);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   width: 100%;
   position: relative;
+  box-sizing: border-box;
 }
 
-@media (max-width: 640px) {
-  .pa-v7-root,
-  .pa-public-v4,
-  .pa-auth-v4 {
-    font-size: var(--pa-body-size-mobile);
-  }
+.pa-v7-root *,
+.pa-public-v4 *,
+.pa-auth-v4 * {
+  box-sizing: border-box;
 }
 
-/* Accessibility: Focus Visible */
-:focus-visible {
-  outline: 2px solid currentColor;
+/* Accessibility: Focus Visible Treatments (Section 34) */
+.pa-v7-root :focus-visible,
+.pa-public-v4 :focus-visible,
+.pa-auth-v4 :focus-visible {
+  outline: 2px solid var(--pa-oxblood);
+  outline-offset: 3px;
+}
+
+/* Dark surface focus treatment */
+.pa-theme--dark :focus-visible,
+[data-theme='dark'] :focus-visible,
+.pa-v7-dark-surface :focus-visible {
+  outline: 2px solid var(--pa-mineral);
   outline-offset: 3px;
 }
 
@@ -39,11 +48,12 @@
   top: -100px;
   left: 1.5rem;
   z-index: 1000;
-  background: var(--pa-bone);
-  color: var(--pa-ground);
+  background: var(--pa-carbon);
+  color: var(--pa-mineral);
   padding: 0.75rem 1.25rem;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.875rem;
+  font-family: var(--pa-font-functional);
   transition: top 0.2s ease;
   border-radius: 2px;
   text-decoration: none;
@@ -53,24 +63,20 @@
   top: 1rem;
 }
 
-/* ── Typography Elements ── */
+/* ── Typography Hierarchy ── */
 .pa-v7-root h1,
 .pa-v7-root h2,
 .pa-v7-root h3,
 .pa-v7-root h4,
-.pa-v7-root h5,
-.pa-v7-root h6,
 .pa-public-v4 h1,
 .pa-public-v4 h2,
 .pa-public-v4 h3,
-.pa-public-v4 h4,
-.pa-public-v4 h5,
-.pa-public-v4 h6 {
-  font-family: var(--pa-font-serif);
+.pa-public-v4 h4 {
+  font-family: var(--pa-font-editorial);
   font-weight: 400;
   margin: 0;
   color: inherit;
-  text-wrap: balance;
+  letter-spacing: -0.02em;
 }
 
 .pa-v7-root p,
@@ -80,142 +86,122 @@
   line-height: var(--pa-body-lh);
 }
 
-.pa-v7-eyebrow {
-  display: block;
-  font-family: var(--pa-font-sans);
-  font-size: var(--pa-meta-size);
-  font-weight: 600;
-  letter-spacing: var(--pa-meta-tracking);
-  text-transform: uppercase;
-  color: var(--pa-stone);
-  margin-bottom: 0.75rem;
-}
-
-/* ── 12-Column Grid Container ── */
+/* ── 12-Column Conceptual Grid Container (Section 8) ── */
 .pa-v7-grid {
   display: grid;
   grid-template-columns: repeat(var(--pa-grid-cols), 1fr);
-  column-gap: var(--pa-grid-gutter);
+  column-gap: var(--pa-grid-gap);
   padding-left: var(--pa-grid-margin);
   padding-right: var(--pa-grid-margin);
   width: 100%;
-  max-width: 1720px;
+  max-width: 1560px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 }
 
-/* ── Button Contracts ── */
-.pa-v7-btn,
-.pa-public-v4 .pa-btn,
-.pa-v6-btn {
+/* ── Action Buttons & Links (Section 11) ── */
+.pa-btn-primary,
+.pa-v7-btn--primary,
+.pa-btn-primary-light {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-family: var(--pa-font-sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  padding: 0.85rem 1.6rem;
+  font-family: var(--pa-font-functional);
+  font-size: 0.9375rem;
+  font-weight: 500;
   min-height: 48px;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: background-color 0.2s var(--pa-ease-micro),
-              color 0.2s var(--pa-ease-micro),
-              border-color 0.2s var(--pa-ease-micro),
-              transform 0.15s var(--pa-ease-micro);
-  border: 1px solid transparent;
-  white-space: nowrap;
+  padding: 0 22px;
+  border-radius: var(--pa-radius-control);
+  background-color: var(--pa-oxblood);
+  color: var(--pa-mineral) !important;
+  border: 1px solid var(--pa-oxblood);
   text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
   line-height: 1;
 }
 
-.pa-v7-btn:active,
-.pa-public-v4 .pa-btn:active,
-.pa-v6-btn:active {
-  transform: scale(0.985);
-}
-
-/* Primary Button: Bone on Ground */
-.pa-v7-btn--primary,
-.pa-public-v4 .pa-btn.pa-btn--primary,
-.pa-v6-btn--primary {
-  background-color: var(--pa-bone);
-  color: var(--pa-ground) !important;
-  border-color: var(--pa-bone);
-}
-
+.pa-btn-primary:hover,
 .pa-v7-btn--primary:hover,
-.pa-public-v4 .pa-btn.pa-btn--primary:hover,
-.pa-v6-btn--primary:hover {
-  background-color: #e2e0d8;
-  color: var(--pa-ground) !important;
+.pa-btn-primary-light:hover {
+  background-color: var(--pa-carbon);
+  border-color: var(--pa-carbon);
+  color: var(--pa-mineral) !important;
 }
 
-/* Secondary Button: Subtle Rule Outline on Ground */
-.pa-v7-btn--secondary,
-.pa-public-v4 .pa-btn.pa-btn--secondary,
-.pa-v6-btn--secondary {
-  background-color: transparent;
-  color: var(--pa-bone) !important;
-  border-color: var(--pa-rule-dark);
+.pa-btn-primary-dark,
+.pa-v7-btn--dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--pa-font-functional);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--pa-radius-control);
+  background-color: var(--pa-mineral);
+  color: var(--pa-carbon) !important;
+  border: 1px solid var(--pa-mineral);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  line-height: 1;
 }
 
-.pa-v7-btn--secondary:hover,
-.pa-public-v4 .pa-btn.pa-btn--secondary:hover,
-.pa-v6-btn--secondary:hover {
-  background-color: rgba(251, 250, 244, 0.06);
-  border-color: var(--pa-bone);
+.pa-btn-primary-dark:hover,
+.pa-v7-btn--dark:hover {
+  background-color: var(--pa-secondary-cool);
+  border-color: var(--pa-secondary-cool);
+  color: var(--pa-carbon) !important;
 }
 
-/* Ink Button: Deep Charcoal for Paper Surfaces */
-.pa-v7-btn--ink,
-.pa-public-v4 .pa-btn.pa-btn--inverse,
-.pa-v6-btn--ink {
-  background-color: var(--pa-surface-deep);
-  color: var(--pa-bone) !important;
-  border-color: var(--pa-surface-deep);
+/* Secondary & Text Links */
+.pa-link-text {
+  font-family: var(--pa-font-functional);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: opacity 0.18s ease;
 }
 
-.pa-v7-btn--ink:hover,
-.pa-public-v4 .pa-btn.pa-btn--inverse:hover,
-.pa-v6-btn--ink:hover {
-  background-color: #242823;
-  color: var(--pa-bone) !important;
+.pa-link-text:hover {
+  opacity: 0.75;
 }
 
-/* Outline Ink Button for Paper Surfaces */
-.pa-v7-btn--outline-ink,
-.pa-v6-btn--outline-ink {
-  background-color: transparent;
-  color: var(--pa-ink) !important;
-  border-color: var(--pa-rule-paper);
-}
-
-.pa-v7-btn--outline-ink:hover,
-.pa-v6-btn--outline-ink:hover {
-  background-color: rgba(58, 60, 54, 0.06);
-  border-color: var(--pa-ink);
-}
-
-/* Lenis Scroll Smoothness container classes */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
+/* Square media and composition planes (Section 8) */
+.pa-media-plane,
+.pa-composition-plane {
+  border-radius: var(--pa-radius-media);
   overflow: hidden;
 }
 
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
+/* Surface Contexts */
+.pa-surface-carbon {
+  background-color: var(--pa-carbon);
+  color: var(--pa-mineral);
+}
+
+.pa-surface-mineral {
+  background-color: var(--pa-mineral);
+  color: var(--pa-carbon);
+}
+
+/* Reduced Motion Override (Section 32) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

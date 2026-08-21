@@ -82,8 +82,23 @@ const ALLOWLIST_PATHS = new Set([
   'components/3d/ParticleBackground.js',
   'components/3d/TraitSphere.js',
 
-  // Legacy static assessment page — not on active user path
+  // Product Shell — intentional dark sidebar navigation
+  'styles/product-shell.css',
+
+  // Evidence in Context public dark chapters/tones
+  'styles/personality-v7/chrome.css',
+  'styles/personality-v7/auth.css',
+  'styles/personality-v7/home.css',
+
+  // Archival and legacy pages
   'pages/Legacy/LegacyStaticAssessmentPage.jsx',
+  'pages/PublicSite.css',
+  'styles/editorial/editorial-careers.css',
+  'styles/editorial/editorial-chapters.css',
+  'styles/editorial/editorial-foundation.css',
+  'styles/editorial/tokens.css',
+  'styles/personality-v4/chrome.css',
+  'styles/personality-v6/cinematic-v6.css',
 ]);
 
 // ---------------------------------------------------------------------------

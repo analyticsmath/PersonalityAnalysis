@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -6,21 +6,29 @@ import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { login as loginApi, googleLogin as googleLoginApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 import { getSafeNextUrl } from '../../utils/personality-v4/navigation';
-import AuthSplitLayout from '../../components/personality-v7/auth/AuthSplitLayout';
+import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
 
+  const emailInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+
   const [form, setForm] = useState({ email: '', password: '' });
-  const [showPassword, setShowPassword] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const safeNext = useMemo(() => {
-    const params = typeof window !== 'undefined' && window.URLSearchParams ? new window.URLSearchParams(location.search) : { get: () => null };
+    const params =
+      typeof window !== 'undefined' && window.URLSearchParams
+        ? new window.URLSearchParams(location.search)
+        : { get: () => null };
     return getSafeNextUrl(params.get('next'), '/dashboard');
   }, [location.search]);
 
@@ -31,7 +39,12 @@ export const LoginPage = () => {
       navigate(safeNext, { replace: true });
     },
     onError: (error) => {
-      const message = error?.message || 'Invalid email or password. Please try again.';
+      let message = 'Email or password is incorrect.';
+      if (error?.status === 0 || error?.message?.includes('Network')) {
+        message = 'We could not reach the service. Try again.';
+      } else if (error?.message) {
+        message = error.message;
+      }
       setFormError(message);
       toast.error(message);
     },
@@ -50,116 +63,182 @@ export const LoginPage = () => {
     },
   });
 
-  const errorMessage = useMemo(
-    () => formError || loginMutation.error?.message || googleMutation.error?.message || '',
-    [formError, loginMutation.error?.message, googleMutation.error?.message]
-  );
-
   if (auth.isAuthenticated) {
     return <Navigate to={safeNext} replace />;
   }
 
-  const submit = (event) => {
-    event.preventDefault();
-    setFormError('');
-    if (!form.email || !form.password) {
-      setFormError('Please enter both your email and password.');
-      return;
+  const validate = () => {
+    const errors = {};
+    if (!form.email.trim()) {
+      errors.email = 'Enter your email.';
+    } else if (!EMAIL_REGEX.test(form.email.trim())) {
+      errors.email = 'Enter a valid email address.';
     }
-    loginMutation.mutate(form);
+
+    if (!form.password) {
+      errors.password = 'Enter your password.';
+    }
+
+    setFieldErrors(errors);
+    return errors;
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormError('');
+
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      if (errors.email && emailInputRef.current) {
+        emailInputRef.current.focus();
+      } else if (errors.password && passwordInputRef.current) {
+        passwordInputRef.current.focus();
+      }
+      return;
+    }
+
+    loginMutation.mutate({
+      email: form.email.trim(),
+      password: form.password,
+    });
+  };
+
+  const isPending = loginMutation.isPending || googleMutation.isPending;
+
   return (
-    <AuthSplitLayout
-      asset={MEDIA_ASSETS_V7.a09}
-      title="Return to the profile you are building."
-      subtitle="Sign in to continue your assessment, review previous evidence or update your profile."
-      caption="Evidence-grounded profiles remain inspectable across career transitions."
-      objectPosition="50% 39%"
-    >
-      <form onSubmit={submit} className="pa-auth-form" noValidate>
-        {errorMessage && (
-          <div role="alert" aria-live="assertive" className="pa-v7-auth-error-banner">
-            {errorMessage}
-          </div>
-        )}
+    <PublicLayout headerTheme="dark-content" withFooter={false} className="pa-auth-login">
+      <div className="pa-auth-login__grid">
+        {/* Form Container */}
+        <div className="pa-auth-login__form-wrap">
+          <h1 className="pa-auth-title">Return to your record.</h1>
+          <p className="pa-auth-lead">
+            Reopen assessments, career exploration and progress already tied to your account.
+          </p>
 
-        <div className="pa-v7-auth-field">
-          <label htmlFor="login-email">Email address</label>
-          <input
-            id="login-email"
-            type="email"
-            name="email"
-            className="pa-v7-auth-input"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            placeholder="name@example.com"
-            autoComplete="email"
-            required
-          />
-        </div>
+          {formError && (
+            <div role="alert" aria-live="assertive" className="pa-auth-banner-error" style={{ marginBottom: '1.25rem' }}>
+              {formError}
+            </div>
+          )}
 
-        <div className="pa-v7-auth-field" style={{ marginBottom: '1.5rem' }}>
-          <label htmlFor="login-password">Password</label>
-          <div className="pa-v7-auth-password-wrap">
-            <input
-              id="login-password"
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              className="pa-v7-auth-input"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="Enter your password"
-              autoComplete="current-password"
-              required
-              style={{ paddingRight: '3.5rem' }}
-            />
+          <form onSubmit={handleSubmit} className="pa-auth-form" noValidate>
+            <div className="pa-auth-field">
+              <label htmlFor="login-email" className="pa-auth-label">
+                Email address
+              </label>
+              <input
+                ref={emailInputRef}
+                id="login-email"
+                type="email"
+                name="email"
+                className="pa-auth-input"
+                value={form.email}
+                onChange={(e) => {
+                  setForm({ ...form, email: e.target.value });
+                  if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: '' });
+                }}
+                autoComplete="email"
+                required
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={fieldErrors.email ? 'login-email-error' : undefined}
+                placeholder="name@example.com"
+              />
+              {fieldErrors.email && (
+                <span id="login-email-error" role="alert" className="pa-auth-field-error">
+                  {fieldErrors.email}
+                </span>
+              )}
+            </div>
+
+            <div className="pa-auth-field">
+              <label htmlFor="login-password" className="pa-auth-label">
+                Password
+              </label>
+              <div className="pa-auth-password-wrap">
+                <input
+                  ref={passwordInputRef}
+                  id="login-password"
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  className="pa-auth-input"
+                  value={form.password}
+                  onChange={(e) => {
+                    setForm({ ...form, password: e.target.value });
+                    if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: '' });
+                  }}
+                  autoComplete="current-password"
+                  required
+                  aria-invalid={Boolean(fieldErrors.password)}
+                  aria-describedby={fieldErrors.password ? 'login-password-error' : undefined}
+                  placeholder="Enter your password"
+                  style={{ paddingRight: '4rem' }}
+                />
+                <button
+                  type="button"
+                  className="pa-auth-password-toggle"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              {fieldErrors.password && (
+                <span id="login-password-error" role="alert" className="pa-auth-field-error">
+                  {fieldErrors.password}
+                </span>
+              )}
+            </div>
+
             <button
-              type="button"
-              className="pa-v7-auth-password-toggle"
-              onClick={() => setShowPassword((prev) => !prev)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              type="submit"
+              disabled={isPending}
+              className="pa-btn-primary-dark"
+              style={{ width: '100%', minHeight: '48px', marginTop: '0.5rem' }}
             >
-              {showPassword ? 'Hide' : 'Show'}
+              {loginMutation.isPending ? 'Signing in…' : 'Sign in'}
             </button>
+          </form>
+
+          {GOOGLE_CLIENT_ID && (
+            <div style={{ marginTop: '1rem' }}>
+              <div className="pa-auth-divider">
+                <span>or continue with</span>
+              </div>
+              <GoogleLoginButton
+                onCredential={(token) => googleMutation.mutate(token)}
+                onError={(message) => {
+                  const err = message || 'Google sign-in failed. Please retry.';
+                  setFormError(err);
+                  toast.error(err);
+                }}
+              />
+            </div>
+          )}
+
+          <div>
+            <Link
+              to={`/signup?next=${encodeURIComponent(safeNext)}`}
+              className="pa-auth-secondary-link"
+            >
+              Do not have a record yet? Create an account &rarr;
+            </Link>
           </div>
         </div>
 
-        <button
-          className="pa-v7-btn pa-v7-btn--ink"
-          type="submit"
-          disabled={loginMutation.isPending || googleMutation.isPending}
-          style={{ width: '100%', height: '46px', fontSize: '0.9375rem' }}
-        >
-          {loginMutation.isPending ? 'Signing in…' : 'Sign in'}
-        </button>
-      </form>
-
-      {GOOGLE_CLIENT_ID && (
-        <div style={{ marginTop: '1.25rem' }}>
-          <div style={{ textAlign: 'center', margin: '1rem 0', position: 'relative' }}>
-            <span style={{ background: 'var(--pa-paper)', padding: '0 0.75rem', fontSize: '0.75rem', color: 'var(--pa-stone)' }}>
-              or continue with
-            </span>
-          </div>
-          <GoogleLoginButton
-            onCredential={(token) => googleMutation.mutate(token)}
-            onError={(message) => {
-              const nextErr = message || 'Google sign-in failed. Please retry.';
-              setFormError(nextErr);
-              toast.error(nextErr);
-            }}
-          />
+        {/* Existing Record Trace on Right */}
+        <div className="pa-auth-login__trace-wrap">
+          <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
+            Existing Record
+          </span>
+          <p style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: '1.375rem', lineHeight: 1.35, color: 'var(--pa-mineral)', margin: 0 }}>
+            "Evidence can change. The record keeps the history."
+          </p>
+          <p style={{ fontSize: '0.875rem', color: 'var(--pa-pewter)', lineHeight: 1.5, margin: 0 }}>
+            Sign in to access your previous assessment stages, inspect psychometric decomposition layers, and compare against curated career profiles.
+          </p>
         </div>
-      )}
-
-      <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--pa-stone)', textAlign: 'center' }}>
-        New to Personality Assessor?{' '}
-        <Link to={`/signup?next=${encodeURIComponent(safeNext)}`} style={{ color: 'var(--pa-ink)', fontWeight: 600, textDecoration: 'underline' }}>
-          Build your profile
-        </Link>
-      </p>
-    </AuthSplitLayout>
+      </div>
+    </PublicLayout>
   );
 };
 

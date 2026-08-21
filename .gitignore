@@ -23,3 +23,5 @@ frontend/build
 frontend/dist
 # Local downloaded reference page
 /frontend/scripts/manypixels-page.html
+media-source/
+frontend/media-source/

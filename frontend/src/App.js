@@ -2,20 +2,21 @@ import { Suspense, lazy } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import LoginPage from './pages/Auth/LoginPage';
-import SignupPage from './pages/Auth/SignupPage';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
-import EditorialHowItWorksPage from './pages/editorial/EditorialHowItWorksPage';
-import EditorialCareerIntelligencePage from './pages/editorial/EditorialCareerIntelligencePage';
-import EditorialProgressPage from './pages/editorial/EditorialProgressPage';
-import EditorialMethodologyPage from './pages/editorial/EditorialMethodologyPage';
-import EditorialTrustPage from './pages/editorial/EditorialTrustPage';
-import EditorialPrivacyPage from './pages/editorial/EditorialPrivacyPage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
+
+const LoginPage = lazy(() => import('./pages/Auth/LoginPage'));
+const SignupPage = lazy(() => import('./pages/Auth/SignupPage'));
+const EditorialHowItWorksPage = lazy(() => import('./pages/editorial/EditorialHowItWorksPage'));
+const EditorialCareerIntelligencePage = lazy(() => import('./pages/editorial/EditorialCareerIntelligencePage'));
+const EditorialProgressPage = lazy(() => import('./pages/editorial/EditorialProgressPage'));
+const EditorialMethodologyPage = lazy(() => import('./pages/editorial/EditorialMethodologyPage'));
+const EditorialTrustPage = lazy(() => import('./pages/editorial/EditorialTrustPage'));
+const EditorialPrivacyPage = lazy(() => import('./pages/editorial/EditorialPrivacyPage'));
 
 const DashboardPage = lazy(() => import('./pages/Dashboard'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
@@ -54,16 +55,16 @@ const AppRoutes = () => {
     <div className="app-root-container">
       <PublicMetadata />
       <Routes location={location} key={`${location.pathname}${location.search}`}>
-        {/* ── Public Routes (Reference-Locked Editorial Visual Architecture) ── */}
+        {/* ── Public Routes (Evidence in Context Visual Architecture) ── */}
         <Route path="/" element={<EditorialHomePage />} />
-        <Route path="/how-it-works" element={<EditorialHowItWorksPage />} />
-        <Route path="/career-intelligence" element={<EditorialCareerIntelligencePage />} />
-        <Route path="/progress" element={<EditorialProgressPage />} />
-        <Route path="/methodology" element={<EditorialMethodologyPage />} />
-        <Route path="/trust" element={<EditorialTrustPage />} />
-        <Route path="/privacy" element={<EditorialPrivacyPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/how-it-works" element={withSuspense(<EditorialHowItWorksPage />)} />
+        <Route path="/career-intelligence" element={withSuspense(<EditorialCareerIntelligencePage />)} />
+        <Route path="/progress" element={withSuspense(<EditorialProgressPage />)} />
+        <Route path="/methodology" element={withSuspense(<EditorialMethodologyPage />)} />
+        <Route path="/trust" element={withSuspense(<EditorialTrustPage />)} />
+        <Route path="/privacy" element={withSuspense(<EditorialPrivacyPage />)} />
+        <Route path="/login" element={withSuspense(<LoginPage />)} />
+        <Route path="/signup" element={withSuspense(<SignupPage />)} />
 
         {/* ── Protected Application Routes ── */}
         <Route

@@ -1,5 +1,0 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { getSignupAcquisitionUrl } from '../../../utils/personality-v4/navigation';
-export const ProgressRecord = () => <section className="pa-progress-path" aria-labelledby="progress-path-title"><header><h1 id="progress-path-title">A profile is a record, not a label.</h1><p>When professional context changes, a person can return to the record and revisit the questions it supports.</p></header><div className="pa-progress-path__line"><article><h2>Evidence added</h2><p>A role, project, or new context can give the inquiry more to work with.</p></article><article><h2>Reading revisited</h2><p>Separate readings can be considered again without inventing a timeline of results.</p></article><article><h2>Career reflection</h2><p>Use the changed context to explore conditions worth discussing next.</p></article></div><Link to={getSignupAcquisitionUrl()} className="pa-v7-btn pa-v7-btn--ink">Start with your context</Link></section>;
-export default ProgressRecord;

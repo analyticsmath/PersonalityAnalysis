@@ -3,44 +3,43 @@ import { useLocation } from 'react-router-dom';
 
 const metadata = {
   '/': [
-    'Personality Assessor — Adaptive Personality & Career Intelligence',
-    'See the professional patterns behind your decisions. An adaptive assessment that keeps personality, vocational interests and work values separate—then shows how they relate.',
+    'Personality Assessor | Inspectable professional evidence',
+    'Build an inspectable professional record from personality, vocational interests, work values and the context around your responses.',
   ],
   '/how-it-works': [
-    'How It Works — Personality Assessor',
-    'From professional context to a profile you can inspect. Four continuous stages transform real career experience into a multi-dimensional assessment.',
+    'How It Works | Personality Assessor',
+    'An assessment that separates different kinds of evidence so they can be inspected before they are used together for career exploration.',
   ],
   '/career-intelligence': [
-    'Career Intelligence — Personality Assessor',
-    'Explore the conditions where your patterns can work. Compare your profile against curated professional environments to understand fit, stretch points, and growth.',
+    'Career Intelligence | Personality Assessor',
+    'Explore the conditions that can create alignment, tension and room to develop across curated professional role profiles.',
   ],
   '/progress': [
-    'Progress Record — Personality Assessor',
-    'Your profile is a record, not a label. Track how changes in role, team, and responsibility reshape your working patterns over time.',
+    'Progress | Personality Assessor',
+    'Assessment history and longitudinal trend views let later evidence sit beside earlier readings without erasing stable patterns.',
   ],
   '/methodology': [
-    'Methodology — Personality Assessor',
-    'Four models kept deliberately separate: Big Five dimensions, Holland RIASEC interests, O*NET work values, and deterministic scoring.',
+    'Methodology | Personality Assessor',
+    'Inspect continuous Big Five dimensions, RIASEC interests, work values, contextual career signals, and deterministic career comparison.',
   ],
   '/trust': [
-    'Trust & Transparency — Personality Assessor',
-    'Every result should show its work. Inspect data intake, structured scoring, separated outputs, and user export/deletion governance.',
+    'Trust & Provenance | Personality Assessor',
+    'Distinguish what you supplied, what the system calculated, what was compared, and what remains under your direct control.',
   ],
   '/privacy': [
-    'Privacy Policy — Personality Assessor',
-    'Your data remains yours. Learn about our collection, storage, and explicit data export and deletion controls.',
+    'Privacy | Personality Assessor',
+    'Read how Personality Assessor handles assessment data, account security, and explicit data export and deletion controls.',
   ],
   '/login': [
-    'Sign In — Personality Assessor',
-    'Return to the profile you are building. Continue your assessment, review previous evidence or update your profile.',
+    'Sign In | Personality Assessor',
+    'Return to your record. Reopen assessments, career exploration and progress already tied to your account.',
   ],
   '/signup': [
-    'Build Your Profile — Personality Assessor',
-    'Start with the work you already know. Create your account and begin an adaptive personality and career assessment.',
+    'Create Account | Personality Assessor',
+    'Create the first record. Start with your background, then add evidence through staged inquiry.',
   ],
 };
 
-const origin = import.meta.env.VITE_SITE_ORIGIN || window.location.origin;
 const indexable = new Set([
   '/',
   '/how-it-works',
@@ -66,23 +65,27 @@ export default function PublicMetadata() {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    const origin =
+      typeof window !== 'undefined'
+        ? import.meta.env.VITE_SITE_ORIGIN || window.location.origin
+        : '';
     const [title, description] = metadata[pathname] || [
-      'Personality Assessor — Adaptive Personality & Career Intelligence',
-      'Adaptive personality and career intelligence based on validated dimensional psychometrics.',
+      'Personality Assessor | Inspectable professional evidence',
+      'Inspectable professional evidence for personality, vocational interests, and career intelligence.',
     ];
     const url = `${origin}${pathname}`;
     document.title = title;
     setMeta('meta[name="description"]', 'name=description', description);
-    setMeta('meta[name="robots"]', 'name=robots', indexable.has(pathname) ? 'index,follow' : 'noindex,follow');
+    setMeta(
+      'meta[name="robots"]',
+      'name=robots',
+      indexable.has(pathname) ? 'index,follow' : 'noindex,nofollow'
+    );
     setMeta('meta[property="og:title"]', 'property=og:title', title);
     setMeta('meta[property="og:description"]', 'property=og:description', description);
     setMeta('meta[property="og:type"]', 'property=og:type', 'website');
     setMeta('meta[property="og:url"]', 'property=og:url', url);
-    setMeta(
-      'meta[property="og:image"]',
-      'property=og:image',
-      `${origin}/media/personality-v4/optimized/personality-assessor-og.jpg`
-    );
+
     const canonical = document.head.querySelector('link[rel="canonical"]');
     const canonicalNode = canonical || document.createElement('link');
     if (!canonical) {

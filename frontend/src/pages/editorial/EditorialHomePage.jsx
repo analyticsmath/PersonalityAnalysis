@@ -1,30 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
-import OrientationChapter from '../../components/personality-v7/home/OrientationChapter';
-import FourLensesAtlasChapter from '../../components/personality-v7/home/FourLensesAtlasChapter';
-import CareerEnvironmentsChapter from '../../components/personality-v7/home/CareerEnvironmentsChapter';
-import ProfileChangeChapter from '../../components/personality-v7/home/ProfileChangeChapter';
-import InspectabilityEntryChapter from '../../components/personality-v7/home/InspectabilityEntryChapter';
+import HomeOpeningChapter from '../../components/personality-v7/home/HomeOpeningChapter';
+import HomeDecisionChapter from '../../components/personality-v7/home/HomeDecisionChapter';
+import HomeTransformationChapter from '../../components/personality-v7/home/HomeTransformationChapter';
+import HomeEnvironmentChapter from '../../components/personality-v7/home/HomeEnvironmentChapter';
+import HomeChangeChapter from '../../components/personality-v7/home/HomeChangeChapter';
+import HomeInspectionChapter from '../../components/personality-v7/home/HomeInspectionChapter';
+import HomeFinaleChapter from '../../components/personality-v7/home/HomeFinaleChapter';
 
 export const EditorialHomePage = () => {
+  const [selectedChoice, setSelectedChoice] = useState(null);
+
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="light" withFooter={false} withMobileAtlasDock={false}>
-        {/* Chapter 01 & 02 — Continuous Opening: Orientation through Evidence */}
-        <OrientationChapter />
+      <PublicLayout headerTheme="light-content" withFooter={true}>
+        {/* Chapter 1 — Orientation & Context */}
+        <HomeOpeningChapter />
 
-        {/* Chapter 03 — Four Lenses Atlas */}
-        <FourLensesAtlasChapter />
+        {/* Chapter 2 — Contextual Decision */}
+        <HomeDecisionChapter
+          selectedChoice={selectedChoice}
+          onSelectChoice={setSelectedChoice}
+        />
 
-        {/* Chapter 04 — Career Environments */}
-        <CareerEnvironmentsChapter />
+        {/* Chapter 3 — Evidence Transformation */}
+        <HomeTransformationChapter selectedChoice={selectedChoice} />
 
-        {/* Chapter 05 — A Profile Can Change */}
-        <ProfileChangeChapter />
+        {/* Chapter 4 — Career Environment */}
+        <HomeEnvironmentChapter />
 
-        {/* Chapter 06 — Inspectability and Entry (Includes Integrated Final CTA & Footer) */}
-        <InspectabilityEntryChapter />
+        {/* Chapter 5 — Change Over Time */}
+        <HomeChangeChapter />
+
+        {/* Chapter 6 — Inspection */}
+        <HomeInspectionChapter />
+
+        {/* Chapter 7 — Finale */}
+        <HomeFinaleChapter />
       </PublicLayout>
     </SmoothScrollProvider>
   );

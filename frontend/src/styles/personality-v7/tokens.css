@@ -1,97 +1,97 @@
 /* ==========================================================================
-   Personality Assessor — V7 Signal Atlas Design Tokens
-   Calm Authority & Editorial Intelligence Publication System
+   Personality Assessor — Evidence in Context Design Tokens
+   Core Palette: Carbon, Graphite, Mineral, Pewter, Oxblood
+   Typography: Newsreader & Instrument Sans
    ========================================================================== */
 
 :root {
-  /* ── Core Mineral & Paper Palette ── */
-  --pa-ground: #0c0e0c;          /* Deep mineral charcoal */
-  --pa-surface-deep: #171a16;    /* Secondary deep surface */
-  --pa-paper: #eeece3;           /* Warm tactile paper */
-  --pa-bone: #fbfaf4;            /* Primary bone foreground on dark */
-  --pa-stone: #a5a79e;           /* Stone annotation & secondary copy */
-  --pa-ink: #3a3c36;             /* Quiet ink foreground on paper */
+  /* ── Core Color Tokens (Specification Section 7) ── */
+  --pa-carbon: #0D0F0E;
+  --pa-graphite: #222724;
+  --pa-mineral: #F3F5F2;
+  --pa-pewter: #AEB4AF;
+  --pa-oxblood: #642832;
+  --pa-muted-light: #69716C;
+  --pa-secondary-cool: #DDE1DD;
 
-  /* Structural Rules & Borders */
-  --pa-rule-dark: rgba(251, 250, 244, 0.18);
-  --pa-rule-paper: rgba(24, 26, 22, 0.16);
+  /* Aliases for Semantic Surfaces */
+  --pa-ground: var(--pa-carbon);
+  --pa-surface-deep: var(--pa-graphite);
+  --pa-paper: var(--pa-mineral);
+  --pa-bone: var(--pa-mineral);
+  --pa-stone: var(--pa-pewter);
+  --pa-ink: var(--pa-carbon);
 
-  /* Big Five Analytical Hue Markers (Data colours only) */
-  --pa-data-openness: #764a62;
-  --pa-data-conscientiousness: #2d5d4b;
-  --pa-data-extraversion: #a64b2a;
-  --pa-data-agreeableness: #af5b68;
-  --pa-data-stability: #43657d;
+  /* ── Typography Tokens (Specification Section 6) ── */
+  --pa-font-serif: 'Newsreader Variable', 'Newsreader', Georgia, Cambria, serif;
+  --pa-font-sans: 'Instrument Sans Variable', 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pa-font-editorial: var(--pa-font-serif);
+  --pa-font-functional: var(--pa-font-sans);
 
-  /* Backward Compatibility Aliases */
-  --pa-black: #0c0e0c;
-  --pa-charcoal: #171a16;
-  --pa-obsidian: #0c0e0c;
-  --pa-white: #fbfaf4;
-  --pa-muted: #a5a79e;
-  --pa-rule-light: rgba(251, 250, 244, 0.18);
+  /* Desktop Display Type Scale */
+  --pa-display-xl: clamp(72px, 7.4vw, 112px);
+  --pa-display-xl-lh: 0.93;
+  --pa-display-l: clamp(56px, 5.4vw, 82px);
+  --pa-display-l-lh: 0.96;
+  --pa-display-m: clamp(40px, 3.7vw, 58px);
+  --pa-display-m-lh: 1.00;
 
-  /* ── Typography Tokens ── */
-  --pa-font-serif: 'Source Serif 4 Variable', Georgia, Cambria, serif;
-  --pa-font-sans: 'Source Sans 3 Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pa-evidence-stmt: clamp(32px, 3.2vw, 46px);
+  --pa-evidence-stmt-lh: 1.08;
+  --pa-lead-editorial: clamp(22px, 2.2vw, 27px);
+  --pa-lead-editorial-lh: 1.32;
 
-  /* Desktop Display */
-  --pa-display-headline: clamp(4.25rem, 7vw, 8.25rem);
-  --pa-display-lh: 0.92;
-  --pa-display-tracking: -0.045em;
+  --pa-body-l: 18px;
+  --pa-body-l-lh: 1.52;
+  --pa-body: 16px;
+  --pa-body-lh: 1.55;
+  --pa-functional: 14px;
+  --pa-meta: 12px;
 
-  /* Route Display */
-  --pa-display-route: clamp(3.1rem, 5vw, 6rem);
-  --pa-display-route-lh: 0.94;
-  --pa-display-route-tracking: -0.038em;
-
-  /* Mobile Display */
-  --pa-display-mobile: clamp(3rem, 13vw, 4.8rem);
-  --pa-display-mobile-lh: 0.93;
-  --pa-display-mobile-tracking: -0.035em;
-
-  /* Body & Annotation Sizes */
-  --pa-body-size-desktop: 17px;
-  --pa-body-size-mobile: 16px;
-  --pa-body-lh: 1.52;
-  --pa-meta-size: 11.5px;
-  --pa-meta-tracking: 0.10em;
-
-  /* ── Grid & Spacing ── */
+  /* Desktop Grid & Gutters (Specification Section 8) */
   --pa-grid-cols: 12;
-  --pa-grid-margin: clamp(24px, 4.4vw, 72px);
-  --pa-grid-gutter: clamp(20px, 2vw, 28px);
+  --pa-grid-margin: clamp(32px, 3.4vw, 56px);
+  --pa-grid-gap: 20px;
+  --pa-header-height: 72px;
+  --pa-header-height-mobile: 64px;
 
-  --pa-header-height: 64px;
-  --pa-header-height-mobile: 56px;
-  --pa-dock-height: 68px;
-
-  /* ── Motion & Easing Curves ── */
+  /* Easing & Timing */
   --pa-ease-default: cubic-bezier(0.22, 1, 0.36, 1);
-  --pa-ease-micro: cubic-bezier(0.16, 1, 0.3, 1);
+  --pa-ease-recompose: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* ── Z-Index Hierarchy ── */
+  /* Focus & Radii */
+  --pa-radius-media: 0px;
+  --pa-radius-control: 2px;
+  --pa-focus-light: 2px solid var(--pa-oxblood);
+  --pa-focus-dark: 2px solid var(--pa-mineral);
+
+  /* Z-Index Structure */
   --pa-z-base-media: 1;
-  --pa-z-overlay: 5;
-  --pa-z-stage-content: 10;
-  --pa-z-edge-anchors: 15;
-  --pa-z-chrome: 100;
-  --pa-z-dock: 110;
-  --pa-z-modal: 200;
+  --pa-z-content: 10;
+  --pa-z-sticky: 20;
+  --pa-z-header: 100;
+  --pa-z-menu: 200;
+  --pa-z-transition: 300;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1179px) {
   :root {
     --pa-grid-cols: 8;
-    --pa-grid-margin: 24px;
-    --pa-grid-gutter: 16px;
+    --pa-grid-margin: 28px;
+    --pa-grid-gap: 16px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   :root {
     --pa-grid-cols: 4;
-    --pa-grid-margin: 16px;
-    --pa-grid-gutter: 12px;
+    --pa-grid-margin: 18px;
+    --pa-grid-gap: 12px;
+    --pa-header-height: 64px;
+
+    --pa-display-xl: clamp(48px, 11vw, 60px);
+    --pa-display-l: clamp(44px, 9.5vw, 54px);
+    --pa-display-m: clamp(36px, 8vw, 46px);
+    --pa-evidence-stmt: clamp(28px, 6.8vw, 36px);
   }
 }

@@ -1,163 +1,297 @@
 /* ==========================================================================
-   Personality Assessor — V7 Signal Atlas Authentication Styles
-   Desktop: 58% Photo Field / 42% Flush Paper Ground Form
-   Mobile: 40dvh Media Lead + Seamless Paper Form (No Bottom Dock)
+   Personality Assessor — Evidence in Context Authentication Styles
+   Login: Dark Existing-Record State (Carbon)
+   Signup: Light First-Record State (Mineral)
    ========================================================================== */
 
-.pa-v7-auth-stage {
+/* ── Login Page (Carbon Ground, Section 25) ── */
+.pa-auth-login {
   min-height: 100vh;
-  width: 100%;
+  background-color: var(--pa-carbon);
+  color: var(--pa-mineral);
+  padding: calc(var(--pa-header-height) + 32px) var(--pa-grid-margin) 60px;
+  display: flex;
+  align-items: center;
+}
+
+.pa-auth-login__grid {
   display: grid;
-  grid-template-columns: 56vw 44vw;
-  background-color: var(--pa-paper);
+  grid-template-columns: repeat(var(--pa-grid-cols), 1fr);
+  column-gap: var(--pa-grid-gap);
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  align-items: center;
 }
 
-/* 58vw Photographic Field */
-.pa-v7-auth-media-pane {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  background-color: var(--pa-paper);
+.pa-auth-login__form-wrap {
+  grid-column: 2 / 7;
+  max-width: 440px;
+  width: 100%;
 }
 
-.pa-v7-auth-media-pane__caption {
-  position: absolute;
-  bottom: 3rem;
-  left: 3rem;
-  right: 3rem;
-  z-index: 3;
-  color: var(--pa-ink);
-  font-family: var(--pa-font-serif);
-  font-size: 1rem;
-  line-height: 1.25;
-  max-width: 360px;
-  padding-top: .55rem;
-  border-top: 1px solid currentColor;
-}
-
-.pa-v7-auth-media-pane__brand { position: absolute; top: 2rem; left: 2.5rem; z-index: 3; }
-
-/* 42vw Flush Paper Ground Form Volume */
-.pa-v7-auth-form-pane {
-  background-color: var(--pa-paper);
-  color: var(--pa-ink);
-  padding: clamp(3rem, 16vh, 6rem) clamp(2rem, 5vw, 4.5rem);
+.pa-auth-login__trace-wrap {
+  grid-column: 8 / 12;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  min-height: 100vh;
-  overflow-y: auto;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  background-color: var(--pa-graphite);
+  border-radius: var(--pa-radius-control);
 }
 
-.pa-v7-auth-form-pane__inner {
-  max-width: 420px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.pa-v7-auth-form-pane h1 {
-  font-size: 2.25rem;
-  color: var(--pa-ink);
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
-}
-
-.pa-v7-auth-form-pane .lead {
-  color: var(--pa-stone);
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  margin-bottom: 2rem;
-}
-
-/* Form inputs & controls */
-.pa-v7-auth-field {
-  margin-bottom: 1.25rem;
-}
-
-.pa-v7-auth-field label {
-  display: block;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--pa-ink);
-  margin-bottom: 0.35rem;
-}
-
-.pa-v7-auth-input {
-  width: 100%;
-  height: 48px;
-  padding: 0 0.875rem;
-  border: 1px solid var(--pa-rule-paper);
-  background: #fff;
-  border-radius: 2px;
-  font-size: 0.9375rem;
-  color: var(--pa-ink);
-  font-family: var(--pa-font-sans);
-  transition: border-color 0.2s var(--pa-ease-micro);
-}
-
-.pa-v7-auth-input:focus {
-  border-color: var(--pa-ink);
-  outline: none;
-}
-
-.pa-v7-auth-password-wrap {
-  position: relative;
-}
-
-.pa-v7-auth-password-toggle {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--pa-stone);
-  min-width: 44px;
-  min-height: 44px;
-  font-size: 0.75rem;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.pa-v7-auth-error-banner {
-  background: #fce8e6;
-  color: #c5221f;
-  padding: 0.75rem 1rem;
-  border-radius: 2px;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-}
-
-.pa-v7-auth-success-banner {
-  background: #e6f4ea;
-  color: #137333;
-  padding: 0.75rem 1rem;
-  border-radius: 2px;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-}
-
-/* Mobile Auth Layout */
 @media (max-width: 900px) {
-  .pa-v7-auth-stage {
-    display: flex;
-    flex-direction: column;
-    grid-template-columns: 1fr;
-    min-height: 100dvh;
+  .pa-auth-login {
+    padding-top: calc(var(--pa-header-height-mobile) + 24px);
+    align-items: flex-start;
   }
 
-  .pa-v7-auth-media-pane {
-    width: 100%;
-    height: 27dvh;
-    min-height: 180px;
+  .pa-auth-login__form-wrap {
+    grid-column: 1 / -1;
+    max-width: 100%;
   }
 
-  .pa-v7-auth-media-pane__caption {
+  .pa-auth-login__trace-wrap {
+    grid-column: 1 / -1;
+    margin-top: 2.5rem;
+    padding: 1.75rem;
+  }
+}
+
+/* ── Signup Page (Mineral Ground, Section 26) ── */
+.pa-auth-signup {
+  min-height: 100vh;
+  background-color: var(--pa-mineral);
+  color: var(--pa-carbon);
+  padding: calc(var(--pa-header-height) + 32px) var(--pa-grid-margin) 60px;
+  display: flex;
+  align-items: center;
+}
+
+.pa-auth-signup__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pa-grid-cols), 1fr);
+  column-gap: var(--pa-grid-gap);
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.pa-auth-signup__form-wrap {
+  grid-column: 2 / 7;
+  max-width: 460px;
+  width: 100%;
+}
+
+.pa-auth-signup__media-wrap {
+  grid-column: 8 / 12;
+  height: clamp(400px, 55vh, 600px);
+  overflow: hidden;
+  border-radius: var(--pa-radius-control);
+}
+
+.pa-auth-signup__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+}
+
+@media (max-width: 900px) {
+  .pa-auth-signup {
+    padding-top: calc(var(--pa-header-height-mobile) + 24px);
+    align-items: flex-start;
+  }
+
+  .pa-auth-signup__form-wrap {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+
+  .pa-auth-signup__media-wrap {
     display: none;
   }
+}
 
-  .pa-v7-auth-form-pane {
-    padding: 2rem 1.25rem 3rem;
-    min-height: auto;
-  }
+/* ── Shared Form Elements & Validation (Section 28) ── */
+.pa-auth-title {
+  font-family: var(--pa-font-editorial);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  line-height: 1.15;
+  margin: 0 0 0.5rem 0;
+  color: inherit;
+}
+
+.pa-auth-lead {
+  font-family: var(--pa-font-functional);
+  font-size: 1rem;
+  line-height: 1.5;
+  opacity: 0.8;
+  margin: 0 0 2rem 0;
+  color: inherit;
+}
+
+.pa-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.pa-auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pa-auth-label {
+  font-family: var(--pa-font-functional);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: inherit;
+}
+
+.pa-auth-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 1rem;
+  border-radius: var(--pa-radius-control);
+  font-family: var(--pa-font-functional);
+  font-size: 0.9375rem;
+  box-sizing: border-box;
+  transition: border-color 0.18s ease;
+}
+
+/* Carbon inputs (Login) */
+.pa-auth-login .pa-auth-input {
+  background-color: var(--pa-graphite);
+  color: var(--pa-mineral);
+  border: 1px solid rgba(243, 245, 242, 0.2);
+}
+
+.pa-auth-login .pa-auth-input:focus {
+  border-color: var(--pa-mineral);
+  outline: 2px solid var(--pa-mineral);
+  outline-offset: 2px;
+}
+
+/* Mineral inputs (Signup) */
+.pa-auth-signup .pa-auth-input {
+  background-color: #FFFFFF;
+  color: var(--pa-carbon);
+  border: 1px solid rgba(13, 15, 14, 0.2);
+}
+
+.pa-auth-signup .pa-auth-input:focus {
+  border-color: var(--pa-carbon);
+  outline: 2px solid var(--pa-oxblood);
+  outline-offset: 2px;
+}
+
+.pa-auth-password-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.pa-auth-password-toggle {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: var(--pa-font-functional);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  min-height: 44px;
+}
+
+.pa-auth-helper {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  color: inherit;
+  margin-top: 2px;
+}
+
+.pa-auth-field-error {
+  font-size: 0.75rem;
+  color: #E24A4A;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.pa-auth-banner-error {
+  padding: 0.875rem 1rem;
+  background-color: rgba(226, 74, 74, 0.12);
+  border: 1px solid rgba(226, 74, 74, 0.4);
+  border-radius: var(--pa-radius-control);
+  color: #E24A4A;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.pa-auth-banner-success {
+  padding: 0.875rem 1rem;
+  background-color: rgba(30, 142, 62, 0.12);
+  border: 1px solid rgba(30, 142, 62, 0.4);
+  border-radius: var(--pa-radius-control);
+  color: #1E8E3E;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.pa-auth-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.pa-auth-consent input[type="checkbox"] {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--pa-oxblood);
+  cursor: pointer;
+}
+
+.pa-auth-secondary-link {
+  font-size: 0.875rem;
+  color: inherit;
+  opacity: 0.85;
+  text-decoration: none;
+  transition: opacity 0.18s ease;
+  margin-top: 1rem;
+  display: inline-block;
+}
+
+.pa-auth-secondary-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.pa-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0;
+  opacity: 0.6;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pa-auth-divider::before,
+.pa-auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.3;
 }

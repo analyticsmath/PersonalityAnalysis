@@ -1,520 +1,294 @@
 /**
- * Personality Assessor — V7 Signal Atlas Unified Media Manifest
- * Contains validated A-series (A01–A10) and B-series (B01–B12) media definitions
+ * Personality Assessor — Evidence in Context Production Media Manifest
+ * Sourced from locally supplied licensed Unsplash Plus originals by Roberta Sant'Anna.
  */
 
+export const MEDIA_PROVENANCE_NOTE =
+  'People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers.';
+
 export const MEDIA_ASSETS_V7 = {
-  // ── A-Series: Core Environmental & Protagonist Media ──
-  a01: {
-    id: 'a01',
-    name: 'pa-a01-obscured-profile',
-    photographer: 'Nick Fancher',
-    role: 'Homepage hero protagonist, closing callback, 404 background fragment',
-    alt: 'A blurred profile seen through textured glass',
+  homeContext: {
+    id: 'CTufAW5vbm8',
+    key: 'home-context',
+    name: 'pa-home-context',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Homepage opening contextual plane & finale return',
+    alt: 'Person working on a project in a room with focused craftsmanship',
+    title: 'Professional working in contextual studio environment',
+    aspectRatio: '1074 / 806',
+    intrinsicDimensions: { width: 1074, height: 806 },
     focalPoint: {
-      desktopInitial: '50% 42%',
-      desktopExpanded: '50% 38%',
-      mobile: '51% 34%'
+      desktop: '45% 50%',
+      tablet: '50% 50%',
+      mobile: '50% 45%',
     },
-    aspectRatio: '5464 / 8192',
-    widths: [720, 1080, 1440, 1920],
-    source: '/media/personality-v4/source/pa-a01-obscured-profile.jpg',
-    avif: {
-      720: '/media/personality-v4/optimized/pa-a01-obscured-profile-720.avif',
-      1080: '/media/personality-v4/optimized/pa-a01-obscured-profile-1080.avif',
-      1440: '/media/personality-v4/optimized/pa-a01-obscured-profile-1440.avif',
-      1920: '/media/personality-v4/optimized/pa-a01-obscured-profile-1920.avif'
-    },
-    webp: {
-      720: '/media/personality-v4/optimized/pa-a01-obscured-profile-720.webp',
-      1080: '/media/personality-v4/optimized/pa-a01-obscured-profile-1080.webp',
-      1440: '/media/personality-v4/optimized/pa-a01-obscured-profile-1440.webp',
-      1920: '/media/personality-v4/optimized/pa-a01-obscured-profile-1920.webp'
-    }
-  },
-  a02: {
-    id: 'a02',
-    name: 'pa-a02-response-glass',
-    photographer: 'Nick Fancher',
-    role: 'Adaptive question scene, career world sequence, how-it-works context',
-    alt: 'A figure pressing both hands against textured glass.',
-    focalPoint: {
-      desktop: '50% 42%',
-      mobile: '50% 42%'
-    },
-    aspectRatio: '5464 / 8192',
-    widths: [640, 960, 1280],
-    source: '/media/personality-v4/source/pa-a02-response-glass.jpg',
-    avif: {
-      640: '/media/personality-v4/optimized/pa-a02-response-glass-640.avif',
-      960: '/media/personality-v4/optimized/pa-a02-response-glass-960.avif',
-      1280: '/media/personality-v4/optimized/pa-a02-response-glass-1280.avif'
-    },
-    webp: {
-      640: '/media/personality-v4/optimized/pa-a02-response-glass-640.webp',
-      960: '/media/personality-v4/optimized/pa-a02-response-glass-960.webp',
-      1280: '/media/personality-v4/optimized/pa-a02-response-glass-1280.webp'
-    }
-  },
-  a03: {
-    id: 'a03',
-    name: 'pa-a03-investigative-world',
-    photographer: 'Nick Fancher',
-    role: 'Investigative world — analysis, precision, technical inquiry',
-    alt: 'A human figure seen through green textured glass.',
-    focalPoint: {
-      desktop: '50% 40%',
-      mobile: '50% 40%'
-    },
-    aspectRatio: '5050 / 7572',
-    widths: [640, 960, 1280],
-    source: '/media/personality-v4/source/pa-a03-investigative-world.jpg',
-    avif: {
-      640: '/media/personality-v4/optimized/pa-a03-investigative-world-640.avif',
-      960: '/media/personality-v4/optimized/pa-a03-investigative-world-960.avif',
-      1280: '/media/personality-v4/optimized/pa-a03-investigative-world-1280.avif'
-    },
-    webp: {
-      640: '/media/personality-v4/optimized/pa-a03-investigative-world-640.webp',
-      960: '/media/personality-v4/optimized/pa-a03-investigative-world-960.webp',
-      1280: '/media/personality-v4/optimized/pa-a03-investigative-world-1280.webp'
-    }
-  },
-  a04: {
-    id: 'a04',
-    name: 'pa-a04-expressive-world',
-    photographer: 'Nick Fancher',
-    role: 'Expressive / artistic world — narrative, design, creative synthesis',
-    alt: 'A backlit silhouette with raised hands behind textured glass.',
-    focalPoint: {
-      desktop: '50% 38%',
-      mobile: '50% 38%'
-    },
-    aspectRatio: '5464 / 8192',
-    widths: [640, 960, 1280],
-    source: '/media/personality-v4/source/pa-a04-expressive-world.jpg',
-    avif: {
-      640: '/media/personality-v4/optimized/pa-a04-expressive-world-640.avif',
-      960: '/media/personality-v4/optimized/pa-a04-expressive-world-960.avif',
-      1280: '/media/personality-v4/optimized/pa-a04-expressive-world-1280.avif'
-    },
-    webp: {
-      640: '/media/personality-v4/optimized/pa-a04-expressive-world-640.webp',
-      960: '/media/personality-v4/optimized/pa-a04-expressive-world-960.webp',
-      1280: '/media/personality-v4/optimized/pa-a04-expressive-world-1280.webp'
-    }
-  },
-  a05: {
-    id: 'a05',
-    name: 'pa-a05-relational-world',
-    photographer: 'Nick Fancher',
-    role: 'Social / relational world & longitudinal earlier baseline',
-    alt: 'A silhouette behind a textured yellow surface.',
-    focalPoint: {
-      desktop: '50% 40%',
-      mobile: '50% 40%'
-    },
-    aspectRatio: '4897 / 7342',
-    widths: [640, 960, 1280],
-    source: '/media/personality-v4/source/pa-a05-relational-world.jpg',
-    avif: {
-      640: '/media/personality-v4/optimized/pa-a05-relational-world-640.avif',
-      960: '/media/personality-v4/optimized/pa-a05-relational-world-960.avif',
-      1280: '/media/personality-v4/optimized/pa-a05-relational-world-1280.avif'
-    },
-    webp: {
-      640: '/media/personality-v4/optimized/pa-a05-relational-world-640.webp',
-      960: '/media/personality-v4/optimized/pa-a05-relational-world-960.webp',
-      1280: '/media/personality-v4/optimized/pa-a05-relational-world-1280.webp'
-    }
-  },
-  a06: {
-    id: 'a06',
-    name: 'pa-a06-directional-world',
-    photographer: 'Nick Fancher',
-    role: 'Enterprising / directional world & longitudinal current state',
-    alt: 'A green silhouette against a textured orange background.',
-    focalPoint: {
-      desktop: '50% 39%',
-      mobile: '50% 39%'
-    },
-    aspectRatio: '4976 / 7461',
-    widths: [640, 960, 1280],
-    source: '/media/personality-v4/source/pa-a06-directional-world.jpg',
-    avif: {
-      640: '/media/personality-v4/optimized/pa-a06-directional-world-640.avif',
-      960: '/media/personality-v4/optimized/pa-a06-directional-world-960.avif',
-      1280: '/media/personality-v4/optimized/pa-a06-directional-world-1280.avif'
-    },
-    webp: {
-      640: '/media/personality-v4/optimized/pa-a06-directional-world-640.webp',
-      960: '/media/personality-v4/optimized/pa-a06-directional-world-960.webp',
-      1280: '/media/personality-v4/optimized/pa-a06-directional-world-1280.webp'
-    }
-  },
-  a07: {
-    id: 'a07',
-    name: 'pa-a07-methodology-collage',
-    photographer: 'Karolina Grabowska',
-    role: 'Methodology opening plate & behavioural signals evidence field',
-    alt: 'A portrait overlaid with a collage of facial details.',
-    focalPoint: {
-      desktop: '50% 45%',
-      mobile: '50% 45%'
-    },
-    aspectRatio: '3953 / 5930',
-    widths: [720, 1080, 1440],
-    source: '/media/personality-v4/source/pa-a07-methodology-collage.jpg',
-    avif: {
-      720: '/media/personality-v4/optimized/pa-a07-methodology-collage-720.avif',
-      1080: '/media/personality-v4/optimized/pa-a07-methodology-collage-1080.avif',
-      1440: '/media/personality-v4/optimized/pa-a07-methodology-collage-1440.avif'
-    },
-    webp: {
-      720: '/media/personality-v4/optimized/pa-a07-methodology-collage-720.webp',
-      1080: '/media/personality-v4/optimized/pa-a07-methodology-collage-1080.webp',
-      1440: '/media/personality-v4/optimized/pa-a07-methodology-collage-1440.webp'
-    }
-  },
-  a08: {
-    id: 'a08',
-    name: 'pa-a08-trust-handoff',
-    photographer: 'Allec Gomes',
-    role: 'Inspectability landscape handoff & trust evidence opening plane',
-    alt: 'Two hand shadows nearly touching on a textured wall.',
-    focalPoint: {
-      desktop: '50% 48%',
-      mobile: '50% 48%'
-    },
-    aspectRatio: '8256 / 5504',
-    widths: [960, 1440, 1920],
-    source: '/media/personality-v4/source/pa-a08-trust-handoff.jpg',
-    avif: {
-      960: '/media/personality-v4/optimized/pa-a08-trust-handoff-960.avif',
-      1440: '/media/personality-v4/optimized/pa-a08-trust-handoff-1440.avif',
-      1920: '/media/personality-v4/optimized/pa-a08-trust-handoff-1920.avif'
-    },
-    webp: {
-      960: '/media/personality-v4/optimized/pa-a08-trust-handoff-960.webp',
-      1440: '/media/personality-v4/optimized/pa-a08-trust-handoff-1440.webp',
-      1920: '/media/personality-v4/optimized/pa-a08-trust-handoff-1920.webp'
-    }
-  },
-  a09: {
-    id: 'a09',
-    name: 'pa-a09-login-refraction',
-    photographer: 'Nick Fancher',
-    role: 'Login portrait refraction field',
-    alt: 'A portrait refracted through vertical glass lines',
-    focalPoint: {
-      desktop: '50% 39%',
-      mobile: '50% 34%'
-    },
-    aspectRatio: '5464 / 8192',
-    widths: [720, 1080, 1440],
-    source: '/media/personality-v4/source/pa-a09-login-refraction.jpg',
-    avif: {
-      720: '/media/personality-v4/optimized/pa-a09-login-refraction-720.avif',
-      1080: '/media/personality-v4/optimized/pa-a09-login-refraction-1080.avif',
-      1440: '/media/personality-v4/optimized/pa-a09-login-refraction-1440.avif'
-    },
-    webp: {
-      720: '/media/personality-v4/optimized/pa-a09-login-refraction-720.webp',
-      1080: '/media/personality-v4/optimized/pa-a09-login-refraction-1080.webp',
-      1440: '/media/personality-v4/optimized/pa-a09-login-refraction-1440.webp'
-    }
-  },
-  a10: {
-    id: 'a10',
-    name: 'pa-a10-signup-red-landscape',
-    photographer: 'Nick Fancher',
-    role: 'Signup portrait red landscape field',
-    alt: 'A silhouette standing against ambient light',
-    focalPoint: {
-      desktop: '51% 45%',
-      mobile: '53% 43%'
-    },
-    aspectRatio: '5464 / 8192',
-    widths: [720, 1080, 1440],
-    source: '/media/personality-v4/source/pa-a10-signup-red-landscape.jpg',
-    avif: {
-      720: '/media/personality-v4/optimized/pa-a10-signup-red-landscape-720.avif',
-      1080: '/media/personality-v4/optimized/pa-a10-signup-red-landscape-1080.avif',
-      1440: '/media/personality-v4/optimized/pa-a10-signup-red-landscape-1440.avif'
-    },
-    webp: {
-      720: '/media/personality-v4/optimized/pa-a10-signup-red-landscape-720.webp',
-      1080: '/media/personality-v4/optimized/pa-a10-signup-red-landscape-1080.webp',
-      1440: '/media/personality-v4/optimized/pa-a10-signup-red-landscape-1440.webp'
-    }
+    widths: [720, 1080, 1600, 2400],
+    source: '/media/evidence-in-context/home-context-1080.webp',
+    fallback: '/media/evidence-in-context/home-context-1080.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/home-context-720.avif 720w, /media/evidence-in-context/home-context-1080.avif 1080w, /media/evidence-in-context/home-context-1600.avif 1600w, /media/evidence-in-context/home-context-2400.avif 2400w',
+    webpSrcSet:
+      '/media/evidence-in-context/home-context-720.webp 720w, /media/evidence-in-context/home-context-1080.webp 1080w, /media/evidence-in-context/home-context-1600.webp 1600w, /media/evidence-in-context/home-context-2400.webp 2400w',
+    mobileAvif: '/media/evidence-in-context/home-context-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/home-context-mobile-720.webp',
   },
 
-  // ── B-Series: Visual Atlas, Traits, Work Worlds, & O*NET Field ──
-  b01: {
-    id: 'b01',
-    name: 'pa-b01-openness-prismatic-portrait',
-    role: 'Big Five: Openness; experimental portrait crop',
-    alt: 'Experimental prismatic portrait reflecting openness and cognitive exploration',
-    focalPoint: { desktop: '50% 40%', mobile: '50% 36%' },
-    aspectRatio: '3664 / 5496',
-    widths: [720, 1080, 1440, 1920],
-    source: '/media/personality-v6/source/pa-b01-openness-prismatic-portrait.jpg',
-    avif: {
-      720: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-720.avif',
-      1080: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-1080.avif',
-      1440: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-1440.avif',
-      1920: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-1920.avif'
+  signupWorkshop: {
+    id: 'VWgfW_Df4fQ',
+    key: 'signup-workshop',
+    name: 'pa-signup-workshop',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Signup introduction & mobile portrait context',
+    alt: 'Woman working with precision machinery in a workshop',
+    title: 'Professional operating workshop machinery',
+    aspectRatio: '735 / 980',
+    intrinsicDimensions: { width: 735, height: 980 },
+    focalPoint: {
+      desktop: '50% 40%',
+      tablet: '50% 40%',
+      mobile: '50% 35%',
     },
-    webp: {
-      720: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-720.webp',
-      1080: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-1080.webp',
-      1440: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-1440.webp',
-      1920: '/media/personality-v6/optimized/pa-b01-openness-prismatic-portrait-1920.webp'
-    }
+    widths: [640, 900, 1200, 1600],
+    source: '/media/evidence-in-context/signup-workshop-900.webp',
+    fallback: '/media/evidence-in-context/signup-workshop-900.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/signup-workshop-640.avif 640w, /media/evidence-in-context/signup-workshop-900.avif 900w, /media/evidence-in-context/signup-workshop-1200.avif 1200w, /media/evidence-in-context/signup-workshop-1600.avif 1600w',
+    webpSrcSet:
+      '/media/evidence-in-context/signup-workshop-640.webp 640w, /media/evidence-in-context/signup-workshop-900.webp 900w, /media/evidence-in-context/signup-workshop-1200.webp 1200w, /media/evidence-in-context/signup-workshop-1600.webp 1600w',
+    mobileAvif: '/media/evidence-in-context/signup-workshop-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/signup-workshop-mobile-720.webp',
   },
-  b02: {
-    id: 'b02',
-    name: 'pa-b02-conscientiousness-architectural-sketch',
-    role: 'Big Five: Conscientiousness; structured planning',
-    alt: 'Detailed architectural drawing representing systematic structure and precision',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '6000 / 4000',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b02-conscientiousness-architectural-sketch.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-640.avif',
-      960: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-1920.avif'
+
+  careerComplex: {
+    id: 'Rf2FWjajd7s',
+    key: 'career-complex-problems',
+    name: 'pa-career-complex-problems',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Career Intelligence: Complex problems, clear ownership',
+    alt: 'Person at machinery with structured focus',
+    title: 'Structured problem solving in technical machinery environment',
+    aspectRatio: '1074 / 806',
+    intrinsicDimensions: { width: 1074, height: 806 },
+    focalPoint: {
+      desktop: '50% 50%',
+      tablet: '50% 50%',
+      mobile: '50% 50%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-640.webp',
-      960: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b02-conscientiousness-architectural-sketch-1920.webp'
-    }
+    widths: [720, 1080, 1600, 2400],
+    source: '/media/evidence-in-context/career-complex-problems-1080.webp',
+    fallback: '/media/evidence-in-context/career-complex-problems-1080.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/career-complex-problems-720.avif 720w, /media/evidence-in-context/career-complex-problems-1080.avif 1080w, /media/evidence-in-context/career-complex-problems-1600.avif 1600w, /media/evidence-in-context/career-complex-problems-2400.avif 2400w',
+    webpSrcSet:
+      '/media/evidence-in-context/career-complex-problems-720.webp 720w, /media/evidence-in-context/career-complex-problems-1080.webp 1080w, /media/evidence-in-context/career-complex-problems-1600.webp 1600w, /media/evidence-in-context/career-complex-problems-2400.webp 2400w',
+    mobileAvif: '/media/evidence-in-context/career-complex-problems-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/career-complex-problems-mobile-720.webp',
   },
-  b03: {
-    id: 'b03',
-    name: 'pa-b03-extraversion-team-exchange',
-    role: 'Big Five: Extraversion; energetic group exchange',
-    alt: 'Engaged team in active collaborative dialogue and exchange',
-    focalPoint: { desktop: '50% 48%', mobile: '50% 48%' },
-    aspectRatio: '3800 / 2138',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b03-extraversion-team-exchange.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-640.avif',
-      960: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-1920.avif'
+
+  careerOpen: {
+    id: 'lQQz57tvWfo',
+    key: 'career-open-questions',
+    name: 'pa-career-open-questions',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Career Intelligence: Open questions, long focus',
+    alt: 'Jeweler concentrating meticulously at workstation',
+    title: 'Focused inquiry and deep investigation at technical workstation',
+    aspectRatio: '1074 / 806',
+    intrinsicDimensions: { width: 1074, height: 806 },
+    focalPoint: {
+      desktop: '52% 48%',
+      tablet: '50% 50%',
+      mobile: '50% 45%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-640.webp',
-      960: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b03-extraversion-team-exchange-1920.webp'
-    }
+    widths: [720, 1080, 1600, 2400],
+    source: '/media/evidence-in-context/career-open-questions-1080.webp',
+    fallback: '/media/evidence-in-context/career-open-questions-1080.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/career-open-questions-720.avif 720w, /media/evidence-in-context/career-open-questions-1080.avif 1080w, /media/evidence-in-context/career-open-questions-1600.avif 1600w, /media/evidence-in-context/career-open-questions-2400.avif 2400w',
+    webpSrcSet:
+      '/media/evidence-in-context/career-open-questions-720.webp 720w, /media/evidence-in-context/career-open-questions-1080.webp 1080w, /media/evidence-in-context/career-open-questions-1600.webp 1600w, /media/evidence-in-context/career-open-questions-2400.webp 2400w',
+    mobileAvif: '/media/evidence-in-context/career-open-questions-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/career-open-questions-mobile-720.webp',
   },
-  b04: {
-    id: 'b04',
-    name: 'pa-b04-agreeableness-workshop-table',
-    role: 'Big Five: Agreeableness; shared working field',
-    alt: 'Collaborative workshop table with hands reviewing shared plans',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '5301 / 3598',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b04-agreeableness-workshop-table.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-640.avif',
-      960: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-1920.avif'
+
+  evidenceVisible: {
+    id: 'pESzYfR0oBA',
+    key: 'evidence-visible-output',
+    name: 'pa-evidence-visible-output',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Homepage Evidence Transformation & Career Intelligence: Visible output',
+    alt: 'Precision soldering close-up with flame and metal craft',
+    title: 'Precision soldering and tangible fabrication detail',
+    aspectRatio: '736 / 981',
+    intrinsicDimensions: { width: 736, height: 981 },
+    focalPoint: {
+      desktop: '50% 50%',
+      tablet: '50% 50%',
+      mobile: '50% 50%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-640.webp',
-      960: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b04-agreeableness-workshop-table-1920.webp'
-    }
+    widths: [640, 900, 1200, 1600],
+    source: '/media/evidence-in-context/evidence-visible-output-900.webp',
+    fallback: '/media/evidence-in-context/evidence-visible-output-900.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/evidence-visible-output-640.avif 640w, /media/evidence-in-context/evidence-visible-output-900.avif 900w, /media/evidence-in-context/evidence-visible-output-1200.avif 1200w, /media/evidence-in-context/evidence-visible-output-1600.avif 1600w',
+    webpSrcSet:
+      '/media/evidence-in-context/evidence-visible-output-640.webp 640w, /media/evidence-in-context/evidence-visible-output-900.webp 900w, /media/evidence-in-context/evidence-visible-output-1200.webp 1200w, /media/evidence-in-context/evidence-visible-output-1600.webp 1600w',
+    mobileAvif: '/media/evidence-in-context/evidence-visible-output-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/evidence-visible-output-mobile-720.webp',
   },
-  b05: {
-    id: 'b05',
-    name: 'pa-b05-stability-water-texture',
-    role: 'Big Five: Emotional Stability; calm abstract field',
-    alt: 'Calm water surface texture representing emotional steadiness and composure',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '4922 / 3281',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b05-stability-water-texture.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b05-stability-water-texture-640.avif',
-      960: '/media/personality-v6/optimized/pa-b05-stability-water-texture-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b05-stability-water-texture-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b05-stability-water-texture-1920.avif'
+
+  howItWorksCraft: {
+    id: '5JmxBz_d49s',
+    key: 'how-it-works-craft',
+    name: 'pa-how-it-works-craft',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'How It Works opening and evidence narrative',
+    alt: 'Hands working with tools and materials on a physical work surface',
+    title: 'Hands and precision tools shaping raw materials',
+    aspectRatio: '1074 / 806',
+    intrinsicDimensions: { width: 1074, height: 806 },
+    focalPoint: {
+      desktop: '50% 50%',
+      tablet: '50% 50%',
+      mobile: '50% 50%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b05-stability-water-texture-640.webp',
-      960: '/media/personality-v6/optimized/pa-b05-stability-water-texture-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b05-stability-water-texture-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b05-stability-water-texture-1920.webp'
-    }
+    widths: [720, 1080, 1600, 2400],
+    source: '/media/evidence-in-context/how-it-works-craft-1080.webp',
+    fallback: '/media/evidence-in-context/how-it-works-craft-1080.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/how-it-works-craft-720.avif 720w, /media/evidence-in-context/how-it-works-craft-1080.avif 1080w, /media/evidence-in-context/how-it-works-craft-1600.avif 1600w, /media/evidence-in-context/how-it-works-craft-2400.avif 2400w',
+    webpSrcSet:
+      '/media/evidence-in-context/how-it-works-craft-720.webp 720w, /media/evidence-in-context/how-it-works-craft-1080.webp 1080w, /media/evidence-in-context/how-it-works-craft-1600.webp 1600w, /media/evidence-in-context/how-it-works-craft-2400.webp 2400w',
+    mobileAvif: '/media/evidence-in-context/how-it-works-craft-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/how-it-works-craft-mobile-720.webp',
   },
-  b06: {
-    id: 'b06',
-    name: 'pa-b06-riasec-realistic-industrial-dialogue',
-    role: 'RIASEC: Realistic',
-    alt: 'Industrial engineering environment representing hands-on technical systems',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '8256 / 5504',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b06-riasec-realistic-industrial-dialogue.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-640.avif',
-      960: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-1920.avif'
+
+  careerShared: {
+    id: 'ePnZ8c20f_o',
+    key: 'career-shared-decisions',
+    name: 'pa-career-shared-decisions',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Career Intelligence: Shared decisions, frequent coordination',
+    alt: 'Craftsperson in collaborative studio workshop',
+    title: 'Multi-disciplinary studio craft and shared workflow',
+    aspectRatio: '1074 / 806',
+    intrinsicDimensions: { width: 1074, height: 806 },
+    focalPoint: {
+      desktop: '50% 50%',
+      tablet: '50% 50%',
+      mobile: '50% 50%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-640.webp',
-      960: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b06-riasec-realistic-industrial-dialogue-1920.webp'
-    }
+    widths: [720, 1080, 1600, 2400],
+    source: '/media/evidence-in-context/career-shared-decisions-1080.webp',
+    fallback: '/media/evidence-in-context/career-shared-decisions-1080.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/career-shared-decisions-720.avif 720w, /media/evidence-in-context/career-shared-decisions-1080.avif 1080w, /media/evidence-in-context/career-shared-decisions-1600.avif 1600w, /media/evidence-in-context/career-shared-decisions-2400.avif 2400w',
+    webpSrcSet:
+      '/media/evidence-in-context/career-shared-decisions-720.webp 720w, /media/evidence-in-context/career-shared-decisions-1080.webp 1080w, /media/evidence-in-context/career-shared-decisions-1600.webp 1600w, /media/evidence-in-context/career-shared-decisions-2400.webp 2400w',
+    mobileAvif: '/media/evidence-in-context/career-shared-decisions-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/career-shared-decisions-mobile-720.webp',
   },
-  b07: {
-    id: 'b07',
-    name: 'pa-b07-riasec-investigative-laboratory',
-    role: 'RIASEC: Investigative',
-    alt: 'Scientific research laboratory representing empirical inquiry and analysis',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '4204 / 2637',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b07-riasec-investigative-laboratory.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-640.avif',
-      960: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-1920.avif'
+
+  careerAutonomy: {
+    id: '8-BQoFhAwKk',
+    key: 'career-autonomy',
+    name: 'pa-career-autonomy',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Career Intelligence: Autonomy, pace, personal standards',
+    alt: 'Artist working in dense, creative studio environment',
+    title: 'Autonomous studio practice with high personal standards',
+    aspectRatio: '1074 / 806',
+    intrinsicDimensions: { width: 1074, height: 806 },
+    focalPoint: {
+      desktop: '50% 50%',
+      tablet: '50% 50%',
+      mobile: '50% 50%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-640.webp',
-      960: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b07-riasec-investigative-laboratory-1920.webp'
-    }
+    widths: [720, 1080, 1600, 2400],
+    source: '/media/evidence-in-context/career-autonomy-1080.webp',
+    fallback: '/media/evidence-in-context/career-autonomy-1080.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/career-autonomy-720.avif 720w, /media/evidence-in-context/career-autonomy-1080.avif 1080w, /media/evidence-in-context/career-autonomy-1600.avif 1600w, /media/evidence-in-context/career-autonomy-2400.avif 2400w',
+    webpSrcSet:
+      '/media/evidence-in-context/career-autonomy-720.webp 720w, /media/evidence-in-context/career-autonomy-1080.webp 1080w, /media/evidence-in-context/career-autonomy-1600.webp 1600w, /media/evidence-in-context/career-autonomy-2400.webp 2400w',
+    mobileAvif: '/media/evidence-in-context/career-autonomy-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/career-autonomy-mobile-720.webp',
   },
-  b08: {
-    id: 'b08',
-    name: 'pa-b08-riasec-artistic-watercolour',
-    role: 'RIASEC: Artistic',
-    alt: 'Creative watercolour textures representing design and conceptual synthesis',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '4189 / 2793',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b08-riasec-artistic-watercolour.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-640.avif',
-      960: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-1920.avif'
+
+  progressStudio: {
+    id: 'rJziomX_sLQ',
+    key: 'progress-studio',
+    name: 'pa-progress-studio',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Progress route longitudinal temporal recomposition',
+    alt: 'Artist preparing in a busy studio environment',
+    title: 'Reflective artist in dynamic studio workspace',
+    aspectRatio: '735 / 980',
+    intrinsicDimensions: { width: 735, height: 980 },
+    focalPoint: {
+      desktop: '50% 40%',
+      tablet: '50% 40%',
+      mobile: '50% 35%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-640.webp',
-      960: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b08-riasec-artistic-watercolour-1920.webp'
-    }
+    widths: [640, 900, 1200, 1600],
+    source: '/media/evidence-in-context/progress-studio-900.webp',
+    fallback: '/media/evidence-in-context/progress-studio-900.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/progress-studio-640.avif 640w, /media/evidence-in-context/progress-studio-900.avif 900w, /media/evidence-in-context/progress-studio-1200.avif 1200w, /media/evidence-in-context/progress-studio-1600.avif 1600w',
+    webpSrcSet:
+      '/media/evidence-in-context/progress-studio-640.webp 640w, /media/evidence-in-context/progress-studio-900.webp 900w, /media/evidence-in-context/progress-studio-1200.webp 1200w, /media/evidence-in-context/progress-studio-1600.webp 1600w',
+    mobileAvif: '/media/evidence-in-context/progress-studio-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/progress-studio-mobile-720.webp',
   },
-  b09: {
-    id: 'b09',
-    name: 'pa-b09-riasec-social-conversation',
-    role: 'RIASEC: Social',
-    alt: 'Meaningful interpersonal conversation representing mentorship and group development',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '6075 / 4050',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b09-riasec-social-conversation.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-640.avif',
-      960: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-1920.avif'
+
+  trustInspection: {
+    id: 'nEY2bbWMfnQ',
+    key: 'trust-inspection',
+    name: 'pa-trust-inspection',
+    photographer: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    role: 'Trust and provenance route inspectable record hero',
+    alt: 'Person inspecting fine details with a magnifying glass',
+    title: 'Meticulous inspection and provenance verification',
+    aspectRatio: '735 / 980',
+    intrinsicDimensions: { width: 735, height: 980 },
+    focalPoint: {
+      desktop: '50% 45%',
+      tablet: '50% 45%',
+      mobile: '50% 40%',
     },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-640.webp',
-      960: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b09-riasec-social-conversation-1920.webp'
-    }
+    widths: [640, 900, 1200, 1600],
+    source: '/media/evidence-in-context/trust-inspection-900.webp',
+    fallback: '/media/evidence-in-context/trust-inspection-900.jpg',
+    avifSrcSet:
+      '/media/evidence-in-context/trust-inspection-640.avif 640w, /media/evidence-in-context/trust-inspection-900.avif 900w, /media/evidence-in-context/trust-inspection-1200.avif 1200w, /media/evidence-in-context/trust-inspection-1600.avif 1600w',
+    webpSrcSet:
+      '/media/evidence-in-context/trust-inspection-640.webp 640w, /media/evidence-in-context/trust-inspection-900.webp 900w, /media/evidence-in-context/trust-inspection-1200.webp 1200w, /media/evidence-in-context/trust-inspection-1600.webp 1600w',
+    mobileAvif: '/media/evidence-in-context/trust-inspection-mobile-720.avif',
+    mobileWebp: '/media/evidence-in-context/trust-inspection-mobile-720.webp',
   },
-  b10: {
-    id: 'b10',
-    name: 'pa-b10-riasec-enterprising-presentation',
-    role: 'RIASEC: Enterprising',
-    alt: 'Executive presentation and strategic alignment session',
-    focalPoint: { desktop: '50% 45%', mobile: '50% 45%' },
-    aspectRatio: '3840 / 2160',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b10-riasec-enterprising-presentation.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-640.avif',
-      960: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-1920.avif'
-    },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-640.webp',
-      960: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b10-riasec-enterprising-presentation-1920.webp'
-    }
-  },
-  b11: {
-    id: 'b11',
-    name: 'pa-b11-riasec-conventional-documents',
-    role: 'RIASEC: Conventional',
-    alt: 'Structured documents and ledger systems representing governance and precision',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '5412 / 7216',
-    widths: [720, 1080, 1440, 1920],
-    source: '/media/personality-v6/source/pa-b11-riasec-conventional-documents.jpg',
-    avif: {
-      720: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-720.avif',
-      1080: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-1080.avif',
-      1440: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-1440.avif',
-      1920: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-1920.avif'
-    },
-    webp: {
-      720: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-720.webp',
-      1080: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-1080.webp',
-      1440: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-1440.webp',
-      1920: '/media/personality-v6/optimized/pa-b11-riasec-conventional-documents-1920.webp'
-    }
-  },
-  b12: {
-    id: 'b12',
-    name: 'pa-b12-onet-workflow-evidence',
-    role: 'O*NET values and behavioural-signal evidence field',
-    alt: 'High-focus workflow evidence field with detailed technical instruments',
-    focalPoint: { desktop: '50% 50%', mobile: '50% 50%' },
-    aspectRatio: '7008 / 4672',
-    widths: [640, 960, 1280, 1920],
-    source: '/media/personality-v6/source/pa-b12-onet-workflow-evidence.jpg',
-    avif: {
-      640: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-640.avif',
-      960: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-960.avif',
-      1280: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-1280.avif',
-      1920: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-1920.avif'
-    },
-    webp: {
-      640: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-640.webp',
-      960: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-960.webp',
-      1280: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-1280.webp',
-      1920: '/media/personality-v6/optimized/pa-b12-onet-workflow-evidence-1920.webp'
-    }
-  }
 };
+
+// Aliases to support index/id lookup
+MEDIA_ASSETS_V7.a01 = MEDIA_ASSETS_V7.homeContext;
+MEDIA_ASSETS_V7.a02 = MEDIA_ASSETS_V7.evidenceVisible;
+MEDIA_ASSETS_V7.a03 = MEDIA_ASSETS_V7.careerComplex;
+MEDIA_ASSETS_V7.a04 = MEDIA_ASSETS_V7.careerOpen;
+MEDIA_ASSETS_V7.a05 = MEDIA_ASSETS_V7.careerShared;
+MEDIA_ASSETS_V7.a06 = MEDIA_ASSETS_V7.careerAutonomy;
+MEDIA_ASSETS_V7.a07 = MEDIA_ASSETS_V7.howItWorksCraft;
+MEDIA_ASSETS_V7.a08 = MEDIA_ASSETS_V7.progressStudio;
+MEDIA_ASSETS_V7.a09 = MEDIA_ASSETS_V7.trustInspection;
+MEDIA_ASSETS_V7.a10 = MEDIA_ASSETS_V7.signupWorkshop;
 
 export const MEDIA_ASSETS = MEDIA_ASSETS_V7;
 export const getAssetV7 = (id) => MEDIA_ASSETS_V7[id] || null;

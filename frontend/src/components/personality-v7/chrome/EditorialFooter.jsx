@@ -1,5 +1,0 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
-export const EditorialFooter = () => <footer className="pa-terminal-footer" role="contentinfo"><div className="pa-terminal-footer__upper"><p>Personality Assessor helps make professional context, separate readings, and the record around them easier to inspect.</p><nav aria-label="Public navigation"><Link to="/how-it-works">How it works</Link><Link to="/career-intelligence">Career environments</Link><Link to="/methodology">Methodology</Link></nav><nav aria-label="Integrity navigation"><Link to="/trust">Trust</Link><Link to="/privacy">Privacy</Link><Link to="/progress">Progress</Link></nav><nav aria-label="Account navigation"><Link to="/login">Sign in</Link><Link to="/signup">Build a profile</Link></nav></div><div className="pa-terminal-footer__wordmark" aria-hidden="true">PERSONALITY ASSESSOR</div><div className="pa-terminal-footer__bottom"><span>© {new Date().getFullYear()} Personality Assessor</span><Link to="/privacy">Privacy policy</Link></div></footer>;
-export default EditorialFooter;
