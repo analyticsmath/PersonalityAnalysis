@@ -720,8 +720,6 @@
   color: var(--pa-mineral);
   padding: clamp(90px, 14vh, 160px) 0;
   position: relative;
-  z-index: 2;
-  will-change: transform;
 }
 
 .pa-home-finale__grid {

@@ -394,13 +394,10 @@
   text-decoration: none;
 }
 
-/* ── Sticky Reveal Public Footer (Section 21) ── */
+/* ── Public Footer (Section 21) ── */
 .pa-footer {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
+  position: relative;
+  width: 100%;
   background-color: var(--pa-carbon);
   color: var(--pa-mineral);
   padding: 4rem 0 2rem 0;

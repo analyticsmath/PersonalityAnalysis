@@ -1,11 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef } from 'react';
 import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
 import MagneticTarget from '../motion/MagneticTarget';
 import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export const HomeFinaleChapter = () => {
   const { navigateWithTransition } = useRouteTransition();
@@ -14,28 +10,6 @@ export const HomeFinaleChapter = () => {
   const contentRef = useRef(null);
 
   const asset = MEDIA_ASSETS_V7.homeContext;
-
-  useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isMobile = window.innerWidth <= 768;
-    if (prefersReduced || isMobile) return;
-
-    const ctx = gsap.context(() => {
-      // Sticky footer reveal upward translation as finale finishes
-      gsap.to(sectionRef.current, {
-        yPercent: -15,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'bottom bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   const handleCtaClick = (e, path) => {
     e.preventDefault();
