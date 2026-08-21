@@ -1,6 +1,7 @@
 /* ==========================================================================
    Personality Assessor — Evidence in Context Foundation Styles
    Accessible Semantics, Typographic Hierarchy & Action Systems
+   Primary Display: Mona Sans Variable
    ========================================================================== */
 
 /* Base Root & Global Page Structure */
@@ -18,6 +19,7 @@
   width: 100%;
   position: relative;
   box-sizing: border-box;
+  overflow-x: clip;
 }
 
 .pa-v7-root *,
@@ -26,7 +28,7 @@
   box-sizing: border-box;
 }
 
-/* Accessibility: Focus Visible Treatments (Section 34) */
+/* Accessibility: Focus Visible Treatments */
 .pa-v7-root :focus-visible,
 .pa-public-v4 :focus-visible,
 .pa-auth-v4 :focus-visible {
@@ -36,8 +38,9 @@
 
 /* Dark surface focus treatment */
 .pa-theme--dark :focus-visible,
-[data-theme='dark'] :focus-visible,
-.pa-v7-dark-surface :focus-visible {
+[data-tone='dark'] :focus-visible,
+[data-tone='dark-content'] :focus-visible,
+.pa-surface-carbon :focus-visible {
   outline: 2px solid var(--pa-mineral);
   outline-offset: 3px;
 }
@@ -55,7 +58,7 @@
   font-size: 0.875rem;
   font-family: var(--pa-font-functional);
   transition: top 0.2s ease;
-  border-radius: 2px;
+  border-radius: var(--pa-radius-control);
   text-decoration: none;
 }
 
@@ -63,7 +66,7 @@
   top: 1rem;
 }
 
-/* ── Typography Hierarchy ── */
+/* ── Typographic Hierarchy (Specification Section 5) ── */
 .pa-v7-root h1,
 .pa-v7-root h2,
 .pa-v7-root h3,
@@ -72,11 +75,48 @@
 .pa-public-v4 h2,
 .pa-public-v4 h3,
 .pa-public-v4 h4 {
-  font-family: var(--pa-font-editorial);
-  font-weight: 400;
+  font-family: var(--pa-font-display);
+  font-weight: 520;
   margin: 0;
   color: inherit;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
+  font-variation-settings: 'opsz' 48;
+}
+
+.pa-display-hero {
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-hero-display);
+  line-height: var(--pa-hero-lh);
+  letter-spacing: var(--pa-hero-tracking);
+  font-weight: 520;
+  font-variation-settings: 'opsz' 72, 'wdth' 100;
+}
+
+.pa-heading-major {
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-heading-major);
+  line-height: var(--pa-heading-major-lh);
+  letter-spacing: var(--pa-heading-major-tracking);
+  font-weight: 520;
+  font-variation-settings: 'opsz' 48;
+}
+
+.pa-heading-sub {
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-heading-sub);
+  line-height: var(--pa-heading-sub-lh);
+  letter-spacing: var(--pa-heading-sub-tracking);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 36;
+}
+
+/* Human Evidence Voice: Newsreader strictly for quoted evidence */
+.pa-evidence-quote {
+  font-family: var(--pa-font-evidence);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
 }
 
 .pa-v7-root p,
@@ -86,7 +126,7 @@
   line-height: var(--pa-body-lh);
 }
 
-/* ── 12-Column Conceptual Grid Container (Section 8) ── */
+/* ── 12-Column Conceptual Grid Container (Specification Section 7) ── */
 .pa-v7-grid {
   display: grid;
   grid-template-columns: repeat(var(--pa-grid-cols), 1fr);
@@ -94,13 +134,13 @@
   padding-left: var(--pa-grid-margin);
   padding-right: var(--pa-grid-margin);
   width: 100%;
-  max-width: 1560px;
+  max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
 }
 
-/* ── Action Buttons & Links (Section 11) ── */
+/* ── Action Buttons & Links (Specification Section 10) ── */
 .pa-btn-primary,
 .pa-v7-btn--primary,
 .pa-btn-primary-light {
@@ -112,14 +152,14 @@
   font-size: 0.9375rem;
   font-weight: 500;
   min-height: 48px;
-  padding: 0 22px;
+  padding: 0 24px;
   border-radius: var(--pa-radius-control);
   background-color: var(--pa-oxblood);
   color: var(--pa-mineral) !important;
   border: 1px solid var(--pa-oxblood);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  transition: background-color 0.22s var(--pa-ease-default), border-color 0.22s var(--pa-ease-default);
   line-height: 1;
 }
 
@@ -141,14 +181,14 @@
   font-size: 0.9375rem;
   font-weight: 500;
   min-height: 48px;
-  padding: 0 22px;
+  padding: 0 24px;
   border-radius: var(--pa-radius-control);
   background-color: var(--pa-mineral);
   color: var(--pa-carbon) !important;
   border: 1px solid var(--pa-mineral);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  transition: background-color 0.22s var(--pa-ease-default), border-color 0.22s var(--pa-ease-default);
   line-height: 1;
 }
 
@@ -176,7 +216,13 @@
   opacity: 0.75;
 }
 
-/* Square media and composition planes (Section 8) */
+/* Magnetic Target wrapper */
+.pa-magnetic-wrap {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Square media and composition planes */
 .pa-media-plane,
 .pa-composition-plane {
   border-radius: var(--pa-radius-media);
@@ -194,7 +240,17 @@
   color: var(--pa-carbon);
 }
 
-/* Reduced Motion Override (Section 32) */
+/* Evidence Provenance Badge */
+.pa-provenance-tag {
+  font-family: var(--pa-font-functional);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pa-oxblood);
+}
+
+/* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

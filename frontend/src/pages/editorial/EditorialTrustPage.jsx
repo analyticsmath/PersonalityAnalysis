@@ -2,259 +2,260 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
-import InspectionAperture from '../../components/personality-v7/motion/InspectionAperture';
+import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
+import { useCursor } from '../../components/personality-v7/motion/CursorCoordinator';
+import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 
-const RECORD_STATES = [
+const PROVENANCE_TIERS = [
   {
     id: 'supplied',
-    buttonLabel: 'You supplied',
-    title: 'You supplied',
-    content: 'Assessment responses, background details and CV text only if you chose to upload a CV.',
-    provenanceTag: 'User Supplied Input',
+    num: '01',
+    label: 'You Supplied',
+    title: 'User Supplied Input',
+    statement: 'Direct responses to contextual assessment scenarios, background details, and CV text when provided.',
+    details: 'Raw inputs are stored directly tied to your account and never shared with third parties for advertising or tracking.',
   },
   {
     id: 'calculated',
-    buttonLabel: 'The system calculated',
-    title: 'The system calculated',
-    content: 'Big Five, RIASEC and work-value readings together with supporting career signals.',
-    provenanceTag: 'Algorithmic Decomposition',
+    num: '02',
+    label: 'System Calculated',
+    title: 'Algorithmic Decomposition',
+    statement: 'Big Five continuous trait coordinates, RIASEC vocational interest vectors, and work values ratings.',
+    details: 'Calculated deterministically using documented psychometric scaling algorithms without black-box alterations.',
   },
   {
     id: 'compared',
-    buttonLabel: 'The system compared',
-    title: 'The system compared',
-    content: 'Your record with curated career profiles using deterministic weighted logic.',
-    provenanceTag: 'Deterministic Career Comparison',
+    num: '03',
+    label: 'System Compared',
+    title: 'Multi-Layer Career Matching',
+    statement: 'Alignment and tension ratings across 17 curated professional role benchmarks.',
+    details: 'Deterministic weighted comparison across traits, interests, and environmental values.',
   },
   {
     id: 'assisted',
-    buttonLabel: 'AI can assist',
-    title: 'AI can assist',
-    content: 'Narrative explanation or coaching where that functionality is configured. AI assistance is not the sole source of the core assessment score.',
-    provenanceTag: 'Optional AI Commentary',
+    num: '04',
+    label: 'AI Assisted',
+    title: 'Narrative Synthesis',
+    statement: 'Contextual coaching commentary, reflective prompts, and narrative summaries.',
+    details: 'AI assistance is supplementary. All primary scores, radar charts, and role matches exist independently.',
   },
   {
     id: 'controlled',
-    buttonLabel: 'You control',
-    title: 'You control',
-    content: 'Data export, assessment deletion and account deletion through the controls implemented in the application.',
-    provenanceTag: 'Account & Privacy Agency',
+    num: '05',
+    label: 'You Control',
+    title: 'Account Agency & Data Rights',
+    statement: 'Export all stored evidence, delete individual assessment stages, or delete your entire account.',
+    details: 'Full self-service data management directly accessible via your account settings.',
   },
 ];
 
-export const EditorialTrustPage = () => {
-  const [activeStateIndex, setActiveStateIndex] = useState(0);
-  const activeState = RECORD_STATES[activeStateIndex];
+export const TrustContent = () => {
+  const { navigateWithTransition } = useRouteTransition();
+  const { setCursorLabel, clearCursorLabel, setApertureActive } = useCursor();
+  const [activeTierIdx, setActiveTierIdx] = useState(0);
+  const [apertureOpen, setApertureOpen] = useState(false);
+
+  const activeTier = PROVENANCE_TIERS[activeTierIdx];
   const asset = MEDIA_ASSETS_V7.trustInspection;
 
-  const surfaceContent = (
-    <div>
-      <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-muted-light)' }}>
-        Surface Statement
-      </span>
-      <p style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: '1.5rem', lineHeight: 1.35, margin: '0.5rem 0 0 0' }}>
-        "Prefers clear structure before committing work."
-      </p>
+  const handlePointerEnterInspection = () => {
+    setCursorLabel('TRACE');
+    setApertureActive(true);
+  };
+
+  const handlePointerLeaveInspection = () => {
+    clearCursorLabel();
+    setApertureActive(false);
+  };
+
+  return (
+    <div className="pa-trust-page">
+      {/* ── Section 1: Hero & Provenance Overview ── */}
+      <section className="pa-trust-hero" data-tone="light">
+        <div className="pa-v7-grid pa-trust-hero__grid">
+          <div className="pa-trust-hero__copy">
+            <span className="pa-provenance-tag">Inspection & Provenance Architecture</span>
+            <h1 className="pa-display-hero pa-trust-hero__h1">
+              Know what you supplied, what the system calculated, and what it added.
+            </h1>
+            <p className="pa-trust-hero__lead">
+              Trust requires transparency. Personality Assessor separates user inputs from algorithmic calculations, role comparisons, and AI commentary so every conclusion remains verifiable.
+            </p>
+          </div>
+
+          <div className="pa-trust-hero__media-wrap">
+            <picture>
+              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
+              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
+              <img
+                src={asset.source}
+                alt={asset.alt}
+                width={asset.intrinsicDimensions.width}
+                height={asset.intrinsicDimensions.height}
+                className="pa-trust-hero__img"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 2: Five Provenance Layers Around One Evidence Record ── */}
+      <section className="pa-trust-tiers-section" data-tone="dark">
+        <div className="pa-v7-grid pa-trust-tiers-section__grid">
+          <div className="pa-trust-tiers-section__header">
+            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
+              Provenance Tiers
+            </span>
+            <h2 className="pa-heading-major pa-trust-tiers-section__h2">
+              Five Verifiable Layers
+            </h2>
+            <p className="pa-trust-tiers-section__lead">
+              Select any tier to trace how information originates, transforms, and remains under your agency.
+            </p>
+          </div>
+
+          {/* Tier Selection Tabs */}
+          <div className="pa-trust-tiers-tabs">
+            {PROVENANCE_TIERS.map((tier, idx) => {
+              const isSelected = activeTierIdx === idx;
+              return (
+                <MagneticTarget key={tier.id} maxDisplacement={6}>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTierIdx(idx)}
+                    onMouseEnter={() => setCursorLabel('TRACE')}
+                    onMouseLeave={() => clearCursorLabel()}
+                    className={`pa-trust-tab-btn ${isSelected ? 'pa-trust-tab-btn--active' : ''}`}
+                    aria-pressed={isSelected}
+                  >
+                    <span className="pa-trust-tab-btn__num">{tier.num}</span>
+                    <span className="pa-trust-tab-btn__label">{tier.label}</span>
+                  </button>
+                </MagneticTarget>
+              );
+            })}
+          </div>
+
+          {/* Active Tier Display & Connected Physical SVG Trajectory */}
+          <div className="pa-trust-tier-display">
+            <svg className="pa-trust-tier-svg" viewBox="0 0 800 200" aria-hidden="true">
+              <path
+                d="M 50 100 Q 200 40 400 100 T 750 100"
+                fill="none"
+                stroke="#642832"
+                strokeWidth="2"
+                strokeDasharray="6 6"
+              />
+            </svg>
+
+            <div className="pa-trust-tier-display__card">
+              <span className="pa-provenance-tag" style={{ color: 'var(--pa-oxblood)' }}>
+                {activeTier.num} • {activeTier.title}
+              </span>
+              <h3 className="pa-trust-tier-display__title">{activeTier.label}</h3>
+              <p className="pa-trust-tier-display__statement">{activeTier.statement}</p>
+              <p className="pa-trust-tier-display__details">{activeTier.details}</p>
+
+              {activeTier.id === 'controlled' && (
+                <div className="pa-trust-tier-display__action">
+                  <Link
+                    to="/account/privacy"
+                    className="pa-link-text"
+                    style={{ color: 'var(--pa-mineral)', textDecoration: 'underline' }}
+                  >
+                    Inspect your account privacy controls &rarr;
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 3: Interactive Aperture Mask Inspection ── */}
+      <section className="pa-trust-inspection-aperture-section" data-tone="light">
+        <div className="pa-v7-grid pa-trust-inspection-aperture-section__grid">
+          <div className="pa-trust-aperture-header">
+            <span className="pa-provenance-tag">Interactive Provenance Mask</span>
+            <h2 className="pa-heading-major">Trace Any Record Reading</h2>
+            <p className="pa-trust-aperture-lead">
+              Hover with fine pointer or toggle the button to inspect the underlying calculation and comparison metadata.
+            </p>
+          </div>
+
+          <div
+            className={`pa-inspection-surface ${apertureOpen ? 'pa-inspection-surface--revealed' : ''}`}
+            onMouseEnter={handlePointerEnterInspection}
+            onMouseLeave={handlePointerLeaveInspection}
+            tabIndex="0"
+            role="region"
+            aria-label="Inspectable reading with provenance layers"
+          >
+            <div className="pa-inspection-surface__foreground">
+              <span className="pa-provenance-tag">Visible Reading</span>
+              <p className="pa-evidence-quote pa-inspection-surface__quote">
+                “Prefers structured problem solving and clear accountability.”
+              </p>
+            </div>
+
+            <div className="pa-inspection-surface__revealed-grid">
+              <div className="pa-provenance-tier">
+                <span className="pa-provenance-tier__tag">01 • You Supplied</span>
+                <p className="pa-provenance-tier__value">Response to deadline scenario in Phase 1.</p>
+              </div>
+              <div className="pa-provenance-tier">
+                <span className="pa-provenance-tier__tag">02 • Calculated</span>
+                <p className="pa-provenance-tier__value">High Conscientiousness coordinate (0.82).</p>
+              </div>
+              <div className="pa-provenance-tier">
+                <span className="pa-provenance-tier__tag">03 • Compared</span>
+                <p className="pa-provenance-tier__value">High alignment with Backend & DevOps profiles.</p>
+              </div>
+              <div className="pa-provenance-tier">
+                <span className="pa-provenance-tier__tag">04 • AI Assisted</span>
+                <p className="pa-provenance-tier__value">Optional narrative coaching tips.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pa-trust-aperture-actions">
+            <button
+              type="button"
+              className="pa-btn-primary-light"
+              onClick={() => setApertureOpen((prev) => !prev)}
+              aria-pressed={apertureOpen}
+            >
+              {apertureOpen ? 'Hide provenance metadata' : 'Inspect provenance metadata'}
+            </button>
+
+            <MagneticTarget>
+              <a
+                href="/privacy"
+                className="pa-btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateWithTransition('/privacy');
+                }}
+              >
+                Read our privacy document &rarr;
+              </a>
+            </MagneticTarget>
+          </div>
+        </div>
+      </section>
     </div>
   );
+};
 
-  const revealedContent = (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Source
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          Assessment response
-        </p>
-      </div>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Reading
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          Big Five contribution
-        </p>
-      </div>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Additional Context
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          Work-value evidence
-        </p>
-      </div>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Career Use
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          One input among comparison layers
-        </p>
-      </div>
-    </div>
-  );
-
+export const EditorialTrustPage = () => {
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={true}>
-        {/* ── Section 1: Opening Hero ── */}
-        <section
-          style={{
-            backgroundColor: 'var(--pa-mineral)',
-            color: 'var(--pa-carbon)',
-            paddingTop: 'calc(var(--pa-header-height) + 40px)',
-            paddingBottom: 'clamp(60px, 8vh, 100px)',
-          }}
-          aria-label="Trust and Provenance Overview"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / 8', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <h1 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-l)', lineHeight: 'var(--pa-display-l-lh)' }}>
-                Trust starts with knowing where a conclusion came from.
-              </h1>
-              <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: 'var(--pa-body-l)', color: 'var(--pa-muted-light)', lineHeight: 1.5, maxWidth: '640px' }}>
-                You should be able to distinguish what you supplied, what the system calculated, what was compared and what remains under your control.
-              </p>
-            </div>
-
-            <div style={{ gridColumn: '9 / 13', height: '360px', overflow: 'hidden', borderRadius: 'var(--pa-radius-control)' }}>
-              <picture>
-                <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 33vw, 100vw" />
-                <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 33vw, 100vw" />
-                <img
-                  src={asset.source}
-                  alt={asset.alt}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              </picture>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Section 2: One Record, Five States ── */}
-        <section
-          style={{
-            backgroundColor: '#ECEFEA',
-            color: 'var(--pa-carbon)',
-            padding: 'clamp(80px, 10vh, 120px) 0',
-          }}
-          aria-label="Five Provenance States"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / -1', marginBottom: '2.5rem' }}>
-              <h2 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-m)', lineHeight: 1.15 }}>
-                One Record, Five States
-              </h2>
-              <p style={{ color: 'var(--pa-muted-light)', marginTop: '0.5rem', fontSize: '1.0625rem' }}>
-                Every piece of information in your profile belongs to a verifiable provenance tier.
-              </p>
-            </div>
-
-            {/* Direct selector buttons */}
-            <div style={{ gridColumn: '1 / 5', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {RECORD_STATES.map((st, idx) => {
-                const isSelected = activeStateIndex === idx;
-                return (
-                  <button
-                    key={st.id}
-                    type="button"
-                    onClick={() => setActiveStateIndex(idx)}
-                    style={{
-                      textAlign: 'left',
-                      padding: '1.25rem 1.5rem',
-                      background: isSelected ? 'var(--pa-carbon)' : 'var(--pa-mineral)',
-                      color: isSelected ? 'var(--pa-mineral)' : 'var(--pa-carbon)',
-                      border: 'none',
-                      borderRadius: 'var(--pa-radius-control)',
-                      cursor: 'pointer',
-                      transition: 'background 0.18s ease, color 0.18s ease',
-                      fontFamily: 'var(--pa-font-functional)',
-                      fontSize: '1rem',
-                      fontWeight: isSelected ? 500 : 450,
-                    }}
-                    aria-pressed={isSelected}
-                  >
-                    {st.buttonLabel}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* State Detail Display */}
-            <div style={{ gridColumn: '6 / 13', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <div
-                style={{
-                  padding: '2.5rem',
-                  background: 'var(--pa-mineral)',
-                  borderRadius: 'var(--pa-radius-control)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                }}
-              >
-                <span style={{ fontSize: '0.8125rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--pa-oxblood)' }}>
-                  {activeState.provenanceTag}
-                </span>
-                <h3 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: '1.75rem', lineHeight: 1.25, margin: 0 }}>
-                  {activeState.title}
-                </h3>
-                <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '1.125rem', lineHeight: 1.55, color: 'var(--pa-carbon)', margin: 0 }}>
-                  {activeState.content}
-                </p>
-
-                {activeState.id === 'controlled' && (
-                  <div style={{ marginTop: '1rem' }}>
-                    <Link
-                      to="/account/privacy"
-                      className="pa-link-text"
-                      style={{ color: 'var(--pa-oxblood)', fontWeight: 500 }}
-                    >
-                      Inspect your account privacy controls &rarr;
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Section 3: Interactive Aperture & Privacy Link ── */}
-        <section
-          style={{
-            backgroundColor: 'var(--pa-mineral)',
-            color: 'var(--pa-carbon)',
-            padding: 'clamp(80px, 10vh, 120px) 0',
-          }}
-          aria-label="Interactive Record Inspection"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / -1', maxWidth: '880px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              <h2 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-m)', lineHeight: 1.15 }}>
-                Inspect provenance on any reading
-              </h2>
-              <p style={{ fontSize: '1.0625rem', color: 'var(--pa-muted-light)', lineHeight: 1.55, margin: 0 }}>
-                Hover with a fine pointer or tap the toggle button to reveal the exact source, framework contribution, and career weighting.
-              </p>
-
-              <InspectionAperture
-                surfaceContent={surfaceContent}
-                revealedContent={revealedContent}
-                buttonLabel="Inspect provenance"
-              />
-
-              <div style={{ marginTop: '1rem' }}>
-                <Link to="/privacy" className="pa-btn-primary">
-                  Read the privacy details
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TrustContent />
       </PublicLayout>
     </SmoothScrollProvider>
   );

@@ -1,11 +1,13 @@
 /* ==========================================================================
    Personality Assessor — Evidence in Context Design Tokens
+   Primary Kinetic/Display: Mona Sans Variable
+   Utility/Body: Instrument Sans Variable
+   Human Evidence: Newsreader Variable
    Core Palette: Carbon, Graphite, Mineral, Pewter, Oxblood
-   Typography: Newsreader & Instrument Sans
    ========================================================================== */
 
 :root {
-  /* ── Core Color Tokens (Specification Section 7) ── */
+  /* ── Core Color Tokens (Specification Section 6) ── */
   --pa-carbon: #0D0F0E;
   --pa-graphite: #222724;
   --pa-mineral: #F3F5F2;
@@ -22,76 +24,102 @@
   --pa-stone: var(--pa-pewter);
   --pa-ink: var(--pa-carbon);
 
-  /* ── Typography Tokens (Specification Section 6) ── */
-  --pa-font-serif: 'Newsreader Variable', 'Newsreader', Georgia, Cambria, serif;
-  --pa-font-sans: 'Instrument Sans Variable', 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --pa-font-editorial: var(--pa-font-serif);
-  --pa-font-functional: var(--pa-font-sans);
+  /* ── Typography Families (Specification Section 5) ── */
+  --pa-font-display: 'Mona Sans', 'Mona Sans VF', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pa-font-functional: 'Instrument Sans Variable', 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pa-font-evidence: 'Newsreader Variable', 'Newsreader', Georgia, Cambria, serif;
 
-  /* Desktop Display Type Scale */
-  --pa-display-xl: clamp(72px, 7.4vw, 112px);
-  --pa-display-xl-lh: 0.93;
-  --pa-display-l: clamp(56px, 5.4vw, 82px);
-  --pa-display-l-lh: 0.96;
-  --pa-display-m: clamp(40px, 3.7vw, 58px);
-  --pa-display-m-lh: 1.00;
+  /* Backward-compatible aliases */
+  --pa-font-sans: var(--pa-font-functional);
+  --pa-font-serif: var(--pa-font-evidence);
+  --pa-font-editorial: var(--pa-font-evidence);
 
-  --pa-evidence-stmt: clamp(32px, 3.2vw, 46px);
-  --pa-evidence-stmt-lh: 1.08;
-  --pa-lead-editorial: clamp(22px, 2.2vw, 27px);
-  --pa-lead-editorial-lh: 1.32;
+  /* ── Typography Scales (Specification Section 5) ── */
+  --pa-hero-display: clamp(4.8rem, 7vw, 7.5rem);
+  --pa-hero-lh: 0.90;
+  --pa-hero-tracking: -0.045em;
 
-  --pa-body-l: 18px;
-  --pa-body-l-lh: 1.52;
-  --pa-body: 16px;
-  --pa-body-lh: 1.55;
+  --pa-heading-major: clamp(3.4rem, 5vw, 5.5rem);
+  --pa-heading-major-lh: 0.94;
+  --pa-heading-major-tracking: -0.035em;
+
+  --pa-heading-sub: clamp(2.2rem, 3.2vw, 3.4rem);
+  --pa-heading-sub-lh: 1.02;
+  --pa-heading-sub-tracking: -0.025em;
+
+  --pa-display-xl: var(--pa-hero-display);
+  --pa-display-xl-lh: var(--pa-hero-lh);
+  --pa-display-l: var(--pa-heading-major);
+  --pa-display-l-lh: var(--pa-heading-major-lh);
+  --pa-display-m: var(--pa-heading-sub);
+  --pa-display-m-lh: var(--pa-heading-sub-lh);
+
+  --pa-evidence-stmt: clamp(28px, 2.8vw, 42px);
+  --pa-evidence-stmt-lh: 1.15;
+  --pa-lead-editorial: clamp(20px, 1.8vw, 24px);
+  --pa-lead-editorial-lh: 1.38;
+
+  --pa-body-l: clamp(18px, 1.3vw, 21px);
+  --pa-body-l-lh: 1.48;
+  --pa-body: clamp(17px, 1.15vw, 20px);
+  --pa-body-lh: 1.50;
   --pa-functional: 14px;
   --pa-meta: 12px;
 
-  /* Desktop Grid & Gutters (Specification Section 8) */
+  /* ── Desktop Grid & Gutters (Specification Section 7) ── */
   --pa-grid-cols: 12;
-  --pa-grid-margin: clamp(32px, 3.4vw, 56px);
-  --pa-grid-gap: 20px;
+  --pa-grid-margin: clamp(32px, 3.4vw, 48px);
+  --pa-grid-gap: 24px;
   --pa-header-height: 72px;
   --pa-header-height-mobile: 64px;
 
-  /* Easing & Timing */
-  --pa-ease-default: cubic-bezier(0.22, 1, 0.36, 1);
+  /* ── Easing & Transitions ── */
+  --pa-ease-default: cubic-bezier(0.16, 1, 0.3, 1);
   --pa-ease-recompose: cubic-bezier(0.16, 1, 0.3, 1);
+  --pa-ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
 
-  /* Focus & Radii */
+  /* ── Radii & Focus ── */
   --pa-radius-media: 0px;
   --pa-radius-control: 2px;
   --pa-focus-light: 2px solid var(--pa-oxblood);
   --pa-focus-dark: 2px solid var(--pa-mineral);
 
-  /* Z-Index Structure */
+  /* ── Layer Hierarchy ── */
   --pa-z-base-media: 1;
   --pa-z-content: 10;
   --pa-z-sticky: 20;
   --pa-z-header: 100;
   --pa-z-menu: 200;
+  --pa-z-cursor: 250;
   --pa-z-transition: 300;
 }
 
-@media (max-width: 1179px) {
+@media (max-width: 1024px) {
   :root {
     --pa-grid-cols: 8;
-    --pa-grid-margin: 28px;
-    --pa-grid-gap: 16px;
+    --pa-grid-margin: clamp(24px, 3vw, 32px);
+    --pa-grid-gap: 18px;
+
+    --pa-hero-display: clamp(3.6rem, 6.2vw, 5.2rem);
+    --pa-hero-lh: 0.92;
+    --pa-heading-major: clamp(2.8rem, 4.5vw, 4rem);
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   :root {
     --pa-grid-cols: 4;
-    --pa-grid-margin: 18px;
-    --pa-grid-gap: 12px;
+    --pa-grid-margin: clamp(16px, 4vw, 20px);
+    --pa-grid-gap: 14px;
     --pa-header-height: 64px;
 
-    --pa-display-xl: clamp(48px, 11vw, 60px);
-    --pa-display-l: clamp(44px, 9.5vw, 54px);
-    --pa-display-m: clamp(36px, 8vw, 46px);
-    --pa-evidence-stmt: clamp(28px, 6.8vw, 36px);
+    --pa-hero-display: clamp(42px, 10vw, 56px);
+    --pa-hero-lh: 0.94;
+    --pa-hero-tracking: -0.035em;
+    --pa-heading-major: clamp(32px, 8vw, 44px);
+    --pa-heading-major-lh: 0.96;
+    --pa-heading-sub: clamp(26px, 6.5vw, 34px);
+    --pa-body: 16px;
+    --pa-body-lh: 1.48;
   }
 }

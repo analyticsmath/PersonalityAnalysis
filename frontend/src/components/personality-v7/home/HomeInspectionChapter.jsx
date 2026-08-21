@@ -1,80 +1,119 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import InspectionAperture from '../motion/InspectionAperture';
+import React, { useState, useRef } from 'react';
+import MagneticTarget from '../motion/MagneticTarget';
+import { useCursor } from '../motion/CursorCoordinator';
+import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
 
 export const HomeInspectionChapter = () => {
-  const surfaceContent = (
-    <div>
-      <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-muted-light)' }}>
-        Surface Reading
-      </span>
-      <p style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: '1.5rem', lineHeight: 1.35, margin: '0.5rem 0 0 0' }}>
-        "Prefers clear structure before committing work."
-      </p>
-    </div>
-  );
+  const { navigateWithTransition } = useRouteTransition();
+  const { setCursorLabel, clearCursorLabel, setApertureActive } = useCursor();
+  const [isApertureRevealed, setIsApertureRevealed] = useState(false);
+  const surfaceRef = useRef(null);
 
-  const revealedContent = (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Source
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          Assessment response
-        </p>
-      </div>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Reading
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          Big Five contribution
-        </p>
-      </div>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Additional Context
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          Work-value evidence
-        </p>
-      </div>
-      <div>
-        <span style={{ fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-          Career Use
-        </span>
-        <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-mineral)', margin: '0.25rem 0 0 0' }}>
-          One input among comparison layers
-        </p>
-      </div>
-    </div>
-  );
+  const handleMouseEnter = () => {
+    setCursorLabel('INSPECT');
+    setApertureActive(true);
+  };
+
+  const handleMouseLeave = () => {
+    clearCursorLabel();
+    setApertureActive(false);
+  };
+
+  const toggleAperture = () => {
+    setIsApertureRevealed((prev) => !prev);
+  };
+
+  const handleCtaClick = (e) => {
+    e.preventDefault();
+    navigateWithTransition('/trust');
+  };
 
   return (
-    <section className="pa-home-inspection" aria-label="Inspection and Provenance">
-      <div className="pa-v7-grid">
-        <div style={{ gridColumn: '1 / -1' }} className="pa-home-inspection__inner">
-          <div>
-            <h2 className="pa-home-inspection__h2">
-              You should be able to ask why.
-            </h2>
-            <p className="pa-home-inspection__body" style={{ marginTop: '1rem' }}>
-              Inspect what you provided, what the system calculated and how a reading relates back to evidence.
+    <section
+      className="pa-home-inspection"
+      aria-label="Inspection & Provenance Chapter"
+      data-tone="light"
+    >
+      <div className="pa-v7-grid pa-home-inspection__grid">
+        <div className="pa-home-inspection__header">
+          <span className="pa-provenance-tag">Verifiable Provenance</span>
+          <h2 className="pa-heading-major pa-home-inspection__h2">
+            Inspect how a reading was built.
+          </h2>
+          <p className="pa-home-inspection__lead">
+            Every score, radar dimension, and career alignment has clear provenance. The system distinguishes what you provided from what was calculated, compared, or generated.
+          </p>
+        </div>
+
+        {/* Interactive Contextual Inspection Surface */}
+        <div
+          ref={surfaceRef}
+          className={`pa-inspection-surface ${isApertureRevealed ? 'pa-inspection-surface--revealed' : ''}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          tabIndex="0"
+          role="region"
+          aria-label="Inspectable reading with provenance layers"
+        >
+          {/* Surface Reading Layer */}
+          <div className="pa-inspection-surface__foreground">
+            <span className="pa-provenance-tag">Visible Reading Layer</span>
+            <p className="pa-evidence-quote pa-inspection-surface__quote">
+              “Prefers clear ownership and system boundaries before committing work.”
+            </p>
+            <p className="pa-inspection-surface__subtext">
+              Hover cursor with pointer or use the button below to inspect provenance metadata.
             </p>
           </div>
 
-          <InspectionAperture
-            surfaceContent={surfaceContent}
-            revealedContent={revealedContent}
-            buttonLabel="Inspect reading"
-          />
+          {/* Under-the-Hood Provenance Layer */}
+          <div className="pa-inspection-surface__revealed-grid">
+            <div className="pa-provenance-tier">
+              <span className="pa-provenance-tier__tag">01 • You Supplied</span>
+              <p className="pa-provenance-tier__value">
+                Direct contextual response to project deadline scenario.
+              </p>
+            </div>
 
-          <div>
-            <Link to="/trust" className="pa-btn-primary">
-              See trust and provenance
-            </Link>
+            <div className="pa-provenance-tier">
+              <span className="pa-provenance-tier__tag">02 • System Calculated</span>
+              <p className="pa-provenance-tier__value">
+                Conscientiousness index & conventional interest vectors.
+              </p>
+            </div>
+
+            <div className="pa-provenance-tier">
+              <span className="pa-provenance-tier__tag">03 • System Compared</span>
+              <p className="pa-provenance-tier__value">
+                Weighted against 17 backend role requirement matrices.
+              </p>
+            </div>
+
+            <div className="pa-provenance-tier">
+              <span className="pa-provenance-tier__tag">04 • AI Assisted</span>
+              <p className="pa-provenance-tier__value">
+                Contextual commentary and development suggestions only.
+              </p>
+            </div>
           </div>
+        </div>
+
+        {/* Action Controls */}
+        <div className="pa-home-inspection__actions">
+          <button
+            type="button"
+            className="pa-btn-primary-light pa-inspection-toggle-btn"
+            onClick={toggleAperture}
+            aria-pressed={isApertureRevealed}
+          >
+            {isApertureRevealed ? 'Hide provenance layer' : 'Inspect reading'}
+          </button>
+
+          <MagneticTarget>
+            <a href="/trust" className="pa-btn-primary" onClick={handleCtaClick}>
+              Explore trust & provenance &rarr;
+            </a>
+          </MagneticTarget>
         </div>
       </div>
     </section>

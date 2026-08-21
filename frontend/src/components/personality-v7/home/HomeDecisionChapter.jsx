@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import MagneticTarget from '../motion/MagneticTarget';
 
 export const DECISION_CHOICES = [
   { id: 'c1', text: 'Clarify responsibilities before committing work.' },
@@ -8,34 +10,88 @@ export const DECISION_CHOICES = [
 ];
 
 export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
-  return (
-    <section className="pa-home-decision" aria-label="Contextual Decision">
-      <div className="pa-v7-grid">
-        <div className="pa-home-decision__grid">
-          <div className="pa-home-decision__prompt">
-            <h2 className="pa-home-decision__h2">Context comes first.</h2>
-            <p className="pa-home-decision__question">
-              A project has a fixed deadline, unclear ownership and two teams waiting on a decision. What would you do first?
-            </p>
-            <p className="pa-home-decision__note">
-              This public example is illustrative. It is not submitted to your account.
-            </p>
-            {selectedChoice && (
-              <p className="pa-home-decision__note" style={{ color: 'var(--pa-carbon)', fontWeight: 500 }}>
-                A response becomes one piece of evidence. The complete assessment uses many signals across multiple stages.
-              </p>
-            )}
-          </div>
+  const choicesContainerRef = useRef(null);
+  const choiceItemsRef = useRef([]);
 
-          <fieldset className="pa-home-decision__choices">
-            <legend className="pa-home-decision__legend">
-              Choose your primary action in this scenario
-            </legend>
-            {DECISION_CHOICES.map((choice) => {
-              const isSelected = selectedChoice?.id === choice.id;
-              return (
+  useEffect(() => {
+    if (!choicesContainerRef.current) return;
+
+    choiceItemsRef.current.forEach((el, idx) => {
+      if (!el) return;
+      const choice = DECISION_CHOICES[idx];
+      const isSelected = selectedChoice?.id === choice.id;
+
+      if (selectedChoice) {
+        if (isSelected) {
+          gsap.to(el, {
+            x: 0,
+            y: 0,
+            scale: 1.02,
+            opacity: 1,
+            duration: 0.48,
+            ease: 'power3.inOut',
+          });
+        } else {
+          gsap.to(el, {
+            x: idx % 2 === 0 ? -16 : 16,
+            y: 8,
+            scale: 0.98,
+            opacity: 0.32,
+            duration: 0.48,
+            ease: 'power3.inOut',
+          });
+        }
+      } else {
+        gsap.to(el, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      }
+    });
+  }, [selectedChoice]);
+
+  return (
+    <section
+      id="context-decision-chapter"
+      className="pa-home-decision"
+      aria-label="Contextual Decision"
+      data-tone="light"
+    >
+      <div className="pa-v7-grid pa-home-decision__grid">
+        {/* Left 5 Columns: Question Prompt */}
+        <div className="pa-home-decision__prompt">
+          <span className="pa-provenance-tag">Decision Scenario</span>
+          <h2 className="pa-heading-major pa-home-decision__h2">
+            Context comes first.
+          </h2>
+          <p className="pa-home-decision__question">
+            A project has a fixed deadline, unclear ownership and two teams waiting on a decision. What would you do first?
+          </p>
+          <p className="pa-home-decision__note">
+            This public example is illustrative. Your answer becomes an evidence object that contributes to several distinct readings below.
+          </p>
+        </div>
+
+        {/* Right 6–7 Columns: Orbiting/Staggered Choices */}
+        <fieldset ref={choicesContainerRef} className="pa-home-decision__choices">
+          <legend className="pa-home-decision__legend">
+            Choose your primary action in this scenario
+          </legend>
+
+          {DECISION_CHOICES.map((choice, idx) => {
+            const isSelected = selectedChoice?.id === choice.id;
+            return (
+              <MagneticTarget
+                key={choice.id}
+                maxDisplacement={8}
+                className="pa-home-decision__choice-wrapper"
+              >
                 <label
-                  key={choice.id}
+                  ref={(node) => (choiceItemsRef.current[idx] = node)}
                   htmlFor={`decision-radio-${choice.id}`}
                   className={`pa-choice-item ${isSelected ? 'pa-choice-item--selected' : ''}`}
                 >
@@ -46,13 +102,17 @@ export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
                     value={choice.id}
                     checked={isSelected}
                     onChange={() => onSelectChoice(choice)}
+                    className="pa-choice-item__radio"
                   />
+                  <span className="pa-choice-item__num" aria-hidden="true">
+                    0{idx + 1}
+                  </span>
                   <span className="pa-choice-item__label">{choice.text}</span>
                 </label>
-              );
-            })}
-          </fieldset>
-        </div>
+              </MagneticTarget>
+            );
+          })}
+        </fieldset>
       </div>
     </section>
   );

@@ -1,63 +1,84 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
-import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import SmoothScrollProvider, { useScrollContext } from '../../components/personality-v7/motion/SmoothScrollProvider';
+import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
+import { useCursor } from '../../components/personality-v7/motion/CursorCoordinator';
+import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 
-const CAREER_ENVIRONMENTS = [
+gsap.registerPlugin(ScrollTrigger);
+
+const CAREER_LENSES = [
   {
     id: 'complex-problems',
+    num: '01',
     title: 'Complex problems, clear ownership',
+    shortName: 'STRUCTURE & OWNERSHIP',
     asset: MEDIA_ASSETS_V7.careerComplex,
     description: 'Work rewards structured problem solving when responsibility is clear enough to follow a decision through.',
-    alignment: 'High focus when technical boundaries and system ownership are clearly defined.',
+    alignment: 'High engagement when technical boundaries and system ownership are clearly defined.',
     tension: 'Friction arises when accountability is fragmented across competing stakeholders.',
-    develop: 'Opportunities to scale architectural judgment and robust error handling.',
+    develop: 'Scaling architectural judgment and robust error handling.',
     roles: ['Software Engineer', 'Backend Engineer', 'DevOps Engineer', 'Cybersecurity Analyst'],
+    desktopPos: { left: '4vw', top: '18vh', scale: 0.72, zIndex: 3, depthFactor: 24 },
   },
   {
     id: 'open-questions',
+    num: '02',
     title: 'Open questions, long focus',
+    shortName: 'DEEP INQUIRY',
     asset: MEDIA_ASSETS_V7.careerOpen,
     description: 'Work leaves room to investigate, model possibilities and stay with a difficult problem before committing an answer.',
     alignment: 'Strong fit for deep analytical inquiry and hypothesis validation without artificial haste.',
     tension: 'Discomfort when forced into rapid superficial delivery without time to understand underlying dynamics.',
     develop: 'Expanding probabilistic modeling and statistical evidence structuring.',
     roles: ['Data Analyst', 'Machine Learning Engineer', 'Control Systems Engineer'],
+    desktopPos: { left: '26vw', top: '8vh', scale: 0.82, zIndex: 4, depthFactor: 32 },
   },
   {
     id: 'shared-decisions',
+    num: '03',
     title: 'Shared decisions, frequent coordination',
+    shortName: 'CROSS-TEAM CONSENSUS',
     asset: MEDIA_ASSETS_V7.careerShared,
     description: 'Progress depends on communication, prioritisation and decisions that cross team boundaries.',
     alignment: 'Thrives when translating disparate perspectives into coherent strategic consensus.',
     tension: 'Energy drain in highly siloed environments where communication channels are blocked.',
     develop: 'Strengthening stakeholder synthesis and cross-functional momentum governance.',
     roles: ['Product Manager', 'Technical Program Manager', 'Customer Success Manager', 'Business Analyst'],
+    desktopPos: { left: '56vw', top: '16vh', scale: 1.0, zIndex: 5, depthFactor: 36 },
   },
   {
     id: 'visible-output',
+    num: '04',
     title: 'Visible output, material feedback',
+    shortName: 'TANGIBLE CRAFT',
     asset: MEDIA_ASSETS_V7.evidenceVisible,
     description: 'Work produces something observable that can be tested, refined or handled.',
     alignment: 'High engagement when craft quality and ergonomics can be directly evaluated.',
     tension: 'Frustration with purely theoretical initiatives that produce no tangible artifact.',
     develop: 'Deepening interaction ergonomics and sensory feedback precision.',
     roles: ['Frontend Engineer', 'UX Designer', 'Electrical Engineer', 'Automation Engineer', 'Embedded Engineer'],
+    desktopPos: { left: '74vw', top: '50vh', scale: 0.74, zIndex: 2, depthFactor: 16 },
   },
   {
     id: 'autonomy-standards',
+    num: '05',
     title: 'Autonomy, pace, personal standards',
+    shortName: 'AUTONOMOUS TEMPO',
     asset: MEDIA_ASSETS_V7.careerAutonomy,
     description: 'The environment gives substantial responsibility for how work is organised, judged and improved.',
     alignment: 'Excels under high trust, self-directed tempo, and uncompromised quality bars.',
     tension: 'Resistance to micromanagement or arbitrary bureaucratic constraints.',
     develop: 'Calibrating personal perfectionism against real-world iterative milestones.',
     roles: ['Software Engineer', 'Machine Learning Engineer', 'UX Designer', 'Power Systems Engineer'],
+    desktopPos: { left: '22vw', top: '60vh', scale: 0.76, zIndex: 3, depthFactor: 20 },
   },
 ];
 
-const ROLE_CATALOGUE = [
+const ROLE_CATALOGUE_ROW_1 = [
   'Software Engineer',
   'Frontend Engineer',
   'Backend Engineer',
@@ -67,6 +88,9 @@ const ROLE_CATALOGUE = [
   'UX Designer',
   'DevOps Engineer',
   'Technical Program Manager',
+];
+
+const ROLE_CATALOGUE_ROW_2 = [
   'Customer Success Manager',
   'Cybersecurity Analyst',
   'Electrical Engineer',
@@ -77,232 +101,305 @@ const ROLE_CATALOGUE = [
   'Business Analyst',
 ];
 
-export const EditorialCareerIntelligencePage = () => {
-  const [activeEnvIndex, setActiveEnvIndex] = useState(0);
-  const activeEnv = CAREER_ENVIRONMENTS[activeEnvIndex];
+const PIXEL_COLS = 12;
+const PIXEL_ROWS = 8;
+
+export const CareerIntelligenceContent = () => {
+  const { navigateWithTransition } = useRouteTransition();
+  const { setCursorLabel, clearCursorLabel } = useCursor();
+  const { subscribe } = useScrollContext();
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [pixelTransitionActive, setPixelTransitionActive] = useState(false);
+  const isFirstSelectionRef = useRef(true);
+
+  const galleryRef = useRef(null);
+  const imagePlanesRef = useRef([]);
+  const catalogueRow1Ref = useRef(null);
+  const catalogueRow2Ref = useRef(null);
+  const pos1Ref = useRef(0);
+  const pos2Ref = useRef(0);
+
+  const activeLens = CAREER_LENSES[activeIdx];
+
+  // Smooth Scroll 3D Pointer Parallax in Gallery
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isMobile || prefersReduced) return;
+
+    const handlePointerMove = (e) => {
+      const normX = (e.clientX / window.innerWidth - 0.5) * 2;
+      const normY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      imagePlanesRef.current.forEach((el, idx) => {
+        if (!el) return;
+        const lens = CAREER_LENSES[idx];
+        const factor = lens.depthFactor || 20;
+
+        gsap.to(el, {
+          x: normX * factor,
+          y: normY * factor,
+          duration: 0.9,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      });
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    return () => window.removeEventListener('pointermove', handlePointerMove);
+  }, []);
+
+  // Kinetic Typographic Role Catalogue Scroll Subscriptions
+  useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    const unsub = subscribe((state) => {
+      const vel = state.velocity || 0;
+      pos1Ref.current -= vel * 0.4;
+      pos2Ref.current += vel * 0.3;
+
+      if (catalogueRow1Ref.current) {
+        catalogueRow1Ref.current.style.transform = `translate3d(${pos1Ref.current}px, 0, 0)`;
+      }
+      if (catalogueRow2Ref.current) {
+        catalogueRow2Ref.current.style.transform = `translate3d(${pos2Ref.current}px, 0, 0)`;
+      }
+    });
+
+    return () => unsub();
+  }, [subscribe]);
+
+  const selectLens = (idx) => {
+    if (idx === activeIdx) return;
+
+    const isMobile = window.innerWidth <= 768;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!isFirstSelectionRef.current && !isMobile && !prefersReduced) {
+      // Trigger Pixel Transition for 340ms
+      setPixelTransitionActive(true);
+      setTimeout(() => setPixelTransitionActive(false), 360);
+    }
+
+    isFirstSelectionRef.current = false;
+    setActiveIdx(idx);
+    setCursorLabel(CAREER_LENSES[idx].shortName);
+  };
 
   return (
-    <SmoothScrollProvider>
-      <PublicLayout headerTheme="dark-content" withFooter={true}>
-        {/* ── Section 1: Opening Hero (Carbon) ── */}
-        <section
-          style={{
-            backgroundColor: 'var(--pa-carbon)',
-            color: 'var(--pa-mineral)',
-            paddingTop: 'calc(var(--pa-header-height) + 40px)',
-            paddingBottom: 'clamp(60px, 8vh, 100px)',
-          }}
-          aria-label="Career Intelligence Overview"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / 8', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <h1 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-l)', lineHeight: 'var(--pa-display-l-lh)' }}>
-                Career fit depends on the conditions around the work.
-              </h1>
-              <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: 'var(--pa-body-l)', color: 'var(--pa-pewter)', lineHeight: 1.5, maxWidth: '640px' }}>
-                Personality Assessor compares your record with curated role profiles. Explore the conditions that can create alignment, tension and room to develop.
-              </p>
-              <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '0.875rem', color: 'var(--pa-pewter)', opacity: 0.8 }}>
-                Career intelligence is evidence for exploration, not a verdict.
-              </p>
-            </div>
-
-            <div style={{ gridColumn: '9 / 13', height: '360px', overflow: 'hidden', borderRadius: 'var(--pa-radius-control)' }}>
-              <picture>
-                <source type="image/avif" srcSet={MEDIA_ASSETS_V7.careerComplex.avifSrcSet} sizes="(min-width: 901px) 33vw, 100vw" />
-                <source type="image/webp" srcSet={MEDIA_ASSETS_V7.careerComplex.webpSrcSet} sizes="(min-width: 901px) 33vw, 100vw" />
-                <img
-                  src={MEDIA_ASSETS_V7.careerComplex.source}
-                  alt={MEDIA_ASSETS_V7.careerComplex.alt}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              </picture>
-            </div>
+    <div className="pa-career-page">
+      {/* ── Section 1: Hero Context (Carbon) ── */}
+      <section className="pa-career-hero" data-tone="dark">
+        <div className="pa-v7-grid pa-career-hero__grid">
+          <div className="pa-career-hero__headline-col">
+            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
+              Editorial Work-Condition Exploration
+            </span>
+            <h1 className="pa-display-hero pa-career-hero__h1">
+              Career fit changes with the conditions around the work.
+            </h1>
+            <p className="pa-career-hero__lead">
+              Explore example work conditions that can affect how professional evidence relates to a role. These lenses are editorial exploration tools, not backend role classifications.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── Section 2: Career Environment Explorer (Mineral) ── */}
-        <section
-          style={{
-            backgroundColor: 'var(--pa-mineral)',
-            color: 'var(--pa-carbon)',
-            padding: 'clamp(80px, 10vh, 120px) 0',
-          }}
-          aria-label="Career Environment Explorer"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / -1', marginBottom: '2.5rem' }}>
-              <h2 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-m)', lineHeight: 1.1 }}>
-                Five Work-Environment Lenses
-              </h2>
-              <p style={{ color: 'var(--pa-muted-light)', marginTop: '0.5rem', fontSize: '1.0625rem' }}>
-                Select an environment to inspect the conditions that shape day-to-day engagement.
-              </p>
-            </div>
-
-            {/* Selectable Condition Lenses */}
-            <div style={{ gridColumn: '1 / 5', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {CAREER_ENVIRONMENTS.map((env, idx) => {
-                const isSelected = activeEnvIndex === idx;
-                return (
+      {/* ── Section 2: 3D Career Media Field & Spatial Selector (Carbon) ── */}
+      <section className="pa-career-gallery-stage" data-tone="dark">
+        <div className="pa-v7-grid pa-career-gallery-stage__controls-row">
+          {/* Environment Switcher Buttons */}
+          <div className="pa-career-gallery-stage__lenses">
+            {CAREER_LENSES.map((lens, idx) => {
+              const isSelected = activeIdx === idx;
+              return (
+                <MagneticTarget key={lens.id} maxDisplacement={8}>
                   <button
-                    key={env.id}
                     type="button"
-                    onClick={() => setActiveEnvIndex(idx)}
-                    style={{
-                      textAlign: 'left',
-                      padding: '1.25rem 1.5rem',
-                      background: isSelected ? 'var(--pa-carbon)' : '#ECEFEA',
-                      color: isSelected ? 'var(--pa-mineral)' : 'var(--pa-carbon)',
-                      border: 'none',
-                      borderRadius: 'var(--pa-radius-control)',
-                      cursor: 'pointer',
-                      transition: 'background 0.18s ease, color 0.18s ease',
-                      fontFamily: 'var(--pa-font-functional)',
-                      fontSize: '1rem',
-                      fontWeight: isSelected ? 500 : 450,
-                      lineHeight: 1.35,
-                    }}
+                    onClick={() => selectLens(idx)}
+                    onMouseEnter={() => setCursorLabel(lens.shortName)}
+                    onMouseLeave={() => clearCursorLabel()}
+                    className={`pa-career-lens-btn ${isSelected ? 'pa-career-lens-btn--active' : ''}`}
                     aria-pressed={isSelected}
                   >
-                    {env.title}
+                    <span className="pa-career-lens-btn__num">{lens.num}</span>
+                    <span className="pa-career-lens-btn__title">{lens.title}</span>
                   </button>
-                );
-              })}
-            </div>
+                </MagneticTarget>
+              );
+            })}
+          </div>
+        </div>
 
-            {/* Active Environment Detail & Inspection */}
-            <div style={{ gridColumn: '6 / 13', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              <div style={{ width: '100%', height: '340px', overflow: 'hidden', borderRadius: 'var(--pa-radius-control)' }}>
+        {/* 3D Spatial Media Field (min-height 110svh, perspective 1200px) */}
+        <div ref={galleryRef} className="pa-career-spatial-field">
+          {/* Pixel Transition Grid (active during switch) */}
+          {pixelTransitionActive && (
+            <div className="pa-pixel-grid-overlay" aria-hidden="true">
+              {Array.from({ length: PIXEL_COLS * PIXEL_ROWS }).map((_, i) => (
+                <div
+                  key={i}
+                  className="pa-pixel-tile"
+                  style={{ animationDelay: `${(i % PIXEL_COLS) * 22}ms` }}
+                />
+              ))}
+            </div>
+          )}
+
+          {CAREER_LENSES.map((lens, idx) => {
+            const isSelected = activeIdx === idx;
+            return (
+              <div
+                key={lens.id}
+                ref={(node) => (imagePlanesRef.current[idx] = node)}
+                onClick={() => selectLens(idx)}
+                className={`pa-career-media-plane ${isSelected ? 'pa-career-media-plane--selected' : 'pa-career-media-plane--dormant'}`}
+                style={{
+                  '--desktop-left': lens.desktopPos.left,
+                  '--desktop-top': lens.desktopPos.top,
+                  '--desktop-scale': isSelected ? 1.05 : lens.desktopPos.scale,
+                  '--z-order': isSelected ? 10 : lens.desktopPos.zIndex,
+                }}
+              >
                 <picture>
-                  <source type="image/avif" srcSet={activeEnv.asset.avifSrcSet} sizes="(min-width: 901px) 55vw, 100vw" />
-                  <source type="image/webp" srcSet={activeEnv.asset.webpSrcSet} sizes="(min-width: 901px) 55vw, 100vw" />
+                  <source type="image/avif" srcSet={lens.asset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
+                  <source type="image/webp" srcSet={lens.asset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
                   <img
-                    key={activeEnv.id}
-                    src={activeEnv.asset.source}
-                    alt={activeEnv.asset.alt}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    src={lens.asset.source}
+                    alt={lens.asset.alt}
+                    width={lens.asset.intrinsicDimensions.width}
+                    height={lens.asset.intrinsicDimensions.height}
+                    className="pa-career-media-plane__img"
                     loading="lazy"
                     decoding="async"
                   />
                 </picture>
-              </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <p style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: '1.375rem', lineHeight: 1.4, color: 'var(--pa-carbon)', margin: 0 }}>
-                  {activeEnv.description}
-                </p>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-                  <div style={{ padding: '1.25rem', background: '#ECEFEA', borderRadius: 'var(--pa-radius-control)' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--pa-oxblood)' }}>
-                      Alignment
-                    </span>
-                    <p style={{ fontSize: '0.9375rem', lineHeight: 1.45, marginTop: '0.35rem', marginBottom: 0 }}>
-                      {activeEnv.alignment}
-                    </p>
-                  </div>
-
-                  <div style={{ padding: '1.25rem', background: '#ECEFEA', borderRadius: 'var(--pa-radius-control)' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--pa-muted-light)' }}>
-                      Tension
-                    </span>
-                    <p style={{ fontSize: '0.9375rem', lineHeight: 1.45, marginTop: '0.35rem', marginBottom: 0 }}>
-                      {activeEnv.tension}
-                    </p>
-                  </div>
-
-                  <div style={{ padding: '1.25rem', background: '#ECEFEA', borderRadius: 'var(--pa-radius-control)' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--pa-carbon)' }}>
-                      Develop
-                    </span>
-                    <p style={{ fontSize: '0.9375rem', lineHeight: 1.45, marginTop: '0.35rem', marginBottom: 0 }}>
-                      {activeEnv.develop}
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--pa-muted-light)' }}>
-                    Curated Role Examples
-                  </span>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
-                    {activeEnv.roles.map((role) => (
-                      <span
-                        key={role}
-                        style={{
-                          padding: '6px 12px',
-                          background: 'var(--pa-carbon)',
-                          color: 'var(--pa-mineral)',
-                          fontSize: '0.875rem',
-                          borderRadius: 'var(--pa-radius-control)',
-                          fontFamily: 'var(--pa-font-functional)',
-                        }}
-                      >
-                        {role}
-                      </span>
-                    ))}
-                  </div>
+                <div className="pa-career-media-plane__tag">
+                  <span>{lens.num} • {lens.title}</span>
                 </div>
               </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── Section 3: Spatial Career Information (Mineral) ── */}
+      <section className="pa-career-spatial-info" data-tone="light">
+        <div className="pa-v7-grid pa-career-spatial-info__grid">
+          <div className="pa-career-spatial-info__intro">
+            <span className="pa-provenance-tag">Active Work Condition</span>
+            <h2 className="pa-heading-major pa-career-spatial-info__title">
+              {activeLens.title}
+            </h2>
+            <p className="pa-career-spatial-info__desc">
+              {activeLens.description}
+            </p>
+          </div>
+
+          {/* Spatial Triad: ALIGNMENT, TENSION, DEVELOP positioned meaningfully */}
+          <div className="pa-career-spatial-info__triad">
+            {/* Alignment near the evidence */}
+            <div className="pa-spatial-card pa-spatial-card--alignment">
+              <span className="pa-spatial-card__tag" style={{ color: 'var(--pa-oxblood)' }}>
+                Alignment Condition
+              </span>
+              <p className="pa-spatial-card__text">{activeLens.alignment}</p>
+            </div>
+
+            {/* Tension between evidence and environment */}
+            <div className="pa-spatial-card pa-spatial-card--tension">
+              <span className="pa-spatial-card__tag" style={{ color: 'var(--pa-muted-light)' }}>
+                Tension Condition
+              </span>
+              <p className="pa-spatial-card__text">{activeLens.tension}</p>
+            </div>
+
+            {/* Develop deeper into the environment */}
+            <div className="pa-spatial-card pa-spatial-card--develop">
+              <span className="pa-spatial-card__tag" style={{ color: 'var(--pa-carbon)' }}>
+                Development Room
+              </span>
+              <p className="pa-spatial-card__text">{activeLens.develop}</p>
             </div>
           </div>
-        </section>
 
-        {/* ── Section 3: Current Role Catalogue (Carbon) ── */}
-        <section
-          style={{
-            backgroundColor: 'var(--pa-carbon)',
-            color: 'var(--pa-mineral)',
-            padding: 'clamp(80px, 10vh, 120px) 0',
-          }}
-          aria-label="Current Role Catalogue"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / -1', maxWidth: '800px', marginBottom: '2.5rem' }}>
-              <h2 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-m)', lineHeight: 1.1 }}>
-                The current role catalogue
-              </h2>
-              <p style={{ color: 'var(--pa-pewter)', marginTop: '0.75rem', fontSize: '1.0625rem', lineHeight: 1.5 }}>
-                Personality Assessor compares your evidence against 17 curated professional role profiles using deterministic multi-layer comparison logic.
-              </p>
-            </div>
-
-            <div
-              style={{
-                gridColumn: '1 / -1',
-                display: 'flex',
-                flexWrap: 'wrap',
-                columnGap: '2rem',
-                rowGap: '1.25rem',
-                padding: '2rem 0',
-              }}
-            >
-              {ROLE_CATALOGUE.map((role) => (
-                <span
-                  key={role}
-                  style={{
-                    fontFamily: 'var(--pa-font-editorial)',
-                    fontSize: 'clamp(1.25rem, 2vw, 1.75rem)',
-                    color: 'var(--pa-mineral)',
-                    opacity: 0.9,
-                  }}
-                >
-                  {role}
+          {/* Subordinate Role Examples with explicit honest product language */}
+          <div className="pa-career-spatial-info__roles-field">
+            <span className="pa-provenance-tag">Example roles worth exploring</span>
+            <div className="pa-career-spatial-info__roles-list">
+              {activeLens.roles.map((r) => (
+                <span key={r} className="pa-career-role-pill">
+                  {r}
                 </span>
               ))}
             </div>
-
-            <div style={{ gridColumn: '1 / -1', marginTop: '2.5rem' }}>
-              <Link to="/signup" className="pa-btn-primary-dark">
-                Build a profile to compare careers
-              </Link>
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
+
+      {/* ── Section 4: Kinetic Typographic Role Catalogue (Carbon) ── */}
+      <section className="pa-career-catalogue" data-tone="dark">
+        <div className="pa-v7-grid pa-career-catalogue__grid">
+          <div className="pa-career-catalogue__header">
+            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
+              Backend Role Catalogue
+            </span>
+            <h2 className="pa-heading-major pa-career-catalogue__h2">
+              17 Curated Professional Profiles
+            </h2>
+            <p className="pa-career-catalogue__lead">
+              Personality Assessor compares your multi-layer psychometric record with 17 curated professional role models using deterministic multi-layer comparison logic.
+            </p>
+          </div>
+        </div>
+
+        {/* Kinetic Typographic Crawler Rows (Infinite Text Move on Scroll) */}
+        <div className="pa-career-catalogue__kinetic-field" aria-hidden="true">
+          <div ref={catalogueRow1Ref} className="pa-career-catalogue__row">
+            {[...ROLE_CATALOGUE_ROW_1, ...ROLE_CATALOGUE_ROW_1].map((role, i) => (
+              <span key={`${role}-${i}`} className="pa-catalogue-role-text">
+                {role} <span className="pa-catalogue-dot">/</span>
+              </span>
+            ))}
+          </div>
+
+          <div ref={catalogueRow2Ref} className="pa-career-catalogue__row pa-career-catalogue__row--alt">
+            {[...ROLE_CATALOGUE_ROW_2, ...ROLE_CATALOGUE_ROW_2].map((role, i) => (
+              <span key={`${role}-${i}`} className="pa-catalogue-role-text">
+                {role} <span className="pa-catalogue-dot">/</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="pa-v7-grid pa-career-catalogue__cta-grid">
+          <MagneticTarget>
+            <a
+              href="/signup"
+              className="pa-btn-primary-dark"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateWithTransition('/signup');
+              }}
+            >
+              Build your profile to compare careers
+            </a>
+          </MagneticTarget>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export const EditorialCareerIntelligencePage = () => {
+  return (
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="dark-content" withFooter={true}>
+        <CareerIntelligenceContent />
       </PublicLayout>
     </SmoothScrollProvider>
   );

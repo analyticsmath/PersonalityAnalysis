@@ -1,140 +1,180 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
 
-const METHODOLOGY_SECTIONS = [
+const FRAMEWORK_SECTIONS = [
   {
     id: 'big-five',
     title: 'Big Five',
-    copy: 'Personality is represented through continuous dimensions rather than a personality type. Use the dimensions as one layer of evidence, not as a diagnosis or permanent identity.',
+    copy: 'Personality is represented through continuous dimensions (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism) rather than a rigid four-letter type. Dimensions serve as one layer of evidence, not as a permanent label.',
   },
   {
     id: 'riasec',
     title: 'RIASEC',
-    copy: 'Vocational interests are considered across Realistic, Investigative, Artistic, Social, Enterprising and Conventional patterns.',
+    copy: 'Vocational interests are modeled across Realistic, Investigative, Artistic, Social, Enterprising, and Conventional interest profiles to discover patterns in what tasks naturally hold interest.',
   },
   {
     id: 'work-values',
-    title: 'Work values',
-    copy: 'Work values describe conditions and outcomes that matter in a work environment. Keep them conceptually separate from personality and vocational interests.',
+    title: 'Work Values',
+    copy: 'Work values identify conditions and outcomes that matter in a professional environment (Achievement, Independence, Recognition, Relationships, Support, Working Conditions), kept conceptually separate from personality and interests.',
   },
   {
-    id: 'contextual-signals',
-    title: 'Contextual career signals',
-    copy: 'Responses and professional context can add supporting evidence about how someone approaches work. Present these signals as supporting interpretation, not as an independent clinical construct.',
+    id: 'career-context',
+    title: 'Career Context',
+    copy: 'Responses and professional situation notes provide supporting evidence about how someone approaches work under specific real-world conditions.',
   },
   {
-    id: 'career-comparison',
-    title: 'Career comparison',
-    copy: 'The current application compares the user record with a curated set of career profiles using deterministic weighted logic across multiple evidence layers. Do not describe this as machine learning predicting the correct career.',
+    id: 'comparison',
+    title: 'Comparison Logic',
+    copy: 'The application compares user evidence against curated role models using deterministic multi-layer comparison logic across distinct evidence layers, avoiding black-box opaque score generation.',
   },
   {
-    id: 'cv-context',
-    title: 'CV context',
-    copy: 'When a user chooses to provide a PDF or DOCX CV, the application can extract professional context for use in the experience. Do not describe this as credential verification.',
+    id: 'cv',
+    title: 'CV Context',
+    copy: 'When a user chooses to provide a CV, professional history is extracted to inform context. CV analysis does not constitute formal credential verification.',
   },
   {
-    id: 'ai-assistance',
-    title: 'AI assistance',
-    copy: 'Where configured, AI can support narrative explanation or coaching. Core assessment and career-comparison behavior must remain usable when AI assistance is unavailable.',
+    id: 'ai',
+    title: 'AI Assistance',
+    copy: 'Where configured, AI provides narrative explanations, coaching prompts, or reflective summaries. The core scoring and multi-layer psychometric models operate independently of AI availability.',
   },
   {
     id: 'limits',
-    title: 'Limits',
-    copy: 'Personality Assessor is not a clinical diagnostic service. Do not advertise formal psychometric validation, guaranteed career fit, unsupported accuracy percentages or a permanent reading of a person.',
+    title: 'Limits & Governance',
+    copy: 'Personality Assessor is an inspectable career exploration tool, not a medical or clinical assessment system. It does not claim formal psychometric accreditation, guaranteed career fit, or unsupported percentage precision.',
   },
 ];
 
-export const EditorialMethodologyPage = () => {
+export const MethodologyContent = () => {
+  const [activeSectionId, setActiveSectionId] = useState(FRAMEWORK_SECTIONS[0].id);
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    const handleIntersect = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSectionId(entry.target.id);
+        }
+      });
+    };
+
+    if (typeof window === 'undefined' || !window.IntersectionObserver) return;
+
+    observerRef.current = new window.IntersectionObserver(handleIntersect, {
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0,
+    });
+
+    FRAMEWORK_SECTIONS.forEach((sec) => {
+      const el = document.getElementById(sec.id);
+      if (el) observerRef.current.observe(el);
+    });
+
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, []);
+
+  const scrollToSection = (e, id) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
-    <PublicLayout headerTheme="light-content" withFooter={true}>
-      <article
-        style={{
-          backgroundColor: 'var(--pa-mineral)',
-          color: 'var(--pa-carbon)',
-          paddingTop: 'calc(var(--pa-header-height) + 48px)',
-          paddingBottom: 'clamp(80px, 10vh, 140px)',
-        }}
-        aria-label="Methodology Reading Room"
-      >
+    <article className="pa-methodology-page" aria-label="Methodology Reading Room">
+      {/* Header */}
+      <header className="pa-methodology-header" data-tone="light">
         <div className="pa-v7-grid">
-          {/* Header Field */}
-          <div style={{ gridColumn: '1 / -1', maxWidth: '780px', marginBottom: 'clamp(40px, 6vh, 72px)' }}>
-            <h1 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-l)', lineHeight: 'var(--pa-display-l-lh)', margin: 0 }}>
-              A profile should be inspectable before it is persuasive.
+          <div className="pa-methodology-header__content">
+            <span className="pa-provenance-tag">Technical & Psychometric Architecture</span>
+            <h1 className="pa-display-hero pa-methodology-header__h1">
+              See how each reading is constructed.
             </h1>
-            <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: 'var(--pa-lead-editorial)', color: 'var(--pa-muted-light)', lineHeight: 1.45, marginTop: '1.25rem' }}>
-              Personality Assessor keeps different evidence layers visible so users can understand what a reading represents and where its limits are.
+            <p className="pa-methodology-header__lead">
+              Personality Assessor keeps multi-layer psychometric frameworks inspectable and decoupled so users can verify how interpretations are assembled.
             </p>
           </div>
+        </div>
+      </header>
 
-          {/* Sticky Table of Contents Navigation */}
-          <aside
-            style={{
-              gridColumn: '1 / 4',
-              position: 'sticky',
-              top: '120px',
-              height: 'fit-content',
-            }}
-            aria-label="Methodology sections"
-          >
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-muted-light)', marginBottom: '0.5rem' }}>
-                On this page
-              </span>
-              {METHODOLOGY_SECTIONS.map((sec) => (
-                <a
-                  key={sec.id}
-                  href={`#${sec.id}`}
-                  style={{
-                    fontFamily: 'var(--pa-font-functional)',
-                    fontSize: '0.875rem',
-                    color: 'var(--pa-carbon)',
-                    textDecoration: 'none',
-                    opacity: 0.8,
-                    transition: 'opacity 0.18s ease',
-                  }}
-                  onMouseEnter={(e) => (e.target.style.opacity = '1')}
-                  onMouseLeave={(e) => (e.target.style.opacity = '0.8')}
-                >
-                  {sec.title}
-                </a>
-              ))}
+      {/* Main Tri-Column Reading Room Layout */}
+      <div className="pa-methodology-body" data-tone="light">
+        <div className="pa-v7-grid pa-methodology-body__grid">
+          {/* Left Column: Curved Vertical Index */}
+          <aside className="pa-methodology-aside-nav" aria-label="Methodology sections index">
+            <nav className="pa-methodology-index-list">
+              {FRAMEWORK_SECTIONS.map((sec, idx) => {
+                const isActive = activeSectionId === sec.id;
+                return (
+                  <a
+                    key={sec.id}
+                    href={`#${sec.id}`}
+                    onClick={(e) => scrollToSection(e, sec.id)}
+                    className={`pa-methodology-index-item ${isActive ? 'pa-methodology-index-item--active' : ''}`}
+                  >
+                    <span className="pa-methodology-index-num">0{idx + 1}</span>
+                    <span className="pa-methodology-index-label">{sec.title}</span>
+                  </a>
+                );
+              })}
             </nav>
           </aside>
 
-          {/* Main Reading Column */}
-          <div
-            style={{
-              gridColumn: '5 / 12',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '3.5rem',
-              maxWidth: '720px',
-            }}
-          >
-            {METHODOLOGY_SECTIONS.map((sec) => (
+          {/* Center 7–8 Columns: Editorial Reading Stream */}
+          <main className="pa-methodology-stream">
+            {FRAMEWORK_SECTIONS.map((sec) => (
               <section
                 key={sec.id}
                 id={sec.id}
-                style={{
-                  scrollMarginTop: '100px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem',
-                }}
+                className="pa-methodology-section"
               >
-                <h2 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-m)', lineHeight: 1.15, margin: 0 }}>
+                <span className="pa-methodology-section__tag">{sec.title} Architecture</span>
+                <h2 className="pa-heading-major pa-methodology-section__title">
                   {sec.title}
                 </h2>
-                <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: '1.0625rem', lineHeight: 1.6, color: 'var(--pa-carbon)', margin: 0 }}>
+                <p className="pa-methodology-section__copy">
                   {sec.copy}
                 </p>
               </section>
             ))}
-          </div>
+          </main>
+
+          {/* Right Column: Thin Evolving Evidence Diagram */}
+          <aside className="pa-methodology-diagram" aria-hidden="true">
+            <div className="pa-methodology-diagram__card">
+              <span className="pa-methodology-diagram__title">Active Framework</span>
+              <div className="pa-methodology-diagram__nodes">
+                {FRAMEWORK_SECTIONS.map((sec) => {
+                  const isActive = activeSectionId === sec.id;
+                  return (
+                    <div
+                      key={sec.id}
+                      className={`pa-diagram-node ${isActive ? 'pa-diagram-node--active' : ''}`}
+                    >
+                      <div className="pa-diagram-node__dot" />
+                      <span className="pa-diagram-node__name">{sec.title}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </aside>
         </div>
-      </article>
-    </PublicLayout>
+      </div>
+    </article>
+  );
+};
+
+export const EditorialMethodologyPage = () => {
+  return (
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light-content" withFooter={true}>
+        <MethodologyContent />
+      </PublicLayout>
+    </SmoothScrollProvider>
   );
 };
 

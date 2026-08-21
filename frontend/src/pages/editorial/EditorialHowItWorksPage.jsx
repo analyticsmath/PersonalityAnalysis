@@ -1,149 +1,231 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
+import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const STAGES = [
   {
-    id: 'stage-context',
-    title: 'Context changes what an answer means.',
-    body: 'Background information, CV context when you choose to provide it, and earlier responses can inform the path through the assessment.',
-    aspect: 'Background & Framing',
+    id: 'context',
+    num: '01',
+    title: 'Contextual Attachment',
+    heading: 'Background & Situational Framing',
+    body: 'A response is never evaluated in isolation. Project deadlines, organizational constraints, and past context stay attached to the response so interpretation reflects real working conditions.',
   },
   {
-    id: 'stage-adaptive',
-    title: 'The next question can depend on what came before.',
-    body: 'The assessment runs through staged questions rather than presenting every person with one fixed marketing quiz.',
-    aspect: 'Staged Inquiry',
+    id: 'adaptive',
+    num: '02',
+    title: 'Adaptive Staged Inquiry',
+    heading: 'The next question builds on the last',
+    body: 'The assessment does not force every person through a static, generic marketing quiz. Responses guide targeted follow-ups to explore nuances in how decisions are made.',
   },
   {
-    id: 'stage-readings',
-    title: 'Personality, interests and work values remain separate readings.',
-    body: 'Big Five, RIASEC and work-value evidence retain their own meaning. Contextual career signals can support interpretation without flattening the record into one opaque personality score.',
-    aspect: 'Multi-Lens Decomposition',
+    id: 'readings',
+    num: '03',
+    title: 'Multi-Lens Decomposition',
+    heading: 'Personality, interests, and work values stay separate',
+    body: 'Big Five personality traits, RIASEC vocational interests, and environmental work values retain distinct provenance rather than being collapsed into an opaque score.',
   },
   {
-    id: 'stage-careers',
-    title: 'The record is compared with curated role profiles.',
-    body: 'The current implementation uses deterministic comparison logic across multiple evidence layers. Present career results as material for exploration rather than a prediction of the one correct career.',
-    aspect: 'Deterministic Comparison',
+    id: 'careers',
+    num: '04',
+    title: 'Deterministic Comparison',
+    heading: 'Compared across multi-layer role profiles',
+    body: 'Your evidence record is matched with curated professional profiles using deterministic weighted multi-layer comparison logic for career exploration, not arbitrary AI prediction.',
   },
   {
-    id: 'stage-revisit',
-    title: 'Later assessments become new evidence.',
-    body: 'History and trend views make it possible to compare what stayed stable with what changed.',
-    aspect: 'Longitudinal Revisit',
+    id: 'revisit',
+    num: '05',
+    title: 'Longitudinal Revisit',
+    heading: 'Later assessments become new evidence',
+    body: 'When you take future assessments or gain new experience, the earlier baseline is preserved. The system lets you inspect what stayed stable alongside what changed over time.',
   },
 ];
 
-export const EditorialHowItWorksPage = () => {
+export const HowItWorksContent = () => {
+  const { navigateWithTransition } = useRouteTransition();
+  const containerRef = useRef(null);
+  const stageRef = useRef(null);
+  const travelingEvidenceRef = useRef(null);
+  const pathRef = useRef(null);
+  const stageCardsRef = useRef([]);
+
   const asset = MEDIA_ASSETS_V7.howItWorksCraft;
 
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTest = typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent);
+    if (isMobile || prefersReduced || isTest) return;
+
+    const container = containerRef.current;
+    const stage = stageRef.current;
+    const evidenceEl = travelingEvidenceRef.current;
+    const pathEl = pathRef.current;
+
+    if (!container || !stage || !evidenceEl || !pathEl) return;
+
+    const pathLength = typeof pathEl.getTotalLength === 'function' ? pathEl.getTotalLength() : 1200;
+    pathEl.style.strokeDasharray = `${pathLength}`;
+    pathEl.style.strokeDashoffset = `${pathLength}`;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: container,
+        start: 'top top',
+        end: 'bottom bottom',
+        pin: stage,
+        scrub: 0.85,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const prog = self.progress;
+
+          // 1. Draw SVG path synchronously with scroll
+          pathEl.style.strokeDashoffset = `${pathLength * (1 - prog)}`;
+
+          // 2. Move traveling evidence object along the SVG path
+          const pt = typeof pathEl.getPointAtLength === 'function'
+            ? pathEl.getPointAtLength(prog * pathLength)
+            : { x: prog * 1000, y: 400 };
+          evidenceEl.style.transform = `translate3d(${pt.x}px, ${pt.y}px, 0)`;
+
+          // 3. Highlight the active destination card
+          const activeIndex = Math.min(Math.floor(prog * 5), 4);
+          stageCardsRef.current.forEach((card, idx) => {
+            if (!card) return;
+            if (idx === activeIndex) {
+              card.classList.add('pa-hiw-destination--active');
+            } else {
+              card.classList.remove('pa-hiw-destination--active');
+            }
+          });
+        },
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div className="pa-hiw-page">
+      {/* ── Section 1: Opening Atmospheric Hero ── */}
+      <section className="pa-hiw-hero" data-tone="light">
+        <div className="pa-v7-grid pa-hiw-hero__grid">
+          <div className="pa-hiw-hero__copy">
+            <span className="pa-provenance-tag">Assessment Process & Pipeline</span>
+            <h1 className="pa-display-hero pa-hiw-hero__h1">
+              A response becomes evidence when its context stays attached.
+            </h1>
+            <p className="pa-hiw-hero__lead">
+              Personality Assessor traces how a single contextual answer travels through staged inquiry, decomposes into separate frameworks, and contributes to career relationship exploration.
+            </p>
+          </div>
+
+          <div className="pa-hiw-hero__media-wrap">
+            <picture>
+              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
+              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
+              <img
+                src={asset.source}
+                alt={asset.alt}
+                width={asset.intrinsicDimensions.width}
+                height={asset.intrinsicDimensions.height}
+                className="pa-hiw-hero__img"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 2: Pinned Evidence Journey Stage (~320svh) ── */}
+      <section ref={containerRef} className="pa-hiw-journey-container" data-tone="dark">
+        <div ref={stageRef} className="pa-hiw-journey-stage">
+          {/* Continuous Animated SVG Curve Canvas */}
+          <svg
+            className="pa-hiw-journey-svg"
+            viewBox="0 0 1200 800"
+            preserveAspectRatio="xMidYMid meet"
+            aria-hidden="true"
+          >
+            <path
+              ref={pathRef}
+              d="M 120 400 C 260 180, 420 180, 560 400 S 840 620, 1080 400"
+              fill="none"
+              stroke="#642832"
+              strokeWidth="3"
+            />
+          </svg>
+
+          {/* Physically Moving Evidence Object along the path */}
+          <div ref={travelingEvidenceRef} className="pa-hiw-traveling-evidence">
+            <div className="pa-hiw-traveling-evidence__inner">
+              <span className="pa-hiw-traveling-evidence__tag">Evidence In Transit</span>
+              <p className="pa-evidence-quote pa-hiw-traveling-evidence__text">
+                “I prefer clear ownership before committing work.”
+              </p>
+            </div>
+          </div>
+
+          {/* 5 Spatial Destinations across the stage */}
+          <div className="pa-hiw-destinations-grid">
+            {STAGES.map((stage, idx) => (
+              <div
+                key={stage.id}
+                ref={(node) => (stageCardsRef.current[idx] = node)}
+                className={`pa-hiw-destination pa-hiw-destination--${stage.id} ${idx === 0 ? 'pa-hiw-destination--active' : ''}`}
+              >
+                <span className="pa-hiw-destination__num">{stage.num}</span>
+                <span className="pa-hiw-destination__title">{stage.title}</span>
+                <h3 className="pa-hiw-destination__heading">{stage.heading}</h3>
+                <p className="pa-hiw-destination__body">{stage.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 3: Next Steps & Acquisition CTA ── */}
+      <section className="pa-hiw-cta-section" data-tone="light">
+        <div className="pa-v7-grid pa-hiw-cta-section__grid">
+          <div className="pa-hiw-cta-section__content">
+            <h2 className="pa-heading-major">Build your inspectable record.</h2>
+            <p className="pa-hiw-cta-section__lead">
+              Start with your professional background, then step through the staged assessment.
+            </p>
+            <div className="pa-hiw-cta-section__actions">
+              <MagneticTarget>
+                <a
+                  href="/signup"
+                  className="pa-btn-primary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateWithTransition('/signup');
+                  }}
+                >
+                  Create your first record
+                </a>
+              </MagneticTarget>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export const EditorialHowItWorksPage = () => {
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={true}>
-        {/* ── Opening Section ── */}
-        <section
-          style={{
-            backgroundColor: 'var(--pa-mineral)',
-            color: 'var(--pa-carbon)',
-            paddingTop: 'calc(var(--pa-header-height) + 40px)',
-            paddingBottom: 'clamp(60px, 8vh, 100px)',
-          }}
-          aria-label="How It Works Overview"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / 8', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <h1 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-l)', lineHeight: 'var(--pa-display-l-lh)' }}>
-                A response enters the record in context.
-              </h1>
-              <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: 'var(--pa-body-l)', color: 'var(--pa-muted-light)', lineHeight: 1.5, maxWidth: '640px' }}>
-                The assessment separates different kinds of evidence so they can be inspected before they are used together for career exploration.
-              </p>
-            </div>
-
-            <div style={{ gridColumn: '9 / 13', height: '360px', overflow: 'hidden', borderRadius: 'var(--pa-radius-control)' }}>
-              <picture>
-                <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 33vw, 100vw" />
-                <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 33vw, 100vw" />
-                <img
-                  src={asset.source}
-                  alt={asset.alt}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              </picture>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Stages Flow Section ── */}
-        <section
-          style={{
-            backgroundColor: 'var(--pa-mineral)',
-            color: 'var(--pa-carbon)',
-            padding: 'clamp(60px, 8vh, 100px) 0',
-          }}
-          aria-label="Assessment Pipeline Stages"
-        >
-          <div className="pa-v7-grid">
-            <div style={{ gridColumn: '1 / 5', position: 'sticky', top: '120px' }}>
-              <div
-                style={{
-                  padding: '1.75rem',
-                  background: 'var(--pa-carbon)',
-                  color: 'var(--pa-mineral)',
-                  borderRadius: 'var(--pa-radius-control)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem',
-                }}
-              >
-                <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--pa-pewter)' }}>
-                  The Evidence Object
-                </span>
-                <p style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: '1.1875rem', lineHeight: 1.4, margin: 0 }}>
-                  One inspectable response moves through context, staged inquiry, separate framework readings, and deterministic career comparison.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ gridColumn: '6 / 13', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-              {STAGES.map((stage) => (
-                <div
-                  key={stage.id}
-                  style={{
-                    padding: '2.25rem 2.5rem',
-                    background: '#ECEFEA',
-                    borderRadius: 'var(--pa-radius-control)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1rem',
-                  }}
-                >
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--pa-oxblood)' }}>
-                    {stage.aspect}
-                  </span>
-                  <h2 style={{ fontFamily: 'var(--pa-font-editorial)', fontSize: 'var(--pa-display-m)', lineHeight: 1.15, margin: 0 }}>
-                    {stage.title}
-                  </h2>
-                  <p style={{ fontFamily: 'var(--pa-font-functional)', fontSize: 'var(--pa-body)', color: 'var(--pa-muted-light)', lineHeight: 1.55, margin: 0 }}>
-                    {stage.body}
-                  </p>
-                </div>
-              ))}
-
-              <div style={{ marginTop: '1.5rem' }}>
-                <Link to="/signup" className="pa-btn-primary">
-                  Create your first record
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HowItWorksContent />
       </PublicLayout>
     </SmoothScrollProvider>
   );

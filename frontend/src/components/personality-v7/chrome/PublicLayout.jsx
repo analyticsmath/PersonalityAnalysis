@@ -1,6 +1,8 @@
 import React from 'react';
 import PublicHeader from './PublicHeader';
 import PublicFooter from './PublicFooter';
+import CursorCoordinator from '../motion/CursorCoordinator';
+import RouteTransitionCoordinator from '../motion/RouteTransitionCoordinator';
 
 export const PublicLayout = ({
   children,
@@ -9,19 +11,23 @@ export const PublicLayout = ({
   className = '',
 }) => {
   return (
-    <div className={`pa-v7-shell ${className}`}>
-      <a href="#main-content" className="pa-skip-link">
-        Skip to main content
-      </a>
+    <RouteTransitionCoordinator>
+      <CursorCoordinator>
+        <div className={`pa-v7-shell ${className}`}>
+          <a href="#main-content" className="pa-skip-link">
+            Skip to main content
+          </a>
 
-      <PublicHeader theme={headerTheme} />
+          <PublicHeader theme={headerTheme} />
 
-      <main id="main-content" tabIndex="-1">
-        {children}
-      </main>
+          <main id="main-content" tabIndex="-1">
+            {children}
+          </main>
 
-      {withFooter && <PublicFooter />}
-    </div>
+          {withFooter && <PublicFooter />}
+        </div>
+      </CursorCoordinator>
+    </RouteTransitionCoordinator>
   );
 };
 

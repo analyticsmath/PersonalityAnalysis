@@ -89,6 +89,7 @@ const ALLOWLIST_PATHS = new Set([
   'styles/personality-v7/chrome.css',
   'styles/personality-v7/auth.css',
   'styles/personality-v7/home.css',
+  'styles/personality-v7/routes.css',
 
   // Archival and legacy pages
   'pages/Legacy/LegacyStaticAssessmentPage.jsx',

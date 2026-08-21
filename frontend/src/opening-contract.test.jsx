@@ -15,7 +15,7 @@ describe('Evidence in Context Opening & Decision Contract', () => {
     );
 
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1).toHaveTextContent('One answer shouldnever define you.');
+    expect(h1).toHaveTextContent('Keep the context behind every answer.');
     expect(screen.getByAltText(MEDIA_ASSETS_V7.homeContext.alt)).toBeInTheDocument();
   });
 

@@ -15,8 +15,14 @@ export const EditorialHomePage = () => {
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={true}>
-        {/* Chapter 1 — Orientation & Context */}
-        <HomeOpeningChapter />
+        {/* Chapter 1 — Orientation & Initial Context */}
+        <HomeOpeningChapter
+          evidenceText={
+            selectedChoice
+              ? `“${selectedChoice.text}”`
+              : '“I prefer clear ownership before committing work.”'
+          }
+        />
 
         {/* Chapter 2 — Contextual Decision */}
         <HomeDecisionChapter
@@ -24,7 +30,7 @@ export const EditorialHomePage = () => {
           onSelectChoice={setSelectedChoice}
         />
 
-        {/* Chapter 3 — Evidence Transformation */}
+        {/* Chapter 3 — Evidence Transformation (Pinned Signature Sequence) */}
         <HomeTransformationChapter selectedChoice={selectedChoice} />
 
         {/* Chapter 4 — Career Environment */}
@@ -33,10 +39,10 @@ export const EditorialHomePage = () => {
         {/* Chapter 5 — Change Over Time */}
         <HomeChangeChapter />
 
-        {/* Chapter 6 — Inspection */}
+        {/* Chapter 6 — Inspection & Provenance */}
         <HomeInspectionChapter />
 
-        {/* Chapter 7 — Finale */}
+        {/* Chapter 7 — Finale & Closure */}
         <HomeFinaleChapter />
       </PublicLayout>
     </SmoothScrollProvider>

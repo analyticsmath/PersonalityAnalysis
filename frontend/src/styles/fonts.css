@@ -1,3 +1,23 @@
-/* Personality Assessor Typography — Newsreader Variable & Instrument Sans Variable */
+/* Personality Assessor Typography — Mona Sans Variable, Instrument Sans Variable & Newsreader Variable */
 @import '@fontsource-variable/newsreader';
 @import '@fontsource-variable/instrument-sans';
+
+@font-face {
+  font-family: 'Mona Sans';
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/MonaSansVF_wdth_opsz_wght_.woff2') format('woff2-variations'),
+       url('/fonts/MonaSansVF_wdth_opsz_wght_.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Mona Sans';
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/MonaSansVF-Italic_wdth_opsz_wght_.woff2') format('woff2-variations'),
+       url('/fonts/MonaSansVF-Italic_wdth_opsz_wght_.woff2') format('woff2');
+}
