@@ -1,49 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
-import HomeOpeningChapter from '../../components/personality-v7/home/HomeOpeningChapter';
-import HomeDecisionChapter from '../../components/personality-v7/home/HomeDecisionChapter';
-import HomeTransformationChapter from '../../components/personality-v7/home/HomeTransformationChapter';
-import HomeEnvironmentChapter from '../../components/personality-v7/home/HomeEnvironmentChapter';
-import HomeChangeChapter from '../../components/personality-v7/home/HomeChangeChapter';
-import HomeInspectionChapter from '../../components/personality-v7/home/HomeInspectionChapter';
-import HomeFinaleChapter from '../../components/personality-v7/home/HomeFinaleChapter';
+import HomeWorldEntryScene from '../../components/personality-v7/home/HomeWorldEntryScene';
+import HomeSourceQuietScene from '../../components/personality-v7/home/HomeSourceQuietScene';
+import HomeBranchingScene from '../../components/personality-v7/home/HomeBranchingScene';
+import HomeCareerTakeoverScene from '../../components/personality-v7/home/HomeCareerTakeoverScene';
+import HomeCalibrationScene from '../../components/personality-v7/home/HomeCalibrationScene';
+import HomeTimeRevisitScene from '../../components/personality-v7/home/HomeTimeRevisitScene';
+import HomeTracebackScene from '../../components/personality-v7/home/HomeTracebackScene';
+import HomeFinaleScene from '../../components/personality-v7/home/HomeFinaleScene';
 
+/**
+ * EditorialHomePage
+ * The Living Record flagship master narrative.
+ * 1. World Entry (0-100)
+ * 2. Source Quiet (3/10)
+ * 3. Branching Evidence (8/10)
+ * 4. Career World Takeover (9/10)
+ * 5. Calibration Quiet (4/10)
+ * 6. Time Revisit (7/10)
+ * 7. Traceback (6/10)
+ * 8. Finale (8/10)
+ */
 export const EditorialHomePage = () => {
-  const [selectedChoice, setSelectedChoice] = useState(null);
-
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={true}>
-        {/* Chapter 1 — Orientation & Initial Context */}
-        <HomeOpeningChapter
-          evidenceText={
-            selectedChoice
-              ? `“${selectedChoice.text}”`
-              : '“I prefer clear ownership before committing work.”'
-          }
-        />
+        {/* Scene 1 — World Entry */}
+        <HomeWorldEntryScene />
 
-        {/* Chapter 2 — Contextual Decision */}
-        <HomeDecisionChapter
-          selectedChoice={selectedChoice}
-          onSelectChoice={setSelectedChoice}
-        />
+        {/* Scene 2 — Source Quiet */}
+        <HomeSourceQuietScene />
 
-        {/* Chapter 3 — Evidence Transformation (Pinned Signature Sequence) */}
-        <HomeTransformationChapter selectedChoice={selectedChoice} />
+        {/* Scene 3 — Branching Evidence */}
+        <HomeBranchingScene />
 
-        {/* Chapter 4 — Career Environment */}
-        <HomeEnvironmentChapter />
+        {/* Scene 4 — Career World Takeover */}
+        <HomeCareerTakeoverScene />
 
-        {/* Chapter 5 — Change Over Time */}
-        <HomeChangeChapter />
+        {/* Scene 5 — Calibration Quiet */}
+        <HomeCalibrationScene />
 
-        {/* Chapter 6 — Inspection & Provenance */}
-        <HomeInspectionChapter />
+        {/* Scene 6 — Time Revisit */}
+        <HomeTimeRevisitScene />
 
-        {/* Chapter 7 — Finale & Closure */}
-        <HomeFinaleChapter />
+        {/* Scene 7 — Traceback */}
+        <HomeTracebackScene />
+
+        {/* Scene 8 — Finale */}
+        <HomeFinaleScene />
       </PublicLayout>
     </SmoothScrollProvider>
   );

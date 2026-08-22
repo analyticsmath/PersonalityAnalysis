@@ -2,73 +2,69 @@ import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
-import SmoothScrollProvider, { useScrollContext } from '../../components/personality-v7/motion/SmoothScrollProvider';
-import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
-import { useCursor } from '../../components/personality-v7/motion/CursorCoordinator';
+import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import EnvironmentPlane from '../../components/personality-v7/living-record/EnvironmentPlane';
+import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
+import CalibrationBaseline from '../../components/personality-v7/living-record/CalibrationBaseline';
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
+import careersData from '../../content/careers.json';
+import './EditorialCareerIntelligencePage.css';
 
-const CareerSpatialCanvas = lazy(() => import('../../components/personality-v7/career/CareerSpatialCanvas'));
+const CareerSpatialCanvas = lazy(() =>
+  import('../../components/personality-v7/career/CareerSpatialCanvas')
+);
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * CAREER INTELLIGENCE STATE MAP (SPATIAL DOCUMENTARY ATLAS)
- * 0%   - Active environment advances forward in z-depth (+120px) and scale (1.05).
- *        Secondary supporting plane maintains depth (-70px to -140px).
- * 25%  - On selection switch: 12x8 pixel transition activates for 320ms on active image bounds.
- * 50%  - Asymmetric triad (Alignment / Tension / Develop) updates in open mineral composition below.
- * 75%  - Subordinate role examples reflect environmental context with explicit editorial disclaimer.
- * 100% - Kinetic typographic catalogue scrolls all 17 curated professional backend roles.
- */
 const CAREER_LENSES = [
   {
     id: 'complex-problems',
     num: '01',
-    title: 'Complex problems, clear ownership',
-    shortName: 'STRUCTURE & OWNERSHIP',
+    title: 'Complex problems',
+    subtitle: 'Clear ownership / direct mechanical control',
     asset: MEDIA_ASSETS_V7.careerComplexMachine,
     secondaryAsset: MEDIA_ASSETS_V7.careerControl,
-    description: 'Work rewards structured problem solving when responsibility is clear enough to follow a decision through.',
+    description:
+      'Work rewards structured problem solving when responsibility is clear enough to follow a decision through.',
     alignment: 'High engagement when technical boundaries and system ownership are clearly defined.',
     tension: 'Friction arises when accountability is fragmented across competing stakeholders.',
     develop: 'Scaling architectural judgment and robust error handling.',
     roles: ['Software Engineer', 'Backend Engineer', 'DevOps Engineer', 'Cybersecurity Analyst'],
-    desktopPos: { left: '4vw', top: '18vh', scale: 0.72, zIndex: 3, depthFactor: 24 },
   },
   {
     id: 'open-questions',
     num: '02',
-    title: 'Open questions, long focus',
-    shortName: 'DEEP INQUIRY',
+    title: 'Open questions',
+    subtitle: 'Long focus / investigative inquiry',
     asset: MEDIA_ASSETS_V7.careerDeepInquiry,
     secondaryAsset: MEDIA_ASSETS_V7.evidenceLabDetail,
-    description: 'Work leaves room to investigate, model possibilities and stay with a difficult problem before committing an answer.',
+    description:
+      'Work leaves room to investigate, model possibilities and stay with a difficult problem before committing an answer.',
     alignment: 'Strong fit for deep analytical inquiry and hypothesis validation without artificial haste.',
-    tension: 'Discomfort when forced into rapid superficial delivery without time to understand underlying dynamics.',
+    tension: 'Discomfort when forced into rapid superficial delivery without time to understand dynamics.',
     develop: 'Expanding probabilistic modeling and statistical evidence structuring.',
     roles: ['Data Analyst', 'Machine Learning Engineer', 'Control Systems Engineer'],
-    desktopPos: { left: '26vw', top: '8vh', scale: 0.82, zIndex: 4, depthFactor: 32 },
   },
   {
     id: 'shared-decisions',
     num: '03',
-    title: 'Shared decisions, frequent coordination',
-    shortName: 'CROSS-TEAM CONSENSUS',
+    title: 'Shared decisions',
+    subtitle: 'Coordination / shared multidisciplinary artifacts',
     asset: MEDIA_ASSETS_V7.careerCoordination,
     secondaryAsset: MEDIA_ASSETS_V7.careerBroadcast,
-    description: 'Progress depends on communication, prioritisation and decisions that cross team boundaries.',
+    description:
+      'Progress depends on communication, prioritisation and decisions that cross team boundaries.',
     alignment: 'Thrives when translating disparate perspectives into coherent strategic consensus.',
     tension: 'Energy drain in highly siloed environments where communication channels are blocked.',
     develop: 'Strengthening stakeholder synthesis and cross-functional momentum governance.',
     roles: ['Product Manager', 'Technical Program Manager', 'Customer Success Manager', 'Business Analyst'],
-    desktopPos: { left: '56vw', top: '16vh', scale: 1.0, zIndex: 5, depthFactor: 36 },
   },
   {
     id: 'visible-output',
     num: '04',
-    title: 'Visible output, material feedback',
-    shortName: 'TANGIBLE CRAFT',
+    title: 'Visible output',
+    subtitle: 'Material feedback / tangible craft',
     asset: MEDIA_ASSETS_V7.evidenceVisible,
     secondaryAsset: MEDIA_ASSETS_V7.career3dPrinting,
     description: 'Work produces something observable that can be tested, refined or handled.',
@@ -76,415 +72,273 @@ const CAREER_LENSES = [
     tension: 'Frustration with purely theoretical initiatives that produce no tangible artifact.',
     develop: 'Deepening interaction ergonomics and sensory feedback precision.',
     roles: ['Frontend Engineer', 'UX Designer', 'Electrical Engineer', 'Automation Engineer', 'Embedded Engineer'],
-    desktopPos: { left: '74vw', top: '50vh', scale: 0.74, zIndex: 2, depthFactor: 16 },
   },
   {
     id: 'autonomy-standards',
     num: '05',
-    title: 'Autonomy, pace, personal standards',
-    shortName: 'AUTONOMOUS TEMPO',
+    title: 'Autonomy',
+    subtitle: 'Pace, personal standards & high trust',
     asset: MEDIA_ASSETS_V7.careerAutonomy,
     secondaryAsset: MEDIA_ASSETS_V7.careerAnalysis,
-    description: 'The environment gives substantial responsibility for how work is organised, judged and improved.',
+    description:
+      'The environment gives substantial responsibility for how work is organised, judged and improved.',
     alignment: 'Excels under high trust, self-directed tempo, and uncompromised quality bars.',
     tension: 'Resistance to micromanagement or arbitrary bureaucratic constraints.',
     develop: 'Calibrating personal perfectionism against real-world iterative milestones.',
     roles: ['Software Engineer', 'Machine Learning Engineer', 'UX Designer', 'Power Systems Engineer'],
-    desktopPos: { left: '22vw', top: '60vh', scale: 0.76, zIndex: 3, depthFactor: 20 },
   },
 ];
 
-const ROLE_CATALOGUE_ROW_1 = [
+const ALL_ROLES = [
   'Software Engineer',
   'Frontend Engineer',
   'Backend Engineer',
+  'DevOps Engineer',
   'Data Analyst',
   'Machine Learning Engineer',
   'Product Manager',
-  'UX Designer',
-  'DevOps Engineer',
   'Technical Program Manager',
-];
-
-const ROLE_CATALOGUE_ROW_2 = [
-  'Customer Success Manager',
+  'UX Designer',
   'Cybersecurity Analyst',
+  'Cloud Architect',
+  'Embedded Systems Engineer',
   'Electrical Engineer',
-  'Power Systems Engineer',
   'Control Systems Engineer',
+  'Power Systems Engineer',
   'Automation Engineer',
-  'Embedded Engineer',
-  'Business Analyst',
+  'Customer Success Manager',
 ];
 
-const PIXEL_COLS = 12;
-const PIXEL_ROWS = 8;
-
-export const CareerIntelligenceContent = () => {
-  const { navigateWithTransition } = useRouteTransition();
-  const { setCursorLabel, clearCursorLabel } = useCursor();
-  const { subscribe } = useScrollContext();
-
+export const EditorialCareerIntelligencePage = () => {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [pixelTransitionActive, setPixelTransitionActive] = useState(false);
-  const [canRenderWebGL, setCanRenderWebGL] = useState(false);
-  const isFirstSelectionRef = useRef(true);
+  const [selectedRole, setSelectedRole] = useState(ALL_ROLES[0]);
+  const [useWebGL, setUseWebGL] = useState(false);
+  const { navigateWithTransition } = useRouteTransition();
 
-  const galleryRef = useRef(null);
-  const imagePlanesRef = useRef([]);
-  const catalogueRow1Ref = useRef(null);
-  const catalogueRow2Ref = useRef(null);
-  const pos1Ref = useRef(0);
-  const pos2Ref = useRef(0);
+  const atlasRef = useRef(null);
+  const activeLens = CAREER_LENSES[activeIdx] || CAREER_LENSES[0];
 
-  const activeLens = CAREER_LENSES[activeIdx];
-
-  // Detect if WebGL progressive enhancement should be enabled (Desktop >1024 + fine pointer)
   useEffect(() => {
-    const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024;
-    const isFinePointer = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: fine)').matches;
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isDesktop = window.innerWidth > 1024;
+    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
-    if (isDesktop && isFinePointer && !prefersReduced) {
+    if (!prefersReduced && isDesktop && isFinePointer) {
       try {
         const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-        if (gl) {
-          setCanRenderWebGL(true);
-        }
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) setUseWebGL(true);
       } catch {
-        setCanRenderWebGL(false);
+        setUseWebGL(false);
       }
     }
   }, []);
 
-  // Choreograph 3D Depth via GSAP (authoritative accessible transform owner)
-  useEffect(() => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const handleCtaClick = (e, to) => {
+    e.preventDefault();
+    navigateWithTransition(to);
+  };
 
-    if (isMobile || prefersReduced) return;
-
-    // Initialize dormant depth bands
-    imagePlanesRef.current.forEach((el, idx) => {
-      if (!el) return;
-      const isSelected = idx === activeIdx;
-      const lens = CAREER_LENSES[idx];
-      const dormantZ = idx === 2 ? 0 : (idx % 2 === 0 ? -70 : -140);
-      const targetZ = isSelected ? 120 : dormantZ;
-      const targetScale = isSelected ? 1.05 : lens.desktopPos.scale;
-
-      gsap.to(el, {
-        z: targetZ,
-        scale: targetScale,
-        duration: 0.52,
-        ease: 'power3.out',
-        overwrite: 'auto',
-      });
-    });
-
-    const handlePointerMove = (e) => {
-      const normX = (e.clientX / window.innerWidth - 0.5) * 2;
-      const normY = (e.clientY / window.innerHeight - 0.5) * 2;
-
-      imagePlanesRef.current.forEach((el, idx) => {
-        if (!el) return;
-        const lens = CAREER_LENSES[idx];
-        const factor = lens.depthFactor || 20;
-
-        gsap.to(el, {
-          x: normX * factor,
-          y: normY * factor,
-          rotateY: normX * 1.2,
-          rotateX: -normY * 1.2,
-          duration: 0.85,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        });
-      });
-    };
-
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    return () => window.removeEventListener('pointermove', handlePointerMove);
-  }, [activeIdx]);
-
-  // Kinetic Typographic Role Catalogue Scroll Subscriptions
-  useEffect(() => {
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
-
-    const unsub = subscribe((state) => {
-      const vel = state.velocity || 0;
-      pos1Ref.current -= vel * 0.4;
-      pos2Ref.current += vel * 0.3;
-
-      if (catalogueRow1Ref.current) {
-        catalogueRow1Ref.current.style.transform = `translate3d(${pos1Ref.current}px, 0, 0)`;
-      }
-      if (catalogueRow2Ref.current) {
-        catalogueRow2Ref.current.style.transform = `translate3d(${pos2Ref.current}px, 0, 0)`;
-      }
-    });
-
-    return () => unsub();
-  }, [subscribe]);
-
-  const selectLens = (idx) => {
-    if (idx === activeIdx) return;
-
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-    const isCoarse = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!isFirstSelectionRef.current && !isMobile && !isCoarse && !prefersReduced) {
-      setPixelTransitionActive(true);
-      setTimeout(() => setPixelTransitionActive(false), 320);
-    }
-
-    isFirstSelectionRef.current = false;
-    setActiveIdx(idx);
-    setCursorLabel(CAREER_LENSES[idx].shortName);
+  const roleDetails = (careersData && careersData[selectedRole]) || {
+    title: selectedRole,
+    description: 'Curated technical and analytical profile definition from the career matching model.',
+    skills: ['Problem Structuring', 'Domain Depth', 'Technical Planning'],
+    facets: { riasec: 'Investigative / Conventional', workValue: 'Autonomy' },
   };
 
   return (
-    <div className="pa-career-page">
-      {/* ── Section 1: Hero Context (Carbon) ── */}
-      <section className="pa-career-hero" data-tone="dark">
-        <div className="pa-v7-grid pa-career-hero__grid">
-          <div className="pa-career-hero__headline-col">
-            <h1 className="pa-display-hero pa-career-hero__h1">
-              Career fit changes with the conditions around the work.
-            </h1>
-            <p className="pa-career-hero__lead">
-              Explore example work conditions that can affect how professional evidence relates to a role. These lenses are editorial exploration tools, not backend role classifications.
-            </p>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light-content" withFooter={true}>
+        {/* ── Section 1: Workworld Atlas ── */}
+        <section
+          ref={atlasRef}
+          className="pa-career-atlas"
+          aria-label="Workworld Atlas: Exploring professional environments"
+        >
+          {/* WebGL Progressive Enhancement Canvas (if active) */}
+          {useWebGL ? (
+            <Suspense fallback={null}>
+              <div className="pa-career-atlas__webgl" aria-hidden="true">
+                <CareerSpatialCanvas
+                  activeLensId={activeLens.id}
+                  onSelectLens={(id) => {
+                    const found = CAREER_LENSES.findIndex((l) => l.id === id);
+                    if (found >= 0) setActiveIdx(found);
+                  }}
+                />
+              </div>
+            </Suspense>
+          ) : (
+            /* DOM Fallback Atlas Environment */
+            <div className="pa-career-atlas__dom-media">
+              <div className="pa-career-atlas__primary-env">
+                <EnvironmentPlane
+                  asset={activeLens.asset}
+                  role="primary"
+                  priority={true}
+                  caption={`ENVIRONMENT: ${activeLens.title.toUpperCase()}`}
+                />
+              </div>
+              <div className="pa-career-atlas__support-env">
+                <EnvironmentPlane
+                  asset={activeLens.secondaryAsset}
+                  role="support"
+                  caption="SUPPORT CONTEXT"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Interactive Atlas Overlay */}
+          <div className="pa-career-atlas__overlay">
+            <div className="pa-career-atlas__header">
+              <span className="pa-career-atlas__eyebrow">WORKWORLD ATLAS</span>
+              <h1 className="pa-career-atlas__title">{activeLens.title}</h1>
+              <p className="pa-career-atlas__subtitle">{activeLens.subtitle}</p>
+            </div>
+
+            {/* Edge Navigation Index */}
+            <nav className="pa-career-atlas__nav" aria-label="Workworld environments index">
+              {CAREER_LENSES.map((lens, idx) => {
+                const isActive = idx === activeIdx;
+                return (
+                  <button
+                    key={lens.id}
+                    type="button"
+                    className={`pa-career-atlas__nav-item ${isActive ? 'is-active' : ''}`}
+                    onClick={() => setActiveIdx(idx)}
+                    aria-current={isActive ? 'true' : undefined}
+                  >
+                    <span className="pa-career-atlas__nav-num">{lens.num}</span>
+                    <span className="pa-career-atlas__nav-label">{lens.title}</span>
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Living Record Protagonist */}
+            <div className="pa-career-atlas__strip-wrap">
+              <EvidenceStrip
+                quote="“I clarify responsibilities before committing work.”"
+                eyebrow="RETAINED SOURCE"
+                conditionLabel={`CURRENT ENVIRONMENT: ${activeLens.title.toUpperCase()}`}
+                sourceLabel="SAME RECORD / DIFFERENT SITUATIONAL DEMANDS"
+                theme="carbon"
+                variant="compared"
+              />
+            </div>
+
+            {/* Asymmetric Relationship Triad (in negative space) */}
+            <div className="pa-career-atlas__triad">
+              <div className="pa-career-atlas__triad-item pa-career-atlas__triad-item--align">
+                <span className="pa-career-atlas__triad-label">ALIGNMENT</span>
+                <p className="pa-career-atlas__triad-text">{activeLens.alignment}</p>
+              </div>
+              <div className="pa-career-atlas__triad-item pa-career-atlas__triad-item--tension">
+                <span className="pa-career-atlas__triad-label">TENSION</span>
+                <p className="pa-career-atlas__triad-text">{activeLens.tension}</p>
+              </div>
+              <div className="pa-career-atlas__triad-item pa-career-atlas__triad-item--develop">
+                <span className="pa-career-atlas__triad-label">DEVELOP</span>
+                <p className="pa-career-atlas__triad-text">{activeLens.develop}</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Section 2: 3D Career Media Field & Spatial Selector (Carbon) ── */}
-      <section className="pa-career-gallery-stage" data-tone="dark">
-        {/* Progressive WebGL 3D Canvas Enhancement (Desktop fine-pointer) */}
-        {canRenderWebGL && (
-          <Suspense fallback={null}>
-            <CareerSpatialCanvas activeIndex={activeIdx} items={CAREER_LENSES} isMobile={false} />
-          </Suspense>
-        )}
+        {/* ── Section 2: Factual Deterministic Calibration Baseline ── */}
+        <section
+          className="pa-career-calibration"
+          aria-label="Deterministic Career Calibration Layers"
+        >
+          <div className="pa-career-calibration__inner">
+            <div className="pa-career-calibration__header">
+              <span className="pa-career-calibration__eyebrow">DETERMINISTIC PROFILE WEIGHTING</span>
+              <h2 className="pa-career-calibration__h2">Career fit uses six deterministic layers.</h2>
+              <p className="pa-career-calibration__lead">
+                Work-condition environments are editorial lenses for exploration. Actual career comparison evaluates the weighted deterministic model below.
+              </p>
+            </div>
 
-        {/* 3D Spatial Media Field (Interactive Image Planes as Primary Selector) */}
-        <div ref={galleryRef} className="pa-career-spatial-field">
-          {CAREER_LENSES.map((lens, idx) => {
-            const isSelected = activeIdx === idx;
-            return (
-              <div
-                key={lens.id}
-                ref={(node) => (imagePlanesRef.current[idx] = node)}
-                onClick={() => selectLens(idx)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    selectLens(idx);
-                  }
-                }}
-                onMouseEnter={() => setCursorLabel(lens.shortName)}
-                onMouseLeave={() => clearCursorLabel()}
-                role="button"
-                tabIndex={0}
-                aria-pressed={isSelected}
-                aria-label={`Select ${lens.title} environment`}
-                className={`pa-career-media-plane ${isSelected ? 'pa-career-media-plane--selected' : 'pa-career-media-plane--dormant'} ${canRenderWebGL ? 'pa-career-media-plane--webgl-active' : ''}`}
-                style={{
-                  '--desktop-left': lens.desktopPos.left,
-                  '--desktop-top': lens.desktopPos.top,
-                  '--z-order': isSelected ? 10 : lens.desktopPos.zIndex,
-                }}
-              >
-                {/* Pixel Transition Grid (integrated within active image bounds) */}
-                {isSelected && pixelTransitionActive && (
-                  <div className="pa-pixel-grid-overlay" aria-hidden="true">
-                    {Array.from({ length: PIXEL_COLS * PIXEL_ROWS }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="pa-pixel-tile"
-                        style={{ animationDelay: `${(i % PIXEL_COLS) * 16}ms` }}
-                      />
-                    ))}
+            <div className="pa-career-calibration__baseline-wrap">
+              <CalibrationBaseline theme="mineral" />
+            </div>
+          </div>
+        </section>
+
+        {/* ── Section 3: 17-Role Atlas Index ── */}
+        <section
+          className="pa-career-roles"
+          aria-label="Supported 17-Role Directory"
+        >
+          <div className="pa-career-roles__inner">
+            <div className="pa-career-roles__header">
+              <span className="pa-career-roles__eyebrow">CAREER DIRECTORY</span>
+              <h2 className="pa-career-roles__h2">17 Curated Professional Roles</h2>
+              <p className="pa-career-roles__lead">
+                Explore curated profile definitions without artificial ranking.
+              </p>
+            </div>
+
+            <div className="pa-career-roles__grid">
+              {/* Left Role List */}
+              <div className="pa-career-roles__list" role="list" aria-label="Role directory list">
+                {ALL_ROLES.map((role) => {
+                  const isSelected = selectedRole === role;
+                  return (
+                    <button
+                      key={role}
+                      type="button"
+                      className={`pa-career-roles__item ${isSelected ? 'is-selected' : ''}`}
+                      onClick={() => setSelectedRole(role)}
+                      role="listitem"
+                      aria-current={isSelected ? 'true' : undefined}
+                    >
+                      <span className="pa-career-roles__item-dot" />
+                      <span className="pa-career-roles__item-name">{role}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right Profile Facets Inspection */}
+              <div className="pa-career-roles__detail-panel" aria-live="polite">
+                <div className="pa-career-roles__detail-header">
+                  <span className="pa-career-roles__detail-tag">CURATED ROLE SPECIFICATION</span>
+                  <h3 className="pa-career-roles__detail-title">{selectedRole}</h3>
+                  <p className="pa-career-roles__detail-desc">
+                    {roleDetails.description || 'Structured professional role profile.'}
+                  </p>
+                </div>
+
+                <div className="pa-career-roles__facets">
+                  <div className="pa-career-roles__facet">
+                    <span className="pa-career-roles__facet-label">RELEVANT SKILLS</span>
+                    <div className="pa-career-roles__pills">
+                      {(roleDetails.skills || ['Technical Problem Solving', 'Systems Planning']).map(
+                        (sk) => (
+                          <span key={sk} className="pa-career-roles__pill">
+                            {sk}
+                          </span>
+                        )
+                      )}
+                    </div>
                   </div>
-                )}
+                </div>
 
-                <picture>
-                  <source type="image/avif" srcSet={lens.asset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
-                  <source type="image/webp" srcSet={lens.asset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
-                  <img
-                    src={lens.asset.source}
-                    alt={lens.asset.alt}
-                    width={lens.asset.intrinsicDimensions.width}
-                    height={lens.asset.intrinsicDimensions.height}
-                    className="pa-career-media-plane__img"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </picture>
-
-                <div className="pa-career-media-plane__tag">
-                  <span>{lens.num} • {lens.title}</span>
+                <div className="pa-career-roles__detail-footer">
+                  <a
+                    href="/signup"
+                    className="pa-btn pa-btn--primary"
+                    onClick={(e) => handleCtaClick(e, '/signup')}
+                  >
+                    Build your profile to match →
+                  </a>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ── Section 3: Open Mineral Spatial Composition ── */}
-      <section className="pa-career-spatial-info" data-tone="light">
-        <div className="pa-v7-grid pa-career-spatial-info__grid">
-          <div className="pa-career-spatial-info__intro">
-            <h2 className="pa-heading-major pa-career-spatial-info__title">
-              {activeLens.title}
-            </h2>
-            <p className="pa-career-spatial-info__desc">
-              {activeLens.description}
-            </p>
-          </div>
-
-          {/* Secondary Media Plane in Context */}
-          <div className="pa-career-spatial-info__secondary-plane" aria-hidden="true">
-            <picture>
-              <source type="image/avif" srcSet={activeLens.secondaryAsset.avifSrcSet} sizes="(min-width: 901px) 30vw, 80vw" />
-              <source type="image/webp" srcSet={activeLens.secondaryAsset.webpSrcSet} sizes="(min-width: 901px) 30vw, 80vw" />
-              <img
-                src={activeLens.secondaryAsset.source}
-                alt=""
-                width={activeLens.secondaryAsset.intrinsicDimensions.width}
-                height={activeLens.secondaryAsset.intrinsicDimensions.height}
-                className="pa-career-spatial-info__secondary-img"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-          </div>
-
-          {/* Single Open Mineral Spatial Composition: ALIGNMENT, TENSION, DEVELOP */}
-          <div className="pa-career-spatial-info__triad">
-            {/* Alignment near the evidence */}
-            <div className="pa-career-triad__item pa-career-triad__item--alignment">
-              <div className="pa-career-triad__marker" aria-hidden="true" />
-              <span className="pa-career-triad__tag" style={{ color: 'var(--pa-oxblood)' }}>
-                Alignment
-              </span>
-              <h3 className="pa-career-triad__heading">Favorable Conditions</h3>
-              <p className="pa-career-triad__text">{activeLens.alignment}</p>
-            </div>
-
-            {/* Tension between evidence and environment */}
-            <div className="pa-career-triad__item pa-career-triad__item--tension">
-              <div className="pa-career-triad__marker" aria-hidden="true" />
-              <span className="pa-career-triad__tag" style={{ color: 'var(--pa-muted-light)' }}>
-                Tension
-              </span>
-              <h3 className="pa-career-triad__heading">Points of Friction</h3>
-              <p className="pa-career-triad__text">{activeLens.tension}</p>
-            </div>
-
-            {/* Develop deeper into the environment */}
-            <div className="pa-career-triad__item pa-career-triad__item--develop">
-              <div className="pa-career-triad__marker" aria-hidden="true" />
-              <span className="pa-career-triad__tag" style={{ color: 'var(--pa-carbon)' }}>
-                Develop
-              </span>
-              <h3 className="pa-career-triad__heading">Growth Opportunities</h3>
-              <p className="pa-career-triad__text">{activeLens.develop}</p>
             </div>
           </div>
-
-          {/* Subordinate Role Examples with explicit honest editorial disclosure */}
-          <div className="pa-career-spatial-info__roles-field">
-            <span className="pa-career-spatial-info__roles-label">Example roles worth exploring</span>
-            <p className="pa-career-roles-disclosure">
-              These illustrative roles are editorial references to understand environmental contexts, not deterministic backend classifications.
-            </p>
-            <div className="pa-career-roles-plain-list">
-              {activeLens.roles.map((r, i) => (
-                <span key={r} className="pa-career-role-plain">
-                  {r}{i < activeLens.roles.length - 1 ? ' · ' : ''}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 4: Kinetic Typographic Role Catalogue (Carbon) ── */}
-      <section className="pa-career-catalogue" data-tone="dark">
-        <div className="pa-v7-grid pa-career-catalogue__grid">
-          <div className="pa-career-catalogue__header">
-            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
-              Backend Role Catalogue
-            </span>
-            <h2 className="pa-heading-major pa-career-catalogue__h2">
-              17 Curated Professional Profiles
-            </h2>
-            <p className="pa-career-catalogue__lead">
-              Personality Assessor compares your multi-layer psychometric record with 17 curated professional role models using deterministic multi-layer comparison logic.
-            </p>
-          </div>
-        </div>
-
-        {/* Kinetic Typographic Crawler Rows */}
-        <div className="pa-career-catalogue__kinetic-field" aria-hidden="true">
-          <div ref={catalogueRow1Ref} className="pa-career-catalogue__row">
-            {[...ROLE_CATALOGUE_ROW_1, ...ROLE_CATALOGUE_ROW_1].map((role, i) => (
-              <span key={`${role}-${i}`} className="pa-catalogue-role-text">
-                {role} <span className="pa-catalogue-dot">/</span>
-              </span>
-            ))}
-          </div>
-
-          <div ref={catalogueRow2Ref} className="pa-career-catalogue__row pa-career-catalogue__row--alt">
-            {[...ROLE_CATALOGUE_ROW_2, ...ROLE_CATALOGUE_ROW_2].map((role, i) => (
-              <span key={`${role}-${i}`} className="pa-catalogue-role-text">
-                {role} <span className="pa-catalogue-dot">/</span>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="pa-v7-grid pa-career-catalogue__cta-grid">
-          <MagneticTarget>
-            <a
-              href="/signup"
-              className="pa-btn-primary-dark"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateWithTransition('/signup');
-              }}
-            >
-              Build your profile to compare careers
-            </a>
-          </MagneticTarget>
-        </div>
-      </section>
-    </div>
-  );
-};
-
-export const EditorialCareerIntelligencePage = () => {
-  return (
-    <SmoothScrollProvider>
-      <PublicLayout headerTheme="dark-content" withFooter={true}>
-        <CareerIntelligenceContent />
+        </section>
       </PublicLayout>
     </SmoothScrollProvider>
   );

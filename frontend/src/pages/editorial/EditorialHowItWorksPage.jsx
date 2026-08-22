@@ -1,270 +1,215 @@
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React from 'react';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
-import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
+import EnvironmentPlane from '../../components/personality-v7/living-record/EnvironmentPlane';
+import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
+import CalibrationBaseline from '../../components/personality-v7/living-record/CalibrationBaseline';
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
-
-gsap.registerPlugin(ScrollTrigger);
+import './EditorialHowItWorksPage.css';
 
 /**
- * HOW IT WORKS STATE MAP (EVIDENCE TRANSIT JOURNEY)
- * 0%   - Hero stage: Media (howProcess) establishes how contextual work begins.
- * 20%  - Stage 1 (Contextual Attachment): Traveling evidence departs initial node along Oxblood curve.
- * 40%  - Stage 2 (Adaptive Staged Inquiry): Follow-up questions adapt to previous decisions.
- * 60%  - Stage 3 (Multi-Lens Decomposition): Big Five, RIASEC, Work Values split into separate readings.
- * 80%  - Stage 4 (Deterministic Comparison): Multi-layer weighted role benchmarks compared.
- * 100% - Stage 5 (Longitudinal Revisit): Earlier baselines preserved for future comparative inspection.
+ * EditorialHowItWorksPage
+ * Operating Mode: Evidence Engine
+ * Demonstrates the full lifecycle of a single response through the deterministic engine:
+ * Prompt -> Source Record -> Evidence Extraction -> Scoring Validity -> Calibration -> Stored Record.
  */
-const STAGES = [
-  {
-    id: 'context',
-    num: '01',
-    title: 'Contextual Attachment',
-    heading: 'Background & Situational Framing',
-    body: 'A response is never evaluated in isolation. Project deadlines, organizational constraints, and past context stay attached to the response so interpretation reflects real working conditions.',
-  },
-  {
-    id: 'adaptive',
-    num: '02',
-    title: 'Adaptive Staged Inquiry',
-    heading: 'The next question builds on the last',
-    body: 'The assessment does not force every person through a static, generic marketing quiz. Responses guide targeted follow-ups to explore nuances in how decisions are made.',
-  },
-  {
-    id: 'readings',
-    num: '03',
-    title: 'Multi-Lens Decomposition',
-    heading: 'Personality, interests, and work values stay separate',
-    body: 'Big Five personality traits, RIASEC vocational interests, and environmental work values retain distinct provenance rather than being collapsed into an opaque score.',
-  },
-  {
-    id: 'careers',
-    num: '04',
-    title: 'Deterministic Comparison',
-    heading: 'Compared across multi-layer role profiles',
-    body: 'Your evidence record is matched with curated professional profiles using deterministic weighted multi-layer comparison logic for career exploration, not arbitrary AI prediction.',
-  },
-  {
-    id: 'revisit',
-    num: '05',
-    title: 'Longitudinal Revisit',
-    heading: 'Later assessments become new evidence',
-    body: 'When you take future assessments or gain new experience, the earlier baseline is preserved. The system lets you inspect what stayed stable alongside what changed over time.',
-  },
-];
-
-export const HowItWorksContent = () => {
-  const { navigateWithTransition } = useRouteTransition();
-  const containerRef = useRef(null);
-  const stageRef = useRef(null);
-  const travelingEvidenceRef = useRef(null);
-  const pathRef = useRef(null);
-  const stageCardsRef = useRef([]);
-
-  const heroAsset = MEDIA_ASSETS_V7.howProcess;
-
-  useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isTest = typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent);
-    if (isMobile || prefersReduced || isTest) return;
-
-    const container = containerRef.current;
-    const stage = stageRef.current;
-    const evidenceEl = travelingEvidenceRef.current;
-    const pathEl = pathRef.current;
-
-    if (!container || !stage || !evidenceEl || !pathEl) return;
-
-    const pathLength = typeof pathEl.getTotalLength === 'function' ? pathEl.getTotalLength() : 1200;
-    pathEl.style.strokeDasharray = `${pathLength}`;
-    pathEl.style.strokeDashoffset = `${pathLength}`;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: container,
-        start: 'top top',
-        end: 'bottom bottom',
-        pin: stage,
-        scrub: 0.85,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          const prog = self.progress;
-
-          // 1. Draw SVG path synchronously with scroll
-          pathEl.style.strokeDashoffset = `${pathLength * (1 - prog)}`;
-
-          // 2. Move traveling evidence token directly within SVG coordinates
-          if (typeof pathEl.getPointAtLength === 'function') {
-            const pt = pathEl.getPointAtLength(prog * pathLength);
-            evidenceEl.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
-            evidenceEl.style.opacity = prog > 0.02 && prog < 0.98 ? '1' : '0';
-          }
-
-          // 3. Highlight the active destination card
-          const activeIndex = Math.min(Math.floor(prog * 5), 4);
-          stageCardsRef.current.forEach((card, idx) => {
-            if (!card) return;
-            if (idx === activeIndex) {
-              card.classList.add('pa-hiw-destination--active');
-            } else {
-              card.classList.remove('pa-hiw-destination--active');
-            }
-          });
-        },
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <div className="pa-hiw-page">
-      {/* ── Section 1: Opening Atmospheric Hero ── */}
-      <section className="pa-hiw-hero" data-tone="light">
-        <div className="pa-hiw-hero__stage">
-          {/* Secondary Lab Detail Plane at Depth */}
-          <div className="pa-hiw-hero__media-secondary" aria-hidden="true">
-            <picture>
-              <source type="image/avif" srcSet={MEDIA_ASSETS_V7.evidenceLabDetail.avifSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
-              <source type="image/webp" srcSet={MEDIA_ASSETS_V7.evidenceLabDetail.webpSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
-              <img
-                src={MEDIA_ASSETS_V7.evidenceLabDetail.source}
-                alt=""
-                width={MEDIA_ASSETS_V7.evidenceLabDetail.intrinsicDimensions.width}
-                height={MEDIA_ASSETS_V7.evidenceLabDetail.intrinsicDimensions.height}
-                className="pa-hiw-hero__media-secondary-img"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-          </div>
-
-          {/* Primary Process Media Plane Spanning Centerline */}
-          <div className="pa-hiw-hero__media-primary">
-            <picture>
-              <source type="image/avif" srcSet={heroAsset.avifSrcSet} sizes="(min-width: 901px) 65vw, 100vw" />
-              <source type="image/webp" srcSet={heroAsset.webpSrcSet} sizes="(min-width: 901px) 65vw, 100vw" />
-              <img
-                src={heroAsset.source}
-                alt={heroAsset.alt}
-                width={heroAsset.intrinsicDimensions.width}
-                height={heroAsset.intrinsicDimensions.height}
-                className="pa-hiw-hero__img"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
-            </picture>
-          </div>
-
-          {/* Foreground Hero Typography in Negative Space */}
-          <div className="pa-hiw-hero__content">
-            <h1 className="pa-display-hero pa-hiw-hero__h1">
-              A response becomes evidence when its context stays attached.
-            </h1>
-            <p className="pa-hiw-hero__lead">
-              Personality Assessor traces how a single contextual answer travels through staged inquiry, decomposes into separate frameworks, and contributes to career relationship exploration.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 2: Pinned Evidence Journey Stage (~320svh) ── */}
-      <section ref={containerRef} className="pa-hiw-journey-container" data-tone="dark">
-        <div ref={stageRef} className="pa-hiw-journey-stage">
-          {/* Continuous Animated SVG Curve Canvas with Native Coordinate Token */}
-          <svg
-            className="pa-hiw-journey-svg"
-            viewBox="0 0 1200 800"
-            preserveAspectRatio="xMidYMid meet"
-            aria-hidden="true"
-          >
-            <path
-              ref={pathRef}
-              d="M 120 400 C 260 180, 420 180, 560 400 S 840 620, 1080 400"
-              fill="none"
-              stroke="var(--pa-oxblood)"
-              strokeWidth="2.5"
-            />
-
-            {/* Native SVG Traveling Evidence Token */}
-            <g ref={travelingEvidenceRef} style={{ opacity: 0 }}>
-              <circle cx="0" cy="0" r="5" fill="var(--pa-oxblood)" />
-              <rect x="8" y="-12" width="140" height="24" rx="2" fill="var(--pa-carbon)" stroke="rgba(100,40,50,0.6)" strokeWidth="1" />
-              <text x="14" y="4" fill="var(--pa-mineral)" fontSize="10" fontFamily="var(--pa-font-functional)" fontWeight="500">
-                evidence payload
-              </text>
-            </g>
-          </svg>
-
-          {/* 5 Positioned Stage Destinations along the 100vh spatial path */}
-          <div className="pa-hiw-destinations-stage">
-            {STAGES.map((stage, idx) => (
-              <div
-                key={stage.id}
-                ref={(node) => (stageCardsRef.current[idx] = node)}
-                className={`pa-hiw-destination pa-hiw-destination--${stage.id} ${idx === 0 ? 'pa-hiw-destination--active' : ''}`}
-              >
-                <div className="pa-hiw-destination__node-marker" aria-hidden="true" />
-                <span className="pa-hiw-destination__num">{stage.num}</span>
-                <span className="pa-hiw-destination__title">{stage.title}</span>
-                <h3 className="pa-hiw-destination__heading">{stage.heading}</h3>
-                <p className="pa-hiw-destination__body">{stage.body}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Dedicated Mobile Vertical Journey Track */}
-          <div className="pa-hiw-mobile-track">
-            {STAGES.map((stage) => (
-              <div key={`mob-${stage.id}`} className="pa-hiw-mobile-stage">
-                <span className="pa-hiw-destination__num">{stage.num} • {stage.title}</span>
-                <h3 className="pa-hiw-destination__heading">{stage.heading}</h3>
-                <p className="pa-hiw-destination__body">{stage.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 3: Next Steps & Acquisition CTA ── */}
-      <section className="pa-hiw-cta-section" data-tone="light">
-        <div className="pa-v7-grid pa-hiw-cta-section__grid">
-          <div className="pa-hiw-cta-section__content">
-            <h2 className="pa-heading-major">Build your inspectable record.</h2>
-            <p className="pa-hiw-cta-section__lead">
-              Start with your professional background, then step through the staged assessment.
-            </p>
-            <div className="pa-hiw-cta-section__actions">
-              <MagneticTarget>
-                <a
-                  href="/signup"
-                  className="pa-btn-primary"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigateWithTransition('/signup');
-                  }}
-                >
-                  Create your first record
-                </a>
-              </MagneticTarget>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-};
-
 export const EditorialHowItWorksPage = () => {
+  const { navigateWithTransition } = useRouteTransition();
+
+  const handleCtaClick = (e, to) => {
+    e.preventDefault();
+    navigateWithTransition(to);
+  };
+
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={true}>
-        <HowItWorksContent />
+        {/* ── Engine Hero Stage ── */}
+        <section className="pa-engine-hero" aria-label="Evidence Engine Overview">
+          <div className="pa-engine-hero__media">
+            <EnvironmentPlane
+              asset={MEDIA_ASSETS_V7.howProcess}
+              role="primary"
+              priority={true}
+              caption="ENGINE RUNTIME / REAL-TIME EVIDENCE PROCESSING"
+            />
+          </div>
+
+          <div className="pa-engine-hero__overlay">
+            <div className="pa-engine-hero__header">
+              <span className="pa-engine-hero__eyebrow">THE EVIDENCE ENGINE</span>
+              <h1 className="pa-engine-hero__h1">
+                From a single response
+                <br />
+                to an ongoing record.
+              </h1>
+              <p className="pa-engine-hero__lead">
+                Follow how one situational answer generates evidence across multiple psychological and career dimensions without losing its source.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Step 1: Real Question Prompt Bank ── */}
+        <section className="pa-engine-step pa-engine-step--prompt" aria-label="Step 1: Input question prompt">
+          <div className="pa-engine-step__inner">
+            <div className="pa-engine-step__meta">
+              <span className="pa-engine-step__num">STAGE 01</span>
+              <h2 className="pa-engine-step__title">Question Prompt & Response</h2>
+              <p className="pa-engine-step__desc">
+                Assessments present realistic working scenarios rather than generic self-rating sliders.
+              </p>
+            </div>
+
+            <div className="pa-engine-step__prompt-box">
+              <div className="pa-engine-step__prompt-header">
+                <span className="pa-engine-step__prompt-tag">QUESTION PROMPT</span>
+                <span className="pa-engine-step__prompt-id">ID: initiative-pattern-intermediate</span>
+              </div>
+              <blockquote className="pa-engine-step__prompt-text">
+                “Describe how you take initiative when a project has unclear ownership.”
+              </blockquote>
+            </div>
+
+            <div className="pa-engine-step__strip-wrap">
+              <EvidenceStrip
+                quote="“I clarify responsibilities before committing work.”"
+                eyebrow="SUPPLIED ANSWER"
+                sourceLabel="SOURCE / RAW HUMAN RESPONSE"
+                theme="carbon"
+                variant="source"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ── Step 2: Multi-Dimension Evidence Extraction ── */}
+        <section className="pa-engine-step pa-engine-step--extraction" aria-label="Step 2: Evidence extraction">
+          <div className="pa-engine-step__inner">
+            <div className="pa-engine-step__meta">
+              <span className="pa-engine-step__num">STAGE 02</span>
+              <h2 className="pa-engine-step__title">Multi-Dimension Extraction</h2>
+              <p className="pa-engine-step__desc">
+                The evidence builder generates discrete atomic records across four foundational framework families.
+              </p>
+            </div>
+
+            <div className="pa-engine-step__extraction-grid">
+              <div className="pa-engine-step__record-item">
+                <span className="pa-engine-step__record-dim">BIG FIVE</span>
+                <strong className="pa-engine-step__record-trait">Conscientiousness</strong>
+                <span className="pa-engine-step__record-val">Direction: Positive (+0.6)</span>
+                <span className="pa-engine-step__record-note">Systematic clarity and execution rigor</span>
+              </div>
+
+              <div className="pa-engine-step__record-item">
+                <span className="pa-engine-step__record-dim">RIASEC</span>
+                <strong className="pa-engine-step__record-trait">Investigative / Conventional</strong>
+                <span className="pa-engine-step__record-val">Direction: Positive (+0.5)</span>
+                <span className="pa-engine-step__record-note">Analytical problem structuring & procedural care</span>
+              </div>
+
+              <div className="pa-engine-step__record-item">
+                <span className="pa-engine-step__record-dim">WORK VALUES</span>
+                <strong className="pa-engine-step__record-trait">Independence & Learning</strong>
+                <span className="pa-engine-step__record-val">Direction: Positive (+0.7)</span>
+                <span className="pa-engine-step__record-note">High preference for autonomous problem framing</span>
+              </div>
+
+              <div className="pa-engine-step__record-item">
+                <span className="pa-engine-step__record-dim">CAREER SIGNALS</span>
+                <strong className="pa-engine-step__record-trait">Ownership & Planning</strong>
+                <span className="pa-engine-step__record-val">Direction: Positive (+0.8)</span>
+                <span className="pa-engine-step__record-note">Defines accountability before execution</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Step 3: Deterministic Scoring & Validity Orchestration ── */}
+        <section className="pa-engine-step pa-engine-step--validity" aria-label="Step 3: Scoring validity">
+          <div className="pa-engine-step__inner">
+            <div className="pa-engine-step__meta">
+              <span className="pa-engine-step__num">STAGE 03</span>
+              <h2 className="pa-engine-step__title">Scoring Validity & Confidence</h2>
+              <p className="pa-engine-step__desc">
+                Scores are calculated deterministically. If insufficient responses exist, validity reflects incomplete coverage rather than fabricating certainty.
+              </p>
+            </div>
+
+            <div className="pa-engine-step__validity-card">
+              <div className="pa-engine-step__validity-row">
+                <span className="pa-engine-step__v-label">SCORING ENGINE</span>
+                <span className="pa-engine-step__v-val">Deterministic (Non-generative)</span>
+              </div>
+              <div className="pa-engine-step__validity-row">
+                <span className="pa-engine-step__v-label">VALIDITY STATE</span>
+                <span className="pa-engine-step__v-val pa-engine-step__v-val--valid">valid</span>
+              </div>
+              <div className="pa-engine-step__validity-row">
+                <span className="pa-engine-step__v-label">CONFIDENCE THRESHOLD</span>
+                <span className="pa-engine-step__v-val">0.88 / 1.0</span>
+              </div>
+              <div className="pa-engine-step__validity-row">
+                <span className="pa-engine-step__v-label">RETAINED ATOMS</span>
+                <span className="pa-engine-step__v-val">4 discrete evidence records</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Step 4: Deterministic Career Comparison ── */}
+        <section className="pa-engine-step pa-engine-step--calibration" aria-label="Step 4: Career fit weights">
+          <div className="pa-engine-step__inner">
+            <div className="pa-engine-step__meta">
+              <span className="pa-engine-step__num">STAGE 04</span>
+              <h2 className="pa-engine-step__title">Deterministic Career Fit Comparison</h2>
+              <p className="pa-engine-step__desc">
+                Career matching evaluates your evidence record against curated benchmarks using the exact weights below.
+              </p>
+            </div>
+
+            <div className="pa-engine-step__baseline-wrap">
+              <CalibrationBaseline theme="mineral" />
+            </div>
+          </div>
+        </section>
+
+        {/* ── Step 5: Stored Dated Record ── */}
+        <section className="pa-engine-step pa-engine-step--stored" aria-label="Step 5: Stored record">
+          <div className="pa-engine-step__inner">
+            <div className="pa-engine-step__meta">
+              <span className="pa-engine-step__num">STAGE 05</span>
+              <h2 className="pa-engine-step__title">Retained in Your Living Record</h2>
+              <p className="pa-engine-step__desc">
+                The record remains available for future comparison, export, and longitudinal tracking.
+              </p>
+            </div>
+
+            <div className="pa-engine-step__strip-wrap">
+              <EvidenceStrip
+                quote="“I clarify responsibilities before committing work.”"
+                eyebrow="STORED IN RECORD"
+                dateLabel="ASSESSMENT 01"
+                sourceLabel="RETAINED + TRACEABLE + COMPARED"
+                theme="carbon"
+                variant="dated"
+                accumulatedMarks={true}
+              />
+            </div>
+
+            <div className="pa-engine-step__footer-actions">
+              <a
+                href="/signup"
+                className="pa-btn pa-btn--primary"
+                onClick={(e) => handleCtaClick(e, '/signup')}
+              >
+                Create your first record →
+              </a>
+            </div>
+          </div>
+        </section>
       </PublicLayout>
     </SmoothScrollProvider>
   );

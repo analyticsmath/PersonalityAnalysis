@@ -1,0 +1,148 @@
+/* ==========================================================================
+   Personality Assessor — The Living Record: HomeBranchingScene (Scene 3)
+   Static Frame Reference: Desktop D1-03A–E / Mobile M1-03A–E
+   ========================================================================== */
+
+.pa-home-branching-scene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--pa-carbon, #0D0F0E);
+  color: var(--pa-mineral, #F3F5F2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pa-home-branching-scene__inner {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
+  box-sizing: border-box;
+}
+
+/* ── Desktop Asymmetric Branching Stage ── */
+.pa-home-branching-scene__stage {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pa-home-branching-scene__strip-center {
+  position: relative;
+  z-index: 10;
+  width: clamp(480px, 46vw, 760px);
+}
+
+.pa-home-branching-scene__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.pa-home-branching-scene__trace {
+  transition: opacity 0.3s ease;
+}
+
+/* ── Branch Endpoints / Nodes ── */
+.pa-home-branching-scene__node {
+  position: absolute;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 260px;
+}
+
+.pa-home-branching-scene__node--top-left {
+  top: 10%;
+  left: 4%;
+  text-align: left;
+}
+
+.pa-home-branching-scene__node--top-right {
+  top: 10%;
+  right: 4%;
+  text-align: right;
+}
+
+.pa-home-branching-scene__node--bottom-left {
+  bottom: 8%;
+  left: 2%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  max-width: 380px;
+}
+
+.pa-home-branching-scene__media-crop {
+  width: 130px;
+  height: 98px;
+  flex-shrink: 0;
+  border: 1px solid rgba(243, 245, 242, 0.15);
+}
+
+.pa-home-branching-scene__node--bottom-right {
+  bottom: 8%;
+  right: 4%;
+  text-align: right;
+}
+
+.pa-home-branching-scene__dim-tag {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #D67D8C;
+}
+
+.pa-home-branching-scene__node-title {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.pa-home-branching-scene__node-sub {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+/* ── Mobile Mode Toggle ── */
+.pa-home-branching-scene__mobile-mode {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .pa-home-branching-scene {
+    padding: 3rem 0;
+    min-height: auto;
+  }
+
+  .pa-home-branching-scene__stage {
+    display: none;
+  }
+
+  .pa-home-branching-scene__mobile-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .pa-home-branching-scene__mobile-strip {
+    width: 100%;
+  }
+}

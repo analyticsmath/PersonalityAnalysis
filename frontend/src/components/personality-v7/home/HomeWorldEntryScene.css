@@ -1,0 +1,213 @@
+/* ==========================================================================
+   Personality Assessor — The Living Record: HomeWorldEntryScene (Scene 1)
+   Static Frame Reference: Desktop D1-01A / Mobile M1-01A
+   ========================================================================== */
+
+.pa-home-entry-scene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--pa-carbon, #0D0F0E);
+  color: var(--pa-mineral, #F3F5F2);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pa-home-entry-scene__backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 75% 45%, rgba(34, 39, 36, 0.4) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Primary Documentary Media (78–88% Viewport Ownership at 1440x900) ── */
+.pa-home-entry-scene__primary-media {
+  position: absolute;
+  top: -2vw;
+  right: -5vw;
+  width: clamp(680px, 68vw, 1120px);
+  height: clamp(520px, 82vh, 880px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── Secondary Depth Media ── */
+.pa-home-entry-scene__secondary-media {
+  position: absolute;
+  bottom: 6vh;
+  left: 6vw;
+  width: clamp(220px, 22vw, 340px);
+  height: auto;
+  z-index: 2;
+  opacity: 0.75;
+}
+
+/* ── Spatial Content Layer ── */
+.pa-home-entry-scene__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.pa-home-entry-scene__headline-wrap {
+  max-width: 720px;
+}
+
+.pa-home-entry-scene__h1 {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: clamp(3.6rem, 7.5vw, 6.8rem);
+  font-weight: 520;
+  line-height: 0.90;
+  letter-spacing: -0.045em;
+  color: var(--pa-mineral, #F3F5F2);
+  margin: 0;
+  padding: 0;
+}
+
+.pa-home-entry-scene__support-wrap {
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pa-home-entry-scene__lead {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  line-height: 1.42;
+  color: var(--pa-pewter, #AEB4AF);
+  margin: 0;
+}
+
+.pa-home-entry-scene__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.pa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1.4rem;
+  text-decoration: none;
+  border-radius: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.pa-btn--primary {
+  background-color: var(--pa-mineral, #F3F5F2);
+  color: var(--pa-carbon, #0D0F0E);
+  border: 1px solid var(--pa-mineral, #F3F5F2);
+}
+
+.pa-btn--primary:hover,
+.pa-btn--primary:focus-visible {
+  background-color: #FFFFFF;
+  color: var(--pa-carbon, #0D0F0E);
+  transform: translateY(-1px);
+}
+
+.pa-btn--quiet {
+  background-color: transparent;
+  color: var(--pa-pewter, #AEB4AF);
+  padding: 0.75rem 0.5rem;
+}
+
+.pa-btn--quiet:hover,
+.pa-btn--quiet:focus-visible {
+  color: var(--pa-mineral, #F3F5F2);
+}
+
+/* ── Persistent Protagonist Anchor ── */
+.pa-home-entry-scene__strip-anchor {
+  position: absolute;
+  bottom: 8vh;
+  right: 8vw;
+  width: clamp(340px, 48vw, 760px);
+  z-index: 4;
+  transform: rotate(-1.5deg);
+}
+
+/* ── Tablet Adjustments (820x1180) ── */
+@media (max-width: 1024px) {
+  .pa-home-entry-scene__primary-media {
+    width: 80vw;
+    right: -10vw;
+    height: 65vh;
+  }
+
+  .pa-home-entry-scene__secondary-media {
+    bottom: 4vh;
+    left: 4vw;
+    width: 28vw;
+  }
+
+  .pa-home-entry-scene__strip-anchor {
+    bottom: 6vh;
+    right: 4vw;
+    width: clamp(320px, 60vw, 640px);
+  }
+}
+
+/* ── Mobile Adjustments (390x844) ── */
+@media (max-width: 768px) {
+  .pa-home-entry-scene {
+    height: auto;
+    min-height: 100vh;
+    padding: calc(var(--pa-header-height, 64px) + 1.5rem) 0 3rem 0;
+    align-items: flex-start;
+  }
+
+  .pa-home-entry-scene__primary-media {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 48vh;
+    margin-bottom: -4rem;
+  }
+
+  .pa-home-entry-scene__secondary-media {
+    display: none;
+  }
+
+  .pa-home-entry-scene__content {
+    gap: 1.25rem;
+  }
+
+  .pa-home-entry-scene__h1 {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    line-height: 0.92;
+  }
+
+  .pa-home-entry-scene__strip-anchor {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0 var(--pa-grid-margin, 20px);
+    box-sizing: border-box;
+    transform: none;
+  }
+}

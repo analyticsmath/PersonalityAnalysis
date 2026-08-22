@@ -14,6 +14,7 @@ import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
 import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
+import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -99,7 +100,7 @@ export const SignupPage = () => {
       navigate(safeNext, { replace: true });
     },
     onError: (error) => {
-      const message = error?.message || 'Google sign-up failed. Please try again.';
+      const message = error?.message || 'Google sign-up failed. Please retry.';
       setFormError(message);
       toast.error(message);
     },
@@ -111,46 +112,34 @@ export const SignupPage = () => {
 
   const validate = () => {
     const errors = {};
-    if (!form.name.trim()) {
-      errors.name = 'Enter your name.';
-    }
-
+    if (!form.name.trim()) errors.name = 'Please enter your full name.';
     if (!form.email.trim()) {
-      errors.email = 'Enter your email.';
-    } else if (!EMAIL_REGEX.test(form.email.trim())) {
-      errors.email = 'Enter a valid email address.';
+      errors.email = 'Please enter your email address.';
+    } else if (!EMAIL_REGEX.test(form.email)) {
+      errors.email = 'Please enter a valid email address.';
     }
-
     if (!form.password) {
-      errors.password = 'Enter a password.';
+      errors.password = 'Please enter a password.';
     } else if (form.password.length < 6) {
-      errors.password = 'Use at least 6 characters.';
+      errors.password = 'Password must be at least 6 characters.';
     }
-
     if (!form.terms) {
-      errors.terms = 'Agree to the Privacy Policy & Terms to continue.';
+      errors.terms = 'Please accept the privacy policy to continue.';
     }
-
-    setFieldErrors(errors);
     return errors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError('');
-    setSuccessMessage('');
-
     const errors = validate();
+    setFieldErrors(errors);
+
     if (Object.keys(errors).length > 0) {
-      if (errors.name && nameInputRef.current) {
-        nameInputRef.current.focus();
-      } else if (errors.email && emailInputRef.current) {
-        emailInputRef.current.focus();
-      } else if (errors.password && passwordInputRef.current) {
-        passwordInputRef.current.focus();
-      } else if (errors.terms && consentInputRef.current) {
-        consentInputRef.current.focus();
-      }
+      if (errors.name && nameInputRef.current) nameInputRef.current.focus();
+      else if (errors.email && emailInputRef.current) emailInputRef.current.focus();
+      else if (errors.password && passwordInputRef.current) passwordInputRef.current.focus();
+      else if (errors.terms && consentInputRef.current) consentInputRef.current.focus();
       return;
     }
 
@@ -164,29 +153,35 @@ export const SignupPage = () => {
   const isPending = signupMutation.isPending || googleMutation.isPending;
 
   return (
-    <SmoothScrollProvider options={{ lerp: 0.2 }}>
-      <PublicLayout headerTheme="light-content" withFooter={false} className="pa-auth-signup">
-        {/* Moving Environmental Image Layer in Background / Right Plane */}
-        <div ref={environmentalImageRef} className="pa-auth-signup__env-layer" aria-hidden="true">
-          <picture>
-            <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
-            <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
-            <img
-              src={asset.source}
-              alt=""
-              className="pa-auth-signup__env-img"
-              loading="eager"
-            />
-          </picture>
-        </div>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light-content" withFooter={false}>
+        <div className="pa-auth-signup" aria-label="Create Account: First Living Record">
+          {/* Environmental Crossing Layer */}
+          <div
+            ref={environmentalImageRef}
+            className="pa-auth-signup__environmental-plane"
+            aria-hidden="true"
+          >
+            <picture>
+              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="60vw" />
+              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="60vw" />
+              <img
+                src={asset.source}
+                alt={asset.alt}
+                width={asset.intrinsicDimensions.width}
+                height={asset.intrinsicDimensions.height}
+                className="pa-auth-signup__img"
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
+          </div>
 
-        <div className="pa-v7-grid pa-auth-signup__grid" data-tone="light">
-          {/* Foreground Form (Left / Center) */}
-          <div className="pa-auth-signup__form-col">
-            <h1 className="pa-display-hero pa-auth-signup__h1">
-              Start a record that can change with new evidence.
-            </h1>
-            <p className="pa-auth-signup__lead">
+          {/* Form Container */}
+          <div className="pa-auth-form-card">
+            <span className="pa-auth-eyebrow">FIRST RECORD SETUP</span>
+            <h1 className="pa-auth-title">Create your Living Record</h1>
+            <p className="pa-auth-subtitle">
               Create an inspectable account to preserve your assessments, explore career conditions, and revisit your evidence over time.
             </p>
 
@@ -372,21 +367,15 @@ export const SignupPage = () => {
             </div>
           </div>
 
-          {/* Open Typographic Step Indicators (BACKGROUND, CONTEXT, FIRST ASSESSMENT) */}
+          {/* New Record Specimen Preview */}
           <div className="pa-auth-signup__evidence-preview-col" aria-hidden="true">
-            <div className="pa-auth-signup__step-labels">
-              <div className={`pa-auth-step-label ${activeStep >= 1 ? 'pa-auth-step-label--active' : ''}`}>
-                <span className="pa-auth-step-label__num">01</span>
-                <span className="pa-auth-step-label__text">BACKGROUND</span>
-              </div>
-              <div className={`pa-auth-step-label ${activeStep >= 2 ? 'pa-auth-step-label--active' : ''}`}>
-                <span className="pa-auth-step-label__num">02</span>
-                <span className="pa-auth-step-label__text">CONTEXT</span>
-              </div>
-              <div className={`pa-auth-step-label ${activeStep >= 3 ? 'pa-auth-step-label--active' : ''}`}>
-                <span className="pa-auth-step-label__num">03</span>
-                <span className="pa-auth-step-label__text">FIRST ASSESSMENT</span>
-              </div>
+            <div className="pa-auth-signup__strip-anchor">
+              <EvidenceStrip
+                variant="new-record"
+                theme="mineral"
+                eyebrow="INITIAL SPECIMEN"
+                sourceLabel="FIRST RECORD / CLEAN SLATE"
+              />
             </div>
           </div>
         </div>

@@ -69,7 +69,7 @@ const SuspensePageFallback = ({ pathname = '' }) => {
             opacity: 0.5,
           }}
         >
-          Evidence Field
+          The Living Record
         </span>
       </div>
     </main>

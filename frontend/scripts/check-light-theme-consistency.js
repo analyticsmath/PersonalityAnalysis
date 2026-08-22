@@ -85,11 +85,33 @@ const ALLOWLIST_PATHS = new Set([
   // Product Shell — intentional dark sidebar navigation
   'styles/product-shell.css',
 
-  // Evidence in Context public dark chapters/tones
+  // Evidence in Context / Living Record public dark chapters/tones
   'styles/personality-v7/chrome.css',
   'styles/personality-v7/auth.css',
   'styles/personality-v7/home.css',
   'styles/personality-v7/routes.css',
+  'styles/personality-v7/tokens.css',
+  'styles/personality-v7/foundation.css',
+  'components/personality-v7/living-record/EvidenceStrip.css',
+  'components/personality-v7/living-record/EvidenceBranch.css',
+  'components/personality-v7/living-record/ProvenanceTrace.css',
+  'components/personality-v7/living-record/MobileEvidenceSpine.css',
+  'components/personality-v7/living-record/CalibrationBaseline.css',
+  'components/personality-v7/living-record/ResponsiveEvidenceImage.css',
+  'components/personality-v7/living-record/EnvironmentPlane.css',
+  'components/personality-v7/home/HomeWorldEntryScene.css',
+  'components/personality-v7/home/HomeSourceQuietScene.css',
+  'components/personality-v7/home/HomeBranchingScene.css',
+  'components/personality-v7/home/HomeCareerTakeoverScene.css',
+  'components/personality-v7/home/HomeCalibrationScene.css',
+  'components/personality-v7/home/HomeTimeRevisitScene.css',
+  'components/personality-v7/home/HomeTracebackScene.css',
+  'components/personality-v7/home/HomeFinaleScene.css',
+  'pages/editorial/EditorialCareerIntelligencePage.css',
+  'pages/editorial/EditorialHowItWorksPage.css',
+  'pages/editorial/EditorialProgressPage.css',
+  'pages/editorial/EditorialMethodologyPage.css',
+  'pages/editorial/EditorialTrustPage.css',
 
   // Archival and legacy pages
   'pages/Legacy/LegacyStaticAssessmentPage.jsx',

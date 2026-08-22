@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Personality Assessor — The Living Record: MobileEvidenceSpine
+   ========================================================================== */
+
+.pa-mobile-spine {
+  position: relative;
+  width: 100%;
+  padding: 1.5rem 0;
+}
+
+.pa-mobile-spine__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background-color: var(--pa-oxblood, #642832);
+  opacity: 0.45;
+}
+
+.pa-mobile-spine__branches {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.pa-mobile-spine__branch {
+  position: relative;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  transition: opacity 0.3s ease;
+}
+
+.pa-mobile-spine__branch.is-dimmed {
+  opacity: 0.4;
+}
+
+.pa-mobile-spine__branch--left {
+  justify-content: flex-start;
+  padding-right: 52%;
+}
+
+.pa-mobile-spine__branch--right {
+  justify-content: flex-end;
+  padding-left: 52%;
+}
+
+.pa-mobile-spine__connector {
+  position: absolute;
+  top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.pa-mobile-spine__branch--left .pa-mobile-spine__connector {
+  right: calc(50% - 4px);
+}
+
+.pa-mobile-spine__branch--right .pa-mobile-spine__connector {
+  left: calc(50% - 4px);
+}
+
+.pa-mobile-spine__connector-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--pa-oxblood, #642832);
+}
+
+.pa-mobile-spine__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background-color: rgba(13, 15, 14, 0.04);
+  padding: 0.75rem 0.9rem;
+  border-left: 2px solid var(--pa-oxblood, #642832);
+}
+
+.pa-theme-carbon .pa-mobile-spine__card {
+  background-color: rgba(243, 245, 242, 0.05);
+}
+
+.pa-mobile-spine__dim {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pa-oxblood, #642832);
+}
+
+.pa-theme-carbon .pa-mobile-spine__dim {
+  color: #D67D8C;
+}
+
+.pa-mobile-spine__title {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.pa-mobile-spine__desc {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  opacity: 0.75;
+  margin: 0;
+}

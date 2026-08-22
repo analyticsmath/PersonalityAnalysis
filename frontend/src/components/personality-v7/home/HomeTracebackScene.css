@@ -1,0 +1,100 @@
+/* ==========================================================================
+   Personality Assessor — The Living Record: HomeTracebackScene (Scene 7)
+   Static Frame Reference: Desktop D1-07A–E / Mobile M1-07
+   ========================================================================== */
+
+.pa-home-traceback-scene {
+  position: relative;
+  width: 100%;
+  padding: clamp(5rem, 10vh, 8rem) 0;
+  background-color: var(--pa-carbon, #0D0F0E);
+  color: var(--pa-mineral, #F3F5F2);
+  box-sizing: border-box;
+}
+
+.pa-home-traceback-scene__inner {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pa-home-traceback-scene__media-grid {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pa-home-traceback-scene__primary-media {
+  width: 100%;
+  height: clamp(340px, 45vh, 520px);
+}
+
+.pa-home-traceback-scene__diag-media {
+  position: absolute;
+  bottom: -2rem;
+  right: -1rem;
+  width: clamp(180px, 18vw, 260px);
+  border: 1px solid rgba(243, 245, 242, 0.15);
+}
+
+.pa-home-traceback-scene__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.pa-home-traceback-scene__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pa-home-traceback-scene__eyebrow {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #D67D8C;
+}
+
+.pa-home-traceback-scene__h2 {
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-size: clamp(2.2rem, 4.2vw, 3.6rem);
+  font-weight: 520;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.pa-home-traceback-scene__strip-wrap {
+  width: 100%;
+}
+
+.pa-home-traceback-scene__trace-nav {
+  padding-left: 0.5rem;
+}
+
+.pa-home-traceback-scene__footer {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .pa-home-traceback-scene__inner {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .pa-home-traceback-scene__diag-media {
+    position: static;
+    width: 60%;
+  }
+}
