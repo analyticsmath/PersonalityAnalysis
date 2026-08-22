@@ -21,6 +21,7 @@ const GoogleLoginButton = ({ onCredential, onError }) => {
       size="large"
       shape="pill"
       text="continue_with"
+      locale="en"
     />
   );
 };

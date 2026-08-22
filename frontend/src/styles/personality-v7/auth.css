@@ -45,15 +45,14 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 460px;
-  background-color: var(--pa-graphite);
-  border: 1px solid rgba(174, 180, 175, 0.15);
-  border-radius: var(--pa-radius-control);
-  padding: 2.5rem;
+  max-width: 480px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
 }
 
 .pa-auth-login__h1 {
@@ -137,51 +136,41 @@
   justify-content: flex-end;
 }
 
-.pa-auth-evidence-outline {
+.pa-auth-signup__step-labels {
   width: 100%;
-  max-width: 400px;
-  background: rgba(243, 245, 242, 0.92);
-  border: 1px solid rgba(13, 15, 14, 0.1);
-  border-radius: var(--pa-radius-control);
-  padding: 2rem;
+  max-width: 360px;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  box-shadow: 0 16px 40px rgba(13, 15, 14, 0.06);
+  gap: 2rem;
+  padding: 1rem 0;
 }
 
-.pa-outline-stage {
+.pa-auth-step-label {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  background: #ECEFEA;
-  border-radius: var(--pa-radius-control);
-  opacity: 0.45;
-  transition: opacity 0.3s ease, background-color 0.3s ease;
+  opacity: 0.35;
+  transition: opacity 0.25s ease;
 }
 
-.pa-outline-stage--filled {
+.pa-auth-step-label--active {
   opacity: 1;
-  background-color: var(--pa-carbon);
-  color: var(--pa-mineral);
 }
 
-.pa-outline-num {
+.pa-auth-step-label__num {
   font-family: var(--pa-font-functional);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--pa-oxblood);
 }
 
-.pa-outline-stage--filled .pa-outline-num {
-  color: var(--pa-mineral);
-}
-
-.pa-outline-text {
+.pa-auth-step-label__text {
   font-family: var(--pa-font-functional);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pa-carbon);
 }
 
 /* ── Common Auth Form Controls ── */

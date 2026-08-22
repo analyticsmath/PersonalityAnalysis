@@ -152,7 +152,7 @@ export const TrustContent = () => {
               />
             </svg>
 
-            <div className="pa-trust-tier-display__card">
+            <div className="pa-trust-tier-display__open">
               <span className="pa-provenance-tag" style={{ color: 'var(--pa-oxblood)' }}>
                 {activeTier.num} • {activeTier.title}
               </span>
@@ -180,7 +180,7 @@ export const TrustContent = () => {
       <section className="pa-trust-inspection-aperture-section" data-tone="light">
         <div className="pa-v7-grid pa-trust-inspection-aperture-section__grid">
           <div className="pa-trust-aperture-header">
-            <span className="pa-provenance-tag">Interactive Provenance Mask</span>
+            <span className="pa-provenance-tag">Illustrative provenance trace</span>
             <h2 className="pa-heading-major">Trace Any Record Reading</h2>
             <p className="pa-trust-aperture-lead">
               Hover with fine pointer or toggle the button to inspect the underlying calculation and comparison metadata.
@@ -209,11 +209,11 @@ export const TrustContent = () => {
               </div>
               <div className="pa-provenance-tier">
                 <span className="pa-provenance-tier__tag">02 • Calculated</span>
-                <p className="pa-provenance-tier__value">High Conscientiousness coordinate (0.82).</p>
+                <p className="pa-provenance-tier__value">Conscientiousness trait coordinate evaluated across structured delivery scenarios.</p>
               </div>
               <div className="pa-provenance-tier">
                 <span className="pa-provenance-tier__tag">03 • Compared</span>
-                <p className="pa-provenance-tier__value">High alignment with Backend & DevOps profiles.</p>
+                <p className="pa-provenance-tier__value">Deterministic alignment against documented engineering and technical systems benchmarks.</p>
               </div>
               <div className="pa-provenance-tier">
                 <span className="pa-provenance-tier__tag">04 • AI Assisted</span>

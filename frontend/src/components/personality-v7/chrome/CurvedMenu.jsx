@@ -165,7 +165,6 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
             loading="lazy"
           />
         )}
-        <div className="pa-curved-menu__preview-scrim" />
       </div>
 
       <div className="pa-v7-grid pa-curved-menu__grid">

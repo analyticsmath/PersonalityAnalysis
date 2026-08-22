@@ -374,21 +374,21 @@ export const SignupPage = () => {
             </div>
           </div>
 
-          {/* Interactive Illustrative Evidence Outline */}
+          {/* Open Typographic Step Indicators (BACKGROUND, CONTEXT, FIRST ASSESSMENT) */}
           <div className="pa-auth-signup__evidence-preview-col" aria-hidden="true">
-            <div className="pa-auth-evidence-outline">
-              <span className="pa-provenance-tag">Incoming Record Container</span>
-              <div className={`pa-outline-stage ${activeStep >= 1 ? 'pa-outline-stage--filled' : ''}`}>
-                <span className="pa-outline-num">01</span>
-                <span className="pa-outline-text">Professional Profile Grounding</span>
+            <div className="pa-auth-signup__step-labels">
+              <span className="pa-provenance-tag">Staged Account Inquiry</span>
+              <div className={`pa-auth-step-label ${activeStep >= 1 ? 'pa-auth-step-label--active' : ''}`}>
+                <span className="pa-auth-step-label__num">01</span>
+                <span className="pa-auth-step-label__text">BACKGROUND</span>
               </div>
-              <div className={`pa-outline-stage ${activeStep >= 2 ? 'pa-outline-stage--filled' : ''}`}>
-                <span className="pa-outline-num">02</span>
-                <span className="pa-outline-text">Contextual Evidence Anchoring</span>
+              <div className={`pa-auth-step-label ${activeStep >= 2 ? 'pa-auth-step-label--active' : ''}`}>
+                <span className="pa-auth-step-label__num">02</span>
+                <span className="pa-auth-step-label__text">CONTEXT</span>
               </div>
-              <div className={`pa-outline-stage ${activeStep >= 3 ? 'pa-outline-stage--filled' : ''}`}>
-                <span className="pa-outline-num">03</span>
-                <span className="pa-outline-text">Multi-Framework Staged Inquiry</span>
+              <div className={`pa-auth-step-label ${activeStep >= 3 ? 'pa-auth-step-label--active' : ''}`}>
+                <span className="pa-auth-step-label__num">03</span>
+                <span className="pa-auth-step-label__text">FIRST ASSESSMENT</span>
               </div>
             </div>
           </div>

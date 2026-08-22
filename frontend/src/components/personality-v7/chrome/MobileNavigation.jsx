@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
 
 const MOBILE_ROUTES = [
   { to: '/how-it-works', label: 'How it works' },
@@ -10,11 +11,12 @@ const MOBILE_ROUTES = [
   { to: '/privacy', label: 'Privacy' },
 ];
 
-export const MobileNavigation = ({ isOpen, onClose, activePath }) => {
+export const MobileNavigation = ({ isOpen, onClose, activePath, triggerRef }) => {
   const containerRef = useRef(null);
   const closeButtonRef = useRef(null);
+  const { navigateWithTransition } = useRouteTransition();
 
-  // Lock background scroll when open
+  // Lock background scroll when open & manage focus
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -38,6 +40,9 @@ export const MobileNavigation = ({ isOpen, onClose, activePath }) => {
       if (e.key === 'Escape') {
         e.preventDefault();
         onClose();
+        if (triggerRef?.current) {
+          triggerRef.current.focus();
+        }
         return;
       }
 
@@ -62,7 +67,28 @@ export const MobileNavigation = ({ isOpen, onClose, activePath }) => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, triggerRef]);
+
+  const handleCloseAndRestoreFocus = () => {
+    onClose();
+    if (triggerRef?.current) {
+      try {
+        triggerRef.current.focus();
+      } catch {
+        // ignore
+      }
+    }
+  };
+
+  const handleNavClick = (e, to) => {
+    e.preventDefault();
+    onClose();
+    if (to === activePath) {
+      if (triggerRef?.current) triggerRef.current.focus();
+    } else {
+      navigateWithTransition(to);
+    }
+  };
 
   return (
     <div
@@ -75,14 +101,14 @@ export const MobileNavigation = ({ isOpen, onClose, activePath }) => {
       aria-hidden={!isOpen}
     >
       <div className="pa-mobile-menu__header">
-        <Link to="/" className="pa-header__brand" onClick={onClose}>
+        <Link to="/" className="pa-header__brand" onClick={(e) => handleNavClick(e, '/')}>
           <span>Personality Assessor</span>
         </Link>
         <button
           ref={closeButtonRef}
           type="button"
           className="pa-header__menu-btn"
-          onClick={onClose}
+          onClick={handleCloseAndRestoreFocus}
           aria-label="Close navigation menu"
         >
           Close
@@ -93,36 +119,36 @@ export const MobileNavigation = ({ isOpen, onClose, activePath }) => {
         {MOBILE_ROUTES.map(({ to, label }) => {
           const isActive = activePath === to;
           return (
-            <Link
+            <a
               key={to}
-              to={to}
+              href={to}
               className="pa-mobile-menu__link"
-              onClick={onClose}
+              onClick={(e) => handleNavClick(e, to)}
               aria-current={isActive ? 'page' : undefined}
             >
               {isActive && <span className="pa-mobile-menu__link-marker" aria-hidden="true" />}
               <span>{label}</span>
-            </Link>
+            </a>
           );
         })}
       </nav>
 
       <div className="pa-mobile-menu__footer">
         <div className="pa-mobile-menu__actions">
-          <Link
-            to="/signup"
+          <a
+            href="/signup"
             className="pa-mobile-menu__cta"
-            onClick={onClose}
+            onClick={(e) => handleNavClick(e, '/signup')}
           >
             Build profile
-          </Link>
-          <Link
-            to="/login"
+          </a>
+          <a
+            href="/login"
             className="pa-mobile-menu__signin"
-            onClick={onClose}
+            onClick={(e) => handleNavClick(e, '/login')}
           >
             Sign in to existing record
-          </Link>
+          </a>
         </div>
       </div>
     </div>

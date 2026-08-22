@@ -122,11 +122,33 @@ export const CareerIntelligenceContent = () => {
 
   const activeLens = CAREER_LENSES[activeIdx];
 
-  // Smooth Scroll 3D Pointer Parallax in Gallery
+  // Initialize & Choreograph 3D Depth via GSAP (sole transform owner)
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     if (isMobile || prefersReduced) return;
+
+    // Initialize dormant depth bands
+    imagePlanesRef.current.forEach((el, idx) => {
+      if (!el) return;
+      const isSelected = idx === activeIdx;
+      const lens = CAREER_LENSES[idx];
+      const dormantZ = idx === 2 ? 0 : (idx % 2 === 0 ? -70 : -140);
+      const targetZ = isSelected ? 120 : dormantZ;
+      const targetScale = isSelected ? 1.05 : lens.desktopPos.scale;
+
+      gsap.to(el, {
+        z: targetZ,
+        scale: targetScale,
+        duration: 0.52,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+    });
 
     const handlePointerMove = (e) => {
       const normX = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -140,7 +162,9 @@ export const CareerIntelligenceContent = () => {
         gsap.to(el, {
           x: normX * factor,
           y: normY * factor,
-          duration: 0.9,
+          rotateY: normX * 1.2,
+          rotateX: -normY * 1.2,
+          duration: 0.85,
           ease: 'power2.out',
           overwrite: 'auto',
         });
@@ -149,11 +173,14 @@ export const CareerIntelligenceContent = () => {
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
     return () => window.removeEventListener('pointermove', handlePointerMove);
-  }, []);
+  }, [activeIdx]);
 
   // Kinetic Typographic Role Catalogue Scroll Subscriptions
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
     const unsub = subscribe((state) => {
@@ -175,13 +202,17 @@ export const CareerIntelligenceContent = () => {
   const selectLens = (idx) => {
     if (idx === activeIdx) return;
 
-    const isMobile = window.innerWidth <= 768;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    const isCoarse = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (!isFirstSelectionRef.current && !isMobile && !prefersReduced) {
-      // Trigger Pixel Transition for 340ms
+    if (!isFirstSelectionRef.current && !isMobile && !isCoarse && !prefersReduced) {
+      // Trigger Pixel Transition integrated within active media for 240ms
       setPixelTransitionActive(true);
-      setTimeout(() => setPixelTransitionActive(false), 360);
+      setTimeout(() => setPixelTransitionActive(false), 240);
     }
 
     isFirstSelectionRef.current = false;
@@ -234,21 +265,8 @@ export const CareerIntelligenceContent = () => {
           </div>
         </div>
 
-        {/* 3D Spatial Media Field (min-height 110svh, perspective 1200px) */}
+        {/* 3D Spatial Media Field (min-height 105vh, perspective 1200px) */}
         <div ref={galleryRef} className="pa-career-spatial-field">
-          {/* Pixel Transition Grid (active during switch) */}
-          {pixelTransitionActive && (
-            <div className="pa-pixel-grid-overlay" aria-hidden="true">
-              {Array.from({ length: PIXEL_COLS * PIXEL_ROWS }).map((_, i) => (
-                <div
-                  key={i}
-                  className="pa-pixel-tile"
-                  style={{ animationDelay: `${(i % PIXEL_COLS) * 22}ms` }}
-                />
-              ))}
-            </div>
-          )}
-
           {CAREER_LENSES.map((lens, idx) => {
             const isSelected = activeIdx === idx;
             return (
@@ -260,10 +278,22 @@ export const CareerIntelligenceContent = () => {
                 style={{
                   '--desktop-left': lens.desktopPos.left,
                   '--desktop-top': lens.desktopPos.top,
-                  '--desktop-scale': isSelected ? 1.05 : lens.desktopPos.scale,
                   '--z-order': isSelected ? 10 : lens.desktopPos.zIndex,
                 }}
               >
+                {/* Pixel Transition Grid (integrated within active image bounds) */}
+                {isSelected && pixelTransitionActive && (
+                  <div className="pa-pixel-grid-overlay" aria-hidden="true">
+                    {Array.from({ length: PIXEL_COLS * PIXEL_ROWS }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="pa-pixel-tile"
+                        style={{ animationDelay: `${(i % PIXEL_COLS) * 16}ms` }}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 <picture>
                   <source type="image/avif" srcSet={lens.asset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
                   <source type="image/webp" srcSet={lens.asset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
@@ -287,7 +317,7 @@ export const CareerIntelligenceContent = () => {
         </div>
       </section>
 
-      {/* ── Section 3: Spatial Career Information (Mineral) ── */}
+      {/* ── Section 3: Open Mineral Spatial Composition (No SaaS Cards) ── */}
       <section className="pa-career-spatial-info" data-tone="light">
         <div className="pa-v7-grid pa-career-spatial-info__grid">
           <div className="pa-career-spatial-info__intro">
@@ -300,40 +330,49 @@ export const CareerIntelligenceContent = () => {
             </p>
           </div>
 
-          {/* Spatial Triad: ALIGNMENT, TENSION, DEVELOP positioned meaningfully */}
+          {/* Single Open Mineral Spatial Composition: ALIGNMENT (left), TENSION (center), DEVELOP (right) */}
           <div className="pa-career-spatial-info__triad">
             {/* Alignment near the evidence */}
-            <div className="pa-spatial-card pa-spatial-card--alignment">
-              <span className="pa-spatial-card__tag" style={{ color: 'var(--pa-oxblood)' }}>
-                Alignment Condition
+            <div className="pa-career-triad__item pa-career-triad__item--alignment">
+              <div className="pa-career-triad__marker" aria-hidden="true" />
+              <span className="pa-career-triad__tag" style={{ color: 'var(--pa-oxblood)' }}>
+                Alignment
               </span>
-              <p className="pa-spatial-card__text">{activeLens.alignment}</p>
+              <h3 className="pa-career-triad__heading">Favorable Conditions</h3>
+              <p className="pa-career-triad__text">{activeLens.alignment}</p>
             </div>
 
             {/* Tension between evidence and environment */}
-            <div className="pa-spatial-card pa-spatial-card--tension">
-              <span className="pa-spatial-card__tag" style={{ color: 'var(--pa-muted-light)' }}>
-                Tension Condition
+            <div className="pa-career-triad__item pa-career-triad__item--tension">
+              <div className="pa-career-triad__marker" aria-hidden="true" />
+              <span className="pa-career-triad__tag" style={{ color: 'var(--pa-muted-light)' }}>
+                Tension
               </span>
-              <p className="pa-spatial-card__text">{activeLens.tension}</p>
+              <h3 className="pa-career-triad__heading">Points of Friction</h3>
+              <p className="pa-career-triad__text">{activeLens.tension}</p>
             </div>
 
             {/* Develop deeper into the environment */}
-            <div className="pa-spatial-card pa-spatial-card--develop">
-              <span className="pa-spatial-card__tag" style={{ color: 'var(--pa-carbon)' }}>
-                Development Room
+            <div className="pa-career-triad__item pa-career-triad__item--develop">
+              <div className="pa-career-triad__marker" aria-hidden="true" />
+              <span className="pa-career-triad__tag" style={{ color: 'var(--pa-carbon)' }}>
+                Develop
               </span>
-              <p className="pa-spatial-card__text">{activeLens.develop}</p>
+              <h3 className="pa-career-triad__heading">Growth Opportunities</h3>
+              <p className="pa-career-triad__text">{activeLens.develop}</p>
             </div>
           </div>
 
-          {/* Subordinate Role Examples with explicit honest product language */}
+          {/* Subordinate Role Examples with explicit honest editorial disclosure */}
           <div className="pa-career-spatial-info__roles-field">
             <span className="pa-provenance-tag">Example roles worth exploring</span>
-            <div className="pa-career-spatial-info__roles-list">
-              {activeLens.roles.map((r) => (
-                <span key={r} className="pa-career-role-pill">
-                  {r}
+            <p className="pa-career-roles-disclosure">
+              These illustrative roles are editorial references to understand environmental contexts, not deterministic backend classifications.
+            </p>
+            <div className="pa-career-roles-plain-list">
+              {activeLens.roles.map((r, i) => (
+                <span key={r} className="pa-career-role-plain">
+                  {r}{i < activeLens.roles.length - 1 ? ' · ' : ''}
                 </span>
               ))}
             </div>

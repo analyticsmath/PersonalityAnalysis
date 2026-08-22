@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
+import RouteTransitionCoordinator from './components/personality-v7/motion/RouteTransitionCoordinator';
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
@@ -30,8 +31,18 @@ const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStati
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
 
 const SuspensePageFallback = () => (
-  <main className="app-page">
-    <div className="page-shell">
+  <main
+    className="app-page pa-suspense-fallback"
+    style={{
+      backgroundColor: 'var(--pa-mineral, #F3F5F2)',
+      color: 'var(--pa-carbon, #0D0F0E)',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <div className="page-shell" style={{ textAlign: 'center' }}>
       <LoadingState message="Loading page" />
     </div>
   </main>
@@ -182,7 +193,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <AvatarEventProvider>
-        <AppRoutes />
+        <RouteTransitionCoordinator>
+          <AppRoutes />
+        </RouteTransitionCoordinator>
       </AvatarEventProvider>
     </BrowserRouter>
   );

@@ -3,10 +3,10 @@ import { gsap } from 'gsap';
 import MagneticTarget from '../motion/MagneticTarget';
 
 export const DECISION_CHOICES = [
-  { id: 'c1', text: 'Clarify responsibilities before committing work.' },
-  { id: 'c2', text: 'Start a small test and learn from it.' },
-  { id: 'c3', text: 'Bring the teams together and align priorities.' },
-  { id: 'c4', text: 'Choose a direction and adjust as evidence arrives.' },
+  { id: 'c1', text: 'Clarify responsibilities before committing work.', desktopPos: { left: '4%', top: '8%' } },
+  { id: 'c2', text: 'Start a small test and learn from it.', desktopPos: { left: '34%', top: '29%' } },
+  { id: 'c3', text: 'Bring the teams together and align priorities.', desktopPos: { left: '8%', top: '55%' } },
+  { id: 'c4', text: 'Choose a direction and adjust as evidence arrives.', desktopPos: { left: '40%', top: '76%' } },
 ];
 
 export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
@@ -14,6 +14,12 @@ export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
   const choiceItemsRef = useRef([]);
 
   useEffect(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1024;
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     if (!choicesContainerRef.current) return;
 
     choiceItemsRef.current.forEach((el, idx) => {
@@ -21,23 +27,28 @@ export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
       const choice = DECISION_CHOICES[idx];
       const isSelected = selectedChoice?.id === choice.id;
 
+      if (prefersReduced) {
+        el.style.opacity = selectedChoice ? (isSelected ? '1' : '0.25') : '1';
+        return;
+      }
+
       if (selectedChoice) {
         if (isSelected) {
           gsap.to(el, {
-            x: 0,
-            y: 0,
-            scale: 1.02,
+            x: isMobile ? 0 : 12,
+            y: isMobile ? 0 : 16,
+            scale: 1.03,
             opacity: 1,
-            duration: 0.48,
+            duration: 0.46,
             ease: 'power3.inOut',
           });
         } else {
           gsap.to(el, {
-            x: idx % 2 === 0 ? -16 : 16,
-            y: 8,
-            scale: 0.98,
-            opacity: 0.32,
-            duration: 0.48,
+            x: isMobile ? 0 : (idx % 2 === 0 ? -22 : 22),
+            y: isMobile ? 0 : (idx < 2 ? -18 : 18),
+            scale: 0.96,
+            opacity: 0.22,
+            duration: 0.46,
             ease: 'power3.inOut',
           });
         }
@@ -94,6 +105,10 @@ export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
                   ref={(node) => (choiceItemsRef.current[idx] = node)}
                   htmlFor={`decision-radio-${choice.id}`}
                   className={`pa-choice-item ${isSelected ? 'pa-choice-item--selected' : ''}`}
+                  style={{
+                    '--choice-left': choice.desktopPos.left,
+                    '--choice-top': choice.desktopPos.top,
+                  }}
                 >
                   <input
                     type="radio"

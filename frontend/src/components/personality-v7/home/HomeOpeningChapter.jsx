@@ -111,9 +111,8 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
       tl.to(
         evidenceCardRef.current,
         {
-          y: '+12vh',
-          scale: 1.04,
-          boxShadow: '0 20px 40px rgba(13,15,14,0.12)',
+          y: '+10vh',
+          scale: 1.03,
           ease: 'power1.inOut',
         },
         0.35
@@ -207,9 +206,10 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
             </div>
           </div>
 
-          {/* First Visible Evidence Object with Mask Cursor Context Aperture */}
+          {/* First Visible Evidence Object as Open Typographic Object */}
           <div ref={evidenceCardRef} className="pa-home-opening__evidence-wrap">
-            <div className="pa-home-opening__evidence-card">
+            <div className="pa-home-opening__evidence-open">
+              <div className="pa-home-opening__provenance-mark" aria-hidden="true" />
               <span className="pa-provenance-tag">Supplied Evidence Statement</span>
               <p className="pa-evidence-quote pa-home-opening__evidence-quote">
                 {evidenceText}

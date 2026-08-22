@@ -174,7 +174,7 @@ export const HowItWorksContent = () => {
             </div>
           </div>
 
-          {/* 5 Spatial Destinations across the stage */}
+          {/* 5 Open Typography Spatial Destinations across the stage */}
           <div className="pa-hiw-destinations-grid">
             {STAGES.map((stage, idx) => (
               <div
@@ -182,6 +182,7 @@ export const HowItWorksContent = () => {
                 ref={(node) => (stageCardsRef.current[idx] = node)}
                 className={`pa-hiw-destination pa-hiw-destination--${stage.id} ${idx === 0 ? 'pa-hiw-destination--active' : ''}`}
               >
+                <div className="pa-hiw-destination__node-marker" aria-hidden="true" />
                 <span className="pa-hiw-destination__num">{stage.num}</span>
                 <span className="pa-hiw-destination__title">{stage.title}</span>
                 <h3 className="pa-hiw-destination__heading">{stage.heading}</h3>

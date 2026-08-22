@@ -18,6 +18,7 @@ export const PublicHeader = ({ theme = 'light-content' }) => {
   const [indexOpen, setIndexOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const indexTriggerRef = useRef(null);
+  const mobileTriggerRef = useRef(null);
 
   // Synchronize section-aware header tone
   useHeaderTone(theme);
@@ -99,6 +100,7 @@ export const PublicHeader = ({ theme = 'light-content' }) => {
 
             {/* Mobile Menu Button */}
             <button
+              ref={mobileTriggerRef}
               type="button"
               className="pa-header__menu-btn"
               onClick={() => setMobileOpen(true)}
@@ -124,6 +126,7 @@ export const PublicHeader = ({ theme = 'light-content' }) => {
         isOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
         activePath={location.pathname}
+        triggerRef={mobileTriggerRef}
       />
     </>
   );
