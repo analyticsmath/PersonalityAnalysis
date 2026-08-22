@@ -1,428 +1,419 @@
 /* ==========================================================================
    Personality Assessor — The Living Record: Career Intelligence (Workworld Atlas)
-   Static Frame Reference: Desktop D1-C01 / Mobile Board Page 28
+   Asymmetric Editorial Workworld Architecture
    ========================================================================== */
 
-.pa-career-atlas {
+.pa-career-atlas-page {
   position: relative;
   width: 100%;
-  min-height: 100vh;
   background-color: var(--pa-carbon, #0D0F0E);
   color: var(--pa-mineral, #F3F5F2);
   box-sizing: border-box;
-  overflow: hidden;
 }
 
-.pa-career-atlas__webgl {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.pa-career-atlas__dom-media {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.pa-career-atlas__primary-env {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.85;
-}
-
-.pa-career-atlas__primary-env .pa-environment-plane,
-.pa-career-atlas__primary-env .pa-responsive-image-wrap {
-  width: 100%;
-  height: 100%;
-}
-
-.pa-career-atlas__support-env {
-  position: absolute;
-  top: 15vh;
-  right: 6vw;
-  width: clamp(240px, 24vw, 360px);
-  z-index: 2;
-  border: 1px solid rgba(243, 245, 242, 0.2);
-}
-
-.pa-career-atlas__overlay {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  min-height: 100vh;
+/* ── Header Scene ── */
+.pa-career-atlas__header-scene {
+  padding: clamp(6rem, 10vh, 9rem) var(--pa-grid-margin, clamp(32px, 3.4vw, 48px)) 3rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
   max-width: 1440px;
   margin: 0 auto;
-  padding: calc(var(--pa-header-height, 72px) + 2rem) var(--pa-grid-margin, clamp(32px, 3.4vw, 48px)) 4rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 2.5rem;
-  box-sizing: border-box;
-  pointer-events: none;
 }
 
-.pa-career-atlas__header {
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  pointer-events: auto;
-}
-
-.pa-career-atlas__eyebrow {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 650;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #D67D8C;
-}
-
-.pa-career-atlas__title {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: clamp(2.6rem, 5.5vw, 4.8rem);
-  font-weight: 520;
-  line-height: 0.94;
-  letter-spacing: -0.04em;
-  color: #FFFFFF;
-  margin: 0;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-}
-
-.pa-career-atlas__subtitle {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
-}
-
-/* ── Edge Navigation Index ── */
-.pa-career-atlas__nav {
-  position: absolute;
-  top: calc(var(--pa-header-height, 72px) + 2rem);
-  right: var(--pa-grid-margin, 48px);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  z-index: 20;
-  pointer-events: auto;
-}
-
-.pa-career-atlas__nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: rgba(13, 15, 14, 0.65);
-  border: 1px solid rgba(243, 245, 242, 0.15);
-  color: var(--pa-mineral, #F3F5F2);
-  padding: 0.4rem 0.8rem;
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.75rem;
-  font-weight: 550;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
-}
-
-.pa-career-atlas__nav-item:hover,
-.pa-career-atlas__nav-item:focus-visible {
-  border-color: var(--pa-mineral, #F3F5F2);
-}
-
-.pa-career-atlas__nav-item.is-active {
-  background-color: var(--pa-oxblood, #642832);
-  border-color: var(--pa-oxblood, #642832);
-  color: #FFFFFF;
-}
-
-.pa-career-atlas__nav-num {
-  font-weight: 650;
-  opacity: 0.75;
-}
-
-/* ── Strip Anchor ── */
-.pa-career-atlas__strip-wrap {
-  width: clamp(340px, 48vw, 760px);
-  pointer-events: auto;
-}
-
-/* ── Asymmetric Triad Annotations in Negative Space ── */
-.pa-career-atlas__triad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  width: 100%;
-  pointer-events: auto;
-}
-
-.pa-career-atlas__triad-item {
-  background: rgba(13, 15, 14, 0.75);
-  border-top: 2px solid var(--pa-oxblood, #642832);
-  padding: 1rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  backdrop-filter: blur(6px);
-}
-
-.pa-career-atlas__triad-label {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.625rem;
-  font-weight: 650;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #D67D8C;
-}
-
-.pa-career-atlas__triad-text {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  color: var(--pa-mineral, #F3F5F2);
-  margin: 0;
-}
-
-/* ── Section 2: Calibration Baseline ── */
-.pa-career-calibration {
-  padding: clamp(5rem, 10vh, 8rem) 0;
-  background-color: var(--pa-mineral, #F3F5F2);
-  color: var(--pa-carbon, #0D0F0E);
-}
-
-.pa-career-calibration__inner {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 0 var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
-  display: flex;
-  flex-direction: column;
-  gap: 3.5rem;
-}
-
-.pa-career-calibration__header {
-  max-width: 780px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.pa-career-calibration__eyebrow {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 650;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--pa-oxblood, #642832);
-}
-
-.pa-career-calibration__h2 {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: clamp(2.2rem, 4.2vw, 3.8rem);
-  font-weight: 520;
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-  margin: 0;
-}
-
-.pa-career-calibration__lead {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 1.05rem;
-  line-height: 1.45;
-  color: var(--pa-muted-light, #69716C);
-  margin: 0;
-}
-
-/* ── Section 3: 17-Role Atlas Index ── */
-.pa-career-roles {
-  padding: clamp(5rem, 10vh, 8rem) 0;
-  background-color: var(--pa-carbon, #0D0F0E);
-  color: var(--pa-mineral, #F3F5F2);
-}
-
-.pa-career-roles__inner {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 0 var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-.pa-career-roles__header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 680px;
-}
-
-.pa-career-roles__eyebrow {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 650;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #D67D8C;
-}
-
-.pa-career-roles__h2 {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: clamp(2.2rem, 4.2vw, 3.8rem);
-  font-weight: 520;
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-  margin: 0;
-}
-
-.pa-career-roles__lead {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 1rem;
-  color: var(--pa-pewter, #AEB4AF);
-  margin: 0;
-}
-
-.pa-career-roles__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: start;
-}
-
-.pa-career-roles__list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.pa-career-roles__item {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  background: transparent;
-  border: none;
-  color: var(--pa-pewter, #AEB4AF);
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 1.05rem;
-  font-weight: 500;
-  padding: 0.6rem 0.75rem;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border-left: 2px solid transparent;
-}
-
-.pa-career-roles__item-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--pa-pewter, #AEB4AF);
-}
-
-.pa-career-roles__item:hover,
-.pa-career-roles__item:focus-visible {
-  color: var(--pa-mineral, #F3F5F2);
-  border-left-color: var(--pa-mineral, #F3F5F2);
-  background-color: rgba(243, 245, 242, 0.03);
-}
-
-.pa-career-roles__item.is-selected {
-  color: #FFFFFF;
-  border-left-color: var(--pa-oxblood, #642832);
-  background-color: rgba(100, 40, 50, 0.12);
-}
-
-.pa-career-roles__item.is-selected .pa-career-roles__item-dot {
-  background-color: var(--pa-oxblood, #642832);
-}
-
-.pa-career-roles__detail-panel {
-  background: rgba(34, 39, 36, 0.5);
-  border: 1px solid rgba(243, 245, 242, 0.12);
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-}
-
-.pa-career-roles__detail-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.pa-career-roles__detail-tag {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.625rem;
-  font-weight: 650;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #D67D8C;
-}
-
-.pa-career-roles__detail-title {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.pa-career-roles__detail-desc {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  color: var(--pa-pewter, #AEB4AF);
-  margin: 0;
-}
-
-.pa-career-roles__facets {
+.pa-career-atlas__header-content {
+  max-width: 820px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.pa-career-roles__facet-label {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+.pa-career-atlas__meta-tag {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.6875rem;
   font-weight: 650;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  opacity: 0.75;
+  color: var(--pa-oxblood, #642832);
 }
 
-.pa-career-roles__pills {
+.pa-career-atlas__h1 {
+  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.pa-career-atlas__lead {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: clamp(1.05rem, 1.35vw, 1.2rem);
+  line-height: 1.45;
+  color: var(--pa-pewter, #AEB4AF);
+  margin: 0;
+  max-width: 680px;
+}
+
+.pa-career-atlas__strip-anchor {
+  max-width: 720px;
+}
+
+/* ── Section 1: Workworld Atlas Section ── */
+.pa-career-atlas__stage-section {
+  position: relative;
+  width: 100%;
+  padding: 2rem 0 5rem 0;
+  background-color: var(--pa-carbon, #0D0F0E);
+}
+
+/* Open Environment Index (No glass buttons, no border box) */
+.pa-career-atlas__lens-index {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--pa-grid-margin, clamp(32px, 3.4vw, 48px)) 1.5rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1.5rem 2.5rem;
 }
 
-.pa-career-roles__pill {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.75rem;
-  padding: 0.3rem 0.65rem;
-  background: rgba(243, 245, 242, 0.08);
-  border: 1px solid rgba(243, 245, 242, 0.15);
+.pa-career-atlas__lens-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  color: var(--pa-pewter, #AEB4AF);
+  padding: 0.25rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.pa-career-atlas__lens-btn:hover {
+  opacity: 0.9;
   color: var(--pa-mineral, #F3F5F2);
 }
 
+.pa-career-atlas__lens-btn--active {
+  opacity: 1;
+  color: var(--pa-mineral, #F3F5F2);
+}
+
+.pa-career-atlas__lens-num {
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--pa-oxblood, #642832);
+}
+
+.pa-career-atlas__lens-title {
+  font-size: 1rem;
+  font-weight: 550;
+}
+
+.pa-career-atlas__lens-tick {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background-color: var(--pa-oxblood, #642832);
+  margin-left: 0.25rem;
+}
+
+/* Stage Field */
+.pa-career-atlas__field {
+  position: relative;
+  width: 100%;
+  min-height: 800px;
+  height: 85vh;
+  overflow: hidden;
+}
+
+.pa-career-atlas__dom-plane {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+.pa-career-atlas__dom-plane--webgl-active {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Asymmetric Annotations around the Active Work Environment (No 3-equal columns) ── */
+.pa-career-atlas__asymmetric-relationships {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.pa-career-atlas__rel-node {
+  position: absolute;
+  pointer-events: auto;
+  background-color: rgba(13, 15, 14, 0.92);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  box-sizing: border-box;
+}
+
+/* Alignment: left 6vw, top 28vh */
+.pa-career-atlas__rel-node--alignment {
+  top: 24%;
+  left: 6vw;
+  width: clamp(290px, 24vw, 330px);
+}
+
+/* Tension: right 6vw, top 48vh */
+.pa-career-atlas__rel-node--tension {
+  top: 48%;
+  right: 6vw;
+  width: clamp(330px, 26vw, 390px);
+}
+
+/* Develop: left 36vw, bottom 6vh */
+.pa-career-atlas__rel-node--develop {
+  bottom: 8%;
+  left: 36vw;
+  width: clamp(380px, 30vw, 460px);
+}
+
+.pa-career-atlas__rel-label {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--pa-oxblood, #642832);
+}
+
+.pa-career-atlas__rel-text {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--pa-mineral, #F3F5F2);
+  margin: 0;
+}
+
+/* ── Section 2: Calibration Baseline Section ── */
+.pa-career-atlas__calibration-section {
+  padding: 5rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.pa-career-atlas__calibration-content {
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pa-career-atlas__h2 {
+  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.pa-career-atlas__calibration-lead {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--pa-pewter, #AEB4AF);
+  margin: 0;
+}
+
+/* ── Section 3: Open Role Atlas (Canonical 17 Roles from careers.json) ── */
+.pa-career-atlas__directory-section {
+  padding: 4rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px)) 6rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.pa-career-atlas__directory-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pa-career-atlas__directory-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+/* Open Role List */
+.pa-career-atlas__roles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pa-career-atlas__role-btn {
+  background: transparent;
+  border: none;
+  color: var(--pa-pewter, #AEB4AF);
+  text-align: left;
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.9375rem;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.pa-career-atlas__role-btn:hover {
+  opacity: 0.9;
+  color: var(--pa-mineral, #F3F5F2);
+}
+
+.pa-career-atlas__role-btn--selected {
+  opacity: 1;
+  color: var(--pa-mineral, #F3F5F2);
+  font-weight: 600;
+}
+
+.pa-career-atlas__role-notch {
+  width: 4px;
+  height: 4px;
+  background-color: var(--pa-oxblood, #642832);
+}
+
+/* Open Editorial Detail Field */
+.pa-career-atlas__role-detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.pa-career-atlas__role-headline-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pa-career-atlas__role-code {
+  font-family: monospace;
+  font-size: 0.6875rem;
+  color: var(--pa-oxblood, #642832);
+  letter-spacing: 0.08em;
+}
+
+.pa-career-atlas__role-detail-title {
+  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.pa-career-atlas__role-desc {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--pa-pewter, #AEB4AF);
+  margin: 0;
+  max-width: 640px;
+}
+
+/* Open Spec Grid */
+.pa-career-atlas__open-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
+.pa-career-atlas__spec-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pa-career-atlas__spec-label {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--pa-pewter, #AEB4AF);
+  opacity: 0.75;
+}
+
+.pa-career-atlas__open-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pa-career-atlas__open-item {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: var(--pa-mineral, #F3F5F2);
+}
+
+.pa-career-atlas__role-actions {
+  padding-top: 1rem;
+}
+
+/* ── Mobile and Tablet Adaptations ── */
 @media (max-width: 900px) {
-  .pa-career-atlas__nav {
-    position: static;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  .pa-career-atlas__directory-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 
-  .pa-career-atlas__triad {
-    grid-template-columns: 1fr;
+  .pa-career-atlas__field {
+    min-height: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
   }
 
-  .pa-career-roles__grid {
-    grid-template-columns: 1fr;
+  .pa-career-atlas__dom-plane {
+    position: relative;
+    height: 380px;
+  }
+
+  .pa-career-atlas__asymmetric-relationships {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.5rem;
+  }
+
+  .pa-career-atlas__rel-node {
+    position: relative;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
   }
 }

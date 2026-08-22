@@ -68,7 +68,7 @@
 }
 
 .pa-calibration-baseline--carbon .pa-calibration-baseline__caption {
-  color: #D67D8C;
+  color: var(--pa-oxblood, #642832);
 }
 
 /* ── Mobile Vertical Layout ── */

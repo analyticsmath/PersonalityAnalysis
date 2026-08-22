@@ -1,6 +1,6 @@
 /**
  * Personality Assessor — Evidence in Context Production Media Manifest
- * Sourced from locally supplied licensed Unsplash Plus originals by Roberta Sant'Anna.
+ * Sourced from locally supplied licensed Unsplash Plus originals with per-asset provenance recorded below.
  */
 
 export const MEDIA_PROVENANCE_NOTE =

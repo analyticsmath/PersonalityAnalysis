@@ -1,8 +1,7 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { gsap } from 'gsap';
 import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { login as loginApi, googleLogin as googleLoginApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
@@ -12,15 +11,9 @@ import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
 import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
+import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const EVIDENCE_FRAGMENTS = [
-  { id: 'f1', text: '“Prefers clear ownership and system contracts.”', x: -360, y: -240 },
-  { id: 'f2', text: '“High Investigative & Conventional alignment.”', x: 360, y: -220 },
-  { id: 'f3', text: '“Values autonomy, craft, and tangible output.”', x: -380, y: 240 },
-  { id: 'f4', text: '“Demonstrated resilience in ambiguous releases.”', x: 380, y: 260 },
-];
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,7 +23,6 @@ export const LoginPage = () => {
 
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
-  const fragmentsRef = useRef([]);
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [fieldErrors, setFieldErrors] = useState({});
@@ -44,29 +36,6 @@ export const LoginPage = () => {
         : { get: () => null };
     return getSafeNextUrl(params.get('next'), '/dashboard');
   }, [location.search]);
-
-  // Fragments reassemble toward the form on route entry
-  useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
-
-    gsap.fromTo(
-      fragmentsRef.current,
-      (i) => ({
-        x: EVIDENCE_FRAGMENTS[i]?.x * 1.6 || 0,
-        y: EVIDENCE_FRAGMENTS[i]?.y * 1.6 || 0,
-        opacity: 0,
-      }),
-      (i) => ({
-        x: EVIDENCE_FRAGMENTS[i]?.x || 0,
-        y: EVIDENCE_FRAGMENTS[i]?.y || 0,
-        opacity: 0.45,
-        duration: 0.8,
-        stagger: 0.08,
-        ease: 'power3.out',
-      })
-    );
-  }, []);
 
   const loginMutation = useMutation({
     mutationFn: loginApi,
@@ -104,35 +73,32 @@ export const LoginPage = () => {
   }
 
   const validate = () => {
-    const errors = {};
-    if (!form.email.trim()) {
-      errors.email = 'Enter your email.';
+    const nextErrors = {};
+    if (!form.email) {
+      nextErrors.email = 'Email address is required.';
     } else if (!EMAIL_REGEX.test(form.email.trim())) {
-      errors.email = 'Enter a valid email address.';
+      nextErrors.email = 'Enter a valid email address.';
     }
 
     if (!form.password) {
-      errors.password = 'Enter your password.';
+      nextErrors.password = 'Password is required.';
     }
 
-    setFieldErrors(errors);
-    return errors;
+    setFieldErrors(nextErrors);
+
+    if (nextErrors.email && emailInputRef.current) {
+      emailInputRef.current.focus();
+    } else if (nextErrors.password && passwordInputRef.current) {
+      passwordInputRef.current.focus();
+    }
+
+    return Object.keys(nextErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError('');
-
-    const errors = validate();
-    if (Object.keys(errors).length > 0) {
-      if (errors.email && emailInputRef.current) {
-        emailInputRef.current.focus();
-      } else if (errors.password && passwordInputRef.current) {
-        passwordInputRef.current.focus();
-      }
-      return;
-    }
-
+    if (!validate()) return;
     loginMutation.mutate({
       email: form.email.trim(),
       password: form.password,
@@ -142,141 +108,143 @@ export const LoginPage = () => {
   const isPending = loginMutation.isPending || googleMutation.isPending;
 
   return (
-    <SmoothScrollProvider options={{ lerp: 0.2 }}>
-      <PublicLayout headerTheme="dark-content" withFooter={false} className="pa-auth-login">
-        <div className="pa-auth-login__carbon-viewport" data-tone="dark">
-          {/* Sparse floating field of earlier evidence fragments reassembling toward the form */}
-          <div className="pa-auth-login__fragment-field" aria-hidden="true">
-            {EVIDENCE_FRAGMENTS.map((frag, idx) => (
-              <span
-                key={frag.id}
-                ref={(node) => (fragmentsRef.current[idx] = node)}
-                className="pa-auth-login__fragment"
-              >
-                {frag.text}
-              </span>
-            ))}
-          </div>
+    <SmoothScrollProvider>
+      <PublicLayout headerTheme="light-content" withFooter={false}>
+        <div className="pa-auth-login" role="main" id="main-content">
+          <div className="pa-auth-login__carbon-viewport">
+            {/* Distant Low-Ownership Evidence Strip Protagonist */}
+            <div className="pa-auth-login__strip-anchor" aria-hidden="true">
+              <EvidenceStrip
+                quote="“I clarify responsibilities before committing work.”"
+                eyebrow="REOPEN RECORD"
+                sourceLabel="EXISTING RECORD SPECIMEN"
+                theme="carbon"
+                variant="dated"
+                dateLabel="RECORD PRESERVED"
+              />
+            </div>
 
-          <div className="pa-auth-login__form-container">
-            <h1 className="pa-display-hero pa-auth-login__h1">
-              Return to the record you've already built.
-            </h1>
-            <p className="pa-auth-login__lead">
-              Reopen past assessment stages, longitudinal trend views, and multi-layer career comparisons tied to your profile.
-            </p>
-
-            {formError && (
-              <div role="alert" aria-live="assertive" className="pa-auth-banner-error">
-                {formError}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="pa-auth-form" noValidate>
-              <div className="pa-auth-field">
-                <label htmlFor="login-email" className="pa-auth-label">
-                  Email address
-                </label>
-                <input
-                  ref={emailInputRef}
-                  id="login-email"
-                  type="email"
-                  name="email"
-                  className="pa-auth-input"
-                  value={form.email}
-                  onChange={(e) => {
-                    setForm({ ...form, email: e.target.value });
-                    if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: '' });
-                  }}
-                  autoComplete="email"
-                  required
-                  aria-invalid={Boolean(fieldErrors.email)}
-                  aria-describedby={fieldErrors.email ? 'login-email-error' : undefined}
-                  placeholder="name@example.com"
-                />
-                {fieldErrors.email && (
-                  <span id="login-email-error" role="alert" className="pa-auth-field-error">
-                    {fieldErrors.email}
-                  </span>
-                )}
+            {/* Primary Form Container direct on Carbon ground */}
+            <div className="pa-auth-login__form-container">
+              <div className="pa-auth-login__header">
+                <span className="pa-auth-login__meta-tag">AUTHENTICATION</span>
+                <h1 className="pa-auth-login__h1">Reopen your record.</h1>
+                <p className="pa-auth-login__lead">
+                  Sign in to inspect your longitudinal evidence baselines, career fit matrices, and stored reports.
+                </p>
               </div>
 
-              <div className="pa-auth-field">
-                <label htmlFor="login-password" className="pa-auth-label">
-                  Password
-                </label>
-                <div className="pa-auth-password-wrap">
-                  <input
-                    ref={passwordInputRef}
-                    id="login-password"
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    className="pa-auth-input"
-                    value={form.password}
-                    onChange={(e) => {
-                      setForm({ ...form, password: e.target.value });
-                      if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: '' });
-                    }}
-                    autoComplete="current-password"
-                    required
-                    aria-invalid={Boolean(fieldErrors.password)}
-                    aria-describedby={fieldErrors.password ? 'login-password-error' : undefined}
-                    placeholder="Enter your password"
-                  />
-                  <button
-                    type="button"
-                    className="pa-auth-password-toggle"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </button>
+              {formError && (
+                <div role="alert" className="pa-auth-alert pa-auth-alert--error">
+                  {formError}
                 </div>
-                {fieldErrors.password && (
-                  <span id="login-password-error" role="alert" className="pa-auth-field-error">
-                    {fieldErrors.password}
-                  </span>
-                )}
-              </div>
+              )}
 
-              <MagneticTarget>
-                <button
-                  type="submit"
-                  disabled={isPending}
-                  className="pa-btn-primary-dark"
-                  style={{ width: '100%', minHeight: '50px', marginTop: '0.75rem' }}
-                >
-                  {loginMutation.isPending ? 'Signing in…' : 'Sign in to record'}
-                </button>
-              </MagneticTarget>
-            </form>
+              <form onSubmit={handleSubmit} noValidate className="pa-auth-form">
+                <div className="pa-auth-field">
+                  <label htmlFor="login-email" className="pa-auth-label">
+                    Email address
+                  </label>
+                  <input
+                    ref={emailInputRef}
+                    id="login-email"
+                    type="email"
+                    name="email"
+                    className="pa-auth-input"
+                    value={form.email}
+                    onChange={(e) => {
+                      setForm({ ...form, email: e.target.value });
+                      if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: '' });
+                    }}
+                    autoComplete="email"
+                    required
+                    aria-invalid={Boolean(fieldErrors.email)}
+                    aria-describedby={fieldErrors.email ? 'login-email-error' : undefined}
+                    placeholder="name@example.com"
+                  />
+                  {fieldErrors.email && (
+                    <span id="login-email-error" role="alert" className="pa-auth-field-error">
+                      {fieldErrors.email}
+                    </span>
+                  )}
+                </div>
 
-            {GOOGLE_CLIENT_ID && (
-              <div className="pa-auth-google-wrap">
-                <span className="pa-auth-or-label">or continue with</span>
-                <GoogleLoginButton
-                  onCredential={(token) => googleMutation.mutate(token)}
-                  onError={(message) => {
-                    const err = message || 'Google sign-in failed. Please retry.';
-                    setFormError(err);
-                    toast.error(err);
+                <div className="pa-auth-field">
+                  <label htmlFor="login-password" className="pa-auth-label">
+                    Password
+                  </label>
+                  <div className="pa-auth-password-wrap">
+                    <input
+                      ref={passwordInputRef}
+                      id="login-password"
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      className="pa-auth-input"
+                      value={form.password}
+                      onChange={(e) => {
+                        setForm({ ...form, password: e.target.value });
+                        if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: '' });
+                      }}
+                      autoComplete="current-password"
+                      required
+                      aria-invalid={Boolean(fieldErrors.password)}
+                      aria-describedby={fieldErrors.password ? 'login-password-error' : undefined}
+                      placeholder="Enter your password"
+                    />
+                    <button
+                      type="button"
+                      className="pa-auth-password-toggle"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                  {fieldErrors.password && (
+                    <span id="login-password-error" role="alert" className="pa-auth-field-error">
+                      {fieldErrors.password}
+                    </span>
+                  )}
+                </div>
+
+                <MagneticTarget>
+                  <button
+                    type="submit"
+                    disabled={isPending}
+                    className="pa-btn-primary"
+                    style={{ width: '100%', minHeight: '50px', marginTop: '0.5rem' }}
+                  >
+                    {loginMutation.isPending ? 'Accessing record…' : 'Sign in'}
+                  </button>
+                </MagneticTarget>
+              </form>
+
+              {GOOGLE_CLIENT_ID && (
+                <div className="pa-auth-google-wrap">
+                  <span className="pa-auth-or-label">or continue with</span>
+                  <GoogleLoginButton
+                    onCredential={(token) => googleMutation.mutate(token)}
+                    onError={(message) => {
+                      const err = message || 'Google sign-in failed. Please retry.';
+                      setFormError(err);
+                      toast.error(err);
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="pa-auth-switch-link">
+                <a
+                  href={`/signup?next=${encodeURIComponent(safeNext)}`}
+                  className="pa-link-text"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateWithTransition(`/signup?next=${encodeURIComponent(safeNext)}`);
                   }}
-                />
+                >
+                  New here? Create your first record &rarr;
+                </a>
               </div>
-            )}
-
-            <div className="pa-auth-switch-link">
-              <a
-                href={`/signup?next=${encodeURIComponent(safeNext)}`}
-                className="pa-link-text"
-                style={{ color: 'var(--pa-mineral)' }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateWithTransition(`/signup?next=${encodeURIComponent(safeNext)}`);
-                }}
-              >
-                Do not have a record yet? Create an account &rarr;
-              </a>
             </div>
           </div>
         </div>

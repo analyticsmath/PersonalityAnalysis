@@ -10,9 +10,9 @@ import './EditorialHowItWorksPage.css';
 
 /**
  * EditorialHowItWorksPage
- * Operating Mode: Evidence Engine
- * Demonstrates the full lifecycle of a single response through the deterministic engine:
- * Prompt -> Source Record -> Evidence Extraction -> Scoring Validity -> Calibration -> Stored Record.
+ * Operating Mode: The Evidence Engine
+ * One continuous pipeline tracking a single situational response through:
+ * Question Prompt -> Retained Source -> Multi-Dimensional Extraction -> Scoring Validity -> Calibration Baseline -> Stored Record.
  */
 export const EditorialHowItWorksPage = () => {
   const { navigateWithTransition } = useRouteTransition();
@@ -25,191 +25,189 @@ export const EditorialHowItWorksPage = () => {
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={true}>
-        {/* ── Engine Hero Stage ── */}
-        <section className="pa-engine-hero" aria-label="Evidence Engine Overview">
-          <div className="pa-engine-hero__media">
-            <EnvironmentPlane
-              asset={MEDIA_ASSETS_V7.howProcess}
-              role="primary"
-              priority={true}
-              caption="ENGINE RUNTIME / REAL-TIME EVIDENCE PROCESSING"
-            />
-          </div>
-
-          <div className="pa-engine-hero__overlay">
-            <div className="pa-engine-hero__header">
-              <span className="pa-engine-hero__eyebrow">THE EVIDENCE ENGINE</span>
-              <h1 className="pa-engine-hero__h1">
-                From a single response
-                <br />
-                to an ongoing record.
-              </h1>
-              <p className="pa-engine-hero__lead">
-                Follow how one situational answer generates evidence across multiple psychological and career dimensions without losing its source.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Step 1: Real Question Prompt Bank ── */}
-        <section className="pa-engine-step pa-engine-step--prompt" aria-label="Step 1: Input question prompt">
-          <div className="pa-engine-step__inner">
-            <div className="pa-engine-step__meta">
-              <span className="pa-engine-step__num">STAGE 01</span>
-              <h2 className="pa-engine-step__title">Question Prompt & Response</h2>
-              <p className="pa-engine-step__desc">
-                Assessments present realistic working scenarios rather than generic self-rating sliders.
-              </p>
-            </div>
-
-            <div className="pa-engine-step__prompt-box">
-              <div className="pa-engine-step__prompt-header">
-                <span className="pa-engine-step__prompt-tag">QUESTION PROMPT</span>
-                <span className="pa-engine-step__prompt-id">ID: initiative-pattern-intermediate</span>
-              </div>
-              <blockquote className="pa-engine-step__prompt-text">
-                “Describe how you take initiative when a project has unclear ownership.”
-              </blockquote>
-            </div>
-
-            <div className="pa-engine-step__strip-wrap">
-              <EvidenceStrip
-                quote="“I clarify responsibilities before committing work.”"
-                eyebrow="SUPPLIED ANSWER"
-                sourceLabel="SOURCE / RAW HUMAN RESPONSE"
-                theme="carbon"
-                variant="source"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* ── Step 2: Multi-Dimension Evidence Extraction ── */}
-        <section className="pa-engine-step pa-engine-step--extraction" aria-label="Step 2: Evidence extraction">
-          <div className="pa-engine-step__inner">
-            <div className="pa-engine-step__meta">
-              <span className="pa-engine-step__num">STAGE 02</span>
-              <h2 className="pa-engine-step__title">Multi-Dimension Extraction</h2>
-              <p className="pa-engine-step__desc">
-                The evidence builder generates discrete atomic records across four foundational framework families.
-              </p>
-            </div>
-
-            <div className="pa-engine-step__extraction-grid">
-              <div className="pa-engine-step__record-item">
-                <span className="pa-engine-step__record-dim">BIG FIVE</span>
-                <strong className="pa-engine-step__record-trait">Conscientiousness</strong>
-                <span className="pa-engine-step__record-val">Direction: Positive (+0.6)</span>
-                <span className="pa-engine-step__record-note">Systematic clarity and execution rigor</span>
-              </div>
-
-              <div className="pa-engine-step__record-item">
-                <span className="pa-engine-step__record-dim">RIASEC</span>
-                <strong className="pa-engine-step__record-trait">Investigative / Conventional</strong>
-                <span className="pa-engine-step__record-val">Direction: Positive (+0.5)</span>
-                <span className="pa-engine-step__record-note">Analytical problem structuring & procedural care</span>
-              </div>
-
-              <div className="pa-engine-step__record-item">
-                <span className="pa-engine-step__record-dim">WORK VALUES</span>
-                <strong className="pa-engine-step__record-trait">Independence & Learning</strong>
-                <span className="pa-engine-step__record-val">Direction: Positive (+0.7)</span>
-                <span className="pa-engine-step__record-note">High preference for autonomous problem framing</span>
-              </div>
-
-              <div className="pa-engine-step__record-item">
-                <span className="pa-engine-step__record-dim">CAREER SIGNALS</span>
-                <strong className="pa-engine-step__record-trait">Ownership & Planning</strong>
-                <span className="pa-engine-step__record-val">Direction: Positive (+0.8)</span>
-                <span className="pa-engine-step__record-note">Defines accountability before execution</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Step 3: Deterministic Scoring & Validity Orchestration ── */}
-        <section className="pa-engine-step pa-engine-step--validity" aria-label="Step 3: Scoring validity">
-          <div className="pa-engine-step__inner">
-            <div className="pa-engine-step__meta">
-              <span className="pa-engine-step__num">STAGE 03</span>
-              <h2 className="pa-engine-step__title">Scoring Validity & Confidence</h2>
-              <p className="pa-engine-step__desc">
-                Scores are calculated deterministically. If insufficient responses exist, validity reflects incomplete coverage rather than fabricating certainty.
-              </p>
-            </div>
-
-            <div className="pa-engine-step__validity-card">
-              <div className="pa-engine-step__validity-row">
-                <span className="pa-engine-step__v-label">SCORING ENGINE</span>
-                <span className="pa-engine-step__v-val">Deterministic (Non-generative)</span>
-              </div>
-              <div className="pa-engine-step__validity-row">
-                <span className="pa-engine-step__v-label">VALIDITY STATE</span>
-                <span className="pa-engine-step__v-val pa-engine-step__v-val--valid">valid</span>
-              </div>
-              <div className="pa-engine-step__validity-row">
-                <span className="pa-engine-step__v-label">CONFIDENCE THRESHOLD</span>
-                <span className="pa-engine-step__v-val">0.88 / 1.0</span>
-              </div>
-              <div className="pa-engine-step__validity-row">
-                <span className="pa-engine-step__v-label">RETAINED ATOMS</span>
-                <span className="pa-engine-step__v-val">4 discrete evidence records</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Step 4: Deterministic Career Comparison ── */}
-        <section className="pa-engine-step pa-engine-step--calibration" aria-label="Step 4: Career fit weights">
-          <div className="pa-engine-step__inner">
-            <div className="pa-engine-step__meta">
-              <span className="pa-engine-step__num">STAGE 04</span>
-              <h2 className="pa-engine-step__title">Deterministic Career Fit Comparison</h2>
-              <p className="pa-engine-step__desc">
-                Career matching evaluates your evidence record against curated benchmarks using the exact weights below.
-              </p>
-            </div>
-
-            <div className="pa-engine-step__baseline-wrap">
-              <CalibrationBaseline theme="mineral" />
-            </div>
-          </div>
-        </section>
-
-        {/* ── Step 5: Stored Dated Record ── */}
-        <section className="pa-engine-step pa-engine-step--stored" aria-label="Step 5: Stored record">
-          <div className="pa-engine-step__inner">
-            <div className="pa-engine-step__meta">
-              <span className="pa-engine-step__num">STAGE 05</span>
-              <h2 className="pa-engine-step__title">Retained in Your Living Record</h2>
-              <p className="pa-engine-step__desc">
-                The record remains available for future comparison, export, and longitudinal tracking.
-              </p>
-            </div>
-
-            <div className="pa-engine-step__strip-wrap">
-              <EvidenceStrip
-                quote="“I clarify responsibilities before committing work.”"
-                eyebrow="STORED IN RECORD"
-                dateLabel="ASSESSMENT 01"
-                sourceLabel="RETAINED + TRACEABLE + COMPARED"
-                theme="carbon"
-                variant="dated"
-                accumulatedMarks={true}
+        <div className="pa-engine-page" role="main" id="main-content">
+          {/* Continuous Engine Hero */}
+          <section className="pa-engine-hero" aria-label="Evidence Engine Overview">
+            <div className="pa-engine-hero__media">
+              <EnvironmentPlane
+                asset={MEDIA_ASSETS_V7.howProcess}
+                role="primary"
+                priority={true}
+                caption="ENGINE RUNTIME / REAL-TIME EVIDENCE PROCESSING"
               />
             </div>
 
-            <div className="pa-engine-step__footer-actions">
-              <a
-                href="/signup"
-                className="pa-btn pa-btn--primary"
-                onClick={(e) => handleCtaClick(e, '/signup')}
-              >
-                Create your first record →
-              </a>
+            <div className="pa-engine-hero__overlay">
+              <div className="pa-engine-hero__header">
+                <span className="pa-engine-hero__meta-tag">OPERATIONAL PIPELINE</span>
+                <h1 className="pa-engine-hero__h1">
+                  From a single response to an ongoing record.
+                </h1>
+                <p className="pa-engine-hero__lead">
+                  Follow how one situational answer generates evidence across multiple psychological
+                  and career dimensions without losing its source.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Continuous Pipeline Stage Container */}
+          <div className="pa-engine-pipeline">
+            {/* Step A: Real Prompt & Illustrative Response */}
+            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--prompt">
+              <div className="pa-engine-pipeline__header">
+                <span className="pa-engine-pipeline__meta-tag">QUESTION SPECIMEN</span>
+                <h2 className="pa-engine-pipeline__title">Situational decision prompt</h2>
+                <p className="pa-engine-pipeline__sub">
+                  Real psychometric items present grounded working trade-offs rather than generic self-rating scales.
+                </p>
+              </div>
+
+              <div className="pa-engine-pipeline__prompt-specimen">
+                <span className="pa-engine-pipeline__prompt-id">ID: technical-depth-intermediate</span>
+                <blockquote className="pa-engine-pipeline__prompt-quote">
+                  “How do you decide whether a problem needs a quick patch or a deeper redesign?”
+                </blockquote>
+              </div>
+
+              <div className="pa-engine-pipeline__strip-wrap">
+                <EvidenceStrip
+                  quote="“I investigate the architecture, debug the root issue, clarify the tradeoff with stakeholders, and choose an independent plan that leaves room to learn.”"
+                  eyebrow="ILLUSTRATIVE RESPONSE"
+                  sourceLabel="SOURCE RETAINED / RAW HUMAN SPECIMEN"
+                  theme="carbon"
+                  variant="source"
+                />
+              </div>
+            </div>
+
+            {/* Step B: Multi-Dimension Qualitative Evidence Extraction */}
+            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--extraction">
+              <div className="pa-engine-pipeline__header">
+                <span className="pa-engine-pipeline__meta-tag">DIMENSIONAL MAPPING</span>
+                <h2 className="pa-engine-pipeline__title">Multi-dimensional extraction</h2>
+                <p className="pa-engine-pipeline__sub">
+                  One statement produces discrete qualitative evidence atoms across foundational framework families.
+                </p>
+              </div>
+
+              <div className="pa-engine-pipeline__open-records">
+                <div className="pa-engine-pipeline__record-row">
+                  <span className="pa-engine-pipeline__dim-label">BIG FIVE</span>
+                  <span className="pa-engine-pipeline__key-label">Openness</span>
+                  <p className="pa-engine-pipeline__signal-text">
+                    Architectural root-cause inquiry, systems curiosity, and willingness to redesign fundamental mechanisms.
+                  </p>
+                </div>
+
+                <div className="pa-engine-pipeline__record-row">
+                  <span className="pa-engine-pipeline__dim-label">RIASEC</span>
+                  <span className="pa-engine-pipeline__key-label">Investigative</span>
+                  <p className="pa-engine-pipeline__signal-text">
+                    Analytical problem framing and deep debugging preference before committing changes.
+                  </p>
+                </div>
+
+                <div className="pa-engine-pipeline__record-row">
+                  <span className="pa-engine-pipeline__dim-label">WORK VALUES</span>
+                  <span className="pa-engine-pipeline__key-label">Independence & Learning</span>
+                  <p className="pa-engine-pipeline__signal-text">
+                    Autonomous decision authority and priority placed on continuous skill acquisition.
+                  </p>
+                </div>
+
+                <div className="pa-engine-pipeline__record-row">
+                  <span className="pa-engine-pipeline__dim-label">CAREER SIGNALS</span>
+                  <span className="pa-engine-pipeline__key-label">Technical Depth & Stakeholder Synthesis</span>
+                  <p className="pa-engine-pipeline__signal-text">
+                    Rigorous problem framing paired with proactive cross-functional trade-off clarification.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step C: Scoring Validity Gate */}
+            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--validity">
+              <div className="pa-engine-pipeline__header">
+                <span className="pa-engine-pipeline__meta-tag">INTEGRITY CHECK</span>
+                <h2 className="pa-engine-pipeline__title">Deterministic score validity</h2>
+                <p className="pa-engine-pipeline__sub">
+                  Evidence is validated against response consistency and minimum evidence thresholds before scores are finalized.
+                </p>
+              </div>
+
+              <div className="pa-engine-pipeline__validity-readout">
+                <div className="pa-engine-pipeline__validity-item">
+                  <span className="pa-engine-pipeline__validity-key">STATUS</span>
+                  <span className="pa-engine-pipeline__validity-val">VALID</span>
+                </div>
+                <div className="pa-engine-pipeline__validity-item">
+                  <span className="pa-engine-pipeline__validity-key">INTEGRITY GUARD</span>
+                  <span className="pa-engine-pipeline__validity-val">PASSED</span>
+                </div>
+                <div className="pa-engine-pipeline__validity-item">
+                  <span className="pa-engine-pipeline__validity-key">CALCULATION ENGINE</span>
+                  <span className="pa-engine-pipeline__validity-val">DETERMINISTIC</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Step D: Calibration Baseline */}
+            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--calibration">
+              <div className="pa-engine-pipeline__header">
+                <span className="pa-engine-pipeline__meta-tag">PROFILE WEIGHTING</span>
+                <h2 className="pa-engine-pipeline__title">Career calibration baseline</h2>
+                <p className="pa-engine-pipeline__sub">
+                  The evidence feeds directly into the 6-layer deterministic fit scale without opaque weighting changes.
+                </p>
+              </div>
+
+              <div className="pa-engine-pipeline__calibration-wrap">
+                <CalibrationBaseline theme="carbon" />
+              </div>
+            </div>
+
+            {/* Step E: Stored Living Record Finale */}
+            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--stored">
+              <div className="pa-engine-pipeline__header">
+                <span className="pa-engine-pipeline__meta-tag">PERSISTENCE</span>
+                <h2 className="pa-engine-pipeline__title">The stored living record</h2>
+                <p className="pa-engine-pipeline__sub">
+                  The source answer remains attached to all derived signals, ready for longitudinal comparison across assessments.
+                </p>
+              </div>
+
+              <div className="pa-engine-pipeline__strip-wrap">
+                <EvidenceStrip
+                  quote="“I investigate the architecture, debug the root issue, clarify the tradeoff with stakeholders, and choose an independent plan that leaves room to learn.”"
+                  eyebrow="STORED ASSESSMENT RECORD"
+                  sourceLabel="STORED RECORD / PROVENANCE SECURED"
+                  theme="mineral"
+                  variant="inspect"
+                  accumulatedMarks={true}
+                  provenanceData={{
+                    source: 'answer',
+                    sourceId: 'technical-depth-intermediate',
+                    dimension: 'bigFive',
+                    key: 'openness',
+                    direction: 'positive',
+                    scoringSource: 'deterministic',
+                  }}
+                />
+              </div>
+
+              <div className="pa-engine-pipeline__actions">
+                <a
+                  href="/signup"
+                  className="pa-btn pa-btn--primary"
+                  onClick={(e) => handleCtaClick(e, '/signup')}
+                >
+                  Start your initial record &rarr;
+                </a>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
       </PublicLayout>
     </SmoothScrollProvider>
   );

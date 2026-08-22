@@ -38,7 +38,6 @@ export const SignupPage = () => {
   const [formError, setFormError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [activeStep, setActiveStep] = useState(1);
   const asset = MEDIA_ASSETS_V7.signupFirstRecord;
 
   const safeNext = useMemo(() => {
@@ -55,7 +54,6 @@ export const SignupPage = () => {
     };
   }, []);
 
-  // Moving environmental layer parallax
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.innerWidth <= 768;
@@ -112,10 +110,12 @@ export const SignupPage = () => {
 
   const validate = () => {
     const errors = {};
-    if (!form.name.trim()) errors.name = 'Please enter your full name.';
+    if (!form.name.trim()) {
+      errors.name = 'Please enter your name.';
+    }
     if (!form.email.trim()) {
-      errors.email = 'Please enter your email address.';
-    } else if (!EMAIL_REGEX.test(form.email)) {
+      errors.email = 'Please enter your email.';
+    } else if (!EMAIL_REGEX.test(form.email.trim())) {
       errors.email = 'Please enter a valid email address.';
     }
     if (!form.password) {
@@ -155,16 +155,16 @@ export const SignupPage = () => {
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={false}>
-        <div className="pa-auth-signup" aria-label="Create Account: First Living Record">
-          {/* Environmental Crossing Layer */}
+        <div className="pa-auth-signup" aria-label="Create Account: First Living Record" id="main-content">
+          {/* Asymmetric Environmental Crossing Layer (Crosses centerline at 36vw) */}
           <div
             ref={environmentalImageRef}
             className="pa-auth-signup__environmental-plane"
             aria-hidden="true"
           >
             <picture>
-              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="60vw" />
-              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="60vw" />
+              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(max-width: 768px) 100vw, 70vw" />
+              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(max-width: 768px) 100vw, 70vw" />
               <img
                 src={asset.source}
                 alt={asset.alt}
@@ -175,24 +175,36 @@ export const SignupPage = () => {
                 decoding="async"
               />
             </picture>
+
+            {/* Desktop Specimen Strip embedded in Environmental Plane */}
+            <div className="pa-auth-signup__embedded-strip">
+              <EvidenceStrip
+                variant="new-record"
+                theme="mineral"
+                eyebrow="INITIAL RECORD SPECIMEN"
+                sourceLabel="FIRST RECORD / CLEAN SLATE"
+              />
+            </div>
           </div>
 
-          {/* Form Container */}
-          <div className="pa-auth-form-card">
-            <span className="pa-auth-eyebrow">FIRST RECORD SETUP</span>
-            <h1 className="pa-auth-title">Create your Living Record</h1>
-            <p className="pa-auth-subtitle">
-              Create an inspectable account to preserve your assessments, explore career conditions, and revisit your evidence over time.
-            </p>
+          {/* Form Container direct on ground */}
+          <div className="pa-auth-signup__form-container">
+            <div className="pa-auth-signup__header">
+              <span className="pa-auth-signup__meta-tag">INITIALIZATION</span>
+              <h1 className="pa-auth-signup__h1">Create your Living Record.</h1>
+              <p className="pa-auth-signup__lead">
+                Establish an inspectable account to preserve your assessments, explore career conditions, and revisit your evidence over time.
+              </p>
+            </div>
 
             {formError && (
-              <div role="alert" aria-live="assertive" className="pa-auth-banner-error">
+              <div role="alert" aria-live="assertive" className="pa-auth-alert pa-auth-alert--error">
                 {formError}
               </div>
             )}
 
             {successMessage && (
-              <div role="status" aria-live="polite" className="pa-auth-banner-success">
+              <div role="status" aria-live="polite" className="pa-auth-alert pa-auth-alert--success">
                 {successMessage}
               </div>
             )}
@@ -209,7 +221,6 @@ export const SignupPage = () => {
                   name="name"
                   className="pa-auth-input"
                   value={form.name}
-                  onFocus={() => setActiveStep(1)}
                   onChange={(e) => {
                     setForm({ ...form, name: e.target.value });
                     if (fieldErrors.name) setFieldErrors({ ...fieldErrors, name: '' });
@@ -238,7 +249,6 @@ export const SignupPage = () => {
                   name="email"
                   className="pa-auth-input"
                   value={form.email}
-                  onFocus={() => setActiveStep(2)}
                   onChange={(e) => {
                     setForm({ ...form, email: e.target.value });
                     if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: '' });
@@ -256,6 +266,16 @@ export const SignupPage = () => {
                 )}
               </div>
 
+              {/* Mobile mid-form compact new-record strip */}
+              <div className="pa-auth-signup__mobile-strip-wrap" aria-hidden="true">
+                <EvidenceStrip
+                  variant="new-record"
+                  theme="mineral"
+                  eyebrow="INITIAL SPECIMEN"
+                  sourceLabel="FIRST RECORD / CLEAN SLATE"
+                />
+              </div>
+
               <div className="pa-auth-field">
                 <label htmlFor="signup-password" className="pa-auth-label">
                   Password
@@ -268,7 +288,6 @@ export const SignupPage = () => {
                     name="password"
                     className="pa-auth-input"
                     value={form.password}
-                    onFocus={() => setActiveStep(3)}
                     onChange={(e) => {
                       setForm({ ...form, password: e.target.value });
                       if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: '' });
@@ -334,7 +353,7 @@ export const SignupPage = () => {
                   className="pa-btn-primary"
                   style={{ width: '100%', minHeight: '50px', marginTop: '0.5rem' }}
                 >
-                  {signupMutation.isPending ? 'Creating account…' : 'Create account'}
+                  {signupMutation.isPending ? 'Creating record…' : 'Create Living Record'}
                 </button>
               </MagneticTarget>
             </form>
@@ -364,18 +383,6 @@ export const SignupPage = () => {
               >
                 Already have a record? Sign in &rarr;
               </a>
-            </div>
-          </div>
-
-          {/* New Record Specimen Preview */}
-          <div className="pa-auth-signup__evidence-preview-col" aria-hidden="true">
-            <div className="pa-auth-signup__strip-anchor">
-              <EvidenceStrip
-                variant="new-record"
-                theme="mineral"
-                eyebrow="INITIAL SPECIMEN"
-                sourceLabel="FIRST RECORD / CLEAN SLATE"
-              />
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 /* ==========================================================================
    Personality Assessor — The Living Record: HomeFinaleScene (Scene 8)
-   Static Frame Reference: Desktop D1-08 / Mobile Finale
+   Direct Carbon/Graphite Ground, No Gradients
    ========================================================================== */
 
 .pa-home-finale-scene {
@@ -18,7 +18,7 @@
 .pa-home-finale-scene__backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 25% 50%, rgba(34, 39, 36, 0.45) 0%, transparent 70%);
+  background-color: var(--pa-carbon, #0D0F0E);
   pointer-events: none;
   z-index: 0;
 }
@@ -62,26 +62,26 @@
 }
 
 .pa-home-finale-scene__eyebrow {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.6875rem;
   font-weight: 650;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #D67D8C;
+  color: var(--pa-oxblood, #642832);
 }
 
 .pa-home-finale-scene__h2 {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
   font-size: clamp(2.4rem, 4.8vw, 4.4rem);
-  font-weight: 520;
-  line-height: 0.94;
-  letter-spacing: -0.04em;
-  color: #FFFFFF;
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  color: var(--pa-mineral, #F3F5F2);
   margin: 0;
 }
 
 .pa-home-finale-scene__lead {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: clamp(1rem, 1.25vw, 1.15rem);
   line-height: 1.45;
   color: var(--pa-pewter, #AEB4AF);
@@ -99,12 +99,35 @@
   gap: 1.25rem;
 }
 
-@media (max-width: 900px) {
-  .pa-home-finale-scene__media {
-    display: none;
-  }
+.pa-btn--ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--pa-mineral, #F3F5F2);
+  border: 1px solid var(--pa-pewter, #AEB4AF);
+  padding: 0.75rem 1.5rem;
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 550;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
 
+.pa-btn--ghost:hover {
+  border-color: var(--pa-mineral, #F3F5F2);
+}
+
+@media (max-width: 900px) {
   .pa-home-finale-scene__content {
     align-items: flex-start;
+  }
+
+  .pa-home-finale-scene__media {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    margin-bottom: 2rem;
   }
 }

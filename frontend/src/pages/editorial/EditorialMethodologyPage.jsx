@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
-import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
+import SmoothScrollProvider, { useScrollContext } from '../../components/personality-v7/motion/SmoothScrollProvider';
 import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
 import CalibrationBaseline from '../../components/personality-v7/living-record/CalibrationBaseline';
 import './EditorialMethodologyPage.css';
@@ -56,100 +56,102 @@ const METHOD_SECTIONS = [
   },
 ];
 
-export const EditorialMethodologyPage = () => {
+const MethodologyInner = () => {
   const [activeSection, setActiveSection] = useState(METHOD_SECTIONS[0].id);
+  const { scrollTo } = useScrollContext();
 
-  const scrollToSection = (e, id) => {
+  const handleNavClick = (e, id) => {
     e.preventDefault();
     setActiveSection(id);
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    scrollTo(`#${id}`, { offset: -80 });
   };
 
   return (
+    <article className="pa-method-room" aria-label="Methodology Calibration Room" id="main-content">
+      {/* Header */}
+      <header className="pa-method-room__header">
+        <div className="pa-method-room__header-inner">
+          <span className="pa-method-room__meta-tag">CALIBRATION ROOM</span>
+          <h1 className="pa-method-room__h1">Methodology & Framework Decoupling</h1>
+          <p className="pa-method-room__lead">
+            Every calculation, framework relationship, and career weighting layer is inspectable and decoupled.
+          </p>
+        </div>
+      </header>
+
+      {/* Model Specimen Evidence Strip */}
+      <section className="pa-method-room__strip-stage" aria-label="Model specimen schema">
+        <div className="pa-method-room__strip-inner">
+          <EvidenceStrip
+            quote="“I clarify responsibilities before committing work.”"
+            eyebrow="PRODUCT EVIDENCE SCHEMA"
+            sourceLabel="DECOUPLED EVIDENCE MAPPING"
+            theme="carbon"
+            variant="inspect"
+            isInspecting={true}
+            provenanceData={{
+              source: 'answer',
+              sourceId: 'technical-depth-intermediate',
+              dimension: 'bigFive',
+              key: 'conscientiousness',
+              direction: 'positive',
+              scoringSource: 'deterministic',
+            }}
+          />
+        </div>
+      </section>
+
+      {/* Main Grid: Sticky Index + Technical Specifications */}
+      <div className="pa-method-room__layout">
+        <nav className="pa-method-room__nav" aria-label="Methodology sections">
+          <div className="pa-method-room__nav-sticky">
+            <span className="pa-method-room__nav-title">FRAMEWORK INDEX</span>
+            <ul className="pa-method-room__nav-list">
+              {METHOD_SECTIONS.map((sec) => {
+                const isActive = sec.id === activeSection;
+                return (
+                  <li key={sec.id}>
+                    <a
+                      href={`#${sec.id}`}
+                      className={`pa-method-room__nav-link ${
+                        isActive ? 'pa-method-room__nav-link--active' : ''
+                      }`}
+                      onClick={(e) => handleNavClick(e, sec.id)}
+                    >
+                      {sec.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </nav>
+
+        <div className="pa-method-room__content">
+          {METHOD_SECTIONS.map((sec) => (
+            <section key={sec.id} id={sec.id} className="pa-method-room__section">
+              <span className="pa-method-room__sec-num">{sec.title}</span>
+              <h2 className="pa-method-room__sec-h2">{sec.heading}</h2>
+              <p className="pa-method-room__sec-body">{sec.body}</p>
+
+              {sec.id === 'weights' && (
+                <div className="pa-method-room__baseline-wrap">
+                  <CalibrationBaseline theme="mineral" />
+                </div>
+              )}
+            </section>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+};
+
+export const EditorialMethodologyPage = () => {
+  return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="dark-content" withFooter={true}>
-        <article className="pa-method-room" aria-label="Methodology Calibration Room">
-          {/* Header */}
-          <header className="pa-method-room__header">
-            <div className="pa-method-room__header-inner">
-              <span className="pa-method-room__eyebrow">METHODOLOGY & CALIBRATION</span>
-              <h1 className="pa-method-room__h1">Calibration Room</h1>
-              <p className="pa-method-room__lead">
-                Every calculation, framework relationship, and career weighting layer is inspectable and decoupled.
-              </p>
-            </div>
-          </header>
-
-          {/* Expanded Calibration Prototype Strip */}
-          <section className="pa-method-room__strip-stage" aria-label="Model specimen schema">
-            <div className="pa-method-room__strip-inner">
-              <EvidenceStrip
-                quote="“I clarify responsibilities before committing work.”"
-                eyebrow="PRODUCT EVIDENCE SCHEMA"
-                sourceLabel="MAPPED TO BIG FIVE + RIASEC + VALUES + SIGNALS"
-                theme="carbon"
-                variant="inspect"
-                isInspecting={true}
-                provenanceData={{
-                  source: 'answer',
-                  sourceId: 'initiative-pattern-intermediate',
-                  dimension: 'bigFive',
-                  key: 'conscientiousness',
-                  direction: 'positive',
-                  scoringSource: 'deterministic',
-                }}
-              />
-            </div>
-          </section>
-
-          {/* Main Content Layout */}
-          <div className="pa-method-room__body">
-            <div className="pa-method-room__grid">
-              {/* Sticky Table of Contents */}
-              <aside className="pa-method-room__toc" aria-label="Methodology sections">
-                <nav className="pa-method-room__toc-nav">
-                  <span className="pa-method-room__toc-heading">FRAMEWORK SPECIFICATIONS</span>
-                  <ol className="pa-method-room__toc-list">
-                    {METHOD_SECTIONS.map((sec) => {
-                      const isActive = activeSection === sec.id;
-                      return (
-                        <li key={sec.id}>
-                          <a
-                            href={`#${sec.id}`}
-                            className={`pa-method-room__toc-link ${isActive ? 'is-active' : ''}`}
-                            onClick={(e) => scrollToSection(e, sec.id)}
-                          >
-                            {sec.title}
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ol>
-                </nav>
-              </aside>
-
-              {/* Technical Specifications */}
-              <main className="pa-method-room__sections">
-                {METHOD_SECTIONS.map((sec) => (
-                  <section key={sec.id} id={sec.id} className="pa-method-room__sec">
-                    <span className="pa-method-room__sec-num">{sec.title}</span>
-                    <h2 className="pa-method-room__sec-h2">{sec.heading}</h2>
-                    <p className="pa-method-room__sec-body">{sec.body}</p>
-
-                    {sec.id === 'weights' && (
-                      <div className="pa-method-room__baseline-box">
-                        <CalibrationBaseline theme="mineral" />
-                      </div>
-                    )}
-                  </section>
-                ))}
-              </main>
-            </div>
-          </div>
-        </article>
+        <MethodologyInner />
       </PublicLayout>
     </SmoothScrollProvider>
   );

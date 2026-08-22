@@ -49,6 +49,7 @@
     "lint": "eslint src",
     "typecheck": "echo \"No TypeScript files in frontend\"",
     "check:theme": "node scripts/check-light-theme-consistency.js",
+    "check:living-record": "vitest run src/living-record-source-contracts.test.jsx",
     "generate:evidence-media": "node scripts/rename-normalize-sources.mjs && node scripts/generate-evidence-in-context-media.mjs",
     "check:marketing-media": "node scripts/check-evidence-media.mjs",
     "check:marketing-media:sources": "node scripts/check-source-media.mjs",

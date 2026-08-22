@@ -67,7 +67,6 @@
 
 .pa-provenance-trace__btn.is-active .pa-provenance-trace__node {
   background-color: var(--pa-oxblood, #642832);
-  box-shadow: 0 0 0 4px rgba(100, 40, 50, 0.2);
 }
 
 .pa-provenance-trace__meta {

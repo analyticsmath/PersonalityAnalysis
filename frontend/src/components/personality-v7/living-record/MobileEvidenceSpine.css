@@ -94,7 +94,7 @@
 }
 
 .pa-theme-carbon .pa-mobile-spine__dim {
-  color: #D67D8C;
+  color: var(--pa-oxblood, #642832);
 }
 
 .pa-mobile-spine__title {

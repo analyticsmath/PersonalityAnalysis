@@ -43,6 +43,7 @@ export const HomeCareerTakeoverScene = () => {
   const sceneRef = useRef(null);
   const planesRef = useRef([]);
   const [activeIdx, setActiveIdx] = useState(0);
+  const activeIdxRef = useRef(0);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -69,12 +70,10 @@ export const HomeCareerTakeoverScene = () => {
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
-            if (p < 0.33) {
-              setActiveIdx(0);
-            } else if (p < 0.66) {
-              setActiveIdx(1);
-            } else {
-              setActiveIdx(2);
+            const nextIdx = p < 0.33 ? 0 : p < 0.66 ? 1 : 2;
+            if (nextIdx !== activeIdxRef.current) {
+              activeIdxRef.current = nextIdx;
+              setActiveIdx(nextIdx);
             }
           },
         },

@@ -1,17 +1,18 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
+import EvidenceStrip from '../living-record/EvidenceStrip';
 
-const ROUTE_KEYWORDS = {
-  '/': 'CONTEXT',
-  '/career-intelligence': 'ENVIRONMENT',
-  '/how-it-works': 'PROCESS',
-  '/progress': 'LATER EVIDENCE',
-  '/methodology': 'METHOD',
-  '/trust': 'PROVENANCE',
-  '/privacy': 'CONTROL',
-  '/login': 'EXISTING RECORD',
-  '/signup': 'FIRST RECORD',
+const ROUTE_METADATA = {
+  '/': { keyword: 'CONTEXT', quote: '“Keep the source attached.”', label: 'SOURCE RETAINED' },
+  '/career-intelligence': { keyword: 'ENVIRONMENT', quote: '“Where work happens changes what evidence means.”', label: 'WORKWORLD ATLAS' },
+  '/how-it-works': { keyword: 'PROCESS', quote: '“From a single response to an ongoing record.”', label: 'EVIDENCE ENGINE' },
+  '/progress': { keyword: 'LATER EVIDENCE', quote: '“A later assessment adds a record without erasing the first.”', label: 'LONGITUDINAL FILM' },
+  '/methodology': { keyword: 'METHOD', quote: '“Every calculation and career weighting layer is inspectable.”', label: 'CALIBRATION ROOM' },
+  '/trust': { keyword: 'PROVENANCE', quote: '“Every reading traces back to what created it.”', label: 'TRACEBACK' },
+  '/privacy': { keyword: 'CONTROL', quote: '“Data belongs entirely to the individual.”', label: 'USER RIGHTS' },
+  '/login': { keyword: 'EXISTING RECORD', quote: '“Reopen your stored living record.”', label: 'REOPEN RECORD' },
+  '/signup': { keyword: 'FIRST RECORD', quote: '“Establish your initial living record.”', label: 'FIRST RECORD' },
 };
 
 const PROTECTED_PREFIXES = [
@@ -47,11 +48,12 @@ export const RouteTransitionCoordinator = ({ children }) => {
     active: false,
     keyword: '',
     target: '',
+    quote: '',
+    label: '',
   });
 
   const overlayRef = useRef(null);
-  const traceLineRef = useRef(null);
-  const wordRef = useRef(null);
+  const stripWrapRef = useRef(null);
   const currentTimelineRef = useRef(null);
   const pendingTargetRef = useRef(null);
   const currentGenerationRef = useRef(0);
@@ -92,119 +94,116 @@ export const RouteTransitionCoordinator = ({ children }) => {
         return;
       }
 
-      // Increment generation token so any previous transition attempt is superseded (Amendment 9)
+      // Increment generation token so any previous transition attempt is superseded (latest-navigation-wins)
       const thisGeneration = ++currentGenerationRef.current;
-      const keyword = ROUTE_KEYWORDS[cleanTarget] || 'EVIDENCE';
+      const meta = ROUTE_METADATA[cleanTarget] || { keyword: 'EVIDENCE', quote: '“Keep the source attached.”', label: 'LIVING RECORD' };
       pendingTargetRef.current = targetPath;
 
       // Interruption / Latest-Navigation-Wins handling
       if (currentTimelineRef.current) {
         currentTimelineRef.current.kill();
+        currentTimelineRef.current = null;
       }
       if (safetyTimerRef.current) {
         clearTimeout(safetyTimerRef.current);
+        safetyTimerRef.current = null;
       }
 
       setTransitionState({
         active: true,
-        keyword,
+        keyword: meta.keyword,
         target: targetPath,
+        quote: meta.quote,
+        label: meta.label,
       });
 
-      const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-      const totalDuration = isMobile ? 0.48 : 0.64;
-
       const overlay = overlayRef.current;
-      const trace = traceLineRef.current;
-      const word = wordRef.current;
-      const mainContent = document.getElementById('main-content');
+      const stripWrap = stripWrapRef.current;
 
-      // Clear ready status for pending target so we wait for its fresh mount
-      readyRoutesRef.current.delete(cleanTarget);
+      const totalDuration = 0.58;
 
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({
+        onComplete: () => {
+          // Keep covered while waiting for destination route-ready signal
+        },
+      });
       currentTimelineRef.current = tl;
 
-      // Phase 1 (0–20%): Current composition scales slightly
-      if (mainContent) {
-        tl.to(mainContent, {
-          scale: 0.985,
-          opacity: 0.85,
-          duration: totalDuration * 0.2,
-          ease: 'power2.inOut',
-        });
-      }      // Phase 2 (15–50%): Oxblood trace enters and Carbon mask expands to cover viewport
       if (overlay) {
-        tl.set(overlay, { display: 'flex', opacity: 1, pointerEvents: 'none' }, 0);
+        overlay.style.display = 'flex';
+        overlay.style.pointerEvents = 'auto';
+
+        // Phase 1: Carbon ground sweeps across (0–280ms)
         tl.fromTo(
           overlay,
           { clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' },
           {
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-            duration: totalDuration * 0.35,
-            ease: 'power4.inOut',
+            duration: totalDuration * 0.48,
+            ease: 'power3.inOut',
           },
-          totalDuration * 0.12
+          0
         );
       }
 
-      if (trace) {
+      // Phase 2: EvidenceStrip protagonist handoff
+      if (stripWrap) {
         tl.fromTo(
-          trace,
-          { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: totalDuration * 0.28, ease: 'power3.out' },
-          totalDuration * 0.16
+          stripWrap,
+          { y: 30, opacity: 0, scale: 0.96 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: totalDuration * 0.4,
+            ease: 'power3.out',
+          },
+          totalDuration * 0.18
         );
       }
 
-      if (word) {
-        tl.fromTo(
-          word,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: totalDuration * 0.24, ease: 'power3.out' },
-          totalDuration * 0.2
-        );
-      }
-
-      // Phase 3: Once viewport is visually owned by mask, execute navigate()
-      tl.add(() => {
-        // If a newer navigation superseded this generation, abort this execution
+      // Phase 3: Execute navigation while fully covered
+      setTimeout(() => {
         if (currentGenerationRef.current !== thisGeneration) return;
 
-        const destination = pendingTargetRef.current;
-        if (!destination) return;
-
+        const destination = pendingTargetRef.current || targetPath;
         navigate(destination);
 
-        // Function to proceed with uncovering once route DOM is ready
+        // Reset scroll while covered
+        window.scrollTo(0, 0);
+
         const proceedWithEntrance = () => {
           if (currentGenerationRef.current !== thisGeneration) return;
-
-          if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
-          readyListenerRef.current = null;
-
-          // Reset scroll while fully covered
-          if (typeof window !== 'undefined') {
-            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-          }
-
-          // Move focus to new #main-content with preventScroll
-          const newMain = document.getElementById('main-content');
-          if (newMain) {
-            newMain.focus({ preventScroll: true });
-          }
 
           const exitTl = gsap.timeline({
             onComplete: () => {
               if (currentGenerationRef.current === thisGeneration) {
-                setTransitionState({ active: false, keyword: '', target: '' });
-                if (overlay) overlay.style.display = 'none';
+                setTransitionState({ active: false, keyword: '', target: '', quote: '', label: '' });
+                if (overlay) {
+                  overlay.style.display = 'none';
+                  overlay.style.pointerEvents = 'none';
+                }
                 currentTimelineRef.current = null;
                 pendingTargetRef.current = null;
+
+                // Handoff focus to main content
+                const mainEl = document.getElementById('main-content');
+                if (mainEl) {
+                  mainEl.setAttribute('tabindex', '-1');
+                  mainEl.focus({ preventScroll: true });
+                }
               }
             },
           });
           currentTimelineRef.current = exitTl;
+
+          if (stripWrap) {
+            exitTl.to(
+              stripWrap,
+              { y: -20, opacity: 0, duration: totalDuration * 0.22, ease: 'power2.in' },
+              0
+            );
+          }
 
           if (overlay) {
             exitTl.to(
@@ -214,7 +213,7 @@ export const RouteTransitionCoordinator = ({ children }) => {
                 duration: totalDuration * 0.35,
                 ease: 'power4.inOut',
               },
-              0
+              totalDuration * 0.1
             );
           }
 
@@ -222,9 +221,9 @@ export const RouteTransitionCoordinator = ({ children }) => {
           if (activeMain) {
             exitTl.fromTo(
               activeMain,
-              { y: 20, opacity: 0.7, scale: 1 },
+              { y: 16, opacity: 0.8 },
               { y: 0, opacity: 1, duration: totalDuration * 0.32, ease: 'power3.out' },
-              0.04
+              totalDuration * 0.12
             );
           }
         };
@@ -241,7 +240,7 @@ export const RouteTransitionCoordinator = ({ children }) => {
             }
           };
 
-          // Safety fallback timeout: max 2000ms in case bundle load is delayed
+          // Safety fallback timeout: max 2000ms
           safetyTimerRef.current = setTimeout(() => {
             if (currentGenerationRef.current === thisGeneration) {
               proceedWithEntrance();
@@ -272,11 +271,14 @@ export const RouteTransitionCoordinator = ({ children }) => {
         aria-hidden={!transitionState.active}
         style={{ display: 'none', pointerEvents: 'none' }}
       >
-        <div className="pa-route-transition-inner">
-          <div ref={traceLineRef} className="pa-route-transition-trace" />
-          <span ref={wordRef} className="pa-route-transition-word">
-            {transitionState.keyword}
-          </span>
+        <div ref={stripWrapRef} className="pa-route-transition-strip-wrap">
+          <EvidenceStrip
+            quote={transitionState.quote || '“Keep the source attached.”'}
+            eyebrow="NAVIGATING RECORD"
+            sourceLabel={transitionState.label || 'LIVING RECORD'}
+            theme="mineral"
+            variant="source"
+          />
         </div>
       </div>
     </RouteTransitionContext.Provider>

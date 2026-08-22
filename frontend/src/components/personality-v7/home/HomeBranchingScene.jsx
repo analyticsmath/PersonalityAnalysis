@@ -11,9 +11,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 /**
  * HomeBranchingScene (Scene 3)
- * Primary signature mechanic:
- * One retained response branches into multiple evidence contributions across dimensions:
- * Big Five -> RIASEC -> Work Values (crossing media) -> Career Signals.
+ * Signature mechanic: One retained human response branches into genuinely unequal
+ * multidimensional readings across the field:
+ * Big Five (top-left) -> RIASEC (mid-right) -> Work Values (bottom-left crossing media) -> Career Signals (lower-right).
  */
 export const HomeBranchingScene = () => {
   const sceneRef = useRef(null);
@@ -23,7 +23,7 @@ export const HomeBranchingScene = () => {
   const branch3Ref = useRef(null);
   const branch4Ref = useRef(null);
   const mediaCropRef = useRef(null);
-  const [activeStep, setActiveStep] = useState(4); // default full for static/reduced-motion
+  const [activeStep, setActiveStep] = useState(4);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -51,18 +51,18 @@ export const HomeBranchingScene = () => {
         },
       });
 
-      // Frame 0–25%: Big Five branch emerges
+      // Frame 0–25%: Big Five branch emerges (shorter, upper left trajectory)
       tl.fromTo(
         branch1Ref.current,
-        { strokeDashoffset: 400, opacity: 0 },
+        { strokeDashoffset: 500, opacity: 0 },
         { strokeDashoffset: 0, opacity: 1, duration: 0.25, ease: 'none' },
         0
       );
 
-      // Frame 25–50%: RIASEC branch emerges in different trajectory
+      // Frame 25–50%: RIASEC branch emerges (longer upper-right sweep)
       tl.fromTo(
         branch2Ref.current,
-        { strokeDashoffset: 400, opacity: 0 },
+        { strokeDashoffset: 500, opacity: 0 },
         { strokeDashoffset: 0, opacity: 1, duration: 0.25, ease: 'none' },
         0.25
       );
@@ -70,22 +70,22 @@ export const HomeBranchingScene = () => {
       // Frame 50–75%: Work Values branch crosses documentary media crop
       tl.fromTo(
         mediaCropRef.current,
-        { opacity: 0, scale: 0.95 },
+        { opacity: 0, scale: 0.96 },
         { opacity: 1, scale: 1, duration: 0.2, ease: 'none' },
         0.45
       );
 
       tl.fromTo(
         branch3Ref.current,
-        { strokeDashoffset: 400, opacity: 0 },
+        { strokeDashoffset: 500, opacity: 0 },
         { strokeDashoffset: 0, opacity: 1, duration: 0.25, ease: 'none' },
         0.5
       );
 
-      // Frame 75–100%: Career Signal extends
+      // Frame 75–100%: Career Signal extends down into lower-right field
       tl.fromTo(
         branch4Ref.current,
-        { strokeDashoffset: 400, opacity: 0 },
+        { strokeDashoffset: 500, opacity: 0 },
         { strokeDashoffset: 0, opacity: 1, duration: 0.25, ease: 'none' },
         0.75
       );
@@ -96,96 +96,96 @@ export const HomeBranchingScene = () => {
 
   return (
     <section
-      ref={sceneRef}
       id="home-scene-branching"
+      ref={sceneRef}
       className="pa-home-branching-scene"
-      aria-label="Evidence branching: Multiple contributions from one source"
+      aria-label="Multi-dimensional evidence branching"
     >
       <div className="pa-home-branching-scene__inner">
-        {/* Desktop Asymmetric Branching Stage */}
         <div className="pa-home-branching-scene__stage">
-          {/* Centered Source Strip */}
+          {/* Asymmetrically Anchored Protagonist */}
           <div className="pa-home-branching-scene__strip-center">
             <EvidenceStrip
               quote="“I clarify responsibilities before committing work.”"
-              eyebrow="SOURCE SPECIMEN"
+              eyebrow="RETAINED SOURCE SPECIMEN"
               sourceLabel="SOURCE / ANSWER"
-              theme="carbon"
+              theme="mineral"
               variant="branched"
+              accumulatedMarks={true}
             />
           </div>
 
-          {/* SVG Asymmetric Traces */}
+          {/* Asymmetric SVG Trace Connections (Unequal trajectories) */}
           <svg
             ref={svgRef}
             className="pa-home-branching-scene__svg"
-            viewBox="0 0 1200 700"
+            viewBox="0 0 1200 750"
             preserveAspectRatio="none"
             aria-hidden="true"
           >
             {/* Branch 1: Top-Left to Big Five */}
             <path
               ref={branch1Ref}
-              d="M 450 320 Q 280 240 160 140"
+              d="M 380 320 C 260 260, 180 180, 100 120"
               fill="none"
               stroke="var(--pa-oxblood, #642832)"
               strokeWidth="2.5"
-              strokeDasharray="400"
+              strokeDasharray="500"
               className="pa-home-branching-scene__trace"
             />
 
-            {/* Branch 2: Top-Right to RIASEC */}
+            {/* Branch 2: Mid-Right to RIASEC (Different curvature and length) */}
             <path
               ref={branch2Ref}
-              d="M 750 320 Q 920 230 1060 140"
+              d="M 760 330 C 860 280, 940 260, 1020 200"
               fill="none"
               stroke="var(--pa-oxblood, #642832)"
               strokeWidth="2.5"
-              strokeDasharray="400"
+              strokeDasharray="500"
               className="pa-home-branching-scene__trace"
             />
 
-            {/* Branch 3: Bottom-Left to Work Values across media */}
+            {/* Branch 3: Lower-Left to Work Values (Intersects documentary crop) */}
             <path
               ref={branch3Ref}
-              d="M 460 380 Q 300 480 180 570"
+              d="M 360 410 C 240 470, 160 520, 90 590"
               fill="none"
               stroke="var(--pa-oxblood, #642832)"
               strokeWidth="2.5"
-              strokeDasharray="400"
+              strokeDasharray="500"
               className="pa-home-branching-scene__trace"
             />
 
-            {/* Branch 4: Bottom-Right to Career Signal */}
+            {/* Branch 4: Deep Lower-Right to Career Signal */}
             <path
               ref={branch4Ref}
-              d="M 740 380 Q 900 490 1040 580"
+              d="M 740 420 C 840 510, 920 580, 1040 640"
               fill="none"
               stroke="var(--pa-oxblood, #642832)"
               strokeWidth="2.5"
-              strokeDasharray="400"
+              strokeDasharray="500"
               className="pa-home-branching-scene__trace"
             />
           </svg>
 
-          {/* Endpoint 1: Big Five */}
-          <div className="pa-home-branching-scene__node pa-home-branching-scene__node--top-left">
+          {/* Unequal Endpoint 1: Big Five (~7vw, ~12vh) */}
+          <div className="pa-home-branching-scene__node pa-home-branching-scene__node--bigfive">
             <span className="pa-home-branching-scene__dim-tag">BIG FIVE</span>
             <strong className="pa-home-branching-scene__node-title">conscientiousness</strong>
             <span className="pa-home-branching-scene__node-sub">positive contribution</span>
           </div>
 
-          {/* Endpoint 2: RIASEC */}
-          <div className="pa-home-branching-scene__node pa-home-branching-scene__node--top-right">
+          {/* Unequal Endpoint 2: RIASEC (~61vw, ~22vh) */}
+          <div className="pa-home-branching-scene__node pa-home-branching-scene__node--riasec">
             <span className="pa-home-branching-scene__dim-tag">RIASEC</span>
             <strong className="pa-home-branching-scene__node-title">investigative / conventional</strong>
             <span className="pa-home-branching-scene__node-sub">procedural rigor</span>
           </div>
 
-          {/* Endpoint 3: Work Values + Documentary Media Crop */}
+          {/* Unequal Endpoint 3: Work Values + Documentary Media Crop (~6vw, ~58vh) */}
           <div
             ref={mediaCropRef}
-            className="pa-home-branching-scene__node pa-home-branching-scene__node--bottom-left"
+            className="pa-home-branching-scene__node pa-home-branching-scene__node--values"
           >
             <div className="pa-home-branching-scene__media-crop">
               <ResponsiveEvidenceImage
@@ -201,8 +201,8 @@ export const HomeBranchingScene = () => {
             </div>
           </div>
 
-          {/* Endpoint 4: Career Signal */}
-          <div className="pa-home-branching-scene__node pa-home-branching-scene__node--bottom-right">
+          {/* Unequal Endpoint 4: Career Signal (~64vw, ~68vh) */}
+          <div className="pa-home-branching-scene__node pa-home-branching-scene__node--career">
             <span className="pa-home-branching-scene__dim-tag">CAREER SIGNAL</span>
             <strong className="pa-home-branching-scene__node-title">ownership / planning</strong>
             <span className="pa-home-branching-scene__node-sub">ambiguous problem framing</span>
@@ -214,7 +214,7 @@ export const HomeBranchingScene = () => {
           <div className="pa-home-branching-scene__mobile-strip">
             <EvidenceStrip
               quote="“I clarify responsibilities before committing work.”"
-              eyebrow="RETAINED SOURCE"
+              eyebrow="RETAINED SOURCE SPECIMEN"
               sourceLabel="SOURCE / ANSWER"
               theme="carbon"
               variant="source"

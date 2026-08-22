@@ -19,7 +19,7 @@
 .pa-home-entry-scene__backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 75% 45%, rgba(34, 39, 36, 0.4) 0%, transparent 70%);
+  background-color: var(--pa-carbon, #0D0F0E);
   pointer-events: none;
   z-index: 0;
 }

@@ -1,16 +1,23 @@
 /* ==========================================================================
    Personality Assessor — The Living Record: Progress (Longitudinal Film)
-   Static Frame Reference: Desktop D1-P01 / Mobile Board Page 26
+   Overlapping Temporal Crops & Single Quiet Threshold State
    ========================================================================== */
 
+.pa-progress-page {
+  position: relative;
+  width: 100%;
+  background-color: var(--pa-carbon, #0D0F0E);
+  color: var(--pa-mineral, #F3F5F2);
+  box-sizing: border-box;
+}
+
+/* ── Hero Stage with Physical Photographic Crop Overlap ── */
 .pa-progress-film {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background-color: var(--pa-carbon, #0D0F0E);
-  color: var(--pa-mineral, #F3F5F2);
-  box-sizing: border-box;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .pa-progress-film__crops {
@@ -18,270 +25,251 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
   z-index: 1;
+  pointer-events: none;
 }
 
-.pa-progress-film__crop {
-  width: 50%;
-  height: 100%;
-  opacity: 0.55;
+/* Crop A: Earlier time point (x -8vw, y 7vh, w 68vw, h 82vh) */
+.pa-progress-film__crop--a {
+  position: absolute;
+  left: -8vw;
+  top: 7vh;
+  width: 68vw;
+  height: 82vh;
+  opacity: 0.35;
 }
 
+/* Crop B: Later time point (x 45vw, y -4vh, w 64vw, h 78vh) */
 .pa-progress-film__crop--b {
-  border-left: 2px solid var(--pa-oxblood, #642832);
-}
-
-.pa-progress-film__crop .pa-environment-plane,
-.pa-progress-film__crop .pa-responsive-image-wrap {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  left: 45vw;
+  top: -4vh;
+  width: 64vw;
+  height: 78vh;
+  opacity: 0.28;
 }
 
 .pa-progress-film__overlay {
   position: relative;
-  z-index: 10;
+  z-index: 2;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: calc(var(--pa-header-height, 72px) + 2rem) var(--pa-grid-margin, clamp(32px, 3.4vw, 48px)) 4rem;
+  padding: clamp(6rem, 11vh, 9rem) var(--pa-grid-margin, clamp(32px, 3.4vw, 48px)) 5rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 3.5rem;
   box-sizing: border-box;
 }
 
 .pa-progress-film__header {
+  max-width: 780px;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  max-width: 820px;
+  gap: 1.25rem;
 }
 
-.pa-progress-film__eyebrow {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+.pa-progress-film__meta-tag,
+.pa-progress-insufficient__meta-tag {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.6875rem;
   font-weight: 650;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #D67D8C;
+  color: var(--pa-oxblood, #642832);
 }
 
 .pa-progress-film__h1 {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: clamp(2.6rem, 5.5vw, 4.8rem);
-  font-weight: 520;
-  line-height: 0.94;
-  letter-spacing: -0.04em;
-  color: #FFFFFF;
+  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   margin: 0;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .pa-progress-film__lead {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--pa-pewter, #AEB4AF);
   margin: 0;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 
-/* ── Stacked Overlapping Strips ── */
+/* ── Overlapping Dated Strips Stack (Depth Layering) ── */
 .pa-progress-film__stack {
   position: relative;
+  max-width: 820px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 860px;
-  margin: 1.5rem 0;
 }
 
-.pa-progress-film__strip--one {
-  width: clamp(320px, 48vw, 720px);
-  transform: rotate(-1deg);
-}
-
-.pa-progress-film__strip--two {
-  width: clamp(320px, 48vw, 720px);
-  margin-left: clamp(2rem, 8vw, 6rem);
-  margin-top: -1.25rem;
-  transform: rotate(1deg);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
-}
-
-.pa-progress-film__intersection {
-  background: var(--pa-oxblood, #642832);
-  color: #FFFFFF;
-  padding: 1.25rem 1.5rem;
-  margin-left: clamp(2rem, 6vw, 5rem);
-  margin-top: 0.5rem;
-  max-width: 620px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.pa-progress-film__int-label {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+.pa-progress-film__demo-label {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.625rem;
   font-weight: 650;
   letter-spacing: 0.09em;
   text-transform: uppercase;
+  color: var(--pa-oxblood, #642832);
 }
 
-.pa-progress-film__int-text {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.875rem;
-  line-height: 1.4;
-  margin: 0;
+.pa-progress-film__strip--one {
+  position: relative;
+  z-index: 10;
+  width: 90%;
 }
 
-/* ── Section 2: Longitudinal Contract ── */
-.pa-progress-contract {
-  padding: clamp(5rem, 10vh, 8rem) 0;
-  background-color: var(--pa-mineral, #F3F5F2);
-  color: var(--pa-carbon, #0D0F0E);
+.pa-progress-film__strip--two {
+  position: relative;
+  z-index: 12;
+  width: 90%;
+  margin-left: 10%;
+  margin-top: -1rem;
 }
 
-.pa-progress-contract__inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
+/* Intersection Readout (Appears at physical overlap boundary, unboxed) */
+.pa-progress-film__intersection {
+  position: relative;
+  z-index: 15;
+  padding: 1.5rem 0 0.5rem 0;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 0.4rem;
+  max-width: 620px;
 }
 
-.pa-progress-contract__header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 720px;
-}
-
-.pa-progress-contract__eyebrow {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 0.6875rem;
+.pa-progress-film__int-label {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.625rem;
   font-weight: 650;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--pa-oxblood, #642832);
 }
 
-.pa-progress-contract__h2 {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: clamp(2.2rem, 4.2vw, 3.6rem);
-  font-weight: 520;
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-  margin: 0;
-}
-
-.pa-progress-contract__lead {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 1.05rem;
+.pa-progress-film__int-text {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 0.9375rem;
   line-height: 1.45;
-  color: var(--pa-muted-light, #69716C);
+  color: var(--pa-mineral, #F3F5F2);
   margin: 0;
 }
 
-.pa-progress-contract__states-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+/* ── Quiet Single Insufficient History Threshold Composition ── */
+.pa-progress-insufficient {
+  padding: 4rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px)) 6rem var(--pa-grid-margin, clamp(32px, 3.4vw, 48px));
+  max-width: 1440px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-.pa-progress-contract__state-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(13, 15, 14, 0.1);
-  padding: 2rem;
+.pa-progress-insufficient__inner {
+  max-width: 820px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2.5rem;
 }
 
-.pa-progress-contract__state-card--active {
-  border-left: 3px solid var(--pa-oxblood, #642832);
+.pa-progress-insufficient__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.pa-progress-contract__card-header {
+.pa-progress-insufficient__h2 {
+  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.pa-progress-insufficient__desc {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--pa-pewter, #AEB4AF);
+  margin: 0;
+}
+
+/* Single composition with 1 active strip and 1 empty future registration slot */
+.pa-progress-insufficient__field {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pa-progress-insufficient__strip-active {
+  width: 100%;
+}
+
+.pa-progress-insufficient__strip-future {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  background-color: rgba(34, 39, 36, 0.4);
+  padding: 0;
+}
+
+.pa-progress-insufficient__future-notch {
+  width: 4px;
+  background-color: var(--pa-pewter, #AEB4AF);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+.pa-progress-insufficient__future-body {
+  padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.pa-progress-contract__status {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+.pa-progress-insufficient__future-tag {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.625rem;
   font-weight: 650;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  color: var(--pa-pewter, #AEB4AF);
+  opacity: 0.7;
 }
 
-.pa-progress-contract__status--single {
-  color: var(--pa-muted-light, #69716C);
-}
-
-.pa-progress-contract__status--active {
-  color: var(--pa-oxblood, #642832);
-}
-
-.pa-progress-contract__card-title {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.pa-progress-contract__card-desc {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+.pa-progress-insufficient__future-prompt {
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.875rem;
-  line-height: 1.45;
-  color: var(--pa-muted-light, #69716C);
+  line-height: 1.4;
+  color: var(--pa-pewter, #AEB4AF);
   margin: 0;
 }
 
-.pa-progress-contract__sample-pill {
-  font-family: monospace;
-  font-size: 0.75rem;
-  padding: 0.35rem 0.6rem;
-  background-color: rgba(13, 15, 14, 0.05);
-  align-self: flex-start;
-  margin-top: auto;
+.pa-progress-insufficient__actions {
+  padding-top: 0.5rem;
 }
 
-.pa-progress-contract__sample-pill--green {
-  background-color: rgba(60, 140, 80, 0.1);
-  color: #246B38;
-}
-
+/* ── Mobile and Tablet Adaptations ── */
 @media (max-width: 768px) {
-  .pa-progress-film__crops {
-    flex-direction: column;
-  }
-
-  .pa-progress-film__crop {
+  .pa-progress-film__crop--a {
+    left: 0;
+    top: 0;
     width: 100%;
-    height: 50%;
+    height: 60%;
   }
 
   .pa-progress-film__crop--b {
-    border-left: none;
-    border-top: 2px solid var(--pa-oxblood, #642832);
+    left: 0;
+    top: 40%;
+    width: 100%;
+    height: 60%;
+    opacity: 0.2;
   }
 
   .pa-progress-film__strip--one,
   .pa-progress-film__strip--two {
     width: 100%;
     margin-left: 0;
-    transform: none;
-  }
-
-  .pa-progress-film__intersection {
-    margin-left: 0;
-  }
-
-  .pa-progress-contract__states-grid {
-    grid-template-columns: 1fr;
+    margin-top: 0;
   }
 }

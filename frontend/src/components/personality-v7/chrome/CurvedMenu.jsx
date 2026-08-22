@@ -4,15 +4,16 @@ import { gsap } from 'gsap';
 import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
 import { useCursor } from '../motion/CursorCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
+import EvidenceStrip from '../living-record/EvidenceStrip';
 
 const MENU_ITEMS = [
-  { num: '01', to: '/', label: 'Home', previewAsset: MEDIA_ASSETS_V7.homeContext },
-  { num: '02', to: '/career-intelligence', label: 'Career', previewAsset: MEDIA_ASSETS_V7.careerComplexMachine },
-  { num: '03', to: '/how-it-works', label: 'Process', previewAsset: MEDIA_ASSETS_V7.howProcess },
-  { num: '04', to: '/progress', label: 'Progress', previewAsset: MEDIA_ASSETS_V7.progressStudio },
-  { num: '05', to: '/methodology', label: 'Method', previewAsset: MEDIA_ASSETS_V7.homeAnalysis },
-  { num: '06', to: '/trust', label: 'Trust', previewAsset: MEDIA_ASSETS_V7.trustInspection },
-  { num: '07', to: '/privacy', label: 'Privacy', previewAsset: MEDIA_ASSETS_V7.signupFirstRecord },
+  { num: '01', to: '/', label: 'Home', quote: '“Keep the source attached.”', previewAsset: MEDIA_ASSETS_V7.homeContext },
+  { num: '02', to: '/career-intelligence', label: 'Career Intelligence', quote: '“Where work happens changes what evidence means.”', previewAsset: MEDIA_ASSETS_V7.careerComplexMachine },
+  { num: '03', to: '/how-it-works', label: 'How It Works', quote: '“From a single response to an ongoing record.”', previewAsset: MEDIA_ASSETS_V7.howProcess },
+  { num: '04', to: '/progress', label: 'Progress Record', quote: '“A later assessment adds a record without erasing the first.”', previewAsset: MEDIA_ASSETS_V7.progressStudio },
+  { num: '05', to: '/methodology', label: 'Methodology', quote: '“Every calculation and weighting layer is inspectable.”', previewAsset: MEDIA_ASSETS_V7.homeAnalysis },
+  { num: '06', to: '/trust', label: 'Trust & Governance', quote: '“Every reading traces back to what created it.”', previewAsset: MEDIA_ASSETS_V7.trustInspection },
+  { num: '07', to: '/privacy', label: 'Privacy Document', quote: '“Data belongs entirely to the individual.”', previewAsset: MEDIA_ASSETS_V7.signupFirstRecord },
 ];
 
 export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
@@ -23,7 +24,7 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
   const containerRef = useRef(null);
   const itemsRef = useRef([]);
   const previewRef = useRef(null);
-  const [activePreview, setActivePreview] = useState(MENU_ITEMS[0].previewAsset);
+  const [activeItem, setActiveItem] = useState(MENU_ITEMS[0]);
   const closeButtonRef = useRef(null);
 
   // Focus management & Escape key trap
@@ -79,7 +80,7 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
     };
   }, [isOpen, onClose, triggerRef]);
 
-  // Curved entrance & exit animation
+  // Record catalog entrance & exit animation
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -88,7 +89,6 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
       gsap.killTweensOf(el);
       gsap.killTweensOf(itemsRef.current);
 
-      // 0–520ms: curved surface expands from top-right
       gsap.fromTo(
         el,
         {
@@ -103,7 +103,6 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
         }
       );
 
-      // 160–620ms: items enter with stagger 45–55ms
       gsap.fromTo(
         itemsRef.current,
         { y: 32, opacity: 0 },
@@ -136,7 +135,7 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
   };
 
   const handleItemHover = (item) => {
-    setActivePreview(item.previewAsset);
+    setActiveItem(item);
     setCursorLabel(item.label.toUpperCase());
   };
 
@@ -155,16 +154,25 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
     >
       <div className="pa-curved-menu__backdrop" />
 
-      {/* Atmospheric Media Preview (desktop only) */}
+      {/* Atmospheric Media Preview with Embedded Evidence Strip */}
       <div ref={previewRef} className="pa-curved-menu__preview" aria-hidden="true">
-        {activePreview && (
+        {activeItem.previewAsset && (
           <img
-            src={activePreview.source}
+            src={activeItem.previewAsset.source}
             alt=""
             className="pa-curved-menu__preview-img"
             loading="lazy"
           />
         )}
+        <div className="pa-curved-menu__preview-strip">
+          <EvidenceStrip
+            quote={activeItem.quote}
+            eyebrow="CATALOG SPECIMEN"
+            sourceLabel={activeItem.label.toUpperCase()}
+            theme="mineral"
+            variant="source"
+          />
+        </div>
       </div>
 
       <div className="pa-v7-grid pa-curved-menu__grid">
@@ -209,6 +217,7 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
                   >
                     <span className="pa-curved-menu__num">{item.num}</span>
                     <span className="pa-curved-menu__label">{item.label}</span>
+                    {isActive && <span className="pa-curved-menu__active-notch" aria-hidden="true" />}
                   </a>
                 </li>
               );

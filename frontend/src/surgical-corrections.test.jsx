@@ -91,7 +91,7 @@ describe('The Living Record — Architectural Contracts Suite', () => {
 
   it('10. How It Works runs the Evidence Engine from prompt to stored record', () => {
     expect(howItWorksPage).toContain('pa-engine-hero');
-    expect(howItWorksPage).toContain('initiative-pattern-intermediate');
+    expect(howItWorksPage).toContain('technical-depth-intermediate');
     expect(howItWorksPage).toContain('CalibrationBaseline');
   });
 

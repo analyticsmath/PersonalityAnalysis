@@ -1,6 +1,6 @@
 /* ==========================================================================
    Personality Assessor — The Living Record: HomeTimeRevisitScene (Scene 6)
-   Static Frame Reference: Desktop D1-06A–E / Mobile M1-06
+   Temporal Film Recomposition: Overlapping Crops, No Divider Borders
    ========================================================================== */
 
 .pa-home-time-scene {
@@ -24,21 +24,20 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 55vw;
+  width: 58vw;
   height: 100%;
   z-index: 1;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .pa-home-time-scene__crop-b {
   position: absolute;
   top: 0;
   right: 0;
-  width: 55vw;
+  width: 58vw;
   height: 100%;
   z-index: 2;
-  opacity: 0.75;
-  border-left: 2px solid var(--pa-oxblood, #642832);
+  opacity: 0.65;
 }
 
 .pa-home-time-scene__crop-a .pa-environment-plane,
@@ -73,23 +72,22 @@
 }
 
 .pa-home-time-scene__eyebrow {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.6875rem;
   font-weight: 650;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #D67D8C;
+  color: var(--pa-oxblood, #642832);
 }
 
 .pa-home-time-scene__h2 {
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
   font-size: clamp(2.2rem, 4.2vw, 3.8rem);
-  font-weight: 520;
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-  color: #FFFFFF;
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  color: var(--pa-mineral, #F3F5F2);
   margin: 0;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .pa-home-time-scene__strips-stack {
@@ -105,15 +103,12 @@
 
 .pa-home-time-scene__strip--earlier {
   width: clamp(320px, 48vw, 680px);
-  transform: rotate(-1deg);
 }
 
 .pa-home-time-scene__strip--later {
   width: clamp(320px, 48vw, 680px);
   margin-left: clamp(2rem, 8vw, 6rem);
   margin-top: -1.25rem;
-  transform: rotate(1deg);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .pa-home-time-scene__intersection-reading {
@@ -128,7 +123,7 @@
   gap: 0.5rem;
   background-color: var(--pa-oxblood, #642832);
   color: #FFFFFF;
-  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
+  font-family: var(--pa-font-sans, 'Instrument Sans Variable', sans-serif);
   font-size: 0.6875rem;
   font-weight: 650;
   letter-spacing: 0.08em;
@@ -165,8 +160,6 @@
     width: 100%;
     top: 50%;
     height: 50%;
-    border-left: none;
-    border-top: 2px solid var(--pa-oxblood, #642832);
   }
 
   .pa-home-time-scene__overlay {
@@ -180,7 +173,7 @@
   .pa-home-time-scene__strip--later {
     width: 100%;
     margin-left: 0;
-    transform: none;
+    margin-top: 0;
   }
 
   .pa-home-time-scene__footer {

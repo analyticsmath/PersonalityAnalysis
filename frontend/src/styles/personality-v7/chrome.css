@@ -285,6 +285,23 @@
   color: var(--pa-oxblood);
 }
 
+.pa-curved-menu__preview-strip {
+  position: absolute;
+  bottom: 5vh;
+  left: 3vw;
+  width: clamp(340px, 30vw, 460px);
+  z-index: 5;
+}
+
+.pa-curved-menu__active-notch {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--pa-oxblood);
+  margin-left: 0.75rem;
+  vertical-align: middle;
+}
+
 .pa-curved-menu__footer {
   grid-column: 1 / -1;
   display: flex;
@@ -292,7 +309,6 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  border-top: 1px solid rgba(174, 180, 175, 0.15);
   padding-top: 1.5rem;
 }
 
