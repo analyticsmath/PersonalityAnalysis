@@ -5,23 +5,16 @@ import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
 import MagneticTarget from '../motion/MagneticTarget';
 import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
 import { useCursor } from '../motion/CursorCoordinator';
+import { useScrollContext } from '../motion/SmoothScrollProvider';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * HOME OPENING SCENE STATE MAP
- * 0%   - Environment dominates. Primary media (homeContext) owns 68% viewport area with asymmetric hard clip.
- *        Headline in negative space. Open typographic evidence quote visible. Secondary media (homeAnalysis) at rear depth.
- * 25%  - Headline reduces visual ownership via y/scale/opacity. Primary crop shifts. Evidence remains stable.
- * 50%  - Evidence moves closer to central visual axis. Secondary analytical image crosses behind in depth.
- * 75%  - Environment recedes. Oxblood provenance trace appears. Evidence becomes payload handed to Decision.
- * 100% - Opening chapter resolved. Evidence object persists seamlessly into Decision scene.
- */
 export const HomeOpeningChapter = ({
   evidenceText = '“I prefer clear ownership before committing work.”',
 }) => {
   const { navigateWithTransition } = useRouteTransition();
   const { setApertureActive, setCursorLabel, clearCursorLabel } = useCursor();
+  const { scrollTo } = useScrollContext();
 
   const sectionRef = useRef(null);
   const headlineRef = useRef(null);
@@ -189,9 +182,13 @@ export const HomeOpeningChapter = ({
 
   const handleScrollToContext = (e) => {
     e.preventDefault();
-    const target = document.getElementById('context-decision-chapter');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+    if (scrollTo) {
+      scrollTo('#context-decision-chapter', { offset: 0, duration: 1.2 });
+    } else {
+      const target = document.getElementById('context-decision-chapter');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

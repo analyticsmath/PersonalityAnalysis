@@ -7,15 +7,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const DEFAULT_SOURCE = 'Clarify responsibilities before committing work.';
 
-/**
- * HOME EVIDENCE TRANSFORMATION STATE MAP (PRIMARY SIGNATURE MECHANIC)
- * 0-15%   - Source evidence alone near visual center. Background environmental memory faint.
- * 15-32%  - Big Five branch (upper arc). A visible fragment leaves source along Oxblood trajectory.
- * 32-49%  - RIASEC branch (left/lower trajectory). Big Five remains at reduced ownership (.45).
- * 49-66%  - Work Values. Analytical media fragment (homeAnalysis) enters. Values relationship established.
- * 66-83%  - Career Context. Tangible work environment (evidenceVisible) broadens as largest interpretation zone.
- * 83-100% - Recomposition. Branches return toward source with kinetic text on path. Interpretations remain as residues. Original evidence regains dominant ownership.
- */
 export const HomeTransformationChapter = ({ selectedChoice }) => {
   const currentPhrase = selectedChoice?.text || DEFAULT_SOURCE;
   const containerRef = useRef(null);
@@ -33,6 +24,7 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
   const pathCareerRef = useRef(null);
   const textPathRef = useRef(null);
 
+  // SVG-native traveling fragment group refs
   const fragBigFiveRef = useRef(null);
   const fragRiasecRef = useRef(null);
   const fragValuesRef = useRef(null);
@@ -69,7 +61,7 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
 
     paths.forEach((p) => {
       if (p) {
-        const len = typeof p.getTotalLength === 'function' ? p.getTotalLength() : 450;
+        const len = typeof p.getTotalLength === 'function' ? p.getTotalLength() : 500;
         p.style.strokeDasharray = `${len}`;
         p.style.strokeDashoffset = `${len}`;
       }
@@ -87,9 +79,9 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
         onUpdate: (self) => {
           const prog = self.progress;
 
-          // 1. Big Five (15–32%)
+          // 1. Big Five (15–32%) - Upper arc, compact
           if (pathBigFiveRef.current && fragBigFiveRef.current) {
-            const len = typeof pathBigFiveRef.current.getTotalLength === 'function' ? pathBigFiveRef.current.getTotalLength() : 450;
+            const len = typeof pathBigFiveRef.current.getTotalLength === 'function' ? pathBigFiveRef.current.getTotalLength() : 500;
             const f = Math.min(Math.max((prog - 0.15) / 0.17, 0), 1);
             pathBigFiveRef.current.style.strokeDashoffset = `${len * (1 - f)}`;
 
@@ -98,14 +90,14 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
 
             if (typeof pathBigFiveRef.current.getPointAtLength === 'function') {
               const pt = pathBigFiveRef.current.getPointAtLength(actualF * len);
-              fragBigFiveRef.current.style.transform = `translate3d(${pt.x}px, ${pt.y}px, 0)`;
+              fragBigFiveRef.current.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
             }
-            fragBigFiveRef.current.style.opacity = prog >= 0.12 && prog <= 0.98 ? (f > 0.05 ? '0.92' : '0') : '0';
+            fragBigFiveRef.current.style.opacity = prog >= 0.12 && prog <= 0.98 ? (f > 0.05 ? '0.95' : '0') : '0';
           }
 
-          // 2. RIASEC (32–49%)
+          // 2. RIASEC (32–49%) - Left/lower trajectory
           if (pathRiasecRef.current && fragRiasecRef.current) {
-            const len = typeof pathRiasecRef.current.getTotalLength === 'function' ? pathRiasecRef.current.getTotalLength() : 450;
+            const len = typeof pathRiasecRef.current.getTotalLength === 'function' ? pathRiasecRef.current.getTotalLength() : 500;
             const f = Math.min(Math.max((prog - 0.32) / 0.17, 0), 1);
             pathRiasecRef.current.style.strokeDashoffset = `${len * (1 - f)}`;
 
@@ -114,14 +106,14 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
 
             if (typeof pathRiasecRef.current.getPointAtLength === 'function') {
               const pt = pathRiasecRef.current.getPointAtLength(actualF * len);
-              fragRiasecRef.current.style.transform = `translate3d(${pt.x}px, ${pt.y}px, 0)`;
+              fragRiasecRef.current.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
             }
-            fragRiasecRef.current.style.opacity = prog >= 0.28 && prog <= 0.98 ? (f > 0.05 ? '0.92' : '0') : '0';
+            fragRiasecRef.current.style.opacity = prog >= 0.28 && prog <= 0.98 ? (f > 0.05 ? '0.95' : '0') : '0';
           }
 
-          // 3. Work Values (49–66%)
+          // 3. Work Values (49–66%) - Intersects media plane
           if (pathValuesRef.current && fragValuesRef.current) {
-            const len = typeof pathValuesRef.current.getTotalLength === 'function' ? pathValuesRef.current.getTotalLength() : 450;
+            const len = typeof pathValuesRef.current.getTotalLength === 'function' ? pathValuesRef.current.getTotalLength() : 500;
             const f = Math.min(Math.max((prog - 0.49) / 0.17, 0), 1);
             pathValuesRef.current.style.strokeDashoffset = `${len * (1 - f)}`;
 
@@ -130,19 +122,18 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
 
             if (typeof pathValuesRef.current.getPointAtLength === 'function') {
               const pt = pathValuesRef.current.getPointAtLength(actualF * len);
-              fragValuesRef.current.style.transform = `translate3d(${pt.x}px, ${pt.y}px, 0)`;
+              fragValuesRef.current.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
             }
-            fragValuesRef.current.style.opacity = prog >= 0.45 && prog <= 0.98 ? (f > 0.05 ? '0.92' : '0') : '0';
+            fragValuesRef.current.style.opacity = prog >= 0.45 && prog <= 0.98 ? (f > 0.05 ? '0.95' : '0') : '0';
 
-            // Analytical Media memory enter
             if (valuesMediaRef.current) {
-              valuesMediaRef.current.style.opacity = f > 0.2 ? `${Math.min(f * 0.7, 0.7)}` : '0';
+              valuesMediaRef.current.style.opacity = f > 0.2 ? `${Math.min(f * 0.75, 0.75)}` : '0';
             }
           }
 
-          // 4. Career Context (66–83%)
+          // 4. Career Context (66–83%) - Largest reach
           if (pathCareerRef.current && fragCareerRef.current) {
-            const len = typeof pathCareerRef.current.getTotalLength === 'function' ? pathCareerRef.current.getTotalLength() : 450;
+            const len = typeof pathCareerRef.current.getTotalLength === 'function' ? pathCareerRef.current.getTotalLength() : 500;
             const f = Math.min(Math.max((prog - 0.66) / 0.17, 0), 1);
             pathCareerRef.current.style.strokeDashoffset = `${len * (1 - f)}`;
 
@@ -151,47 +142,41 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
 
             if (typeof pathCareerRef.current.getPointAtLength === 'function') {
               const pt = pathCareerRef.current.getPointAtLength(actualF * len);
-              fragCareerRef.current.style.transform = `translate3d(${pt.x}px, ${pt.y}px, 0)`;
+              fragCareerRef.current.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
             }
-            fragCareerRef.current.style.opacity = prog >= 0.62 && prog <= 0.98 ? (f > 0.05 ? '0.92' : '0') : '0';
+            fragCareerRef.current.style.opacity = prog >= 0.62 && prog <= 0.98 ? (f > 0.05 ? '0.95' : '0') : '0';
 
-            // Career Craft Media enter
             if (careerMediaRef.current) {
               careerMediaRef.current.style.opacity = f > 0.2 ? `${Math.min(f * 0.85, 0.85)}` : '0';
             }
           }
 
-          // Text on kinetic path
+          // Kinetic path text on recomposition
           if (textPathRef.current) {
             const textOffset = Math.min(Math.max((prog - 0.83) / 0.17, 0), 1) * 100;
             textPathRef.current.setAttribute('startOffset', `${textOffset}%`);
           }
 
-          // Destination Interpretation Reveals
+          // Reading Reveals
           if (readingBigFiveRef.current) {
             const f1 = Math.min(Math.max((prog - 0.2) / 0.12, 0), 1);
-            readingBigFiveRef.current.style.opacity = prog >= 0.83 ? '0.8' : (prog >= 0.32 ? '0.45' : `${f1}`);
+            readingBigFiveRef.current.style.opacity = prog >= 0.83 ? '0.85' : (prog >= 0.32 ? '0.45' : `${f1}`);
           }
           if (readingRiasecRef.current) {
             const f2 = Math.min(Math.max((prog - 0.37) / 0.12, 0), 1);
-            readingRiasecRef.current.style.opacity = prog >= 0.83 ? '0.8' : (prog >= 0.49 ? '0.45' : `${f2}`);
+            readingRiasecRef.current.style.opacity = prog >= 0.83 ? '0.85' : (prog >= 0.49 ? '0.45' : `${f2}`);
           }
           if (readingValuesRef.current) {
             const f3 = Math.min(Math.max((prog - 0.54) / 0.12, 0), 1);
-            readingValuesRef.current.style.opacity = prog >= 0.83 ? '0.8' : (prog >= 0.66 ? '0.45' : `${f3}`);
+            readingValuesRef.current.style.opacity = prog >= 0.83 ? '0.85' : (prog >= 0.66 ? '0.45' : `${f3}`);
           }
           if (readingCareerRef.current) {
             const f4 = Math.min(Math.max((prog - 0.71) / 0.12, 0), 1);
-            readingCareerRef.current.style.opacity = prog >= 0.83 ? '0.8' : `${f4}`;
+            readingCareerRef.current.style.opacity = prog >= 0.83 ? '0.85' : `${f4}`;
           }
 
-          // Central Source Recomposition state
           if (sourceEvidenceRef.current) {
-            if (prog >= 0.83) {
-              sourceEvidenceRef.current.style.transform = 'scale(1.05)';
-            } else {
-              sourceEvidenceRef.current.style.transform = 'scale(1)';
-            }
+            sourceEvidenceRef.current.style.transform = prog >= 0.83 ? 'scale(1.04)' : 'scale(1)';
           }
         },
       });
@@ -208,49 +193,49 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
       data-tone="dark"
     >
       <div ref={stageRef} className="pa-home-transformation__stage">
-        {/* SVG Trajectory Canvas with 2-3px Oxblood paths */}
+        {/* SVG Trajectory Canvas with Native SVG Coordinates */}
         <svg
           className="pa-home-transformation__svg-canvas"
           viewBox="0 0 1200 800"
           preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
         >
-          {/* Trajectory 1: Center -> Big Five (Top Left) */}
+          {/* Trajectory 1: Center -> Big Five (Top Left, compact arc) */}
           <path
             ref={pathBigFiveRef}
-            d="M 600 400 C 450 350, 300 250, 240 200"
+            d="M 600 400 C 500 320, 360 220, 260 170"
             className="pa-evidence-path"
           />
 
-          {/* Trajectory 2: Center -> RIASEC (Top Right) */}
+          {/* Trajectory 2: Center -> RIASEC (Left Lower, wide reach) */}
           <path
             ref={pathRiasecRef}
-            d="M 600 400 C 750 350, 900 250, 960 200"
+            d="M 600 400 C 440 430, 280 470, 160 520"
             className="pa-evidence-path"
           />
 
-          {/* Trajectory 3: Center -> Work Values (Bottom Left) */}
+          {/* Trajectory 3: Center -> Work Values (Bottom Right, intersects media) */}
           <path
             ref={pathValuesRef}
-            d="M 600 400 C 450 480, 320 580, 240 620"
+            d="M 600 400 C 680 460, 820 540, 940 600"
             className="pa-evidence-path"
           />
 
-          {/* Trajectory 4: Center -> Career Context (Bottom Right) */}
+          {/* Trajectory 4: Center -> Career Context (Top Right, largest reach) */}
           <path
             ref={pathCareerRef}
-            d="M 600 400 C 750 480, 880 580, 960 620"
+            d="M 600 400 C 760 300, 920 180, 1060 130"
             className="pa-evidence-path"
           />
 
-          {/* Recomposition Curve with Kinetic Text */}
+          {/* Recomposition Kinetic Path */}
           <path
             id="evidence-path-recompose"
-            d="M 240 200 Q 600 280 960 200 Q 900 620 600 400 Q 300 620 240 200"
+            d="M 260 170 Q 600 240 1060 130 Q 940 600 600 400 Q 160 520 260 170"
             fill="none"
-            stroke="rgba(100,40,50,0.35)"
-            strokeWidth="2"
-            strokeDasharray="5 5"
+            stroke="rgba(100,40,50,0.3)"
+            strokeWidth="1.5"
+            strokeDasharray="4 4"
           />
 
           <text className="pa-path-kinetic-text">
@@ -259,9 +244,45 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
               href="#evidence-path-recompose"
               startOffset="0%"
             >
-              same evidence may travel along one path → context → personality → interests → values → career
+              same evidence — four distinct interpretative frameworks
             </textPath>
           </text>
+
+          {/* Pure SVG Traveling Fragment 1: Big Five */}
+          <g ref={fragBigFiveRef} style={{ opacity: 0 }}>
+            <circle cx="0" cy="0" r="4" fill="var(--pa-oxblood)" />
+            <rect x="8" y="-12" width="130" height="24" rx="2" fill="var(--pa-carbon)" stroke="rgba(100,40,50,0.5)" strokeWidth="1" />
+            <text x="14" y="4" fill="var(--pa-mineral)" fontSize="10" fontFamily="var(--pa-font-functional)" fontWeight="500">
+              ownership signal
+            </text>
+          </g>
+
+          {/* Pure SVG Traveling Fragment 2: RIASEC */}
+          <g ref={fragRiasecRef} style={{ opacity: 0 }}>
+            <circle cx="0" cy="0" r="4" fill="var(--pa-oxblood)" />
+            <rect x="8" y="-12" width="130" height="24" rx="2" fill="var(--pa-carbon)" stroke="rgba(100,40,50,0.5)" strokeWidth="1" />
+            <text x="14" y="4" fill="var(--pa-mineral)" fontSize="10" fontFamily="var(--pa-font-functional)" fontWeight="500">
+              system orientation
+            </text>
+          </g>
+
+          {/* Pure SVG Traveling Fragment 3: Work Values */}
+          <g ref={fragValuesRef} style={{ opacity: 0 }}>
+            <circle cx="0" cy="0" r="4" fill="var(--pa-oxblood)" />
+            <rect x="8" y="-12" width="130" height="24" rx="2" fill="var(--pa-carbon)" stroke="rgba(100,40,50,0.5)" strokeWidth="1" />
+            <text x="14" y="4" fill="var(--pa-mineral)" fontSize="10" fontFamily="var(--pa-font-functional)" fontWeight="500">
+              role autonomy
+            </text>
+          </g>
+
+          {/* Pure SVG Traveling Fragment 4: Career Context */}
+          <g ref={fragCareerRef} style={{ opacity: 0 }}>
+            <circle cx="0" cy="0" r="4" fill="var(--pa-oxblood)" />
+            <rect x="8" y="-12" width="130" height="24" rx="2" fill="var(--pa-carbon)" stroke="rgba(100,40,50,0.5)" strokeWidth="1" />
+            <text x="14" y="4" fill="var(--pa-mineral)" fontSize="10" fontFamily="var(--pa-font-functional)" fontWeight="500">
+              architecture focus
+            </text>
+          </g>
         </svg>
 
         {/* Supporting Media Memories */}
@@ -273,52 +294,11 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
           <img src={visibleCraftAsset.source} alt="" className="pa-transformation-media__img" loading="lazy" />
         </div>
 
-        {/* 4 Physically Traveling Evidence Fragments along SVG Trajectories */}
-        <div
-          ref={fragBigFiveRef}
-          className="pa-traveling-fragment pa-traveling-fragment--bigfive"
-          aria-hidden="true"
-          style={{ opacity: 0 }}
-        >
-          <span className="pa-traveling-fragment__mark" />
-          <span className="pa-traveling-fragment__text">“{currentPhrase}”</span>
-        </div>
-
-        <div
-          ref={fragRiasecRef}
-          className="pa-traveling-fragment pa-traveling-fragment--riasec"
-          aria-hidden="true"
-          style={{ opacity: 0 }}
-        >
-          <span className="pa-traveling-fragment__mark" />
-          <span className="pa-traveling-fragment__text">“{currentPhrase}”</span>
-        </div>
-
-        <div
-          ref={fragValuesRef}
-          className="pa-traveling-fragment pa-traveling-fragment--values"
-          aria-hidden="true"
-          style={{ opacity: 0 }}
-        >
-          <span className="pa-traveling-fragment__mark" />
-          <span className="pa-traveling-fragment__text">“{currentPhrase}”</span>
-        </div>
-
-        <div
-          ref={fragCareerRef}
-          className="pa-traveling-fragment pa-traveling-fragment--career"
-          aria-hidden="true"
-          style={{ opacity: 0 }}
-        >
-          <span className="pa-traveling-fragment__mark" />
-          <span className="pa-traveling-fragment__text">“{currentPhrase}”</span>
-        </div>
-
         <div className="pa-home-transformation__content-field">
           {/* Central Dominant Source Evidence Object (Open Typography) */}
           <div ref={sourceEvidenceRef} className="pa-home-transformation__source">
             <div className="pa-home-transformation__provenance-anchor" aria-hidden="true" />
-            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
+            <span className="pa-home-transformation__label">
               Source Evidence Object
             </span>
             <p className="pa-evidence-quote pa-home-transformation__quote">
@@ -341,7 +321,7 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
             </p>
           </div>
 
-          {/* Reading Zone 2: RIASEC (Top Right) — Open Typography */}
+          {/* Reading Zone 2: RIASEC (Left Lower) — Open Typography */}
           <div
             ref={readingRiasecRef}
             className="pa-reading-zone pa-reading-zone--riasec"
@@ -353,7 +333,7 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
             </p>
           </div>
 
-          {/* Reading Zone 3: Work Values (Bottom Left) — Open Typography */}
+          {/* Reading Zone 3: Work Values (Bottom Right) — Open Typography */}
           <div
             ref={readingValuesRef}
             className="pa-reading-zone pa-reading-zone--values"
@@ -365,7 +345,7 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
             </p>
           </div>
 
-          {/* Reading Zone 4: Career Context (Bottom Right) — Open Typography */}
+          {/* Reading Zone 4: Career Context (Top Right) — Open Typography */}
           <div
             ref={readingCareerRef}
             className="pa-reading-zone pa-reading-zone--career"
@@ -375,6 +355,26 @@ export const HomeTransformationChapter = ({ selectedChoice }) => {
             <p className="pa-reading-zone__text">
               Relates to roles requiring system ownership and architecture rather than open-ended ambiguous exploration.
             </p>
+          </div>
+        </div>
+
+        {/* Dedicated Mobile Vertical Journey */}
+        <div className="pa-home-transformation__mobile-track">
+          <div className="pa-home-transformation__mobile-node">
+            <span className="pa-reading-zone__tag">01 • Big Five</span>
+            <p className="pa-reading-zone__text">Conscientiousness Signal: Structured delivery preference.</p>
+          </div>
+          <div className="pa-home-transformation__mobile-node">
+            <span className="pa-reading-zone__tag">02 • RIASEC</span>
+            <p className="pa-reading-zone__text">Vocational Interests: Conventional &amp; Investigative.</p>
+          </div>
+          <div className="pa-home-transformation__mobile-node">
+            <span className="pa-reading-zone__tag">03 • Work Values</span>
+            <p className="pa-reading-zone__text">Environmental Values: Operational clarity and autonomy.</p>
+          </div>
+          <div className="pa-home-transformation__mobile-node">
+            <span className="pa-reading-zone__tag">04 • Career Context</span>
+            <p className="pa-reading-zone__text">Contextual Fit: System architecture and direct ownership.</p>
           </div>
         </div>
       </div>

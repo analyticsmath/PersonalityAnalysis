@@ -97,11 +97,12 @@ export const HowItWorksContent = () => {
           // 1. Draw SVG path synchronously with scroll
           pathEl.style.strokeDashoffset = `${pathLength * (1 - prog)}`;
 
-          // 2. Move traveling evidence object along the SVG path
-          const pt = typeof pathEl.getPointAtLength === 'function'
-            ? pathEl.getPointAtLength(prog * pathLength)
-            : { x: prog * 1000, y: 400 };
-          evidenceEl.style.transform = `translate3d(${pt.x}px, ${pt.y}px, 0)`;
+          // 2. Move traveling evidence token directly within SVG coordinates
+          if (typeof pathEl.getPointAtLength === 'function') {
+            const pt = pathEl.getPointAtLength(prog * pathLength);
+            evidenceEl.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
+            evidenceEl.style.opacity = prog > 0.02 && prog < 0.98 ? '1' : '0';
+          }
 
           // 3. Highlight the active destination card
           const activeIndex = Math.min(Math.floor(prog * 5), 4);
@@ -124,21 +125,29 @@ export const HowItWorksContent = () => {
     <div className="pa-hiw-page">
       {/* ── Section 1: Opening Atmospheric Hero ── */}
       <section className="pa-hiw-hero" data-tone="light">
-        <div className="pa-v7-grid pa-hiw-hero__grid">
-          <div className="pa-hiw-hero__copy">
-            <span className="pa-provenance-tag">Assessment Process & Pipeline</span>
-            <h1 className="pa-display-hero pa-hiw-hero__h1">
-              A response becomes evidence when its context stays attached.
-            </h1>
-            <p className="pa-hiw-hero__lead">
-              Personality Assessor traces how a single contextual answer travels through staged inquiry, decomposes into separate frameworks, and contributes to career relationship exploration.
-            </p>
+        <div className="pa-hiw-hero__stage">
+          {/* Secondary Lab Detail Plane at Depth */}
+          <div className="pa-hiw-hero__media-secondary" aria-hidden="true">
+            <picture>
+              <source type="image/avif" srcSet={MEDIA_ASSETS_V7.evidenceLabDetail.avifSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
+              <source type="image/webp" srcSet={MEDIA_ASSETS_V7.evidenceLabDetail.webpSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
+              <img
+                src={MEDIA_ASSETS_V7.evidenceLabDetail.source}
+                alt=""
+                width={MEDIA_ASSETS_V7.evidenceLabDetail.intrinsicDimensions.width}
+                height={MEDIA_ASSETS_V7.evidenceLabDetail.intrinsicDimensions.height}
+                className="pa-hiw-hero__media-secondary-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
           </div>
 
-          <div className="pa-hiw-hero__media-wrap">
+          {/* Primary Process Media Plane Spanning Centerline */}
+          <div className="pa-hiw-hero__media-primary">
             <picture>
-              <source type="image/avif" srcSet={heroAsset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
-              <source type="image/webp" srcSet={heroAsset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
+              <source type="image/avif" srcSet={heroAsset.avifSrcSet} sizes="(min-width: 901px) 65vw, 100vw" />
+              <source type="image/webp" srcSet={heroAsset.webpSrcSet} sizes="(min-width: 901px) 65vw, 100vw" />
               <img
                 src={heroAsset.source}
                 alt={heroAsset.alt}
@@ -151,13 +160,23 @@ export const HowItWorksContent = () => {
               />
             </picture>
           </div>
+
+          {/* Foreground Hero Typography in Negative Space */}
+          <div className="pa-hiw-hero__content">
+            <h1 className="pa-display-hero pa-hiw-hero__h1">
+              A response becomes evidence when its context stays attached.
+            </h1>
+            <p className="pa-hiw-hero__lead">
+              Personality Assessor traces how a single contextual answer travels through staged inquiry, decomposes into separate frameworks, and contributes to career relationship exploration.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* ── Section 2: Pinned Evidence Journey Stage (~320svh) ── */}
       <section ref={containerRef} className="pa-hiw-journey-container" data-tone="dark">
         <div ref={stageRef} className="pa-hiw-journey-stage">
-          {/* Continuous Animated SVG Curve Canvas */}
+          {/* Continuous Animated SVG Curve Canvas with Native Coordinate Token */}
           <svg
             className="pa-hiw-journey-svg"
             viewBox="0 0 1200 800"
@@ -168,23 +187,22 @@ export const HowItWorksContent = () => {
               ref={pathRef}
               d="M 120 400 C 260 180, 420 180, 560 400 S 840 620, 1080 400"
               fill="none"
-              stroke="#642832"
-              strokeWidth="3"
+              stroke="var(--pa-oxblood)"
+              strokeWidth="2.5"
             />
+
+            {/* Native SVG Traveling Evidence Token */}
+            <g ref={travelingEvidenceRef} style={{ opacity: 0 }}>
+              <circle cx="0" cy="0" r="5" fill="var(--pa-oxblood)" />
+              <rect x="8" y="-12" width="140" height="24" rx="2" fill="var(--pa-carbon)" stroke="rgba(100,40,50,0.6)" strokeWidth="1" />
+              <text x="14" y="4" fill="var(--pa-mineral)" fontSize="10" fontFamily="var(--pa-font-functional)" fontWeight="500">
+                evidence payload
+              </text>
+            </g>
           </svg>
 
-          {/* Physically Moving Evidence Object along the path */}
-          <div ref={travelingEvidenceRef} className="pa-hiw-traveling-evidence">
-            <div className="pa-hiw-traveling-evidence__inner">
-              <span className="pa-hiw-traveling-evidence__tag">Evidence In Transit</span>
-              <p className="pa-evidence-quote pa-hiw-traveling-evidence__text">
-                “I prefer clear ownership before committing work.”
-              </p>
-            </div>
-          </div>
-
-          {/* 5 Open Typography Spatial Destinations across the stage */}
-          <div className="pa-hiw-destinations-grid">
+          {/* 5 Positioned Stage Destinations along the 100vh spatial path */}
+          <div className="pa-hiw-destinations-stage">
             {STAGES.map((stage, idx) => (
               <div
                 key={stage.id}
@@ -194,6 +212,17 @@ export const HowItWorksContent = () => {
                 <div className="pa-hiw-destination__node-marker" aria-hidden="true" />
                 <span className="pa-hiw-destination__num">{stage.num}</span>
                 <span className="pa-hiw-destination__title">{stage.title}</span>
+                <h3 className="pa-hiw-destination__heading">{stage.heading}</h3>
+                <p className="pa-hiw-destination__body">{stage.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Dedicated Mobile Vertical Journey Track */}
+          <div className="pa-hiw-mobile-track">
+            {STAGES.map((stage) => (
+              <div key={`mob-${stage.id}`} className="pa-hiw-mobile-stage">
+                <span className="pa-hiw-destination__num">{stage.num} • {stage.title}</span>
                 <h3 className="pa-hiw-destination__heading">{stage.heading}</h3>
                 <p className="pa-hiw-destination__body">{stage.body}</p>
               </div>

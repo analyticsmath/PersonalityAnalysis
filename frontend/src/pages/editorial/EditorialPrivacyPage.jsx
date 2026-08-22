@@ -17,7 +17,6 @@ export const PrivacyContent = () => {
       <header className="pa-privacy-header" data-tone="light">
         <div className="pa-v7-grid">
           <div className="pa-privacy-header__content">
-            <span className="pa-provenance-tag">Legal & Governance Document</span>
             <h1 className="pa-display-hero pa-privacy-header__h1">Privacy</h1>
             <p className="pa-privacy-header__lead">
               Read how Personality Assessor handles assessment data and the controls available to your account.

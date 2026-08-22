@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 
 const CursorContext = createContext({
@@ -13,7 +13,9 @@ export const CursorCoordinator = ({ children }) => {
   const cursorRef = useRef(null);
   const labelRef = useRef(null);
   const [label, setLabel] = useState('');
+  const [isAperture, setIsAperture] = useState(false);
   const isEnabledRef = useRef(false);
+  const activeZoneRef = useRef({ label: '', isAperture: false });
 
   useEffect(() => {
     const isCoarse = window.matchMedia('(pointer: coarse)').matches;
@@ -37,8 +39,22 @@ export const CursorCoordinator = ({ children }) => {
     const handlePointerMove = (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
-      if (cursorEl.style.opacity === '0' || cursorEl.style.opacity === '') {
+
+      // Check if target is inside a form or input
+      const target = e.target;
+      const isFormElement = target && (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.closest('form')
+      );
+
+      const hasActiveZone = Boolean(activeZoneRef.current.label || activeZoneRef.current.isAperture);
+
+      if (hasActiveZone && !isFormElement) {
         cursorEl.style.opacity = '1';
+      } else {
+        cursorEl.style.opacity = '0';
       }
     };
 
@@ -66,26 +82,43 @@ export const CursorCoordinator = ({ children }) => {
     };
   }, []);
 
-  const setCursorLabel = (text) => {
+  const setCursorLabel = useCallback((text) => {
     if (!isEnabledRef.current) return;
     setLabel(text);
+    activeZoneRef.current.label = text;
     if (cursorRef.current) {
       cursorRef.current.classList.toggle('pa-cursor--active', Boolean(text));
+      if (text || activeZoneRef.current.isAperture) {
+        cursorRef.current.style.opacity = '1';
+      }
     }
-  };
+  }, []);
 
-  const clearCursorLabel = () => {
+  const clearCursorLabel = useCallback(() => {
     if (!isEnabledRef.current) return;
     setLabel('');
+    activeZoneRef.current.label = '';
     if (cursorRef.current) {
       cursorRef.current.classList.remove('pa-cursor--active');
+      if (!activeZoneRef.current.isAperture) {
+        cursorRef.current.style.opacity = '0';
+      }
     }
-  };
+  }, []);
 
-  const setApertureActive = (active) => {
-    if (!isEnabledRef.current || !cursorRef.current) return;
-    cursorRef.current.classList.toggle('pa-cursor--aperture', active);
-  };
+  const setApertureActive = useCallback((active) => {
+    if (!isEnabledRef.current) return;
+    setIsAperture(active);
+    activeZoneRef.current.isAperture = active;
+    if (cursorRef.current) {
+      cursorRef.current.classList.toggle('pa-cursor--aperture', active);
+      if (active || activeZoneRef.current.label) {
+        cursorRef.current.style.opacity = '1';
+      } else {
+        cursorRef.current.style.opacity = '0';
+      }
+    }
+  }, []);
 
   return (
     <CursorContext.Provider value={{ setCursorLabel, clearCursorLabel, setApertureActive }}>

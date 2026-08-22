@@ -133,16 +133,14 @@ export const RouteTransitionCoordinator = ({ children }) => {
           duration: totalDuration * 0.2,
           ease: 'power2.inOut',
         });
-      }
-
-      // Phase 2 (15–50%): Oxblood trace enters and Carbon mask expands to cover viewport
+      }      // Phase 2 (15–50%): Oxblood trace enters and Carbon mask expands to cover viewport
       if (overlay) {
         tl.set(overlay, { display: 'flex', opacity: 1, pointerEvents: 'none' }, 0);
         tl.fromTo(
           overlay,
           { clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' },
           {
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
             duration: totalDuration * 0.35,
             ease: 'power4.inOut',
           },
@@ -208,7 +206,6 @@ export const RouteTransitionCoordinator = ({ children }) => {
           });
           currentTimelineRef.current = exitTl;
 
-          // Mask retracts & destination enters
           if (overlay) {
             exitTl.to(
               overlay,

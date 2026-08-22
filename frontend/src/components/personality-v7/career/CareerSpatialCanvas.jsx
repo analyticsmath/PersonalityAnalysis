@@ -4,7 +4,7 @@ import * as THREE from 'three';
 /**
  * CareerSpatialCanvas — Progressive WebGL 3D Spatial Canvas for Career Atlas
  * Enhances desktop fine-pointer perceptual depth without bloom/glow/chromatic distortion.
- * Disposes all GPU resources on unmount.
+ * Initializes ONCE and persists across active lens selections.
  */
 export const CareerSpatialCanvas = ({ activeIndex = 0, items = [], isMobile = false }) => {
   const mountRef = useRef(null);
@@ -12,6 +12,12 @@ export const CareerSpatialCanvas = ({ activeIndex = 0, items = [], isMobile = fa
   const rendererRef = useRef(null);
   const planesRef = useRef([]);
   const frameIdRef = useRef(null);
+  const activeIndexRef = useRef(activeIndex);
+
+  // Keep ref up to date without re-triggering full scene rebuild
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -44,7 +50,7 @@ export const CareerSpatialCanvas = ({ activeIndex = 0, items = [], isMobile = fa
     const textureLoader = new THREE.TextureLoader();
     const planes = [];
 
-    // Create subtle spatial image planes
+    // Create persistent spatial image planes
     items.forEach((item, idx) => {
       const texture = textureLoader.load(item.asset.source);
       texture.generateMipmaps = true;
@@ -54,12 +60,12 @@ export const CareerSpatialCanvas = ({ activeIndex = 0, items = [], isMobile = fa
       const material = new THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,
-        opacity: idx === activeIndex ? 0.95 : 0.45,
+        opacity: idx === activeIndexRef.current ? 0.95 : 0.45,
       });
 
       const mesh = new THREE.Mesh(geometry, material);
       const xOffset = (idx - 2) * 1.2;
-      const zOffset = idx === activeIndex ? 0.8 : (idx - 2) * -0.4;
+      const zOffset = idx === activeIndexRef.current ? 0.8 : (idx - 2) * -0.4;
       mesh.position.set(xOffset, 0, zOffset);
 
       scene.add(mesh);
@@ -80,13 +86,14 @@ export const CareerSpatialCanvas = ({ activeIndex = 0, items = [], isMobile = fa
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
 
-    // Animation render loop
+    // Animation render loop with smooth interpolation
     const animate = () => {
       camera.rotation.y += (targetRotY - camera.rotation.y) * 0.05;
       camera.rotation.x += (targetRotX - camera.rotation.x) * 0.05;
 
+      const curActive = activeIndexRef.current;
       planes.forEach((mesh, idx) => {
-        const isSelected = idx === activeIndex;
+        const isSelected = idx === curActive;
         const targetZ = isSelected ? 0.8 : (idx - 2) * -0.4;
         mesh.position.z += (targetZ - mesh.position.z) * 0.08;
         mesh.material.opacity += ((isSelected ? 0.95 : 0.4) - mesh.material.opacity) * 0.08;
@@ -136,7 +143,7 @@ export const CareerSpatialCanvas = ({ activeIndex = 0, items = [], isMobile = fa
       rendererRef.current = null;
       planesRef.current = [];
     };
-  }, [activeIndex, items, isMobile]);
+  }, [items, isMobile]);
 
   return (
     <div
@@ -153,5 +160,4 @@ export const CareerSpatialCanvas = ({ activeIndex = 0, items = [], isMobile = fa
     />
   );
 };
-
 export default CareerSpatialCanvas;

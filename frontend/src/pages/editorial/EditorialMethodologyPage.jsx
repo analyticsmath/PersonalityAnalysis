@@ -89,7 +89,6 @@ export const MethodologyContent = () => {
       <header className="pa-methodology-header" data-tone="light">
         <div className="pa-v7-grid">
           <div className="pa-methodology-header__content">
-            <span className="pa-provenance-tag">Technical & Psychometric Architecture</span>
             <h1 className="pa-display-hero pa-methodology-header__h1">
               See how each reading is constructed.
             </h1>
@@ -131,7 +130,6 @@ export const MethodologyContent = () => {
                 id={sec.id}
                 className="pa-methodology-section"
               >
-                <span className="pa-methodology-section__tag">{sec.title} Architecture</span>
                 <h2 className="pa-heading-major pa-methodology-section__title">
                   {sec.title}
                 </h2>
@@ -142,24 +140,21 @@ export const MethodologyContent = () => {
             ))}
           </main>
 
-          {/* Right Column: Thin Evolving Evidence Diagram */}
+          {/* Right Column: Evolving Framework Diagram (Direct in Page Field) */}
           <aside className="pa-methodology-diagram" aria-hidden="true">
-            <div className="pa-methodology-diagram__card">
-              <span className="pa-methodology-diagram__title">Active Framework</span>
-              <div className="pa-methodology-diagram__nodes">
-                {FRAMEWORK_SECTIONS.map((sec) => {
-                  const isActive = activeSectionId === sec.id;
-                  return (
-                    <div
-                      key={sec.id}
-                      className={`pa-diagram-node ${isActive ? 'pa-diagram-node--active' : ''}`}
-                    >
-                      <div className="pa-diagram-node__dot" />
-                      <span className="pa-diagram-node__name">{sec.title}</span>
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="pa-methodology-diagram__nodes">
+              {FRAMEWORK_SECTIONS.map((sec) => {
+                const isActive = activeSectionId === sec.id;
+                return (
+                  <div
+                    key={sec.id}
+                    className={`pa-diagram-node ${isActive ? 'pa-diagram-node--active' : ''}`}
+                  >
+                    <div className="pa-diagram-node__dot" />
+                    <span className="pa-diagram-node__name">{sec.title}</span>
+                  </div>
+                );
+              })}
             </div>
           </aside>
         </div>

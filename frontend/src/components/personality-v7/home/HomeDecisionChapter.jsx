@@ -4,10 +4,10 @@ import MagneticTarget from '../motion/MagneticTarget';
 import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
 
 export const DECISION_CHOICES = [
-  { id: 'c1', text: 'Clarify responsibilities before committing work.', desktopPos: { left: '6%', top: '10%' } },
-  { id: 'c2', text: 'Start a small test and learn from it.', desktopPos: { left: '36%', top: '30%' } },
-  { id: 'c3', text: 'Bring the teams together and align priorities.', desktopPos: { left: '10%', top: '56%' } },
-  { id: 'c4', text: 'Choose a direction and adjust as evidence arrives.', desktopPos: { left: '42%', top: '78%' } },
+  { id: 'c1', text: 'Clarify responsibilities before committing work.', desktopPos: { left: '4%', top: '8%' } },
+  { id: 'c2', text: 'Start a small test and learn from it.', desktopPos: { left: '34%', top: '29%' } },
+  { id: 'c3', text: 'Bring the teams together and align priorities.', desktopPos: { left: '8%', top: '55%' } },
+  { id: 'c4', text: 'Choose a direction and adjust as evidence arrives.', desktopPos: { left: '40%', top: '76%' } },
 ];
 
 /**
@@ -102,7 +102,6 @@ export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
       <div className="pa-v7-grid pa-home-decision__grid">
         {/* Left 5 Columns: Question Prompt */}
         <div className="pa-home-decision__prompt">
-          <span className="pa-provenance-tag">Decision Scenario</span>
           <h2 className="pa-heading-major pa-home-decision__h2">
             Context comes first.
           </h2>

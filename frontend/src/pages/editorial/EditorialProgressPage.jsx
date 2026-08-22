@@ -74,7 +74,6 @@ export const ProgressContent = () => {
       <section className="pa-progress-hero" data-tone="light">
         <div className="pa-v7-grid pa-progress-hero__grid">
           <div className="pa-progress-hero__copy">
-            <span className="pa-provenance-tag">Longitudinal Record Management</span>
             <h1 className="pa-display-hero pa-progress-hero__h1">
               A later assessment should add evidence without erasing the earlier record.
             </h1>
@@ -102,13 +101,10 @@ export const ProgressContent = () => {
         </div>
       </section>
 
-      {/* ── Section 2: Temporal Recomposition & Split Vignette Field ── */}
+      {/* ── Section 2: Temporal Recomposition & Overlapping Field ── */}
       <section ref={recompositionStageRef} className="pa-progress-recomposition" data-tone="dark">
-        <div className="pa-v7-grid pa-progress-recomposition__grid">
+        <div className="pa-progress-recomposition__stage">
           <div className="pa-progress-recomposition__header">
-            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
-              Temporal Evidence Synthesis
-            </span>
             <h2 className="pa-heading-major pa-progress-recomposition__h2">
               Three Inspectable States
             </h2>
@@ -117,19 +113,19 @@ export const ProgressContent = () => {
             </p>
           </div>
 
-          <div className="pa-progress-spatial-field">
-            {/* Plane 1: Earlier Evidence */}
-            <div ref={earlierPlaneRef} className="pa-temporal-card pa-temporal-card--earlier">
-              <span className="pa-temporal-card__tag">01 • Earlier Baseline</span>
-              <p className="pa-evidence-quote pa-temporal-card__quote">
+          <div className="pa-progress-recomposition__field">
+            {/* Plane 1: Earlier Evidence Baseline */}
+            <div ref={earlierPlaneRef} className="pa-progress-plane pa-progress-plane--earlier">
+              <span className="pa-progress-plane__index">01 • Earlier Baseline</span>
+              <p className="pa-evidence-quote pa-progress-plane__quote">
                 “I avoid ambiguous ownership because it makes delivery harder to control.”
               </p>
-              <span className="pa-temporal-card__meta">Stage 1 Initial Record</span>
+              <span className="pa-progress-plane__meta">Stage 1 Initial Record • Baseline Operating Mode</span>
             </div>
 
             {/* Plane 2: New Context Documentary Crop */}
-            <div ref={laterMediaCropRef} className="pa-temporal-card pa-temporal-card--media">
-              <div className="pa-temporal-crop-frame">
+            <div ref={laterMediaCropRef} className="pa-progress-plane pa-progress-plane--media">
+              <div className="pa-progress-crop-frame">
                 <picture>
                   <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 30vw, 100vw" />
                   <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 30vw, 100vw" />
@@ -138,59 +134,71 @@ export const ProgressContent = () => {
                     alt={asset.alt}
                     width={asset.intrinsicDimensions.width}
                     height={asset.intrinsicDimensions.height}
-                    className="pa-temporal-crop-img"
+                    className="pa-progress-crop-img"
                     loading="lazy"
                     decoding="async"
                   />
                 </picture>
               </div>
-              <div className="pa-temporal-card__overlay-text">
-                <span className="pa-temporal-card__tag">02 • New Context</span>
-                <p className="pa-evidence-quote pa-temporal-card__quote" style={{ color: 'var(--pa-mineral)' }}>
+              <div className="pa-progress-plane__overlay-content">
+                <span className="pa-progress-plane__index">02 • New Context</span>
+                <p className="pa-evidence-quote pa-progress-plane__quote">
                   “Led cross-functional release where ownership shifted continuously.”
                 </p>
               </div>
             </div>
 
-            {/* Plane 3: Synthesized Revised Reading */}
-            <div ref={revisedReadingRef} className="pa-temporal-card pa-temporal-card--revised">
-              <span className="pa-provenance-tag" style={{ color: 'var(--pa-oxblood)' }}>
+            {/* Plane 3: Synthesized Revised Reading at Intersection */}
+            <div ref={revisedReadingRef} className="pa-progress-plane pa-progress-plane--revised">
+              <div className="pa-progress-plane__provenance-mark" aria-hidden="true" />
+              <span className="pa-progress-plane__index pa-progress-plane__index--oxblood">
                 03 • Synthesized Reading
               </span>
-              <h3 className="pa-temporal-card__revised-title">
+              <h3 className="pa-progress-plane__revised-title">
                 Demonstrated Adaptability in Unowned Delivery
               </h3>
-              <p className="pa-temporal-card__revised-body">
+              <p className="pa-progress-plane__revised-body">
                 The baseline preference for clarity remains valid. The later evidence adds demonstrated capacity to navigate ambiguity under project delivery constraints.
               </p>
-              <span className="pa-temporal-card__meta">Both earlier baseline and new context remain inspectable.</span>
+              <span className="pa-progress-plane__subtext">Both earlier baseline and new context remain inspectable.</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Section 3: Longitudinal Principles & CTA ── */}
+      {/* ── Section 3: Longitudinal Principles Trace & CTA ── */}
       <section className="pa-progress-principles" data-tone="light">
-        <div className="pa-v7-grid pa-progress-principles__grid">
-          <div className="pa-progress-principle-col">
-            <h3 className="pa-heading-sub">What stayed stable</h3>
-            <p className="pa-progress-principle-body">
-              Core traits and stable work preferences reinforce confidence in recurring patterns across career milestones.
-            </p>
-          </div>
+        <div className="pa-progress-principles__stage">
+          <div className="pa-progress-trace-track">
+            <div className="pa-progress-milestone">
+              <div className="pa-progress-milestone__node" aria-hidden="true" />
+              <div className="pa-progress-milestone__content">
+                <h3 className="pa-heading-sub">What stayed stable</h3>
+                <p className="pa-progress-principle-body">
+                  Core traits and stable work preferences reinforce confidence in recurring patterns across career milestones.
+                </p>
+              </div>
+            </div>
 
-          <div className="pa-progress-principle-col">
-            <h3 className="pa-heading-sub">What changed</h3>
-            <p className="pa-progress-principle-body">
-              New project challenges demonstrate expanded capability without discarding previous observations.
-            </p>
-          </div>
+            <div className="pa-progress-milestone">
+              <div className="pa-progress-milestone__node" aria-hidden="true" />
+              <div className="pa-progress-milestone__content">
+                <h3 className="pa-heading-sub">What changed</h3>
+                <p className="pa-progress-principle-body">
+                  New project challenges demonstrate expanded capability without discarding previous observations.
+                </p>
+              </div>
+            </div>
 
-          <div className="pa-progress-principle-col">
-            <h3 className="pa-heading-sub">What appeared later</h3>
-            <p className="pa-progress-principle-body">
-              Longitudinal comparison reveals emerging vocational interest vectors as you gain seniority.
-            </p>
+            <div className="pa-progress-milestone">
+              <div className="pa-progress-milestone__node" aria-hidden="true" />
+              <div className="pa-progress-milestone__content">
+                <h3 className="pa-heading-sub">What appeared later</h3>
+                <p className="pa-progress-principle-body">
+                  Longitudinal comparison reveals emerging vocational interest vectors as you gain seniority.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="pa-progress-principles__cta-wrap">

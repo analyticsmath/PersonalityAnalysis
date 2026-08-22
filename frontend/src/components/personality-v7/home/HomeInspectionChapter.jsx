@@ -7,7 +7,16 @@ export const HomeInspectionChapter = () => {
   const { navigateWithTransition } = useRouteTransition();
   const { setCursorLabel, clearCursorLabel, setApertureActive } = useCursor();
   const [isApertureRevealed, setIsApertureRevealed] = useState(false);
+  const [activeTier, setActiveTier] = useState(0);
   const surfaceRef = useRef(null);
+
+  const provenanceTiers = [
+    { num: '01', name: 'You Supplied', desc: 'Direct contextual response to project deadline scenario.' },
+    { num: '02', name: 'System Calculated', desc: 'Conscientiousness index & vocational interest vectors.' },
+    { num: '03', name: 'System Compared', desc: 'Weighted against 17 role requirement condition matrices.' },
+    { num: '04', name: 'AI Assisted', desc: 'Contextual commentary and developmental suggestions only.' },
+    { num: '05', name: 'User Controlled', desc: 'Selective disclosure, sharing boundaries and verification state.' },
+  ];
 
   const handleMouseEnter = () => {
     setCursorLabel('INSPECT');
@@ -32,11 +41,10 @@ export const HomeInspectionChapter = () => {
     <section
       className="pa-home-inspection"
       aria-label="Inspection & Provenance Chapter"
-      data-tone="light"
+      data-tone="dark"
     >
-      <div className="pa-v7-grid pa-home-inspection__grid">
+      <div className="pa-home-inspection__stage">
         <div className="pa-home-inspection__header">
-          <span className="pa-provenance-tag">Verifiable Provenance</span>
           <h2 className="pa-heading-major pa-home-inspection__h2">
             Inspect how a reading was built.
           </h2>
@@ -45,56 +53,45 @@ export const HomeInspectionChapter = () => {
           </p>
         </div>
 
-        {/* Interactive Contextual Inspection Surface */}
+        {/* Interactive Carbon Inspection Ground */}
         <div
           ref={surfaceRef}
-          className={`pa-inspection-surface ${isApertureRevealed ? 'pa-inspection-surface--revealed' : ''}`}
+          className={`pa-inspection-ground ${isApertureRevealed ? 'pa-inspection-ground--revealed' : ''}`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           tabIndex="0"
           role="region"
           aria-label="Inspectable reading with provenance layers"
         >
-          {/* Surface Reading Layer */}
-          <div className="pa-inspection-surface__foreground">
-            <span className="pa-provenance-tag">Visible Reading Layer</span>
-            <p className="pa-evidence-quote pa-inspection-surface__quote">
+          {/* Inspected Reading Object (Open Typography) */}
+          <div className="pa-inspection-ground__reading">
+            <div className="pa-inspection-ground__provenance-mark" aria-hidden="true" />
+            <p className="pa-evidence-quote pa-inspection-ground__quote">
               “Prefers clear ownership and system boundaries before committing work.”
             </p>
-            <p className="pa-inspection-surface__subtext">
-              Hover cursor with pointer or use the button below to inspect provenance metadata.
-            </p>
+            <span className="pa-inspection-ground__status">
+              Source Record • Complete Provenance Chain (5 Tiers)
+            </span>
           </div>
 
-          {/* Under-the-Hood Provenance Layer */}
-          <div className="pa-inspection-surface__revealed-grid">
-            <div className="pa-provenance-tier">
-              <span className="pa-provenance-tier__tag">01 • You Supplied</span>
-              <p className="pa-provenance-tier__value">
-                Direct contextual response to project deadline scenario.
-              </p>
-            </div>
-
-            <div className="pa-provenance-tier">
-              <span className="pa-provenance-tier__tag">02 • System Calculated</span>
-              <p className="pa-provenance-tier__value">
-                Conscientiousness index & conventional interest vectors.
-              </p>
-            </div>
-
-            <div className="pa-provenance-tier">
-              <span className="pa-provenance-tier__tag">03 • System Compared</span>
-              <p className="pa-provenance-tier__value">
-                Weighted against 17 backend role requirement matrices.
-              </p>
-            </div>
-
-            <div className="pa-provenance-tier">
-              <span className="pa-provenance-tier__tag">04 • AI Assisted</span>
-              <p className="pa-provenance-tier__value">
-                Contextual commentary and development suggestions only.
-              </p>
-            </div>
+          {/* 5-State Provenance Path */}
+          <div className="pa-inspection-ground__trace-path">
+            {provenanceTiers.map((tier, idx) => {
+              const isActive = activeTier === idx || isApertureRevealed;
+              return (
+                <button
+                  key={tier.num}
+                  type="button"
+                  className={`pa-provenance-node ${isActive ? 'pa-provenance-node--active' : ''}`}
+                  onClick={() => setActiveTier(idx)}
+                  onFocus={() => setActiveTier(idx)}
+                >
+                  <span className="pa-provenance-node__num">{tier.num}</span>
+                  <span className="pa-provenance-node__name">{tier.name}</span>
+                  <p className="pa-provenance-node__desc">{tier.desc}</p>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -106,7 +103,7 @@ export const HomeInspectionChapter = () => {
             onClick={toggleAperture}
             aria-pressed={isApertureRevealed}
           >
-            {isApertureRevealed ? 'Hide provenance layer' : 'Inspect reading'}
+            {isApertureRevealed ? 'Collapse provenance chain' : 'Inspect full provenance chain'}
           </button>
 
           <MagneticTarget>

@@ -80,23 +80,31 @@ export const TrustContent = () => {
 
   return (
     <div className="pa-trust-page">
-      {/* ── Section 1: Hero & Provenance Overview ── */}
+      {/* ── Section 1: Hero & Provenance Overview (Dual Media Integration) ── */}
       <section className="pa-trust-hero" data-tone="light">
-        <div className="pa-v7-grid pa-trust-hero__grid">
-          <div className="pa-trust-hero__copy">
-            <span className="pa-provenance-tag">Inspection & Provenance Architecture</span>
-            <h1 className="pa-display-hero pa-trust-hero__h1">
-              Know what you supplied, what the system calculated, and what it added.
-            </h1>
-            <p className="pa-trust-hero__lead">
-              Trust requires transparency. Personality Assessor separates user inputs from algorithmic calculations, role comparisons, and AI commentary so every conclusion remains verifiable.
-            </p>
+        <div className="pa-trust-hero__stage">
+          {/* Secondary Diagnostic Media Plane */}
+          <div className="pa-trust-hero__media-secondary" aria-hidden="true">
+            <picture>
+              <source type="image/avif" srcSet={diagnosticAsset.avifSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
+              <source type="image/webp" srcSet={diagnosticAsset.webpSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
+              <img
+                src={diagnosticAsset.source}
+                alt=""
+                width={diagnosticAsset.intrinsicDimensions.width}
+                height={diagnosticAsset.intrinsicDimensions.height}
+                className="pa-trust-hero__media-secondary-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
           </div>
 
-          <div className="pa-trust-hero__media-wrap">
+          {/* Primary Human Inspection Media Plane */}
+          <div className="pa-trust-hero__media-primary">
             <picture>
-              <source type="image/avif" srcSet={heroAsset.avifSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
-              <source type="image/webp" srcSet={heroAsset.webpSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
+              <source type="image/avif" srcSet={heroAsset.avifSrcSet} sizes="(min-width: 901px) 50vw, 100vw" />
+              <source type="image/webp" srcSet={heroAsset.webpSrcSet} sizes="(min-width: 901px) 50vw, 100vw" />
               <img
                 src={heroAsset.source}
                 alt={heroAsset.alt}
@@ -109,91 +117,77 @@ export const TrustContent = () => {
               />
             </picture>
           </div>
+
+          {/* Foreground Hero Typography in Negative Space */}
+          <div className="pa-trust-hero__content">
+            <h1 className="pa-display-hero pa-trust-hero__h1">
+              Know what you supplied, what the system calculated, and what it added.
+            </h1>
+            <p className="pa-trust-hero__lead">
+              Trust requires transparency. Personality Assessor separates user inputs from algorithmic calculations, role comparisons, and AI commentary so every conclusion remains verifiable.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* ── Section 2: Five Provenance Layers Around One Evidence Record ── */}
       <section className="pa-trust-tiers-section" data-tone="dark">
-        <div className="pa-v7-grid pa-trust-tiers-section__grid">
+        <div className="pa-trust-tiers-section__stage">
           <div className="pa-trust-tiers-section__header">
-            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
-              Provenance Tiers
-            </span>
             <h2 className="pa-heading-major pa-trust-tiers-section__h2">
               Five Verifiable Layers
             </h2>
             <p className="pa-trust-tiers-section__lead">
-              Select any tier to trace how information originates, transforms, and remains under your agency.
+              Trace how information originates, transforms, and remains under your agency.
             </p>
           </div>
 
-          {/* Tier Selection Tabs */}
-          <div className="pa-trust-tiers-tabs">
-            {PROVENANCE_TIERS.map((tier, idx) => {
-              const isSelected = activeTierIdx === idx;
-              return (
-                <MagneticTarget key={tier.id} maxDisplacement={6}>
+          {/* Continuous Oxblood Provenance Trace with 5 Nodes */}
+          <div className="pa-trust-trace-field">
+            <div className="pa-trust-trace-nodes">
+              {PROVENANCE_TIERS.map((tier, idx) => {
+                const isSelected = activeTierIdx === idx;
+                return (
                   <button
+                    key={tier.id}
                     type="button"
                     onClick={() => setActiveTierIdx(idx)}
                     onMouseEnter={() => setCursorLabel('TRACE')}
                     onMouseLeave={() => clearCursorLabel()}
-                    className={`pa-trust-tab-btn ${isSelected ? 'pa-trust-tab-btn--active' : ''}`}
+                    className={`pa-trust-trace-node ${isSelected ? 'pa-trust-trace-node--active' : ''}`}
                     aria-pressed={isSelected}
                   >
-                    <span className="pa-trust-tab-btn__num">{tier.num}</span>
-                    <span className="pa-trust-tab-btn__label">{tier.label}</span>
+                    <span className="pa-trust-trace-node__num">{tier.num}</span>
+                    <span className="pa-trust-trace-node__label">{tier.label}</span>
+                    <span className="pa-trust-trace-node__title">{tier.title}</span>
                   </button>
-                </MagneticTarget>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
 
-          {/* Active Tier Display & Connected Physical SVG Trajectory */}
-          <div className="pa-trust-tier-display">
-            <svg className="pa-trust-tier-svg" viewBox="0 0 800 200" aria-hidden="true">
-              <path
-                d="M 50 100 Q 200 40 400 100 T 750 100"
-                fill="none"
-                stroke="#642832"
-                strokeWidth="2"
-                strokeDasharray="6 6"
-              />
-            </svg>
+            {/* Active Tier Display */}
+            <div className="pa-trust-tier-display">
+              <div className="pa-trust-tier-display__open">
+                <div className="pa-trust-tier-display__provenance-mark" aria-hidden="true" />
+                <span className="pa-trust-tier-display__tier-label">
+                  {activeTier.num} • {activeTier.title}
+                </span>
+                <h3 className="pa-trust-tier-display__title">{activeTier.label}</h3>
+                <p className="pa-trust-tier-display__statement">{activeTier.statement}</p>
+                <p className="pa-trust-tier-display__details">{activeTier.details}</p>
 
-            <div className="pa-trust-tier-display__open">
-              <span className="pa-provenance-tag" style={{ color: 'var(--pa-oxblood)' }}>
-                {activeTier.num} • {activeTier.title}
-              </span>
-              <h3 className="pa-trust-tier-display__title">{activeTier.label}</h3>
-              <p className="pa-trust-tier-display__statement">{activeTier.statement}</p>
-              <p className="pa-trust-tier-display__details">{activeTier.details}</p>
-
-              {/* Diagnostic Telemetry Visual Plane */}
-              <div className="pa-trust-tier-display__media" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcSet={diagnosticAsset.avifSrcSet} sizes="(min-width: 901px) 25vw, 50vw" />
-                  <source type="image/webp" srcSet={diagnosticAsset.webpSrcSet} sizes="(min-width: 901px) 25vw, 50vw" />
-                  <img
-                    src={diagnosticAsset.source}
-                    alt=""
-                    className="pa-trust-tier-display__img"
-                    loading="lazy"
-                  />
-                </picture>
+                {activeTier.id === 'controlled' && (
+                  <div className="pa-trust-tier-display__action">
+                    <Link
+                      to="/account/privacy"
+                      className="pa-link-text"
+                      style={{ color: 'var(--pa-mineral)', textDecoration: 'underline' }}
+                    >
+                      Inspect your account privacy controls &rarr;
+                    </Link>
+                  </div>
+                )}
               </div>
-
-              {activeTier.id === 'controlled' && (
-                <div className="pa-trust-tier-display__action">
-                  <Link
-                    to="/account/privacy"
-                    className="pa-link-text"
-                    style={{ color: 'var(--pa-mineral)', textDecoration: 'underline' }}
-                  >
-                    Inspect your account privacy controls &rarr;
-                  </Link>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -203,7 +197,6 @@ export const TrustContent = () => {
       <section className="pa-trust-inspection-aperture-section" data-tone="light">
         <div className="pa-v7-grid pa-trust-inspection-aperture-section__grid">
           <div className="pa-trust-aperture-header">
-            <span className="pa-provenance-tag">Illustrative provenance trace</span>
             <h2 className="pa-heading-major">Trace Any Record Reading</h2>
             <p className="pa-trust-aperture-lead">
               Hover with fine pointer or toggle the button to inspect the underlying calculation and comparison metadata.
@@ -219,7 +212,6 @@ export const TrustContent = () => {
             aria-label="Inspectable reading with provenance layers"
           >
             <div className="pa-inspection-surface__foreground">
-              <span className="pa-provenance-tag">Visible Reading</span>
               <p className="pa-evidence-quote pa-inspection-surface__quote">
                 “Prefers structured problem solving and clear accountability.”
               </p>

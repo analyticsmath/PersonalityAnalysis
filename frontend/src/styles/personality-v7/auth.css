@@ -324,6 +324,9 @@
 }
 
 @media (max-width: 1024px) {
+  .pa-auth-signup__env-layer {
+    display: none;
+  }
   .pa-auth-signup__form-col {
     grid-column: 1 / -1;
   }

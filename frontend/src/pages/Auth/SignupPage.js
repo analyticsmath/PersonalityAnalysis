@@ -183,7 +183,6 @@ export const SignupPage = () => {
         <div className="pa-v7-grid pa-auth-signup__grid" data-tone="light">
           {/* Foreground Form (Left / Center) */}
           <div className="pa-auth-signup__form-col">
-            <span className="pa-provenance-tag">New Record Initialisation</span>
             <h1 className="pa-display-hero pa-auth-signup__h1">
               Start a record that can change with new evidence.
             </h1>
@@ -376,7 +375,6 @@ export const SignupPage = () => {
           {/* Open Typographic Step Indicators (BACKGROUND, CONTEXT, FIRST ASSESSMENT) */}
           <div className="pa-auth-signup__evidence-preview-col" aria-hidden="true">
             <div className="pa-auth-signup__step-labels">
-              <span className="pa-provenance-tag">Staged Account Inquiry</span>
               <div className={`pa-auth-step-label ${activeStep >= 1 ? 'pa-auth-step-label--active' : ''}`}>
                 <span className="pa-auth-step-label__num">01</span>
                 <span className="pa-auth-step-label__text">BACKGROUND</span>

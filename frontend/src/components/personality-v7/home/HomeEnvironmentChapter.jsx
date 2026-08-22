@@ -7,19 +7,15 @@ import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * HOME CAREER ENVIRONMENT BRIDGE STATE MAP
- * 0%   - Evidence occupies foreground left plane. Work environment image begins as partial field.
- * 50%  - Image broadens and crosses into negative space as Career Context gains ownership.
- * 100% - Clearly communicates that the same evidence contributes differently when work conditions change.
- */
 export const HomeEnvironmentChapter = () => {
   const { navigateWithTransition } = useRouteTransition();
   const sectionRef = useRef(null);
   const evidencePlaneRef = useRef(null);
   const mediaPlaneRef = useRef(null);
+  const secondaryPlaneRef = useRef(null);
 
-  const asset = MEDIA_ASSETS_V7.careerComplexMachine;
+  const primaryAsset = MEDIA_ASSETS_V7.careerComplexMachine;
+  const secondaryAsset = MEDIA_ASSETS_V7.careerCoordination;
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -27,13 +23,13 @@ export const HomeEnvironmentChapter = () => {
     if (prefersReduced || isMobile) return;
 
     const ctx = gsap.context(() => {
-      // Scroll parallax changing relative spatial distance between evidence and environment
+      // Scroll parallax changing relative spatial distance between evidence and environments
       gsap.fromTo(
         evidencePlaneRef.current,
-        { y: '8vh', scale: 0.96 },
+        { y: '6vh', scale: 0.97 },
         {
-          y: '-6vh',
-          scale: 1.02,
+          y: '-4vh',
+          scale: 1.01,
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -46,10 +42,26 @@ export const HomeEnvironmentChapter = () => {
 
       gsap.fromTo(
         mediaPlaneRef.current,
-        { y: '-6vh', scale: 1.06 },
+        { y: '-8vh', scale: 1.04 },
         {
-          y: '8vh',
+          y: '6vh',
           scale: 0.98,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.8,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        secondaryPlaneRef.current,
+        { y: '4vh', x: '-2vw' },
+        {
+          y: '-6vh',
+          x: '1vw',
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -76,10 +88,43 @@ export const HomeEnvironmentChapter = () => {
       aria-label="Career Environment Chapter"
       data-tone="light"
     >
-      <div className="pa-v7-grid pa-home-environment__grid">
-        {/* Left Plane: Evidence in Relationship */}
-        <div ref={evidencePlaneRef} className="pa-home-environment__evidence-plane">
-          <span className="pa-provenance-tag">Environmental Relationship</span>
+      <div className="pa-home-environment__stage">
+        {/* Secondary Coordinate Media in Depth */}
+        <div ref={secondaryPlaneRef} className="pa-home-environment__secondary-media" aria-hidden="true">
+          <picture>
+            <source type="image/avif" srcSet={secondaryAsset.avifSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
+            <source type="image/webp" srcSet={secondaryAsset.webpSrcSet} sizes="(min-width: 901px) 25vw, 40vw" />
+            <img
+              src={secondaryAsset.source}
+              alt=""
+              width={secondaryAsset.intrinsicDimensions.width}
+              height={secondaryAsset.intrinsicDimensions.height}
+              className="pa-home-environment__secondary-img"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
+
+        {/* Primary Crossing Media Plane */}
+        <div ref={mediaPlaneRef} className="pa-home-environment__primary-media">
+          <picture>
+            <source type="image/avif" srcSet={primaryAsset.avifSrcSet} sizes="(min-width: 901px) 55vw, 100vw" />
+            <source type="image/webp" srcSet={primaryAsset.webpSrcSet} sizes="(min-width: 901px) 55vw, 100vw" />
+            <img
+              src={primaryAsset.source}
+              alt={primaryAsset.alt}
+              width={primaryAsset.intrinsicDimensions.width}
+              height={primaryAsset.intrinsicDimensions.height}
+              className="pa-home-environment__img"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
+
+        {/* Evidence Typography Intersecting Negative Space */}
+        <div ref={evidencePlaneRef} className="pa-home-environment__content">
           <h2 className="pa-heading-major pa-home-environment__h2">
             Career fit changes with the conditions around the work.
           </h2>
@@ -97,26 +142,6 @@ export const HomeEnvironmentChapter = () => {
                 Explore career conditions &rarr;
               </a>
             </MagneticTarget>
-          </div>
-        </div>
-
-        {/* Right Plane: Atmospheric Environmental Photography */}
-        <div ref={mediaPlaneRef} className="pa-home-environment__media-plane">
-          <picture>
-            <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 50vw, 100vw" />
-            <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 50vw, 100vw" />
-            <img
-              src={asset.source}
-              alt={asset.alt}
-              width={asset.intrinsicDimensions.width}
-              height={asset.intrinsicDimensions.height}
-              className="pa-home-environment__img"
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
-          <div className="pa-home-environment__caption">
-            <span>Work Environment Lens: Complex problems, clear system ownership</span>
           </div>
         </div>
       </div>

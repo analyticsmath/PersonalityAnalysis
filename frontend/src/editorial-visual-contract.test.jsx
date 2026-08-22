@@ -141,18 +141,28 @@ describe('Personality Assessor — Evidence in Context Visual Architecture & Pro
   });
 
   // Guardrail 7: Media Manifest satisfies all asset requirements
-  it('7. media manifest contains all 10 unwatermarked photographic assets with dimensions and focal points', () => {
+  it('7. media manifest contains all 20 unwatermarked photographic assets with dimensions and focal points', () => {
     const expectedKeys = [
       'homeContext',
-      'signupWorkshop',
-      'careerComplex',
-      'careerOpen',
+      'homeSharedContext',
+      'homeAnalysis',
+      'careerComplexMachine',
+      'careerDeepInquiry',
+      'careerCoordination',
       'evidenceVisible',
-      'howItWorksCraft',
-      'careerShared',
       'careerAutonomy',
+      'careerControl',
+      'careerBroadcast',
+      'careerAnalysis',
+      'career3dPrinting',
+      'careerTeamDevice',
+      'evidenceLabDetail',
+      'howProcess',
       'progressStudio',
       'trustInspection',
+      'trustDiagnostic',
+      'signupFirstRecord',
+      'signupAgency',
     ];
     for (const key of expectedKeys) {
       expect(MEDIA_ASSETS_V7).toHaveProperty(key);
@@ -200,11 +210,14 @@ describe('Personality Assessor — Evidence in Context Visual Architecture & Pro
     expect(signup).not.toContain('Step 1 of');
   });
 
-  // Guardrail 12: CSS styling is properly isolated
-  it('12. foundation and V7 CSS are properly defined', () => {
+  // Guardrail 12: CSS styling is properly isolated and free of decorative artifacts
+  it('12. foundation and V7 CSS are properly defined and free of gradients', () => {
     expect(foundationCss).toContain('.pa-v7-root');
     expect(foundationCss).toContain('.pa-btn-primary');
     expect(chromeCss).toContain('.pa-header');
     expect(homeCss).toContain('.pa-home-opening');
+    expect(homeCss).not.toContain('linear-gradient');
+    expect(homeCss).not.toContain('radial-gradient');
+    expect(homeCss).not.toContain('backdrop-filter');
   });
 });

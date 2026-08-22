@@ -264,9 +264,6 @@ export const CareerIntelligenceContent = () => {
       <section className="pa-career-hero" data-tone="dark">
         <div className="pa-v7-grid pa-career-hero__grid">
           <div className="pa-career-hero__headline-col">
-            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
-              Editorial Work-Condition Exploration
-            </span>
             <h1 className="pa-display-hero pa-career-hero__h1">
               Career fit changes with the conditions around the work.
             </h1>
@@ -286,31 +283,7 @@ export const CareerIntelligenceContent = () => {
           </Suspense>
         )}
 
-        <div className="pa-v7-grid pa-career-gallery-stage__controls-row">
-          {/* Environment Switcher Buttons */}
-          <div className="pa-career-gallery-stage__lenses">
-            {CAREER_LENSES.map((lens, idx) => {
-              const isSelected = activeIdx === idx;
-              return (
-                <MagneticTarget key={lens.id} maxDisplacement={8}>
-                  <button
-                    type="button"
-                    onClick={() => selectLens(idx)}
-                    onMouseEnter={() => setCursorLabel(lens.shortName)}
-                    onMouseLeave={() => clearCursorLabel()}
-                    className={`pa-career-lens-btn ${isSelected ? 'pa-career-lens-btn--active' : ''}`}
-                    aria-pressed={isSelected}
-                  >
-                    <span className="pa-career-lens-btn__num">{lens.num}</span>
-                    <span className="pa-career-lens-btn__title">{lens.title}</span>
-                  </button>
-                </MagneticTarget>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 3D Spatial Media Field (DOM/GSAP Atlas) */}
+        {/* 3D Spatial Media Field (Interactive Image Planes as Primary Selector) */}
         <div ref={galleryRef} className="pa-career-spatial-field">
           {CAREER_LENSES.map((lens, idx) => {
             const isSelected = activeIdx === idx;
@@ -319,7 +292,19 @@ export const CareerIntelligenceContent = () => {
                 key={lens.id}
                 ref={(node) => (imagePlanesRef.current[idx] = node)}
                 onClick={() => selectLens(idx)}
-                className={`pa-career-media-plane ${isSelected ? 'pa-career-media-plane--selected' : 'pa-career-media-plane--dormant'}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectLens(idx);
+                  }
+                }}
+                onMouseEnter={() => setCursorLabel(lens.shortName)}
+                onMouseLeave={() => clearCursorLabel()}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isSelected}
+                aria-label={`Select ${lens.title} environment`}
+                className={`pa-career-media-plane ${isSelected ? 'pa-career-media-plane--selected' : 'pa-career-media-plane--dormant'} ${canRenderWebGL ? 'pa-career-media-plane--webgl-active' : ''}`}
                 style={{
                   '--desktop-left': lens.desktopPos.left,
                   '--desktop-top': lens.desktopPos.top,
@@ -362,11 +347,10 @@ export const CareerIntelligenceContent = () => {
         </div>
       </section>
 
-      {/* ── Section 3: Open Mineral Spatial Composition (No SaaS Cards) ── */}
+      {/* ── Section 3: Open Mineral Spatial Composition ── */}
       <section className="pa-career-spatial-info" data-tone="light">
         <div className="pa-v7-grid pa-career-spatial-info__grid">
           <div className="pa-career-spatial-info__intro">
-            <span className="pa-provenance-tag">Active Work Condition</span>
             <h2 className="pa-heading-major pa-career-spatial-info__title">
               {activeLens.title}
             </h2>
@@ -375,7 +359,24 @@ export const CareerIntelligenceContent = () => {
             </p>
           </div>
 
-          {/* Single Open Mineral Spatial Composition: ALIGNMENT (left), TENSION (center), DEVELOP (right) */}
+          {/* Secondary Media Plane in Context */}
+          <div className="pa-career-spatial-info__secondary-plane" aria-hidden="true">
+            <picture>
+              <source type="image/avif" srcSet={activeLens.secondaryAsset.avifSrcSet} sizes="(min-width: 901px) 30vw, 80vw" />
+              <source type="image/webp" srcSet={activeLens.secondaryAsset.webpSrcSet} sizes="(min-width: 901px) 30vw, 80vw" />
+              <img
+                src={activeLens.secondaryAsset.source}
+                alt=""
+                width={activeLens.secondaryAsset.intrinsicDimensions.width}
+                height={activeLens.secondaryAsset.intrinsicDimensions.height}
+                className="pa-career-spatial-info__secondary-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+
+          {/* Single Open Mineral Spatial Composition: ALIGNMENT, TENSION, DEVELOP */}
           <div className="pa-career-spatial-info__triad">
             {/* Alignment near the evidence */}
             <div className="pa-career-triad__item pa-career-triad__item--alignment">
@@ -410,7 +411,7 @@ export const CareerIntelligenceContent = () => {
 
           {/* Subordinate Role Examples with explicit honest editorial disclosure */}
           <div className="pa-career-spatial-info__roles-field">
-            <span className="pa-provenance-tag">Example roles worth exploring</span>
+            <span className="pa-career-spatial-info__roles-label">Example roles worth exploring</span>
             <p className="pa-career-roles-disclosure">
               These illustrative roles are editorial references to understand environmental contexts, not deterministic backend classifications.
             </p>

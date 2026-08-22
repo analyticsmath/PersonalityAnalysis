@@ -87,13 +87,12 @@ describe('Valtum Studio Post-Live-QA Surgical Corrections Suite', () => {
   });
 
   it('8. Home Transformation uses 4 traveling evidence fragments along SVG trajectories without linearGradient defs', () => {
-    expect(homeTransform).toContain('pa-traveling-fragment');
     expect(homeTransform).toContain('fragBigFiveRef');
     expect(homeTransform).toContain('fragRiasecRef');
     expect(homeTransform).toContain('fragValuesRef');
     expect(homeTransform).toContain('fragCareerRef');
     expect(homeTransform).not.toContain('<linearGradient');
-    expect(homeCss).toContain('.pa-traveling-fragment');
+    expect(homeCss).toContain('.pa-home-transformation__stage');
   });
 
   it('9. Career Intelligence uses GSAP 3D depth, integrated pixel transition, and open mineral triad', () => {
@@ -105,20 +104,23 @@ describe('Valtum Studio Post-Live-QA Surgical Corrections Suite', () => {
     expect(routesCss).toContain('transform-style: preserve-3d');
   });
 
-  it('10. How It Works has 5 open text zones along SVG curve with node markers', () => {
+  it('10. How It Works has positioned destinations along SVG curve with node markers and dedicated mobile track', () => {
+    expect(howItWorksPage).toContain('pa-hiw-destinations-stage');
     expect(howItWorksPage).toContain('pa-hiw-destination__node-marker');
+    expect(howItWorksPage).toContain('pa-hiw-mobile-track');
     expect(routesCss).toContain('.pa-hiw-destination__node-marker');
-    expect(routesCss).toContain('opacity: 0.32');
   });
 
-  it('11. Progress uses open spatial states for Longitudinal Re-evaluation without cards', () => {
-    expect(progressPage).toContain('pa-progress-spatial-field');
-    expect(routesCss).toContain('.pa-progress-spatial-field');
+  it('11. Progress uses open overlapping spatial states for Longitudinal Re-evaluation without cards', () => {
+    expect(progressPage).toContain('pa-progress-recomposition__field');
+    expect(progressPage).toContain('pa-progress-plane');
+    expect(progressPage).toContain('pa-progress-trace-track');
+    expect(routesCss).toContain('.pa-progress-recomposition__field');
   });
 
-  it('12. Trust page has open tier display and honest non-fabricated inspection copy', () => {
+  it('12. Trust page has open tier display and honest non-fabricated inspection copy with provenance trace', () => {
+    expect(trustPage).toContain('pa-trust-trace-nodes');
     expect(trustPage).toContain('pa-trust-tier-display__open');
-    expect(trustPage).toContain('Illustrative provenance trace');
     expect(trustPage).not.toContain('0.82');
     expect(routesCss).toContain('.pa-trust-tier-display__open');
   });

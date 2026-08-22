@@ -16,10 +16,10 @@ import { useRouteTransition } from '../../components/personality-v7/motion/Route
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const EVIDENCE_FRAGMENTS = [
-  { id: 'f1', text: '“Prefers clear ownership and system contracts.”', x: -180, y: -120 },
-  { id: 'f2', text: '“High Investigative & Conventional alignment.”', x: 220, y: -140 },
-  { id: 'f3', text: '“Values autonomy, craft, and tangible output.”', x: -200, y: 160 },
-  { id: 'f4', text: '“Demonstrated resilience in ambiguous releases.”', x: 240, y: 180 },
+  { id: 'f1', text: '“Prefers clear ownership and system contracts.”', x: -360, y: -240 },
+  { id: 'f2', text: '“High Investigative & Conventional alignment.”', x: 360, y: -220 },
+  { id: 'f3', text: '“Values autonomy, craft, and tangible output.”', x: -380, y: 240 },
+  { id: 'f4', text: '“Demonstrated resilience in ambiguous releases.”', x: 380, y: 260 },
 ];
 
 export const LoginPage = () => {
@@ -159,9 +159,6 @@ export const LoginPage = () => {
           </div>
 
           <div className="pa-auth-login__form-container">
-            <span className="pa-provenance-tag" style={{ color: 'var(--pa-mineral)' }}>
-              Existing Evidence Record
-            </span>
             <h1 className="pa-display-hero pa-auth-login__h1">
               Return to the record you've already built.
             </h1>
