@@ -1,8 +1,8 @@
 {
-  "version": 1,
-  "artDirection": "Evidence in Context",
-  "generatedAt": "2026-08-21T13:21:42.388Z",
-  "totalAssets": 10,
+  "version": 2,
+  "artDirection": "Evidence Field / Evidence in Context",
+  "generatedAt": "2026-08-22T04:45:11.852Z",
+  "totalAssets": 20,
   "assets": [
     {
       "key": "home-context",
@@ -15,7 +15,7 @@
       "alt": "Person working on a project in a room with focused craftsmanship",
       "usage": "Homepage opening contextual plane & finale return",
       "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
       "intrinsicDimensions": {
         "width": 1074,
         "height": 806
@@ -26,6 +26,11 @@
         "desktop": "45% 50%",
         "tablet": "50% 50%",
         "mobile": "50% 45%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
       },
       "derivatives": [
         "/media/evidence-in-context/home-context-1080.avif",
@@ -44,116 +49,237 @@
       "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
     },
     {
-      "key": "signup-workshop",
-      "id": "VWgfW_Df4fQ",
-      "sourceFile": "signup-workshop-vwgfw-df4fq.jpg",
+      "key": "home-shared-context",
+      "id": "8ayxzntpap0",
+      "sourceFile": "home-shared-context-8ayxzntpap0.jpg",
       "sourcePlatform": "Unsplash Plus",
       "creator": "Roberta Sant'Anna",
       "creatorUsername": "roberta_sant_anna",
-      "title": "Professional operating workshop machinery",
-      "alt": "Woman working with precision machinery in a workshop",
-      "usage": "Signup introduction & mobile portrait context",
+      "title": "Collaborative analysis and situational decision context",
+      "alt": "Professionals collaborating across an open work table with shared artifacts",
+      "usage": "Homepage Decision spatial environment",
       "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
       "intrinsicDimensions": {
-        "width": 735,
-        "height": 980
+        "width": 5800,
+        "height": 3867
       },
-      "aspectRatio": "0.750",
-      "isLandscape": false,
-      "focalPoint": {
-        "desktop": "50% 40%",
-        "tablet": "50% 40%",
-        "mobile": "50% 35%"
-      },
-      "derivatives": [
-        "/media/evidence-in-context/signup-workshop-640.avif",
-        "/media/evidence-in-context/signup-workshop-640.webp",
-        "/media/evidence-in-context/signup-workshop-640.jpg",
-        "/media/evidence-in-context/signup-workshop-mobile-720.avif",
-        "/media/evidence-in-context/signup-workshop-mobile-720.webp",
-        "/media/evidence-in-context/signup-workshop-mobile-720.jpg",
-        "/media/evidence-in-context/signup-workshop-mobile-480.avif",
-        "/media/evidence-in-context/signup-workshop-mobile-480.webp",
-        "/media/evidence-in-context/signup-workshop-mobile-480.jpg"
-      ],
-      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
-    },
-    {
-      "key": "career-complex-problems",
-      "id": "Rf2FWjajd7s",
-      "sourceFile": "career-complex-problems-rf2fwjajd7s.jpg",
-      "sourcePlatform": "Unsplash Plus",
-      "creator": "Roberta Sant'Anna",
-      "creatorUsername": "roberta_sant_anna",
-      "title": "Structured problem solving in technical machinery environment",
-      "alt": "Person at machinery with structured focus",
-      "usage": "Career Intelligence: Complex problems, clear ownership",
-      "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
-      "intrinsicDimensions": {
-        "width": 1074,
-        "height": 806
-      },
-      "aspectRatio": "1.333",
+      "aspectRatio": "1.500",
       "isLandscape": true,
       "focalPoint": {
         "desktop": "50% 50%",
         "tablet": "50% 50%",
         "mobile": "50% 50%"
       },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
       "derivatives": [
-        "/media/evidence-in-context/career-complex-problems-1080.avif",
-        "/media/evidence-in-context/career-complex-problems-1080.webp",
-        "/media/evidence-in-context/career-complex-problems-1080.jpg",
-        "/media/evidence-in-context/career-complex-problems-720.avif",
-        "/media/evidence-in-context/career-complex-problems-720.webp",
-        "/media/evidence-in-context/career-complex-problems-720.jpg",
-        "/media/evidence-in-context/career-complex-problems-mobile-720.avif",
-        "/media/evidence-in-context/career-complex-problems-mobile-720.webp",
-        "/media/evidence-in-context/career-complex-problems-mobile-720.jpg",
-        "/media/evidence-in-context/career-complex-problems-mobile-480.avif",
-        "/media/evidence-in-context/career-complex-problems-mobile-480.webp",
-        "/media/evidence-in-context/career-complex-problems-mobile-480.jpg"
+        "/media/evidence-in-context/home-shared-context-1440.avif",
+        "/media/evidence-in-context/home-shared-context-1440.webp",
+        "/media/evidence-in-context/home-shared-context-1440.jpg",
+        "/media/evidence-in-context/home-shared-context-1080.avif",
+        "/media/evidence-in-context/home-shared-context-1080.webp",
+        "/media/evidence-in-context/home-shared-context-1080.jpg",
+        "/media/evidence-in-context/home-shared-context-720.avif",
+        "/media/evidence-in-context/home-shared-context-720.webp",
+        "/media/evidence-in-context/home-shared-context-720.jpg",
+        "/media/evidence-in-context/home-shared-context-mobile-720.avif",
+        "/media/evidence-in-context/home-shared-context-mobile-720.webp",
+        "/media/evidence-in-context/home-shared-context-mobile-720.jpg",
+        "/media/evidence-in-context/home-shared-context-mobile-480.avif",
+        "/media/evidence-in-context/home-shared-context-mobile-480.webp",
+        "/media/evidence-in-context/home-shared-context-mobile-480.jpg"
       ],
       "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
     },
     {
-      "key": "career-open-questions",
-      "id": "lQQz57tvWfo",
-      "sourceFile": "career-open-questions-lqqz57tvwfo.jpg",
+      "key": "home-analysis",
+      "id": "vjg1teprcd0",
+      "sourceFile": "home-analysis-vjg1teprcd0.jpg",
       "sourcePlatform": "Unsplash Plus",
       "creator": "Roberta Sant'Anna",
       "creatorUsername": "roberta_sant_anna",
-      "title": "Focused inquiry and deep investigation at technical workstation",
-      "alt": "Jeweler concentrating meticulously at workstation",
-      "usage": "Career Intelligence: Open questions, long focus",
+      "title": "Methodological inspection and data observation",
+      "alt": "Close analytical inspection of materials and technical data",
+      "usage": "Homepage opening depth layer & Work Values memory",
       "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
       "intrinsicDimensions": {
-        "width": 1074,
-        "height": 806
+        "width": 6400,
+        "height": 4267
       },
-      "aspectRatio": "1.333",
+      "aspectRatio": "1.500",
       "isLandscape": true,
       "focalPoint": {
         "desktop": "52% 48%",
         "tablet": "50% 50%",
         "mobile": "50% 45%"
       },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
       "derivatives": [
-        "/media/evidence-in-context/career-open-questions-1080.avif",
-        "/media/evidence-in-context/career-open-questions-1080.webp",
-        "/media/evidence-in-context/career-open-questions-1080.jpg",
-        "/media/evidence-in-context/career-open-questions-720.avif",
-        "/media/evidence-in-context/career-open-questions-720.webp",
-        "/media/evidence-in-context/career-open-questions-720.jpg",
-        "/media/evidence-in-context/career-open-questions-mobile-720.avif",
-        "/media/evidence-in-context/career-open-questions-mobile-720.webp",
-        "/media/evidence-in-context/career-open-questions-mobile-720.jpg",
-        "/media/evidence-in-context/career-open-questions-mobile-480.avif",
-        "/media/evidence-in-context/career-open-questions-mobile-480.webp",
-        "/media/evidence-in-context/career-open-questions-mobile-480.jpg"
+        "/media/evidence-in-context/home-analysis-1440.avif",
+        "/media/evidence-in-context/home-analysis-1440.webp",
+        "/media/evidence-in-context/home-analysis-1440.jpg",
+        "/media/evidence-in-context/home-analysis-1080.avif",
+        "/media/evidence-in-context/home-analysis-1080.webp",
+        "/media/evidence-in-context/home-analysis-1080.jpg",
+        "/media/evidence-in-context/home-analysis-720.avif",
+        "/media/evidence-in-context/home-analysis-720.webp",
+        "/media/evidence-in-context/home-analysis-720.jpg",
+        "/media/evidence-in-context/home-analysis-mobile-720.avif",
+        "/media/evidence-in-context/home-analysis-mobile-720.webp",
+        "/media/evidence-in-context/home-analysis-mobile-720.jpg",
+        "/media/evidence-in-context/home-analysis-mobile-480.avif",
+        "/media/evidence-in-context/home-analysis-mobile-480.webp",
+        "/media/evidence-in-context/home-analysis-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "career-complex-machine",
+      "id": "shbyg6mb3o",
+      "sourceFile": "career-complex-machine-shbyg6mb3o.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Structured problem solving and technical system ownership",
+      "alt": "Engineer operating precision mechanical systems with direct control",
+      "usage": "Career Intelligence: Complex problems, clear ownership",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6600,
+        "height": 4400
+      },
+      "aspectRatio": "1.500",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-complex-machine-1440.avif",
+        "/media/evidence-in-context/career-complex-machine-1440.webp",
+        "/media/evidence-in-context/career-complex-machine-1440.jpg",
+        "/media/evidence-in-context/career-complex-machine-1080.avif",
+        "/media/evidence-in-context/career-complex-machine-1080.webp",
+        "/media/evidence-in-context/career-complex-machine-1080.jpg",
+        "/media/evidence-in-context/career-complex-machine-720.avif",
+        "/media/evidence-in-context/career-complex-machine-720.webp",
+        "/media/evidence-in-context/career-complex-machine-720.jpg",
+        "/media/evidence-in-context/career-complex-machine-mobile-720.avif",
+        "/media/evidence-in-context/career-complex-machine-mobile-720.webp",
+        "/media/evidence-in-context/career-complex-machine-mobile-720.jpg",
+        "/media/evidence-in-context/career-complex-machine-mobile-480.avif",
+        "/media/evidence-in-context/career-complex-machine-mobile-480.webp",
+        "/media/evidence-in-context/career-complex-machine-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "career-deep-inquiry",
+      "id": "gnasyqdkdbi",
+      "sourceFile": "career-deep-inquiry-gnasyqdkdbi.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Deep inquiry and technical investigation",
+      "alt": "Scientist conducting meticulous examination with laboratory instrument",
+      "usage": "Career Intelligence: Open questions, long focus",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 7439,
+        "height": 4184
+      },
+      "aspectRatio": "1.778",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 45%",
+        "tablet": "50% 45%",
+        "mobile": "50% 40%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "top"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-deep-inquiry-1440.avif",
+        "/media/evidence-in-context/career-deep-inquiry-1440.webp",
+        "/media/evidence-in-context/career-deep-inquiry-1440.jpg",
+        "/media/evidence-in-context/career-deep-inquiry-1080.avif",
+        "/media/evidence-in-context/career-deep-inquiry-1080.webp",
+        "/media/evidence-in-context/career-deep-inquiry-1080.jpg",
+        "/media/evidence-in-context/career-deep-inquiry-720.avif",
+        "/media/evidence-in-context/career-deep-inquiry-720.webp",
+        "/media/evidence-in-context/career-deep-inquiry-720.jpg",
+        "/media/evidence-in-context/career-deep-inquiry-mobile-720.avif",
+        "/media/evidence-in-context/career-deep-inquiry-mobile-720.webp",
+        "/media/evidence-in-context/career-deep-inquiry-mobile-720.jpg",
+        "/media/evidence-in-context/career-deep-inquiry-mobile-480.avif",
+        "/media/evidence-in-context/career-deep-inquiry-mobile-480.webp",
+        "/media/evidence-in-context/career-deep-inquiry-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "career-coordination",
+      "id": "qnfckqwyu1k",
+      "sourceFile": "career-coordination-qnfckqwyu1k.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Cross-functional coordination and shared decision making",
+      "alt": "Designers and engineers collaborating closely over technical plans",
+      "usage": "Career Intelligence: Shared decisions, frequent coordination",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 7728,
+        "height": 5152
+      },
+      "aspectRatio": "1.500",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-coordination-1440.avif",
+        "/media/evidence-in-context/career-coordination-1440.webp",
+        "/media/evidence-in-context/career-coordination-1440.jpg",
+        "/media/evidence-in-context/career-coordination-1080.avif",
+        "/media/evidence-in-context/career-coordination-1080.webp",
+        "/media/evidence-in-context/career-coordination-1080.jpg",
+        "/media/evidence-in-context/career-coordination-720.avif",
+        "/media/evidence-in-context/career-coordination-720.webp",
+        "/media/evidence-in-context/career-coordination-720.jpg",
+        "/media/evidence-in-context/career-coordination-mobile-720.avif",
+        "/media/evidence-in-context/career-coordination-mobile-720.webp",
+        "/media/evidence-in-context/career-coordination-mobile-720.jpg",
+        "/media/evidence-in-context/career-coordination-mobile-480.avif",
+        "/media/evidence-in-context/career-coordination-mobile-480.webp",
+        "/media/evidence-in-context/career-coordination-mobile-480.jpg"
       ],
       "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
     },
@@ -168,7 +294,7 @@
       "alt": "Precision soldering close-up with flame and metal craft",
       "usage": "Homepage Evidence Transformation & Career Intelligence: Visible output",
       "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
       "intrinsicDimensions": {
         "width": 736,
         "height": 981
@@ -180,94 +306,21 @@
         "tablet": "50% 50%",
         "mobile": "50% 50%"
       },
+      "mobileCrop": {
+        "widthRatio": 3,
+        "heightRatio": 4,
+        "focal": "center"
+      },
       "derivatives": [
-        "/media/evidence-in-context/evidence-visible-output-640.avif",
-        "/media/evidence-in-context/evidence-visible-output-640.webp",
-        "/media/evidence-in-context/evidence-visible-output-640.jpg",
+        "/media/evidence-in-context/evidence-visible-output-720.avif",
+        "/media/evidence-in-context/evidence-visible-output-720.webp",
+        "/media/evidence-in-context/evidence-visible-output-720.jpg",
         "/media/evidence-in-context/evidence-visible-output-mobile-720.avif",
         "/media/evidence-in-context/evidence-visible-output-mobile-720.webp",
         "/media/evidence-in-context/evidence-visible-output-mobile-720.jpg",
         "/media/evidence-in-context/evidence-visible-output-mobile-480.avif",
         "/media/evidence-in-context/evidence-visible-output-mobile-480.webp",
         "/media/evidence-in-context/evidence-visible-output-mobile-480.jpg"
-      ],
-      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
-    },
-    {
-      "key": "how-it-works-craft",
-      "id": "5JmxBz_d49s",
-      "sourceFile": "how-it-works-craft-5jmxbz-d49s.jpg",
-      "sourcePlatform": "Unsplash Plus",
-      "creator": "Roberta Sant'Anna",
-      "creatorUsername": "roberta_sant_anna",
-      "title": "Hands and precision tools shaping raw materials",
-      "alt": "Hands working with tools and materials on a physical work surface",
-      "usage": "How It Works opening and evidence narrative",
-      "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
-      "intrinsicDimensions": {
-        "width": 1074,
-        "height": 806
-      },
-      "aspectRatio": "1.333",
-      "isLandscape": true,
-      "focalPoint": {
-        "desktop": "50% 50%",
-        "tablet": "50% 50%",
-        "mobile": "50% 50%"
-      },
-      "derivatives": [
-        "/media/evidence-in-context/how-it-works-craft-1080.avif",
-        "/media/evidence-in-context/how-it-works-craft-1080.webp",
-        "/media/evidence-in-context/how-it-works-craft-1080.jpg",
-        "/media/evidence-in-context/how-it-works-craft-720.avif",
-        "/media/evidence-in-context/how-it-works-craft-720.webp",
-        "/media/evidence-in-context/how-it-works-craft-720.jpg",
-        "/media/evidence-in-context/how-it-works-craft-mobile-720.avif",
-        "/media/evidence-in-context/how-it-works-craft-mobile-720.webp",
-        "/media/evidence-in-context/how-it-works-craft-mobile-720.jpg",
-        "/media/evidence-in-context/how-it-works-craft-mobile-480.avif",
-        "/media/evidence-in-context/how-it-works-craft-mobile-480.webp",
-        "/media/evidence-in-context/how-it-works-craft-mobile-480.jpg"
-      ],
-      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
-    },
-    {
-      "key": "career-shared-decisions",
-      "id": "ePnZ8c20f_o",
-      "sourceFile": "career-shared-decisions-epnz8c20f-o.jpg",
-      "sourcePlatform": "Unsplash Plus",
-      "creator": "Roberta Sant'Anna",
-      "creatorUsername": "roberta_sant_anna",
-      "title": "Multi-disciplinary studio craft and shared workflow",
-      "alt": "Craftsperson in collaborative studio workshop",
-      "usage": "Career Intelligence: Shared decisions, frequent coordination",
-      "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
-      "intrinsicDimensions": {
-        "width": 1074,
-        "height": 806
-      },
-      "aspectRatio": "1.333",
-      "isLandscape": true,
-      "focalPoint": {
-        "desktop": "50% 50%",
-        "tablet": "50% 50%",
-        "mobile": "50% 50%"
-      },
-      "derivatives": [
-        "/media/evidence-in-context/career-shared-decisions-1080.avif",
-        "/media/evidence-in-context/career-shared-decisions-1080.webp",
-        "/media/evidence-in-context/career-shared-decisions-1080.jpg",
-        "/media/evidence-in-context/career-shared-decisions-720.avif",
-        "/media/evidence-in-context/career-shared-decisions-720.webp",
-        "/media/evidence-in-context/career-shared-decisions-720.jpg",
-        "/media/evidence-in-context/career-shared-decisions-mobile-720.avif",
-        "/media/evidence-in-context/career-shared-decisions-mobile-720.webp",
-        "/media/evidence-in-context/career-shared-decisions-mobile-720.jpg",
-        "/media/evidence-in-context/career-shared-decisions-mobile-480.avif",
-        "/media/evidence-in-context/career-shared-decisions-mobile-480.webp",
-        "/media/evidence-in-context/career-shared-decisions-mobile-480.jpg"
       ],
       "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
     },
@@ -282,7 +335,7 @@
       "alt": "Artist working in dense, creative studio environment",
       "usage": "Career Intelligence: Autonomy, pace, personal standards",
       "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
       "intrinsicDimensions": {
         "width": 1074,
         "height": 806
@@ -293,6 +346,11 @@
         "desktop": "50% 50%",
         "tablet": "50% 50%",
         "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
       },
       "derivatives": [
         "/media/evidence-in-context/career-autonomy-1080.avif",
@@ -311,6 +369,335 @@
       "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
     },
     {
+      "key": "career-control",
+      "id": "khikhsrqgt4",
+      "sourceFile": "career-control-khikhsrqgt4.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Industrial instrumentation and process governance",
+      "alt": "Specialist configuring industrial instrumentation controls",
+      "usage": "Career Atlas secondary depth plane",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6720,
+        "height": 4480
+      },
+      "aspectRatio": "1.500",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-control-1440.avif",
+        "/media/evidence-in-context/career-control-1440.webp",
+        "/media/evidence-in-context/career-control-1440.jpg",
+        "/media/evidence-in-context/career-control-1080.avif",
+        "/media/evidence-in-context/career-control-1080.webp",
+        "/media/evidence-in-context/career-control-1080.jpg",
+        "/media/evidence-in-context/career-control-720.avif",
+        "/media/evidence-in-context/career-control-720.webp",
+        "/media/evidence-in-context/career-control-720.jpg",
+        "/media/evidence-in-context/career-control-mobile-720.avif",
+        "/media/evidence-in-context/career-control-mobile-720.webp",
+        "/media/evidence-in-context/career-control-mobile-720.jpg",
+        "/media/evidence-in-context/career-control-mobile-480.avif",
+        "/media/evidence-in-context/career-control-mobile-480.webp",
+        "/media/evidence-in-context/career-control-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "career-broadcast",
+      "id": "lorhdkrohvw",
+      "sourceFile": "career-broadcast-lorhdkrohvw.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Real-time broadcast media operations and transmission control",
+      "alt": "Production console in technical broadcast environment",
+      "usage": "Career Atlas secondary depth plane",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6048,
+        "height": 4024
+      },
+      "aspectRatio": "1.503",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-broadcast-1440.avif",
+        "/media/evidence-in-context/career-broadcast-1440.webp",
+        "/media/evidence-in-context/career-broadcast-1440.jpg",
+        "/media/evidence-in-context/career-broadcast-1080.avif",
+        "/media/evidence-in-context/career-broadcast-1080.webp",
+        "/media/evidence-in-context/career-broadcast-1080.jpg",
+        "/media/evidence-in-context/career-broadcast-720.avif",
+        "/media/evidence-in-context/career-broadcast-720.webp",
+        "/media/evidence-in-context/career-broadcast-720.jpg",
+        "/media/evidence-in-context/career-broadcast-mobile-720.avif",
+        "/media/evidence-in-context/career-broadcast-mobile-720.webp",
+        "/media/evidence-in-context/career-broadcast-mobile-720.jpg",
+        "/media/evidence-in-context/career-broadcast-mobile-480.avif",
+        "/media/evidence-in-context/career-broadcast-mobile-480.webp",
+        "/media/evidence-in-context/career-broadcast-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "career-analysis",
+      "id": "gxjuznhq",
+      "sourceFile": "career-analysis-gxjuznhq.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Quantitative analysis and data validation",
+      "alt": "Technical analyst reviewing detailed diagnostic telemetry",
+      "usage": "Career Atlas secondary depth plane",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 7952,
+        "height": 5304
+      },
+      "aspectRatio": "1.499",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-analysis-1440.avif",
+        "/media/evidence-in-context/career-analysis-1440.webp",
+        "/media/evidence-in-context/career-analysis-1440.jpg",
+        "/media/evidence-in-context/career-analysis-1080.avif",
+        "/media/evidence-in-context/career-analysis-1080.webp",
+        "/media/evidence-in-context/career-analysis-1080.jpg",
+        "/media/evidence-in-context/career-analysis-720.avif",
+        "/media/evidence-in-context/career-analysis-720.webp",
+        "/media/evidence-in-context/career-analysis-720.jpg",
+        "/media/evidence-in-context/career-analysis-mobile-720.avif",
+        "/media/evidence-in-context/career-analysis-mobile-720.webp",
+        "/media/evidence-in-context/career-analysis-mobile-720.jpg",
+        "/media/evidence-in-context/career-analysis-mobile-480.avif",
+        "/media/evidence-in-context/career-analysis-mobile-480.webp",
+        "/media/evidence-in-context/career-analysis-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "career-3d-printing",
+      "id": "6e5sxczdmce",
+      "sourceFile": "career-3d-printing-6e5sxczdmce.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Rapid digital fabrication and prototype modeling",
+      "alt": "Additive manufacturing and precision rapid prototyping",
+      "usage": "Career Atlas secondary depth plane",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6386,
+        "height": 4790
+      },
+      "aspectRatio": "1.333",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-3d-printing-1440.avif",
+        "/media/evidence-in-context/career-3d-printing-1440.webp",
+        "/media/evidence-in-context/career-3d-printing-1440.jpg",
+        "/media/evidence-in-context/career-3d-printing-1080.avif",
+        "/media/evidence-in-context/career-3d-printing-1080.webp",
+        "/media/evidence-in-context/career-3d-printing-1080.jpg",
+        "/media/evidence-in-context/career-3d-printing-720.avif",
+        "/media/evidence-in-context/career-3d-printing-720.webp",
+        "/media/evidence-in-context/career-3d-printing-720.jpg",
+        "/media/evidence-in-context/career-3d-printing-mobile-720.avif",
+        "/media/evidence-in-context/career-3d-printing-mobile-720.webp",
+        "/media/evidence-in-context/career-3d-printing-mobile-720.jpg",
+        "/media/evidence-in-context/career-3d-printing-mobile-480.avif",
+        "/media/evidence-in-context/career-3d-printing-mobile-480.webp",
+        "/media/evidence-in-context/career-3d-printing-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "career-team-device",
+      "id": "ivrtfrzbzrg",
+      "sourceFile": "career-team-device-ivrtfrzbzrg.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Embedded hardware verification and physical device integration",
+      "alt": "Hardware engineering team testing connected device prototypes",
+      "usage": "Career Atlas secondary depth plane",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6000,
+        "height": 4000
+      },
+      "aspectRatio": "1.500",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/career-team-device-1440.avif",
+        "/media/evidence-in-context/career-team-device-1440.webp",
+        "/media/evidence-in-context/career-team-device-1440.jpg",
+        "/media/evidence-in-context/career-team-device-1080.avif",
+        "/media/evidence-in-context/career-team-device-1080.webp",
+        "/media/evidence-in-context/career-team-device-1080.jpg",
+        "/media/evidence-in-context/career-team-device-720.avif",
+        "/media/evidence-in-context/career-team-device-720.webp",
+        "/media/evidence-in-context/career-team-device-720.jpg",
+        "/media/evidence-in-context/career-team-device-mobile-720.avif",
+        "/media/evidence-in-context/career-team-device-mobile-720.webp",
+        "/media/evidence-in-context/career-team-device-mobile-720.jpg",
+        "/media/evidence-in-context/career-team-device-mobile-480.avif",
+        "/media/evidence-in-context/career-team-device-mobile-480.webp",
+        "/media/evidence-in-context/career-team-device-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "evidence-lab-detail",
+      "id": "ontjllb3kri",
+      "sourceFile": "evidence-lab-detail-ontjllb3kri.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Precision measurement calibration and micro-scale inspection",
+      "alt": "Detailed optical magnification and laboratory measurement setup",
+      "usage": "How It Works detail & Career Atlas depth layer",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 7023,
+        "height": 4682
+      },
+      "aspectRatio": "1.500",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/evidence-lab-detail-1440.avif",
+        "/media/evidence-in-context/evidence-lab-detail-1440.webp",
+        "/media/evidence-in-context/evidence-lab-detail-1440.jpg",
+        "/media/evidence-in-context/evidence-lab-detail-1080.avif",
+        "/media/evidence-in-context/evidence-lab-detail-1080.webp",
+        "/media/evidence-in-context/evidence-lab-detail-1080.jpg",
+        "/media/evidence-in-context/evidence-lab-detail-720.avif",
+        "/media/evidence-in-context/evidence-lab-detail-720.webp",
+        "/media/evidence-in-context/evidence-lab-detail-720.jpg",
+        "/media/evidence-in-context/evidence-lab-detail-mobile-720.avif",
+        "/media/evidence-in-context/evidence-lab-detail-mobile-720.webp",
+        "/media/evidence-in-context/evidence-lab-detail-mobile-720.jpg",
+        "/media/evidence-in-context/evidence-lab-detail-mobile-480.avif",
+        "/media/evidence-in-context/evidence-lab-detail-mobile-480.webp",
+        "/media/evidence-in-context/evidence-lab-detail-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "how-process",
+      "id": "jhtfogpvg8",
+      "sourceFile": "how-process-jhtfogpvg8.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Process development and methodological workflow",
+      "alt": "Meticulous technical process execution in structured workshop",
+      "usage": "How It Works opening and evidence narrative",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6000,
+        "height": 4000
+      },
+      "aspectRatio": "1.500",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/how-process-1440.avif",
+        "/media/evidence-in-context/how-process-1440.webp",
+        "/media/evidence-in-context/how-process-1440.jpg",
+        "/media/evidence-in-context/how-process-1080.avif",
+        "/media/evidence-in-context/how-process-1080.webp",
+        "/media/evidence-in-context/how-process-1080.jpg",
+        "/media/evidence-in-context/how-process-720.avif",
+        "/media/evidence-in-context/how-process-720.webp",
+        "/media/evidence-in-context/how-process-720.jpg",
+        "/media/evidence-in-context/how-process-mobile-720.avif",
+        "/media/evidence-in-context/how-process-mobile-720.webp",
+        "/media/evidence-in-context/how-process-mobile-720.jpg",
+        "/media/evidence-in-context/how-process-mobile-480.avif",
+        "/media/evidence-in-context/how-process-mobile-480.webp",
+        "/media/evidence-in-context/how-process-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
       "key": "progress-studio",
       "id": "rJziomX_sLQ",
       "sourceFile": "progress-studio-rjziomx-slq.jpg",
@@ -321,7 +708,7 @@
       "alt": "Artist preparing in a busy studio environment",
       "usage": "Progress route longitudinal temporal recomposition",
       "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
       "intrinsicDimensions": {
         "width": 735,
         "height": 980
@@ -333,10 +720,15 @@
         "tablet": "50% 40%",
         "mobile": "50% 35%"
       },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "top"
+      },
       "derivatives": [
-        "/media/evidence-in-context/progress-studio-640.avif",
-        "/media/evidence-in-context/progress-studio-640.webp",
-        "/media/evidence-in-context/progress-studio-640.jpg",
+        "/media/evidence-in-context/progress-studio-720.avif",
+        "/media/evidence-in-context/progress-studio-720.webp",
+        "/media/evidence-in-context/progress-studio-720.jpg",
         "/media/evidence-in-context/progress-studio-mobile-720.avif",
         "/media/evidence-in-context/progress-studio-mobile-720.webp",
         "/media/evidence-in-context/progress-studio-mobile-720.jpg",
@@ -355,9 +747,9 @@
       "creatorUsername": "roberta_sant_anna",
       "title": "Meticulous inspection and provenance verification",
       "alt": "Person inspecting fine details with a magnifying glass",
-      "usage": "Trust and provenance route inspectable record hero",
+      "usage": "Trust route human inspection hero layer",
       "license": "Licensed Unsplash Plus Original",
-      "retrievedAt": "2026-08-21T13:21:42.388Z",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
       "intrinsicDimensions": {
         "width": 735,
         "height": 980
@@ -369,16 +761,159 @@
         "tablet": "50% 45%",
         "mobile": "50% 40%"
       },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "top"
+      },
       "derivatives": [
-        "/media/evidence-in-context/trust-inspection-640.avif",
-        "/media/evidence-in-context/trust-inspection-640.webp",
-        "/media/evidence-in-context/trust-inspection-640.jpg",
+        "/media/evidence-in-context/trust-inspection-720.avif",
+        "/media/evidence-in-context/trust-inspection-720.webp",
+        "/media/evidence-in-context/trust-inspection-720.jpg",
         "/media/evidence-in-context/trust-inspection-mobile-720.avif",
         "/media/evidence-in-context/trust-inspection-mobile-720.webp",
         "/media/evidence-in-context/trust-inspection-mobile-720.jpg",
         "/media/evidence-in-context/trust-inspection-mobile-480.avif",
         "/media/evidence-in-context/trust-inspection-mobile-480.webp",
         "/media/evidence-in-context/trust-inspection-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "trust-diagnostic",
+      "id": "aq7oa5ikihs",
+      "sourceFile": "trust-diagnostic-aq7oa5ikihs.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Diagnostic measurement and signal verification",
+      "alt": "Technical probe and diagnostic instrumentation contact detail",
+      "usage": "Trust route technical diagnostic layer",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6720,
+        "height": 4480
+      },
+      "aspectRatio": "1.500",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/trust-diagnostic-1440.avif",
+        "/media/evidence-in-context/trust-diagnostic-1440.webp",
+        "/media/evidence-in-context/trust-diagnostic-1440.jpg",
+        "/media/evidence-in-context/trust-diagnostic-1080.avif",
+        "/media/evidence-in-context/trust-diagnostic-1080.webp",
+        "/media/evidence-in-context/trust-diagnostic-1080.jpg",
+        "/media/evidence-in-context/trust-diagnostic-720.avif",
+        "/media/evidence-in-context/trust-diagnostic-720.webp",
+        "/media/evidence-in-context/trust-diagnostic-720.jpg",
+        "/media/evidence-in-context/trust-diagnostic-mobile-720.avif",
+        "/media/evidence-in-context/trust-diagnostic-mobile-720.webp",
+        "/media/evidence-in-context/trust-diagnostic-mobile-720.jpg",
+        "/media/evidence-in-context/trust-diagnostic-mobile-480.avif",
+        "/media/evidence-in-context/trust-diagnostic-mobile-480.webp",
+        "/media/evidence-in-context/trust-diagnostic-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "signup-first-record",
+      "id": "vogj3ghonk0",
+      "sourceFile": "signup-first-record-vogj3ghonk0.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Initial record formation and professional documentation",
+      "alt": "Hands recording initial documentation and technical notes in workspace",
+      "usage": "Signup route primary environmental plane",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 6070,
+        "height": 8093
+      },
+      "aspectRatio": "0.750",
+      "isLandscape": false,
+      "focalPoint": {
+        "desktop": "50% 45%",
+        "tablet": "50% 45%",
+        "mobile": "50% 40%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "top"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/signup-first-record-1080.avif",
+        "/media/evidence-in-context/signup-first-record-1080.webp",
+        "/media/evidence-in-context/signup-first-record-1080.jpg",
+        "/media/evidence-in-context/signup-first-record-720.avif",
+        "/media/evidence-in-context/signup-first-record-720.webp",
+        "/media/evidence-in-context/signup-first-record-720.jpg",
+        "/media/evidence-in-context/signup-first-record-mobile-720.avif",
+        "/media/evidence-in-context/signup-first-record-mobile-720.webp",
+        "/media/evidence-in-context/signup-first-record-mobile-720.jpg",
+        "/media/evidence-in-context/signup-first-record-mobile-480.avif",
+        "/media/evidence-in-context/signup-first-record-mobile-480.webp",
+        "/media/evidence-in-context/signup-first-record-mobile-480.jpg"
+      ],
+      "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
+    },
+    {
+      "key": "signup-agency",
+      "id": "yi5jlsra5j8",
+      "sourceFile": "signup-agency-yi5jlsra5j8.jpg",
+      "sourcePlatform": "Unsplash Plus",
+      "creator": "Roberta Sant'Anna",
+      "creatorUsername": "roberta_sant_anna",
+      "title": "Individual agency and purposeful project foundation",
+      "alt": "Professional in structured workspace establishing project ownership",
+      "usage": "Signup route secondary support plane",
+      "license": "Licensed Unsplash Plus Original",
+      "retrievedAt": "2026-08-22T04:45:11.852Z",
+      "intrinsicDimensions": {
+        "width": 5504,
+        "height": 7168
+      },
+      "aspectRatio": "0.768",
+      "isLandscape": true,
+      "focalPoint": {
+        "desktop": "50% 50%",
+        "tablet": "50% 50%",
+        "mobile": "50% 50%"
+      },
+      "mobileCrop": {
+        "widthRatio": 4,
+        "heightRatio": 5,
+        "focal": "center"
+      },
+      "derivatives": [
+        "/media/evidence-in-context/signup-agency-1440.avif",
+        "/media/evidence-in-context/signup-agency-1440.webp",
+        "/media/evidence-in-context/signup-agency-1440.jpg",
+        "/media/evidence-in-context/signup-agency-1080.avif",
+        "/media/evidence-in-context/signup-agency-1080.webp",
+        "/media/evidence-in-context/signup-agency-1080.jpg",
+        "/media/evidence-in-context/signup-agency-720.avif",
+        "/media/evidence-in-context/signup-agency-720.webp",
+        "/media/evidence-in-context/signup-agency-720.jpg",
+        "/media/evidence-in-context/signup-agency-mobile-720.avif",
+        "/media/evidence-in-context/signup-agency-mobile-720.webp",
+        "/media/evidence-in-context/signup-agency-mobile-720.jpg",
+        "/media/evidence-in-context/signup-agency-mobile-480.avif",
+        "/media/evidence-in-context/signup-agency-mobile-480.webp",
+        "/media/evidence-in-context/signup-agency-mobile-480.jpg"
       ],
       "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
     }

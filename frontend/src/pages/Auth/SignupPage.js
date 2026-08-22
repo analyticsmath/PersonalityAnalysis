@@ -38,8 +38,7 @@ export const SignupPage = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
-
-  const asset = MEDIA_ASSETS_V7.signupWorkshop;
+  const asset = MEDIA_ASSETS_V7.signupFirstRecord;
 
   const safeNext = useMemo(() => {
     const params =

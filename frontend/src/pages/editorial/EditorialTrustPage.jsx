@@ -7,6 +7,14 @@ import { useCursor } from '../../components/personality-v7/motion/CursorCoordina
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 
+/**
+ * TRUST PROVENANCE STATE MAP (INSPECTION & GOVERNANCE)
+ * 0%   - Human inspection plane (trustInspection) introduces auditability principle.
+ * 25%  - Tier selector shifts focus between 5 verifiable layers (Supplied -> Calculated -> Compared -> Assisted -> Controlled).
+ * 50%  - Technical diagnostic plane (trustDiagnostic) reveals underlying telemetry and deterministic calculation guarantees.
+ * 75%  - Interactive Aperture Mask allows live peel-back of sample reading into raw constituent evidence.
+ * 100% - Direct user control tier connects to account data export and permanent deletion.
+ */
 const PROVENANCE_TIERS = [
   {
     id: 'supplied',
@@ -57,7 +65,8 @@ export const TrustContent = () => {
   const [apertureOpen, setApertureOpen] = useState(false);
 
   const activeTier = PROVENANCE_TIERS[activeTierIdx];
-  const asset = MEDIA_ASSETS_V7.trustInspection;
+  const heroAsset = MEDIA_ASSETS_V7.trustInspection;
+  const diagnosticAsset = MEDIA_ASSETS_V7.trustDiagnostic;
 
   const handlePointerEnterInspection = () => {
     setCursorLabel('TRACE');
@@ -86,13 +95,13 @@ export const TrustContent = () => {
 
           <div className="pa-trust-hero__media-wrap">
             <picture>
-              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
-              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
+              <source type="image/avif" srcSet={heroAsset.avifSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
+              <source type="image/webp" srcSet={heroAsset.webpSrcSet} sizes="(min-width: 901px) 40vw, 100vw" />
               <img
-                src={asset.source}
-                alt={asset.alt}
-                width={asset.intrinsicDimensions.width}
-                height={asset.intrinsicDimensions.height}
+                src={heroAsset.source}
+                alt={heroAsset.alt}
+                width={heroAsset.intrinsicDimensions.width}
+                height={heroAsset.intrinsicDimensions.height}
                 className="pa-trust-hero__img"
                 loading="eager"
                 fetchPriority="high"
@@ -159,6 +168,20 @@ export const TrustContent = () => {
               <h3 className="pa-trust-tier-display__title">{activeTier.label}</h3>
               <p className="pa-trust-tier-display__statement">{activeTier.statement}</p>
               <p className="pa-trust-tier-display__details">{activeTier.details}</p>
+
+              {/* Diagnostic Telemetry Visual Plane */}
+              <div className="pa-trust-tier-display__media" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcSet={diagnosticAsset.avifSrcSet} sizes="(min-width: 901px) 25vw, 50vw" />
+                  <source type="image/webp" srcSet={diagnosticAsset.webpSrcSet} sizes="(min-width: 901px) 25vw, 50vw" />
+                  <img
+                    src={diagnosticAsset.source}
+                    alt=""
+                    className="pa-trust-tier-display__img"
+                    loading="lazy"
+                  />
+                </picture>
+              </div>
 
               {activeTier.id === 'controlled' && (
                 <div className="pa-trust-tier-display__action">

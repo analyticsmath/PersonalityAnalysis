@@ -7,13 +7,19 @@ import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * HOME CAREER ENVIRONMENT BRIDGE STATE MAP
+ * 0%   - Evidence occupies foreground left plane. Work environment image begins as partial field.
+ * 50%  - Image broadens and crosses into negative space as Career Context gains ownership.
+ * 100% - Clearly communicates that the same evidence contributes differently when work conditions change.
+ */
 export const HomeEnvironmentChapter = () => {
   const { navigateWithTransition } = useRouteTransition();
   const sectionRef = useRef(null);
   const evidencePlaneRef = useRef(null);
   const mediaPlaneRef = useRef(null);
 
-  const asset = MEDIA_ASSETS_V7.careerComplex;
+  const asset = MEDIA_ASSETS_V7.careerComplexMachine;
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

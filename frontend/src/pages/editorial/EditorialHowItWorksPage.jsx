@@ -9,6 +9,15 @@ import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * HOW IT WORKS STATE MAP (EVIDENCE TRANSIT JOURNEY)
+ * 0%   - Hero stage: Media (howProcess) establishes how contextual work begins.
+ * 20%  - Stage 1 (Contextual Attachment): Traveling evidence departs initial node along Oxblood curve.
+ * 40%  - Stage 2 (Adaptive Staged Inquiry): Follow-up questions adapt to previous decisions.
+ * 60%  - Stage 3 (Multi-Lens Decomposition): Big Five, RIASEC, Work Values split into separate readings.
+ * 80%  - Stage 4 (Deterministic Comparison): Multi-layer weighted role benchmarks compared.
+ * 100% - Stage 5 (Longitudinal Revisit): Earlier baselines preserved for future comparative inspection.
+ */
 const STAGES = [
   {
     id: 'context',
@@ -55,7 +64,7 @@ export const HowItWorksContent = () => {
   const pathRef = useRef(null);
   const stageCardsRef = useRef([]);
 
-  const asset = MEDIA_ASSETS_V7.howItWorksCraft;
+  const heroAsset = MEDIA_ASSETS_V7.howProcess;
 
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
@@ -128,13 +137,13 @@ export const HowItWorksContent = () => {
 
           <div className="pa-hiw-hero__media-wrap">
             <picture>
-              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
-              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
+              <source type="image/avif" srcSet={heroAsset.avifSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
+              <source type="image/webp" srcSet={heroAsset.webpSrcSet} sizes="(min-width: 901px) 45vw, 100vw" />
               <img
-                src={asset.source}
-                alt={asset.alt}
-                width={asset.intrinsicDimensions.width}
-                height={asset.intrinsicDimensions.height}
+                src={heroAsset.source}
+                alt={heroAsset.alt}
+                width={heroAsset.intrinsicDimensions.width}
+                height={heroAsset.intrinsicDimensions.height}
                 className="pa-hiw-hero__img"
                 loading="eager"
                 fetchPriority="high"

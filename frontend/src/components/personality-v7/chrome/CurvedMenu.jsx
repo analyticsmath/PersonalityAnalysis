@@ -7,12 +7,12 @@ import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
 
 const MENU_ITEMS = [
   { num: '01', to: '/', label: 'Home', previewAsset: MEDIA_ASSETS_V7.homeContext },
-  { num: '02', to: '/career-intelligence', label: 'Career', previewAsset: MEDIA_ASSETS_V7.careerComplex },
-  { num: '03', to: '/how-it-works', label: 'Process', previewAsset: MEDIA_ASSETS_V7.howItWorksCraft },
+  { num: '02', to: '/career-intelligence', label: 'Career', previewAsset: MEDIA_ASSETS_V7.careerComplexMachine },
+  { num: '03', to: '/how-it-works', label: 'Process', previewAsset: MEDIA_ASSETS_V7.howProcess },
   { num: '04', to: '/progress', label: 'Progress', previewAsset: MEDIA_ASSETS_V7.progressStudio },
-  { num: '05', to: '/methodology', label: 'Method', previewAsset: MEDIA_ASSETS_V7.trustInspection },
+  { num: '05', to: '/methodology', label: 'Method', previewAsset: MEDIA_ASSETS_V7.homeAnalysis },
   { num: '06', to: '/trust', label: 'Trust', previewAsset: MEDIA_ASSETS_V7.trustInspection },
-  { num: '07', to: '/privacy', label: 'Privacy', previewAsset: MEDIA_ASSETS_V7.signupWorkshop },
+  { num: '07', to: '/privacy', label: 'Privacy', previewAsset: MEDIA_ASSETS_V7.signupFirstRecord },
 ];
 
 export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {

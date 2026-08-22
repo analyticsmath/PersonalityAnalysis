@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
@@ -8,15 +8,27 @@ import { useCursor } from '../../components/personality-v7/motion/CursorCoordina
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 
+const CareerSpatialCanvas = lazy(() => import('../../components/personality-v7/career/CareerSpatialCanvas'));
+
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * CAREER INTELLIGENCE STATE MAP (SPATIAL DOCUMENTARY ATLAS)
+ * 0%   - Active environment advances forward in z-depth (+120px) and scale (1.05).
+ *        Secondary supporting plane maintains depth (-70px to -140px).
+ * 25%  - On selection switch: 12x8 pixel transition activates for 320ms on active image bounds.
+ * 50%  - Asymmetric triad (Alignment / Tension / Develop) updates in open mineral composition below.
+ * 75%  - Subordinate role examples reflect environmental context with explicit editorial disclaimer.
+ * 100% - Kinetic typographic catalogue scrolls all 17 curated professional backend roles.
+ */
 const CAREER_LENSES = [
   {
     id: 'complex-problems',
     num: '01',
     title: 'Complex problems, clear ownership',
     shortName: 'STRUCTURE & OWNERSHIP',
-    asset: MEDIA_ASSETS_V7.careerComplex,
+    asset: MEDIA_ASSETS_V7.careerComplexMachine,
+    secondaryAsset: MEDIA_ASSETS_V7.careerControl,
     description: 'Work rewards structured problem solving when responsibility is clear enough to follow a decision through.',
     alignment: 'High engagement when technical boundaries and system ownership are clearly defined.',
     tension: 'Friction arises when accountability is fragmented across competing stakeholders.',
@@ -29,7 +41,8 @@ const CAREER_LENSES = [
     num: '02',
     title: 'Open questions, long focus',
     shortName: 'DEEP INQUIRY',
-    asset: MEDIA_ASSETS_V7.careerOpen,
+    asset: MEDIA_ASSETS_V7.careerDeepInquiry,
+    secondaryAsset: MEDIA_ASSETS_V7.evidenceLabDetail,
     description: 'Work leaves room to investigate, model possibilities and stay with a difficult problem before committing an answer.',
     alignment: 'Strong fit for deep analytical inquiry and hypothesis validation without artificial haste.',
     tension: 'Discomfort when forced into rapid superficial delivery without time to understand underlying dynamics.',
@@ -42,7 +55,8 @@ const CAREER_LENSES = [
     num: '03',
     title: 'Shared decisions, frequent coordination',
     shortName: 'CROSS-TEAM CONSENSUS',
-    asset: MEDIA_ASSETS_V7.careerShared,
+    asset: MEDIA_ASSETS_V7.careerCoordination,
+    secondaryAsset: MEDIA_ASSETS_V7.careerBroadcast,
     description: 'Progress depends on communication, prioritisation and decisions that cross team boundaries.',
     alignment: 'Thrives when translating disparate perspectives into coherent strategic consensus.',
     tension: 'Energy drain in highly siloed environments where communication channels are blocked.',
@@ -56,6 +70,7 @@ const CAREER_LENSES = [
     title: 'Visible output, material feedback',
     shortName: 'TANGIBLE CRAFT',
     asset: MEDIA_ASSETS_V7.evidenceVisible,
+    secondaryAsset: MEDIA_ASSETS_V7.career3dPrinting,
     description: 'Work produces something observable that can be tested, refined or handled.',
     alignment: 'High engagement when craft quality and ergonomics can be directly evaluated.',
     tension: 'Frustration with purely theoretical initiatives that produce no tangible artifact.',
@@ -69,6 +84,7 @@ const CAREER_LENSES = [
     title: 'Autonomy, pace, personal standards',
     shortName: 'AUTONOMOUS TEMPO',
     asset: MEDIA_ASSETS_V7.careerAutonomy,
+    secondaryAsset: MEDIA_ASSETS_V7.careerAnalysis,
     description: 'The environment gives substantial responsibility for how work is organised, judged and improved.',
     alignment: 'Excels under high trust, self-directed tempo, and uncompromised quality bars.',
     tension: 'Resistance to micromanagement or arbitrary bureaucratic constraints.',
@@ -111,6 +127,7 @@ export const CareerIntelligenceContent = () => {
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [pixelTransitionActive, setPixelTransitionActive] = useState(false);
+  const [canRenderWebGL, setCanRenderWebGL] = useState(false);
   const isFirstSelectionRef = useRef(true);
 
   const galleryRef = useRef(null);
@@ -122,7 +139,29 @@ export const CareerIntelligenceContent = () => {
 
   const activeLens = CAREER_LENSES[activeIdx];
 
-  // Initialize & Choreograph 3D Depth via GSAP (sole transform owner)
+  // Detect if WebGL progressive enhancement should be enabled (Desktop >1024 + fine pointer)
+  useEffect(() => {
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024;
+    const isFinePointer = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isDesktop && isFinePointer && !prefersReduced) {
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        if (gl) {
+          setCanRenderWebGL(true);
+        }
+      } catch {
+        setCanRenderWebGL(false);
+      }
+    }
+  }, []);
+
+  // Choreograph 3D Depth via GSAP (authoritative accessible transform owner)
   useEffect(() => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
     const prefersReduced =
@@ -210,9 +249,8 @@ export const CareerIntelligenceContent = () => {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!isFirstSelectionRef.current && !isMobile && !isCoarse && !prefersReduced) {
-      // Trigger Pixel Transition integrated within active media for 240ms
       setPixelTransitionActive(true);
-      setTimeout(() => setPixelTransitionActive(false), 240);
+      setTimeout(() => setPixelTransitionActive(false), 320);
     }
 
     isFirstSelectionRef.current = false;
@@ -241,6 +279,13 @@ export const CareerIntelligenceContent = () => {
 
       {/* ── Section 2: 3D Career Media Field & Spatial Selector (Carbon) ── */}
       <section className="pa-career-gallery-stage" data-tone="dark">
+        {/* Progressive WebGL 3D Canvas Enhancement (Desktop fine-pointer) */}
+        {canRenderWebGL && (
+          <Suspense fallback={null}>
+            <CareerSpatialCanvas activeIndex={activeIdx} items={CAREER_LENSES} isMobile={false} />
+          </Suspense>
+        )}
+
         <div className="pa-v7-grid pa-career-gallery-stage__controls-row">
           {/* Environment Switcher Buttons */}
           <div className="pa-career-gallery-stage__lenses">
@@ -265,7 +310,7 @@ export const CareerIntelligenceContent = () => {
           </div>
         </div>
 
-        {/* 3D Spatial Media Field (min-height 105vh, perspective 1200px) */}
+        {/* 3D Spatial Media Field (DOM/GSAP Atlas) */}
         <div ref={galleryRef} className="pa-career-spatial-field">
           {CAREER_LENSES.map((lens, idx) => {
             const isSelected = activeIdx === idx;
@@ -396,7 +441,7 @@ export const CareerIntelligenceContent = () => {
           </div>
         </div>
 
-        {/* Kinetic Typographic Crawler Rows (Infinite Text Move on Scroll) */}
+        {/* Kinetic Typographic Crawler Rows */}
         <div className="pa-career-catalogue__kinetic-field" aria-hidden="true">
           <div ref={catalogueRow1Ref} className="pa-career-catalogue__row">
             {[...ROLE_CATALOGUE_ROW_1, ...ROLE_CATALOGUE_ROW_1].map((role, i) => (

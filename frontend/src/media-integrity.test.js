@@ -11,18 +11,29 @@ describe('Production Media Integrity Verification', () => {
 
   const assetKeys = [
     'homeContext',
-    'signupWorkshop',
-    'careerComplex',
-    'careerOpen',
+    'homeSharedContext',
+    'homeAnalysis',
+    'careerComplexMachine',
+    'careerDeepInquiry',
+    'careerCoordination',
     'evidenceVisible',
-    'howItWorksCraft',
-    'careerShared',
     'careerAutonomy',
+    'careerControl',
+    'careerBroadcast',
+    'careerAnalysis',
+    'career3dPrinting',
+    'careerTeamDevice',
+    'evidenceLabDetail',
+    'howProcess',
     'progressStudio',
     'trustInspection',
+    'trustDiagnostic',
+    'signupFirstRecord',
+    'signupAgency',
   ];
 
-  it('declares all 10 unwatermarked photographic evidence assets in mediaManifest', () => {
+  it('declares all 20 unwatermarked photographic evidence assets in mediaManifest', () => {
+    expect(assetKeys.length).toBe(20);
     assetKeys.forEach((key) => {
       expect(MEDIA_ASSETS_V7).toHaveProperty(key);
       const asset = MEDIA_ASSETS_V7[key];

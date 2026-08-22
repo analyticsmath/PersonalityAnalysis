@@ -1,17 +1,27 @@
 import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import MagneticTarget from '../motion/MagneticTarget';
+import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
 
 export const DECISION_CHOICES = [
-  { id: 'c1', text: 'Clarify responsibilities before committing work.', desktopPos: { left: '4%', top: '8%' } },
-  { id: 'c2', text: 'Start a small test and learn from it.', desktopPos: { left: '34%', top: '29%' } },
-  { id: 'c3', text: 'Bring the teams together and align priorities.', desktopPos: { left: '8%', top: '55%' } },
-  { id: 'c4', text: 'Choose a direction and adjust as evidence arrives.', desktopPos: { left: '40%', top: '76%' } },
+  { id: 'c1', text: 'Clarify responsibilities before committing work.', desktopPos: { left: '6%', top: '10%' } },
+  { id: 'c2', text: 'Start a small test and learn from it.', desktopPos: { left: '36%', top: '30%' } },
+  { id: 'c3', text: 'Bring the teams together and align priorities.', desktopPos: { left: '10%', top: '56%' } },
+  { id: 'c4', text: 'Choose a direction and adjust as evidence arrives.', desktopPos: { left: '42%', top: '78%' } },
 ];
 
+/**
+ * HOME DECISION SCENE STATE MAP
+ * 0%   - Rear environmental plane (homeSharedContext) establishes situational work atmosphere.
+ * 25%  - Evidence statement is centered. 4 demonstration choices distributed asymmetrically across field.
+ * 50%  - On choice selection: chosen item migrates toward evidence axis, receives Oxblood marker.
+ * 75%  - Unselected choices recede in opacity (.22).
+ * 100% - Selected payload flows directly into the Transformation sequence.
+ */
 export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
   const choicesContainerRef = useRef(null);
   const choiceItemsRef = useRef([]);
+  const sharedContextAsset = MEDIA_ASSETS_V7.homeSharedContext;
 
   useEffect(() => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1024;
@@ -72,6 +82,23 @@ export const HomeDecisionChapter = ({ selectedChoice, onSelectChoice }) => {
       aria-label="Contextual Decision"
       data-tone="light"
     >
+      {/* Rear Environmental Plane (Collaborative Work Surface) */}
+      <div className="pa-home-decision__bg-media" aria-hidden="true">
+        <picture>
+          <source type="image/avif" srcSet={sharedContextAsset.avifSrcSet} sizes="(min-width: 901px) 50vw, 100vw" />
+          <source type="image/webp" srcSet={sharedContextAsset.webpSrcSet} sizes="(min-width: 901px) 50vw, 100vw" />
+          <img
+            src={sharedContextAsset.source}
+            alt=""
+            width={sharedContextAsset.intrinsicDimensions.width}
+            height={sharedContextAsset.intrinsicDimensions.height}
+            className="pa-home-decision__bg-img"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </div>
+
       <div className="pa-v7-grid pa-home-decision__grid">
         {/* Left 5 Columns: Question Prompt */}
         <div className="pa-home-decision__prompt">

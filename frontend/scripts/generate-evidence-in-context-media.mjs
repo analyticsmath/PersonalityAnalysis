@@ -21,49 +21,77 @@ const assetsConfig = [
     sourcePlatform: 'Unsplash Plus',
     isLandscape: true,
     focalPoint: { desktop: '45% 50%', tablet: '50% 50%', mobile: '50% 45%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 45%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
   },
   {
-    key: 'signup-workshop',
-    sourceFile: 'signup-workshop-vwgfw-df4fq.jpg',
-    id: 'VWgfW_Df4fQ',
-    alt: 'Woman working with precision machinery in a workshop',
-    title: 'Professional operating workshop machinery',
-    usage: 'Signup introduction & mobile portrait context',
+    key: 'home-shared-context',
+    sourceFile: 'home-shared-context-8ayxzntpap0.jpg',
+    id: '8ayxzntpap0',
+    alt: 'Professionals collaborating across an open work table with shared artifacts',
+    title: 'Collaborative analysis and situational decision context',
+    usage: 'Homepage Decision spatial environment',
     creator: "Roberta Sant'Anna",
     creatorUsername: 'roberta_sant_anna',
     sourcePlatform: 'Unsplash Plus',
-    isLandscape: false,
-    focalPoint: { desktop: '50% 40%', tablet: '50% 40%', mobile: '50% 35%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 35%' },
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
   },
   {
-    key: 'career-complex-problems',
-    sourceFile: 'career-complex-problems-rf2fwjajd7s.jpg',
-    id: 'Rf2FWjajd7s',
-    alt: 'Person at machinery with structured focus',
-    title: 'Structured problem solving in technical machinery environment',
+    key: 'home-analysis',
+    sourceFile: 'home-analysis-vjg1teprcd0.jpg',
+    id: 'vjg1teprcd0',
+    alt: 'Close analytical inspection of materials and technical data',
+    title: 'Methodological inspection and data observation',
+    usage: 'Homepage opening depth layer & Work Values memory',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '52% 48%', tablet: '50% 50%', mobile: '50% 45%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'career-complex-machine',
+    sourceFile: 'career-complex-machine-shbyg6mb3o.jpg',
+    id: 'shbyg6mb3o',
+    alt: 'Engineer operating precision mechanical systems with direct control',
+    title: 'Structured problem solving and technical system ownership',
     usage: 'Career Intelligence: Complex problems, clear ownership',
     creator: "Roberta Sant'Anna",
     creatorUsername: 'roberta_sant_anna',
     sourcePlatform: 'Unsplash Plus',
     isLandscape: true,
     focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
   },
   {
-    key: 'career-open-questions',
-    sourceFile: 'career-open-questions-lqqz57tvwfo.jpg',
-    id: 'lQQz57tvWfo',
-    alt: 'Jeweler concentrating meticulously at workstation',
-    title: 'Focused inquiry and deep investigation at technical workstation',
+    key: 'career-deep-inquiry',
+    sourceFile: 'career-deep-inquiry-gnasyqdkdbi.jpg',
+    id: 'gnasyqdkdbi',
+    alt: 'Scientist conducting meticulous examination with laboratory instrument',
+    title: 'Deep inquiry and technical investigation',
     usage: 'Career Intelligence: Open questions, long focus',
     creator: "Roberta Sant'Anna",
     creatorUsername: 'roberta_sant_anna',
     sourcePlatform: 'Unsplash Plus',
     isLandscape: true,
-    focalPoint: { desktop: '52% 48%', tablet: '50% 50%', mobile: '50% 45%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 45%' },
+    focalPoint: { desktop: '50% 45%', tablet: '50% 45%', mobile: '50% 40%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'top' },
+  },
+  {
+    key: 'career-coordination',
+    sourceFile: 'career-coordination-qnfckqwyu1k.jpg',
+    id: 'qnfckqwyu1k',
+    alt: 'Designers and engineers collaborating closely over technical plans',
+    title: 'Cross-functional coordination and shared decision making',
+    usage: 'Career Intelligence: Shared decisions, frequent coordination',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
   },
   {
     key: 'evidence-visible-output',
@@ -77,35 +105,7 @@ const assetsConfig = [
     sourcePlatform: 'Unsplash Plus',
     isLandscape: false,
     focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
-    mobileCrop: { widthRatio: 3, heightRatio: 4, focal: '50% 50%' },
-  },
-  {
-    key: 'how-it-works-craft',
-    sourceFile: 'how-it-works-craft-5jmxbz-d49s.jpg',
-    id: '5JmxBz_d49s',
-    alt: 'Hands working with tools and materials on a physical work surface',
-    title: 'Hands and precision tools shaping raw materials',
-    usage: 'How It Works opening and evidence narrative',
-    creator: "Roberta Sant'Anna",
-    creatorUsername: 'roberta_sant_anna',
-    sourcePlatform: 'Unsplash Plus',
-    isLandscape: true,
-    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 50%' },
-  },
-  {
-    key: 'career-shared-decisions',
-    sourceFile: 'career-shared-decisions-epnz8c20f-o.jpg',
-    id: 'ePnZ8c20f_o',
-    alt: 'Craftsperson in collaborative studio workshop',
-    title: 'Multi-disciplinary studio craft and shared workflow',
-    usage: 'Career Intelligence: Shared decisions, frequent coordination',
-    creator: "Roberta Sant'Anna",
-    creatorUsername: 'roberta_sant_anna',
-    sourcePlatform: 'Unsplash Plus',
-    isLandscape: true,
-    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 50%' },
+    mobileCrop: { widthRatio: 3, heightRatio: 4, focal: 'center' },
   },
   {
     key: 'career-autonomy',
@@ -119,7 +119,105 @@ const assetsConfig = [
     sourcePlatform: 'Unsplash Plus',
     isLandscape: true,
     focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'career-control',
+    sourceFile: 'career-control-khikhsrqgt4.jpg',
+    id: 'khikhsrqgt4',
+    alt: 'Specialist configuring industrial instrumentation controls',
+    title: 'Industrial instrumentation and process governance',
+    usage: 'Career Atlas secondary depth plane',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'career-broadcast',
+    sourceFile: 'career-broadcast-lorhdkrohvw.jpg',
+    id: 'lorhdkrohvw',
+    alt: 'Production console in technical broadcast environment',
+    title: 'Real-time broadcast media operations and transmission control',
+    usage: 'Career Atlas secondary depth plane',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'career-analysis',
+    sourceFile: 'career-analysis-gxjuznhq.jpg',
+    id: 'gxjuznhq',
+    alt: 'Technical analyst reviewing detailed diagnostic telemetry',
+    title: 'Quantitative analysis and data validation',
+    usage: 'Career Atlas secondary depth plane',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'career-3d-printing',
+    sourceFile: 'career-3d-printing-6e5sxczdmce.jpg',
+    id: '6e5sxczdmce',
+    alt: 'Additive manufacturing and precision rapid prototyping',
+    title: 'Rapid digital fabrication and prototype modeling',
+    usage: 'Career Atlas secondary depth plane',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'career-team-device',
+    sourceFile: 'career-team-device-ivrtfrzbzrg.jpg',
+    id: 'ivrtfrzbzrg',
+    alt: 'Hardware engineering team testing connected device prototypes',
+    title: 'Embedded hardware verification and physical device integration',
+    usage: 'Career Atlas secondary depth plane',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'evidence-lab-detail',
+    sourceFile: 'evidence-lab-detail-ontjllb3kri.jpg',
+    id: 'ontjllb3kri',
+    alt: 'Detailed optical magnification and laboratory measurement setup',
+    title: 'Precision measurement calibration and micro-scale inspection',
+    usage: 'How It Works detail & Career Atlas depth layer',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'how-process',
+    sourceFile: 'how-process-jhtfogpvg8.jpg',
+    id: 'jhtfogpvg8',
+    alt: 'Meticulous technical process execution in structured workshop',
+    title: 'Process development and methodological workflow',
+    usage: 'How It Works opening and evidence narrative',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
   },
   {
     key: 'progress-studio',
@@ -133,7 +231,7 @@ const assetsConfig = [
     sourcePlatform: 'Unsplash Plus',
     isLandscape: false,
     focalPoint: { desktop: '50% 40%', tablet: '50% 40%', mobile: '50% 35%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 35%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'top' },
   },
   {
     key: 'trust-inspection',
@@ -141,20 +239,62 @@ const assetsConfig = [
     id: 'nEY2bbWMfnQ',
     alt: 'Person inspecting fine details with a magnifying glass',
     title: 'Meticulous inspection and provenance verification',
-    usage: 'Trust and provenance route inspectable record hero',
+    usage: 'Trust route human inspection hero layer',
     creator: "Roberta Sant'Anna",
     creatorUsername: 'roberta_sant_anna',
     sourcePlatform: 'Unsplash Plus',
     isLandscape: false,
     focalPoint: { desktop: '50% 45%', tablet: '50% 45%', mobile: '50% 40%' },
-    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: '50% 40%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'top' },
+  },
+  {
+    key: 'trust-diagnostic',
+    sourceFile: 'trust-diagnostic-aq7oa5ikihs.jpg',
+    id: 'aq7oa5ikihs',
+    alt: 'Technical probe and diagnostic instrumentation contact detail',
+    title: 'Diagnostic measurement and signal verification',
+    usage: 'Trust route technical diagnostic layer',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
+  },
+  {
+    key: 'signup-first-record',
+    sourceFile: 'signup-first-record-vogj3ghonk0.jpg',
+    id: 'vogj3ghonk0',
+    alt: 'Hands recording initial documentation and technical notes in workspace',
+    title: 'Initial record formation and professional documentation',
+    usage: 'Signup route primary environmental plane',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: false,
+    focalPoint: { desktop: '50% 45%', tablet: '50% 45%', mobile: '50% 40%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'top' },
+  },
+  {
+    key: 'signup-agency',
+    sourceFile: 'signup-agency-yi5jlsra5j8.jpg',
+    id: 'yi5jlsra5j8',
+    alt: 'Professional in structured workspace establishing project ownership',
+    title: 'Individual agency and purposeful project foundation',
+    usage: 'Signup route secondary support plane',
+    creator: "Roberta Sant'Anna",
+    creatorUsername: 'roberta_sant_anna',
+    sourcePlatform: 'Unsplash Plus',
+    isLandscape: true,
+    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
+    mobileCrop: { widthRatio: 4, heightRatio: 5, focal: 'center' },
   },
 ];
 
 async function processAsset(asset) {
   const sourcePath = path.join(sourceDir, asset.sourceFile);
   console.log(`[Media Pipeline] Processing ${asset.key} from ${asset.sourceFile}...`);
-  
+
   const buffer = await fs.readFile(sourcePath);
   const image = sharp(buffer, { failOn: 'none' });
   const meta = await image.metadata();
@@ -162,7 +302,7 @@ async function processAsset(asset) {
   console.log(`  Source dimensions: ${meta.width}x${meta.height}`);
 
   const derivatives = [];
-  const standardWidths = asset.isLandscape ? [2400, 1600, 1080, 720] : [1600, 1200, 900, 640];
+  const standardWidths = asset.isLandscape ? [1440, 1080, 720] : [1080, 720];
 
   for (const w of standardWidths) {
     if (w > meta.width + 100) continue;
@@ -197,7 +337,7 @@ async function processAsset(asset) {
   // Mobile portrait crops (4:5 or 3:4)
   const mobileWidths = [720, 480];
   for (const mw of mobileWidths) {
-    const crop = asset.mobileCrop || { widthRatio: 4, heightRatio: 5 };
+    const crop = asset.mobileCrop || { widthRatio: 4, heightRatio: 5, focal: 'center' };
     const targetHeight = Math.round((mw * crop.heightRatio) / crop.widthRatio);
     const mobileBaseName = `${asset.key}-mobile-${mw}`;
     const mobileBasePath = path.join(outputDir, mobileBaseName);
@@ -207,7 +347,7 @@ async function processAsset(asset) {
         width: mw,
         height: targetHeight,
         fit: 'cover',
-        position: crop.focal === '50% 35%' ? 'top' : 'center',
+        position: crop.focal === 'top' ? 'top' : (crop.focal === 'bottom' ? 'bottom' : 'center'),
       })
       .avif({ quality: 68, effort: 4 })
       .toFile(`${mobileBasePath}.avif`);
@@ -217,7 +357,7 @@ async function processAsset(asset) {
         width: mw,
         height: targetHeight,
         fit: 'cover',
-        position: crop.focal === '50% 35%' ? 'top' : 'center',
+        position: crop.focal === 'top' ? 'top' : (crop.focal === 'bottom' ? 'bottom' : 'center'),
       })
       .webp({ quality: 84, effort: 4 })
       .toFile(`${mobileBasePath}.webp`);
@@ -227,7 +367,7 @@ async function processAsset(asset) {
         width: mw,
         height: targetHeight,
         fit: 'cover',
-        position: crop.focal === '50% 35%' ? 'top' : 'center',
+        position: crop.focal === 'top' ? 'top' : (crop.focal === 'bottom' ? 'bottom' : 'center'),
       })
       .jpeg({ quality: 85, progressive: true, mozjpeg: true })
       .toFile(`${mobileBasePath}.jpg`);
@@ -257,6 +397,7 @@ async function processAsset(asset) {
     aspectRatio: (meta.width / meta.height).toFixed(3),
     isLandscape: asset.isLandscape,
     focalPoint: asset.focalPoint,
+    mobileCrop: asset.mobileCrop,
     derivatives,
     nonEndorsementNote,
   };
@@ -273,15 +414,18 @@ async function main() {
   }
 
   const manifestData = {
-    version: 1,
-    artDirection: 'Evidence in Context',
+    version: 2,
+    artDirection: 'Evidence Field / Evidence in Context',
     generatedAt: retrievedAt,
     totalAssets: manifest.length,
     assets: manifest,
   };
 
   await fs.writeFile(manifestPath, JSON.stringify(manifestData, null, 2), 'utf-8');
-  console.log(`\n── Successfully generated all derivatives. Manifest written to ${manifestPath} ──`);
+  console.log(`\n── Successfully generated all 20 derivative sets. Manifest written to ${manifestPath} ──`);
 }
 
-main();
+main().catch((err) => {
+  console.error('[Media Pipeline ERROR]', err);
+  process.exit(1);
+});

@@ -30,25 +30,55 @@ const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplo
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
 
-const SuspensePageFallback = () => (
-  <main
-    className="app-page pa-suspense-fallback"
-    style={{
-      backgroundColor: 'var(--pa-mineral, #F3F5F2)',
-      color: 'var(--pa-carbon, #0D0F0E)',
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <div className="page-shell" style={{ textAlign: 'center' }}>
-      <LoadingState message="Loading page" />
-    </div>
-  </main>
-);
+const SuspensePageFallback = ({ pathname = '' }) => {
+  const isDark = pathname.startsWith('/login') || pathname.startsWith('/career-intelligence');
+  const bg = isDark ? 'var(--pa-carbon, #0D0F0E)' : 'var(--pa-mineral, #F3F5F2)';
+  const fg = isDark ? 'var(--pa-mineral, #F3F5F2)' : 'var(--pa-carbon, #0D0F0E)';
+  const traceColor = 'var(--pa-oxblood, #642832)';
 
-const withSuspense = (node) => <Suspense fallback={<SuspensePageFallback />}>{node}</Suspense>;
+  return (
+    <main
+      className="app-page pa-suspense-fallback"
+      style={{
+        backgroundColor: bg,
+        color: fg,
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      aria-label="Loading route"
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+        <div
+          style={{
+            width: '32px',
+            height: '2px',
+            backgroundColor: traceColor,
+            opacity: 0.8,
+          }}
+          aria-hidden="true"
+        />
+        <span
+          style={{
+            fontFamily: 'var(--pa-font-sans, "Instrument Sans", sans-serif)',
+            fontSize: '0.75rem',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            opacity: 0.5,
+          }}
+        >
+          Evidence Field
+        </span>
+      </div>
+    </main>
+  );
+};
+
+const withSuspense = (node, pathname = '') => (
+  <Suspense fallback={<SuspensePageFallback pathname={pathname} />}>{node}</Suspense>
+);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,14 +98,14 @@ const AppRoutes = () => {
       <Routes location={location} key={`${location.pathname}${location.search}`}>
         {/* ── Public Routes (Evidence in Context Visual Architecture) ── */}
         <Route path="/" element={<EditorialHomePage />} />
-        <Route path="/how-it-works" element={withSuspense(<EditorialHowItWorksPage />)} />
-        <Route path="/career-intelligence" element={withSuspense(<EditorialCareerIntelligencePage />)} />
-        <Route path="/progress" element={withSuspense(<EditorialProgressPage />)} />
-        <Route path="/methodology" element={withSuspense(<EditorialMethodologyPage />)} />
-        <Route path="/trust" element={withSuspense(<EditorialTrustPage />)} />
-        <Route path="/privacy" element={withSuspense(<EditorialPrivacyPage />)} />
-        <Route path="/login" element={withSuspense(<LoginPage />)} />
-        <Route path="/signup" element={withSuspense(<SignupPage />)} />
+        <Route path="/how-it-works" element={withSuspense(<EditorialHowItWorksPage />, '/how-it-works')} />
+        <Route path="/career-intelligence" element={withSuspense(<EditorialCareerIntelligencePage />, '/career-intelligence')} />
+        <Route path="/progress" element={withSuspense(<EditorialProgressPage />, '/progress')} />
+        <Route path="/methodology" element={withSuspense(<EditorialMethodologyPage />, '/methodology')} />
+        <Route path="/trust" element={withSuspense(<EditorialTrustPage />, '/trust')} />
+        <Route path="/privacy" element={withSuspense(<EditorialPrivacyPage />, '/privacy')} />
+        <Route path="/login" element={withSuspense(<LoginPage />, '/login')} />
+        <Route path="/signup" element={withSuspense(<SignupPage />, '/signup')} />
 
         {/* ── Protected Application Routes ── */}
         <Route

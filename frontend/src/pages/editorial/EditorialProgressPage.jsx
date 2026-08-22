@@ -9,6 +9,13 @@ import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * PROGRESS RECOMPOSITION STATE MAP (TEMPORAL EVIDENCE SYNTHESIS)
+ * 0%   - Earlier evidence baseline is established on upper spatial plane.
+ * 35%  - New context documentary crop (progressStudio) enters on middle plane with scroll parallax.
+ * 65%  - Layers intersect; Synthesized Revised Reading emerges directly from the overlap boundary.
+ * 100% - All three states remain independently inspectable, demonstrating that new evidence never erases past records.
+ */
 export const ProgressContent = () => {
   const { navigateWithTransition } = useRouteTransition();
   const recompositionStageRef = useRef(null);

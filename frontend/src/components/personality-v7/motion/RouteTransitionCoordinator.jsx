@@ -54,6 +54,7 @@ export const RouteTransitionCoordinator = ({ children }) => {
   const wordRef = useRef(null);
   const currentTimelineRef = useRef(null);
   const pendingTargetRef = useRef(null);
+  const currentGenerationRef = useRef(0);
   const readyRoutesRef = useRef(new Set());
   const readyListenerRef = useRef(null);
   const safetyTimerRef = useRef(null);
@@ -91,6 +92,8 @@ export const RouteTransitionCoordinator = ({ children }) => {
         return;
       }
 
+      // Increment generation token so any previous transition attempt is superseded (Amendment 9)
+      const thisGeneration = ++currentGenerationRef.current;
       const keyword = ROUTE_KEYWORDS[cleanTarget] || 'EVIDENCE';
       pendingTargetRef.current = targetPath;
 
@@ -139,7 +142,7 @@ export const RouteTransitionCoordinator = ({ children }) => {
           overlay,
           { clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' },
           {
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
             duration: totalDuration * 0.35,
             ease: 'power4.inOut',
           },
@@ -167,6 +170,9 @@ export const RouteTransitionCoordinator = ({ children }) => {
 
       // Phase 3: Once viewport is visually owned by mask, execute navigate()
       tl.add(() => {
+        // If a newer navigation superseded this generation, abort this execution
+        if (currentGenerationRef.current !== thisGeneration) return;
+
         const destination = pendingTargetRef.current;
         if (!destination) return;
 
@@ -174,6 +180,8 @@ export const RouteTransitionCoordinator = ({ children }) => {
 
         // Function to proceed with uncovering once route DOM is ready
         const proceedWithEntrance = () => {
+          if (currentGenerationRef.current !== thisGeneration) return;
+
           if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
           readyListenerRef.current = null;
 
@@ -190,10 +198,12 @@ export const RouteTransitionCoordinator = ({ children }) => {
 
           const exitTl = gsap.timeline({
             onComplete: () => {
-              setTransitionState({ active: false, keyword: '', target: '' });
-              if (overlay) overlay.style.display = 'none';
-              currentTimelineRef.current = null;
-              pendingTargetRef.current = null;
+              if (currentGenerationRef.current === thisGeneration) {
+                setTransitionState({ active: false, keyword: '', target: '' });
+                if (overlay) overlay.style.display = 'none';
+                currentTimelineRef.current = null;
+                pendingTargetRef.current = null;
+              }
             },
           });
           currentTimelineRef.current = exitTl;
@@ -229,14 +239,16 @@ export const RouteTransitionCoordinator = ({ children }) => {
           proceedWithEntrance();
         } else {
           readyListenerRef.current = (readyPath) => {
-            if (readyPath === targetClean) {
+            if (readyPath === targetClean && currentGenerationRef.current === thisGeneration) {
               proceedWithEntrance();
             }
           };
 
           // Safety fallback timeout: max 2000ms in case bundle load is delayed
           safetyTimerRef.current = setTimeout(() => {
-            proceedWithEntrance();
+            if (currentGenerationRef.current === thisGeneration) {
+              proceedWithEntrance();
+            }
           }, 2000);
         }
       }, totalDuration * 0.48);

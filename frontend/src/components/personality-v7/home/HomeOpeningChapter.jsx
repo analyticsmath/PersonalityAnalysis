@@ -4,19 +4,35 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
 import MagneticTarget from '../motion/MagneticTarget';
 import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
+import { useCursor } from '../motion/CursorCoordinator';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership before committing work.”' }) => {
+/**
+ * HOME OPENING SCENE STATE MAP
+ * 0%   - Environment dominates. Primary media (homeContext) owns 68% viewport area with asymmetric hard clip.
+ *        Headline in negative space. Open typographic evidence quote visible. Secondary media (homeAnalysis) at rear depth.
+ * 25%  - Headline reduces visual ownership via y/scale/opacity. Primary crop shifts. Evidence remains stable.
+ * 50%  - Evidence moves closer to central visual axis. Secondary analytical image crosses behind in depth.
+ * 75%  - Environment recedes. Oxblood provenance trace appears. Evidence becomes payload handed to Decision.
+ * 100% - Opening chapter resolved. Evidence object persists seamlessly into Decision scene.
+ */
+export const HomeOpeningChapter = ({
+  evidenceText = '“I prefer clear ownership before committing work.”',
+}) => {
   const { navigateWithTransition } = useRouteTransition();
+  const { setApertureActive, setCursorLabel, clearCursorLabel } = useCursor();
+
   const sectionRef = useRef(null);
   const headlineRef = useRef(null);
   const leadRef = useRef(null);
-  const imagePlaneRef = useRef(null);
+  const primaryImageRef = useRef(null);
+  const secondaryImageRef = useRef(null);
   const evidenceCardRef = useRef(null);
   const maskLayerRef = useRef(null);
 
-  const asset = MEDIA_ASSETS_V7.homeContext;
+  const primaryAsset = MEDIA_ASSETS_V7.homeContext;
+  const secondaryAsset = MEDIA_ASSETS_V7.homeAnalysis;
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,7 +41,7 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
 
     if (prefersReduced || isTest) return;
 
-    // Pointer Parallax across multiple depth planes (desktop only)
+    // Desktop Pointer Parallax across multiple depth planes
     let pointerCleanup = () => {};
     if (!isMobile) {
       const handlePointerMove = (e) => {
@@ -33,17 +49,25 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
         const normY = (e.clientY / window.innerHeight - 0.5) * 2;
 
         gsap.to(headlineRef.current, {
-          x: normX * 5,
-          y: normY * 5,
+          x: normX * 6,
+          y: normY * 6,
           duration: 0.8,
           ease: 'power2.out',
           overwrite: 'auto',
         });
 
-        gsap.to(imagePlaneRef.current, {
-          x: normX * 9,
-          y: normY * 9,
+        gsap.to(primaryImageRef.current, {
+          x: normX * 10,
+          y: normY * 10,
           duration: 1.0,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+
+        gsap.to(secondaryImageRef.current, {
+          x: normX * 4,
+          y: normY * 4,
+          duration: 1.2,
           ease: 'power2.out',
           overwrite: 'auto',
         });
@@ -61,25 +85,26 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
       pointerCleanup = () => window.removeEventListener('pointermove', handlePointerMove);
     }
 
-    // Scroll Choreography & Hero -> Context Transition (110vh)
+    // Scroll Choreography & Hero -> Context Transition
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=110%',
+          end: '+=120%',
           scrub: 0.85,
           pin: !isMobile,
           anticipatePin: 1,
         },
       });
 
-      // 0–20%: Headline surrenders visual ownership
+      // 0–25%: Headline reduces visual ownership
       tl.to(
         headlineRef.current,
         {
-          y: '-6vh',
-          opacity: 0.25,
+          y: '-8vh',
+          scale: 0.96,
+          opacity: 0.2,
           ease: 'none',
         },
         0
@@ -89,44 +114,65 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
         leadRef.current,
         {
           opacity: 0,
-          y: '-4vh',
+          y: '-5vh',
           ease: 'none',
         },
         0
       );
 
-      // Main image parallax & scale (0 → -9vh, scale 1 → 1.07)
+      // Primary image crop shift & parallax
       tl.to(
-        imagePlaneRef.current,
+        primaryImageRef.current,
         {
-          y: '-9vh',
-          scale: 1.07,
+          y: '-10vh',
+          scale: 1.06,
           clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
           ease: 'none',
         },
         0
       );
 
-      // 35–70%: Evidence statement becomes dominant and moves downward
+      // Secondary analytical image moves in depth
+      tl.to(
+        secondaryImageRef.current,
+        {
+          y: '-4vh',
+          x: '2vw',
+          opacity: 0.7,
+          ease: 'power1.out',
+        },
+        0.15
+      );
+
+      // 35–75%: Evidence statement moves toward central visual axis
       tl.to(
         evidenceCardRef.current,
         {
-          y: '+10vh',
-          scale: 1.03,
+          y: '+12vh',
+          scale: 1.04,
           ease: 'power1.inOut',
         },
-        0.35
+        0.3
       );
 
-      // 70–90%: Hero image fades and leaves
+      // 70–100%: Opening environment recedes into Decision
       tl.to(
-        imagePlaneRef.current,
+        primaryImageRef.current,
         {
           opacity: 0,
           scale: 1.12,
           ease: 'power2.in',
         },
         0.7
+      );
+
+      tl.to(
+        secondaryImageRef.current,
+        {
+          opacity: 0,
+          ease: 'power2.in',
+        },
+        0.75
       );
     }, sectionRef);
 
@@ -149,6 +195,16 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
     }
   };
 
+  const handlePointerEnterMedia = () => {
+    setCursorLabel('INSPECT');
+    setApertureActive(true);
+  };
+
+  const handlePointerLeaveMedia = () => {
+    clearCursorLabel();
+    setApertureActive(false);
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -157,16 +213,38 @@ export const HomeOpeningChapter = ({ evidenceText = '“I prefer clear ownership
       data-tone="light"
     >
       <div className="pa-home-opening__viewport">
-        {/* Asymmetric Curved Media Plane (Desktop 1440+) */}
-        <div ref={imagePlaneRef} className="pa-home-opening__media-plane">
+        {/* Secondary Analytical Media Layer in Depth */}
+        <div ref={secondaryImageRef} className="pa-home-opening__media-secondary" aria-hidden="true">
           <picture>
-            <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(min-width: 901px) 68vw, 100vw" />
-            <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(min-width: 901px) 68vw, 100vw" />
+            <source type="image/avif" srcSet={secondaryAsset.avifSrcSet} sizes="(min-width: 901px) 30vw, 50vw" />
+            <source type="image/webp" srcSet={secondaryAsset.webpSrcSet} sizes="(min-width: 901px) 30vw, 50vw" />
             <img
-              src={asset.source}
-              alt={asset.alt}
-              width={asset.intrinsicDimensions.width}
-              height={asset.intrinsicDimensions.height}
+              src={secondaryAsset.source}
+              alt=""
+              width={secondaryAsset.intrinsicDimensions.width}
+              height={secondaryAsset.intrinsicDimensions.height}
+              className="pa-home-opening__media-secondary-img"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
+
+        {/* Asymmetric Hard-Clipped Primary Media Plane */}
+        <div
+          ref={primaryImageRef}
+          className="pa-home-opening__media-plane"
+          onMouseEnter={handlePointerEnterMedia}
+          onMouseLeave={handlePointerLeaveMedia}
+        >
+          <picture>
+            <source type="image/avif" srcSet={primaryAsset.avifSrcSet} sizes="(min-width: 901px) 68vw, 100vw" />
+            <source type="image/webp" srcSet={primaryAsset.webpSrcSet} sizes="(min-width: 901px) 68vw, 100vw" />
+            <img
+              src={primaryAsset.source}
+              alt={primaryAsset.alt}
+              width={primaryAsset.intrinsicDimensions.width}
+              height={primaryAsset.intrinsicDimensions.height}
               className="pa-home-opening__media-img"
               loading="eager"
               fetchPriority="high"
