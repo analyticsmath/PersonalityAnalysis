@@ -45,6 +45,7 @@ export const HomeCareerTakeoverScene = () => {
   const { navigateWithTransition } = useRouteTransition();
   const sceneRef = useRef(null);
   const planesRef = useRef([]);
+  const tlRef = useRef(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const activeIdxRef = useRef(0);
 
@@ -100,6 +101,7 @@ export const HomeCareerTakeoverScene = () => {
           },
         },
       });
+      tlRef.current = tl;
 
       // Cross-fade / crop replacement across environments
       planesRef.current.forEach((plane, idx) => {
@@ -136,6 +138,13 @@ export const HomeCareerTakeoverScene = () => {
   const handleSelectEnv = (idx) => {
     activeIdxRef.current = idx;
     setActiveIdx(idx);
+
+    const st = tlRef.current?.scrollTrigger;
+    if (st && typeof window !== 'undefined') {
+      const targetP = idx === 0 ? 0.05 : idx === 1 ? 0.5 : 0.95;
+      const targetScroll = st.start + (st.end - st.start) * targetP;
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }
   };
 
   const currentEnv = CAREER_ENVIRONMENTS[activeIdx] || CAREER_ENVIRONMENTS[0];

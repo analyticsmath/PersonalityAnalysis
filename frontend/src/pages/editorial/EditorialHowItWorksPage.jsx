@@ -218,7 +218,7 @@ export const EditorialHowItWorksPage = () => {
                         : activeSegment === 2
                         ? 'MULTI-DIMENSIONAL SPECIMEN'
                         : activeSegment === 3
-                        ? 'VALIDATED EVIDENCE ATOM'
+                        ? 'ILLUSTRATIVE SPECIMEN'
                         : activeSegment === 4
                         ? 'CALIBRATED FIT SPECIMEN'
                         : 'STORED ASSESSMENT RECORD'
@@ -231,7 +231,7 @@ export const EditorialHowItWorksPage = () => {
                         : activeSegment === 2
                         ? 'SOURCE: INITIATIVE-PATTERN-INTERMEDIATE'
                         : activeSegment === 3
-                        ? 'VERIFIED CONSISTENCY / VALIDITY GATED'
+                        ? 'VALIDITY GATE: EVALUATION CRITERIA'
                         : activeSegment === 4
                         ? 'WEIGHTED BENCHMARK SPECIMEN'
                         : 'STORED RECORD / PROVENANCE SECURED'
@@ -276,10 +276,27 @@ export const EditorialHowItWorksPage = () => {
                   </div>
                 )}
 
-                {/* Stage Context: Segment 2 Spatial Asymmetric Branching */}
+                {/* Stage Context: Segment 2 Spatial Asymmetric Branching with Traces & Support Media */}
                 {activeSegment === 2 && (
                   <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--asymmetric">
                     <div className="pa-engine-asymmetric-field">
+                      {/* Oxblood SVG Traces from Persistent Strip to 4 Endpoints */}
+                      <svg className="pa-engine-asymmetric-traces" viewBox="0 0 800 400" fill="none" aria-hidden="true">
+                        <path d="M 400 0 C 300 30, 140 10, 100 40" stroke="var(--pa-oxblood, #642832)" strokeWidth="1.5" strokeDasharray="3 3" />
+                        <path d="M 400 0 C 500 25, 660 30, 700 60" stroke="var(--pa-oxblood, #642832)" strokeWidth="1.5" strokeDasharray="3 3" />
+                        <path d="M 400 0 C 320 100, 160 160, 120 200" stroke="var(--pa-oxblood, #642832)" strokeWidth="1.5" strokeDasharray="3 3" />
+                        <path d="M 400 0 C 480 120, 640 200, 680 260" stroke="var(--pa-oxblood, #642832)" strokeWidth="1.5" strokeDasharray="3 3" />
+                      </svg>
+
+                      {/* Restrained Documentary Support Crop */}
+                      <div className="pa-engine-asymmetric-support-crop">
+                        <EnvironmentPlane
+                          asset={MEDIA_ASSETS_V7.evidenceLabDetail}
+                          role="support"
+                          caption="DOCUMENTARY EXTRACTION DETAIL"
+                        />
+                      </div>
+
                       <div className="pa-engine-asymmetric-node pa-engine-asymmetric-node--1">
                         <span className="pa-engine-pipeline__dim-label">BIG FIVE</span>
                         <strong className="pa-engine-pipeline__key-label">Extraversion</strong>

@@ -299,7 +299,6 @@ export const EditorialCareerIntelligencePage = () => {
                     ROLE PROFILE: {selectedRoleId.toUpperCase()}
                   </span>
                   <h3 className="pa-career-atlas__role-detail-title">{selectedProfile.title}</h3>
-                  <p className="pa-career-atlas__role-desc">{selectedProfile.description}</p>
                 </div>
 
                 <div className="pa-career-atlas__open-spec-grid">

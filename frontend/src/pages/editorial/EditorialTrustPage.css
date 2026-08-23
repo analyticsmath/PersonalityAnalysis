@@ -243,13 +243,22 @@
 /* ── Mobile and Tablet Adaptations ── */
 @media (max-width: 900px) {
   .pa-trust-hero__primary-media {
-    left: 10vw;
-    width: 90vw;
-    opacity: 0.2;
+    left: 4vw;
+    top: 4vh;
+    width: 92vw;
+    height: 55vh;
+    opacity: 0.22;
   }
 
   .pa-trust-hero__diag-media {
-    display: none;
+    display: block;
+    position: absolute;
+    bottom: 2vh;
+    right: 4vw;
+    width: clamp(140px, 30vw, 220px);
+    height: clamp(90px, 22vw, 150px);
+    opacity: 0.35;
+    z-index: 1;
   }
 
   .pa-trust-rights__asymmetric-field {

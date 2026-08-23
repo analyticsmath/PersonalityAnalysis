@@ -41,7 +41,7 @@ export const EditorialProgressPage = () => {
 
     const ctx = gsap.context(() => {
       if (isMobile) {
-        // Mobile temporal sequence along 140svh scroll
+        // Mobile temporal sequence along 140svh scroll: Later crop animates into earlier crop with Assessment 02
         const mobileTl = gsap.timeline({
           scrollTrigger: {
             trigger: film,
@@ -54,12 +54,19 @@ export const EditorialProgressPage = () => {
         });
 
         mobileTl
-          .fromTo(strip1Ref.current, { opacity: 0.8, y: 0 }, { opacity: 1, y: 0, duration: 0.3 }, 0)
+          .fromTo(cropARef.current, { opacity: 0.25 }, { opacity: 0.35, duration: 0.25 }, 0)
+          .fromTo(strip1Ref.current, { opacity: 0.8, y: 0 }, { opacity: 1, y: 0, duration: 0.25 }, 0)
+          .fromTo(
+            cropBRef.current,
+            { opacity: 0.05, scale: 0.94, x: 24 },
+            { opacity: 0.3, scale: 1, x: 0, duration: 0.35 },
+            0.2
+          )
           .fromTo(
             strip2Ref.current,
             { opacity: 0, x: 16, y: 16 },
             { opacity: 1, x: 0, y: 0, duration: 0.35 },
-            0.3
+            0.25
           )
           .fromTo(
             intersectionRef.current,
