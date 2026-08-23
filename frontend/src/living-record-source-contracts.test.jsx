@@ -267,4 +267,51 @@ describe('The Living Record — Source & Architecture Contract Guardrails', () =
     expect(smoothScroll).toContain('prefers-reduced-motion: reduce');
     expect(smoothScroll).toContain("prefersReduced ? 'auto' : 'smooth'");
   });
+
+  // Contract 20: Route transition idempotency guard
+  it('20. confirms RouteTransitionCoordinator guards against double entrance', () => {
+    const coordinator = readFile('src/components/personality-v7/motion/RouteTransitionCoordinator.jsx');
+
+    expect(coordinator).toContain('let entranceStarted = false;');
+    expect(coordinator).toContain('if (entranceStarted) return;');
+    expect(coordinator).toContain('safetyTimerRef.current = null;');
+  });
+
+  // Contract 21: useHeaderTone scopes queries to content and excludes header itself
+  it('21. confirms useHeaderTone excludes header, menu, and transition overlays', () => {
+    const headerTone = readFile('src/components/personality-v7/chrome/useHeaderTone.js');
+
+    expect(headerTone).toContain('#main-content [data-tone]');
+    expect(headerTone).toContain("!el.classList.contains('pa-header')");
+    expect(headerTone).toContain("!el.closest('header.pa-header')");
+  });
+
+  // Contract 22: HowItWorks spatial field and discrete state
+  it('22. confirms HowItWorks uses spatial field without 2x2 grid and discrete activeSegment state', () => {
+    expect(howItWorksCss).not.toContain('repeat(2, 1fr)');
+    expect(howItWorks).not.toContain('setEngineProgress(self.progress)');
+    expect(howItWorks).toContain('activeSegmentRef');
+    expect(howItWorks).toContain('pa-engine-pipeline__persistent-strip-wrap');
+  });
+
+  // Contract 23: Trust shared hero field and asymmetric rights layout
+  it('23. confirms Trust page uses shared spatial field and asymmetric rights layout', () => {
+    expect(trustRouteCss).not.toContain('1fr 1.25fr');
+    expect(trustRouteCss).not.toContain('repeat(auto-fit, minmax(280px, 1fr))');
+    expect(trustRouteCss).toContain('.pa-trust-rights__asymmetric-field');
+    expect(trustRoute).toContain('pa-trust-hero__stage-field');
+  });
+
+  // Contract 24: Career takeover separate opacity ownership
+  it('24. confirms Career takeover scene separates GSAP desktop opacity from React state', () => {
+    expect(homeCareerTakeoverJsx).not.toContain('opacity: idx === activeIdx ? 1 : 0');
+    expect(homeCareerTakeoverJsx).toContain('pa-home-career-scene__env-nav');
+    expect(homeCareerTakeoverJsx).toContain('pa-home-career-scene__env-btn');
+  });
+
+  // Contract 25: Career DOM fallback renders dominant and support crops
+  it('25. confirms Career intelligence page renders dominant and secondary DOM planes', () => {
+    expect(careerIntelligence).toContain('pa-career-atlas__dom-primary');
+    expect(careerIntelligence).toContain('pa-career-atlas__dom-secondary');
+  });
 });

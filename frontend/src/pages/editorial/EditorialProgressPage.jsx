@@ -40,13 +40,42 @@ export const EditorialProgressPage = () => {
     const isMobile = window.innerWidth <= 768;
 
     const ctx = gsap.context(() => {
-      if (isMobile) return;
+      if (isMobile) {
+        // Mobile temporal sequence along 140svh scroll
+        const mobileTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: film,
+            start: 'top top',
+            end: '+=140%',
+            pin: true,
+            anticipatePin: 1,
+            scrub: 0.5,
+          },
+        });
+
+        mobileTl
+          .fromTo(strip1Ref.current, { opacity: 0.8, y: 0 }, { opacity: 1, y: 0, duration: 0.3 }, 0)
+          .fromTo(
+            strip2Ref.current,
+            { opacity: 0, x: 16, y: 16 },
+            { opacity: 1, x: 0, y: 0, duration: 0.35 },
+            0.3
+          )
+          .fromTo(
+            intersectionRef.current,
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, duration: 0.3 },
+            0.65
+          );
+
+        return;
+      }
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: film,
           start: 'top top',
-          end: '+=160%',
+          end: '+=200%',
           pin: true,
           anticipatePin: 1,
           scrub: 0.5,
@@ -54,7 +83,12 @@ export const EditorialProgressPage = () => {
       });
 
       // 0–25%: Baseline crop & 2024 strip in focus
-      tl.fromTo(strip1Ref.current, { opacity: 0.7, y: 10 }, { opacity: 1, y: 0, duration: 0.25 }, 0);
+      tl.fromTo(
+        strip1Ref.current,
+        { opacity: 0.7, y: 10 },
+        { opacity: 1, y: 0, duration: 0.25 },
+        0
+      );
 
       // 25–50%: 2026 revisit crop and strip emerge overlapping
       tl.fromTo(
@@ -76,6 +110,25 @@ export const EditorialProgressPage = () => {
         { opacity: 0, y: 15 },
         { opacity: 1, y: 0, duration: 0.22 },
         0.5
+      );
+
+      // 72–90%: Temporal stabilization (holding both states concurrently without jump)
+      tl.to(
+        strip1Ref.current,
+        { opacity: 0.85, duration: 0.18 },
+        0.72
+      );
+      tl.to(
+        strip2Ref.current,
+        { opacity: 1, duration: 0.18 },
+        0.72
+      );
+
+      // 90–100%: Retained history / handoff stage (settled compound state)
+      tl.to(
+        [cropARef.current, cropBRef.current],
+        { opacity: (i) => (i === 0 ? 0.3 : 0.28), duration: 0.1 },
+        0.9
       );
     }, film);
 

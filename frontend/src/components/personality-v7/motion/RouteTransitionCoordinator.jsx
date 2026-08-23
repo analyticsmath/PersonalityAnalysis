@@ -178,8 +178,18 @@ export const RouteTransitionCoordinator = ({ children }) => {
           // Reset scroll while covered
           window.scrollTo(0, 0);
 
+          let entranceStarted = false;
           const proceedWithEntrance = () => {
             if (currentGenerationRef.current !== thisGeneration) return;
+            if (entranceStarted) return;
+            entranceStarted = true;
+
+            // Clear any pending safety timer and listener immediately
+            if (safetyTimerRef.current) {
+              clearTimeout(safetyTimerRef.current);
+              safetyTimerRef.current = null;
+            }
+            readyListenerRef.current = null;
 
             const exitTl = gsap.timeline({
               onComplete: () => {

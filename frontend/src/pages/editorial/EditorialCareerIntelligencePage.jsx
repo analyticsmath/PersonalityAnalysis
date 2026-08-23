@@ -104,19 +104,25 @@ export const EditorialCareerIntelligencePage = () => {
   const { navigateWithTransition } = useRouteTransition();
   const { setCursorLabel, clearCursorLabel } = useCursor();
 
+  const handleCanvasReady = React.useCallback(() => setUseWebGL(true), []);
+  const handleCanvasUnavailable = React.useCallback(() => setUseWebGL(false), []);
+
   const atlasRef = useRef(null);
   const activeLens = CAREER_LENSES[activeIdx] || CAREER_LENSES[0];
   const selectedProfile = careersData[selectedRoleId] || ROLE_ENTRIES[0];
 
   useEffect(() => {
     const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024;
-    const isFinePointer = typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches;
+    const isFinePointer =
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(pointer: fine)').matches || !window.matchMedia('(pointer: coarse)').matches);
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isDocumentHidden = typeof document !== 'undefined' && document.hidden;
 
-    setCanMountWebGL(isDesktop && isFinePointer && !prefersReduced);
+    setCanMountWebGL(isDesktop && isFinePointer && !prefersReduced && !isDocumentHidden);
   }, []);
 
   return (
@@ -185,24 +191,35 @@ export const EditorialCareerIntelligencePage = () => {
                     activeIndex={activeIdx}
                     items={CAREER_LENSES}
                     isMobile={false}
-                    onCanvasReady={() => setUseWebGL(true)}
-                    onCanvasUnavailable={() => setUseWebGL(false)}
+                    onCanvasReady={handleCanvasReady}
+                    onCanvasUnavailable={handleCanvasUnavailable}
                   />
                 </Suspense>
               )}
 
-              {/* DOM Photographic Plane (Visible when WebGL is unavailable or unmounted) */}
+              {/* DOM Photographic Plane (Dominant primary + secondary support crop) */}
               <div
                 className={`pa-career-atlas__dom-plane ${
                   useWebGL ? 'pa-career-atlas__dom-plane--webgl-active' : ''
                 }`}
               >
-                <EnvironmentPlane
-                  asset={activeLens.asset}
-                  role="primary"
-                  priority={true}
-                  caption={`WORKING CONDITION: ${activeLens.title.toUpperCase()}`}
-                />
+                <div className="pa-career-atlas__dom-primary">
+                  <EnvironmentPlane
+                    asset={activeLens.asset}
+                    role="primary"
+                    priority={true}
+                    caption={`WORKING CONDITION: ${activeLens.title.toUpperCase()}`}
+                  />
+                </div>
+                {activeLens.secondaryAsset && (
+                  <div className="pa-career-atlas__dom-secondary">
+                    <EnvironmentPlane
+                      asset={activeLens.secondaryAsset}
+                      role="support"
+                      caption={`DETAIL: ${activeLens.subtitle.toUpperCase()}`}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Asymmetric Annotations around the Active Work Environment */}
@@ -255,7 +272,7 @@ export const EditorialCareerIntelligencePage = () => {
 
             <div className="pa-career-atlas__directory-layout">
               {/* Open Role List */}
-              <div className="pa-career-atlas__roles-list" role="tablist" aria-label="17 Career Profiles">
+              <div className="pa-career-atlas__role-list" role="tablist" aria-label="17 Career Profiles">
                 {ROLE_ENTRIES.map((role) => {
                   const isSelected = role.id === selectedRoleId;
                   return (
@@ -263,25 +280,26 @@ export const EditorialCareerIntelligencePage = () => {
                       key={role.id}
                       role="tab"
                       aria-selected={isSelected}
-                      className={`pa-career-atlas__role-btn ${
-                        isSelected ? 'pa-career-atlas__role-btn--selected' : ''
+                      className={`pa-career-atlas__role-item ${
+                        isSelected ? 'pa-career-atlas__role-item--active' : ''
                       }`}
                       onClick={() => setSelectedRoleId(role.id)}
                     >
                       <span className="pa-career-atlas__role-title">{role.title}</span>
-                      {isSelected && <span className="pa-career-atlas__role-notch" aria-hidden="true" />}
+                      <span className="pa-career-atlas__role-code">{role.id.toUpperCase()}</span>
                     </button>
                   );
                 })}
               </div>
 
               {/* Open Editorial Detail Field (Rendered from verified careers.json fields) */}
-              <div className="pa-career-atlas__role-detail-field" aria-live="polite">
+              <div className="pa-career-atlas__role-detail" aria-live="polite">
                 <div className="pa-career-atlas__role-headline-wrap">
                   <span className="pa-career-atlas__role-code">
                     ROLE PROFILE: {selectedRoleId.toUpperCase()}
                   </span>
                   <h3 className="pa-career-atlas__role-detail-title">{selectedProfile.title}</h3>
+                  <p className="pa-career-atlas__role-desc">{selectedProfile.description}</p>
                 </div>
 
                 <div className="pa-career-atlas__open-spec-grid">

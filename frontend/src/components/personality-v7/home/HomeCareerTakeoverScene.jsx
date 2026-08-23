@@ -154,7 +154,7 @@ export const HomeCareerTakeoverScene = () => {
             key={env.key}
             ref={(el) => (planesRef.current[idx] = el)}
             className={`pa-home-career-scene__plane ${idx === activeIdx ? 'is-active' : ''}`}
-            style={{ zIndex: idx + 1, opacity: idx === activeIdx ? 1 : 0 }}
+            style={{ zIndex: idx + 1 }}
           >
             <EnvironmentPlane
               asset={env.asset}

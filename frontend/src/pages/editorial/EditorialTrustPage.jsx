@@ -68,10 +68,11 @@ export const EditorialTrustPage = () => {
     <SmoothScrollProvider>
       <PublicLayout headerTheme="dark-content" withFooter={true}>
         <div className="pa-trust-page" data-tone="dark">
-          {/* Section 1: Hero & Interactive Traceback Stage */}
+          {/* Section 1: Hero & Interactive Traceback Stage (Shared Spatial Field) */}
           <section className="pa-trust-hero" aria-label="Trust and Provenance Architecture">
-            <div className="pa-trust-hero__inner">
-              <div className="pa-trust-hero__media-col">
+            <div className="pa-trust-hero__stage-field">
+              {/* Shared Photographic Spatial Backdrop */}
+              <div className="pa-trust-hero__media-backdrop">
                 <div className="pa-trust-hero__primary-media">
                   <EnvironmentPlane
                     asset={MEDIA_ASSETS_V7.trustInspection}
@@ -89,14 +90,17 @@ export const EditorialTrustPage = () => {
                 </div>
               </div>
 
-              <div className="pa-trust-hero__content">
-                <h1 className="pa-trust-hero__h1">
-                  Every reading traces back to what created it.
-                </h1>
-                <p className="pa-trust-hero__lead">
-                  Personality Assessor does not use opaque prediction or irreversible categorization.
-                  Trace any conclusion back through its entire calculation path.
-                </p>
+              {/* Foreground Content in Same Spatial Field */}
+              <div className="pa-trust-hero__foreground">
+                <div className="pa-trust-hero__header">
+                  <h1 className="pa-trust-hero__h1">
+                    Every reading traces back to what created it.
+                  </h1>
+                  <p className="pa-trust-hero__lead">
+                    Personality Assessor does not use opaque prediction or irreversible categorization.
+                    Trace any conclusion back through its entire calculation path.
+                  </p>
+                </div>
 
                 {/* Provenance Interactive Sequence */}
                 <div
@@ -141,7 +145,7 @@ export const EditorialTrustPage = () => {
             </div>
           </section>
 
-          {/* Section 2: Open Editorial Data Rights */}
+          {/* Section 2: Open Editorial Data Rights (Asymmetric Reading Field) */}
           <section className="pa-trust-rights" aria-label="User Data Rights">
             <div className="pa-trust-rights__inner">
               <div className="pa-trust-rights__header">
@@ -152,8 +156,8 @@ export const EditorialTrustPage = () => {
                 </p>
               </div>
 
-              <div className="pa-trust-rights__open-grid">
-                <div className="pa-trust-rights__col">
+              <div className="pa-trust-rights__asymmetric-field">
+                <div className="pa-trust-rights__col pa-trust-rights__col--dominant">
                   <span className="pa-trust-rights__col-tag">DATA OWNERSHIP</span>
                   <h3 className="pa-trust-rights__col-title">No commercial data sales</h3>
                   <p className="pa-trust-rights__col-desc">
@@ -162,7 +166,7 @@ export const EditorialTrustPage = () => {
                   </p>
                 </div>
 
-                <div className="pa-trust-rights__col">
+                <div className="pa-trust-rights__col pa-trust-rights__col--export">
                   <span className="pa-trust-rights__col-tag">EXPORT & ACCESSIBILITY</span>
                   <h3 className="pa-trust-rights__col-title">Structured JSON export</h3>
                   <p className="pa-trust-rights__col-desc">
@@ -171,7 +175,7 @@ export const EditorialTrustPage = () => {
                   </p>
                 </div>
 
-                <div className="pa-trust-rights__col">
+                <div className="pa-trust-rights__col pa-trust-rights__col--erasure">
                   <span className="pa-trust-rights__col-tag">RIGHT TO ERASURE</span>
                   <h3 className="pa-trust-rights__col-title">Complete account deletion</h3>
                   <p className="pa-trust-rights__col-desc">

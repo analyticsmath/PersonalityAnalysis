@@ -25,6 +25,11 @@ export const CareerSpatialCanvas = ({
   const textureLoaderRef = useRef(null);
   const isHiddenRef = useRef(false);
 
+  const onCanvasReadyRef = useRef(onCanvasReady);
+  onCanvasReadyRef.current = onCanvasReady;
+  const onCanvasUnavailableRef = useRef(onCanvasUnavailable);
+  onCanvasUnavailableRef.current = onCanvasUnavailable;
+
   // Update activeIndex ref and update the single reusable support mesh texture
   useEffect(() => {
     activeIndexRef.current = activeIndex;
@@ -67,9 +72,10 @@ export const CareerSpatialCanvas = ({
       typeof window !== 'undefined' &&
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isDocumentHidden = typeof document !== 'undefined' && document.hidden;
 
-    if (!container || isMobile || !isDesktop || !isFinePointer || prefersReduced) {
-      if (onCanvasUnavailable) onCanvasUnavailable();
+    if (!container || isMobile || !isDesktop || !isFinePointer || prefersReduced || isDocumentHidden) {
+      if (onCanvasUnavailableRef.current) onCanvasUnavailableRef.current();
       return;
     }
 
@@ -79,11 +85,11 @@ export const CareerSpatialCanvas = ({
       const testCanvas = document.createElement('canvas');
       glContext = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl');
       if (!glContext) {
-        if (onCanvasUnavailable) onCanvasUnavailable();
+        if (onCanvasUnavailableRef.current) onCanvasUnavailableRef.current();
         return;
       }
     } catch {
-      if (onCanvasUnavailable) onCanvasUnavailable();
+      if (onCanvasUnavailableRef.current) onCanvasUnavailableRef.current();
       return;
     }
 
@@ -201,8 +207,8 @@ export const CareerSpatialCanvas = ({
       frameIdRef.current = window.requestAnimationFrame(animate);
 
       // Signal confirmed readiness to caller
-      if (onCanvasReady) {
-        onCanvasReady();
+      if (onCanvasReadyRef.current) {
+        onCanvasReadyRef.current();
       }
 
       const handleResize = () => {
@@ -262,9 +268,9 @@ export const CareerSpatialCanvas = ({
       };
     } catch (err) {
       console.warn('Career WebGL initialization failed:', err);
-      if (onCanvasUnavailable) onCanvasUnavailable();
+      if (onCanvasUnavailableRef.current) onCanvasUnavailableRef.current();
     }
-  }, [items, isMobile, onCanvasReady, onCanvasUnavailable]);
+  }, [items, isMobile]);
 
   return (
     <div

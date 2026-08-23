@@ -27,6 +27,7 @@ export const HomeBranchingScene = () => {
   const branch4Ref = useRef(null);
   const mediaCropRef = useRef(null);
   const [mobileBranchIndex, setMobileBranchIndex] = useState(0);
+  const mobileBranchIndexRef = useRef(0);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -51,7 +52,10 @@ export const HomeBranchingScene = () => {
           onUpdate: (self) => {
             const p = self.progress;
             const idx = Math.min(3, Math.floor(p * 4));
-            setMobileBranchIndex(idx);
+            if (idx !== mobileBranchIndexRef.current) {
+              mobileBranchIndexRef.current = idx;
+              setMobileBranchIndex(idx);
+            }
           },
         });
         return;

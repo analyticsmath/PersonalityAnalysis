@@ -30,8 +30,10 @@ const SPECIMEN_QUOTE =
 export const EditorialHowItWorksPage = () => {
   const { navigateWithTransition } = useRouteTransition();
   const engineStageRef = useRef(null);
-  const [engineProgress, setEngineProgress] = useState(0);
+  const [activeSegment, setActiveSegment] = useState(0);
+  const activeSegmentRef = useRef(0);
   const [mobileBranchIdx, setMobileBranchIdx] = useState(0);
+  const mobileBranchIdxRef = useRef(0);
 
   useEffect(() => {
     const stage = engineStageRef.current;
@@ -54,7 +56,11 @@ export const EditorialHowItWorksPage = () => {
           end: 'bottom bottom',
           onUpdate: (self) => {
             const p = self.progress;
-            setMobileBranchIdx(Math.min(3, Math.floor(p * 4)));
+            const idx = Math.min(3, Math.floor(p * 4));
+            if (idx !== mobileBranchIdxRef.current) {
+              mobileBranchIdxRef.current = idx;
+              setMobileBranchIdx(idx);
+            }
           },
         });
         return;
@@ -68,7 +74,13 @@ export const EditorialHowItWorksPage = () => {
         anticipatePin: 1,
         scrub: 0.5,
         onUpdate: (self) => {
-          setEngineProgress(self.progress);
+          const p = self.progress;
+          const nextSegment =
+            p < 0.18 ? 0 : p < 0.38 ? 1 : p < 0.58 ? 2 : p < 0.74 ? 3 : p < 0.9 ? 4 : 5;
+          if (nextSegment !== activeSegmentRef.current) {
+            activeSegmentRef.current = nextSegment;
+            setActiveSegment(nextSegment);
+          }
         },
       });
     }, stage);
@@ -80,20 +92,6 @@ export const EditorialHowItWorksPage = () => {
     e.preventDefault();
     navigateWithTransition(to);
   };
-
-  // Resolve active stage segment (0–18%, 18–38%, 38–58%, 58–74%, 74–90%, 90–100%)
-  const activeSegment =
-    engineProgress < 0.18
-      ? 0
-      : engineProgress < 0.38
-      ? 1
-      : engineProgress < 0.58
-      ? 2
-      : engineProgress < 0.74
-      ? 3
-      : engineProgress < 0.90
-      ? 4
-      : 5;
 
   return (
     <SmoothScrollProvider>
@@ -206,9 +204,67 @@ export const EditorialHowItWorksPage = () => {
                 </div>
               </div>
 
-              {/* Right Main Arena: Morphing Stage Content */}
+              {/* Right Main Arena: Persistent Evidence Strip + Dynamic Stage Context */}
               <div className="pa-engine-continuous-stage__arena">
-                {/* Segment 0 & 1: Prompt & Source Strip */}
+                {/* Persistent Evidence Strip Protagonist throughout all 6 segments */}
+                <div className="pa-engine-pipeline__persistent-strip-wrap">
+                  <EvidenceStrip
+                    quote={SPECIMEN_QUOTE}
+                    eyebrow={
+                      activeSegment === 0
+                        ? 'RAW HUMAN RESPONSE'
+                        : activeSegment === 1
+                        ? 'SIGNAL EXTRACTION'
+                        : activeSegment === 2
+                        ? 'MULTI-DIMENSIONAL SPECIMEN'
+                        : activeSegment === 3
+                        ? 'VALIDATED EVIDENCE ATOM'
+                        : activeSegment === 4
+                        ? 'CALIBRATED FIT SPECIMEN'
+                        : 'STORED ASSESSMENT RECORD'
+                    }
+                    sourceLabel={
+                      activeSegment === 0
+                        ? 'SOURCE RETAINED / RAW HUMAN SPECIMEN'
+                        : activeSegment === 1
+                        ? 'PARSED BEHAVIORAL ATOM'
+                        : activeSegment === 2
+                        ? 'SOURCE: INITIATIVE-PATTERN-INTERMEDIATE'
+                        : activeSegment === 3
+                        ? 'VERIFIED CONSISTENCY / VALIDITY GATED'
+                        : activeSegment === 4
+                        ? 'WEIGHTED BENCHMARK SPECIMEN'
+                        : 'STORED RECORD / PROVENANCE SECURED'
+                    }
+                    theme={activeSegment === 5 ? 'mineral' : 'carbon'}
+                    variant={
+                      activeSegment === 0
+                        ? 'source'
+                        : activeSegment <= 2
+                        ? 'branched'
+                        : activeSegment <= 4
+                        ? 'compared'
+                        : 'inspect'
+                    }
+                    conditionLabel={activeSegment === 4 ? 'CALIBRATION: 6-LAYER MATRIX' : undefined}
+                    accumulatedMarks={activeSegment >= 2}
+                    isInspecting={activeSegment === 5}
+                    provenanceData={
+                      activeSegment >= 3
+                        ? {
+                            source: 'answer',
+                            sourceId: 'initiative-pattern-intermediate',
+                            dimension: 'bigFive',
+                            key: 'extraversion',
+                            direction: 'positive',
+                            scoringSource: 'deterministic',
+                          }
+                        : undefined
+                    }
+                  />
+                </div>
+
+                {/* Stage Context: Segment 0 & 1 Prompt Specimen */}
                 {activeSegment <= 1 && (
                   <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--prompt">
                     <div className="pa-engine-pipeline__prompt-specimen">
@@ -217,20 +273,10 @@ export const EditorialHowItWorksPage = () => {
                         “When team ownership is ambiguous and a project is stalled, what is your initial operating move?”
                       </blockquote>
                     </div>
-
-                    <div className="pa-engine-pipeline__strip-wrap">
-                      <EvidenceStrip
-                        quote={SPECIMEN_QUOTE}
-                        eyebrow="ILLUSTRATIVE RESPONSE"
-                        sourceLabel="SOURCE RETAINED / RAW HUMAN SPECIMEN"
-                        theme="carbon"
-                        variant="source"
-                      />
-                    </div>
                   </div>
                 )}
 
-                {/* Segment 2: Asymmetric Branch Coordinates & Traces */}
+                {/* Stage Context: Segment 2 Spatial Asymmetric Branching */}
                 {activeSegment === 2 && (
                   <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--asymmetric">
                     <div className="pa-engine-asymmetric-field">
@@ -269,57 +315,42 @@ export const EditorialHowItWorksPage = () => {
                   </div>
                 )}
 
-                {/* Segment 3: Validity Gate (Verified Vocabulary) */}
+                {/* Stage Context: Segment 3 Deterministic Validity Vocabulary Gate */}
                 {activeSegment === 3 && (
                   <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--validity">
                     <div className="pa-engine-pipeline__validity-readout">
-                      <div className="pa-engine-pipeline__validity-item">
-                        <span className="pa-engine-pipeline__validity-key">INTEGRITY STATUS</span>
-                        <span className="pa-engine-pipeline__validity-val">VALID</span>
+                      <div className="pa-engine-pipeline__validity-vocab-item">
+                        <span className="pa-engine-pipeline__validity-tier">STATUS: VALID</span>
+                        <p className="pa-engine-pipeline__validity-desc">
+                          Response density and consistency satisfy minimum coverage thresholds across all dimensional families.
+                        </p>
                       </div>
-                      <div className="pa-engine-pipeline__validity-item">
-                        <span className="pa-engine-pipeline__validity-key">EVIDENCE COVERAGE</span>
-                        <span className="pa-engine-pipeline__validity-val">VALID</span>
+                      <div className="pa-engine-pipeline__validity-vocab-item">
+                        <span className="pa-engine-pipeline__validity-tier">STATUS: PARTIAL</span>
+                        <p className="pa-engine-pipeline__validity-desc">
+                          Primary trait signals are resolved with secondary trait confidence held in reserve until further items register.
+                        </p>
                       </div>
-                      <div className="pa-engine-pipeline__validity-item">
-                        <span className="pa-engine-pipeline__validity-key">CONFIDENCE STATE</span>
-                        <span className="pa-engine-pipeline__validity-val">PARTIAL</span>
-                      </div>
-                      <div className="pa-engine-pipeline__validity-item">
-                        <span className="pa-engine-pipeline__validity-key">SPARSE CHECK</span>
-                        <span className="pa-engine-pipeline__validity-val">INSUFFICIENT_DATA: NONE</span>
+                      <div className="pa-engine-pipeline__validity-vocab-item">
+                        <span className="pa-engine-pipeline__validity-tier">STATUS: INSUFFICIENT_DATA</span>
+                        <p className="pa-engine-pipeline__validity-desc">
+                          Longitudinal and career fit calibrations are withheld until required baseline item count is completed.
+                        </p>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* Segment 4: Calibration */}
+                {/* Stage Context: Segment 4 Calibration Baseline */}
                 {activeSegment === 4 && (
                   <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--calibration">
                     <CalibrationBaseline theme="carbon" />
                   </div>
                 )}
 
-                {/* Segment 5: Stored Record & Action */}
+                {/* Stage Context: Segment 5 Living Record CTA */}
                 {activeSegment === 5 && (
                   <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--stored">
-                    <EvidenceStrip
-                      quote={SPECIMEN_QUOTE}
-                      eyebrow="STORED ASSESSMENT RECORD"
-                      sourceLabel="STORED RECORD / PROVENANCE SECURED"
-                      theme="mineral"
-                      variant="inspect"
-                      accumulatedMarks={true}
-                      provenanceData={{
-                        source: 'answer',
-                        sourceId: 'initiative-pattern-intermediate',
-                        dimension: 'bigFive',
-                        key: 'extraversion',
-                        direction: 'positive',
-                        scoringSource: 'deterministic',
-                      }}
-                    />
-
                     <div className="pa-engine-pipeline__actions">
                       <a
                         href="/signup"
@@ -334,8 +365,9 @@ export const EditorialHowItWorksPage = () => {
               </div>
             </div>
 
-            {/* Mobile Continuous Spine Mode */}
+            {/* Mobile Continuous Spine Mode (Complete Pipeline: Prompt -> Source -> Branches -> Validity -> Calibration -> Stored -> CTA) */}
             <div className="pa-engine-continuous-stage__mobile">
+              {/* 1. Prompt */}
               <div className="pa-engine-pipeline__prompt-specimen">
                 <span className="pa-engine-pipeline__prompt-id">QUESTION ID: initiative-pattern-intermediate</span>
                 <blockquote className="pa-engine-pipeline__prompt-quote">
@@ -343,6 +375,7 @@ export const EditorialHowItWorksPage = () => {
                 </blockquote>
               </div>
 
+              {/* 2. Retained Source Specimen */}
               <div className="pa-engine-pipeline__strip-wrap">
                 <EvidenceStrip
                   quote={SPECIMEN_QUOTE}
@@ -353,19 +386,52 @@ export const EditorialHowItWorksPage = () => {
                 />
               </div>
 
+              {/* 3. Evidence Families Branching Spine */}
               <MobileEvidenceSpine activeBranchIndex={mobileBranchIdx} />
 
+              {/* 4. Validity Gate (3-tier vocabulary) */}
               <div className="pa-engine-pipeline__validity-readout">
-                <div className="pa-engine-pipeline__validity-item">
-                  <span className="pa-engine-pipeline__validity-key">STATUS</span>
-                  <span className="pa-engine-pipeline__validity-val">VALID</span>
+                <div className="pa-engine-pipeline__validity-vocab-item">
+                  <span className="pa-engine-pipeline__validity-tier">VALID</span>
+                  <p className="pa-engine-pipeline__validity-desc">Thresholds satisfied across dimensional families.</p>
                 </div>
-                <div className="pa-engine-pipeline__validity-item">
-                  <span className="pa-engine-pipeline__validity-key">CONFIDENCE</span>
-                  <span className="pa-engine-pipeline__validity-val">PARTIAL</span>
+                <div className="pa-engine-pipeline__validity-vocab-item">
+                  <span className="pa-engine-pipeline__validity-tier">PARTIAL</span>
+                  <p className="pa-engine-pipeline__validity-desc">Core signals resolved; secondary traits in reserve.</p>
+                </div>
+                <div className="pa-engine-pipeline__validity-vocab-item">
+                  <span className="pa-engine-pipeline__validity-tier">INSUFFICIENT_DATA</span>
+                  <p className="pa-engine-pipeline__validity-desc">Withheld until minimum response count is met.</p>
                 </div>
               </div>
 
+              {/* 5. Calibration Baseline */}
+              <div className="pa-engine-pipeline__mobile-calibration">
+                <CalibrationBaseline theme="carbon" />
+              </div>
+
+              {/* 6. Stored Record Specimen */}
+              <div className="pa-engine-pipeline__strip-wrap">
+                <EvidenceStrip
+                  quote={SPECIMEN_QUOTE}
+                  eyebrow="STORED ASSESSMENT RECORD"
+                  sourceLabel="STORED RECORD / PROVENANCE SECURED"
+                  theme="mineral"
+                  variant="inspect"
+                  isInspecting={true}
+                  accumulatedMarks={true}
+                  provenanceData={{
+                    source: 'answer',
+                    sourceId: 'initiative-pattern-intermediate',
+                    dimension: 'bigFive',
+                    key: 'extraversion',
+                    direction: 'positive',
+                    scoringSource: 'deterministic',
+                  }}
+                />
+              </div>
+
+              {/* 7. Action CTA */}
               <div className="pa-engine-pipeline__actions">
                 <a
                   href="/signup"

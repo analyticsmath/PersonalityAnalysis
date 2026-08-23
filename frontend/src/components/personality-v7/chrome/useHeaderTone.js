@@ -16,7 +16,17 @@ export const useHeaderTone = (defaultTone = 'light-content') => {
     // Set initial default
     headerEl.setAttribute('data-tone', defaultTone);
 
-    const sections = document.querySelectorAll('[data-tone]');
+    // Query only content sections within main content, explicitly excluding header, menu, and transition overlays
+    const allToneElements = document.querySelectorAll('#main-content [data-tone], #main-content[data-tone], main [data-tone], main[data-tone]');
+    const sections = Array.from(allToneElements).filter((el) => {
+      return (
+        !el.classList.contains('pa-header') &&
+        !el.closest('header.pa-header') &&
+        !el.closest('.pa-curved-menu') &&
+        !el.closest('.pa-route-transition-overlay')
+      );
+    });
+
     if (!sections.length) return;
 
     const triggers = [];
