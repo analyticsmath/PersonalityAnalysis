@@ -1,4 +1,4 @@
-import React, { useState, useRef, lazy, Suspense } from 'react';
+import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
@@ -7,6 +7,7 @@ import EnvironmentPlane from '../../components/personality-v7/living-record/Envi
 import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
 import CalibrationBaseline from '../../components/personality-v7/living-record/CalibrationBaseline';
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
+import { useCursor } from '../../components/personality-v7/motion/CursorCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 import careersData from '../../content/careers.json';
 import './EditorialCareerIntelligencePage.css';
@@ -99,20 +100,32 @@ export const EditorialCareerIntelligencePage = () => {
   const [activeIdx, setActiveIdx] = useState(0);
   const [selectedRoleId, setSelectedRoleId] = useState(ROLE_ENTRIES[0]?.id || 'software_engineer');
   const [useWebGL, setUseWebGL] = useState(false);
+  const [canMountWebGL, setCanMountWebGL] = useState(false);
   const { navigateWithTransition } = useRouteTransition();
+  const { setCursorLabel, clearCursorLabel } = useCursor();
 
   const atlasRef = useRef(null);
   const activeLens = CAREER_LENSES[activeIdx] || CAREER_LENSES[0];
   const selectedProfile = careersData[selectedRoleId] || ROLE_ENTRIES[0];
 
+  useEffect(() => {
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024;
+    const isFinePointer = typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches;
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    setCanMountWebGL(isDesktop && isFinePointer && !prefersReduced);
+  }, []);
+
   return (
     <SmoothScrollProvider>
-      <PublicLayout>
-        <div className="pa-career-atlas-page" role="main" id="main-content">
+      <PublicLayout headerTheme="dark-content" withFooter={true}>
+        <div className="pa-career-atlas-page" data-tone="dark">
           {/* Header Scene */}
           <section className="pa-career-atlas__header-scene">
             <div className="pa-career-atlas__header-content">
-              <span className="pa-career-atlas__meta-tag">OCCUPATIONAL CONDITIONS</span>
               <h1 className="pa-career-atlas__h1">
                 Where work happens changes what evidence means.
               </h1>
@@ -160,18 +173,25 @@ export const EditorialCareerIntelligencePage = () => {
             </div>
 
             {/* Stage Field: Progressive WebGL or Flat Photographic Plane */}
-            <div className="pa-career-atlas__field">
+            <div
+              className="pa-career-atlas__field"
+              onMouseEnter={() => setCursorLabel(activeLens.title.toUpperCase())}
+              onMouseLeave={clearCursorLabel}
+            >
               {/* Optional Progressive WebGL Mesh Canvas */}
-              <Suspense fallback={null}>
-                <CareerSpatialCanvas
-                  activeIndex={activeIdx}
-                  items={CAREER_LENSES}
-                  isMobile={false}
-                  onCanvasReady={() => setUseWebGL(true)}
-                />
-              </Suspense>
+              {canMountWebGL && (
+                <Suspense fallback={null}>
+                  <CareerSpatialCanvas
+                    activeIndex={activeIdx}
+                    items={CAREER_LENSES}
+                    isMobile={false}
+                    onCanvasReady={() => setUseWebGL(true)}
+                    onCanvasUnavailable={() => setUseWebGL(false)}
+                  />
+                </Suspense>
+              )}
 
-              {/* DOM Photographic Plane (Visible when WebGL is unavailable) */}
+              {/* DOM Photographic Plane (Visible when WebGL is unavailable or unmounted) */}
               <div
                 className={`pa-career-atlas__dom-plane ${
                   useWebGL ? 'pa-career-atlas__dom-plane--webgl-active' : ''
@@ -211,7 +231,6 @@ export const EditorialCareerIntelligencePage = () => {
           {/* Section 2: Deterministic Calibration Baseline */}
           <section className="pa-career-atlas__calibration-section">
             <div className="pa-career-atlas__calibration-content">
-              <span className="pa-career-atlas__meta-tag">PROFILE WEIGHTING</span>
               <h2 className="pa-career-atlas__h2">
                 Multi-layered deterministic fit calibration.
               </h2>
@@ -229,7 +248,6 @@ export const EditorialCareerIntelligencePage = () => {
           {/* Section 3: Open Role Atlas (Canonical 17 Roles from careers.json) */}
           <section className="pa-career-atlas__directory-section">
             <div className="pa-career-atlas__directory-header">
-              <span className="pa-career-atlas__meta-tag">17 CANONICAL PROFILES</span>
               <h2 className="pa-career-atlas__h2">
                 Occupational directory & baseline requirements.
               </h2>
@@ -257,43 +275,55 @@ export const EditorialCareerIntelligencePage = () => {
                 })}
               </div>
 
-              {/* Open Editorial Detail Field (No bordered box, no skill pills) */}
+              {/* Open Editorial Detail Field (Rendered from verified careers.json fields) */}
               <div className="pa-career-atlas__role-detail-field" aria-live="polite">
                 <div className="pa-career-atlas__role-headline-wrap">
                   <span className="pa-career-atlas__role-code">
-                    HOLLAND CODE: {selectedProfile.riasecCode || 'IRC'}
+                    ROLE PROFILE: {selectedRoleId.toUpperCase()}
                   </span>
                   <h3 className="pa-career-atlas__role-detail-title">{selectedProfile.title}</h3>
-                  <p className="pa-career-atlas__role-desc">{selectedProfile.description}</p>
                 </div>
 
                 <div className="pa-career-atlas__open-spec-grid">
                   <div className="pa-career-atlas__spec-col">
                     <span className="pa-career-atlas__spec-label">CORE SKILLS</span>
                     <ul className="pa-career-atlas__open-list">
-                      {(selectedProfile.coreSkills || []).map((skill, idx) => (
+                      {(selectedProfile.skills || []).map((skill, idx) => (
                         <li key={idx} className="pa-career-atlas__open-item">{skill}</li>
                       ))}
                     </ul>
                   </div>
 
                   <div className="pa-career-atlas__spec-col">
-                    <span className="pa-career-atlas__spec-label">DOMAIN INTERESTS</span>
+                    <span className="pa-career-atlas__spec-label">RELATED SUBJECTS</span>
                     <ul className="pa-career-atlas__open-list">
-                      {(selectedProfile.domainInterests || []).map((interest, idx) => (
-                        <li key={idx} className="pa-career-atlas__open-item">{interest}</li>
+                      {(selectedProfile.subjects || []).map((subject, idx) => (
+                        <li key={idx} className="pa-career-atlas__open-item">{subject}</li>
                       ))}
                     </ul>
                   </div>
 
                   <div className="pa-career-atlas__spec-col">
-                    <span className="pa-career-atlas__spec-label">COMMON PATHWAYS</span>
+                    <span className="pa-career-atlas__spec-label">INTERESTS</span>
                     <ul className="pa-career-atlas__open-list">
-                      {(selectedProfile.commonPathways || []).map((pathway, idx) => (
-                        <li key={idx} className="pa-career-atlas__open-item">{pathway}</li>
+                      {(selectedProfile.interests || []).map((interest, idx) => (
+                        <li key={idx} className="pa-career-atlas__open-item">{interest}</li>
                       ))}
                     </ul>
                   </div>
+
+                  {selectedProfile.aptitude && (
+                    <div className="pa-career-atlas__spec-col">
+                      <span className="pa-career-atlas__spec-label">APTITUDE PROFILE</span>
+                      <ul className="pa-career-atlas__open-list">
+                        {Object.entries(selectedProfile.aptitude).map(([key, val]) => (
+                          <li key={key} className="pa-career-atlas__open-item">
+                            {key.replace('_', ' ')}: {val}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
                 <div className="pa-career-atlas__role-actions">

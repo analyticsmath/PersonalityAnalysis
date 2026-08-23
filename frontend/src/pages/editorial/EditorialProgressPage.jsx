@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
 import EnvironmentPlane from '../../components/personality-v7/living-record/EnvironmentPlane';
@@ -6,6 +8,8 @@ import EvidenceStrip from '../../components/personality-v7/living-record/Evidenc
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 import './EditorialProgressPage.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * EditorialProgressPage
@@ -15,6 +19,68 @@ import './EditorialProgressPage.css';
  */
 export const EditorialProgressPage = () => {
   const { navigateWithTransition } = useRouteTransition();
+  const filmRef = useRef(null);
+  const cropARef = useRef(null);
+  const cropBRef = useRef(null);
+  const strip1Ref = useRef(null);
+  const strip2Ref = useRef(null);
+  const intersectionRef = useRef(null);
+
+  useEffect(() => {
+    const film = filmRef.current;
+    if (!film) return;
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTest = typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent);
+    if (prefersReduced || isTest) return;
+
+    const isMobile = window.innerWidth <= 768;
+
+    const ctx = gsap.context(() => {
+      if (isMobile) return;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: film,
+          start: 'top top',
+          end: '+=160%',
+          pin: true,
+          anticipatePin: 1,
+          scrub: 0.5,
+        },
+      });
+
+      // 0–25%: Baseline crop & 2024 strip in focus
+      tl.fromTo(strip1Ref.current, { opacity: 0.7, y: 10 }, { opacity: 1, y: 0, duration: 0.25 }, 0);
+
+      // 25–50%: 2026 revisit crop and strip emerge overlapping
+      tl.fromTo(
+        cropBRef.current,
+        { opacity: 0.08, scale: 0.98 },
+        { opacity: 0.35, scale: 1, duration: 0.25 },
+        0.25
+      );
+      tl.fromTo(
+        strip2Ref.current,
+        { opacity: 0, x: 20, y: 20 },
+        { opacity: 1, x: 0, y: 0, duration: 0.25 },
+        0.25
+      );
+
+      // 50–72%: Direct intersection reading / trace convergence
+      tl.fromTo(
+        intersectionRef.current,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.22 },
+        0.5
+      );
+    }, film);
+
+    return () => ctx.revert();
+  }, []);
 
   const handleCtaClick = (e, to) => {
     e.preventDefault();
@@ -23,13 +89,17 @@ export const EditorialProgressPage = () => {
 
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="light-content" withFooter={true}>
-        <div className="pa-progress-page" role="main" id="main-content">
+      <PublicLayout headerTheme="dark-content" withFooter={true}>
+        <div className="pa-progress-page" data-tone="dark">
           {/* Longitudinal Film Hero Stage with Physical Photographic Crop Overlap */}
-          <section className="pa-progress-film" aria-label="Longitudinal Film: Recomposition over time">
+          <section
+            ref={filmRef}
+            className="pa-progress-film"
+            aria-label="Longitudinal Film: Recomposition over time"
+          >
             <div className="pa-progress-film__crops">
               {/* Crop A: Earlier time point (x -8vw, y 7vh, w 68vw, h 82vh) */}
-              <div className="pa-progress-film__crop pa-progress-film__crop--a">
+              <div ref={cropARef} className="pa-progress-film__crop pa-progress-film__crop--a">
                 <EnvironmentPlane
                   asset={MEDIA_ASSETS_V7.progressStudio}
                   role="primary"
@@ -40,7 +110,7 @@ export const EditorialProgressPage = () => {
               </div>
 
               {/* Crop B: Later time point (x 45vw, y -4vh, w 64vw, h 78vh) */}
-              <div className="pa-progress-film__crop pa-progress-film__crop--b">
+              <div ref={cropBRef} className="pa-progress-film__crop pa-progress-film__crop--b">
                 <EnvironmentPlane
                   asset={MEDIA_ASSETS_V7.progressStudio}
                   role="primary"
@@ -52,7 +122,6 @@ export const EditorialProgressPage = () => {
 
             <div className="pa-progress-film__overlay">
               <div className="pa-progress-film__header">
-                <span className="pa-progress-film__meta-tag">TEMPORAL CONTINUITY</span>
                 <h1 className="pa-progress-film__h1">
                   A later assessment adds a record.
                   <br />
@@ -70,7 +139,10 @@ export const EditorialProgressPage = () => {
                   ILLUSTRATIVE EXAMPLE — COMPARATIVE RECORD
                 </span>
 
-                <div className="pa-progress-film__strip pa-progress-film__strip--one">
+                <div
+                  ref={strip1Ref}
+                  className="pa-progress-film__strip pa-progress-film__strip--one"
+                >
                   <EvidenceStrip
                     quote="“I clarify responsibilities before committing work.”"
                     eyebrow="RETAINED BASELINE"
@@ -81,7 +153,10 @@ export const EditorialProgressPage = () => {
                   />
                 </div>
 
-                <div className="pa-progress-film__strip pa-progress-film__strip--two">
+                <div
+                  ref={strip2Ref}
+                  className="pa-progress-film__strip pa-progress-film__strip--two"
+                >
                   <EvidenceStrip
                     quote="“I coordinate across functions when goals require shared ownership.”"
                     eyebrow="SUBSEQUENT OBSERVATION"
@@ -93,7 +168,7 @@ export const EditorialProgressPage = () => {
                 </div>
 
                 {/* Qualitative Intersection Readout at the Physical Overlap Boundary */}
-                <div className="pa-progress-film__intersection">
+                <div ref={intersectionRef} className="pa-progress-film__intersection">
                   <span className="pa-progress-film__int-label">INTERSECTION READOUT</span>
                   <p className="pa-progress-film__int-text">
                     Foundational procedural conscientiousness remains stable, while cross-functional
@@ -108,7 +183,6 @@ export const EditorialProgressPage = () => {
           <section className="pa-progress-insufficient" aria-label="Eligibility threshold requirements">
             <div className="pa-progress-insufficient__inner">
               <div className="pa-progress-insufficient__content">
-                <span className="pa-progress-insufficient__meta-tag">ELIGIBILITY THRESHOLD</span>
                 <h2 className="pa-progress-insufficient__h2">Not enough history yet.</h2>
                 <p className="pa-progress-insufficient__desc">
                   Complete another eligible assessment before longitudinal trends can be calculated.

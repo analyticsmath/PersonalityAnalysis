@@ -33,12 +33,17 @@ export const SmoothScrollProvider = ({ children, options = {} }) => {
   };
 
   const scrollTo = (target, scrollOptions = {}) => {
-    if (lenisRef.current) {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (lenisRef.current && !prefersReduced) {
       lenisRef.current.scrollTo(target, scrollOptions);
     } else {
       const element = typeof target === 'string' ? document.querySelector(target) : target;
       if (element && element.scrollIntoView) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
       }
     }
   };

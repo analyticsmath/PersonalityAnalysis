@@ -155,7 +155,7 @@ export const SignupPage = () => {
   return (
     <SmoothScrollProvider>
       <PublicLayout headerTheme="light-content" withFooter={false}>
-        <div className="pa-auth-signup" aria-label="Create Account: First Living Record" id="main-content">
+        <div className="pa-auth-signup" aria-label="Create Account: First Living Record" data-tone="light">
           {/* Asymmetric Environmental Crossing Layer (Crosses centerline at 36vw) */}
           <div
             ref={environmentalImageRef}
@@ -190,7 +190,6 @@ export const SignupPage = () => {
           {/* Form Container direct on ground */}
           <div className="pa-auth-signup__form-container">
             <div className="pa-auth-signup__header">
-              <span className="pa-auth-signup__meta-tag">INITIALIZATION</span>
               <h1 className="pa-auth-signup__h1">Create your Living Record.</h1>
               <p className="pa-auth-signup__lead">
                 Establish an inspectable account to preserve your assessments, explore career conditions, and revisit your evidence over time.

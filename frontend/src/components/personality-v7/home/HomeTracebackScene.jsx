@@ -4,6 +4,7 @@ import EnvironmentPlane from '../living-record/EnvironmentPlane';
 import EvidenceStrip from '../living-record/EvidenceStrip';
 import ProvenanceTrace from '../living-record/ProvenanceTrace';
 import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
+import { useCursor } from '../motion/CursorCoordinator';
 import './HomeTracebackScene.css';
 
 /**
@@ -13,6 +14,7 @@ import './HomeTracebackScene.css';
  */
 export const HomeTracebackScene = () => {
   const { navigateWithTransition } = useRouteTransition();
+  const { setCursorLabel, clearCursorLabel } = useCursor();
   const [isInspecting, setIsInspecting] = useState(false);
   const [activeStage, setActiveStage] = useState('supplied');
 
@@ -20,13 +22,14 @@ export const HomeTracebackScene = () => {
     source: 'answer',
     sourceId: 'initiative-pattern-intermediate',
     dimension: 'bigFive',
-    key: 'conscientiousness',
+    key: 'extraversion',
     direction: 'positive',
     scoringSource: 'deterministic',
   };
 
   const handleCtaClick = (e) => {
     e.preventDefault();
+    clearCursorLabel();
     navigateWithTransition('/trust');
   };
 
@@ -34,6 +37,7 @@ export const HomeTracebackScene = () => {
     <section
       id="home-scene-traceback"
       className="pa-home-traceback-scene"
+      data-tone="dark"
       aria-label="Traceback: Inspect evidence provenance"
     >
       <div className="pa-home-traceback-scene__inner">
@@ -56,9 +60,12 @@ export const HomeTracebackScene = () => {
         </div>
 
         {/* Inspection Interaction Area */}
-        <div className="pa-home-traceback-scene__content">
+        <div
+          className="pa-home-traceback-scene__content"
+          onMouseEnter={() => setCursorLabel('TRACE')}
+          onMouseLeave={clearCursorLabel}
+        >
           <div className="pa-home-traceback-scene__header">
-            <span className="pa-home-traceback-scene__eyebrow">VERIFIED PROVENANCE</span>
             <h2 className="pa-home-traceback-scene__h2">
               Trace a reading back
               <br />
@@ -68,7 +75,7 @@ export const HomeTracebackScene = () => {
 
           <div className="pa-home-traceback-scene__strip-wrap">
             <EvidenceStrip
-              quote="“Reading assembled from retained evidence.”"
+              quote="“When ownership is unclear, I clarify stakeholders, investigate the issue, organize the work, choose an independent plan, and learn from the result.”"
               eyebrow="TRACE SPECIMEN"
               sourceLabel="REVERSIBLE PROVENANCE"
               theme="carbon"

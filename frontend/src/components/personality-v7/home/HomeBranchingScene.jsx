@@ -9,6 +9,9 @@ import './HomeBranchingScene.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const GROUNDED_SOURCE_QUOTE =
+  '“When ownership is unclear, I clarify stakeholders, investigate the issue, organize the work, choose an independent plan, and learn from the result.”';
+
 /**
  * HomeBranchingScene (Scene 3)
  * Signature mechanic: One retained human response branches into genuinely unequal
@@ -23,7 +26,7 @@ export const HomeBranchingScene = () => {
   const branch3Ref = useRef(null);
   const branch4Ref = useRef(null);
   const mediaCropRef = useRef(null);
-  const [activeStep, setActiveStep] = useState(4);
+  const [mobileBranchIndex, setMobileBranchIndex] = useState(0);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -37,9 +40,23 @@ export const HomeBranchingScene = () => {
     if (prefersReduced || isTest) return;
 
     const isMobile = window.innerWidth <= 768;
-    if (isMobile) return;
 
     const ctx = gsap.context(() => {
+      if (isMobile) {
+        // Mobile scroll-triggered progression along the spine
+        ScrollTrigger.create({
+          trigger: scene,
+          start: 'top top+=20%',
+          end: 'bottom bottom',
+          onUpdate: (self) => {
+            const p = self.progress;
+            const idx = Math.min(3, Math.floor(p * 4));
+            setMobileBranchIndex(idx);
+          },
+        });
+        return;
+      }
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scene,
@@ -99,6 +116,7 @@ export const HomeBranchingScene = () => {
       id="home-scene-branching"
       ref={sceneRef}
       className="pa-home-branching-scene"
+      data-tone="dark"
       aria-label="Multi-dimensional evidence branching"
     >
       <div className="pa-home-branching-scene__inner">
@@ -106,9 +124,9 @@ export const HomeBranchingScene = () => {
           {/* Asymmetrically Anchored Protagonist */}
           <div className="pa-home-branching-scene__strip-center">
             <EvidenceStrip
-              quote="“I clarify responsibilities before committing work.”"
+              quote={GROUNDED_SOURCE_QUOTE}
               eyebrow="RETAINED SOURCE SPECIMEN"
-              sourceLabel="SOURCE / ANSWER"
+              sourceLabel="SOURCE: INITIATIVE-PATTERN-INTERMEDIATE"
               theme="mineral"
               variant="branched"
               accumulatedMarks={true}
@@ -123,7 +141,7 @@ export const HomeBranchingScene = () => {
             preserveAspectRatio="none"
             aria-hidden="true"
           >
-            {/* Branch 1: Top-Left to Big Five */}
+            {/* Branch 1: Top-Left to Big Five (Extraversion) */}
             <path
               ref={branch1Ref}
               d="M 380 320 C 260 260, 180 180, 100 120"
@@ -134,7 +152,7 @@ export const HomeBranchingScene = () => {
               className="pa-home-branching-scene__trace"
             />
 
-            {/* Branch 2: Mid-Right to RIASEC (Different curvature and length) */}
+            {/* Branch 2: Mid-Right to RIASEC (Investigative / Conventional) */}
             <path
               ref={branch2Ref}
               d="M 760 330 C 860 280, 940 260, 1020 200"
@@ -145,7 +163,7 @@ export const HomeBranchingScene = () => {
               className="pa-home-branching-scene__trace"
             />
 
-            {/* Branch 3: Lower-Left to Work Values (Intersects documentary crop) */}
+            {/* Branch 3: Lower-Left to Work Values (Independence & Learning) */}
             <path
               ref={branch3Ref}
               d="M 360 410 C 240 470, 160 520, 90 590"
@@ -156,7 +174,7 @@ export const HomeBranchingScene = () => {
               className="pa-home-branching-scene__trace"
             />
 
-            {/* Branch 4: Deep Lower-Right to Career Signal */}
+            {/* Branch 4: Deep Lower-Right to Career Signal (Communication & Planning) */}
             <path
               ref={branch4Ref}
               d="M 740 420 C 840 510, 920 580, 1040 640"
@@ -171,7 +189,7 @@ export const HomeBranchingScene = () => {
           {/* Unequal Endpoint 1: Big Five (~7vw, ~12vh) */}
           <div className="pa-home-branching-scene__node pa-home-branching-scene__node--bigfive">
             <span className="pa-home-branching-scene__dim-tag">BIG FIVE</span>
-            <strong className="pa-home-branching-scene__node-title">conscientiousness</strong>
+            <strong className="pa-home-branching-scene__node-title">extraversion</strong>
             <span className="pa-home-branching-scene__node-sub">positive contribution</span>
           </div>
 
@@ -204,7 +222,7 @@ export const HomeBranchingScene = () => {
           {/* Unequal Endpoint 4: Career Signal (~64vw, ~68vh) */}
           <div className="pa-home-branching-scene__node pa-home-branching-scene__node--career">
             <span className="pa-home-branching-scene__dim-tag">CAREER SIGNAL</span>
-            <strong className="pa-home-branching-scene__node-title">ownership / planning</strong>
+            <strong className="pa-home-branching-scene__node-title">communication / planning / learning orientation</strong>
             <span className="pa-home-branching-scene__node-sub">ambiguous problem framing</span>
           </div>
         </div>
@@ -213,14 +231,14 @@ export const HomeBranchingScene = () => {
         <div className="pa-home-branching-scene__mobile-mode">
           <div className="pa-home-branching-scene__mobile-strip">
             <EvidenceStrip
-              quote="“I clarify responsibilities before committing work.”"
+              quote={GROUNDED_SOURCE_QUOTE}
               eyebrow="RETAINED SOURCE SPECIMEN"
-              sourceLabel="SOURCE / ANSWER"
+              sourceLabel="SOURCE / INITIATIVE-PATTERN-INTERMEDIATE"
               theme="carbon"
               variant="source"
             />
           </div>
-          <MobileEvidenceSpine />
+          <MobileEvidenceSpine activeBranchIndex={mobileBranchIndex} />
         </div>
       </div>
     </section>

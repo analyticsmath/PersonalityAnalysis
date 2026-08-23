@@ -67,11 +67,10 @@ const MethodologyInner = () => {
   };
 
   return (
-    <article className="pa-method-room" aria-label="Methodology Calibration Room" id="main-content">
+    <article className="pa-method-room" aria-label="Methodology Calibration Room" data-tone="light">
       {/* Header */}
       <header className="pa-method-room__header">
         <div className="pa-method-room__header-inner">
-          <span className="pa-method-room__meta-tag">CALIBRATION ROOM</span>
           <h1 className="pa-method-room__h1">Methodology & Framework Decoupling</h1>
           <p className="pa-method-room__lead">
             Every calculation, framework relationship, and career weighting layer is inspectable and decoupled.
@@ -80,10 +79,14 @@ const MethodologyInner = () => {
       </header>
 
       {/* Model Specimen Evidence Strip */}
-      <section className="pa-method-room__strip-stage" aria-label="Model specimen schema">
+      <section
+        className="pa-method-room__strip-stage"
+        data-tone="dark"
+        aria-label="Model specimen schema"
+      >
         <div className="pa-method-room__strip-inner">
           <EvidenceStrip
-            quote="“I clarify responsibilities before committing work.”"
+            quote="“When ownership is unclear, I clarify stakeholders, investigate the issue, organize the work, choose an independent plan, and learn from the result.”"
             eyebrow="PRODUCT EVIDENCE SCHEMA"
             sourceLabel="DECOUPLED EVIDENCE MAPPING"
             theme="carbon"
@@ -91,9 +94,9 @@ const MethodologyInner = () => {
             isInspecting={true}
             provenanceData={{
               source: 'answer',
-              sourceId: 'technical-depth-intermediate',
+              sourceId: 'initiative-pattern-intermediate',
               dimension: 'bigFive',
-              key: 'conscientiousness',
+              key: 'extraversion',
               direction: 'positive',
               scoringSource: 'deterministic',
             }}
@@ -150,7 +153,7 @@ const MethodologyInner = () => {
 export const EditorialMethodologyPage = () => {
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="dark-content" withFooter={true}>
+      <PublicLayout headerTheme="light-content" withFooter={true}>
         <MethodologyInner />
       </PublicLayout>
     </SmoothScrollProvider>

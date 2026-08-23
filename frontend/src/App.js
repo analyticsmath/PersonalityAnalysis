@@ -30,14 +30,26 @@ const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplo
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
 
+const PUBLIC_ROUTE_TONES = {
+  '/career-intelligence': 'dark',
+  '/how-it-works': 'dark',
+  '/progress': 'dark',
+  '/trust': 'dark',
+  '/login': 'dark',
+  '/methodology': 'light',
+  '/privacy': 'light',
+  '/signup': 'light',
+};
+
 const SuspensePageFallback = ({ pathname = '' }) => {
-  const isDark = pathname.startsWith('/login') || pathname.startsWith('/career-intelligence');
+  const cleanPath = pathname.split('?')[0].split('#')[0];
+  const isDark = PUBLIC_ROUTE_TONES[cleanPath] === 'dark' || cleanPath === '/';
   const bg = isDark ? 'var(--pa-carbon, #0D0F0E)' : 'var(--pa-mineral, #F3F5F2)';
   const fg = isDark ? 'var(--pa-mineral, #F3F5F2)' : 'var(--pa-carbon, #0D0F0E)';
   const traceColor = 'var(--pa-oxblood, #642832)';
 
   return (
-    <main
+    <div
       className="app-page pa-suspense-fallback"
       style={{
         backgroundColor: bg,
@@ -48,6 +60,7 @@ const SuspensePageFallback = ({ pathname = '' }) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}
+      role="status"
       aria-label="Loading route"
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
@@ -72,7 +85,7 @@ const SuspensePageFallback = ({ pathname = '' }) => {
           The Living Record
         </span>
       </div>
-    </main>
+    </div>
   );
 };
 

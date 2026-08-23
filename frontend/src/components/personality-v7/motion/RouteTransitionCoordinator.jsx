@@ -94,6 +94,10 @@ export const RouteTransitionCoordinator = ({ children }) => {
         return;
       }
 
+      // Invalidate any stale route readiness for cleanTarget before fresh transition
+      readyRoutesRef.current.delete(cleanTarget);
+      readyListenerRef.current = null;
+
       // Increment generation token so any previous transition attempt is superseded (latest-navigation-wins)
       const thisGeneration = ++currentGenerationRef.current;
       const meta = ROUTE_METADATA[cleanTarget] || { keyword: 'EVIDENCE', quote: '“Keep the source attached.”', label: 'LIVING RECORD' };
@@ -131,7 +135,8 @@ export const RouteTransitionCoordinator = ({ children }) => {
 
       if (overlay) {
         overlay.style.display = 'flex';
-        overlay.style.pointerEvents = 'auto';
+        // Keep non-blocking so underlying fixed header remains interactable
+        overlay.style.pointerEvents = 'none';
 
         // Phase 1: Carbon ground sweeps across (0–280ms)
         tl.fromTo(
@@ -162,92 +167,96 @@ export const RouteTransitionCoordinator = ({ children }) => {
         );
       }
 
-      // Phase 3: Execute navigation while fully covered
-      setTimeout(() => {
-        if (currentGenerationRef.current !== thisGeneration) return;
-
-        const destination = pendingTargetRef.current || targetPath;
-        navigate(destination);
-
-        // Reset scroll while covered
-        window.scrollTo(0, 0);
-
-        const proceedWithEntrance = () => {
+      // Phase 3: Execute navigation timeline-natively while fully covered
+      tl.call(
+        () => {
           if (currentGenerationRef.current !== thisGeneration) return;
 
-          const exitTl = gsap.timeline({
-            onComplete: () => {
-              if (currentGenerationRef.current === thisGeneration) {
-                setTransitionState({ active: false, keyword: '', target: '', quote: '', label: '' });
-                if (overlay) {
-                  overlay.style.display = 'none';
-                  overlay.style.pointerEvents = 'none';
+          const destination = pendingTargetRef.current || targetPath;
+          navigate(destination);
+
+          // Reset scroll while covered
+          window.scrollTo(0, 0);
+
+          const proceedWithEntrance = () => {
+            if (currentGenerationRef.current !== thisGeneration) return;
+
+            const exitTl = gsap.timeline({
+              onComplete: () => {
+                if (currentGenerationRef.current === thisGeneration) {
+                  setTransitionState({ active: false, keyword: '', target: '', quote: '', label: '' });
+                  if (overlay) {
+                    overlay.style.display = 'none';
+                    overlay.style.pointerEvents = 'none';
+                  }
+                  currentTimelineRef.current = null;
+                  pendingTargetRef.current = null;
+
+                  // Handoff focus to main content
+                  const mainEl = document.getElementById('main-content');
+                  if (mainEl) {
+                    mainEl.setAttribute('tabindex', '-1');
+                    mainEl.focus({ preventScroll: true });
+                  }
                 }
-                currentTimelineRef.current = null;
-                pendingTargetRef.current = null;
-
-                // Handoff focus to main content
-                const mainEl = document.getElementById('main-content');
-                if (mainEl) {
-                  mainEl.setAttribute('tabindex', '-1');
-                  mainEl.focus({ preventScroll: true });
-                }
-              }
-            },
-          });
-          currentTimelineRef.current = exitTl;
-
-          if (stripWrap) {
-            exitTl.to(
-              stripWrap,
-              { y: -20, opacity: 0, duration: totalDuration * 0.22, ease: 'power2.in' },
-              0
-            );
-          }
-
-          if (overlay) {
-            exitTl.to(
-              overlay,
-              {
-                clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-                duration: totalDuration * 0.35,
-                ease: 'power4.inOut',
               },
-              totalDuration * 0.1
-            );
-          }
+            });
+            currentTimelineRef.current = exitTl;
 
-          const activeMain = document.getElementById('main-content');
-          if (activeMain) {
-            exitTl.fromTo(
-              activeMain,
-              { y: 16, opacity: 0.8 },
-              { y: 0, opacity: 1, duration: totalDuration * 0.32, ease: 'power3.out' },
-              totalDuration * 0.12
-            );
-          }
-        };
+            if (stripWrap) {
+              exitTl.to(
+                stripWrap,
+                { y: -20, opacity: 0, duration: totalDuration * 0.22, ease: 'power2.in' },
+                0
+              );
+            }
 
-        const targetClean = getCleanPathname(destination);
+            if (overlay) {
+              exitTl.to(
+                overlay,
+                {
+                  clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+                  duration: totalDuration * 0.35,
+                  ease: 'power4.inOut',
+                },
+                totalDuration * 0.1
+              );
+            }
 
-        // Check if destination route is already ready or wait for signal
-        if (readyRoutesRef.current.has(targetClean)) {
-          proceedWithEntrance();
-        } else {
-          readyListenerRef.current = (readyPath) => {
-            if (readyPath === targetClean && currentGenerationRef.current === thisGeneration) {
-              proceedWithEntrance();
+            const activeMain = document.getElementById('main-content');
+            if (activeMain) {
+              exitTl.fromTo(
+                activeMain,
+                { y: 16, opacity: 0.8 },
+                { y: 0, opacity: 1, duration: totalDuration * 0.32, ease: 'power3.out' },
+                totalDuration * 0.12
+              );
             }
           };
 
-          // Safety fallback timeout: max 2000ms
-          safetyTimerRef.current = setTimeout(() => {
-            if (currentGenerationRef.current === thisGeneration) {
-              proceedWithEntrance();
-            }
-          }, 2000);
-        }
-      }, totalDuration * 0.48);
+          const targetClean = getCleanPathname(destination);
+
+          // Check if destination route is already ready or wait for signal
+          if (readyRoutesRef.current.has(targetClean)) {
+            proceedWithEntrance();
+          } else {
+            readyListenerRef.current = (readyPath) => {
+              if (readyPath === targetClean && currentGenerationRef.current === thisGeneration) {
+                proceedWithEntrance();
+              }
+            };
+
+            // Safety fallback timeout: max 2000ms
+            safetyTimerRef.current = setTimeout(() => {
+              if (currentGenerationRef.current === thisGeneration) {
+                proceedWithEntrance();
+              }
+            }, 2000);
+          }
+        },
+        [],
+        totalDuration * 0.48
+      );
     },
     [location.pathname, location.search, navigate]
   );
@@ -277,7 +286,7 @@ export const RouteTransitionCoordinator = ({ children }) => {
             eyebrow="NAVIGATING RECORD"
             sourceLabel={transitionState.label || 'LIVING RECORD'}
             theme="mineral"
-            variant="source"
+            variant="transition"
           />
         </div>
       </div>

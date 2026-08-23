@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { useRouteTransition } from '../motion/RouteTransitionCoordinator';
-import { useCursor } from '../motion/CursorCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../../content/personality-v7/mediaManifest';
 import EvidenceStrip from '../living-record/EvidenceStrip';
 
@@ -19,13 +18,20 @@ const MENU_ITEMS = [
 export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
   const location = useLocation();
   const { navigateWithTransition } = useRouteTransition();
-  const { setCursorLabel, clearCursorLabel } = useCursor();
 
   const containerRef = useRef(null);
   const itemsRef = useRef([]);
   const previewRef = useRef(null);
-  const [activeItem, setActiveItem] = useState(MENU_ITEMS[0]);
+  const [activeItem, setActiveItem] = useState(
+    () => MENU_ITEMS.find((item) => item.to === location.pathname) || MENU_ITEMS[0]
+  );
   const closeButtonRef = useRef(null);
+
+  // Synchronize initial preview with current route on open or location change
+  useEffect(() => {
+    const current = MENU_ITEMS.find((item) => item.to === location.pathname) || MENU_ITEMS[0];
+    setActiveItem(current);
+  }, [isOpen, location.pathname]);
 
   // Focus management & Escape key trap
   useEffect(() => {
@@ -130,17 +136,11 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
   const handleItemClick = (e, targetPath) => {
     e.preventDefault();
     onClose();
-    clearCursorLabel();
     navigateWithTransition(targetPath);
   };
 
   const handleItemHover = (item) => {
     setActiveItem(item);
-    setCursorLabel(item.label.toUpperCase());
-  };
-
-  const handleItemLeave = () => {
-    clearCursorLabel();
   };
 
   return (
@@ -210,9 +210,7 @@ export const CurvedMenu = ({ isOpen, onClose, triggerRef }) => {
                     className={`pa-curved-menu__link ${isActive ? 'pa-curved-menu__link--active' : ''}`}
                     onClick={(e) => handleItemClick(e, item.to)}
                     onMouseEnter={() => handleItemHover(item)}
-                    onMouseLeave={handleItemLeave}
                     onFocus={() => handleItemHover(item)}
-                    onBlur={handleItemLeave}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     <span className="pa-curved-menu__num">{item.num}</span>

@@ -49,7 +49,7 @@ export const PrivacyContent = () => {
           </aside>
 
           {/* Main Legal Document Body */}
-          <main className="pa-privacy-stream">
+          <div className="pa-privacy-stream">
             {data.sections.map((section) => (
               <section
                 key={section.id}
@@ -64,7 +64,7 @@ export const PrivacyContent = () => {
                 </div>
               </section>
             ))}
-          </main>
+          </div>
         </div>
       </div>
     </article>

@@ -22,6 +22,7 @@ export const HomeFinaleScene = () => {
     <section
       id="home-scene-finale"
       className="pa-home-finale-scene"
+      data-tone="dark"
       aria-label="Finale: The Living Record accumulated"
     >
       <div className="pa-home-finale-scene__backdrop" aria-hidden="true" />
@@ -38,7 +39,6 @@ export const HomeFinaleScene = () => {
 
       <div className="pa-home-finale-scene__content">
         <div className="pa-home-finale-scene__header">
-          <span className="pa-home-finale-scene__eyebrow">THE LIVING RECORD</span>
           <h2 className="pa-home-finale-scene__h2">
             The source stays.
             <br />

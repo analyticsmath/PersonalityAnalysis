@@ -12,6 +12,7 @@ export const HomeSourceQuietScene = () => {
     <section
       id="home-scene-quiet"
       className="pa-home-quiet-scene"
+      data-tone="dark"
       aria-label="Source quiet: Retained evidence baseline"
     >
       <div className="pa-home-quiet-scene__inner">

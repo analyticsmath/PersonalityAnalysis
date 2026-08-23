@@ -87,7 +87,7 @@ export const CursorCoordinator = ({ children }) => {
     setLabel(text);
     activeZoneRef.current.label = text;
     if (cursorRef.current) {
-      cursorRef.current.classList.toggle('pa-cursor--active', Boolean(text));
+      cursorRef.current.classList.toggle('pa-custom-cursor--active', Boolean(text));
       if (text || activeZoneRef.current.isAperture) {
         cursorRef.current.style.opacity = '1';
       }
@@ -99,7 +99,7 @@ export const CursorCoordinator = ({ children }) => {
     setLabel('');
     activeZoneRef.current.label = '';
     if (cursorRef.current) {
-      cursorRef.current.classList.remove('pa-cursor--active');
+      cursorRef.current.classList.remove('pa-custom-cursor--active');
       if (!activeZoneRef.current.isAperture) {
         cursorRef.current.style.opacity = '0';
       }
@@ -111,7 +111,7 @@ export const CursorCoordinator = ({ children }) => {
     setIsAperture(active);
     activeZoneRef.current.isAperture = active;
     if (cursorRef.current) {
-      cursorRef.current.classList.toggle('pa-cursor--aperture', active);
+      cursorRef.current.classList.toggle('pa-custom-cursor--aperture', active);
       if (active || activeZoneRef.current.label) {
         cursorRef.current.style.opacity = '1';
       } else {

@@ -80,11 +80,11 @@
 }
 
 .pa-progress-film__h1 {
-  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
   font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-  line-height: 1.05;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-weight: 520;
+  letter-spacing: -0.035em;
   margin: 0;
 }
 
@@ -178,11 +178,11 @@
 }
 
 .pa-progress-insufficient__h2 {
-  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
   font-size: clamp(2rem, 3.2vw, 2.8rem);
-  font-weight: 400;
+  font-weight: 520;
   line-height: 1.1;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.03em;
   margin: 0;
 }
 
@@ -249,27 +249,34 @@
   padding-top: 0.5rem;
 }
 
-/* ── Mobile and Tablet Adaptations ── */
+/* ── Mobile Adaptations (Retain Overlapping Crops) ── */
 @media (max-width: 768px) {
   .pa-progress-film__crop--a {
     left: 0;
     top: 0;
-    width: 100%;
-    height: 60%;
+    width: 86vw;
+    height: 60vh;
+    opacity: 0.3;
   }
 
   .pa-progress-film__crop--b {
-    left: 0;
-    top: 40%;
-    width: 100%;
-    height: 60%;
-    opacity: 0.2;
+    left: 14vw;
+    top: 25vh;
+    width: 86vw;
+    height: 60vh;
+    opacity: 0.25;
   }
 
-  .pa-progress-film__strip--one,
-  .pa-progress-film__strip--two {
-    width: 100%;
+  .pa-progress-film__strip--one {
+    width: calc(100vw - 40px);
+    max-width: 480px;
     margin-left: 0;
-    margin-top: 0;
+  }
+
+  .pa-progress-film__strip--two {
+    width: calc(100vw - 40px);
+    max-width: 480px;
+    margin-left: 1.25rem;
+    margin-top: -0.5rem;
   }
 }

@@ -419,7 +419,6 @@
   overflow: hidden;
   white-space: nowrap;
   padding: 1rem 0 2.5rem 0;
-  border-bottom: 1px solid rgba(174, 180, 175, 0.12);
   margin-bottom: 3rem;
 }
 
@@ -500,7 +499,6 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  border-top: 1px solid rgba(174, 180, 175, 0.12);
   padding-top: 1.5rem;
   font-size: 0.8125rem;
   color: var(--pa-muted-light);
@@ -560,7 +558,7 @@
   white-space: nowrap;
 }
 
-/* ── Route Transition Overlay (Section 8) ── */
+/* ── Route Transition Overlay (The Living Record Handoff) ── */
 .pa-route-transition-overlay {
   position: fixed;
   inset: 0;
@@ -570,29 +568,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: all;
+  pointer-events: none;
 }
 
-.pa-route-transition-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+.pa-route-transition-strip-wrap {
+  width: clamp(420px, 46vw, 720px);
+  position: relative;
+  z-index: 1;
 }
 
-.pa-route-transition-trace {
-  width: 120px;
-  height: 2px;
-  background-color: var(--pa-oxblood);
-  transform-origin: left center;
-}
-
-.pa-route-transition-word {
-  font-family: var(--pa-font-display);
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 560;
-  letter-spacing: 0.12em;
-  color: var(--pa-mineral);
+@media (max-width: 768px) {
+  .pa-route-transition-strip-wrap {
+    width: calc(100vw - 32px);
+    max-width: 520px;
+  }
 }
 
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {

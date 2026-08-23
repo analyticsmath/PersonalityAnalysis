@@ -5,6 +5,7 @@ import EnvironmentPlane from '../../components/personality-v7/living-record/Envi
 import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
 import ProvenanceTrace from '../../components/personality-v7/living-record/ProvenanceTrace';
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
+import { useCursor } from '../../components/personality-v7/motion/CursorCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 import './EditorialTrustPage.css';
 
@@ -47,21 +48,26 @@ const STAGE_DETAILS = {
   },
 };
 
+const GROUNDED_PROVENANCE_QUOTE =
+  '“When ownership is unclear, I clarify stakeholders, investigate the issue, organize the work, choose an independent plan, and learn from the result.”';
+
 export const EditorialTrustPage = () => {
   const [activeStage, setActiveStage] = useState('supplied');
   const { navigateWithTransition } = useRouteTransition();
+  const { setCursorLabel, clearCursorLabel } = useCursor();
 
   const currentDetail = STAGE_DETAILS[activeStage] || STAGE_DETAILS.supplied;
 
   const handleCtaClick = (e, to) => {
     e.preventDefault();
+    clearCursorLabel();
     navigateWithTransition(to);
   };
 
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="light-content" withFooter={true}>
-        <div className="pa-trust-page" role="main" id="main-content">
+      <PublicLayout headerTheme="dark-content" withFooter={true}>
+        <div className="pa-trust-page" data-tone="dark">
           {/* Section 1: Hero & Interactive Traceback Stage */}
           <section className="pa-trust-hero" aria-label="Trust and Provenance Architecture">
             <div className="pa-trust-hero__inner">
@@ -84,7 +90,6 @@ export const EditorialTrustPage = () => {
               </div>
 
               <div className="pa-trust-hero__content">
-                <span className="pa-trust-hero__meta-tag">PROVENANCE & CONTROL</span>
                 <h1 className="pa-trust-hero__h1">
                   Every reading traces back to what created it.
                 </h1>
@@ -94,7 +99,11 @@ export const EditorialTrustPage = () => {
                 </p>
 
                 {/* Provenance Interactive Sequence */}
-                <div className="pa-trust-hero__trace-wrap">
+                <div
+                  className="pa-trust-hero__trace-wrap"
+                  onMouseEnter={() => setCursorLabel('TRACE')}
+                  onMouseLeave={clearCursorLabel}
+                >
                   <ProvenanceTrace
                     activeStage={activeStage}
                     onSelectStage={(k) => setActiveStage(k)}
@@ -112,7 +121,7 @@ export const EditorialTrustPage = () => {
                 {/* Anchored Specimen Strip */}
                 <div className="pa-trust-hero__strip-wrap">
                   <EvidenceStrip
-                    quote="“I clarify responsibilities before committing work.”"
+                    quote={GROUNDED_PROVENANCE_QUOTE}
                     eyebrow="VERIFIABLE EVIDENCE RECORD"
                     sourceLabel="PROVENANCE: COMPLETE TRACE"
                     theme="mineral"
@@ -120,9 +129,9 @@ export const EditorialTrustPage = () => {
                     isInspecting={true}
                     provenanceData={{
                       source: 'answer',
-                      sourceId: 'technical-depth-intermediate',
+                      sourceId: 'initiative-pattern-intermediate',
                       dimension: 'bigFive',
-                      key: 'conscientiousness',
+                      key: 'extraversion',
                       direction: 'positive',
                       scoringSource: 'deterministic',
                     }}
@@ -132,11 +141,10 @@ export const EditorialTrustPage = () => {
             </div>
           </section>
 
-          {/* Section 2: Open Editorial Data Rights (No 3-card grid) */}
+          {/* Section 2: Open Editorial Data Rights */}
           <section className="pa-trust-rights" aria-label="User Data Rights">
             <div className="pa-trust-rights__inner">
               <div className="pa-trust-rights__header">
-                <span className="pa-trust-rights__meta-tag">DATA GOVERNANCE</span>
                 <h2 className="pa-trust-rights__h2">Your data, your record, your control.</h2>
                 <p className="pa-trust-rights__lead">
                   We believe psychometric data should belong entirely to the individual.

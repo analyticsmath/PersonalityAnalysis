@@ -62,11 +62,11 @@
 }
 
 .pa-auth-login__h1 {
-  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
   font-size: clamp(2rem, 3.5vw, 2.8rem);
-  line-height: 1.1;
-  font-weight: 400;
-  letter-spacing: -0.015em;
+  line-height: 1.05;
+  font-weight: 520;
+  letter-spacing: -0.035em;
   margin: 0;
 }
 
@@ -138,11 +138,11 @@
 }
 
 .pa-auth-signup__h1 {
-  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
   font-size: clamp(2.2rem, 3.6vw, 3rem);
-  line-height: 1.08;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-weight: 520;
+  letter-spacing: -0.035em;
   margin: 0;
 }
 

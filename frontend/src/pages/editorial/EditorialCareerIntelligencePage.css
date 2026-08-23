@@ -38,11 +38,11 @@
 }
 
 .pa-career-atlas__h1 {
-  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
   font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-  line-height: 1.05;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-weight: 520;
+  letter-spacing: -0.035em;
   margin: 0;
 }
 
@@ -219,11 +219,11 @@
 }
 
 .pa-career-atlas__h2 {
-  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
   font-size: clamp(1.8rem, 3.2vw, 2.6rem);
   line-height: 1.1;
-  font-weight: 400;
-  letter-spacing: -0.015em;
+  font-weight: 520;
+  letter-spacing: -0.03em;
   margin: 0;
 }
 
@@ -319,11 +319,11 @@
 }
 
 .pa-career-atlas__role-detail-title {
-  font-family: var(--pa-font-serif, 'Newsreader Variable', Georgia, serif);
+  font-family: var(--pa-font-display, 'Mona Sans', sans-serif);
   font-size: clamp(2rem, 3.2vw, 2.8rem);
-  font-weight: 400;
+  font-weight: 520;
   line-height: 1.1;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.03em;
   margin: 0;
 }
 

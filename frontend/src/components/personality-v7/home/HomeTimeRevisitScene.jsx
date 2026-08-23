@@ -87,6 +87,7 @@ export const HomeTimeRevisitScene = () => {
       ref={sceneRef}
       id="home-scene-time"
       className="pa-home-time-scene"
+      data-tone="dark"
       aria-label="Time revisit: Longitudinal record retention"
     >
       <div className="pa-home-time-scene__stage">
@@ -113,7 +114,6 @@ export const HomeTimeRevisitScene = () => {
         {/* Content & Overlapping Strips */}
         <div className="pa-home-time-scene__overlay">
           <div className="pa-home-time-scene__header">
-            <span className="pa-home-time-scene__eyebrow">LONGITUDINAL ARCHIVE</span>
             <h2 className="pa-home-time-scene__h2">
               A later assessment adds a record.
               <br />

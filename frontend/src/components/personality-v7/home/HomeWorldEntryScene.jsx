@@ -142,6 +142,7 @@ export const HomeWorldEntryScene = () => {
       ref={sceneRef}
       id="home-scene-entry"
       className="pa-home-entry-scene"
+      data-tone="dark"
       aria-label="World entry: The Living Record"
     >
       <div className="pa-home-entry-scene__backdrop" aria-hidden="true" />

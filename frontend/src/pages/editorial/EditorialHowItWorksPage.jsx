@@ -1,31 +1,104 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
 import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
 import EnvironmentPlane from '../../components/personality-v7/living-record/EnvironmentPlane';
 import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
 import CalibrationBaseline from '../../components/personality-v7/living-record/CalibrationBaseline';
+import MobileEvidenceSpine from '../../components/personality-v7/living-record/MobileEvidenceSpine';
 import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
 import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 import './EditorialHowItWorksPage.css';
 
+gsap.registerPlugin(ScrollTrigger);
+
+const SPECIMEN_QUOTE =
+  '“When ownership is unclear, I clarify stakeholders, investigate the issue, organize the work, choose an independent plan, and learn from the result.”';
+
 /**
  * EditorialHowItWorksPage
- * Operating Mode: The Evidence Engine
- * One continuous pipeline tracking a single situational response through:
- * Question Prompt -> Retained Source -> Multi-Dimensional Extraction -> Scoring Validity -> Calibration Baseline -> Stored Record.
+ * Operating Mode: The Continuous Evidence Engine
+ * 260–300svh pinned operational pipeline tracking a single situational response through:
+ * 0–18%: Prompt & Retained Source
+ * 18–38%: Extraction & Behavioral Calibration
+ * 38–58%: Multi-Dimensional Branching (Asymmetric Coordinates & Traces)
+ * 58–74%: Deterministic Score Validity Gate (VALID | PARTIAL | INSUFFICIENT_DATA)
+ * 74–90%: Calibration Baseline
+ * 90–100%: Stored Living Record / Reversible Provenance
  */
 export const EditorialHowItWorksPage = () => {
   const { navigateWithTransition } = useRouteTransition();
+  const engineStageRef = useRef(null);
+  const [engineProgress, setEngineProgress] = useState(0);
+  const [mobileBranchIdx, setMobileBranchIdx] = useState(0);
+
+  useEffect(() => {
+    const stage = engineStageRef.current;
+    if (!stage) return;
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTest = typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent);
+    if (prefersReduced || isTest) return;
+
+    const isMobile = window.innerWidth <= 768;
+
+    const ctx = gsap.context(() => {
+      if (isMobile) {
+        ScrollTrigger.create({
+          trigger: stage,
+          start: 'top top+=20%',
+          end: 'bottom bottom',
+          onUpdate: (self) => {
+            const p = self.progress;
+            setMobileBranchIdx(Math.min(3, Math.floor(p * 4)));
+          },
+        });
+        return;
+      }
+
+      ScrollTrigger.create({
+        trigger: stage,
+        start: 'top top',
+        end: '+=280%',
+        pin: true,
+        anticipatePin: 1,
+        scrub: 0.5,
+        onUpdate: (self) => {
+          setEngineProgress(self.progress);
+        },
+      });
+    }, stage);
+
+    return () => ctx.revert();
+  }, []);
 
   const handleCtaClick = (e, to) => {
     e.preventDefault();
     navigateWithTransition(to);
   };
 
+  // Resolve active stage segment (0–18%, 18–38%, 38–58%, 58–74%, 74–90%, 90–100%)
+  const activeSegment =
+    engineProgress < 0.18
+      ? 0
+      : engineProgress < 0.38
+      ? 1
+      : engineProgress < 0.58
+      ? 2
+      : engineProgress < 0.74
+      ? 3
+      : engineProgress < 0.90
+      ? 4
+      : 5;
+
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="light-content" withFooter={true}>
-        <div className="pa-engine-page" role="main" id="main-content">
+      <PublicLayout headerTheme="dark-content" withFooter={true}>
+        <div className="pa-engine-page" data-tone="dark">
           {/* Continuous Engine Hero */}
           <section className="pa-engine-hero" aria-label="Evidence Engine Overview">
             <div className="pa-engine-hero__media">
@@ -39,7 +112,6 @@ export const EditorialHowItWorksPage = () => {
 
             <div className="pa-engine-hero__overlay">
               <div className="pa-engine-hero__header">
-                <span className="pa-engine-hero__meta-tag">OPERATIONAL PIPELINE</span>
                 <h1 className="pa-engine-hero__h1">
                   From a single response to an ongoing record.
                 </h1>
@@ -51,90 +123,237 @@ export const EditorialHowItWorksPage = () => {
             </div>
           </section>
 
-          {/* Continuous Pipeline Stage Container */}
-          <div className="pa-engine-pipeline">
-            {/* Step A: Real Prompt & Illustrative Response */}
-            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--prompt">
-              <div className="pa-engine-pipeline__header">
-                <span className="pa-engine-pipeline__meta-tag">QUESTION SPECIMEN</span>
-                <h2 className="pa-engine-pipeline__title">Situational decision prompt</h2>
-                <p className="pa-engine-pipeline__sub">
-                  Real psychometric items present grounded working trade-offs rather than generic self-rating scales.
-                </p>
+          {/* Continuous 280svh Pinned Engine Stage */}
+          <section
+            ref={engineStageRef}
+            className="pa-engine-continuous-stage"
+            aria-label="Continuous operational pipeline"
+          >
+            {/* Desktop Pinned Stage Display */}
+            <div className="pa-engine-continuous-stage__desktop">
+              {/* Left Column: Segment Status & Headings */}
+              <div className="pa-engine-continuous-stage__sidebar">
+                <div className="pa-engine-continuous-stage__step-nav">
+                  {[
+                    { num: '01', title: 'Source Capture' },
+                    { num: '02', title: 'Signal Extraction' },
+                    { num: '03', title: 'Asymmetric Branching' },
+                    { num: '04', title: 'Deterministic Validity' },
+                    { num: '05', title: 'Calibration Weighting' },
+                    { num: '06', title: 'Living Record' },
+                  ].map((step, idx) => (
+                    <div
+                      key={step.num}
+                      className={`pa-engine-continuous-stage__step-item ${
+                        idx === activeSegment ? 'is-active' : idx < activeSegment ? 'is-complete' : ''
+                      }`}
+                    >
+                      <span className="pa-engine-continuous-stage__step-num">{step.num}</span>
+                      <span className="pa-engine-continuous-stage__step-title">{step.title}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pa-engine-continuous-stage__active-info">
+                  {activeSegment === 0 && (
+                    <>
+                      <h2 className="pa-engine-continuous-stage__h2">Situational decision prompt</h2>
+                      <p className="pa-engine-continuous-stage__desc">
+                        Real psychometric items present grounded working trade-offs rather than generic self-rating scales.
+                      </p>
+                    </>
+                  )}
+                  {activeSegment === 1 && (
+                    <>
+                      <h2 className="pa-engine-continuous-stage__h2">Signal extraction & calibration</h2>
+                      <p className="pa-engine-continuous-stage__desc">
+                        The response is parsed for behavioral markers without destroying context.
+                      </p>
+                    </>
+                  )}
+                  {activeSegment === 2 && (
+                    <>
+                      <h2 className="pa-engine-continuous-stage__h2">Multi-dimensional branching</h2>
+                      <p className="pa-engine-continuous-stage__desc">
+                        One human response branches across unequal field trajectories into distinct framework endpoints.
+                      </p>
+                    </>
+                  )}
+                  {activeSegment === 3 && (
+                    <>
+                      <h2 className="pa-engine-continuous-stage__h2">Deterministic score validity</h2>
+                      <p className="pa-engine-continuous-stage__desc">
+                        Evidence is verified against consistency thresholds before scores are finalized.
+                      </p>
+                    </>
+                  )}
+                  {activeSegment === 4 && (
+                    <>
+                      <h2 className="pa-engine-continuous-stage__h2">Career calibration baseline</h2>
+                      <p className="pa-engine-continuous-stage__desc">
+                        The evidence feeds directly into the 6-layer deterministic fit scale without opaque weighting changes.
+                      </p>
+                    </>
+                  )}
+                  {activeSegment === 5 && (
+                    <>
+                      <h2 className="pa-engine-continuous-stage__h2">The stored living record</h2>
+                      <p className="pa-engine-continuous-stage__desc">
+                        The source answer remains attached to all derived signals, ready for longitudinal comparison.
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
 
+              {/* Right Main Arena: Morphing Stage Content */}
+              <div className="pa-engine-continuous-stage__arena">
+                {/* Segment 0 & 1: Prompt & Source Strip */}
+                {activeSegment <= 1 && (
+                  <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--prompt">
+                    <div className="pa-engine-pipeline__prompt-specimen">
+                      <span className="pa-engine-pipeline__prompt-id">QUESTION ID: initiative-pattern-intermediate</span>
+                      <blockquote className="pa-engine-pipeline__prompt-quote">
+                        “When team ownership is ambiguous and a project is stalled, what is your initial operating move?”
+                      </blockquote>
+                    </div>
+
+                    <div className="pa-engine-pipeline__strip-wrap">
+                      <EvidenceStrip
+                        quote={SPECIMEN_QUOTE}
+                        eyebrow="ILLUSTRATIVE RESPONSE"
+                        sourceLabel="SOURCE RETAINED / RAW HUMAN SPECIMEN"
+                        theme="carbon"
+                        variant="source"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Segment 2: Asymmetric Branch Coordinates & Traces */}
+                {activeSegment === 2 && (
+                  <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--asymmetric">
+                    <div className="pa-engine-asymmetric-field">
+                      <div className="pa-engine-asymmetric-node pa-engine-asymmetric-node--1">
+                        <span className="pa-engine-pipeline__dim-label">BIG FIVE</span>
+                        <strong className="pa-engine-pipeline__key-label">Extraversion</strong>
+                        <p className="pa-engine-pipeline__signal-text">
+                          Clarifying stakeholders and taking cross-functional initiative.
+                        </p>
+                      </div>
+
+                      <div className="pa-engine-asymmetric-node pa-engine-asymmetric-node--2">
+                        <span className="pa-engine-pipeline__dim-label">RIASEC</span>
+                        <strong className="pa-engine-pipeline__key-label">Investigative / Conventional</strong>
+                        <p className="pa-engine-pipeline__signal-text">
+                          Analytical issue investigation & procedural organization.
+                        </p>
+                      </div>
+
+                      <div className="pa-engine-asymmetric-node pa-engine-asymmetric-node--3">
+                        <span className="pa-engine-pipeline__dim-label">WORK VALUES</span>
+                        <strong className="pa-engine-pipeline__key-label">Independence & Learning</strong>
+                        <p className="pa-engine-pipeline__signal-text">
+                          Autonomous execution paired with continuous learning orientation.
+                        </p>
+                      </div>
+
+                      <div className="pa-engine-asymmetric-node pa-engine-asymmetric-node--4">
+                        <span className="pa-engine-pipeline__dim-label">CAREER SIGNALS</span>
+                        <strong className="pa-engine-pipeline__key-label">Communication & Planning</strong>
+                        <p className="pa-engine-pipeline__signal-text">
+                          Structured problem framing and deliberate execution.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Segment 3: Validity Gate (Verified Vocabulary) */}
+                {activeSegment === 3 && (
+                  <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--validity">
+                    <div className="pa-engine-pipeline__validity-readout">
+                      <div className="pa-engine-pipeline__validity-item">
+                        <span className="pa-engine-pipeline__validity-key">INTEGRITY STATUS</span>
+                        <span className="pa-engine-pipeline__validity-val">VALID</span>
+                      </div>
+                      <div className="pa-engine-pipeline__validity-item">
+                        <span className="pa-engine-pipeline__validity-key">EVIDENCE COVERAGE</span>
+                        <span className="pa-engine-pipeline__validity-val">VALID</span>
+                      </div>
+                      <div className="pa-engine-pipeline__validity-item">
+                        <span className="pa-engine-pipeline__validity-key">CONFIDENCE STATE</span>
+                        <span className="pa-engine-pipeline__validity-val">PARTIAL</span>
+                      </div>
+                      <div className="pa-engine-pipeline__validity-item">
+                        <span className="pa-engine-pipeline__validity-key">SPARSE CHECK</span>
+                        <span className="pa-engine-pipeline__validity-val">INSUFFICIENT_DATA: NONE</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Segment 4: Calibration */}
+                {activeSegment === 4 && (
+                  <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--calibration">
+                    <CalibrationBaseline theme="carbon" />
+                  </div>
+                )}
+
+                {/* Segment 5: Stored Record & Action */}
+                {activeSegment === 5 && (
+                  <div className="pa-engine-continuous-stage__view pa-engine-continuous-stage__view--stored">
+                    <EvidenceStrip
+                      quote={SPECIMEN_QUOTE}
+                      eyebrow="STORED ASSESSMENT RECORD"
+                      sourceLabel="STORED RECORD / PROVENANCE SECURED"
+                      theme="mineral"
+                      variant="inspect"
+                      accumulatedMarks={true}
+                      provenanceData={{
+                        source: 'answer',
+                        sourceId: 'initiative-pattern-intermediate',
+                        dimension: 'bigFive',
+                        key: 'extraversion',
+                        direction: 'positive',
+                        scoringSource: 'deterministic',
+                      }}
+                    />
+
+                    <div className="pa-engine-pipeline__actions">
+                      <a
+                        href="/signup"
+                        className="pa-btn pa-btn--primary"
+                        onClick={(e) => handleCtaClick(e, '/signup')}
+                      >
+                        Start your initial record &rarr;
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile Continuous Spine Mode */}
+            <div className="pa-engine-continuous-stage__mobile">
               <div className="pa-engine-pipeline__prompt-specimen">
-                <span className="pa-engine-pipeline__prompt-id">ID: technical-depth-intermediate</span>
+                <span className="pa-engine-pipeline__prompt-id">QUESTION ID: initiative-pattern-intermediate</span>
                 <blockquote className="pa-engine-pipeline__prompt-quote">
-                  “How do you decide whether a problem needs a quick patch or a deeper redesign?”
+                  “When team ownership is ambiguous and a project is stalled, what is your initial operating move?”
                 </blockquote>
               </div>
 
               <div className="pa-engine-pipeline__strip-wrap">
                 <EvidenceStrip
-                  quote="“I investigate the architecture, debug the root issue, clarify the tradeoff with stakeholders, and choose an independent plan that leaves room to learn.”"
-                  eyebrow="ILLUSTRATIVE RESPONSE"
-                  sourceLabel="SOURCE RETAINED / RAW HUMAN SPECIMEN"
+                  quote={SPECIMEN_QUOTE}
+                  eyebrow="RETAINED SOURCE SPECIMEN"
+                  sourceLabel="SOURCE / INITIATIVE-PATTERN-INTERMEDIATE"
                   theme="carbon"
                   variant="source"
                 />
               </div>
-            </div>
 
-            {/* Step B: Multi-Dimension Qualitative Evidence Extraction */}
-            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--extraction">
-              <div className="pa-engine-pipeline__header">
-                <span className="pa-engine-pipeline__meta-tag">DIMENSIONAL MAPPING</span>
-                <h2 className="pa-engine-pipeline__title">Multi-dimensional extraction</h2>
-                <p className="pa-engine-pipeline__sub">
-                  One statement produces discrete qualitative evidence atoms across foundational framework families.
-                </p>
-              </div>
-
-              <div className="pa-engine-pipeline__open-records">
-                <div className="pa-engine-pipeline__record-row">
-                  <span className="pa-engine-pipeline__dim-label">BIG FIVE</span>
-                  <span className="pa-engine-pipeline__key-label">Openness</span>
-                  <p className="pa-engine-pipeline__signal-text">
-                    Architectural root-cause inquiry, systems curiosity, and willingness to redesign fundamental mechanisms.
-                  </p>
-                </div>
-
-                <div className="pa-engine-pipeline__record-row">
-                  <span className="pa-engine-pipeline__dim-label">RIASEC</span>
-                  <span className="pa-engine-pipeline__key-label">Investigative</span>
-                  <p className="pa-engine-pipeline__signal-text">
-                    Analytical problem framing and deep debugging preference before committing changes.
-                  </p>
-                </div>
-
-                <div className="pa-engine-pipeline__record-row">
-                  <span className="pa-engine-pipeline__dim-label">WORK VALUES</span>
-                  <span className="pa-engine-pipeline__key-label">Independence & Learning</span>
-                  <p className="pa-engine-pipeline__signal-text">
-                    Autonomous decision authority and priority placed on continuous skill acquisition.
-                  </p>
-                </div>
-
-                <div className="pa-engine-pipeline__record-row">
-                  <span className="pa-engine-pipeline__dim-label">CAREER SIGNALS</span>
-                  <span className="pa-engine-pipeline__key-label">Technical Depth & Stakeholder Synthesis</span>
-                  <p className="pa-engine-pipeline__signal-text">
-                    Rigorous problem framing paired with proactive cross-functional trade-off clarification.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step C: Scoring Validity Gate */}
-            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--validity">
-              <div className="pa-engine-pipeline__header">
-                <span className="pa-engine-pipeline__meta-tag">INTEGRITY CHECK</span>
-                <h2 className="pa-engine-pipeline__title">Deterministic score validity</h2>
-                <p className="pa-engine-pipeline__sub">
-                  Evidence is validated against response consistency and minimum evidence thresholds before scores are finalized.
-                </p>
-              </div>
+              <MobileEvidenceSpine activeBranchIndex={mobileBranchIdx} />
 
               <div className="pa-engine-pipeline__validity-readout">
                 <div className="pa-engine-pipeline__validity-item">
@@ -142,58 +361,9 @@ export const EditorialHowItWorksPage = () => {
                   <span className="pa-engine-pipeline__validity-val">VALID</span>
                 </div>
                 <div className="pa-engine-pipeline__validity-item">
-                  <span className="pa-engine-pipeline__validity-key">INTEGRITY GUARD</span>
-                  <span className="pa-engine-pipeline__validity-val">PASSED</span>
+                  <span className="pa-engine-pipeline__validity-key">CONFIDENCE</span>
+                  <span className="pa-engine-pipeline__validity-val">PARTIAL</span>
                 </div>
-                <div className="pa-engine-pipeline__validity-item">
-                  <span className="pa-engine-pipeline__validity-key">CALCULATION ENGINE</span>
-                  <span className="pa-engine-pipeline__validity-val">DETERMINISTIC</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Step D: Calibration Baseline */}
-            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--calibration">
-              <div className="pa-engine-pipeline__header">
-                <span className="pa-engine-pipeline__meta-tag">PROFILE WEIGHTING</span>
-                <h2 className="pa-engine-pipeline__title">Career calibration baseline</h2>
-                <p className="pa-engine-pipeline__sub">
-                  The evidence feeds directly into the 6-layer deterministic fit scale without opaque weighting changes.
-                </p>
-              </div>
-
-              <div className="pa-engine-pipeline__calibration-wrap">
-                <CalibrationBaseline theme="carbon" />
-              </div>
-            </div>
-
-            {/* Step E: Stored Living Record Finale */}
-            <div className="pa-engine-pipeline__node pa-engine-pipeline__node--stored">
-              <div className="pa-engine-pipeline__header">
-                <span className="pa-engine-pipeline__meta-tag">PERSISTENCE</span>
-                <h2 className="pa-engine-pipeline__title">The stored living record</h2>
-                <p className="pa-engine-pipeline__sub">
-                  The source answer remains attached to all derived signals, ready for longitudinal comparison across assessments.
-                </p>
-              </div>
-
-              <div className="pa-engine-pipeline__strip-wrap">
-                <EvidenceStrip
-                  quote="“I investigate the architecture, debug the root issue, clarify the tradeoff with stakeholders, and choose an independent plan that leaves room to learn.”"
-                  eyebrow="STORED ASSESSMENT RECORD"
-                  sourceLabel="STORED RECORD / PROVENANCE SECURED"
-                  theme="mineral"
-                  variant="inspect"
-                  accumulatedMarks={true}
-                  provenanceData={{
-                    source: 'answer',
-                    sourceId: 'technical-depth-intermediate',
-                    dimension: 'bigFive',
-                    key: 'openness',
-                    direction: 'positive',
-                    scoringSource: 'deterministic',
-                  }}
-                />
               </div>
 
               <div className="pa-engine-pipeline__actions">
@@ -206,7 +376,7 @@ export const EditorialHowItWorksPage = () => {
                 </a>
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </PublicLayout>
     </SmoothScrollProvider>

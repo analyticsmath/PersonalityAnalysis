@@ -118,10 +118,10 @@ describe('The Living Record — Source & Architecture Contract Guardrails', () =
     expect(careerIntelligenceCss).toContain('pa-career-atlas__rel-node--develop');
   });
 
-  // Contract 7: How It Works is continuous pipeline with technical-depth-intermediate specimen
-  it('7. confirms How It Works uses technical-depth-intermediate without synthetic numbers', () => {
-    expect(howItWorks).toContain('technical-depth-intermediate');
-    expect(howItWorks).toContain('How do you decide whether a problem needs a quick patch or a deeper redesign?');
+  // Contract 7: How It Works is continuous pipeline with initiative-pattern-intermediate specimen
+  it('7. confirms How It Works uses initiative-pattern-intermediate without synthetic numbers', () => {
+    expect(howItWorks).toContain('initiative-pattern-intermediate');
+    expect(howItWorks).toContain('When team ownership is ambiguous');
     expect(howItWorks).not.toContain('+0.6');
     expect(howItWorks).not.toContain('+0.5');
     expect(howItWorks).not.toContain('+0.7');
@@ -177,5 +177,94 @@ describe('The Living Record — Source & Architecture Contract Guardrails', () =
       const { container } = render(<EvidenceStrip variant={v} />);
       expect(container.querySelector(`.pa-evidence-strip--${v}`)).toBeDefined();
     });
+  });
+
+  // Contract 14: Semantic single-main rule across all public routes
+  it('14. verifies only PublicLayout renders main#main-content with zero inner duplicates', () => {
+    const publicLayout = readFile('src/components/personality-v7/chrome/PublicLayout.jsx');
+    const appJs = readFile('src/App.js');
+    const privacy = readFile('src/pages/editorial/EditorialPrivacyPage.jsx');
+
+    expect(publicLayout).toContain('<main id="main-content"');
+
+    const innerPages = [
+      home,
+      howItWorks,
+      careerIntelligence,
+      methodology,
+      trustRoute,
+      progress,
+      login,
+      signup,
+      privacy,
+      appJs,
+    ];
+
+    innerPages.forEach((src) => {
+      expect(src).not.toMatch(/<main[\s>]/);
+      expect(src).not.toMatch(/role=["']main["']/);
+      expect(src).not.toMatch(/id=["']main-content["']/);
+    });
+  });
+
+  // Contract 15: Route transition timeline-native execution and pointer-events
+  it('15. confirms route transition timeline-native execution and pointer-events', () => {
+    const coordinator = readFile('src/components/personality-v7/motion/RouteTransitionCoordinator.jsx');
+    const chromeCss = readFile('src/styles/personality-v7/chrome.css');
+
+    expect(coordinator).toContain('tl.call');
+    expect(coordinator).toContain('totalDuration * 0.48');
+    expect(coordinator).toContain('readyRoutesRef.current.delete');
+    expect(coordinator).toContain('variant="transition"');
+    expect(chromeCss).toContain('.pa-route-transition-overlay');
+    expect(chromeCss).toContain('pointer-events: none;');
+  });
+
+  // Contract 16: WebGL gating and lifecycle contract
+  it('16. confirms CareerSpatialCanvas WebGL capability gating and cleanup lifecycle', () => {
+    const canvasJsx = readFile('src/components/personality-v7/career/CareerSpatialCanvas.jsx');
+
+    expect(canvasJsx).toContain('window.innerWidth > 1024');
+    expect(canvasJsx).toContain('pointer: fine');
+    expect(canvasJsx).toContain('prefers-reduced-motion: reduce');
+    expect(canvasJsx).toContain('document.hidden');
+    expect(canvasJsx).toContain('onCanvasReady');
+    expect(canvasJsx).toContain('onCanvasUnavailable');
+    expect(canvasJsx).toContain('renderer.dispose');
+  });
+
+  // Contract 17: Route tone mapping contract
+  it('17. confirms route tone mapping across all public routes and Suspense fallback', () => {
+    const appJs = readFile('src/App.js');
+
+    expect(appJs).toContain("'/career-intelligence': 'dark'");
+    expect(appJs).toContain("'/how-it-works': 'dark'");
+    expect(appJs).toContain("'/progress': 'dark'");
+    expect(appJs).toContain("'/trust': 'dark'");
+    expect(appJs).toContain("'/login': 'dark'");
+    expect(appJs).toContain("'/methodology': 'light'");
+    expect(appJs).toContain("'/privacy': 'light'");
+    expect(appJs).toContain("'/signup': 'light'");
+  });
+
+  // Contract 18: Typography and structural dividers
+  it('18. confirms footer has no horizontal divider lines and H1/H2 use Mona Sans', () => {
+    const chromeCss = readFile('src/styles/personality-v7/chrome.css');
+
+    expect(chromeCss).not.toContain('border-bottom: 1px solid var(--pa-carbon-border');
+    expect(careerIntelligenceCss).toContain('var(--pa-font-display');
+    expect(howItWorksCss).toContain('var(--pa-font-display');
+    expect(methodologyCss).toContain('var(--pa-font-display');
+    expect(trustRouteCss).toContain('var(--pa-font-display');
+    expect(progressCss).toContain('var(--pa-font-display');
+    expect(authCss).toContain('var(--pa-font-display');
+  });
+
+  // Contract 19: Reduced motion auto scroll fallback
+  it('19. confirms SmoothScrollProvider falls back to auto scrolling under reduced motion', () => {
+    const smoothScroll = readFile('src/components/personality-v7/motion/SmoothScrollProvider.jsx');
+
+    expect(smoothScroll).toContain('prefers-reduced-motion: reduce');
+    expect(smoothScroll).toContain("prefersReduced ? 'auto' : 'smooth'");
   });
 });

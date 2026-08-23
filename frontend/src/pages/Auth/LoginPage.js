@@ -109,8 +109,8 @@ export const LoginPage = () => {
 
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="light-content" withFooter={false}>
-        <div className="pa-auth-login" role="main" id="main-content">
+      <PublicLayout headerTheme="dark-content" withFooter={false}>
+        <div className="pa-auth-login" data-tone="dark">
           <div className="pa-auth-login__carbon-viewport">
             {/* Distant Low-Ownership Evidence Strip Protagonist */}
             <div className="pa-auth-login__strip-anchor" aria-hidden="true">
@@ -127,7 +127,6 @@ export const LoginPage = () => {
             {/* Primary Form Container direct on Carbon ground */}
             <div className="pa-auth-login__form-container">
               <div className="pa-auth-login__header">
-                <span className="pa-auth-login__meta-tag">AUTHENTICATION</span>
                 <h1 className="pa-auth-login__h1">Reopen your record.</h1>
                 <p className="pa-auth-login__lead">
                   Sign in to inspect your longitudinal evidence baselines, career fit matrices, and stored reports.

@@ -25,7 +25,7 @@ import HomeFinaleScene from '../../components/personality-v7/home/HomeFinaleScen
 export const EditorialHomePage = () => {
   return (
     <SmoothScrollProvider>
-      <PublicLayout headerTheme="light-content" withFooter={true}>
+      <PublicLayout headerTheme="dark-content" withFooter={true}>
         {/* Scene 1 — World Entry */}
         <HomeWorldEntryScene />
 

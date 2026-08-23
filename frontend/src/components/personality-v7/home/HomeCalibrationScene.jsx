@@ -12,11 +12,11 @@ export const HomeCalibrationScene = () => {
     <section
       id="home-scene-calibration"
       className="pa-home-calibration-scene"
+      data-tone="light"
       aria-label="Calibration: Deterministic fit layers"
     >
       <div className="pa-home-calibration-scene__inner">
         <div className="pa-home-calibration-scene__header">
-          <span className="pa-home-calibration-scene__eyebrow">DETERMINISTIC WEIGHTING</span>
           <h2 className="pa-home-calibration-scene__h2">
             The comparison is
             <br />
