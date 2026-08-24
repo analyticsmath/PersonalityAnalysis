@@ -1,0 +1,30 @@
+/**
+ * Personality Assessor - Public Experience Responsive Matrix
+ * Viewport tests: 1440x900, 1366x768, 1024x768, 820x1180, 430x930, 390x844, 360x800
+ */
+
+@media (max-width: 1023px) {
+  :root {
+    --px-outer-gutter: 24px;
+    --px-column-gap: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --px-outer-gutter: 16px;
+    --px-column-gap: 16px;
+    --px-header-height-desktop: 60px;
+  }
+
+  .pa-px-btn-primary,
+  .pa-px-btn-secondary {
+    width: 100%;
+    height: 52px;
+  }
+
+  .pa-px-auth-root {
+    padding: 80px 16px 40px;
+    justify-content: center;
+  }
+}

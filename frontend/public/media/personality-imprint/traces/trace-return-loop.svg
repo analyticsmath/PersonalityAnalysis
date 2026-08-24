@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M 250,50 A 200,200 0 1,1 249,50" stroke-dasharray="6,6" opacity="0.35" />
-      <path d="M 250,50 A 200,200 0 0,1 450,250" />
-      <circle cx="250" cy="50" r="5" fill="currentColor" />
-      <circle cx="450" cy="250" r="5" fill="currentColor" />
-      <circle cx="250" cy="450" r="5" fill="currentColor" />
-      <circle cx="50" cy="250" r="5" fill="currentColor" />
-    </svg>

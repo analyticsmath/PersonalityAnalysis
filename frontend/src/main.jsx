@@ -11,18 +11,24 @@ import { GOOGLE_CLIENT_ID } from './config/env';
 import './index.css';
 import './styles/fonts.css';
 import './styles/foundation.css';
-import './styles/personality-atlas/fonts.css';
-import './styles/personality-atlas/tokens.css';
-import './styles/personality-atlas/base.css';
-import './styles/personality-atlas/chrome.css';
-import './styles/personality-atlas/motion.css';
-import './styles/personality-atlas/responsive.css';
-import './styles/personality-v7/tokens.css';
-import './styles/personality-v7/foundation.css';
-import './styles/personality-v7/chrome.css';
-import './styles/personality-v7/home.css';
-import './styles/personality-v7/routes.css';
-import './styles/personality-v7/auth.css';
+
+/* ── Public Experience Styles ── */
+import './styles/public-experience/fonts.css';
+import './styles/public-experience/tokens.css';
+import './styles/public-experience/base.css';
+import './styles/public-experience/chrome.css';
+import './styles/public-experience/home.css';
+import './styles/public-experience/career.css';
+import './styles/public-experience/how.css';
+import './styles/public-experience/progress.css';
+import './styles/public-experience/trust.css';
+import './styles/public-experience/methodology.css';
+import './styles/public-experience/privacy.css';
+import './styles/public-experience/auth.css';
+import './styles/public-experience/responsive.css';
+import './styles/public-experience/reduced-motion.css';
+
+/* ── Protected Product Styles ── */
 import './styles/product-shell.css';
 import './styles/assessment-product.css';
 import './styles/results-product.css';

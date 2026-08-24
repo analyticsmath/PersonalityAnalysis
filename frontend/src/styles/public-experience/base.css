@@ -1,0 +1,185 @@
+/**
+ * Personality Assessor - Public Experience Base & Reset Layer
+ */
+
+.pa-public-experience {
+  font-family: var(--px-font-family);
+  font-weight: var(--px-weight-body);
+  color: var(--px-white);
+  background-color: var(--px-ink);
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.pa-public-experience *,
+.pa-public-experience *::before,
+.pa-public-experience *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Accessible Skip Link ── */
+.pa-px-skip-link {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10000;
+  padding: 10px 18px;
+  background-color: var(--px-white);
+  color: var(--px-ink);
+  font-size: var(--px-body-sm);
+  font-weight: var(--px-weight-medium);
+  border-radius: var(--px-radius-xs);
+  transform: translateY(-150%);
+  transition: transform 180ms ease;
+  text-decoration: none;
+}
+
+.pa-px-skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--px-white);
+  outline-offset: 3px;
+}
+
+/* ── Typography Utility Classes ── */
+.pa-px-display-xl {
+  font-family: var(--px-font-family);
+  font-size: var(--px-display-xl);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' var(--px-wdth-display), 'opsz' var(--px-opsz-display);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.pa-px-display-lg {
+  font-family: var(--px-font-family);
+  font-size: var(--px-display-lg);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' var(--px-wdth-display), 'opsz' var(--px-opsz-display);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+}
+
+.pa-px-heading-xl {
+  font-family: var(--px-font-family);
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.pa-px-heading-lg {
+  font-family: var(--px-font-family);
+  font-size: var(--px-heading-lg);
+  font-weight: var(--px-weight-heading);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.pa-px-heading-md {
+  font-family: var(--px-font-family);
+  font-size: var(--px-heading-md);
+  font-weight: var(--px-weight-medium);
+  line-height: 1.25;
+}
+
+.pa-px-body-lg {
+  font-size: var(--px-body-lg);
+  font-weight: var(--px-weight-body);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.pa-px-body {
+  font-size: var(--px-body);
+  font-weight: var(--px-weight-body);
+  line-height: 1.55;
+}
+
+.pa-px-context-data {
+  font-family: var(--px-font-family);
+  font-size: var(--px-caption);
+  font-weight: var(--px-weight-medium);
+  font-variation-settings: 'wdth' 88, 'opsz' 14;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── Button Primitives (No pills, no gradients, 48-52px desktop) ── */
+.pa-px-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 28px;
+  background-color: var(--px-white);
+  color: var(--px-ink);
+  font-family: var(--px-font-family);
+  font-size: var(--px-body);
+  font-weight: var(--px-weight-medium);
+  border-radius: var(--px-radius-xs);
+  border: 1px solid var(--px-white);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.pa-px-btn-primary:hover {
+  background-color: transparent;
+  color: var(--px-white);
+  transform: translateY(-2px);
+}
+
+.pa-px-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 24px;
+  background-color: transparent;
+  color: var(--px-white);
+  font-family: var(--px-font-family);
+  font-size: var(--px-body);
+  font-weight: var(--px-weight-body);
+  border: 1px solid rgba(247, 248, 248, 0.35);
+  border-radius: var(--px-radius-xs);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.pa-px-btn-secondary:hover {
+  border-color: var(--px-white);
+  background-color: rgba(247, 248, 248, 0.08);
+  transform: translateY(-2px);
+}
+
+.pa-px-btn-primary:focus-visible,
+.pa-px-btn-secondary:focus-visible,
+.pa-public-experience a:focus-visible,
+.pa-public-experience button:focus-visible {
+  outline: 2px solid var(--px-white);
+  outline-offset: 3px;
+}
+
+/* ── Layout Grid ── */
+.pa-px-grid {
+  padding-left: var(--px-outer-gutter);
+  padding-right: var(--px-outer-gutter);
+}
+
+.pa-px-scene-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+}

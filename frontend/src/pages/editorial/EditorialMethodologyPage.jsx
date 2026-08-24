@@ -1,15 +1,12 @@
 import React from 'react';
-import AtlasLayout from '../../components/personality-atlas/chrome/AtlasLayout';
-import AtlasScrollProvider from '../../components/personality-atlas/motion/AtlasScrollProvider';
-import MethodologyPublication from '../../components/personality-atlas/methodology/MethodologyPublication';
+import { PublicExperienceRoot } from '../../components/public-experience/chrome/PublicExperienceRoot';
+import { MethodologyEditorial } from '../../components/public-experience/methodology/MethodologyEditorial';
 
 export const EditorialMethodologyPage = () => {
   return (
-    <AtlasScrollProvider>
-      <AtlasLayout>
-        <MethodologyPublication />
-      </AtlasLayout>
-    </AtlasScrollProvider>
+    <PublicExperienceRoot withFooter={true}>
+      <MethodologyEditorial />
+    </PublicExperienceRoot>
   );
 };
 

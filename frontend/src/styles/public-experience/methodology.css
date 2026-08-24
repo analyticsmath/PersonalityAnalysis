@@ -1,0 +1,76 @@
+/**
+ * Personality Assessor - Public Experience Methodology Route Styles
+ * Motion Editorial & Deterministic Calibration
+ */
+
+.pa-px-methodology-root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--px-ink);
+  color: var(--px-white);
+}
+
+.pa-px-methodology-hero {
+  padding: 120px var(--px-outer-gutter) 60px;
+  max-width: 52rem;
+}
+
+.pa-px-methodology-hero h1 {
+  font-family: var(--px-font-family);
+  font-size: var(--px-display-lg);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' 80, 'opsz' 84;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+
+.pa-px-methodology-hero p {
+  font-size: var(--px-body-lg);
+  opacity: 0.85;
+}
+
+.pa-px-methodology-frameworks {
+  padding: 40px var(--px-outer-gutter) 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 68rem;
+}
+
+.pa-px-methodology-item {
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(247, 248, 248, 0.12);
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+}
+
+.pa-px-methodology-item h3 {
+  font-size: 1.35rem;
+  font-weight: var(--px-weight-heading);
+  font-variation-settings: 'wdth' 90;
+  letter-spacing: -0.015em;
+  margin-bottom: 4px;
+}
+
+.pa-px-methodology-item span {
+  font-size: var(--px-caption);
+  color: var(--px-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pa-px-methodology-item p {
+  font-size: var(--px-body);
+  line-height: 1.6;
+  opacity: 0.88;
+}
+
+@media (max-width: 767px) {
+  .pa-px-methodology-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

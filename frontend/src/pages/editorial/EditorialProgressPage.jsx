@@ -1,17 +1,12 @@
 import React from 'react';
-import AtlasLayout from '../../components/personality-atlas/chrome/AtlasLayout';
-import AtlasScrollProvider from '../../components/personality-atlas/motion/AtlasScrollProvider';
-import ProgressTemporalStage from '../../components/personality-atlas/progress/ProgressTemporalStage';
-import ProgressEmptyState from '../../components/personality-atlas/progress/ProgressEmptyState';
+import { PublicExperienceRoot } from '../../components/public-experience/chrome/PublicExperienceRoot';
+import { ProgressTemporalStage } from '../../components/public-experience/progress/ProgressTemporalStage';
 
 export const EditorialProgressPage = () => {
   return (
-    <AtlasScrollProvider>
-      <AtlasLayout>
-        <ProgressTemporalStage />
-        <ProgressEmptyState />
-      </AtlasLayout>
-    </AtlasScrollProvider>
+    <PublicExperienceRoot withFooter={true}>
+      <ProgressTemporalStage />
+    </PublicExperienceRoot>
   );
 };
 

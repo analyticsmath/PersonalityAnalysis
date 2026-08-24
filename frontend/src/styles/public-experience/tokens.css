@@ -1,0 +1,54 @@
+/**
+ * Personality Assessor - Public Experience Design Tokens
+ * Media-Led Architecture: Photography supplies chromatic depth; interface is restrained.
+ * Strict ceiling: Font weight 560 maximum. No gradients.
+ */
+
+:root {
+  /* ── Interface Neutrals ── */
+  --px-ink: #121416;
+  --px-white: #F7F8F8;
+  --px-soft: #DDE1E3;
+  --px-glass: rgba(18, 20, 22, 0.72);
+  --px-glass-light: rgba(247, 248, 248, 0.85);
+
+  /* ── Typography: Single Variable Family (Bricolage Grotesque) ── */
+  --px-font-family: 'Bricolage Grotesque Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* ── Font Weights (Max 560 ceiling) ── */
+  --px-weight-display: 360;
+  --px-weight-heading: 420;
+  --px-weight-body: 380;
+  --px-weight-medium: 480;
+  --px-weight-bold: 540;
+
+  /* ── Variable Font Axes Defaults ── */
+  --px-wdth-display: 82;
+  --px-wdth-body: 98;
+  --px-opsz-display: 84;
+  --px-opsz-body: 16;
+
+  /* ── Type Scale ── */
+  --px-display-xl: clamp(3.2rem, 7.5vw, 6.4rem);
+  --px-display-lg: clamp(2.4rem, 5.5vw, 4.4rem);
+  --px-heading-xl: clamp(1.9rem, 3.8vw, 3.2rem);
+  --px-heading-lg: clamp(1.5rem, 2.8vw, 2.4rem);
+  --px-heading-md: clamp(1.25rem, 2vw, 1.75rem);
+  --px-body-lg: clamp(1.1rem, 1.4vw, 1.35rem);
+  --px-body: 1rem;
+  --px-body-sm: 0.88rem;
+  --px-caption: 0.76rem;
+
+  /* ── Spatial Layout & Rhythm ── */
+  --px-outer-gutter: clamp(20px, 4.5vw, 64px);
+  --px-column-gap: clamp(16px, 2.5vw, 40px);
+  --px-measure-reading: 65ch;
+  --px-radius-xs: 3px;
+  --px-radius-sm: 6px;
+  --px-radius-media: 8px;
+
+  /* ── Header Heights ── */
+  --px-header-height-desktop: 72px;
+  --px-header-height-tablet: 66px;
+  --px-header-height-mobile: 60px;
+}

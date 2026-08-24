@@ -1,17 +1,12 @@
 import React from 'react';
-import AtlasLayout from '../../components/personality-atlas/chrome/AtlasLayout';
-import AtlasScrollProvider from '../../components/personality-atlas/motion/AtlasScrollProvider';
-import TrustChainStage from '../../components/personality-atlas/trust/TrustChainStage';
-import TrustControlField from '../../components/personality-atlas/trust/TrustControlField';
+import { PublicExperienceRoot } from '../../components/public-experience/chrome/PublicExperienceRoot';
+import { TrustInspectionStage } from '../../components/public-experience/trust/TrustInspectionStage';
 
 export const EditorialTrustPage = () => {
   return (
-    <AtlasScrollProvider>
-      <AtlasLayout>
-        <TrustChainStage />
-        <TrustControlField />
-      </AtlasLayout>
-    </AtlasScrollProvider>
+    <PublicExperienceRoot withFooter={true}>
+      <TrustInspectionStage />
+    </PublicExperienceRoot>
   );
 };
 

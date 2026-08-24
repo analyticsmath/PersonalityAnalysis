@@ -1,0 +1,122 @@
+/**
+ * Personality Assessor - Public Experience Trust Route Styles
+ * X-Ray / Inspection Aperture + Sovereign Data Rights
+ */
+
+.pa-px-trust-root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--px-ink);
+  color: var(--px-white);
+}
+
+.pa-px-trust-hero {
+  padding: 120px var(--px-outer-gutter) 60px;
+  max-width: 52rem;
+}
+
+.pa-px-trust-hero h1 {
+  font-family: var(--px-font-family);
+  font-size: var(--px-display-lg);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' 80, 'opsz' 84;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+
+.pa-px-trust-hero p {
+  font-size: var(--px-body-lg);
+  opacity: 0.85;
+}
+
+/* ── Stacked Semantic Layers ── */
+.pa-px-trust-layers {
+  padding: 40px var(--px-outer-gutter) 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 68rem;
+}
+
+.pa-px-trust-layer-item {
+  background: rgba(247, 248, 248, 0.04);
+  border: 1px solid rgba(247, 248, 248, 0.1);
+  padding: 28px 32px;
+  border-radius: var(--px-radius-sm);
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.pa-px-trust-layer-item__meta h3 {
+  font-size: 1.25rem;
+  font-weight: var(--px-weight-heading);
+  color: var(--px-white);
+}
+
+.pa-px-trust-layer-item__meta span {
+  font-size: var(--px-caption);
+  color: var(--px-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pa-px-trust-layer-item__desc {
+  font-size: var(--px-body);
+  line-height: 1.55;
+  opacity: 0.88;
+}
+
+/* ── Sovereign Data Rights (Unboxed) ── */
+.pa-px-trust-rights-section {
+  padding: 80px var(--px-outer-gutter) 120px;
+  border-top: 1px solid rgba(247, 248, 248, 0.12);
+}
+
+.pa-px-trust-rights-section h2 {
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
+  letter-spacing: -0.02em;
+  margin-bottom: 36px;
+  max-width: 44rem;
+}
+
+.pa-px-trust-rights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--px-column-gap);
+}
+
+.pa-px-trust-right-card {
+  background: rgba(247, 248, 248, 0.04);
+  border: 1px solid rgba(247, 248, 248, 0.1);
+  padding: 28px;
+  border-radius: var(--px-radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pa-px-trust-right-card h4 {
+  font-size: 1.15rem;
+  font-weight: var(--px-weight-heading);
+}
+
+.pa-px-trust-right-card p {
+  font-size: var(--px-body-sm);
+  line-height: 1.55;
+  opacity: 0.85;
+}
+
+@media (max-width: 1023px) {
+  .pa-px-trust-layer-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .pa-px-trust-rights-grid {
+    grid-template-columns: 1fr;
+  }
+}

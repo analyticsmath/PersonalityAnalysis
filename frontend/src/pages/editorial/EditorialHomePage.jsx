@@ -1,23 +1,26 @@
 import React from 'react';
-import AtlasLayout from '../../components/personality-atlas/chrome/AtlasLayout';
-import AtlasScrollProvider from '../../components/personality-atlas/motion/AtlasScrollProvider';
-import FieldEntryChapter from '../../components/personality-atlas/home/FieldEntryChapter';
-import BranchingChapter from '../../components/personality-atlas/home/BranchingChapter';
-import WorkworldDriftChapter from '../../components/personality-atlas/home/WorkworldDriftChapter';
-import TemporalLayersChapter from '../../components/personality-atlas/home/TemporalLayersChapter';
-import ResolutionChapter from '../../components/personality-atlas/home/ResolutionChapter';
+import { PublicExperienceRoot } from '../../components/public-experience/chrome/PublicExperienceRoot';
+import { WorldEntry } from '../../components/public-experience/home/WorldEntry';
+import { ProfessionalSituation } from '../../components/public-experience/home/ProfessionalSituation';
+import { MultipleReadings } from '../../components/public-experience/home/MultipleReadings';
+import { WorkworldJourney } from '../../components/public-experience/media/WorkworldJourney';
+import { Calibration } from '../../components/public-experience/home/Calibration';
+import { TimeExposure } from '../../components/public-experience/home/TimeExposure';
+import { ProvenanceReveal } from '../../components/public-experience/home/ProvenanceReveal';
+import { Finale } from '../../components/public-experience/home/Finale';
 
 export const EditorialHomePage = () => {
   return (
-    <AtlasScrollProvider>
-      <AtlasLayout>
-        <FieldEntryChapter />
-        <BranchingChapter />
-        <WorkworldDriftChapter />
-        <TemporalLayersChapter />
-        <ResolutionChapter />
-      </AtlasLayout>
-    </AtlasScrollProvider>
+    <PublicExperienceRoot withFooter={true}>
+      <WorldEntry />
+      <ProfessionalSituation />
+      <MultipleReadings />
+      <WorkworldJourney />
+      <Calibration />
+      <TimeExposure />
+      <ProvenanceReveal />
+      <Finale />
+    </PublicExperienceRoot>
   );
 };
 

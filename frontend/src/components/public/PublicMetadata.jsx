@@ -3,40 +3,40 @@ import { useLocation } from 'react-router-dom';
 
 const metadata = {
   '/': [
-    'Personality Assessor | Context Atlas',
-    'Context Atlas architecture: See how the same professional evidence reads across personality, interests, work values, career conditions, and time.',
+    'Personality Assessor | Under Different Conditions',
+    'Personality Assessor reads professional patterns with the work attached. Explore behavioral readings across changing conditions, deterministic career calibration, and temporal stability.',
   ],
   '/how-it-works': [
     'How It Works | Personality Assessor',
-    'See one response extract, branch, weight, and store without numbered steppers or opaque scoring.',
+    'Follow one answer from source capture to multi-model psychometric calibration and deterministic scoring.',
   ],
   '/career-intelligence': [
     'Career Intelligence | Personality Assessor',
-    'Explore 5 workworld environments and 17 canonical role requirements in a navigable spatial atlas.',
+    'Spatial workworld exploration across 5 environmental conditions and 17 canonical occupational profiles.',
   ],
   '/progress': [
     'Progress | Personality Assessor',
-    'Longitudinal context accumulation where later evidence sits beside earlier readings without erasing stable patterns.',
+    'Temporal exposure where later evidence sits beside earlier readings to inspect trait stability and contextual adaptation.',
   ],
   '/methodology': [
     'Methodology | Personality Assessor',
     'Inspect continuous Big Five dimensions, RIASEC interests, work values, behavioral signals, and deterministic career calibration.',
   ],
   '/trust': [
-    'Trust & Chain of Custody | Personality Assessor',
-    'Follow a reading back to its source: what you supplied, what the system calculated, and what remains under your direct control.',
+    'Trust & Provenance | Personality Assessor',
+    'Follow every reading back to its source: what you supplied, what the system calculated, and what remains under your direct control.',
   ],
   '/privacy': [
     'Privacy Terms | Personality Assessor',
-    'Read how Personality Assessor handles assessment data, account security, and explicit data export and deletion controls.',
+    'How Personality Assessor collects, computes, stores, and protects your professional evidence with sovereign export and purge rights.',
   ],
   '/login': [
     'Sign In | Personality Assessor',
-    'Return to your record. Reopen assessments, review results, and revisit your career context.',
+    'Continue where you left off. Sign in to continue an assessment or revisit your results.',
   ],
   '/signup': [
-    'Create Account | Personality Assessor',
-    'Start with one honest record. Create an account to keep assessments and compare later changes over time.',
+    'Start Assessment | Personality Assessor',
+    'Start with one assessment. Create an account to keep your results, compare later changes and control your data.',
   ],
 };
 
@@ -70,8 +70,8 @@ export default function PublicMetadata() {
         ? import.meta.env.VITE_SITE_ORIGIN || window.location.origin
         : '';
     const [title, description] = metadata[pathname] || [
-      'Personality Assessor | Context Atlas',
-      'Adaptive personality and career intelligence keeping evidence attached to the conditions where it occurred.',
+      'Personality Assessor | Under Different Conditions',
+      'Personality Assessor reads professional patterns with the work attached.',
     ];
     const url = `${origin}${pathname}`;
     document.title = title;

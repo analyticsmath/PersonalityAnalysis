@@ -73,47 +73,35 @@ const DISALLOWED = [
  * Allowlist: file paths (relative to src/) where dark patterns are permitted.
  */
 const ALLOWLIST_PATHS = new Set([
-  // Design token source files — contain variable *names* with dark colours
+  // Design token source files
   'styles/theme.css',
   'styles/phase6-ui.css',
   'theme/tokens.js',
 
-  // 3D / particle effects — intentional dark canvas
+  // 3D / particle effects
   'components/3d/ParticleBackground.js',
   'components/3d/TraitSphere.js',
 
-  // Product Shell — intentional dark sidebar navigation
+  // Product Shell
   'styles/product-shell.css',
 
-  // Evidence in Context / Living Record public dark chapters/tones
-  'styles/personality-v7/chrome.css',
-  'styles/personality-v7/auth.css',
-  'styles/personality-v7/home.css',
-  'styles/personality-v7/routes.css',
-  'styles/personality-v7/tokens.css',
-  'styles/personality-v7/foundation.css',
-  'components/personality-v7/living-record/EvidenceStrip.css',
-  'components/personality-v7/living-record/EvidenceBranch.css',
-  'components/personality-v7/living-record/ProvenanceTrace.css',
-  'components/personality-v7/living-record/MobileEvidenceSpine.css',
-  'components/personality-v7/living-record/CalibrationBaseline.css',
-  'components/personality-v7/living-record/ResponsiveEvidenceImage.css',
-  'components/personality-v7/living-record/EnvironmentPlane.css',
-  'components/personality-v7/home/HomeWorldEntryScene.css',
-  'components/personality-v7/home/HomeSourceQuietScene.css',
-  'components/personality-v7/home/HomeBranchingScene.css',
-  'components/personality-v7/home/HomeCareerTakeoverScene.css',
-  'components/personality-v7/home/HomeCalibrationScene.css',
-  'components/personality-v7/home/HomeTimeRevisitScene.css',
-  'components/personality-v7/home/HomeTracebackScene.css',
-  'components/personality-v7/home/HomeFinaleScene.css',
-  'pages/editorial/EditorialCareerIntelligencePage.css',
-  'pages/editorial/EditorialHowItWorksPage.css',
-  'pages/editorial/EditorialProgressPage.css',
-  'pages/editorial/EditorialMethodologyPage.css',
-  'pages/editorial/EditorialTrustPage.css',
+  // Public Experience (Under Different Conditions) cinematic surface
+  'styles/public-experience/fonts.css',
+  'styles/public-experience/tokens.css',
+  'styles/public-experience/base.css',
+  'styles/public-experience/chrome.css',
+  'styles/public-experience/home.css',
+  'styles/public-experience/career.css',
+  'styles/public-experience/how.css',
+  'styles/public-experience/progress.css',
+  'styles/public-experience/trust.css',
+  'styles/public-experience/methodology.css',
+  'styles/public-experience/privacy.css',
+  'styles/public-experience/auth.css',
+  'styles/public-experience/responsive.css',
+  'styles/public-experience/reduced-motion.css',
 
-  // Context Atlas public atmospheric layer
+  // Context Atlas public atmospheric layer (archived)
   'styles/personality-atlas/tokens.css',
   'styles/personality-atlas/fonts.css',
   'styles/personality-atlas/base.css',
@@ -130,6 +118,12 @@ const ALLOWLIST_PATHS = new Set([
   'styles/editorial/tokens.css',
   'styles/personality-v4/chrome.css',
   'styles/personality-v6/cinematic-v6.css',
+  'styles/personality-v7/chrome.css',
+  'styles/personality-v7/auth.css',
+  'styles/personality-v7/home.css',
+  'styles/personality-v7/routes.css',
+  'styles/personality-v7/tokens.css',
+  'styles/personality-v7/foundation.css',
 ]);
 
 // ---------------------------------------------------------------------------

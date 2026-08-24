@@ -1,0 +1,168 @@
+/**
+ * Personality Assessor - Public Experience How It Works Route Styles
+ * Continuous Single Transformation Stage (No Numbered Steppers)
+ */
+
+.pa-px-how-root {
+  position: relative;
+  width: 100%;
+  background-color: var(--px-ink);
+  color: var(--px-white);
+}
+
+.pa-px-how-stage {
+  position: relative;
+  width: 100%;
+  height: 380svh;
+}
+
+.pa-px-how-stage__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(40px, 8vh, 80px) var(--px-outer-gutter);
+}
+
+.pa-px-how-stage__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+  z-index: 1;
+}
+
+.pa-px-how-stage__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pa-px-how-header {
+  position: relative;
+  z-index: 5;
+  max-width: 48rem;
+}
+
+.pa-px-how-header h1 {
+  font-family: var(--px-font-family);
+  font-size: var(--px-display-lg);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' 80, 'opsz' 84;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  margin-bottom: 12px;
+}
+
+.pa-px-how-header p {
+  font-size: var(--px-body-lg);
+  opacity: 0.85;
+}
+
+.pa-px-how-core {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.pa-px-how-transform-display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pa-px-how-response-bubble {
+  font-family: var(--px-font-family);
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--px-white);
+  padding: 24px 32px;
+  background: rgba(18, 20, 22, 0.85);
+  border-radius: var(--px-radius-sm);
+  border-left: 3px solid var(--px-white);
+}
+
+.pa-px-how-active-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 32rem;
+}
+
+.pa-px-how-active-step__title {
+  font-size: 1.25rem;
+  font-weight: var(--px-weight-heading);
+  color: var(--px-white);
+}
+
+.pa-px-how-active-step__desc {
+  font-size: var(--px-body);
+  line-height: 1.55;
+  opacity: 0.85;
+}
+
+.pa-px-how-lottie-container {
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.pa-px-how-progress-rail {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  border-top: 1px solid rgba(247, 248, 248, 0.15);
+  padding-top: 20px;
+}
+
+.pa-px-how-movement-indicator {
+  font-size: var(--px-caption);
+  font-weight: var(--px-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--px-soft);
+  opacity: 0.5;
+  transition: opacity 200ms ease, color 200ms ease;
+}
+
+.pa-px-how-movement-indicator--active {
+  opacity: 1;
+  color: var(--px-white);
+}
+
+@media (max-width: 767px) {
+  .pa-px-how-core {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pa-px-how-lottie-container {
+    width: 140px;
+    height: 140px;
+  }
+  .pa-px-how-progress-rail {
+    display: none;
+  }
+}

@@ -1,38 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PublicLayout from '../components/personality-v7/chrome/PublicLayout';
-import MediaPlane from '../components/personality-v7/motion/MediaPlane';
-import { MEDIA_ASSETS_V7 } from '../content/personality-v7/mediaManifest';
-import { PUBLIC_CONTENT } from '../content/personality-v7/publicContent';
-import { getSignupAcquisitionUrl } from '../utils/personality-v4/navigation';
+import { PublicExperienceRoot } from '../components/public-experience/chrome/PublicExperienceRoot';
+import { PUBLIC_CONTENT } from '../content/public-experience/publicContent';
+import { getSignupAcquisitionUrl } from '../content/public-experience/navigation';
 
 export const PublicNotFoundPage = () => {
   const data = PUBLIC_CONTENT.notFound;
 
   return (
-    <PublicLayout headerTheme="light" withFooter={true}>
-      <div className="pa-v7-404-stage pa-public-404">
-        <div className="pa-v7-404-card">
-          <MediaPlane asset={MEDIA_ASSETS_V7.a01} alt="Abstract profile evidence crop" />
-          <div>
-          <h1>
-            {data.title}
-          </h1>
-          <p>
-            {data.message}
-          </p>
-          <div className="pa-public-404__actions">
-            <Link to="/" className="pa-v7-btn pa-v7-btn--primary">
-              {data.returnHome}
-            </Link>
-            <Link to={getSignupAcquisitionUrl()} className="pa-v7-btn pa-v7-btn--secondary">
-              {data.buildProfile}
-            </Link>
-          </div>
-          </div>
+    <PublicExperienceRoot withFooter={true}>
+      <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px' }}>
+        <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', marginBottom: '12px' }}>
+          404 Context Error
+        </span>
+        <h1 className="pa-px-heading-xl" style={{ marginBottom: '16px' }}>
+          {data.title}
+        </h1>
+        <p className="pa-px-body-lg" style={{ maxWidth: '32rem', marginBottom: '32px', opacity: 0.85 }}>
+          {data.message}
+        </p>
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <Link to="/" className="pa-px-btn-primary">
+            {data.returnHome}
+          </Link>
+          <Link to={getSignupAcquisitionUrl()} className="pa-px-btn-secondary">
+            {data.buildProfile}
+          </Link>
         </div>
       </div>
-    </PublicLayout>
+    </PublicExperienceRoot>
   );
 };
 

@@ -1,0 +1,54 @@
+/**
+ * Personality Assessor - Public Experience Reduced Motion Styles
+ * Complete document flow alternatives when prefers-reduced-motion: reduce is active.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-px-scene-sticky,
+  .pa-px-home-entry__stage,
+  .pa-px-home-situation__stage,
+  .pa-px-home-readings__stage,
+  .pa-px-home-passage__stage,
+  .pa-px-home-calibration__stage,
+  .pa-px-home-time__stage,
+  .pa-px-home-trace__stage,
+  .pa-px-home-finale__stage,
+  .pa-px-career-stage__sticky,
+  .pa-px-how-stage__sticky,
+  .pa-px-progress-stage__sticky {
+    position: relative !important;
+    height: auto !important;
+    min-height: 100vh;
+    padding: 80px var(--px-outer-gutter) !important;
+  }
+
+  .pa-px-home-entry,
+  .pa-px-home-situation,
+  .pa-px-home-readings,
+  .pa-px-home-passage,
+  .pa-px-home-calibration,
+  .pa-px-home-time,
+  .pa-px-home-trace,
+  .pa-px-home-finale,
+  .pa-px-career-stage,
+  .pa-px-how-stage,
+  .pa-px-progress-stage {
+    height: auto !important;
+  }
+
+  .pa-px-home-passage__environment {
+    position: relative !important;
+    height: auto !important;
+    min-height: 70vh;
+    opacity: 1 !important;
+    transform: none !important;
+    margin-bottom: 40px;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

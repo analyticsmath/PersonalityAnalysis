@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
-import AtlasRouteTransitionCoordinator from './components/personality-atlas/motion/AtlasRouteTransitionCoordinator';
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
@@ -30,23 +29,12 @@ const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplo
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
 
-const PUBLIC_ROUTE_TONES = {
-  '/career-intelligence': 'dark',
-  '/how-it-works': 'dark',
-  '/progress': 'dark',
-  '/trust': 'dark',
-  '/login': 'dark',
-  '/methodology': 'light',
-  '/privacy': 'light',
-  '/signup': 'light',
-};
-
 const PublicSuspenseFallback = () => (
   <div
-    className="app-page pa-atlas-suspense-fallback"
+    className="pa-px-suspense-fallback"
     style={{
-      backgroundColor: 'var(--atlas-field, #163D35)',
-      color: 'var(--atlas-paper, #EFF5F2)',
+      backgroundColor: 'var(--px-ink, #121416)',
+      color: 'var(--px-white, #F7F8F8)',
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
@@ -61,59 +49,42 @@ const PublicSuspenseFallback = () => (
         style={{
           width: '24px',
           height: '24px',
-          border: '2px solid var(--atlas-signal, #CDD86A)',
-          borderTopColor: 'transparent',
+          border: '2px solid rgba(247, 248, 248, 0.3)',
+          borderTopColor: 'var(--px-white, #F7F8F8)',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
         }}
         aria-hidden="true"
       />
-      <span
-        style={{
-          fontFamily: 'var(--atlas-font-mono, monospace)',
-          fontSize: '0.78rem',
-          letterSpacing: '0.08em',
-          color: 'var(--atlas-signal, #CDD86A)',
-        }}
-      >
-        LOADING CONTEXT ATLAS
-      </span>
     </div>
   </div>
 );
 
-const ProtectedSuspenseFallback = ({ pathname = '' }) => {
-  const cleanPath = pathname.split('?')[0].split('#')[0];
-  const isDark = PUBLIC_ROUTE_TONES[cleanPath] === 'dark' || cleanPath === '/';
-  const bg = isDark ? 'var(--pa-carbon, #0D0F0E)' : 'var(--pa-mineral, #F3F5F2)';
-  const fg = isDark ? 'var(--pa-mineral, #F3F5F2)' : 'var(--pa-carbon, #0D0F0E)';
-
-  return (
-    <div
-      className="app-page pa-suspense-fallback"
-      style={{
-        backgroundColor: bg,
-        color: fg,
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-      role="status"
-      aria-label="Loading route"
-    >
-      <LoadingState />
-    </div>
-  );
-};
+const ProtectedSuspenseFallback = () => (
+  <div
+    className="app-page pa-suspense-fallback"
+    style={{
+      backgroundColor: 'var(--pa-carbon, #0D0F0E)',
+      color: 'var(--pa-mineral, #F3F5F2)',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+    role="status"
+    aria-label="Loading route"
+  >
+    <LoadingState />
+  </div>
+);
 
 const withPublicSuspense = (node) => (
   <Suspense fallback={<PublicSuspenseFallback />}>{node}</Suspense>
 );
 
-const withProtectedSuspense = (node, pathname = '') => (
-  <Suspense fallback={<ProtectedSuspenseFallback pathname={pathname} />}>{node}</Suspense>
+const withProtectedSuspense = (node) => (
+  <Suspense fallback={<ProtectedSuspenseFallback />}>{node}</Suspense>
 );
 
 gsap.registerPlugin(ScrollTrigger);
@@ -132,7 +103,7 @@ const AppRoutes = () => {
     <div className="app-root-container">
       <PublicMetadata />
       <Routes location={location} key={`${location.pathname}${location.search}`}>
-        {/* ── Public Routes (Context Atlas Visual Architecture) ── */}
+        {/* ── Public Experience Routes ── */}
         <Route path="/" element={<EditorialHomePage />} />
         <Route path="/how-it-works" element={withPublicSuspense(<EditorialHowItWorksPage />)} />
         <Route path="/career-intelligence" element={withPublicSuspense(<EditorialCareerIntelligencePage />)} />
@@ -143,7 +114,7 @@ const AppRoutes = () => {
         <Route path="/login" element={withPublicSuspense(<LoginPage />)} />
         <Route path="/signup" element={withPublicSuspense(<SignupPage />)} />
 
-        {/* ── Protected Application Routes ── */}
+        {/* ── Protected Application Routes (Preserved) ── */}
         <Route
           path="/dashboard"
           element={withProtectedSuspense(
@@ -259,9 +230,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <AvatarEventProvider>
-        <AtlasRouteTransitionCoordinator>
-          <AppRoutes />
-        </AtlasRouteTransitionCoordinator>
+        <AppRoutes />
       </AvatarEventProvider>
     </BrowserRouter>
   );

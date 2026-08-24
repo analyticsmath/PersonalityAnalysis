@@ -1,7 +1,7 @@
 // frontend/src/v5-responsive-overflow.test.jsx
 // Personality Assessor — V7 Signal Atlas Responsive Viewport & Computed Overflow Matrix
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
@@ -16,6 +16,15 @@ import EditorialProgressPage from './pages/editorial/EditorialProgressPage';
 import EditorialPrivacyPage from './pages/editorial/EditorialPrivacyPage';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
+
+vi.mock('gsap/ScrollTrigger', () => ({
+  ScrollTrigger: {
+    create: vi.fn().mockReturnValue({ kill: vi.fn(), getVelocity: vi.fn(() => 0), progress: 0 }),
+    refresh: vi.fn(),
+    update: vi.fn(),
+    getAll: vi.fn(() => []),
+  },
+}));
 
 const VIEWPORTS = [360, 390, 412, 768, 1024, 1440];
 

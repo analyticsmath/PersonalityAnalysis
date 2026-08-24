@@ -2,9 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import FieldEntryChapter from './components/personality-atlas/home/FieldEntryChapter';
-import ResponseFragment from './components/personality-atlas/fragments/ResponseFragment';
-import { MEDIA_ASSETS_ATLAS } from './content/personality-atlas/mediaManifest';
+import { WorldEntry } from './components/public-experience/home/WorldEntry';
+import { MEDIA_MANIFEST_PX } from './content/public-experience/mediaManifest';
 
 vi.mock('gsap/ScrollTrigger', () => ({
   ScrollTrigger: {
@@ -14,37 +13,20 @@ vi.mock('gsap/ScrollTrigger', () => ({
   },
 }));
 
-describe('Context Atlas — Field Entry & Protagonist Contracts', () => {
-  it('renders home field entry chapter with single H1 and primary media', () => {
+describe('Under Different Conditions — World Entry Contracts', () => {
+  it('renders home world entry scene with single H1', () => {
     render(
       <BrowserRouter>
-        <FieldEntryChapter />
+        <WorldEntry />
       </BrowserRouter>
     );
 
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1).toHaveTextContent('Your work leaves a trail of context.');
-    expect(screen.getByAltText(MEDIA_ASSETS_ATLAS.homeContext.alt)).toBeInTheDocument();
+    expect(h1).toHaveTextContent('UNDER DIFFERENT CONDITIONS');
   });
 
-  it('renders ResponseFragment with quote and source retention metadata', () => {
-    render(
-      <ResponseFragment
-        text="“I clarify responsibilities before committing work.”"
-        sourceId="0x8F4A"
-        date="2026-08"
-        variant="response"
-      />
-    );
-
-    expect(screen.getByText('“I clarify responsibilities before committing work.”')).toBeInTheDocument();
-    expect(screen.getByText('REF: 0x8F4A')).toBeInTheDocument();
-    expect(screen.getByText('RECORDED: 2026-08')).toBeInTheDocument();
-  });
-
-  it('provides truthful responsive image attributes for homeContext', () => {
-    const asset = MEDIA_ASSETS_ATLAS.homeContext;
-    expect(asset.widths).toContain(720);
+  it('provides truthful responsive image attributes for homeWorldEntry', () => {
+    const asset = MEDIA_MANIFEST_PX.homeWorldEntry;
     expect(asset.avifSrcSet).toContain('.avif');
     expect(asset.webpSrcSet).toContain('.webp');
   });

@@ -6,13 +6,10 @@ import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { googleLogin as googleLoginApi, signup as signupApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../utils/personality-v4/navigation';
-import AtlasLayout from '../../components/personality-atlas/chrome/AtlasLayout';
-import AtlasScrollProvider from '../../components/personality-atlas/motion/AtlasScrollProvider';
-import AtlasResponsiveImage from '../../components/personality-atlas/media/AtlasResponsiveImage';
-import ResponseFragment from '../../components/personality-atlas/fragments/ResponseFragment';
-import { MEDIA_ASSETS_ATLAS } from '../../content/personality-atlas/mediaManifest';
-import { PUBLIC_CONTENT } from '../../content/personality-atlas/publicContent';
+import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../content/public-experience/navigation';
+import { PublicExperienceRoot } from '../../components/public-experience/chrome/PublicExperienceRoot';
+import { PublicPicture } from '../../components/public-experience/media/PublicPicture';
+import { PUBLIC_CONTENT } from '../../content/public-experience/publicContent';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -100,7 +97,7 @@ export const SignupPage = () => {
     }
 
     if (!form.terms) {
-      nextErrors.terms = 'You must accept the terms to continue.';
+      nextErrors.terms = 'You must agree to the Terms of Service to continue.';
     }
 
     setFieldErrors(nextErrors);
@@ -122,272 +119,176 @@ export const SignupPage = () => {
     e.preventDefault();
     setFormError('');
     if (!validate()) return;
+
     signupMutation.mutate({
       name: form.name.trim(),
-      email: form.email.trim().toLowerCase(),
+      email: form.email.trim(),
       password: form.password,
     });
   };
 
+  const handleGoogleSuccess = (credentialResponse) => {
+    setFormError('');
+    if (!credentialResponse?.credential) {
+      setFormError('No credential received from Google.');
+      return;
+    }
+    googleMutation.mutate({ idToken: credentialResponse.credential });
+  };
+
+  const isSubmitting = signupMutation.isPending || googleMutation.isPending;
+
   return (
-    <AtlasScrollProvider>
-      <AtlasLayout>
-        <section
-          className="pa-atlas-auth-page pa-atlas-grid"
-          style={{
-            minHeight: '110svh',
-            padding: 'calc(var(--atlas-header-height-desktop) + 40px) var(--atlas-outer-gutter) 80px',
-            backgroundColor: 'var(--atlas-field)',
-            color: 'var(--atlas-paper)',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-          aria-label="Create Record Account"
-        >
-          {/* Upper/Middle Environmental Plane (Spans 72vw, non-split) */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '12vh',
-              right: 0,
-              width: '70vw',
-              height: '65vh',
-              overflow: 'hidden',
-              opacity: 0.2,
-              pointerEvents: 'none',
-              zIndex: 1,
-            }}
-          >
-            <AtlasResponsiveImage
-              asset={MEDIA_ASSETS_ATLAS.signupFirstRecord}
-              style={{ width: '100%', height: '100%' }}
-            />
+    <PublicExperienceRoot withFooter={false}>
+      <div className="pa-px-auth-root">
+        <div className="pa-px-auth-bg-media">
+          <PublicPicture assetKey="authSignup" alt="Workshop environment" priority={true} />
+        </div>
+
+        <div className="pa-px-auth-form-card">
+          <div>
+            <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '6px' }}>
+              First Assessment Entry
+            </span>
+            <h1>{content.headline}</h1>
+            <p>{content.support}</p>
           </div>
 
-          {/* Form Task Column */}
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 2,
-              maxWidth: '480px',
-              width: '100%',
-              margin: '20px 0',
-            }}
-          >
-            <span className="pa-atlas-mono" style={{ color: 'var(--atlas-signal)', fontSize: '0.76rem', display: 'block', marginBottom: '8px' }}>
-              INITIAL RECORD CREATION
-            </span>
-            <h1 className="pa-atlas-heading-xl" style={{ marginBottom: '12px' }}>
-              {content.headline}
-            </h1>
-            <p className="pa-atlas-body" style={{ opacity: 0.88, marginBottom: '32px' }}>
-              {content.lead}
-            </p>
+          {formError && (
+            <div className="pa-px-auth-error" role="alert">
+              {formError}
+            </div>
+          )}
 
-            {successMessage && (
-              <div
-                role="status"
-                style={{
-                  padding: '14px 18px',
-                  backgroundColor: 'rgba(205, 216, 106, 0.2)',
-                  border: '1px solid var(--atlas-signal)',
-                  borderRadius: 'var(--atlas-radius-xs)',
-                  color: 'var(--atlas-signal)',
-                  fontSize: '0.94rem',
-                  marginBottom: '20px',
+          {successMessage && (
+            <div className="pa-px-caption" style={{ color: '#86efac', background: 'rgba(34, 197, 94, 0.15)', padding: '12px 16px', borderRadius: '4px' }}>
+              {successMessage}
+            </div>
+          )}
+
+          {GOOGLE_CLIENT_ID && (
+            <>
+              <GoogleLoginButton
+                onSuccess={handleGoogleSuccess}
+                onError={() => setFormError('Google sign-up was interrupted.')}
+                text="signup_with"
+                disabled={isSubmitting}
+              />
+              <div className="pa-px-auth-divider">or register with email</div>
+            </>
+          )}
+
+          <form onSubmit={handleSubmit} className="pa-px-auth-form" noValidate>
+            <div className="pa-px-auth-field">
+              <label htmlFor="signup-name">{content.nameLabel}</label>
+              <input
+                ref={nameInputRef}
+                id="signup-name"
+                type="text"
+                autoComplete="name"
+                placeholder="Jane Doe"
+                value={form.name}
+                disabled={isSubmitting}
+                onChange={(e) => {
+                  setForm((f) => ({ ...f, name: e.target.value }));
+                  if (fieldErrors.name) setFieldErrors((fe) => ({ ...fe, name: undefined }));
                 }}
-              >
-                {successMessage}
-              </div>
-            )}
-
-            {formError && (
-              <div
-                role="alert"
-                style={{
-                  padding: '12px 16px',
-                  backgroundColor: 'rgba(100, 40, 50, 0.4)',
-                  border: '1px solid rgba(214, 125, 140, 0.5)',
-                  borderRadius: 'var(--atlas-radius-xs)',
-                  color: '#FFD6DC',
-                  fontSize: '0.92rem',
-                  marginBottom: '20px',
-                }}
-              >
-                {formError}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              <div>
-                <label htmlFor="signup-name" className="pa-atlas-mono" style={{ display: 'block', fontSize: '0.78rem', marginBottom: '6px' }}>
-                  {content.nameLabel}
-                </label>
-                <input
-                  id="signup-name"
-                  ref={nameInputRef}
-                  type="text"
-                  autoComplete="name"
-                  value={form.name}
-                  onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-                  style={{
-                    width: '100%',
-                    height: '48px',
-                    padding: '0 16px',
-                    backgroundColor: 'rgba(239, 245, 242, 0.08)',
-                    border: fieldErrors.name ? '1px solid #FF8090' : '1px solid rgba(239, 245, 242, 0.2)',
-                    borderRadius: 'var(--atlas-radius-xs)',
-                    color: 'var(--atlas-paper)',
-                    fontSize: '1rem',
-                    fontFamily: 'var(--atlas-font-sans)',
-                  }}
-                  aria-invalid={fieldErrors.name ? 'true' : 'false'}
-                />
-                {fieldErrors.name && (
-                  <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '4px', display: 'block' }}>
-                    {fieldErrors.name}
-                  </span>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="signup-email" className="pa-atlas-mono" style={{ display: 'block', fontSize: '0.78rem', marginBottom: '6px' }}>
-                  {content.emailLabel}
-                </label>
-                <input
-                  id="signup-email"
-                  ref={emailInputRef}
-                  type="email"
-                  autoComplete="email"
-                  value={form.email}
-                  onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
-                  style={{
-                    width: '100%',
-                    height: '48px',
-                    padding: '0 16px',
-                    backgroundColor: 'rgba(239, 245, 242, 0.08)',
-                    border: fieldErrors.email ? '1px solid #FF8090' : '1px solid rgba(239, 245, 242, 0.2)',
-                    borderRadius: 'var(--atlas-radius-xs)',
-                    color: 'var(--atlas-paper)',
-                    fontSize: '1rem',
-                    fontFamily: 'var(--atlas-font-sans)',
-                  }}
-                  aria-invalid={fieldErrors.email ? 'true' : 'false'}
-                />
-                {fieldErrors.email && (
-                  <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '4px', display: 'block' }}>
-                    {fieldErrors.email}
-                  </span>
-                )}
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <label htmlFor="signup-password" className="pa-atlas-mono" style={{ fontSize: '0.78rem' }}>
-                    {content.passwordLabel}
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((p) => !p)}
-                    className="pa-atlas-mono"
-                    style={{ fontSize: '0.74rem', color: 'var(--atlas-signal)', opacity: 0.9 }}
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </button>
-                </div>
-                <input
-                  id="signup-password"
-                  ref={passwordInputRef}
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  value={form.password}
-                  onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))}
-                  style={{
-                    width: '100%',
-                    height: '48px',
-                    padding: '0 16px',
-                    backgroundColor: 'rgba(239, 245, 242, 0.08)',
-                    border: fieldErrors.password ? '1px solid #FF8090' : '1px solid rgba(239, 245, 242, 0.2)',
-                    borderRadius: 'var(--atlas-radius-xs)',
-                    color: 'var(--atlas-paper)',
-                    fontSize: '1rem',
-                    fontFamily: 'var(--atlas-font-sans)',
-                  }}
-                  aria-invalid={fieldErrors.password ? 'true' : 'false'}
-                />
-                {fieldErrors.password && (
-                  <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '4px', display: 'block' }}>
-                    {fieldErrors.password}
-                  </span>
-                )}
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '4px' }}>
-                <input
-                  id="signup-terms"
-                  ref={consentInputRef}
-                  type="checkbox"
-                  checked={form.terms}
-                  onChange={(e) => setForm((prev) => ({ ...prev, terms: e.target.checked }))}
-                  style={{ marginTop: '4px' }}
-                />
-                <label htmlFor="signup-terms" className="pa-atlas-body" style={{ fontSize: '0.88rem', opacity: 0.9 }}>
-                  {content.termsAgreement}
-                </label>
-              </div>
-              {fieldErrors.terms && (
-                <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '-10px', display: 'block' }}>
-                  {fieldErrors.terms}
+              />
+              {fieldErrors.name && (
+                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                  {fieldErrors.name}
                 </span>
               )}
+            </div>
 
-              <button
-                type="submit"
-                disabled={signupMutation.isPending}
-                className="pa-atlas-btn-primary"
-                style={{ width: '100%', marginTop: '10px' }}
-              >
-                {signupMutation.isPending ? 'Creating record...' : content.submitBtn}
-              </button>
-            </form>
+            <div className="pa-px-auth-field">
+              <label htmlFor="signup-email">{content.emailLabel}</label>
+              <input
+                ref={emailInputRef}
+                id="signup-email"
+                type="email"
+                autoComplete="email"
+                placeholder="name@company.com"
+                value={form.email}
+                disabled={isSubmitting}
+                onChange={(e) => {
+                  setForm((f) => ({ ...f, email: e.target.value }));
+                  if (fieldErrors.email) setFieldErrors((fe) => ({ ...fe, email: undefined }));
+                }}
+              />
+              {fieldErrors.email && (
+                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                  {fieldErrors.email}
+                </span>
+              )}
+            </div>
 
-            {GOOGLE_CLIENT_ID && (
-              <div style={{ marginTop: '24px' }}>
-                <GoogleLoginButton
-                  onSuccess={(credential) => googleMutation.mutate(credential)}
-                  onError={() => setFormError('Google sign-up failed.')}
-                  disabled={googleMutation.isPending}
-                />
+            <div className="pa-px-auth-field">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <label htmlFor="signup-password">{content.passwordLabel}</label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  style={{ background: 'none', border: 'none', color: 'var(--px-soft)', fontSize: 'var(--px-caption)', cursor: 'pointer' }}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
               </div>
+              <input
+                ref={passwordInputRef}
+                id="signup-password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="new-password"
+                placeholder="••••••••"
+                value={form.password}
+                disabled={isSubmitting}
+                onChange={(e) => {
+                  setForm((f) => ({ ...f, password: e.target.value }));
+                  if (fieldErrors.password) setFieldErrors((fe) => ({ ...fe, password: undefined }));
+                }}
+              />
+              {fieldErrors.password && (
+                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                  {fieldErrors.password}
+                </span>
+              )}
+            </div>
+
+            <label className="pa-px-auth-checkbox">
+              <input
+                ref={consentInputRef}
+                type="checkbox"
+                checked={form.terms}
+                disabled={isSubmitting}
+                onChange={(e) => {
+                  setForm((f) => ({ ...f, terms: e.target.checked }));
+                  if (fieldErrors.terms) setFieldErrors((fe) => ({ ...fe, terms: undefined }));
+                }}
+              />
+              <span>
+                {content.termsAgreement}
+              </span>
+            </label>
+            {fieldErrors.terms && (
+              <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                {fieldErrors.terms}
+              </span>
             )}
 
-            <div style={{ marginTop: '32px', paddingTop: '20px', borderTop: '1px solid rgba(239, 245, 242, 0.12)' }}>
-              <span className="pa-atlas-body" style={{ opacity: 0.8, fontSize: '0.94rem' }}>
-                {content.loginPrompt}{' '}
-                <Link
-                  to={`/login?next=${encodeURIComponent(safeNext)}`}
-                  style={{ color: 'var(--atlas-signal)', fontWeight: 520, marginLeft: '6px' }}
-                >
-                  {content.loginLinkText}
-                </Link>
-              </span>
-            </div>
-          </div>
+            <button type="submit" className="pa-px-btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? 'Creating account...' : content.submitBtn}
+            </button>
+          </form>
 
-          {/* Lower Field Response Fragment */}
-          <div style={{ position: 'relative', zIndex: 2, margin: '20px 0 0' }}>
-            <ResponseFragment
-              variant="response"
-              text="“I clarify responsibilities before committing work.”"
-              sourceId="0x8F4A"
-              date="2026-08"
-            />
+          <div className="pa-px-auth-switch">
+            {content.loginPrompt}
+            <Link to={`/login?next=${encodeURIComponent(safeNext)}`}>
+              {content.loginLinkText}
+            </Link>
           </div>
-        </section>
-      </AtlasLayout>
-    </AtlasScrollProvider>
+        </div>
+      </div>
+    </PublicExperienceRoot>
   );
 };
 

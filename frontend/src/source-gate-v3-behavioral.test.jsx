@@ -2,8 +2,8 @@ import { act } from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
-import AtlasRouteTransitionCoordinator from './components/personality-atlas/motion/AtlasRouteTransitionCoordinator';
-import { EditorialCareerIntelligencePage, CAREER_LENSES } from './pages/editorial/EditorialCareerIntelligencePage';
+import { PublicRouteTransition } from './components/public-experience/motion/PublicRouteTransition';
+import { EditorialCareerIntelligencePage } from './pages/editorial/EditorialCareerIntelligencePage';
 import { EditorialHomePage } from './pages/editorial/EditorialHomePage';
 import { EditorialHowItWorksPage } from './pages/editorial/EditorialHowItWorksPage';
 import { EditorialProgressPage } from './pages/editorial/EditorialProgressPage';
@@ -46,30 +46,32 @@ vi.mock('gsap', () => {
     }
     return tl;
   };
-  return {
-    gsap: {
-      timeline: vi.fn(createTimeline),
-      to: vi.fn(),
-      fromTo: vi.fn(),
-      set: vi.fn(),
-      quickSetter: vi.fn(() => vi.fn()),
-      ticker: {
-        add: vi.fn(),
-        remove: vi.fn(),
-        lagSmoothing: vi.fn(),
-      },
-      context: vi.fn((cb) => {
-        if (typeof cb === 'function') cb();
-        return { revert: vi.fn() };
-      }),
-      registerPlugin: vi.fn(),
-      matchMedia: vi.fn(() => ({
-        add: vi.fn((_, cb) => {
-          if (typeof cb === 'function') cb();
-        }),
-        revert: vi.fn(),
-      })),
+  const gsapObj = {
+    timeline: vi.fn(createTimeline),
+    to: vi.fn(),
+    fromTo: vi.fn(),
+    set: vi.fn(),
+    quickSetter: vi.fn(() => vi.fn()),
+    ticker: {
+      add: vi.fn(),
+      remove: vi.fn(),
+      lagSmoothing: vi.fn(),
     },
+    context: vi.fn((cb) => {
+      if (typeof cb === 'function') cb();
+      return { revert: vi.fn() };
+    }),
+    registerPlugin: vi.fn(),
+    matchMedia: vi.fn(() => ({
+      add: vi.fn((_, cb) => {
+        if (typeof cb === 'function') cb();
+      }),
+      revert: vi.fn(),
+    })),
+  };
+  return {
+    default: gsapObj,
+    gsap: gsapObj,
   };
 });
 
@@ -106,9 +108,8 @@ describe('Source Gate V3 — Route Transition Idempotence & Coordination', () =>
   it('1. Transition Coordinator mounts smoothly without errors', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
-        <AtlasRouteTransitionCoordinator>
-          <TestNavigationHarness />
-        </AtlasRouteTransitionCoordinator>
+        <PublicRouteTransition />
+        <TestNavigationHarness />
       </MemoryRouter>
     );
 
@@ -116,44 +117,36 @@ describe('Source Gate V3 — Route Transition Idempotence & Coordination', () =>
   });
 });
 
-describe('Source Gate V3 — Context Atlas Composition Contracts', () => {
-  it('2. renders both primary and secondary support crops in Career DOM fallback', () => {
+describe('Source Gate V3 — Under Different Conditions Composition Contracts', () => {
+  it('2. renders Career Intelligence with 17 canonical roles', () => {
     render(
       <MemoryRouter>
         <EditorialCareerIntelligencePage />
       </MemoryRouter>
     );
 
-    const primaryCrop = document.querySelector('.pa-career-atlas__dom-primary');
-    const secondaryCrop = document.querySelector('.pa-career-atlas__dom-secondary');
-
-    expect(primaryCrop).not.toBeNull();
-    expect(secondaryCrop).not.toBeNull();
+    expect(screen.getByText('17 VERIFIED CAREER ROLES')).toBeInTheDocument();
   });
 
-  it('3. confirms HowItWorks renders transformation stage', () => {
+  it('3. confirms HowItWorks renders continuous transformation stage', () => {
     render(
       <MemoryRouter>
         <EditorialHowItWorksPage />
       </MemoryRouter>
     );
 
-    const howStage = document.querySelector('.pa-atlas-how-stage');
+    const howStage = document.querySelector('.pa-px-how-stage');
     expect(howStage).not.toBeNull();
   });
 
-  it('4. confirms Trust page renders chain of custody and data rights field', () => {
+  it('4. confirms Trust page renders five evidence layers and sovereign rights', () => {
     render(
       <MemoryRouter>
         <EditorialTrustPage />
       </MemoryRouter>
     );
 
-    const chainStage = document.querySelector('.pa-atlas-trust-chain');
-    const controlField = document.querySelector('.pa-atlas-trust-control');
-
-    expect(chainStage).not.toBeNull();
-    expect(controlField).not.toBeNull();
+    expect(screen.getByText('SOVEREIGN DATA RIGHTS')).toBeInTheDocument();
   });
 
   it('5. confirms Progress page renders temporal comparison stage', () => {
@@ -163,7 +156,7 @@ describe('Source Gate V3 — Context Atlas Composition Contracts', () => {
       </MemoryRouter>
     );
 
-    const temporalStage = document.querySelector('.pa-progress-temporal');
+    const temporalStage = document.querySelector('.pa-px-progress-stage');
     expect(temporalStage).not.toBeNull();
   });
 });
