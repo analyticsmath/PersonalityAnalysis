@@ -1,122 +1,175 @@
 /**
  * Personality Assessor - Public Experience Trust Route Styles
- * X-Ray / Inspection Aperture + Sovereign Data Rights
+ * Single Provenance Record State Engine
+ * Zero Card Grids, Zero Eyebrows, Zero Gradients
  */
 
-.pa-px-trust-root {
+.pa-px-trust-section {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100svh;
+  padding: clamp(100px, 14vh, 160px) var(--px-outer-gutter) 80px;
   background-color: var(--px-ink);
-  color: var(--px-white);
 }
 
-.pa-px-trust-hero {
-  padding: 120px var(--px-outer-gutter) 60px;
-  max-width: 52rem;
-}
-
-.pa-px-trust-hero h1 {
-  font-family: var(--px-font-family);
-  font-size: var(--px-display-lg);
-  font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 80, 'opsz' 84;
-  line-height: 0.96;
-  letter-spacing: -0.025em;
-  margin-bottom: 16px;
-}
-
-.pa-px-trust-hero p {
-  font-size: var(--px-body-lg);
-  opacity: 0.85;
-}
-
-/* ── Stacked Semantic Layers ── */
-.pa-px-trust-layers {
-  padding: 40px var(--px-outer-gutter) 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 68rem;
-}
-
-.pa-px-trust-layer-item {
-  background: rgba(247, 248, 248, 0.04);
-  border: 1px solid rgba(247, 248, 248, 0.1);
-  padding: 28px 32px;
-  border-radius: var(--px-radius-sm);
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 24px;
-  align-items: center;
-}
-
-.pa-px-trust-layer-item__meta h3 {
-  font-size: 1.25rem;
-  font-weight: var(--px-weight-heading);
-  color: var(--px-white);
-}
-
-.pa-px-trust-layer-item__meta span {
-  font-size: var(--px-caption);
-  color: var(--px-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.pa-px-trust-layer-item__desc {
-  font-size: var(--px-body);
-  line-height: 1.55;
-  opacity: 0.88;
-}
-
-/* ── Sovereign Data Rights (Unboxed) ── */
-.pa-px-trust-rights-section {
-  padding: 80px var(--px-outer-gutter) 120px;
-  border-top: 1px solid rgba(247, 248, 248, 0.12);
-}
-
-.pa-px-trust-rights-section h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
-  margin-bottom: 36px;
+.pa-px-trust-header {
   max-width: 44rem;
+  margin-bottom: clamp(40px, 6vh, 72px);
 }
 
-.pa-px-trust-rights-grid {
+.pa-px-trust-header h1 {
+  font-family: var(--px-font-family);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' 80, 'opsz' 96;
+  line-height: 1.05;
+  color: var(--px-white);
+  margin-bottom: 12px;
+}
+
+.pa-px-trust-lead {
+  font-size: var(--px-body-lg);
+  color: var(--px-soft);
+  line-height: 1.5;
+}
+
+.pa-px-trust-record-engine {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--px-column-gap);
+  grid-template-columns: 1.2fr 2fr;
+  grid-gap: clamp(32px, 6vw, 80px);
+  align-items: start;
+  outline: none;
 }
 
-.pa-px-trust-right-card {
-  background: rgba(247, 248, 248, 0.04);
-  border: 1px solid rgba(247, 248, 248, 0.1);
-  padding: 28px;
-  border-radius: var(--px-radius-sm);
+.pa-px-trust-stage-nav {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.pa-px-trust-right-card h4 {
-  font-size: 1.15rem;
-  font-weight: var(--px-weight-heading);
+.pa-px-trust-stage-nav__btn {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 14px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-left: 2px solid transparent;
+  opacity: 0.5;
+  transition: opacity 150ms ease, transform 150ms ease;
 }
 
-.pa-px-trust-right-card p {
-  font-size: var(--px-body-sm);
-  line-height: 1.55;
+.pa-px-trust-stage-nav__btn:hover,
+.pa-px-trust-stage-nav__btn:focus-visible {
   opacity: 0.85;
+  transform: translateX(4px);
 }
 
-@media (max-width: 1023px) {
-  .pa-px-trust-layer-item {
+.pa-px-trust-stage-nav__btn--active {
+  opacity: 1;
+  border-left-color: var(--px-white);
+  transform: translateX(8px);
+}
+
+.pa-px-trust-stage-nav__num {
+  font-size: 0.88rem;
+  font-weight: var(--px-weight-bold);
+  color: var(--px-soft);
+}
+
+.pa-px-trust-stage-nav__name {
+  font-family: var(--px-font-family);
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 88, 'opsz' 36;
+  color: var(--px-white);
+}
+
+.pa-px-trust-record-display {
+  position: relative;
+  max-width: 38rem;
+}
+
+.pa-px-trust-record__status {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--px-soft);
+  margin-bottom: 12px;
+}
+
+.pa-px-trust-record__title {
+  font-family: var(--px-font-family);
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 82, 'opsz' 64;
+  line-height: 1.15;
+  color: var(--px-white);
+  margin-bottom: 16px;
+}
+
+.pa-px-trust-record__desc {
+  font-size: var(--px-body-lg);
+  color: var(--px-white);
+  opacity: 0.9;
+  line-height: 1.55;
+  margin-bottom: 28px;
+}
+
+.pa-px-trust-record__details-layer {
+  border-top: 1px solid rgba(247, 248, 248, 0.15);
+  padding-top: 20px;
+  margin-bottom: 28px;
+}
+
+.pa-px-trust-record__details-label {
+  font-size: var(--px-body-sm);
+  font-weight: var(--px-weight-medium);
+  color: var(--px-soft);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.pa-px-trust-record__details-body {
+  font-family: var(--px-font-family);
+  font-size: var(--px-body);
+  color: var(--px-white);
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+.pa-px-trust-rights-actions {
+  border-top: 1px solid rgba(247, 248, 248, 0.15);
+  padding-top: 20px;
+}
+
+.pa-px-trust-rights__label {
+  font-size: var(--px-body-sm);
+  font-weight: var(--px-weight-medium);
+  color: var(--px-soft);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.pa-px-trust-rights__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pa-px-trust-right-row {
+  font-size: var(--px-body);
+  color: var(--px-white);
+  line-height: 1.45;
+  opacity: 0.9;
+}
+
+/* ── Mobile Responsive Rules ── */
+@media (max-width: 768px) {
+  .pa-px-trust-record-engine {
     grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .pa-px-trust-rights-grid {
-    grid-template-columns: 1fr;
+    grid-gap: 36px;
   }
 }

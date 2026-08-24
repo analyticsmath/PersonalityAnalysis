@@ -119,18 +119,17 @@ export const LoginPage = () => {
   return (
     <PublicExperienceRoot withFooter={false}>
       <div className="pa-px-auth-root">
+        {/* Full Environmental Ground (Desktop) / Header Crop (Mobile) */}
         <div className="pa-px-auth-bg-media">
           <PublicPicture assetKey="authLogin" alt="Professional analysis environment" priority={true} />
         </div>
 
-        <div className="pa-px-auth-form-card">
-          <div>
-            <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '6px' }}>
-              Continuous Record Entry
-            </span>
+        {/* Direct Negative Space Form (No Floating Glass Card) */}
+        <div className="pa-px-auth-negative-space-form">
+          <header className="pa-px-auth-form-header">
             <h1>{content.headline}</h1>
             <p>{content.support}</p>
-          </div>
+          </header>
 
           {formError && (
             <div className="pa-px-auth-error" role="alert">
@@ -139,20 +138,19 @@ export const LoginPage = () => {
           )}
 
           {GOOGLE_CLIENT_ID && (
-            <>
+            <div className="pa-px-auth-social-wrap">
               <GoogleLoginButton
                 onSuccess={handleGoogleSuccess}
                 onError={() => setFormError('Google sign-in was interrupted.')}
                 text="signin_with"
                 disabled={isSubmitting}
               />
-              <div className="pa-px-auth-divider">or continue with email</div>
-            </>
+            </div>
           )}
 
           <form onSubmit={handleSubmit} className="pa-px-auth-form" noValidate>
             <div className="pa-px-auth-field">
-              <label htmlFor="login-email">{content.emailLabel}</label>
+              <label htmlFor="login-email">Email Address</label>
               <input
                 ref={emailInputRef}
                 id="login-email"
@@ -167,19 +165,19 @@ export const LoginPage = () => {
                 }}
               />
               {fieldErrors.email && (
-                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                <span className="pa-px-field-error">
                   {fieldErrors.email}
                 </span>
               )}
             </div>
 
             <div className="pa-px-auth-field">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label htmlFor="login-password">{content.passwordLabel}</label>
+              <div className="pa-px-auth-field__row">
+                <label htmlFor="login-password">Password</label>
                 <button
                   type="button"
+                  className="pa-px-auth-toggle-pwd"
                   onClick={() => setShowPassword((s) => !s)}
-                  style={{ background: 'none', border: 'none', color: 'var(--px-soft)', fontSize: 'var(--px-caption)', cursor: 'pointer' }}
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -198,21 +196,21 @@ export const LoginPage = () => {
                 }}
               />
               {fieldErrors.password && (
-                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                <span className="pa-px-field-error">
                   {fieldErrors.password}
                 </span>
               )}
             </div>
 
             <button type="submit" className="pa-px-btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Signing in...' : content.submitBtn}
+              {isSubmitting ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
           <div className="pa-px-auth-switch">
-            {content.signupPrompt}
+            Don't have an account?{' '}
             <Link to={`/signup?next=${encodeURIComponent(safeNext)}`}>
-              {content.signupLinkText}
+              Start with one record
             </Link>
           </div>
         </div>

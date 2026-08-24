@@ -1,5 +1,7 @@
 /**
  * Personality Assessor - Public Experience Base & Reset Layer
+ * Single Variable Family (Bricolage Grotesque)
+ * Zero Card Grids, Zero Eyebrows, Zero Gradients
  */
 
 .pa-public-experience {
@@ -101,15 +103,6 @@
   line-height: 1.55;
 }
 
-.pa-px-context-data {
-  font-family: var(--px-font-family);
-  font-size: var(--px-caption);
-  font-weight: var(--px-weight-medium);
-  font-variation-settings: 'wdth' 88, 'opsz' 14;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
 /* ── Button Primitives (No pills, no gradients, 48-52px desktop) ── */
 .pa-px-btn-primary {
   display: inline-flex;
@@ -182,4 +175,16 @@
   width: 100%;
   height: 100svh;
   overflow: hidden;
+}
+
+/* ── Transition Canvas ── */
+.pa-px-transition-layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--px-ink);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 90;
 }

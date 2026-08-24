@@ -15,8 +15,12 @@ export const MultipleReadings = () => {
     if (prefersReducedMotion || !containerRef.current) return;
 
     const ctx = gsap.context(() => {
-      const branches = containerRef.current.querySelectorAll('.pa-px-home-readings__branch');
-      const paths = containerRef.current.querySelectorAll('.pa-px-branch-path');
+      const sourceAnchor = containerRef.current.querySelector('.pa-px-readings__source-anchor');
+      const b1 = containerRef.current.querySelector('.pa-px-reading-node--bigfive');
+      const b2 = containerRef.current.querySelector('.pa-px-reading-node--riasec');
+      const b3 = containerRef.current.querySelector('.pa-px-reading-node--values');
+      const b4 = containerRef.current.querySelector('.pa-px-reading-node--signals');
+      const paths = containerRef.current.querySelectorAll('.pa-px-reading-path');
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -25,50 +29,76 @@ export const MultipleReadings = () => {
           end: 'bottom bottom',
           scrub: 0.8,
           fastScrollEnd: true,
+          invalidateOnRefresh: true,
         },
       });
 
-      tl.fromTo(paths, { strokeDashoffset: 1000, strokeDasharray: 1000 }, { strokeDashoffset: 0, duration: 1 })
-        .fromTo(
-          branches,
-          { opacity: 0, y: 40, scale: 0.95 },
-          { opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.8 },
-          0.2
-        );
+      // SVG path drawing & asymmetric node arrivals
+      tl.to(sourceAnchor, { x: '-5%', fontVariationSettings: "'wdth' 80, 'opsz' 56", ease: 'none' }, 0)
+        .fromTo(paths, { strokeDashoffset: 1200, strokeDasharray: 1200 }, { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' }, 0)
+        .fromTo(b1, { x: '40px', y: '-30px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.1)
+        .fromTo(b2, { x: '60px', y: '20px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.2)
+        .fromTo(b3, { x: '80px', y: '-20px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.7, ease: 'power2.out' }, 0.3)
+        .fromTo(b4, { x: '50px', y: '40px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.4);
     }, containerRef);
 
     return () => ctx.revert();
   }, [prefersReducedMotion]);
 
+  const [d1, d2, d3, d4] = data.destinations;
+
   return (
-    <section ref={containerRef} className="pa-px-home-readings" aria-label="Multiple Readings">
-      <div className="pa-px-home-readings__stage">
-        <div className="pa-px-home-readings__header">
-          <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '8px' }}>
-            Interpretive Calibration
-          </span>
-          <h2>{data.headline}</h2>
+    <section ref={containerRef} className="pa-px-readings-section" aria-label="Multiple Readings">
+      <div className="pa-px-readings-stage">
+        {/* Background Geometric Trajectory Canvas */}
+        <svg className="pa-px-readings__trajectories" viewBox="0 0 1400 700" preserveAspectRatio="none" aria-hidden="true">
+          <path className="pa-px-reading-path" d="M 280 350 C 480 350, 600 140, 950 140" fill="none" stroke="rgba(247, 248, 248, 0.22)" strokeWidth="1.5" />
+          <path className="pa-px-reading-path" d="M 280 350 C 520 350, 700 280, 1020 280" fill="none" stroke="rgba(247, 248, 248, 0.18)" strokeWidth="1.5" />
+          <path className="pa-px-reading-path" d="M 280 350 C 500 350, 650 460, 980 460" fill="none" stroke="rgba(247, 248, 248, 0.18)" strokeWidth="1.5" />
+          <path className="pa-px-reading-path" d="M 280 350 C 460 350, 620 590, 920 590" fill="none" stroke="rgba(247, 248, 248, 0.22)" strokeWidth="1.5" />
+        </svg>
+
+        {/* Persistent Source Expression */}
+        <div className="pa-px-readings__source-anchor">
+          <div className="pa-px-readings__source-title">{data.headline}</div>
+          <p className="pa-px-readings__source-phrase">
+            "I clarify the constraints first, then choose the smallest reversible step."
+          </p>
         </div>
 
-        <div className="pa-px-home-readings__branches">
-          <svg className="pa-px-home-readings__svg-canvas" viewBox="0 0 1200 400" preserveAspectRatio="none">
-            <path className="pa-px-branch-path" d="M 0 200 C 300 200, 300 80, 600 80" fill="none" stroke="rgba(247, 248, 248, 0.25)" strokeWidth="2" />
-            <path className="pa-px-branch-path" d="M 0 200 C 300 200, 300 160, 600 160" fill="none" stroke="rgba(247, 248, 248, 0.25)" strokeWidth="2" />
-            <path className="pa-px-branch-path" d="M 0 200 C 300 200, 300 240, 600 240" fill="none" stroke="rgba(247, 248, 248, 0.25)" strokeWidth="2" />
-            <path className="pa-px-branch-path" d="M 0 200 C 300 200, 300 320, 600 320" fill="none" stroke="rgba(247, 248, 248, 0.25)" strokeWidth="2" />
-          </svg>
+        {/* Asymmetric Interpreted Typographic Nodes (No Box Containers) */}
+        <div className="pa-px-readings__field">
+          {/* Big Five Node (Upper wide) */}
+          <div className="pa-px-reading-node pa-px-reading-node--bigfive">
+            <span className="pa-px-reading-node__axis">{d1.axis}</span>
+            <h3 className="pa-px-reading-node__name">{d1.name}</h3>
+            <p className="pa-px-reading-node__summary">{d1.summary}</p>
+            <p className="pa-px-reading-node__detail">{d1.detail}</p>
+          </div>
 
-          {data.destinations.map((dest) => (
-            <div key={dest.id} className="pa-px-home-readings__branch">
-              <span className="pa-px-context-data">{dest.name}</span>
-              <h4>{dest.summary}</h4>
-              <p>{dest.detail}</p>
-            </div>
-          ))}
-        </div>
+          {/* RIASEC Node (Mid upper) */}
+          <div className="pa-px-reading-node pa-px-reading-node--riasec">
+            <span className="pa-px-reading-node__axis">{d2.axis}</span>
+            <h3 className="pa-px-reading-node__name">{d2.name}</h3>
+            <p className="pa-px-reading-node__summary">{d2.summary}</p>
+            <p className="pa-px-reading-node__detail">{d2.detail}</p>
+          </div>
 
-        <div className="pa-px-context-data" style={{ opacity: 0.6 }}>
-          Independent psychometric models maintain provenance back to source response.
+          {/* Work Values Node (Mid lower) */}
+          <div className="pa-px-reading-node pa-px-reading-node--values">
+            <span className="pa-px-reading-node__axis">{d3.axis}</span>
+            <h3 className="pa-px-reading-node__name">{d3.name}</h3>
+            <p className="pa-px-reading-node__summary">{d3.summary}</p>
+            <p className="pa-px-reading-node__detail">{d3.detail}</p>
+          </div>
+
+          {/* Behavioral Signals Node (Lower wide) */}
+          <div className="pa-px-reading-node pa-px-reading-node--signals">
+            <span className="pa-px-reading-node__axis">{d4.axis}</span>
+            <h3 className="pa-px-reading-node__name">{d4.name}</h3>
+            <p className="pa-px-reading-node__summary">{d4.summary}</p>
+            <p className="pa-px-reading-node__detail">{d4.detail}</p>
+          </div>
         </div>
       </div>
     </section>

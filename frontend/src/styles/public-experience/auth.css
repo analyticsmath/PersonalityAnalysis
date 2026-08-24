@@ -1,19 +1,18 @@
 /**
- * Personality Assessor - Public Experience Auth Routes (Login & Signup)
- * Task-Focused Cinematic Entry (Non-Split Layout)
+ * Personality Assessor - Public Experience Auth Styles
+ * Form Placed Directly in Photographic Negative Space
+ * Zero Glassmorphism, Zero Floating Cards, Zero Borders
  */
 
 .pa-px-auth-root {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 100px var(--px-outer-gutter) 60px;
+  justify-content: flex-end;
+  padding: clamp(80px, 12vh, 120px) var(--px-outer-gutter);
   background-color: var(--px-ink);
-  color: var(--px-white);
-  overflow: hidden;
 }
 
 .pa-px-auth-bg-media {
@@ -22,43 +21,59 @@
   width: 100%;
   height: 100%;
   z-index: 1;
-  opacity: 0.42;
 }
 
 .pa-px-auth-bg-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0.5;
 }
 
-.pa-px-auth-form-card {
+.pa-px-auth-negative-space-form {
   position: relative;
   z-index: 5;
+  max-width: 28rem;
   width: 100%;
-  max-width: 480px;
-  background: rgba(18, 20, 22, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: clamp(32px, 5vw, 48px);
-  border-radius: var(--px-radius-sm);
-  border: 1px solid rgba(247, 248, 248, 0.12);
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.pa-px-auth-form-card h1 {
+.pa-px-auth-form-header h1 {
   font-family: var(--px-font-family);
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
-  margin-bottom: 4px;
+  font-size: clamp(2rem, 3.8vw, 2.8rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 82, 'opsz' 64;
+  line-height: 1.1;
+  color: var(--px-white);
+  margin-bottom: 8px;
 }
 
-.pa-px-auth-form-card p {
+.pa-px-auth-form-header p {
+  font-size: var(--px-body);
+  color: var(--px-soft);
+  line-height: 1.45;
+}
+
+.pa-px-auth-error {
   font-size: var(--px-body-sm);
-  line-height: 1.5;
-  opacity: 0.85;
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.15);
+  padding: 10px 14px;
+  border-radius: var(--px-radius-sm);
+}
+
+.pa-px-auth-success {
+  font-size: var(--px-body-sm);
+  color: #86efac;
+  background-color: rgba(34, 197, 94, 0.15);
+  padding: 10px 14px;
+  border-radius: var(--px-radius-sm);
+}
+
+.pa-px-auth-social-wrap {
+  width: 100%;
 }
 
 .pa-px-auth-form {
@@ -79,79 +94,99 @@
   color: var(--px-white);
 }
 
-.pa-px-auth-field input {
+.pa-px-auth-field input[type='text'],
+.pa-px-auth-field input[type='email'],
+.pa-px-auth-field input[type='password'] {
+  width: 100%;
   height: 48px;
-  padding: 0 16px;
-  background: rgba(247, 248, 248, 0.06);
+  padding: 0 14px;
+  background: rgba(247, 248, 248, 0.08);
   border: 1px solid rgba(247, 248, 248, 0.2);
-  border-radius: var(--px-radius-xs);
+  border-radius: var(--px-radius-sm);
   color: var(--px-white);
   font-family: var(--px-font-family);
   font-size: var(--px-body);
-  transition: border-color 160ms ease, background-color 160ms ease;
+  outline: none;
+  transition: border-color 150ms ease, background 150ms ease;
 }
 
 .pa-px-auth-field input:focus {
-  outline: none;
   border-color: var(--px-white);
-  background: rgba(247, 248, 248, 0.1);
+  background: rgba(247, 248, 248, 0.14);
 }
 
-.pa-px-auth-field input::placeholder {
-  color: rgba(247, 248, 248, 0.4);
+.pa-px-auth-field__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pa-px-auth-toggle-pwd {
+  background: none;
+  border: none;
+  color: var(--px-soft);
+  font-size: var(--px-caption);
+  cursor: pointer;
+  padding: 0;
+}
+
+.pa-px-field-error {
+  font-size: var(--px-caption);
+  color: #fca5a5;
 }
 
 .pa-px-auth-checkbox {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: var(--px-caption);
-  line-height: 1.4;
-  opacity: 0.85;
+  font-size: var(--px-body-sm);
+  color: var(--px-soft);
   cursor: pointer;
+  line-height: 1.4;
 }
 
 .pa-px-auth-checkbox input {
   margin-top: 3px;
-  cursor: pointer;
+  accent-color: var(--px-white);
 }
 
-.pa-px-auth-error {
-  padding: 12px 16px;
-  background: rgba(220, 38, 38, 0.15);
-  border: 1px solid rgba(220, 38, 38, 0.4);
-  border-radius: var(--px-radius-xs);
-  color: #fca5a5;
-  font-size: var(--px-body-sm);
-}
-
-.pa-px-auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: var(--px-caption);
-  color: var(--px-soft);
-  opacity: 0.6;
-}
-
-.pa-px-auth-divider::before,
-.pa-px-auth-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background-color: rgba(247, 248, 248, 0.12);
+.pa-px-auth-checkbox a {
+  color: var(--px-white);
+  text-decoration: underline;
 }
 
 .pa-px-auth-switch {
   font-size: var(--px-body-sm);
-  text-align: center;
-  opacity: 0.85;
+  color: var(--px-soft);
 }
 
 .pa-px-auth-switch a {
   color: var(--px-white);
-  font-weight: var(--px-weight-medium);
   text-decoration: underline;
-  text-underline-offset: 3px;
-  margin-left: 6px;
+  margin-left: 4px;
+}
+
+/* ── Mobile Dedicated Portrait Layout (Upper 35svh image, solid Ink below) ── */
+@media (max-width: 768px) {
+  .pa-px-auth-root {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  .pa-px-auth-bg-media {
+    position: relative;
+    width: 100%;
+    height: 35svh;
+  }
+
+  .pa-px-auth-bg-media img {
+    opacity: 0.8;
+  }
+
+  .pa-px-auth-negative-space-form {
+    max-width: 100%;
+    padding: 32px var(--px-outer-gutter) 60px;
+    background-color: var(--px-ink);
+  }
 }

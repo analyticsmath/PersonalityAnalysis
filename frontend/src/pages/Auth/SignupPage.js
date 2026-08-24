@@ -141,18 +141,17 @@ export const SignupPage = () => {
   return (
     <PublicExperienceRoot withFooter={false}>
       <div className="pa-px-auth-root">
+        {/* Full Environmental Ground (Desktop) / Header Crop (Mobile) */}
         <div className="pa-px-auth-bg-media">
-          <PublicPicture assetKey="authSignup" alt="Workshop environment" priority={true} />
+          <PublicPicture assetKey="authSignup" alt="Workshop baseline environment" priority={true} />
         </div>
 
-        <div className="pa-px-auth-form-card">
-          <div>
-            <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '6px' }}>
-              First Assessment Entry
-            </span>
+        {/* Direct Negative Space Form (No Floating Glass Card) */}
+        <div className="pa-px-auth-negative-space-form">
+          <header className="pa-px-auth-form-header">
             <h1>{content.headline}</h1>
             <p>{content.support}</p>
-          </div>
+          </header>
 
           {formError && (
             <div className="pa-px-auth-error" role="alert">
@@ -161,26 +160,25 @@ export const SignupPage = () => {
           )}
 
           {successMessage && (
-            <div className="pa-px-caption" style={{ color: '#86efac', background: 'rgba(34, 197, 94, 0.15)', padding: '12px 16px', borderRadius: '4px' }}>
+            <div className="pa-px-auth-success" role="status">
               {successMessage}
             </div>
           )}
 
           {GOOGLE_CLIENT_ID && (
-            <>
+            <div className="pa-px-auth-social-wrap">
               <GoogleLoginButton
                 onSuccess={handleGoogleSuccess}
                 onError={() => setFormError('Google sign-up was interrupted.')}
                 text="signup_with"
                 disabled={isSubmitting}
               />
-              <div className="pa-px-auth-divider">or register with email</div>
-            </>
+            </div>
           )}
 
           <form onSubmit={handleSubmit} className="pa-px-auth-form" noValidate>
             <div className="pa-px-auth-field">
-              <label htmlFor="signup-name">{content.nameLabel}</label>
+              <label htmlFor="signup-name">Full Name</label>
               <input
                 ref={nameInputRef}
                 id="signup-name"
@@ -195,14 +193,14 @@ export const SignupPage = () => {
                 }}
               />
               {fieldErrors.name && (
-                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                <span className="pa-px-field-error">
                   {fieldErrors.name}
                 </span>
               )}
             </div>
 
             <div className="pa-px-auth-field">
-              <label htmlFor="signup-email">{content.emailLabel}</label>
+              <label htmlFor="signup-email">Email Address</label>
               <input
                 ref={emailInputRef}
                 id="signup-email"
@@ -217,19 +215,19 @@ export const SignupPage = () => {
                 }}
               />
               {fieldErrors.email && (
-                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                <span className="pa-px-field-error">
                   {fieldErrors.email}
                 </span>
               )}
             </div>
 
             <div className="pa-px-auth-field">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label htmlFor="signup-password">{content.passwordLabel}</label>
+              <div className="pa-px-auth-field__row">
+                <label htmlFor="signup-password">Password</label>
                 <button
                   type="button"
+                  className="pa-px-auth-toggle-pwd"
                   onClick={() => setShowPassword((s) => !s)}
-                  style={{ background: 'none', border: 'none', color: 'var(--px-soft)', fontSize: 'var(--px-caption)', cursor: 'pointer' }}
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -248,7 +246,7 @@ export const SignupPage = () => {
                 }}
               />
               {fieldErrors.password && (
-                <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+                <span className="pa-px-field-error">
                   {fieldErrors.password}
                 </span>
               )}
@@ -266,24 +264,24 @@ export const SignupPage = () => {
                 }}
               />
               <span>
-                {content.termsAgreement}
+                I agree to the <Link to="/privacy">Privacy Policy</Link> and data governance terms.
               </span>
             </label>
             {fieldErrors.terms && (
-              <span className="pa-px-caption" style={{ color: '#fca5a5' }}>
+              <span className="pa-px-field-error">
                 {fieldErrors.terms}
               </span>
             )}
 
             <button type="submit" className="pa-px-btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating account...' : content.submitBtn}
+              {isSubmitting ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
 
           <div className="pa-px-auth-switch">
-            {content.loginPrompt}
+            Already have an account?{' '}
             <Link to={`/login?next=${encodeURIComponent(safeNext)}`}>
-              {content.loginLinkText}
+              Sign in to your record
             </Link>
           </div>
         </div>

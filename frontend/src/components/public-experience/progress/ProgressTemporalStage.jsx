@@ -18,8 +18,8 @@ export const ProgressTemporalStage = () => {
     if (prefersReducedMotion || !containerRef.current) return;
 
     const ctx = gsap.context(() => {
-      const laterLayer = containerRef.current.querySelector('.pa-px-progress-layer--later');
-      const findings = containerRef.current.querySelector('.pa-px-progress-findings');
+      const laterMedia = containerRef.current.querySelector('.pa-px-progress__later-media');
+      const findings = containerRef.current.querySelector('.pa-px-progress__findings');
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -28,14 +28,15 @@ export const ProgressTemporalStage = () => {
           end: 'bottom bottom',
           scrub: 0.8,
           fastScrollEnd: true,
+          invalidateOnRefresh: true,
         },
       });
 
       tl.fromTo(
-        laterLayer,
-        { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' },
-        { clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 50% 100%)', duration: 1 }
-      ).fromTo(findings, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, 0.3);
+        laterMedia,
+        { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)', scale: 1.1 },
+        { clipPath: 'polygon(35% 0, 100% 0, 100% 100%, 48% 100%)', scale: 1, duration: 1, ease: 'power2.inOut' }
+      ).fromTo(findings, { y: '40px', opacity: 0 }, { y: '0px', opacity: 1, duration: 0.6 }, 0.3);
     }, containerRef);
 
     return () => ctx.revert();
@@ -43,50 +44,47 @@ export const ProgressTemporalStage = () => {
 
   return (
     <div className="pa-px-progress-root">
-      <div ref={containerRef} className="pa-px-progress-stage">
-        <div className="pa-px-progress-stage__sticky">
-          <div className="pa-px-progress-layers">
-            <div className="pa-px-progress-layer pa-px-progress-layer--base">
-              <PublicPicture assetKey="homeWorldEntry" alt="Initial baseline assessment environment" />
-            </div>
-            <div className="pa-px-progress-layer pa-px-progress-layer--later">
-              <PublicPicture assetKey="workworldAutonomy" alt="Later shifted career context" />
-            </div>
+      {/* Pinned Double-Exposure Temporal Stage */}
+      <section ref={containerRef} className="pa-px-progress-section" aria-label="Longitudinal Progress">
+        <div className="pa-px-progress-stage">
+          {/* Base Assessment Layer */}
+          <div className="pa-px-progress__base-media">
+            <PublicPicture assetKey="homeWorldEntry" alt="Initial baseline assessment environment" />
           </div>
 
-          <div className="pa-px-progress-header">
-            <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '8px' }}>
-              Longitudinal Calibration
-            </span>
-            <h1>{data.hero.headline}</h1>
-            <p>{data.hero.support}</p>
+          {/* Shifted Context Layer (Double Exposure) */}
+          <div className="pa-px-progress__later-media">
+            <PublicPicture assetKey="workworldAutonomy" alt="Later shifted work environment" />
           </div>
 
-          <div className="pa-px-progress-findings">
-            <div className="pa-px-progress-finding">
-              <h3>Trait Stability Over Time</h3>
-              <p>
-                Core problem formulation and conscientious risk containment remain 89% consistent across annual assessment re-evaluations.
-              </p>
-            </div>
-            <div className="pa-px-progress-finding">
-              <h3>Contextual Skill Adaptation</h3>
-              <p>
-                Collaborative decision making and cross-functional delegation increase 34% as organizational scope expands.
-              </p>
+          {/* Editorial Content & Illustrative Findings */}
+          <div className="pa-px-progress__content">
+            <h1 className="pa-px-progress__headline">{data.hero.headline}</h1>
+            <p className="pa-px-progress__support">{data.hero.support}</p>
+
+            <div className="pa-px-progress__findings">
+              <div className="pa-px-progress__finding-row">
+                {data.stabilityFinding}
+              </div>
+              <div className="pa-px-progress__finding-row">
+                {data.adaptationFinding}
+              </div>
+              <span className="pa-px-progress__disclaimer">({data.disclaimer})</span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="pa-px-progress-empty">
-        <span className="pa-px-context-data" style={{ color: 'var(--px-soft)' }}>Initial Baseline Required</span>
-        <h2>{data.emptyState.headline}</h2>
-        <p>{data.emptyState.support}</p>
-        <Link to={getSignupAcquisitionUrl()} className="pa-px-btn-primary">
-          {data.emptyState.cta}
-        </Link>
-      </div>
+      {/* Calm Baseline Continuation */}
+      <section className="pa-px-progress-empty-section" aria-label="Initial Baseline Requirement">
+        <div className="pa-px-progress-empty__inner">
+          <h2>{data.emptyState.headline}</h2>
+          <p>{data.emptyState.support}</p>
+          <Link to={getSignupAcquisitionUrl()} className="pa-px-btn-primary">
+            {data.emptyState.cta}
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };

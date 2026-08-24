@@ -8,6 +8,7 @@ import { AvatarEventProvider } from './components/avatar/AvatarEvents';
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
+import PublicRouteTransition from './components/public-experience/motion/PublicRouteTransition';
 
 const LoginPage = lazy(() => import('./pages/Auth/LoginPage'));
 const SignupPage = lazy(() => import('./pages/Auth/SignupPage'));
@@ -98,10 +99,22 @@ const AssessmentRootRedirect = () => {
 
 const AppRoutes = () => {
   const location = useLocation();
+  const isPublicRoute = [
+    '/',
+    '/how-it-works',
+    '/career-intelligence',
+    '/progress',
+    '/methodology',
+    '/trust',
+    '/privacy',
+    '/login',
+    '/signup',
+  ].includes(location.pathname);
 
   return (
     <div className="app-root-container">
       <PublicMetadata />
+      {isPublicRoute && <PublicRouteTransition />}
       <Routes location={location} key={`${location.pathname}${location.search}`}>
         {/* ── Public Experience Routes ── */}
         <Route path="/" element={<EditorialHomePage />} />

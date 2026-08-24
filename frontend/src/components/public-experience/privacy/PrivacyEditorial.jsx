@@ -6,24 +6,21 @@ export const PrivacyEditorial = () => {
 
   return (
     <div className="pa-px-privacy-root">
-      <div className="pa-px-privacy-hero">
-        <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '8px' }}>
-          Data Governance & Integrity
-        </span>
+      <header className="pa-px-privacy-hero">
         <h1>{data.hero.headline}</h1>
-        <p>{data.hero.support}</p>
-      </div>
+        <p className="pa-px-privacy-lead">{data.hero.support}</p>
+      </header>
 
       <div className="pa-px-privacy-layout">
         <aside className="pa-px-privacy-toc" aria-label="Table of Contents">
-          <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', marginBottom: '4px' }}>
-            Sections
-          </span>
-          {data.sections.map((s) => (
-            <a key={s.id} href={`#${s.id}`}>
-              {s.title}
-            </a>
-          ))}
+          <div className="pa-px-privacy-toc__heading">Policy Sections</div>
+          <nav className="pa-px-privacy-toc__nav">
+            {data.sections.map((s) => (
+              <a key={s.id} href={`#${s.id}`} className="pa-px-privacy-toc__link">
+                {s.title}
+              </a>
+            ))}
+          </nav>
         </aside>
 
         <div className="pa-px-privacy-content">

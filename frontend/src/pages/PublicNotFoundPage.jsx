@@ -10,9 +10,6 @@ export const PublicNotFoundPage = () => {
   return (
     <PublicExperienceRoot withFooter={true}>
       <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px' }}>
-        <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', marginBottom: '12px' }}>
-          404 Context Error
-        </span>
         <h1 className="pa-px-heading-xl" style={{ marginBottom: '16px' }}>
           {data.title}
         </h1>

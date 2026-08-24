@@ -1,6 +1,6 @@
 /**
  * Personality Assessor - Public Experience Content Repository
- * Authoritative content for Under Different Conditions master creative specification.
+ * Authoritative content for Under Different Conditions master creative correction.
  * Strict compliance: Zero em dashes in website copy.
  */
 
@@ -15,6 +15,11 @@ export const PUBLIC_CONTENT = {
     situation: {
       prompt: 'How do you make progress when the goal is clear but the implementation is not?',
       response: 'I clarify the constraints first, then choose the smallest reversible step.',
+      clauses: [
+        { id: 'c1', text: 'I clarify the constraints first' },
+        { id: 'c2', text: 'then choose the smallest' },
+        { id: 'c3', text: 'reversible step.' },
+      ],
     },
     readings: {
       headline: 'ONE RESPONSE. MORE THAN ONE READING.',
@@ -24,24 +29,28 @@ export const PUBLIC_CONTENT = {
           name: 'Big Five Dimensions',
           summary: 'Conscientiousness and emotional stability under ambiguity',
           detail: 'Measures deliberate pacing, systematic risk containment, and steady execution.',
+          axis: 'Methodological Pacing',
         },
         {
           id: 'riasec',
           name: 'RIASEC Interests',
           summary: 'Investigative and conventional problem navigation',
           detail: 'Reflects preference for structured inquiry over open-ended speculation.',
+          axis: 'Inquiry Focus',
         },
         {
           id: 'work-values',
           name: 'O*NET Work Values',
           summary: 'Working conditions, independence, and achievement priority',
           detail: 'Signals high motivation in autonomous environments with clear quality standards.',
+          axis: 'Autonomy & Structure',
         },
         {
           id: 'signals',
           name: 'Behavioral Signals',
           summary: 'Iterative execution and defensive risk management',
           detail: 'Captures observable preference for small reversible experiments over large commitments.',
+          axis: 'Experimental Velocity',
         },
       ],
     },
@@ -95,13 +104,14 @@ export const PUBLIC_CONTENT = {
       support: 'Revisit your profile as your responsibilities shift to inspect what stayed stable, what moved, and what context changed around it.',
       baselineLabel: 'BASELINE RECORD',
       laterLabel: 'LATER WORK CONTEXT',
-      stabilityFinding: 'Trait stability: 89% consistency in core conscientious problem formulation.',
-      adaptationFinding: 'Context adaptation: 34% increase in collaborative delegation under team scale.',
+      stabilityFinding: 'Some patterns remain stable over time.',
+      adaptationFinding: 'Others shift as responsibilities change.',
+      disclaimer: 'Illustrative example',
     },
     trace: {
       headline: 'SHOW ME WHERE THAT CAME FROM.',
       support: 'Distinguish what you supplied, what the system calculated, where comparison happens, and what remains under your direct control.',
-      inspectPrompt: 'Hover or drag inspection aperture to view the underlying evidence layer.',
+      inspectPrompt: 'Hover, drag, or press Enter on the inspection aperture to view source layers.',
     },
     finale: {
       headline: 'SEE WHAT HOLDS UNDER DIFFERENT CONDITIONS.',
@@ -174,31 +184,31 @@ export const PUBLIC_CONTENT = {
     movements: [
       {
         id: 'capture',
-        name: 'Capture',
+        name: 'Source capture',
         title: 'Source response is preserved verbatim',
         description: 'Raw input enters with its situational context intact rather than immediately reduced to a number.',
       },
       {
         id: 'isolate',
-        name: 'Isolate',
+        name: 'Clause separation',
         title: 'Syntactic and semantic clause separation',
         description: 'Key phrases separate into distinct behavioral markers representing cognitive and action strategies.',
       },
       {
         id: 'branch',
-        name: 'Branch',
+        name: 'Multi-model calibration',
         title: 'Multi-model psychometric calibration',
         description: 'Traits, vocational interests, and work values calibrate across independent psychometric models.',
       },
       {
         id: 'weight',
-        name: 'Weight',
+        name: 'Deterministic calculation',
         title: 'Proportional mathematical calculation',
-        description: 'Verified scoring formulas apply fixed proportional weights without black-box adjustments.',
+        description: 'Scoring formulas apply fixed proportional weights without black box adjustments.',
       },
       {
         id: 'recompose',
-        name: 'Recompose',
+        name: 'Inspectable record',
         title: 'Unified inspectable professional record',
         description: 'The complete profile emerges as an inspectable record with continuous provenance back to the source.',
       },
@@ -210,6 +220,9 @@ export const PUBLIC_CONTENT = {
       headline: 'WHAT CHANGED, AND WHAT DID NOT?',
       support: 'Later assessments add evidence. They do not erase the earlier record.',
     },
+    stabilityFinding: 'Some patterns remain stable over time.',
+    adaptationFinding: 'Others shift as responsibilities change.',
+    disclaimer: 'Illustrative example',
     emptyState: {
       headline: 'Change becomes visible after another record exists.',
       support: 'Complete an initial assessment now, then return after a meaningful shift in your work responsibilities.',
@@ -222,39 +235,44 @@ export const PUBLIC_CONTENT = {
       headline: 'SHOW ME WHERE THAT CAME FROM.',
       support: 'Follow every reading back to the exact evidence that produced it.',
     },
-    layers: [
+    recordStateSteps: [
       {
         id: 'supplied',
-        title: 'Supplied',
-        subtitle: 'Raw participant input',
+        name: 'Supplied',
+        title: 'Raw participant input',
         description: 'The original contextual response you entered during assessment inquiry.',
+        details: 'Source Prompt: "How do you make progress under ambiguity?" | Response: "I clarify constraints first, then choose the smallest reversible step."',
       },
       {
         id: 'inferred',
-        title: 'Inferred',
-        subtitle: 'Trait vectors & dimensions',
+        name: 'Inferred',
+        title: 'Trait vectors & dimensions',
         description: 'Continuous Big Five and RIASEC scores calculated through standardized item response theory.',
+        details: 'Conscientiousness: 78 | Emotional Stability: 64 | Investigative: 72 | Conventional: 68',
       },
       {
         id: 'calculated',
-        title: 'Calculated',
-        subtitle: 'Deterministic career calibration',
+        name: 'Calculated',
+        title: 'Deterministic career calibration',
         description: 'Multi-factor alignment scored using explicit 25/25/20/15/10/5 mathematical weights.',
+        details: 'RIASEC (25%) + Skills (25%) + Values (20%) + Traits (15%) + Education (10%) + Goals (5%)',
       },
       {
         id: 'compared',
-        title: 'Compared',
-        subtitle: 'Verified occupational benchmarks',
-        description: 'Contextual comparison against 17 verified engineering, design, and analytical profiles.',
+        name: 'Compared',
+        title: 'Occupational benchmarks',
+        description: 'Contextual comparison against 17 engineering, design, and analytical profiles.',
+        details: 'Top alignment: Systems Architect (91%), Staff Software Engineer (88%), Research Analyst (85%)',
       },
       {
         id: 'controlled',
-        title: 'Controlled',
-        subtitle: 'Direct user ownership',
+        name: 'Controlled',
+        title: 'Direct user ownership',
         description: 'Immediate account actions to export raw data, disable AI synthesis, or delete all records.',
+        details: 'Sovereign rights: JSON Export, Narrative Control Toggle, Permanent Database Deletion',
       },
     ],
-    rights: [
+    rightsActions: [
       {
         id: 'export',
         label: 'Export full record',
@@ -278,121 +296,104 @@ export const PUBLIC_CONTENT = {
       headline: 'WHAT THE SYSTEM USES. WHAT IT DOES NOT.',
       support: 'Independent psychometric models maintain clear boundaries so no single convenience score obscures your real working patterns.',
     },
-    frameworks: [
-      {
-        id: 'big-five',
-        name: 'Big Five Dimensions',
+    sections: {
+      bigFive: {
+        title: 'Big Five Dimensions',
         role: 'Trait Spectrum Measurement',
         description: 'Evaluates Openness, Conscientiousness, Extraversion, Agreeableness, and Emotional Stability as continuous spectrums rather than binary personality types.',
+        dimensions: ['Openness to Experience', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Emotional Stability'],
       },
-      {
-        id: 'riasec',
-        name: 'RIASEC Vocational Interests',
+      riasec: {
+        title: 'RIASEC Vocational Interests',
         role: 'Occupational Domain Mapping',
         description: 'Maps attraction to Realistic, Investigative, Artistic, Social, Enterprising, and Conventional problem spaces based on Holland occupational theory.',
+        orbit: ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'],
       },
-      {
-        id: 'work-values',
-        name: 'O*NET Work Values',
+      workValues: {
+        title: 'O*NET Work Values',
         role: 'Workplace Reward Priority',
         description: 'Quantifies organizational conditions that sustain motivation: Achievement, Independence, Working Conditions, Recognition, Relationships, and Support.',
+        priorities: ['Achievement', 'Independence', 'Working Conditions', 'Recognition', 'Relationships', 'Support'],
       },
-      {
-        id: 'career-signals',
-        name: 'Behavioral Signals',
-        role: 'Situational Decision Trade-offs',
-        description: 'Captures observed decision patterns in complex team and system engineering scenarios to calibrate real-world performance context.',
+      behavioralSignals: {
+        title: 'Behavioral Signals',
+        role: 'Situational Action Patterns',
+        description: 'Identifies contextual action tendencies: iterative scoping, stakeholder alignment, risk containment, and diagnostic inquiry.',
+        patterns: ['Iterative scoping', 'Stakeholder alignment', 'Risk containment', 'Diagnostic inquiry'],
       },
-      {
-        id: 'career-fit',
-        name: 'Multi-Factor Career Comparison',
-        role: 'Deterministic Fit Indexing',
-        description: 'Calculates career alignment against 17 verified engineering, design, and analytical profiles using fixed mathematical weights.',
+      careerWeights: {
+        title: 'Proportional Career Alignment',
+        role: 'Deterministic Calibration Engine',
+        description: 'Fixed mathematical weights ensure career alignment scores are transparent, repeatable, and completely unboxed.',
       },
-      {
-        id: 'ai-role',
-        name: 'AI Narrative Decoupling',
-        role: 'Contextual Synthesis Only',
-        description: 'Language models generate qualitative explanations and synthesis but have zero authority over trait scores or career ranking calculations.',
+      aiNarrative: {
+        title: 'Role of AI Commentary',
+        role: 'Explanatory Synthesis Only',
+        description: 'AI is strictly utilized for contextual narrative summarization. Psychometric scoring, trait calculations, and career fit algorithms are 100% deterministic code.',
       },
-      {
-        id: 'limits',
-        name: 'Boundaries and Non-Clinical Scope',
-        role: 'Professional Self-Discovery',
-        description: 'Designed exclusively for professional self-reflection and career planning. Not intended for clinical psychological diagnosis or automated hiring verdicts.',
+      limits: {
+        title: 'Scientific Boundaries & Non-Clinical Scope',
+        role: 'Clear Operational Limits',
+        description: 'Personality Assessor is an analytical instrument for professional self-reflection and career planning. It does not provide clinical psychological diagnoses, medical evaluations, or psychiatric assessments.',
       },
-    ],
+    },
   },
 
   privacy: {
     hero: {
-      headline: 'YOUR DATA, IN PLAIN LANGUAGE.',
-      support: 'How Personality Assessor collects, computes, stores, and protects your professional evidence.',
+      headline: 'PLAIN-LANGUAGE GOVERNANCE & SOVEREIGN DATA RIGHTS',
+      support: 'Your assessment data belongs to you. We do not sell your personal evidence or train third-party foundation models on your responses.',
     },
     sections: [
       {
-        id: 'collection',
-        title: 'Information we collect',
-        content: 'When you take an assessment, we record your response text, selected options, and completion timestamps. When creating an account, we store your name and verified email address.',
+        id: 'data-collection',
+        title: '1. What We Collect',
+        content: 'We collect your email address, account credentials, and responses provided during assessment inquiries. Technical telemetry is limited to essential operational diagnostics.',
       },
       {
-        id: 'processing',
-        title: 'How your data is processed',
-        content: 'Responses are analyzed through deterministic psychometric algorithms to calculate Big Five dimensions, RIASEC profiles, and work value rankings. Numerical calculations run entirely in secure backend environments.',
+        id: 'data-usage',
+        title: '2. How Data Is Used',
+        content: 'Your responses are processed solely to compute your psychometric profile, generate career comparisons, and render your longitudinal progress record.',
       },
       {
-        id: 'ai-usage',
-        title: 'Artificial intelligence and narrative generation',
-        content: 'If enabled, qualitative narrative summaries are generated using secure AI endpoints. Your raw assessment responses are processed with strict zero-retention policies and are never used to train third-party machine learning models.',
+        id: 'ai-governance',
+        title: '3. AI Models & Data Sharing',
+        content: 'We do not sell personal data to brokers or advertisers. Assessment responses are never used to train generalized third-party machine learning models.',
       },
       {
-        id: 'storage',
-        title: 'Storage and security',
-        content: 'Your records are stored in authenticated relational database systems with role-based access control, encrypted network transport, and continuous monitoring.',
+        id: 'user-rights',
+        title: '4. Sovereign Data Controls',
+        content: 'You maintain permanent sovereignty over your record. You can export your full data in JSON format, toggle narrative AI generation, or permanently delete your account at any time.',
       },
       {
-        id: 'rights',
-        title: 'Your ownership and export rights',
-        content: 'You own your record. You can download your complete historical assessment data at any time in machine-readable JSON format, or request full account and data deletion from your profile settings.',
+        id: 'security',
+        title: '5. Storage & Cryptographic Protection',
+        content: 'All data is encrypted in transit via TLS 1.3 and at rest using industry-standard AES-256 encryption. Authentication utilizes secure salted hashing and tokenized sessions.',
       },
       {
         id: 'contact',
-        title: 'Contact and privacy inquiries',
-        content: 'For privacy inquiries, data requests, or governance questions, contact privacy@valtumpersonality.com.',
+        title: '6. Privacy Inquiries',
+        content: 'For questions regarding your data rights or to submit an explicit verification request, contact our privacy governance team directly through your account dashboard.',
       },
     ],
   },
 
   auth: {
     login: {
-      headline: 'Continue where you left off.',
-      support: 'Sign in to continue an assessment or revisit your results.',
-      emailLabel: 'Email address',
-      passwordLabel: 'Password',
-      submitBtn: 'Sign in',
-      googleBtn: 'Sign in with Google',
-      signupPrompt: 'Need an account?',
-      signupLinkText: 'Start with one assessment',
+      headline: 'RETURN TO YOUR RECORD',
+      support: 'Sign in to access your assessment history, review calibration, and track your career trajectory.',
     },
     signup: {
-      headline: 'Start with one assessment.',
-      support: 'Create an account to keep your results, compare later changes and control your data.',
-      nameLabel: 'Full name',
-      emailLabel: 'Email address',
-      passwordLabel: 'Password (min 8 characters)',
-      termsAgreement: 'I agree to the Terms of Service and Privacy Policy.',
-      submitBtn: 'Create account',
-      googleBtn: 'Sign up with Google',
-      loginPrompt: 'Already have an account?',
-      loginLinkText: 'Sign in',
+      headline: 'START WITH ONE RECORD',
+      support: 'Create an account to preserve your initial baseline, inspect your traits, and revisit your progress over time.',
     },
   },
 
   notFound: {
-    title: 'Page not found in this world',
-    message: 'The requested route does not exist in this public environment.',
-    returnHome: 'Return home',
-    buildProfile: 'Build my profile',
+    title: 'Page Not Found',
+    message: 'The requested route does not exist in the current assessment context.',
+    returnHome: 'Return to Home',
+    buildProfile: 'Start an assessment',
   },
 };
 

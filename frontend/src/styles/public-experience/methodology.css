@@ -1,76 +1,196 @@
 /**
- * Personality Assessor - Public Experience Methodology Route Styles
- * Motion Editorial & Deterministic Calibration
+ * Personality Assessor - Public Experience Methodology Styles
+ * Typographic Measurement Fields
+ * Zero Row Repeats, Zero Dividers, Zero Gradients
  */
 
 .pa-px-methodology-root {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100svh;
+  padding: clamp(100px, 14vh, 160px) var(--px-outer-gutter) 100px;
   background-color: var(--px-ink);
-  color: var(--px-white);
 }
 
-.pa-px-methodology-hero {
-  padding: 120px var(--px-outer-gutter) 60px;
-  max-width: 52rem;
+.pa-px-methodology-header {
+  max-width: 48rem;
+  margin-bottom: clamp(60px, 10vh, 100px);
 }
 
-.pa-px-methodology-hero h1 {
+.pa-px-methodology-header h1 {
   font-family: var(--px-font-family);
-  font-size: var(--px-display-lg);
+  font-size: clamp(2.4rem, 5vw, 4rem);
   font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 80, 'opsz' 84;
-  line-height: 0.96;
-  letter-spacing: -0.025em;
+  font-variation-settings: 'wdth' 80, 'opsz' 96;
+  line-height: 1.05;
+  color: var(--px-white);
   margin-bottom: 16px;
 }
 
-.pa-px-methodology-hero p {
+.pa-px-methodology-lead {
   font-size: var(--px-body-lg);
-  opacity: 0.85;
+  color: var(--px-soft);
+  line-height: 1.5;
 }
 
-.pa-px-methodology-frameworks {
-  padding: 40px var(--px-outer-gutter) 100px;
+.pa-px-methodology-field-container {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  max-width: 68rem;
+  gap: clamp(60px, 10vh, 120px);
 }
 
-.pa-px-methodology-item {
-  padding-bottom: 32px;
-  border-bottom: 1px solid rgba(247, 248, 248, 0.12);
+.pa-px-method-field {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 32px;
+  grid-template-columns: 1.4fr 1.6fr;
+  grid-gap: clamp(32px, 6vw, 80px);
+  align-items: start;
 }
 
-.pa-px-methodology-item h3 {
-  font-size: 1.35rem;
-  font-weight: var(--px-weight-heading);
-  font-variation-settings: 'wdth' 90;
-  letter-spacing: -0.015em;
-  margin-bottom: 4px;
+.pa-px-method-field__meta {
+  max-width: 32rem;
 }
 
-.pa-px-methodology-item span {
-  font-size: var(--px-caption);
-  color: var(--px-soft);
+.pa-px-method-field__role {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  color: var(--px-soft);
+  display: block;
+  margin-bottom: 8px;
 }
 
-.pa-px-methodology-item p {
+.pa-px-method-field__title {
+  font-family: var(--px-font-family);
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 85, 'opsz' 64;
+  line-height: 1.15;
+  color: var(--px-white);
+  margin-bottom: 12px;
+}
+
+.pa-px-method-field__desc {
   font-size: var(--px-body);
-  line-height: 1.6;
-  opacity: 0.88;
+  color: var(--px-white);
+  opacity: 0.9;
+  line-height: 1.55;
 }
 
-@media (max-width: 767px) {
-  .pa-px-methodology-item {
+/* 1. Big Five Spectrum Display */
+.pa-px-method-field__spectrum-display {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pa-px-spectrum-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pa-px-spectrum-item__name {
+  font-size: var(--px-body-sm);
+  font-weight: var(--px-weight-medium);
+  color: var(--px-white);
+}
+
+.pa-px-spectrum-item__track {
+  width: 100%;
+  height: 3px;
+  background-color: rgba(247, 248, 248, 0.2);
+  position: relative;
+}
+
+.pa-px-spectrum-item__track::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 45%;
+  width: 9px;
+  height: 9px;
+  background-color: var(--px-white);
+  border-radius: 50%;
+}
+
+/* 2. RIASEC Orbit Display */
+.pa-px-method-field__orbit-display {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 16px;
+}
+
+.pa-px-orbit-node {
+  font-family: var(--px-font-family);
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 88, 'opsz' 36;
+  color: var(--px-white);
+  padding: 12px 16px;
+  background: rgba(247, 248, 248, 0.05);
+}
+
+/* 3. Work Values Priority Display */
+.pa-px-method-field__priority-display {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pa-px-priority-item {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.pa-px-priority-item__rank {
+  font-size: var(--px-body-sm);
+  font-weight: var(--px-weight-bold);
+  color: var(--px-soft);
+}
+
+.pa-px-priority-item__label {
+  font-size: var(--px-body);
+  color: var(--px-white);
+}
+
+/* 4. Behavioral Signals Display */
+.pa-px-method-field__patterns-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pa-px-pattern-tag {
+  font-size: var(--px-body-sm);
+  font-weight: var(--px-weight-medium);
+  color: var(--px-white);
+  padding: 8px 14px;
+  border: 1px solid rgba(247, 248, 248, 0.2);
+  border-radius: var(--px-radius-sm);
+}
+
+/* 5. Career Weights Proportions */
+.pa-px-method-field__weights-display {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 16px;
+  font-size: var(--px-body);
+  color: var(--px-white);
+}
+
+.pa-px-method-field__weights-display strong {
+  font-family: var(--px-font-family);
+  font-size: 1.4rem;
+  font-variation-settings: 'wdth' 80, 'opsz' 48;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+/* ── Mobile Responsive Rules ── */
+@media (max-width: 768px) {
+  .pa-px-method-field {
     grid-template-columns: 1fr;
-    gap: 12px;
+    grid-gap: 24px;
   }
 }

@@ -1,17 +1,18 @@
 /**
  * Personality Assessor - Public Experience Home Route Styles
- * Continuous 8-Scene Cinematic Field Study
+ * Continuous 8-Movement Cinematic Spatial Film
+ * Zero Card Grids, Zero Eyebrow Labels, Zero Gradients
  */
 
-/* ── Scene 1: World Entry ── */
-.pa-px-home-entry {
+/* ── Movement 1: World Entry ── */
+.pa-px-entry-section {
   position: relative;
   width: 100%;
   height: 180svh;
   background-color: var(--px-ink);
 }
 
-.pa-px-home-entry__stage {
+.pa-px-entry-stage {
   position: sticky;
   top: 0;
   left: 0;
@@ -24,7 +25,7 @@
   padding: 0 var(--px-outer-gutter) clamp(40px, 6vh, 80px);
 }
 
-.pa-px-home-entry__media-plane {
+.pa-px-entry__primary-media {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -34,54 +35,84 @@
   will-change: transform;
 }
 
-.pa-px-home-entry__media-plane img {
+.pa-px-entry__primary-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.65;
+}
+
+.pa-px-entry__secondary-crop {
+  position: absolute;
+  top: 15%;
+  right: var(--px-outer-gutter);
+  width: clamp(240px, 22vw, 360px);
+  aspect-ratio: 4 / 3;
+  z-index: 2;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.pa-px-entry__secondary-crop img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.pa-px-home-entry__content {
+.pa-px-entry__overlay-content {
   position: relative;
   z-index: 5;
   max-width: 92vw;
 }
 
-.pa-px-home-entry__title {
+.pa-px-entry__headline {
   font-family: var(--px-font-family);
   font-size: var(--px-display-xl);
   font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 78, 'opsz' 96;
   line-height: 0.88;
   letter-spacing: -0.03em;
   color: var(--px-white);
   margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
 }
 
-.pa-px-home-entry__support {
+.pa-px-entry__title-line-1 {
+  font-variation-settings: 'wdth' 85, 'opsz' 96;
+}
+
+.pa-px-entry__title-line-2 {
+  font-variation-settings: 'wdth' 78, 'opsz' 96;
+}
+
+.pa-px-entry__support-block {
+  max-width: 34rem;
+}
+
+.pa-px-entry__support-text {
   font-size: var(--px-body-lg);
   line-height: 1.45;
   color: var(--px-white);
   opacity: 0.9;
-  max-width: 34rem;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
-.pa-px-home-entry__actions {
+.pa-px-entry__actions {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
 }
 
-/* ── Scene 2: Professional Situation ── */
-.pa-px-home-situation {
+/* ── Movement 2: Professional Situation ── */
+.pa-px-situation-section {
   position: relative;
   width: 100%;
-  height: 160svh;
+  height: 170svh;
   background-color: var(--px-ink);
 }
 
-.pa-px-home-situation__stage {
+.pa-px-situation-stage {
   position: sticky;
   top: 0;
   left: 0;
@@ -94,132 +125,179 @@
   padding: 0 var(--px-outer-gutter);
 }
 
-.pa-px-home-situation__media {
+.pa-px-situation__media {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.45;
   z-index: 1;
 }
 
-.pa-px-home-situation__media img {
+.pa-px-situation__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0.4;
 }
 
-.pa-px-home-situation__dialogue {
+.pa-px-situation__dialogue {
   position: relative;
   z-index: 5;
-  max-width: 68rem;
+  max-width: 58rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
 }
 
-.pa-px-home-situation__prompt {
+.pa-px-situation__prompt {
   font-family: var(--px-font-family);
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  font-weight: var(--px-weight-medium);
+  font-variation-settings: 'wdth' 90, 'opsz' 48;
+  line-height: 1.25;
   color: var(--px-white);
+  opacity: 0.85;
 }
 
-.pa-px-home-situation__response {
+.pa-px-situation__clauses-field {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pa-px-clause {
   font-family: var(--px-font-family);
-  font-size: var(--px-display-lg);
-  font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 94, 'opsz' 72;
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: var(--px-weight-bold);
   line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--px-soft);
-  padding-left: clamp(20px, 3.5vw, 48px);
-  border-left: 2px solid rgba(247, 248, 248, 0.4);
+  color: var(--px-white);
+  display: inline-block;
+  will-change: transform, opacity;
 }
 
-/* ── Scene 3: Multiple Readings ── */
-.pa-px-home-readings {
+.pa-px-clause-1 {
+  font-variation-settings: 'wdth' 85, 'opsz' 64;
+}
+
+.pa-px-clause-2 {
+  font-variation-settings: 'wdth' 100, 'opsz' 56;
+  padding-left: clamp(24px, 6vw, 80px);
+}
+
+.pa-px-clause-3 {
+  font-variation-settings: 'wdth' 75, 'opsz' 72;
+  padding-left: clamp(48px, 12vw, 160px);
+}
+
+/* ── Movement 3: Multiple Readings ── */
+.pa-px-readings-section {
   position: relative;
   width: 100%;
-  height: 220svh;
+  height: 200svh;
   background-color: var(--px-ink);
 }
 
-.pa-px-home-readings__stage {
+.pa-px-readings-stage {
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   height: 100svh;
   overflow: hidden;
-  padding: clamp(60px, 8vh, 100px) var(--px-outer-gutter);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.pa-px-home-readings__header h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
-}
-
-.pa-px-home-readings__branches {
-  position: relative;
-  width: 100%;
-  height: 60vh;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--px-column-gap);
+  grid-template-columns: 1fr 1.6fr;
   align-items: center;
+  padding: 0 var(--px-outer-gutter);
 }
 
-.pa-px-home-readings__branch {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 24px;
-  background: rgba(18, 20, 22, 0.75);
-  border-radius: var(--px-radius-sm);
-  border: 1px solid rgba(247, 248, 248, 0.12);
-  transition: transform 240ms ease, border-color 240ms ease;
-}
-
-.pa-px-home-readings__branch h4 {
-  font-size: 1.15rem;
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.01em;
-}
-
-.pa-px-home-readings__branch p {
-  font-size: var(--px-body-sm);
-  line-height: 1.5;
-  opacity: 0.85;
-}
-
-.pa-px-home-readings__svg-canvas {
+.pa-px-readings__trajectories {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 2;
+  z-index: 1;
 }
 
-/* ── Scene 4: Workworld Passage (White Desert standard 4 environments) ── */
-.pa-px-home-passage {
+.pa-px-readings__source-anchor {
+  position: relative;
+  z-index: 5;
+  max-width: 24rem;
+}
+
+.pa-px-readings__source-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--px-soft);
+  margin-bottom: 12px;
+  font-variation-settings: 'wdth' 90, 'opsz' 16;
+}
+
+.pa-px-readings__source-phrase {
+  font-family: var(--px-font-family);
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-weight: var(--px-weight-medium);
+  font-variation-settings: 'wdth' 85, 'opsz' 48;
+  line-height: 1.3;
+  color: var(--px-white);
+}
+
+.pa-px-readings__field {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-left: clamp(20px, 4vw, 60px);
+}
+
+.pa-px-reading-node {
+  position: relative;
+}
+
+.pa-px-reading-node__axis {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--px-soft);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.pa-px-reading-node__name {
+  font-family: var(--px-font-family);
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 88, 'opsz' 36;
+  color: var(--px-white);
+  margin-bottom: 4px;
+}
+
+.pa-px-reading-node__summary {
+  font-size: var(--px-body);
+  font-weight: var(--px-weight-medium);
+  color: var(--px-white);
+  opacity: 0.9;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.pa-px-reading-node__detail {
+  font-size: var(--px-body-sm);
+  color: var(--px-soft);
+  line-height: 1.45;
+}
+
+/* ── Movement 4: Workworld Journey (White Desert Signature) ── */
+.pa-px-journey-section {
   position: relative;
   width: 100%;
-  height: 480svh;
+  height: 380svh;
   background-color: var(--px-ink);
 }
 
-.pa-px-home-passage__stage {
+.pa-px-journey-stage {
   position: sticky;
   top: 0;
   left: 0;
@@ -228,7 +306,7 @@
   overflow: hidden;
 }
 
-.pa-px-home-passage__environment {
+.pa-px-journey-env {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -236,11 +314,11 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 var(--px-outer-gutter) clamp(40px, 6vh, 80px);
-  will-change: transform, opacity;
+  padding: 0 var(--px-outer-gutter) clamp(40px, 8vh, 80px);
+  will-change: clip-path, transform, opacity;
 }
 
-.pa-px-home-passage__bg-media {
+.pa-px-journey__media-wrap {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -248,242 +326,304 @@
   z-index: 1;
 }
 
-.pa-px-home-passage__bg-media img {
+.pa-px-journey__media-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0.55;
 }
 
-.pa-px-home-passage__info {
+.pa-px-journey__content {
   position: relative;
   z-index: 5;
   max-width: 44rem;
-  background: rgba(18, 20, 22, 0.82);
-  padding: clamp(24px, 3.5vw, 40px);
-  border-radius: var(--px-radius-sm);
-  border-left: 3px solid var(--px-white);
 }
 
-.pa-px-home-passage__cond-name {
-  font-size: var(--px-caption);
-  font-weight: var(--px-weight-medium);
+.pa-px-journey__condition-tag {
+  font-size: 0.82rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--px-soft);
+  display: block;
   margin-bottom: 8px;
 }
 
-.pa-px-home-passage__interpretation {
+.pa-px-journey__interpretation {
   font-family: var(--px-font-family);
-  font-size: var(--px-heading-lg);
-  font-weight: var(--px-weight-heading);
+  font-size: clamp(1.8rem, 3.6vw, 3rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 82, 'opsz' 64;
   line-height: 1.15;
-  letter-spacing: -0.015em;
   color: var(--px-white);
   margin-bottom: 12px;
 }
 
-.pa-px-home-passage__detail {
+.pa-px-journey__detail {
   font-size: var(--px-body);
-  line-height: 1.55;
-  opacity: 0.85;
+  line-height: 1.5;
+  color: var(--px-white);
+  opacity: 0.9;
 }
 
-/* ── Scene 5: Calibration (25/25/20/15/10/5 spatial field) ── */
-.pa-px-home-calibration {
+/* ── Movement 5: Calibration ── */
+.pa-px-calibration-section {
   position: relative;
   width: 100%;
-  height: 240svh;
+  height: 190svh;
   background-color: var(--px-ink);
 }
 
-.pa-px-home-calibration__stage {
+.pa-px-calibration-stage {
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   height: 100svh;
   overflow: hidden;
-  padding: clamp(40px, 6vh, 80px) var(--px-outer-gutter);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 0 var(--px-outer-gutter);
 }
 
-.pa-px-home-calibration__header {
-  max-width: 42rem;
+.pa-px-calibration__header {
+  margin-bottom: clamp(24px, 4vh, 48px);
+  max-width: 36rem;
 }
 
-.pa-px-home-calibration__header h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
+.pa-px-calibration__header h2 {
+  font-family: var(--px-font-family);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 85, 'opsz' 56;
+  color: var(--px-white);
+  margin-bottom: 8px;
 }
 
-.pa-px-home-calibration__header p {
+.pa-px-calibration__header p {
   font-size: var(--px-body);
-  line-height: 1.5;
-  opacity: 0.85;
+  color: var(--px-soft);
+  line-height: 1.45;
 }
 
-.pa-px-home-calibration__weights {
+.pa-px-calibration__proportions-field {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: var(--px-column-gap);
-  align-items: flex-end;
-  padding: 40px 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: clamp(16px, 3vw, 40px);
+  align-items: baseline;
 }
 
-.pa-px-home-calibration__weight-item {
+.pa-px-calibration-mass {
+  display: flex;
+  flex-direction: column;
+}
+
+.pa-px-calibration-mass__pct {
+  font-family: var(--px-font-family);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 78, 'opsz' 96;
+  line-height: 1;
+  color: var(--px-white);
+  margin-bottom: 6px;
+}
+
+.pa-px-calibration-mass__label {
+  font-size: var(--px-body);
+  font-weight: var(--px-weight-medium);
+  color: var(--px-white);
+  margin-bottom: 2px;
+}
+
+.pa-px-calibration-mass__role {
+  font-size: var(--px-body-sm);
+  color: var(--px-soft);
+  line-height: 1.35;
+}
+
+/* ── Movement 6: Time Exposure ── */
+.pa-px-time-section {
+  position: relative;
+  width: 100%;
+  height: 180svh;
+  background-color: var(--px-ink);
+}
+
+.pa-px-time-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--px-outer-gutter);
+}
+
+.pa-px-time__base-media,
+.pa-px-time__later-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pa-px-time__base-media {
+  z-index: 1;
+}
+
+.pa-px-time__base-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+
+.pa-px-time__later-media {
+  z-index: 2;
+  will-change: clip-path;
+}
+
+.pa-px-time__later-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.pa-px-time__editorial-text {
+  position: relative;
+  z-index: 5;
+  max-width: 38rem;
+}
+
+.pa-px-time__title {
+  font-family: var(--px-font-family);
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 82, 'opsz' 72;
+  line-height: 1.15;
+  color: var(--px-white);
+  margin-bottom: 16px;
+}
+
+.pa-px-time__support {
+  font-size: var(--px-body-lg);
+  line-height: 1.5;
+  color: var(--px-white);
+  opacity: 0.9;
+  margin-bottom: 24px;
+}
+
+.pa-px-time__findings-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.pa-px-home-calibration__pct {
-  font-family: var(--px-font-family);
-  font-size: clamp(3rem, 5.5vw, 5.5rem);
-  font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 78, 'opsz' 84;
-  line-height: 0.9;
+.pa-px-time__finding-item {
+  font-size: var(--px-body);
+  font-weight: var(--px-weight-medium);
   color: var(--px-white);
 }
 
-.pa-px-home-calibration__label {
-  font-size: var(--px-body-sm);
-  font-weight: var(--px-weight-medium);
-  line-height: 1.3;
-}
-
-.pa-px-home-calibration__role {
+.pa-px-time__disclaimer {
   font-size: var(--px-caption);
+  color: var(--px-soft);
   opacity: 0.7;
 }
 
-/* ── Scene 6: Time Exposure ── */
-.pa-px-home-time {
+/* ── Movement 7: Provenance & Inspection ── */
+.pa-px-trace-section {
   position: relative;
   width: 100%;
-  height: 240svh;
+  min-height: 100svh;
   background-color: var(--px-ink);
-}
-
-.pa-px-home-time__stage {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100svh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 var(--px-outer-gutter);
-}
-
-.pa-px-home-time__layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.pa-px-home-time__layer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.pa-px-home-time__layer--later {
-  clip-path: polygon(45% 0, 100% 0, 100% 100%, 55% 100%);
-  opacity: 0.85;
-}
-
-.pa-px-home-time__overlay-card {
-  position: relative;
-  z-index: 5;
-  max-width: 48rem;
-  background: rgba(18, 20, 22, 0.88);
-  padding: clamp(28px, 4vw, 48px);
-  border-radius: var(--px-radius-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.pa-px-home-time__overlay-card h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
-}
-
-/* ── Scene 7: Trace / Provenance Aperture ── */
-.pa-px-home-trace {
-  position: relative;
-  width: 100%;
-  height: 200svh;
-  background-color: var(--px-ink);
-}
-
-.pa-px-home-trace__stage {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100svh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 var(--px-outer-gutter);
   cursor: crosshair;
+  outline: none;
 }
 
-.pa-px-home-trace__base-layer,
-.pa-px-home-trace__inspect-layer {
+.pa-px-trace-stage {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--px-outer-gutter);
+}
+
+.pa-px-trace__interpreted-layer,
+.pa-px-trace__source-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 0 var(--px-outer-gutter);
 }
 
-.pa-px-home-trace__inspect-layer {
+.pa-px-trace__interpreted-layer {
+  background-color: var(--px-ink);
+  z-index: 1;
+}
+
+.pa-px-trace__source-layer {
   background-color: var(--px-white);
-  color: var(--px-ink);
+  z-index: 3;
   pointer-events: none;
 }
 
-.pa-px-home-trace__content {
-  max-width: 46rem;
+.pa-px-trace__content {
+  max-width: 48rem;
 }
 
-.pa-px-home-trace__content h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
+.pa-px-trace__title {
+  font-family: var(--px-font-family);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 80, 'opsz' 72;
+  line-height: 1.15;
+  color: var(--px-white);
   margin-bottom: 16px;
 }
 
-.pa-px-home-trace__content p {
+.pa-px-trace__support {
   font-size: var(--px-body-lg);
-  line-height: 1.5;
-  opacity: 0.85;
+  line-height: 1.55;
+  color: var(--px-white);
+  opacity: 0.9;
+  margin-bottom: 24px;
 }
 
-/* ── Scene 8: Finale ── */
-.pa-px-home-finale {
+.pa-px-trace__instruction {
+  font-size: var(--px-body-sm);
+  color: var(--px-soft);
+  opacity: 0.75;
+}
+
+.pa-px-trace__keyboard-btn {
+  background: transparent;
+  border: 1px solid var(--px-soft);
+  color: var(--px-white);
+  padding: 8px 16px;
+  font-size: var(--px-body-sm);
+  cursor: pointer;
+  margin-top: 16px;
+  border-radius: var(--px-radius-sm);
+}
+
+/* ── Movement 8: Finale & Pullback ── */
+.pa-px-finale-section {
   position: relative;
   width: 100%;
-  height: 200svh;
+  height: 180svh;
   background-color: var(--px-ink);
 }
 
-.pa-px-home-finale__stage {
+.pa-px-finale-stage {
   position: sticky;
   top: 0;
   left: 0;
@@ -498,77 +638,117 @@
   padding: 0 var(--px-outer-gutter);
 }
 
-.pa-px-home-finale__media-bg {
+.pa-px-finale__mosaic-field {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   opacity: 0.35;
   z-index: 1;
+  pointer-events: none;
 }
 
-.pa-px-home-finale__media-bg img {
+.pa-px-finale__fragment {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pa-px-finale__fragment img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.pa-px-home-finale__content {
+.pa-px-finale__editorial-resolution {
   position: relative;
   z-index: 5;
-  max-width: 54rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  max-width: 46rem;
 }
 
-.pa-px-home-finale__title {
+.pa-px-finale__resolved-phrase {
   font-family: var(--px-font-family);
-  font-size: var(--px-display-lg);
-  font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 80, 'opsz' 88;
-  line-height: 0.94;
-  letter-spacing: -0.025em;
-  color: var(--px-white);
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-style: italic;
+  color: var(--px-soft);
+  margin-bottom: 20px;
 }
 
-.pa-px-home-finale__support {
+.pa-px-finale__title {
+  font-family: var(--px-font-family);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' 80, 'opsz' 96;
+  line-height: 1.05;
+  color: var(--px-white);
+  margin-bottom: 20px;
+}
+
+.pa-px-finale__support {
   font-size: var(--px-body-lg);
   line-height: 1.5;
-  opacity: 0.85;
-  max-width: 32rem;
+  color: var(--px-white);
+  opacity: 0.9;
+  margin-bottom: 32px;
 }
 
-.pa-px-home-finale__actions {
+.pa-px-finale__actions {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 8px;
-  flex-wrap: wrap;
   justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-@media (max-width: 1023px) {
-  .pa-px-home-readings__branches {
-    grid-template-columns: repeat(2, 1fr);
+/* ── Mobile Responsive Rules (Parallel Design) ── */
+@media (max-width: 768px) {
+  .pa-px-entry-section,
+  .pa-px-situation-section,
+  .pa-px-readings-section,
+  .pa-px-journey-section,
+  .pa-px-calibration-section,
+  .pa-px-time-section,
+  .pa-px-finale-section {
     height: auto;
+    min-height: 100svh;
   }
-  .pa-px-home-calibration__weights {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-  }
-}
 
-@media (max-width: 767px) {
-  .pa-px-home-readings__branches {
+  .pa-px-entry-stage,
+  .pa-px-situation-stage,
+  .pa-px-readings-stage,
+  .pa-px-journey-stage,
+  .pa-px-calibration-stage,
+  .pa-px-time-stage,
+  .pa-px-finale-stage {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    padding: 100px var(--px-outer-gutter) 60px;
+  }
+
+  .pa-px-entry__secondary-crop {
+    display: none;
+  }
+
+  .pa-px-readings-stage {
     grid-template-columns: 1fr;
+    gap: 36px;
   }
-  .pa-px-home-calibration__weights {
-    grid-template-columns: repeat(2, 1fr);
+
+  .pa-px-readings__field {
+    padding-left: 0;
   }
-  .pa-px-home-entry__title {
-    font-size: clamp(2.4rem, 10vw, 3.8rem);
-    line-height: 0.95;
+
+  .pa-px-calibration__proportions-field {
+    grid-template-columns: 1fr;
+    grid-gap: 24px;
+  }
+
+  .pa-px-journey-env {
+    position: relative;
+    min-height: 80svh;
+    padding: 60px var(--px-outer-gutter);
   }
 }

@@ -8,7 +8,7 @@ export const PublicHeader = ({ onOpenIndex }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 30);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -23,7 +23,7 @@ export const PublicHeader = ({ onOpenIndex }) => {
         Personality Assessor
       </Link>
 
-      <nav className="pa-px-header__nav" aria-label="Primary navigation">
+      <nav className="pa-px-header__nav" aria-label="Primary public routes">
         <Link to="/career-intelligence" className="pa-px-header__link">
           Career
         </Link>
@@ -38,23 +38,23 @@ export const PublicHeader = ({ onOpenIndex }) => {
         </Link>
       </nav>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div className="pa-px-header__actions">
         <button
           type="button"
           onClick={onOpenIndex}
           className="pa-px-header__index-btn"
           aria-haspopup="dialog"
           aria-expanded="false"
-          aria-label="Open Atlas Index Menu"
+          aria-label="Open Site Index Menu"
         >
           Index
         </button>
 
-        <Link to={getLoginUrl(location.pathname)} className="pa-px-header__link" style={{ display: 'none' }}>
+        <Link to={getLoginUrl(location.pathname)} className="pa-px-header__link pa-px-header__login-link">
           Sign in
         </Link>
 
-        <Link to={getSignupAcquisitionUrl()} className="pa-px-btn-primary" style={{ height: '38px', padding: '0 16px', fontSize: '0.88rem' }}>
+        <Link to={getSignupAcquisitionUrl()} className="pa-px-btn-primary pa-px-header__cta">
           Build profile
         </Link>
       </div>

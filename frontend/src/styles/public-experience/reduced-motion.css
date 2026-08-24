@@ -1,48 +1,56 @@
 /**
  * Personality Assessor - Public Experience Reduced Motion Styles
- * Complete document flow alternatives when prefers-reduced-motion: reduce is active.
+ * Complete static document flow alternatives when prefers-reduced-motion: reduce is active.
  */
 
 @media (prefers-reduced-motion: reduce) {
   .pa-px-scene-sticky,
-  .pa-px-home-entry__stage,
-  .pa-px-home-situation__stage,
-  .pa-px-home-readings__stage,
-  .pa-px-home-passage__stage,
-  .pa-px-home-calibration__stage,
-  .pa-px-home-time__stage,
-  .pa-px-home-trace__stage,
-  .pa-px-home-finale__stage,
-  .pa-px-career-stage__sticky,
-  .pa-px-how-stage__sticky,
-  .pa-px-progress-stage__sticky {
+  .pa-px-entry-stage,
+  .pa-px-situation-stage,
+  .pa-px-readings-stage,
+  .pa-px-journey-stage,
+  .pa-px-calibration-stage,
+  .pa-px-time-stage,
+  .pa-px-trace-stage,
+  .pa-px-finale-stage,
+  .pa-px-how-stage-sticky,
+  .pa-px-progress-stage {
     position: relative !important;
     height: auto !important;
     min-height: 100vh;
     padding: 80px var(--px-outer-gutter) !important;
   }
 
-  .pa-px-home-entry,
-  .pa-px-home-situation,
-  .pa-px-home-readings,
-  .pa-px-home-passage,
-  .pa-px-home-calibration,
-  .pa-px-home-time,
-  .pa-px-home-trace,
-  .pa-px-home-finale,
-  .pa-px-career-stage,
-  .pa-px-how-stage,
-  .pa-px-progress-stage {
+  .pa-px-entry-section,
+  .pa-px-situation-section,
+  .pa-px-readings-section,
+  .pa-px-journey-section,
+  .pa-px-calibration-section,
+  .pa-px-time-section,
+  .pa-px-trace-section,
+  .pa-px-finale-section,
+  .pa-px-how-section,
+  .pa-px-progress-section {
     height: auto !important;
   }
 
-  .pa-px-home-passage__environment {
+  .pa-px-journey-env {
     position: relative !important;
     height: auto !important;
-    min-height: 70vh;
+    min-height: 60vh;
     opacity: 1 !important;
+    clip-path: none !important;
     transform: none !important;
     margin-bottom: 40px;
+  }
+
+  .pa-px-entry__secondary-crop {
+    display: none !important;
+  }
+
+  .pa-px-time__later-media {
+    clip-path: none !important;
+    opacity: 0.4 !important;
   }
 
   * {

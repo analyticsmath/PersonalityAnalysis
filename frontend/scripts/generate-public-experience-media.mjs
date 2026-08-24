@@ -28,7 +28,7 @@ const assetsConfig = [
     key: 'homeSituationDetail',
     sourceFile: 'home-analysis-vjg1teprcd0.jpg',
     id: 'vjg1teprcd0',
-    alt: 'Close analytical inspection of materials and technical drawings',
+    alt: 'Close analytical inspection of materials and technical drawings in engineering studio',
     title: 'Methodological inspection and data observation',
     sceneRole: 'Home Situation inset detail & Multiple Readings anchor',
     creator: 'Andrej Lišakov',
@@ -40,7 +40,7 @@ const assetsConfig = [
     key: 'workworldPrecision',
     sourceFile: 'career-complex-machine-shbyg6mb3o.jpg',
     id: 'shbyg6mb3o',
-    alt: 'Engineer operating precision mechanical systems with direct physical control',
+    alt: 'Engineer operating precision mechanical systems with direct physical control in engineering workshop',
     title: 'Precision engineering and mechanical systems',
     sceneRole: 'Workworld Condition: Precision',
     creator: 'Andrej Lišakov',
@@ -76,7 +76,7 @@ const assetsConfig = [
     key: 'workworldPressure',
     sourceFile: 'career-control-khikhsrqgt4.jpg',
     id: 'khikhsrqgt4',
-    alt: 'Operators coordinating real-time systems under operational pressure',
+    alt: 'Operators coordinating real-time systems in operational control center',
     title: 'Operational systems coordination and live control',
     sceneRole: 'Workworld Condition: Operational Pressure',
     creator: 'Andrej Lišakov',
@@ -88,8 +88,8 @@ const assetsConfig = [
     key: 'careerDeepInquiry',
     sourceFile: 'career-deep-inquiry-gnasyqdkdbi.jpg',
     id: 'gnasyqdkdbi',
-    alt: 'Scientist conducting meticulous examination with laboratory instrument',
-    title: 'Deep technical inquiry and experimental investigation',
+    alt: 'Technical investigator analyzing precision diagnostics and data patterns in technical workshop',
+    title: 'Deep technical inquiry and investigative analysis',
     sceneRole: 'Career World 2: Deep Inquiry',
     creator: 'Andrej Lišakov',
     sourcePlatform: 'Unsplash Plus',
@@ -100,7 +100,7 @@ const assetsConfig = [
     key: 'careerCoordination',
     sourceFile: 'career-coordination-qnfckqwyu1k.jpg',
     id: 'qnfckqwyu1k',
-    alt: 'Engineers collaborating closely over technical blueprints',
+    alt: 'Engineers collaborating closely over technical blueprints in project room',
     title: 'Cross-functional delivery and team alignment',
     sceneRole: 'Career World 3: Collaborative Delivery',
     creator: 'Andrej Lišakov',
@@ -112,7 +112,7 @@ const assetsConfig = [
     key: 'careerSynthesis',
     sourceFile: 'career-3d-printing-6e5sxczdmce.jpg',
     id: '6e5sxczdmcE',
-    alt: 'Additive manufacturing machine fabricating precise structural component',
+    alt: 'Additive manufacturing machine fabricating precise structural component in fabrication lab',
     title: 'Iterative prototyping and creative engineering',
     sceneRole: 'Career World 5: Creative Synthesis',
     creator: 'Andrej Lišakov',
@@ -124,7 +124,7 @@ const assetsConfig = [
     key: 'howTransformation',
     sourceFile: 'how-process-jhtfogpvg8.jpg',
     id: 'jhtfogpvg8',
-    alt: 'Hands assembling and refining physical technical prototype',
+    alt: 'Hands assembling and refining physical technical prototype in workshop',
     title: 'Direct transformation from raw input into structured output',
     sceneRole: 'How It Works Transformation Stage',
     creator: 'Andrej Lišakov',
@@ -136,7 +136,7 @@ const assetsConfig = [
     key: 'trustDiagnostic',
     sourceFile: 'trust-diagnostic-aq7oa5ikihs.jpg',
     id: 'aq7oa5ikihs',
-    alt: 'High-precision measurement instrument showing calibrated signal',
+    alt: 'High-precision technical measurement instrument showing calibrated signal',
     title: 'Diagnostic calibration and mathematical provenance',
     sceneRole: 'Trust & X-Ray inspection stage',
     creator: 'Andrej Lišakov',
@@ -200,124 +200,105 @@ async function generateMedia() {
         const baseName = `${config.key}-${w}`;
 
         // AVIF
-        const avifName = `${baseName}.avif`;
-        await sharp(inputPath)
-          .resize({ width: w, withoutEnlargement: true })
-          .avif({ quality: 78, effort: 4 })
-          .toFile(path.join(outputDir, avifName));
-        variants.avif[w] = `/media/public-experience/${avifName}`;
+        const avifPath = path.join(outputDir, `${baseName}.avif`);
+        await image.clone().resize(w).avif({ quality: 80 }).toFile(avifPath);
+        variants.avif[w] = `/media/public-experience/${baseName}.avif`;
 
         // WebP
-        const webpName = `${baseName}.webp`;
-        await sharp(inputPath)
-          .resize({ width: w, withoutEnlargement: true })
-          .webp({ quality: 82, effort: 4 })
-          .toFile(path.join(outputDir, webpName));
-        variants.webp[w] = `/media/public-experience/${webpName}`;
+        const webpPath = path.join(outputDir, `${baseName}.webp`);
+        await image.clone().resize(w).webp({ quality: 84 }).toFile(webpPath);
+        variants.webp[w] = `/media/public-experience/${baseName}.webp`;
 
-        // JPG Fallback
-        const jpgName = `${baseName}.jpg`;
-        await sharp(inputPath)
-          .resize({ width: w, withoutEnlargement: true })
-          .jpeg({ quality: 84, mozjpeg: true })
-          .toFile(path.join(outputDir, jpgName));
-        variants.jpg[w] = `/media/public-experience/${jpgName}`;
+        // JPG
+        const jpgPath = path.join(outputDir, `${baseName}.jpg`);
+        await image.clone().resize(w).jpeg({ quality: 86, mozjpeg: true }).toFile(jpgPath);
+        variants.jpg[w] = `/media/public-experience/${baseName}.jpg`;
       }
     }
 
     // 2. Mobile 4:5 portrait crops
-    for (const mw of mobileWidths) {
-      const mh = Math.round(mw * 1.25); // 4:5 aspect ratio
-      const baseName = `${config.key}-portrait-${mw}`;
+    for (const w of mobileWidths) {
+      const h = Math.round((w * 5) / 4);
+      const baseName = `${config.key}-mobile-${w}`;
 
-      // AVIF
-      const avifName = `${baseName}.avif`;
-      await sharp(inputPath)
-        .resize({ width: mw, height: mh, fit: 'cover', position: 'center' })
-        .avif({ quality: 78, effort: 4 })
-        .toFile(path.join(outputDir, avifName));
-      variants.mobileAvif[mw] = `/media/public-experience/${avifName}`;
+      // AVIF 4:5
+      const avifPath = path.join(outputDir, `${baseName}.avif`);
+      await image.clone().resize(w, h, { fit: 'cover', position: 'entropy' }).avif({ quality: 78 }).toFile(avifPath);
+      variants.mobileAvif[w] = `/media/public-experience/${baseName}.avif`;
 
-      // WebP
-      const webpName = `${baseName}.webp`;
-      await sharp(inputPath)
-        .resize({ width: mw, height: mh, fit: 'cover', position: 'center' })
-        .webp({ quality: 82, effort: 4 })
-        .toFile(path.join(outputDir, webpName));
-      variants.mobileWebp[mw] = `/media/public-experience/${webpName}`;
+      // WebP 4:5
+      const webpPath = path.join(outputDir, `${baseName}.webp`);
+      await image.clone().resize(w, h, { fit: 'cover', position: 'entropy' }).webp({ quality: 82 }).toFile(webpPath);
+      variants.mobileWebp[w] = `/media/public-experience/${baseName}.webp`;
 
-      // JPG
-      const jpgName = `${baseName}.jpg`;
-      await sharp(inputPath)
-        .resize({ width: mw, height: mh, fit: 'cover', position: 'center' })
-        .jpeg({ quality: 84, mozjpeg: true })
-        .toFile(path.join(outputDir, jpgName));
-      variants.mobileJpg[mw] = `/media/public-experience/${jpgName}`;
+      // JPG 4:5
+      const jpgPath = path.join(outputDir, `${baseName}.jpg`);
+      await image.clone().resize(w, h, { fit: 'cover', position: 'entropy' }).jpeg({ quality: 84, mozjpeg: true }).toFile(jpgPath);
+      variants.mobileJpg[w] = `/media/public-experience/${baseName}.jpg`;
     }
 
-    // Default primary source & fallbacks
-    const primaryDesktopWidth = variants.webp[1440] ? 1440 : Object.keys(variants.webp)[0];
-    const sourceWebp = variants.webp[primaryDesktopWidth];
-    const sourceAvif = variants.avif[primaryDesktopWidth];
-    const fallbackJpg = variants.jpg[primaryDesktopWidth];
+    const availableDesktopWidths = Object.keys(variants.webp).map(Number).sort((a, b) => b - a);
+    const primaryWidth = availableDesktopWidths[0] || 1920;
 
     manifest[config.key] = {
       key: config.key,
       id: config.id,
-      alt: config.alt,
       title: config.title,
+      alt: config.alt,
       sceneRole: config.sceneRole,
       creator: config.creator,
       sourcePlatform: config.sourcePlatform,
       sceneTone: config.sceneTone,
       focalPoint: config.focalPoint,
-      intrinsicWidth: metadata.width,
-      intrinsicHeight: metadata.height,
-      sourceWebp,
-      sourceAvif,
-      fallbackJpg,
-      avifSrcSet: Object.entries(variants.avif).map(([w, url]) => `${url} ${w}w`).join(', '),
-      webpSrcSet: Object.entries(variants.webp).map(([w, url]) => `${url} ${w}w`).join(', '),
-      jpgSrcSet: Object.entries(variants.jpg).map(([w, url]) => `${url} ${w}w`).join(', '),
-      mobileAvifSrcSet: Object.entries(variants.mobileAvif).map(([w, url]) => `${url} ${w}w`).join(', '),
-      mobileWebpSrcSet: Object.entries(variants.mobileWebp).map(([w, url]) => `${url} ${w}w`).join(', '),
-      mobileJpgSrcSet: Object.entries(variants.mobileJpg).map(([w, url]) => `${url} ${w}w`).join(', '),
+      intrinsicDimensions: {
+        width: metadata.width,
+        height: metadata.height,
+        aspectRatio: (metadata.width / metadata.height).toFixed(3),
+      },
+      sourceWebp: variants.webp[primaryWidth],
+      sourceAvif: variants.avif[primaryWidth],
+      fallbackJpg: variants.jpg[primaryWidth],
+      avifSrcSet: Object.entries(variants.avif)
+        .map(([w, url]) => `${url} ${w}w`)
+        .join(', '),
+      webpSrcSet: Object.entries(variants.webp)
+        .map(([w, url]) => `${url} ${w}w`)
+        .join(', '),
+      jpgSrcSet: Object.entries(variants.jpg)
+        .map(([w, url]) => `${url} ${w}w`)
+        .join(', '),
+      mobileAvifSrcSet: Object.entries(variants.mobileAvif)
+        .map(([w, url]) => `${url} ${w}w`)
+        .join(', '),
+      mobileWebpSrcSet: Object.entries(variants.mobileWebp)
+        .map(([w, url]) => `${url} ${w}w`)
+        .join(', '),
+      mobileJpgSrcSet: Object.entries(variants.mobileJpg)
+        .map(([w, url]) => `${url} ${w}w`)
+        .join(', '),
+      retrievedAt,
+      nonEndorsementNote,
     };
   }
 
-  // Write JSON Manifest
-  await fs.writeFile(
-    manifestJsonPath,
-    JSON.stringify(
-      {
-        retrievedAt,
-        nonEndorsementNote,
-        assets: manifest,
-      },
-      null,
-      2
-    )
-  );
-
-  // Write JS Manifest Module
+  // Write JS manifest for frontend
   const jsContent = `/**
- * Personality Assessor - Public Experience Media Manifest
+ * Public Experience High-Resolution Media Manifest
  * Sourced from licensed Unsplash Plus originals with per-asset provenance recorded below.
+ * Generated: ${retrievedAt}
  */
-
-export const NON_ENDORSEMENT_STATEMENT =
-  'People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers.';
 
 export const MEDIA_MANIFEST_PX = ${JSON.stringify(manifest, null, 2)};
 
 export default MEDIA_MANIFEST_PX;
 `;
 
-  await fs.writeFile(manifestJsPath, jsContent);
-  console.log(`Media generation complete! Manifest written to ${manifestJsPath}`);
+  await fs.writeFile(manifestJsPath, jsContent, 'utf-8');
+  await fs.writeFile(manifestJsonPath, JSON.stringify(manifest, null, 2), 'utf-8');
+  console.log('✅ Generated High-Resolution Media Manifest & Derivatives.');
 }
 
 generateMedia().catch((err) => {
-  console.error('Media generation failed:', err);
+  console.error('Error generating media:', err);
   process.exit(1);
 });

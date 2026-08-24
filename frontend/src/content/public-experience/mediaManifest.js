@@ -1,17 +1,15 @@
 /**
- * Personality Assessor - Public Experience Media Manifest
+ * Public Experience High-Resolution Media Manifest
  * Sourced from licensed Unsplash Plus originals with per-asset provenance recorded below.
+ * Generated: 2026-08-24T13:48:46.189Z
  */
-
-export const NON_ENDORSEMENT_STATEMENT =
-  'People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers.';
 
 export const MEDIA_MANIFEST_PX = {
   "homeWorldEntry": {
     "key": "homeWorldEntry",
     "id": "CTufAW5vbm8",
-    "alt": "Professional working in contextual design and architectural studio environment",
     "title": "Spatial creation and environmental context",
+    "alt": "Professional working in contextual design and architectural studio environment",
     "sceneRole": "Home World Entry & Finale wide pullback",
     "creator": "Roberta Sant'Anna",
     "sourcePlatform": "Unsplash Plus",
@@ -21,23 +19,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 45%"
     },
-    "intrinsicWidth": 1074,
-    "intrinsicHeight": 806,
+    "intrinsicDimensions": {
+      "width": 1074,
+      "height": 806,
+      "aspectRatio": "1.333"
+    },
     "sourceWebp": "/media/public-experience/homeWorldEntry-720.webp",
     "sourceAvif": "/media/public-experience/homeWorldEntry-720.avif",
     "fallbackJpg": "/media/public-experience/homeWorldEntry-720.jpg",
     "avifSrcSet": "/media/public-experience/homeWorldEntry-720.avif 720w",
     "webpSrcSet": "/media/public-experience/homeWorldEntry-720.webp 720w",
     "jpgSrcSet": "/media/public-experience/homeWorldEntry-720.jpg 720w",
-    "mobileAvifSrcSet": "/media/public-experience/homeWorldEntry-portrait-480.avif 480w, /media/public-experience/homeWorldEntry-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/homeWorldEntry-portrait-480.webp 480w, /media/public-experience/homeWorldEntry-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/homeWorldEntry-portrait-480.jpg 480w, /media/public-experience/homeWorldEntry-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/homeWorldEntry-mobile-480.avif 480w, /media/public-experience/homeWorldEntry-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/homeWorldEntry-mobile-480.webp 480w, /media/public-experience/homeWorldEntry-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/homeWorldEntry-mobile-480.jpg 480w, /media/public-experience/homeWorldEntry-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "homeSituationDetail": {
     "key": "homeSituationDetail",
     "id": "vjg1teprcd0",
-    "alt": "Close analytical inspection of materials and technical drawings",
     "title": "Methodological inspection and data observation",
+    "alt": "Close analytical inspection of materials and technical drawings in engineering studio",
     "sceneRole": "Home Situation inset detail & Multiple Readings anchor",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -47,23 +50,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 45%"
     },
-    "intrinsicWidth": 6400,
-    "intrinsicHeight": 4267,
-    "sourceWebp": "/media/public-experience/homeSituationDetail-1440.webp",
-    "sourceAvif": "/media/public-experience/homeSituationDetail-1440.avif",
-    "fallbackJpg": "/media/public-experience/homeSituationDetail-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 6400,
+      "height": 4267,
+      "aspectRatio": "1.500"
+    },
+    "sourceWebp": "/media/public-experience/homeSituationDetail-1920.webp",
+    "sourceAvif": "/media/public-experience/homeSituationDetail-1920.avif",
+    "fallbackJpg": "/media/public-experience/homeSituationDetail-1920.jpg",
     "avifSrcSet": "/media/public-experience/homeSituationDetail-720.avif 720w, /media/public-experience/homeSituationDetail-1080.avif 1080w, /media/public-experience/homeSituationDetail-1440.avif 1440w, /media/public-experience/homeSituationDetail-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/homeSituationDetail-720.webp 720w, /media/public-experience/homeSituationDetail-1080.webp 1080w, /media/public-experience/homeSituationDetail-1440.webp 1440w, /media/public-experience/homeSituationDetail-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/homeSituationDetail-720.jpg 720w, /media/public-experience/homeSituationDetail-1080.jpg 1080w, /media/public-experience/homeSituationDetail-1440.jpg 1440w, /media/public-experience/homeSituationDetail-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/homeSituationDetail-portrait-480.avif 480w, /media/public-experience/homeSituationDetail-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/homeSituationDetail-portrait-480.webp 480w, /media/public-experience/homeSituationDetail-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/homeSituationDetail-portrait-480.jpg 480w, /media/public-experience/homeSituationDetail-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/homeSituationDetail-mobile-480.avif 480w, /media/public-experience/homeSituationDetail-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/homeSituationDetail-mobile-480.webp 480w, /media/public-experience/homeSituationDetail-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/homeSituationDetail-mobile-480.jpg 480w, /media/public-experience/homeSituationDetail-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "workworldPrecision": {
     "key": "workworldPrecision",
     "id": "shbyg6mb3o",
-    "alt": "Engineer operating precision mechanical systems with direct physical control",
     "title": "Precision engineering and mechanical systems",
+    "alt": "Engineer operating precision mechanical systems with direct physical control in engineering workshop",
     "sceneRole": "Workworld Condition: Precision",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -73,23 +81,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 6600,
-    "intrinsicHeight": 4400,
-    "sourceWebp": "/media/public-experience/workworldPrecision-1440.webp",
-    "sourceAvif": "/media/public-experience/workworldPrecision-1440.avif",
-    "fallbackJpg": "/media/public-experience/workworldPrecision-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 6600,
+      "height": 4400,
+      "aspectRatio": "1.500"
+    },
+    "sourceWebp": "/media/public-experience/workworldPrecision-1920.webp",
+    "sourceAvif": "/media/public-experience/workworldPrecision-1920.avif",
+    "fallbackJpg": "/media/public-experience/workworldPrecision-1920.jpg",
     "avifSrcSet": "/media/public-experience/workworldPrecision-720.avif 720w, /media/public-experience/workworldPrecision-1080.avif 1080w, /media/public-experience/workworldPrecision-1440.avif 1440w, /media/public-experience/workworldPrecision-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/workworldPrecision-720.webp 720w, /media/public-experience/workworldPrecision-1080.webp 1080w, /media/public-experience/workworldPrecision-1440.webp 1440w, /media/public-experience/workworldPrecision-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/workworldPrecision-720.jpg 720w, /media/public-experience/workworldPrecision-1080.jpg 1080w, /media/public-experience/workworldPrecision-1440.jpg 1440w, /media/public-experience/workworldPrecision-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/workworldPrecision-portrait-480.avif 480w, /media/public-experience/workworldPrecision-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/workworldPrecision-portrait-480.webp 480w, /media/public-experience/workworldPrecision-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/workworldPrecision-portrait-480.jpg 480w, /media/public-experience/workworldPrecision-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/workworldPrecision-mobile-480.avif 480w, /media/public-experience/workworldPrecision-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/workworldPrecision-mobile-480.webp 480w, /media/public-experience/workworldPrecision-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/workworldPrecision-mobile-480.jpg 480w, /media/public-experience/workworldPrecision-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "workworldAutonomy": {
     "key": "workworldAutonomy",
     "id": "rjziomx-slq",
-    "alt": "Professional working independently in quiet architectural workspace",
     "title": "Autonomous focus and self-directed creation",
+    "alt": "Professional working independently in quiet architectural workspace",
     "sceneRole": "Workworld Condition: Autonomy",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -99,23 +112,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 45%"
     },
-    "intrinsicWidth": 735,
-    "intrinsicHeight": 980,
+    "intrinsicDimensions": {
+      "width": 735,
+      "height": 980,
+      "aspectRatio": "0.750"
+    },
     "sourceWebp": "/media/public-experience/workworldAutonomy-720.webp",
     "sourceAvif": "/media/public-experience/workworldAutonomy-720.avif",
     "fallbackJpg": "/media/public-experience/workworldAutonomy-720.jpg",
     "avifSrcSet": "/media/public-experience/workworldAutonomy-720.avif 720w",
     "webpSrcSet": "/media/public-experience/workworldAutonomy-720.webp 720w",
     "jpgSrcSet": "/media/public-experience/workworldAutonomy-720.jpg 720w",
-    "mobileAvifSrcSet": "/media/public-experience/workworldAutonomy-portrait-480.avif 480w, /media/public-experience/workworldAutonomy-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/workworldAutonomy-portrait-480.webp 480w, /media/public-experience/workworldAutonomy-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/workworldAutonomy-portrait-480.jpg 480w, /media/public-experience/workworldAutonomy-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/workworldAutonomy-mobile-480.avif 480w, /media/public-experience/workworldAutonomy-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/workworldAutonomy-mobile-480.webp 480w, /media/public-experience/workworldAutonomy-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/workworldAutonomy-mobile-480.jpg 480w, /media/public-experience/workworldAutonomy-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "workworldCollaboration": {
     "key": "workworldCollaboration",
     "id": "8ayxzntpap0",
-    "alt": "Designers collaborating across an open work table with shared artifacts",
     "title": "Collaborative analysis and situational negotiation",
+    "alt": "Designers collaborating across an open work table with shared artifacts",
     "sceneRole": "Workworld Condition: Collaboration",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -125,23 +143,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 5800,
-    "intrinsicHeight": 3867,
-    "sourceWebp": "/media/public-experience/workworldCollaboration-1440.webp",
-    "sourceAvif": "/media/public-experience/workworldCollaboration-1440.avif",
-    "fallbackJpg": "/media/public-experience/workworldCollaboration-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 5800,
+      "height": 3867,
+      "aspectRatio": "1.500"
+    },
+    "sourceWebp": "/media/public-experience/workworldCollaboration-1920.webp",
+    "sourceAvif": "/media/public-experience/workworldCollaboration-1920.avif",
+    "fallbackJpg": "/media/public-experience/workworldCollaboration-1920.jpg",
     "avifSrcSet": "/media/public-experience/workworldCollaboration-720.avif 720w, /media/public-experience/workworldCollaboration-1080.avif 1080w, /media/public-experience/workworldCollaboration-1440.avif 1440w, /media/public-experience/workworldCollaboration-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/workworldCollaboration-720.webp 720w, /media/public-experience/workworldCollaboration-1080.webp 1080w, /media/public-experience/workworldCollaboration-1440.webp 1440w, /media/public-experience/workworldCollaboration-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/workworldCollaboration-720.jpg 720w, /media/public-experience/workworldCollaboration-1080.jpg 1080w, /media/public-experience/workworldCollaboration-1440.jpg 1440w, /media/public-experience/workworldCollaboration-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/workworldCollaboration-portrait-480.avif 480w, /media/public-experience/workworldCollaboration-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/workworldCollaboration-portrait-480.webp 480w, /media/public-experience/workworldCollaboration-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/workworldCollaboration-portrait-480.jpg 480w, /media/public-experience/workworldCollaboration-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/workworldCollaboration-mobile-480.avif 480w, /media/public-experience/workworldCollaboration-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/workworldCollaboration-mobile-480.webp 480w, /media/public-experience/workworldCollaboration-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/workworldCollaboration-mobile-480.jpg 480w, /media/public-experience/workworldCollaboration-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "workworldPressure": {
     "key": "workworldPressure",
     "id": "khikhsrqgt4",
-    "alt": "Operators coordinating real-time systems under operational pressure",
     "title": "Operational systems coordination and live control",
+    "alt": "Operators coordinating real-time systems in operational control center",
     "sceneRole": "Workworld Condition: Operational Pressure",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -151,23 +174,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 6720,
-    "intrinsicHeight": 4480,
-    "sourceWebp": "/media/public-experience/workworldPressure-1440.webp",
-    "sourceAvif": "/media/public-experience/workworldPressure-1440.avif",
-    "fallbackJpg": "/media/public-experience/workworldPressure-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 6720,
+      "height": 4480,
+      "aspectRatio": "1.500"
+    },
+    "sourceWebp": "/media/public-experience/workworldPressure-1920.webp",
+    "sourceAvif": "/media/public-experience/workworldPressure-1920.avif",
+    "fallbackJpg": "/media/public-experience/workworldPressure-1920.jpg",
     "avifSrcSet": "/media/public-experience/workworldPressure-720.avif 720w, /media/public-experience/workworldPressure-1080.avif 1080w, /media/public-experience/workworldPressure-1440.avif 1440w, /media/public-experience/workworldPressure-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/workworldPressure-720.webp 720w, /media/public-experience/workworldPressure-1080.webp 1080w, /media/public-experience/workworldPressure-1440.webp 1440w, /media/public-experience/workworldPressure-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/workworldPressure-720.jpg 720w, /media/public-experience/workworldPressure-1080.jpg 1080w, /media/public-experience/workworldPressure-1440.jpg 1440w, /media/public-experience/workworldPressure-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/workworldPressure-portrait-480.avif 480w, /media/public-experience/workworldPressure-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/workworldPressure-portrait-480.webp 480w, /media/public-experience/workworldPressure-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/workworldPressure-portrait-480.jpg 480w, /media/public-experience/workworldPressure-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/workworldPressure-mobile-480.avif 480w, /media/public-experience/workworldPressure-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/workworldPressure-mobile-480.webp 480w, /media/public-experience/workworldPressure-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/workworldPressure-mobile-480.jpg 480w, /media/public-experience/workworldPressure-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "careerDeepInquiry": {
     "key": "careerDeepInquiry",
     "id": "gnasyqdkdbi",
-    "alt": "Scientist conducting meticulous examination with laboratory instrument",
-    "title": "Deep technical inquiry and experimental investigation",
+    "title": "Deep technical inquiry and investigative analysis",
+    "alt": "Technical investigator analyzing precision diagnostics and data patterns in technical workshop",
     "sceneRole": "Career World 2: Deep Inquiry",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -177,23 +205,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 45%",
       "mobile": "50% 40%"
     },
-    "intrinsicWidth": 7439,
-    "intrinsicHeight": 4184,
-    "sourceWebp": "/media/public-experience/careerDeepInquiry-1440.webp",
-    "sourceAvif": "/media/public-experience/careerDeepInquiry-1440.avif",
-    "fallbackJpg": "/media/public-experience/careerDeepInquiry-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 7439,
+      "height": 4184,
+      "aspectRatio": "1.778"
+    },
+    "sourceWebp": "/media/public-experience/careerDeepInquiry-1920.webp",
+    "sourceAvif": "/media/public-experience/careerDeepInquiry-1920.avif",
+    "fallbackJpg": "/media/public-experience/careerDeepInquiry-1920.jpg",
     "avifSrcSet": "/media/public-experience/careerDeepInquiry-720.avif 720w, /media/public-experience/careerDeepInquiry-1080.avif 1080w, /media/public-experience/careerDeepInquiry-1440.avif 1440w, /media/public-experience/careerDeepInquiry-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/careerDeepInquiry-720.webp 720w, /media/public-experience/careerDeepInquiry-1080.webp 1080w, /media/public-experience/careerDeepInquiry-1440.webp 1440w, /media/public-experience/careerDeepInquiry-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/careerDeepInquiry-720.jpg 720w, /media/public-experience/careerDeepInquiry-1080.jpg 1080w, /media/public-experience/careerDeepInquiry-1440.jpg 1440w, /media/public-experience/careerDeepInquiry-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/careerDeepInquiry-portrait-480.avif 480w, /media/public-experience/careerDeepInquiry-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/careerDeepInquiry-portrait-480.webp 480w, /media/public-experience/careerDeepInquiry-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/careerDeepInquiry-portrait-480.jpg 480w, /media/public-experience/careerDeepInquiry-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/careerDeepInquiry-mobile-480.avif 480w, /media/public-experience/careerDeepInquiry-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/careerDeepInquiry-mobile-480.webp 480w, /media/public-experience/careerDeepInquiry-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/careerDeepInquiry-mobile-480.jpg 480w, /media/public-experience/careerDeepInquiry-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "careerCoordination": {
     "key": "careerCoordination",
     "id": "qnfckqwyu1k",
-    "alt": "Engineers collaborating closely over technical blueprints",
     "title": "Cross-functional delivery and team alignment",
+    "alt": "Engineers collaborating closely over technical blueprints in project room",
     "sceneRole": "Career World 3: Collaborative Delivery",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -203,23 +236,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 7728,
-    "intrinsicHeight": 5152,
-    "sourceWebp": "/media/public-experience/careerCoordination-1440.webp",
-    "sourceAvif": "/media/public-experience/careerCoordination-1440.avif",
-    "fallbackJpg": "/media/public-experience/careerCoordination-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 7728,
+      "height": 5152,
+      "aspectRatio": "1.500"
+    },
+    "sourceWebp": "/media/public-experience/careerCoordination-1920.webp",
+    "sourceAvif": "/media/public-experience/careerCoordination-1920.avif",
+    "fallbackJpg": "/media/public-experience/careerCoordination-1920.jpg",
     "avifSrcSet": "/media/public-experience/careerCoordination-720.avif 720w, /media/public-experience/careerCoordination-1080.avif 1080w, /media/public-experience/careerCoordination-1440.avif 1440w, /media/public-experience/careerCoordination-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/careerCoordination-720.webp 720w, /media/public-experience/careerCoordination-1080.webp 1080w, /media/public-experience/careerCoordination-1440.webp 1440w, /media/public-experience/careerCoordination-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/careerCoordination-720.jpg 720w, /media/public-experience/careerCoordination-1080.jpg 1080w, /media/public-experience/careerCoordination-1440.jpg 1440w, /media/public-experience/careerCoordination-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/careerCoordination-portrait-480.avif 480w, /media/public-experience/careerCoordination-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/careerCoordination-portrait-480.webp 480w, /media/public-experience/careerCoordination-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/careerCoordination-portrait-480.jpg 480w, /media/public-experience/careerCoordination-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/careerCoordination-mobile-480.avif 480w, /media/public-experience/careerCoordination-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/careerCoordination-mobile-480.webp 480w, /media/public-experience/careerCoordination-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/careerCoordination-mobile-480.jpg 480w, /media/public-experience/careerCoordination-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "careerSynthesis": {
     "key": "careerSynthesis",
     "id": "6e5sxczdmcE",
-    "alt": "Additive manufacturing machine fabricating precise structural component",
     "title": "Iterative prototyping and creative engineering",
+    "alt": "Additive manufacturing machine fabricating precise structural component in fabrication lab",
     "sceneRole": "Career World 5: Creative Synthesis",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -229,23 +267,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 6386,
-    "intrinsicHeight": 4790,
-    "sourceWebp": "/media/public-experience/careerSynthesis-1440.webp",
-    "sourceAvif": "/media/public-experience/careerSynthesis-1440.avif",
-    "fallbackJpg": "/media/public-experience/careerSynthesis-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 6386,
+      "height": 4790,
+      "aspectRatio": "1.333"
+    },
+    "sourceWebp": "/media/public-experience/careerSynthesis-1920.webp",
+    "sourceAvif": "/media/public-experience/careerSynthesis-1920.avif",
+    "fallbackJpg": "/media/public-experience/careerSynthesis-1920.jpg",
     "avifSrcSet": "/media/public-experience/careerSynthesis-720.avif 720w, /media/public-experience/careerSynthesis-1080.avif 1080w, /media/public-experience/careerSynthesis-1440.avif 1440w, /media/public-experience/careerSynthesis-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/careerSynthesis-720.webp 720w, /media/public-experience/careerSynthesis-1080.webp 1080w, /media/public-experience/careerSynthesis-1440.webp 1440w, /media/public-experience/careerSynthesis-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/careerSynthesis-720.jpg 720w, /media/public-experience/careerSynthesis-1080.jpg 1080w, /media/public-experience/careerSynthesis-1440.jpg 1440w, /media/public-experience/careerSynthesis-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/careerSynthesis-portrait-480.avif 480w, /media/public-experience/careerSynthesis-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/careerSynthesis-portrait-480.webp 480w, /media/public-experience/careerSynthesis-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/careerSynthesis-portrait-480.jpg 480w, /media/public-experience/careerSynthesis-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/careerSynthesis-mobile-480.avif 480w, /media/public-experience/careerSynthesis-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/careerSynthesis-mobile-480.webp 480w, /media/public-experience/careerSynthesis-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/careerSynthesis-mobile-480.jpg 480w, /media/public-experience/careerSynthesis-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "howTransformation": {
     "key": "howTransformation",
     "id": "jhtfogpvg8",
-    "alt": "Hands assembling and refining physical technical prototype",
     "title": "Direct transformation from raw input into structured output",
+    "alt": "Hands assembling and refining physical technical prototype in workshop",
     "sceneRole": "How It Works Transformation Stage",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -255,23 +298,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 45%"
     },
-    "intrinsicWidth": 6000,
-    "intrinsicHeight": 4000,
-    "sourceWebp": "/media/public-experience/howTransformation-1440.webp",
-    "sourceAvif": "/media/public-experience/howTransformation-1440.avif",
-    "fallbackJpg": "/media/public-experience/howTransformation-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 6000,
+      "height": 4000,
+      "aspectRatio": "1.500"
+    },
+    "sourceWebp": "/media/public-experience/howTransformation-1920.webp",
+    "sourceAvif": "/media/public-experience/howTransformation-1920.avif",
+    "fallbackJpg": "/media/public-experience/howTransformation-1920.jpg",
     "avifSrcSet": "/media/public-experience/howTransformation-720.avif 720w, /media/public-experience/howTransformation-1080.avif 1080w, /media/public-experience/howTransformation-1440.avif 1440w, /media/public-experience/howTransformation-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/howTransformation-720.webp 720w, /media/public-experience/howTransformation-1080.webp 1080w, /media/public-experience/howTransformation-1440.webp 1440w, /media/public-experience/howTransformation-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/howTransformation-720.jpg 720w, /media/public-experience/howTransformation-1080.jpg 1080w, /media/public-experience/howTransformation-1440.jpg 1440w, /media/public-experience/howTransformation-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/howTransformation-portrait-480.avif 480w, /media/public-experience/howTransformation-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/howTransformation-portrait-480.webp 480w, /media/public-experience/howTransformation-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/howTransformation-portrait-480.jpg 480w, /media/public-experience/howTransformation-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/howTransformation-mobile-480.avif 480w, /media/public-experience/howTransformation-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/howTransformation-mobile-480.webp 480w, /media/public-experience/howTransformation-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/howTransformation-mobile-480.jpg 480w, /media/public-experience/howTransformation-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "trustDiagnostic": {
     "key": "trustDiagnostic",
     "id": "aq7oa5ikihs",
-    "alt": "High-precision measurement instrument showing calibrated signal",
     "title": "Diagnostic calibration and mathematical provenance",
+    "alt": "High-precision technical measurement instrument showing calibrated signal",
     "sceneRole": "Trust & X-Ray inspection stage",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -281,23 +329,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 6720,
-    "intrinsicHeight": 4480,
-    "sourceWebp": "/media/public-experience/trustDiagnostic-1440.webp",
-    "sourceAvif": "/media/public-experience/trustDiagnostic-1440.avif",
-    "fallbackJpg": "/media/public-experience/trustDiagnostic-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 6720,
+      "height": 4480,
+      "aspectRatio": "1.500"
+    },
+    "sourceWebp": "/media/public-experience/trustDiagnostic-1920.webp",
+    "sourceAvif": "/media/public-experience/trustDiagnostic-1920.avif",
+    "fallbackJpg": "/media/public-experience/trustDiagnostic-1920.jpg",
     "avifSrcSet": "/media/public-experience/trustDiagnostic-720.avif 720w, /media/public-experience/trustDiagnostic-1080.avif 1080w, /media/public-experience/trustDiagnostic-1440.avif 1440w, /media/public-experience/trustDiagnostic-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/trustDiagnostic-720.webp 720w, /media/public-experience/trustDiagnostic-1080.webp 1080w, /media/public-experience/trustDiagnostic-1440.webp 1440w, /media/public-experience/trustDiagnostic-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/trustDiagnostic-720.jpg 720w, /media/public-experience/trustDiagnostic-1080.jpg 1080w, /media/public-experience/trustDiagnostic-1440.jpg 1440w, /media/public-experience/trustDiagnostic-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/trustDiagnostic-portrait-480.avif 480w, /media/public-experience/trustDiagnostic-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/trustDiagnostic-portrait-480.webp 480w, /media/public-experience/trustDiagnostic-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/trustDiagnostic-portrait-480.jpg 480w, /media/public-experience/trustDiagnostic-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/trustDiagnostic-mobile-480.avif 480w, /media/public-experience/trustDiagnostic-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/trustDiagnostic-mobile-480.webp 480w, /media/public-experience/trustDiagnostic-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/trustDiagnostic-mobile-480.jpg 480w, /media/public-experience/trustDiagnostic-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "authLogin": {
     "key": "authLogin",
     "id": "gxjuznhq",
-    "alt": "Professional analyzing complex systemic data in ambient workspace",
     "title": "Returning to continuous assessment record",
+    "alt": "Professional analyzing complex systemic data in ambient workspace",
     "sceneRole": "Login Route Environmental Ground",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -307,23 +360,28 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 7952,
-    "intrinsicHeight": 5304,
-    "sourceWebp": "/media/public-experience/authLogin-1440.webp",
-    "sourceAvif": "/media/public-experience/authLogin-1440.avif",
-    "fallbackJpg": "/media/public-experience/authLogin-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 7952,
+      "height": 5304,
+      "aspectRatio": "1.499"
+    },
+    "sourceWebp": "/media/public-experience/authLogin-1920.webp",
+    "sourceAvif": "/media/public-experience/authLogin-1920.avif",
+    "fallbackJpg": "/media/public-experience/authLogin-1920.jpg",
     "avifSrcSet": "/media/public-experience/authLogin-720.avif 720w, /media/public-experience/authLogin-1080.avif 1080w, /media/public-experience/authLogin-1440.avif 1440w, /media/public-experience/authLogin-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/authLogin-720.webp 720w, /media/public-experience/authLogin-1080.webp 1080w, /media/public-experience/authLogin-1440.webp 1440w, /media/public-experience/authLogin-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/authLogin-720.jpg 720w, /media/public-experience/authLogin-1080.jpg 1080w, /media/public-experience/authLogin-1440.jpg 1440w, /media/public-experience/authLogin-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/authLogin-portrait-480.avif 480w, /media/public-experience/authLogin-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/authLogin-portrait-480.webp 480w, /media/public-experience/authLogin-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/authLogin-portrait-480.jpg 480w, /media/public-experience/authLogin-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/authLogin-mobile-480.avif 480w, /media/public-experience/authLogin-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/authLogin-mobile-480.webp 480w, /media/public-experience/authLogin-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/authLogin-mobile-480.jpg 480w, /media/public-experience/authLogin-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   },
   "authSignup": {
     "key": "authSignup",
     "id": "vogj3ghonk0",
-    "alt": "Large open workshop space with materials and active project surfaces",
     "title": "Initial assessment baseline and record creation",
+    "alt": "Large open workshop space with materials and active project surfaces",
     "sceneRole": "Signup Route Environmental Ground",
     "creator": "Andrej Lišakov",
     "sourcePlatform": "Unsplash Plus",
@@ -333,17 +391,22 @@ export const MEDIA_MANIFEST_PX = {
       "tablet": "50% 50%",
       "mobile": "50% 50%"
     },
-    "intrinsicWidth": 6070,
-    "intrinsicHeight": 8093,
-    "sourceWebp": "/media/public-experience/authSignup-1440.webp",
-    "sourceAvif": "/media/public-experience/authSignup-1440.avif",
-    "fallbackJpg": "/media/public-experience/authSignup-1440.jpg",
+    "intrinsicDimensions": {
+      "width": 6070,
+      "height": 8093,
+      "aspectRatio": "0.750"
+    },
+    "sourceWebp": "/media/public-experience/authSignup-1920.webp",
+    "sourceAvif": "/media/public-experience/authSignup-1920.avif",
+    "fallbackJpg": "/media/public-experience/authSignup-1920.jpg",
     "avifSrcSet": "/media/public-experience/authSignup-720.avif 720w, /media/public-experience/authSignup-1080.avif 1080w, /media/public-experience/authSignup-1440.avif 1440w, /media/public-experience/authSignup-1920.avif 1920w",
     "webpSrcSet": "/media/public-experience/authSignup-720.webp 720w, /media/public-experience/authSignup-1080.webp 1080w, /media/public-experience/authSignup-1440.webp 1440w, /media/public-experience/authSignup-1920.webp 1920w",
     "jpgSrcSet": "/media/public-experience/authSignup-720.jpg 720w, /media/public-experience/authSignup-1080.jpg 1080w, /media/public-experience/authSignup-1440.jpg 1440w, /media/public-experience/authSignup-1920.jpg 1920w",
-    "mobileAvifSrcSet": "/media/public-experience/authSignup-portrait-480.avif 480w, /media/public-experience/authSignup-portrait-720.avif 720w",
-    "mobileWebpSrcSet": "/media/public-experience/authSignup-portrait-480.webp 480w, /media/public-experience/authSignup-portrait-720.webp 720w",
-    "mobileJpgSrcSet": "/media/public-experience/authSignup-portrait-480.jpg 480w, /media/public-experience/authSignup-portrait-720.jpg 720w"
+    "mobileAvifSrcSet": "/media/public-experience/authSignup-mobile-480.avif 480w, /media/public-experience/authSignup-mobile-720.avif 720w",
+    "mobileWebpSrcSet": "/media/public-experience/authSignup-mobile-480.webp 480w, /media/public-experience/authSignup-mobile-720.webp 720w",
+    "mobileJpgSrcSet": "/media/public-experience/authSignup-mobile-480.jpg 480w, /media/public-experience/authSignup-mobile-720.jpg 720w",
+    "retrievedAt": "2026-08-24T13:48:46.189Z",
+    "nonEndorsementNote": "People pictured are not Personality Assessor users, assessment subjects, career-match recipients, testimonial subjects, or endorsers."
   }
 };
 

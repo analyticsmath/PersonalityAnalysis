@@ -1,23 +1,23 @@
 /**
  * Personality Assessor - Public Experience Progress Route Styles
- * Temporal Exposure & Velocity Physics
+ * Double-Exposure Temporal Comparison
+ * Zero Card Grids, Zero Eyebrows, Zero Gradients
  */
 
 .pa-px-progress-root {
   position: relative;
   width: 100%;
-  min-height: 100vh;
   background-color: var(--px-ink);
-  color: var(--px-white);
+}
+
+.pa-px-progress-section {
+  position: relative;
+  width: 100%;
+  height: 200svh;
+  background-color: var(--px-ink);
 }
 
 .pa-px-progress-stage {
-  position: relative;
-  width: 100%;
-  height: 240svh;
-}
-
-.pa-px-progress-stage__sticky {
   position: sticky;
   top: 0;
   left: 0;
@@ -25,112 +25,122 @@
   height: 100svh;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: clamp(60px, 10vh, 100px) var(--px-outer-gutter);
+  align-items: center;
+  padding: 0 var(--px-outer-gutter);
 }
 
-.pa-px-progress-header {
-  position: relative;
-  z-index: 5;
-  max-width: 48rem;
-}
-
-.pa-px-progress-header h1 {
-  font-family: var(--px-font-family);
-  font-size: var(--px-display-lg);
-  font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 80, 'opsz' 84;
-  line-height: 0.96;
-  letter-spacing: -0.025em;
-  margin-bottom: 12px;
-}
-
-.pa-px-progress-header p {
-  font-size: var(--px-body-lg);
-  opacity: 0.85;
-}
-
-.pa-px-progress-layers {
+.pa-px-progress__base-media,
+.pa-px-progress__later-media {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+}
+
+.pa-px-progress__base-media {
   z-index: 1;
 }
 
-.pa-px-progress-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.pa-px-progress-layer img {
+.pa-px-progress__base-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0.35;
 }
 
-.pa-px-progress-layer--later {
-  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
-  opacity: 0.85;
+.pa-px-progress__later-media {
+  z-index: 2;
+  will-change: clip-path;
 }
 
-.pa-px-progress-findings {
+.pa-px-progress__later-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.pa-px-progress__content {
   position: relative;
   z-index: 5;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--px-column-gap);
-  max-width: 64rem;
-  background: rgba(18, 20, 22, 0.88);
-  padding: 32px;
-  border-radius: var(--px-radius-sm);
-  border-left: 3px solid var(--px-white);
+  max-width: 42rem;
 }
 
-.pa-px-progress-finding h3 {
-  font-size: var(--px-heading-md);
-  font-weight: var(--px-weight-heading);
-  margin-bottom: 8px;
+.pa-px-progress__headline {
+  font-family: var(--px-font-family);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: var(--px-weight-display);
+  font-variation-settings: 'wdth' 80, 'opsz' 96;
+  line-height: 1.05;
+  color: var(--px-white);
+  margin-bottom: 16px;
 }
 
-.pa-px-progress-finding p {
-  font-size: var(--px-body-sm);
-  line-height: 1.55;
-  opacity: 0.85;
-}
-
-/* ── Calm Empty State ── */
-.pa-px-progress-empty {
-  position: relative;
-  z-index: 10;
-  padding: 100px var(--px-outer-gutter) 140px;
-  max-width: 52rem;
-  margin: 0 auto;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-}
-
-.pa-px-progress-empty h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
-}
-
-.pa-px-progress-empty p {
+.pa-px-progress__support {
   font-size: var(--px-body-lg);
   line-height: 1.5;
-  opacity: 0.85;
-  max-width: 36rem;
+  color: var(--px-white);
+  opacity: 0.9;
+  margin-bottom: 28px;
 }
 
-@media (max-width: 767px) {
-  .pa-px-progress-findings {
-    grid-template-columns: 1fr;
+.pa-px-progress__findings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pa-px-progress__finding-row {
+  font-size: var(--px-body);
+  font-weight: var(--px-weight-medium);
+  color: var(--px-white);
+}
+
+.pa-px-progress__disclaimer {
+  font-size: var(--px-caption);
+  color: var(--px-soft);
+  opacity: 0.7;
+}
+
+/* ── Calm Baseline Continuation ── */
+.pa-px-progress-empty-section {
+  position: relative;
+  width: 100%;
+  padding: clamp(80px, 12vh, 140px) var(--px-outer-gutter);
+  background-color: var(--px-ink);
+}
+
+.pa-px-progress-empty__inner {
+  max-width: 38rem;
+}
+
+.pa-px-progress-empty__inner h2 {
+  font-family: var(--px-font-family);
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-weight: var(--px-weight-bold);
+  font-variation-settings: 'wdth' 85, 'opsz' 56;
+  color: var(--px-white);
+  margin-bottom: 12px;
+}
+
+.pa-px-progress-empty__inner p {
+  font-size: var(--px-body-lg);
+  color: var(--px-soft);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+/* ── Mobile Responsive Rules ── */
+@media (max-width: 768px) {
+  .pa-px-progress-section {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .pa-px-progress-stage {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    padding: 100px var(--px-outer-gutter) 60px;
   }
 }

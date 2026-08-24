@@ -17,43 +17,28 @@ export const EditorialCareerIntelligencePage = () => {
   return (
     <PublicExperienceRoot withFooter={true}>
       <div className="pa-px-career-root">
-        <div className="pa-px-career-stage">
-          <div className="pa-px-career-stage__sticky">
-            <div className="pa-px-career-header-overlay">
-              <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '8px' }}>
-                Spatial Career Field
-              </span>
-              <h1>{data.hero.headline}</h1>
-              <p>{data.hero.support}</p>
-            </div>
-
-            <div className="pa-px-career-canvas-wrap">
-              {hasWebGL && !prefersReducedMotion ? (
-                <Suspense fallback={<CareerWorldFallback mediaKey={activeWorld.mediaKey} />}>
-                  <LazyCareerWorldCanvas
-                    activeIdx={activeWorldIdx}
-                    onSelectWorld={(idx) => setActiveWorldIdx(idx)}
-                  />
-                </Suspense>
-              ) : (
-                <CareerWorldFallback mediaKey={activeWorld.mediaKey} />
-              )}
-            </div>
-
-            <div className="pa-px-career-world-card">
-              <span className="pa-px-context-data" style={{ color: 'var(--px-soft)', display: 'block', marginBottom: '6px' }}>
-                Active Condition {activeWorldIdx + 1} of 5
-              </span>
-              <div className="pa-px-career-world-card__name">{activeWorld.name}</div>
-              <p className="pa-px-career-world-card__cond">{activeWorld.condition}</p>
-              <div style={{ marginTop: '12px', fontSize: 'var(--px-caption)', opacity: 0.8 }}>
-                <strong>Alignment:</strong> {activeWorld.alignment}
-              </div>
-            </div>
+        {/* 3D Spatial Workworld Stage */}
+        <section className="pa-px-career-hero-section" aria-label="Spatial Workworld Conditions">
+          <div className="pa-px-career-canvas-wrap">
+            {hasWebGL && !prefersReducedMotion ? (
+              <Suspense fallback={<CareerWorldFallback mediaKey={activeWorld.mediaKey} />}>
+                <LazyCareerWorldCanvas
+                  activeIdx={activeWorldIdx}
+                  onSelectWorld={(idx) => setActiveWorldIdx(idx)}
+                />
+              </Suspense>
+            ) : (
+              <CareerWorldFallback mediaKey={activeWorld.mediaKey} />
+            )}
           </div>
-        </div>
 
-        {/* 17 Canonical Roles */}
+          <div className="pa-px-career-hero-content">
+            <h1>{data.hero.headline}</h1>
+            <p>{data.hero.support}</p>
+          </div>
+        </section>
+
+        {/* 17 Occupational Profiles Typographic Rail */}
         <CareerRolePath />
       </div>
     </PublicExperienceRoot>

@@ -30,4 +30,20 @@ if (typeof window !== 'undefined') {
     disconnect() {}
   }
   window.ResizeObserver = window.ResizeObserver || ResizeObserverMock;
+
+  if (typeof window.requestAnimationFrame !== 'function') {
+    window.requestAnimationFrame = (callback) => setTimeout(callback, 0);
+  }
+  if (typeof window.cancelAnimationFrame !== 'function') {
+    window.cancelAnimationFrame = (id) => clearTimeout(id);
+  }
+}
+
+if (typeof global !== 'undefined') {
+  if (typeof global.requestAnimationFrame !== 'function') {
+    global.requestAnimationFrame = (callback) => setTimeout(callback, 0);
+  }
+  if (typeof global.cancelAnimationFrame !== 'function') {
+    global.cancelAnimationFrame = (id) => clearTimeout(id);
+  }
 }

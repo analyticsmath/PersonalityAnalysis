@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MEDIA_MANIFEST_PX } from '../../../content/public-experience/mediaManifest';
-import { getSignupAcquisitionUrl, getLoginUrl } from '../../../content/public-experience/navigation';
 
 const indexItems = [
   { path: '/', label: 'Home', mediaKey: 'homeWorldEntry', desc: 'A continuous cinematic field study of professional behavior under different conditions.' },
@@ -53,17 +52,17 @@ export const PublicIndex = ({ isOpen, onClose }) => {
       className="pa-px-index-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label="Atlas Index Navigation"
+      aria-label="Public Experience Index"
       aria-hidden={!isOpen}
     >
       <div className="pa-px-index-overlay__header">
-        <span className="pa-px-context-data">Personality Assessor Atlas Index</span>
+        <div className="pa-px-index-overlay__brand">Personality Assessor</div>
         <button
           ref={closeBtnRef}
           type="button"
           onClick={onClose}
           className="pa-px-index-overlay__close-btn"
-          aria-label="Close Atlas Index Menu"
+          aria-label="Close Index Menu"
         >
           Close (Esc)
         </button>
@@ -94,7 +93,7 @@ export const PublicIndex = ({ isOpen, onClose }) => {
             />
           )}
           <div className="pa-px-index-overlay__preview-desc">
-            <span className="pa-px-context-data" style={{ display: 'block', marginBottom: '8px' }}>
+            <span className="pa-px-index-overlay__preview-tag">
               {activeItem.label}
             </span>
             <p>{activeItem.desc}</p>
