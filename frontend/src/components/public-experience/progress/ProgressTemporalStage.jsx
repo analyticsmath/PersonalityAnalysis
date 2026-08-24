@@ -6,6 +6,7 @@ import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent
 import { PublicPicture } from '../media/PublicPicture';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 import { getSignupAcquisitionUrl } from '../../../content/public-experience/navigation';
+import { registerSceneProgress } from '../motion/scrollState';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,17 +27,20 @@ export const ProgressTemporalStage = () => {
           trigger: containerRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8,
+          scrub: true, // Immediate 1:1 scrub
           fastScrollEnd: true,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            registerSceneProgress('progress-temporal-stage', self.progress, true);
+          },
         },
       });
 
       tl.fromTo(
         laterMedia,
-        { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)', scale: 1.1 },
-        { clipPath: 'polygon(35% 0, 100% 0, 100% 100%, 48% 100%)', scale: 1, duration: 1, ease: 'power2.inOut' }
-      ).fromTo(findings, { y: '40px', opacity: 0 }, { y: '0px', opacity: 1, duration: 0.6 }, 0.3);
+        { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)', scale: 1.08 },
+        { clipPath: 'polygon(32% 0, 100% 0, 100% 100%, 42% 100%)', scale: 1, ease: 'none' }
+      ).fromTo(findings, { y: '30px', opacity: 0.5 }, { y: '0px', opacity: 1, ease: 'none' }, 0.2);
     }, containerRef);
 
     return () => ctx.revert();
@@ -45,7 +49,7 @@ export const ProgressTemporalStage = () => {
   return (
     <div className="pa-px-progress-root">
       {/* Pinned Double-Exposure Temporal Stage */}
-      <section ref={containerRef} className="pa-px-progress-section" aria-label="Longitudinal Progress">
+      <section ref={containerRef} className="pa-px-progress-section" aria-label="Longitudinal Progress" data-scene-id="progress-temporal-stage">
         <div className="pa-px-progress-stage">
           {/* Base Assessment Layer */}
           <div className="pa-px-progress__base-media">

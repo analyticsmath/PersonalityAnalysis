@@ -4,7 +4,7 @@ import { getSignupAcquisitionUrl, getLoginUrl } from '../../../content/public-ex
 
 export const PublicFooter = () => {
   return (
-    <footer className="pa-px-footer">
+    <footer className="pa-px-footer" role="contentinfo">
       <div className="pa-px-footer__inner">
         <div className="pa-px-footer__brand">
           <h3>Personality Assessor</h3>

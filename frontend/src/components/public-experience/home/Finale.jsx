@@ -6,6 +6,7 @@ import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent
 import { PublicPicture } from '../media/PublicPicture';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 import { getSignupAcquisitionUrl } from '../../../content/public-experience/navigation';
+import { registerSceneProgress } from '../motion/scrollState';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,28 +31,61 @@ export const Finale = () => {
           trigger: containerRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8,
+          scrub: true, // Immediate 1:1 scrub
           fastScrollEnd: true,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            registerSceneProgress('home-finale', self.progress, true);
+          },
         },
       });
 
-      // Spatial multi-plane reconstruction & pullback
-      tl.fromTo(f1, { x: '-80px', scale: 0.9, opacity: 0.3 }, { x: '0px', scale: 1, opacity: 0.85, duration: 0.8 }, 0)
-        .fromTo(f2, { y: '80px', scale: 0.9, opacity: 0.3 }, { y: '0px', scale: 1, opacity: 0.85, duration: 0.8 }, 0.1)
-        .fromTo(f3, { x: '80px', scale: 0.9, opacity: 0.3 }, { x: '0px', scale: 1, opacity: 0.85, duration: 0.8 }, 0.2)
-        .fromTo(title, { y: '40px', fontVariationSettings: "'wdth' 95, 'opsz' 72" }, { y: '0px', fontVariationSettings: "'wdth' 82, 'opsz' 96", duration: 0.6 }, 0.2)
-        .fromTo(phrase, { opacity: 0, y: '30px' }, { opacity: 0.9, y: '0px', duration: 0.5 }, 0.4)
-        .fromTo(actions, { opacity: 0, y: '20px' }, { opacity: 1, y: '0px', duration: 0.5 }, 0.5);
+      // 0.10: First fragment returns
+      // 0.25: Second fragment
+      // 0.35: Source phrase returns
+      // 0.45 - 0.65: Spatial pullback & climax
+      // 0.70: Final statement resolves
+      // 0.82: Primary CTA appears
+      // 0.90: Quiet rest
+      tl.fromTo(f1,
+        { xPercent: -25, scale: 0.88, opacity: 0.5 },
+        { xPercent: 0, scale: 1, opacity: 0.92, ease: 'none' },
+        0
+      )
+      .fromTo(f2,
+        { yPercent: 30, scale: 0.88, opacity: 0.5 },
+        { yPercent: 0, scale: 1, opacity: 0.92, ease: 'none' },
+        0.08
+      )
+      .fromTo(f3,
+        { xPercent: 25, scale: 0.88, opacity: 0.5 },
+        { xPercent: 0, scale: 1, opacity: 0.92, ease: 'none' },
+        0.16
+      )
+      .fromTo(phrase,
+        { opacity: 0, yPercent: 30 },
+        { opacity: 1, yPercent: 0, ease: 'none' },
+        0.25
+      )
+      .fromTo(title,
+        { yPercent: 30, fontVariationSettings: "'wdth' 92, 'opsz' 72" },
+        { yPercent: 0, fontVariationSettings: "'wdth' 80, 'opsz' 96", ease: 'none' },
+        0.35
+      )
+      .fromTo(actions,
+        { opacity: 0, yPercent: 20 },
+        { opacity: 1, yPercent: 0, ease: 'none' },
+        0.55
+      );
     }, containerRef);
 
     return () => ctx.revert();
   }, [prefersReducedMotion]);
 
   return (
-    <section ref={containerRef} className="pa-px-finale-section" aria-label="Finale & Reconstruction">
+    <section ref={containerRef} className="pa-px-finale-section" aria-label="Finale & Reconstruction" data-scene-id="home-finale">
       <div className="pa-px-finale-stage">
-        {/* Reconstructed Asymmetric Environmental Fragments */}
+        {/* Reconstructed Asymmetric Environmental Fragments (Irregular scales: 1.2fr, 0.8fr, 1.1fr) */}
         <div className="pa-px-finale__mosaic-field">
           <div className="pa-px-finale__fragment pa-px-finale__fragment-1">
             <PublicPicture assetKey="workworldPrecision" alt="Precision environment fragment" />

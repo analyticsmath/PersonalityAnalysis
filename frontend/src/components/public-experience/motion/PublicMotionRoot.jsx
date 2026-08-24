@@ -4,14 +4,14 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { updateScrollState } from './scrollState';
 import { usePublicCapabilities } from './usePublicCapabilities';
+import { SceneDebugger } from './SceneDebugger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-if (typeof ScrollTrigger.config === 'function') {
+if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function' && typeof ScrollTrigger.config === 'function') {
   ScrollTrigger.config({
     autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load,resize',
     limitCallbacks: true,
-    syncInterval: 40,
   });
 }
 
@@ -23,18 +23,23 @@ export const PublicMotionRoot = ({ children }) => {
   const { prefersReducedMotion } = usePublicCapabilities();
 
   useEffect(() => {
-    if (typeof window === 'undefined' || prefersReducedMotion) return;
+    if (typeof window === 'undefined') return;
+
+    if (prefersReducedMotion) {
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+      return;
+    }
 
     let lenis = null;
     let tickerCallback = null;
 
     try {
       lenis = new Lenis({
-        lerp: 0.08,
+        lerp: 0.09,
         smoothWheel: true,
-        wheelMultiplier: 0.9,
+        wheelMultiplier: 0.85,
         touchMultiplier: 1.0,
-        infinite: false,
+        syncTouch: false,
       });
 
       lenisRef.current = lenis;
@@ -56,22 +61,42 @@ export const PublicMotionRoot = ({ children }) => {
       // Graceful fallback for non-browser / test environments
     }
 
-    // Initial refresh after microtask / font load
-    const refreshTimer = setTimeout(() => {
-      if (typeof ScrollTrigger.refresh === 'function') {
-        ScrollTrigger.refresh();
-      }
-    }, 150);
+    // Native scroll event listener to capture keyboard scroll (PageDown, ArrowDown) immediately
+    const handleNativeScroll = () => {
+      ScrollTrigger.update();
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight || 1;
+      updateScrollState(window.scrollY, 0, 1, Math.max(0, Math.min(1, window.scrollY / maxScroll)));
+    };
 
-    const handleResize = () => {
+    window.addEventListener('scroll', handleNativeScroll, { passive: true });
+
+    // Centralized refresh discipline: debounced on fonts, media, and layout changes
+    const scheduleRefresh = () => {
       if (typeof ScrollTrigger.refresh === 'function') {
         ScrollTrigger.refresh();
       }
     };
+
+    // Refresh once fonts are ready
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleRefresh).catch(() => {});
+    }
+
+    const refreshTimer = setTimeout(scheduleRefresh, 120);
+
+    // Debounced window resize handler
+    let resizeTimer = null;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(scheduleRefresh, 100);
+    };
+
     window.addEventListener('resize', handleResize);
 
     return () => {
       clearTimeout(refreshTimer);
+      clearTimeout(resizeTimer);
+      window.removeEventListener('scroll', handleNativeScroll);
       window.removeEventListener('resize', handleResize);
       if (tickerCallback) gsap.ticker.remove(tickerCallback);
       if (lenis) lenis.destroy();
@@ -82,6 +107,7 @@ export const PublicMotionRoot = ({ children }) => {
   return (
     <LenisContext.Provider value={lenisRef.current}>
       {children}
+      {import.meta.env.DEV && <SceneDebugger />}
     </LenisContext.Provider>
   );
 };

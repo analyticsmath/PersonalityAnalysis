@@ -37,7 +37,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.35;
+  opacity: 0.88;
 }
 
 .pa-px-how-header-block {
@@ -85,6 +85,12 @@
   color: var(--px-white);
 }
 
+.pa-px-how-word {
+  display: inline-block;
+  will-change: transform;
+  transition: transform 60ms linear;
+}
+
 .pa-px-how-vector-stage {
   width: 100%;
   max-width: 280px;
@@ -119,7 +125,7 @@
   font-size: var(--px-body);
   color: var(--px-soft);
   line-height: 1.5;
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
 /* ── Mobile Responsive Rules ── */

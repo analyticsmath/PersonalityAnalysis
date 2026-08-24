@@ -1,13 +1,43 @@
 import React, { useRef, useState } from 'react';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
+import { registerActor } from '../motion/scrollState';
+import { PixelTransitionCanvas } from '../motion/PixelTransitionCanvas';
 
 export const ProvenanceReveal = () => {
   const containerRef = useRef(null);
   const data = PUBLIC_CONTENT.home.trace;
   const [aperturePos, setAperturePos] = useState({ x: 50, y: 50 });
   const [isInspecting, setIsInspecting] = useState(false);
+  const [pixelProgress, setPixelProgress] = useState(0);
   const { hasFinePointer } = usePublicCapabilities();
+
+  // Register actor for route transition carry to /trust
+  const handleRef = (node) => {
+    containerRef.current = node;
+    if (node) {
+      registerActor('provenance-source', {
+        element: node,
+        inspectPrompt: data.inspectPrompt,
+      });
+    }
+  };
+
+  const triggerPixelTransition = () => {
+    let start = performance.now();
+    const duration = 400;
+    const animate = (now) => {
+      const elapsed = now - start;
+      const p = Math.min(elapsed / duration, 1);
+      setPixelProgress(p);
+      if (p < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setPixelProgress(0);
+      }
+    };
+    requestAnimationFrame(animate);
+  };
 
   const handleMouseMove = (e) => {
     if (!containerRef.current || !hasFinePointer) return;
@@ -30,17 +60,27 @@ export const ProvenanceReveal = () => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      setIsInspecting((prev) => !prev);
+      setIsInspecting((prev) => {
+        triggerPixelTransition();
+        return !prev;
+      });
     } else if (e.key === 'Escape' && isInspecting) {
+      triggerPixelTransition();
       setIsInspecting(false);
     }
   };
 
+  const toggleInspection = () => {
+    triggerPixelTransition();
+    setIsInspecting((prev) => !prev);
+  };
+
   return (
     <section
-      ref={containerRef}
+      ref={handleRef}
       className="pa-px-trace-section"
       aria-label="Provenance & Inspection"
+      data-scene-id="home-provenance"
       tabIndex={0}
       onMouseEnter={() => setIsInspecting(true)}
       onMouseLeave={() => setIsInspecting(false)}
@@ -50,6 +90,8 @@ export const ProvenanceReveal = () => {
       onTouchEnd={() => setIsInspecting(false)}
       onKeyDown={handleKeyDown}
     >
+      {pixelProgress > 0 && <PixelTransitionCanvas progress={pixelProgress} />}
+
       <div className="pa-px-trace-stage">
         {/* Layer 1: Interpreted Reading */}
         <div className="pa-px-trace__interpreted-layer">
@@ -62,7 +104,7 @@ export const ProvenanceReveal = () => {
             <button
               type="button"
               className="pa-px-trace__keyboard-btn"
-              onClick={() => setIsInspecting((prev) => !prev)}
+              onClick={toggleInspection}
               aria-label={isInspecting ? 'Hide source layer' : 'Inspect source layer'}
             >
               {isInspecting ? 'Release to view interpretation' : 'Press to inspect underlying source'}
@@ -75,9 +117,9 @@ export const ProvenanceReveal = () => {
           className="pa-px-trace__source-layer"
           style={{
             clipPath: isInspecting
-              ? `circle(110px at ${aperturePos.x}% ${aperturePos.y}%)`
+              ? `circle(130px at ${aperturePos.x}% ${aperturePos.y}%)`
               : 'circle(0% at 50% 50%)',
-            transition: 'clip-path 70ms linear',
+            transition: 'clip-path 40ms linear',
           }}
           aria-hidden={!isInspecting}
         >

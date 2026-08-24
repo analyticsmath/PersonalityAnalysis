@@ -5,22 +5,28 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { PublicPicture } from '../media/PublicPicture';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
+import { registerSceneProgress, registerActor } from '../motion/scrollState';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const HowContinuousTransformation = () => {
   const containerRef = useRef(null);
   const dotLottieRef = useRef(null);
+  const lastFrameRef = useRef(-1);
   const data = PUBLIC_CONTENT.how;
-  const [activeStageIdx, setActiveStageIdx] = useState(0);
+  const [activeProgress, setActiveProgress] = useState(0);
   const { prefersReducedMotion } = usePublicCapabilities();
 
-  // DotLottie instance initialization callback
+  // DotLottie instance initialization callback with immediate pause
   const dotLottieCallback = useCallback((dotLottieInstance) => {
     dotLottieRef.current = dotLottieInstance;
     if (dotLottieInstance) {
-      dotLottieInstance.pause();
-      dotLottieInstance.setFrame(0);
+      try {
+        dotLottieInstance.pause();
+        dotLottieInstance.setFrame(0);
+      } catch {
+        // ignore
+      }
     }
   }, []);
 
@@ -28,43 +34,79 @@ export const HowContinuousTransformation = () => {
     if (prefersReducedMotion || !containerRef.current) return;
 
     const ctx = gsap.context(() => {
-      const stageEl = containerRef.current.querySelector('.pa-px-how-stage-sticky');
-      const stageTitle = containerRef.current.querySelector('.pa-px-how-stage__title');
-      const stageDesc = containerRef.current.querySelector('.pa-px-how-stage__desc');
-      const sourceActor = containerRef.current.querySelector('.pa-px-how-source-actor');
+      const phraseWord1 = containerRef.current.querySelector('.pa-px-how-word--1');
+      const phraseWord2 = containerRef.current.querySelector('.pa-px-how-word--2');
+      const phraseWord3 = containerRef.current.querySelector('.pa-px-how-word--3');
+      const vectorStage = containerRef.current.querySelector('.pa-px-how-vector-stage');
+      const narrativeWrap = containerRef.current.querySelector('.pa-px-how-stage-narrative');
+
+      // Register actor for route transition
+      if (phraseWord1) {
+        registerActor('how-causal-phrase', {
+          element: phraseWord1,
+          text: data.sampleResponse,
+        });
+      }
 
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.5,
+        scrub: true, // Immediate 1:1 scrub mapping
         fastScrollEnd: true,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
-          const progress = self.progress;
-          const idx = Math.min(
-            Math.floor(progress * data.movements.length),
-            data.movements.length - 1
-          );
-          setActiveStageIdx(idx);
+          const p = self.progress;
+          setActiveProgress(p);
+          registerSceneProgress('how-continuous-stage', p, true);
 
-          // Synchronize DotLottie frame explicitly with scroll progress
+          // Synchronize DotLottie frame strictly when integer frame changes
           if (dotLottieRef.current) {
             const totalFrames = 120;
-            const targetFrame = Math.min(Math.floor(progress * (totalFrames - 1)), totalFrames - 1);
-            dotLottieRef.current.setFrame(targetFrame);
+            const targetFrame = Math.min(Math.floor(p * (totalFrames - 1)), totalFrames - 1);
+            if (targetFrame !== lastFrameRef.current) {
+              lastFrameRef.current = targetFrame;
+              try {
+                dotLottieRef.current.setFrame(targetFrame);
+              } catch {
+                // fallback
+              }
+            }
+          }
+
+          // Physical semantic text transformation along trajectories
+          if (phraseWord1 && phraseWord2 && phraseWord3) {
+            // Stage 0.00 - 0.20: Cohesive initial source phrase
+            // Stage 0.20 - 0.45: Words separate and travel into distinct analytical orbits
+            // Stage 0.45 - 0.75: Trajectory displacement
+            // Stage 0.75 - 1.00: Reassembling into calibrated vector output
+            const word1X = p * -30;
+            const word1Y = Math.sin(p * Math.PI) * -24;
+            const word2X = Math.sin(p * Math.PI * 2) * 15;
+            const word2Y = Math.sin(p * Math.PI) * 18;
+            const word3X = p * 35;
+            const word3Y = Math.sin(p * Math.PI) * -32;
+
+            phraseWord1.style.transform = `translate3d(${word1X}px, ${word1Y}px, 0)`;
+            phraseWord2.style.transform = `translate3d(${word2X}px, ${word2Y}px, 0)`;
+            phraseWord3.style.transform = `translate3d(${word3X}px, ${word3Y}px, 0)`;
           }
         },
       });
     }, containerRef);
 
     return () => ctx.revert();
-  }, [prefersReducedMotion, data.movements.length]);
+  }, [prefersReducedMotion, data.sampleResponse]);
 
-  const currentMovement = data.movements[activeStageIdx];
+  // Derived narrative stage for copy display without visual discontinuity
+  const stageIdx = Math.min(
+    Math.floor(activeProgress * data.movements.length),
+    data.movements.length - 1
+  );
+  const currentMovement = data.movements[stageIdx] || data.movements[0];
 
   return (
-    <section ref={containerRef} className="pa-px-how-section" aria-label="How It Works">
+    <section ref={containerRef} className="pa-px-how-section" aria-label="How It Works" data-scene-id="how-continuous-stage">
       <div className="pa-px-how-stage-sticky">
         {/* Environmental Workshop Backdrop */}
         <div className="pa-px-how-stage__media-bg">
@@ -79,10 +121,12 @@ export const HowContinuousTransformation = () => {
 
         {/* The Continuous Transforming Causal Object */}
         <div className="pa-px-how-causal-field">
-          {/* Transforming Source Expression */}
-          <div className="pa-px-how-source-actor">
+          {/* Transforming Source Expression: Semantic words travel along physical trajectories */}
+          <div className="pa-px-how-source-actor" aria-label={`Source response: ${data.sampleResponse}`}>
             <p className="pa-px-how-source-actor__phrase">
-              "{data.sampleResponse}"
+              <span className="pa-px-how-word pa-px-how-word--1">"I clarify the constraints first, </span>
+              <span className="pa-px-how-word pa-px-how-word--2">then choose the </span>
+              <span className="pa-px-how-word pa-px-how-word--3">smallest reversible step."</span>
             </p>
           </div>
 
@@ -96,7 +140,7 @@ export const HowContinuousTransformation = () => {
           </div>
 
           {/* Dynamic Transformation Stage Narrative */}
-          <div className="pa-px-how-stage-narrative">
+          <div className="pa-px-how-stage-narrative" aria-live="polite">
             <span className="pa-px-how-stage__name">{currentMovement.name}</span>
             <h2 className="pa-px-how-stage__title">{currentMovement.title}</h2>
             <p className="pa-px-how-stage__desc">{currentMovement.description}</p>

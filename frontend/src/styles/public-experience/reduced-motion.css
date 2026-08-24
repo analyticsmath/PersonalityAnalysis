@@ -1,6 +1,7 @@
 /**
  * Personality Assessor - Public Experience Reduced Motion Styles
  * Complete static document flow alternatives when prefers-reduced-motion: reduce is active.
+ * Zero pinned blank spacers, natural editorial document flow.
  */
 
 @media (prefers-reduced-motion: reduce) {
@@ -14,11 +15,12 @@
   .pa-px-trace-stage,
   .pa-px-finale-stage,
   .pa-px-how-stage-sticky,
+  .pa-px-trust-stage-sticky,
   .pa-px-progress-stage {
     position: relative !important;
     height: auto !important;
-    min-height: 100vh;
-    padding: 80px var(--px-outer-gutter) !important;
+    min-height: auto !important;
+    padding: 60px var(--px-outer-gutter) !important;
   }
 
   .pa-px-entry-section,
@@ -30,27 +32,41 @@
   .pa-px-trace-section,
   .pa-px-finale-section,
   .pa-px-how-section,
+  .pa-px-trust-section,
   .pa-px-progress-section {
     height: auto !important;
+    min-height: auto !important;
   }
 
   .pa-px-journey-env {
     position: relative !important;
     height: auto !important;
-    min-height: 60vh;
+    min-height: 50vh !important;
     opacity: 1 !important;
     clip-path: none !important;
     transform: none !important;
-    margin-bottom: 40px;
+    margin-bottom: 40px !important;
   }
 
   .pa-px-entry__secondary-crop {
-    display: none !important;
+    display: block !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: 200px !important;
+    margin-top: 20px !important;
   }
 
   .pa-px-time__later-media {
+    position: relative !important;
     clip-path: none !important;
-    opacity: 0.4 !important;
+    opacity: 0.8 !important;
+    min-height: 40vh !important;
+  }
+
+  .pa-px-pixel-canvas,
+  .pa-px-transition-carry-actor {
+    display: none !important;
   }
 
   * {

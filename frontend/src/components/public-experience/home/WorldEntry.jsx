@@ -6,6 +6,7 @@ import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent
 import { PublicPicture } from '../media/PublicPicture';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 import { getSignupAcquisitionUrl } from '../../../content/public-experience/navigation';
+import { registerSceneProgress, registerActor } from '../motion/scrollState';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,29 +19,89 @@ export const WorldEntry = () => {
     if (prefersReducedMotion || !containerRef.current) return;
 
     const ctx = gsap.context(() => {
-      const primaryMedia = containerRef.current.querySelector('.pa-px-entry__primary-media');
+      const primaryMediaWrap = containerRef.current.querySelector('.pa-px-entry__primary-media');
+      const primaryImg = containerRef.current.querySelector('.pa-px-entry__primary-media img');
       const secondaryMedia = containerRef.current.querySelector('.pa-px-entry__secondary-crop');
+      const secondaryImg = containerRef.current.querySelector('.pa-px-entry__secondary-crop img');
       const titleLine1 = containerRef.current.querySelector('.pa-px-entry__title-line-1');
       const titleLine2 = containerRef.current.querySelector('.pa-px-entry__title-line-2');
       const support = containerRef.current.querySelector('.pa-px-entry__support-block');
+      const anticipateInquiry = containerRef.current.querySelector('.pa-px-entry__anticipate-inquiry');
 
+      // Register actor for persistent route transition carry
+      if (primaryImg) {
+        registerActor('home-hero-media', {
+          element: primaryImg,
+          assetKey: 'homeWorldEntry',
+        });
+      }
+
+      // Continuous scrub mapped directly to scroll progress
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.75,
+          scrub: true, // Immediate 1:1 scrub mapping for zero catch-up lag
           fastScrollEnd: true,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            registerSceneProgress('home-world-entry', self.progress, true);
+          },
         },
       });
 
-      // 4 distinct velocity layers with spatial depth & variable font width
-      tl.to(primaryMedia, { y: '8%', scale: 1.06, ease: 'none' }, 0)
-        .fromTo(secondaryMedia, { y: '40%', opacity: 0.4, scale: 0.9 }, { y: '-10%', opacity: 1, scale: 1, ease: 'none' }, 0)
-        .to(titleLine1, { x: '-8%', fontVariationSettings: "'wdth' 95, 'opsz' 96", ease: 'none' }, 0)
-        .to(titleLine2, { x: '12%', fontVariationSettings: "'wdth' 78, 'opsz' 96", ease: 'none' }, 0)
-        .to(support, { y: '-30%', opacity: 0.15, ease: 'none' }, 0.1);
+      // 0.00 - 0.15 REST (established)
+      // 0.15 - 0.30 ANTICIPATE (inquiry appears in Zone D, secondary crop shifts inward)
+      // 0.30 - 0.65 TRANSFORM & ZOOM PARALLAX (primary container scales, inner image counter-moves, secondary crop expands and occludes title)
+      // 0.45 - 0.58 CLIMAX (simultaneous coexistence, zero black void)
+      // 0.65 - 0.82 TRANSFER OWNERSHIP (inquiry takes dominance, title recedes as residue)
+      // 0.82 - 0.92 SETTLE (participant context stable)
+      // 0.92 - 1.00 HANDOFF (prepared for situation clauses)
+
+      tl.to(primaryMediaWrap, {
+        scale: 1.10,
+        yPercent: 6,
+        ease: 'none',
+      }, 0)
+      .to(primaryImg, {
+        yPercent: -12, // Inner-image counter parallax
+        ease: 'none',
+      }, 0)
+      .fromTo(secondaryMedia, 
+        { xPercent: 10, yPercent: 25, scale: 0.92, opacity: 0.7 },
+        { xPercent: -15, yPercent: -8, scale: 1.08, opacity: 1, ease: 'none' },
+        0
+      )
+      .fromTo(secondaryImg,
+        { yPercent: 10 },
+        { yPercent: -10, ease: 'none' },
+        0
+      )
+      .to(titleLine1, {
+        xPercent: -10,
+        yPercent: -20,
+        opacity: 0.35,
+        fontVariationSettings: "'wdth' 76, 'opsz' 96",
+        ease: 'none',
+      }, 0.1)
+      .to(titleLine2, {
+        xPercent: 14,
+        yPercent: -25,
+        opacity: 0.25,
+        fontVariationSettings: "'wdth' 70, 'opsz' 96",
+        ease: 'none',
+      }, 0.1)
+      .to(support, {
+        yPercent: -35,
+        opacity: 0.15,
+        ease: 'none',
+      }, 0.05)
+      .fromTo(anticipateInquiry,
+        { opacity: 0, yPercent: 40 },
+        { opacity: 1, yPercent: 0, ease: 'none' },
+        0.25
+      );
     }, containerRef);
 
     return () => ctx.revert();
@@ -52,14 +113,14 @@ export const WorldEntry = () => {
   const restWords = words.slice(1).join(' ');
 
   return (
-    <section ref={containerRef} className="pa-px-entry-section" aria-label="World Entry">
+    <section ref={containerRef} className="pa-px-entry-section" aria-label="World Entry" data-scene-id="home-world-entry">
       <div className="pa-px-entry-stage">
-        {/* Dominant Environmental Plane */}
+        {/* Dominant Environmental Plane (Zoom Parallax Container + Inner Parallax) */}
         <div className="pa-px-entry__primary-media">
           <PublicPicture assetKey="homeWorldEntry" alt="Architectural design studio space" priority={true} />
         </div>
 
-        {/* Secondary Detail Crop */}
+        {/* Secondary Detail Crop (Occlusion & Independent Scale Layer) */}
         <div className="pa-px-entry__secondary-crop">
           <PublicPicture assetKey="homeSituationDetail" alt="Analytical drawing inspection close crop" />
         </div>
@@ -81,6 +142,14 @@ export const WorldEntry = () => {
                 {data.ctaSecondary}
               </Link>
             </div>
+          </div>
+
+          {/* Anticipatory inquiry emerging during 0.25 - 0.65 visual climax */}
+          <div className="pa-px-entry__anticipate-inquiry" aria-hidden="true">
+            <span className="pa-px-entry__anticipate-tag">Contextual Inquiry</span>
+            <p className="pa-px-entry__anticipate-prompt">
+              "How do you make progress when the goal is clear but the implementation is not?"
+            </p>
           </div>
         </div>
       </div>

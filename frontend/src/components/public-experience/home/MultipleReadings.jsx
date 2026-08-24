@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
+import { registerSceneProgress } from '../motion/scrollState';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,19 +28,46 @@ export const MultipleReadings = () => {
           trigger: containerRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8,
+          scrub: true, // Immediate 1:1 scrub mapping
           fastScrollEnd: true,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            registerSceneProgress('home-multiple-readings', self.progress, true);
+          },
         },
       });
 
-      // SVG path drawing & asymmetric node arrivals
-      tl.to(sourceAnchor, { x: '-5%', fontVariationSettings: "'wdth' 80, 'opsz' 56", ease: 'none' }, 0)
-        .fromTo(paths, { strokeDashoffset: 1200, strokeDasharray: 1200 }, { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' }, 0)
-        .fromTo(b1, { x: '40px', y: '-30px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.1)
-        .fromTo(b2, { x: '60px', y: '20px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.2)
-        .fromTo(b3, { x: '80px', y: '-20px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.7, ease: 'power2.out' }, 0.3)
-        .fromTo(b4, { x: '50px', y: '40px', opacity: 0.2 }, { x: '0px', y: '0px', opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.4);
+      // SVG path drawing & asymmetric node arrivals with variable font width modulation
+      tl.to(sourceAnchor, {
+        xPercent: -8,
+        fontVariationSettings: "'wdth' 78, 'opsz' 56",
+        ease: 'none',
+      }, 0)
+      .fromTo(paths,
+        { strokeDashoffset: 1200, strokeDasharray: 1200 },
+        { strokeDashoffset: 0, ease: 'none' },
+        0
+      )
+      .fromTo(b1,
+        { xPercent: 18, yPercent: -15, opacity: 0.4 },
+        { xPercent: 0, yPercent: 0, opacity: 1, ease: 'none' },
+        0.05
+      )
+      .fromTo(b2,
+        { xPercent: 24, yPercent: 10, opacity: 0.4 },
+        { xPercent: 0, yPercent: 0, opacity: 1, ease: 'none' },
+        0.18
+      )
+      .fromTo(b3,
+        { xPercent: 30, yPercent: -10, opacity: 0.3 },
+        { xPercent: 0, yPercent: 0, opacity: 1, ease: 'none' },
+        0.32
+      )
+      .fromTo(b4,
+        { xPercent: 22, yPercent: 20, opacity: 0.3 },
+        { xPercent: 0, yPercent: 0, opacity: 1, ease: 'none' },
+        0.45
+      );
     }, containerRef);
 
     return () => ctx.revert();
@@ -48,14 +76,14 @@ export const MultipleReadings = () => {
   const [d1, d2, d3, d4] = data.destinations;
 
   return (
-    <section ref={containerRef} className="pa-px-readings-section" aria-label="Multiple Readings">
+    <section ref={containerRef} className="pa-px-readings-section" aria-label="Multiple Readings" data-scene-id="home-multiple-readings">
       <div className="pa-px-readings-stage">
         {/* Background Geometric Trajectory Canvas */}
         <svg className="pa-px-readings__trajectories" viewBox="0 0 1400 700" preserveAspectRatio="none" aria-hidden="true">
-          <path className="pa-px-reading-path" d="M 280 350 C 480 350, 600 140, 950 140" fill="none" stroke="rgba(247, 248, 248, 0.22)" strokeWidth="1.5" />
-          <path className="pa-px-reading-path" d="M 280 350 C 520 350, 700 280, 1020 280" fill="none" stroke="rgba(247, 248, 248, 0.18)" strokeWidth="1.5" />
-          <path className="pa-px-reading-path" d="M 280 350 C 500 350, 650 460, 980 460" fill="none" stroke="rgba(247, 248, 248, 0.18)" strokeWidth="1.5" />
-          <path className="pa-px-reading-path" d="M 280 350 C 460 350, 620 590, 920 590" fill="none" stroke="rgba(247, 248, 248, 0.22)" strokeWidth="1.5" />
+          <path className="pa-px-reading-path" d="M 280 350 C 480 350, 600 140, 950 140" fill="none" stroke="rgba(247, 248, 248, 0.28)" strokeWidth="1.5" />
+          <path className="pa-px-reading-path" d="M 280 350 C 520 350, 700 280, 1020 280" fill="none" stroke="rgba(247, 248, 248, 0.22)" strokeWidth="1.5" />
+          <path className="pa-px-reading-path" d="M 280 350 C 500 350, 650 460, 980 460" fill="none" stroke="rgba(247, 248, 248, 0.22)" strokeWidth="1.5" />
+          <path className="pa-px-reading-path" d="M 280 350 C 460 350, 620 590, 920 590" fill="none" stroke="rgba(247, 248, 248, 0.28)" strokeWidth="1.5" />
         </svg>
 
         {/* Persistent Source Expression */}
