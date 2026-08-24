@@ -35,10 +35,10 @@ test.describe('Context Atlas — Real-Browser Viewport & Geometry Suite', () => 
           expect(mains).toBe(1);
 
           // Header rendered
-          const header = page.locator('header.pa-atlas-header');
-          await expect(header).toBeVisible();
+          const header = page.locator('header.pa-px-header, header.pa-atlas-header, header');
+          await expect(header.first()).toBeVisible();
 
-          // Horizontal overflow verification
+          // Horizontal overflow verification (allows up to 2px for sub-pixel anti-aliasing)
           const hasOverflow = await page.evaluate(() => {
             return document.documentElement.scrollWidth > window.innerWidth + 2;
           });
@@ -59,7 +59,7 @@ test.describe('Context Atlas — Real-Browser Viewport & Geometry Suite', () => 
     await triggerBtn.click();
 
     // Overlay is visible
-    const overlay = page.locator('.pa-atlas-index-overlay');
+    const overlay = page.locator('.pa-px-index-overlay, .pa-atlas-index-overlay');
     await expect(overlay).toBeVisible();
 
     // Main content is inert

@@ -5,11 +5,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
-import EditorialHomePage from './pages/editorial/EditorialHomePage';
-import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
-import PublicRouteTransition from './components/public-experience/motion/PublicRouteTransition';
+import { PublicExperienceLayout } from './components/public-experience/shell/PublicExperienceLayout';
 
+// Public Experience Canonical Routes
+import EditorialHomePage from './pages/editorial/EditorialHomePage';
 const LoginPage = lazy(() => import('./pages/Auth/LoginPage'));
 const SignupPage = lazy(() => import('./pages/Auth/SignupPage'));
 const EditorialHowItWorksPage = lazy(() => import('./pages/editorial/EditorialHowItWorksPage'));
@@ -18,7 +18,9 @@ const EditorialProgressPage = lazy(() => import('./pages/editorial/EditorialProg
 const EditorialMethodologyPage = lazy(() => import('./pages/editorial/EditorialMethodologyPage'));
 const EditorialTrustPage = lazy(() => import('./pages/editorial/EditorialTrustPage'));
 const EditorialPrivacyPage = lazy(() => import('./pages/editorial/EditorialPrivacyPage'));
+import PublicNotFoundPage from './pages/PublicNotFoundPage';
 
+// Protected Application Routes (Preserved)
 const DashboardPage = lazy(() => import('./pages/Dashboard'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 const ResultPage = lazy(() => import('./pages/Result'));
@@ -29,37 +31,6 @@ const AssessmentFlowResultPage = lazy(() => import('./pages/AssessmentFlow/Resul
 const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplorerPage'));
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
-
-const PublicSuspenseFallback = () => (
-  <div
-    className="pa-px-suspense-fallback"
-    style={{
-      backgroundColor: 'var(--px-ink, #121416)',
-      color: 'var(--px-white, #F7F8F8)',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-    role="status"
-    aria-label="Loading route"
-  >
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-      <div
-        style={{
-          width: '24px',
-          height: '24px',
-          border: '2px solid rgba(247, 248, 248, 0.3)',
-          borderTopColor: 'var(--px-white, #F7F8F8)',
-          borderRadius: '50%',
-          animation: 'spin 1s linear infinite',
-        }}
-        aria-hidden="true"
-      />
-    </div>
-  </div>
-);
 
 const ProtectedSuspenseFallback = () => (
   <div
@@ -80,17 +51,13 @@ const ProtectedSuspenseFallback = () => (
   </div>
 );
 
-const withPublicSuspense = (node) => (
-  <Suspense fallback={<PublicSuspenseFallback />}>{node}</Suspense>
-);
-
 const withProtectedSuspense = (node) => (
   <Suspense fallback={<ProtectedSuspenseFallback />}>{node}</Suspense>
 );
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Preserves query string when normalizing /assessment → /assessment/start (e.g. deep links). */
+/** Preserves query string when normalizing /assessment → /assessment/start */
 const AssessmentRootRedirect = () => {
   const location = useLocation();
   const target = `/assessment/start${location.search || ''}`;
@@ -98,34 +65,23 @@ const AssessmentRootRedirect = () => {
 };
 
 const AppRoutes = () => {
-  const location = useLocation();
-  const isPublicRoute = [
-    '/',
-    '/how-it-works',
-    '/career-intelligence',
-    '/progress',
-    '/methodology',
-    '/trust',
-    '/privacy',
-    '/login',
-    '/signup',
-  ].includes(location.pathname);
-
   return (
     <div className="app-root-container">
       <PublicMetadata />
-      {isPublicRoute && <PublicRouteTransition />}
-      <Routes location={location} key={`${location.pathname}${location.search}`}>
-        {/* ── Public Experience Routes ── */}
-        <Route path="/" element={<EditorialHomePage />} />
-        <Route path="/how-it-works" element={withPublicSuspense(<EditorialHowItWorksPage />)} />
-        <Route path="/career-intelligence" element={withPublicSuspense(<EditorialCareerIntelligencePage />)} />
-        <Route path="/progress" element={withPublicSuspense(<EditorialProgressPage />)} />
-        <Route path="/methodology" element={withPublicSuspense(<EditorialMethodologyPage />)} />
-        <Route path="/trust" element={withPublicSuspense(<EditorialTrustPage />)} />
-        <Route path="/privacy" element={withPublicSuspense(<EditorialPrivacyPage />)} />
-        <Route path="/login" element={withPublicSuspense(<LoginPage />)} />
-        <Route path="/signup" element={withPublicSuspense(<SignupPage />)} />
+      <Routes>
+        {/* ── Public Experience Routes (Inside Persistent Shell) ── */}
+        <Route element={<PublicExperienceLayout />}>
+          <Route path="/" element={<EditorialHomePage />} />
+          <Route path="/how-it-works" element={<EditorialHowItWorksPage />} />
+          <Route path="/career-intelligence" element={<EditorialCareerIntelligencePage />} />
+          <Route path="/progress" element={<EditorialProgressPage />} />
+          <Route path="/methodology" element={<EditorialMethodologyPage />} />
+          <Route path="/trust" element={<EditorialTrustPage />} />
+          <Route path="/privacy" element={<EditorialPrivacyPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="*" element={<PublicNotFoundPage />} />
+        </Route>
 
         {/* ── Protected Application Routes (Preserved) ── */}
         <Route
@@ -232,8 +188,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           )}
         />
-
-        <Route path="*" element={<PublicNotFoundPage />} />
       </Routes>
     </div>
   );

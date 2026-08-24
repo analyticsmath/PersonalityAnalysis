@@ -1,12 +1,11 @@
 import React from 'react';
-import { PublicExperienceRoot } from '../../components/public-experience/chrome/PublicExperienceRoot';
 import { TrustInspectionStage } from '../../components/public-experience/trust/TrustInspectionStage';
 
 export const EditorialTrustPage = () => {
   return (
-    <PublicExperienceRoot withFooter={true}>
+    <div className="pa-px-trust-page-container">
       <TrustInspectionStage />
-    </PublicExperienceRoot>
+    </div>
   );
 };
 

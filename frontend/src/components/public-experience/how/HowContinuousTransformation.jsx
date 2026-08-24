@@ -1,9 +1,15 @@
+/**
+ * Personality Assessor - How It Works Causal Experience
+ * Single normalized progress controller driving semantic phrase travel along SVG trajectories
+ * and guarded DotLottie frame scrubbing without discrete card jumps.
+ */
+
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
-import { PublicPicture } from '../media/PublicPicture';
+import { PersistentMediaSlot } from '../canvas/PersistentMediaSlot';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 import { registerSceneProgress, registerActor } from '../motion/scrollState';
 
@@ -37,14 +43,12 @@ export const HowContinuousTransformation = () => {
       const phraseWord1 = containerRef.current.querySelector('.pa-px-how-word--1');
       const phraseWord2 = containerRef.current.querySelector('.pa-px-how-word--2');
       const phraseWord3 = containerRef.current.querySelector('.pa-px-how-word--3');
-      const vectorStage = containerRef.current.querySelector('.pa-px-how-vector-stage');
-      const narrativeWrap = containerRef.current.querySelector('.pa-px-how-stage-narrative');
 
-      // Register actor for route transition
       if (phraseWord1) {
         registerActor('how-causal-phrase', {
           element: phraseWord1,
           text: data.sampleResponse,
+          transitionRole: 'shared',
         });
       }
 
@@ -74,18 +78,14 @@ export const HowContinuousTransformation = () => {
             }
           }
 
-          // Physical semantic text transformation along trajectories
+          // Physical semantic text transformation along trajectories with meaningful travel (20-30vw)
           if (phraseWord1 && phraseWord2 && phraseWord3) {
-            // Stage 0.00 - 0.20: Cohesive initial source phrase
-            // Stage 0.20 - 0.45: Words separate and travel into distinct analytical orbits
-            // Stage 0.45 - 0.75: Trajectory displacement
-            // Stage 0.75 - 1.00: Reassembling into calibrated vector output
-            const word1X = p * -30;
-            const word1Y = Math.sin(p * Math.PI) * -24;
-            const word2X = Math.sin(p * Math.PI * 2) * 15;
-            const word2Y = Math.sin(p * Math.PI) * 18;
-            const word3X = p * 35;
-            const word3Y = Math.sin(p * Math.PI) * -32;
+            const word1X = p * -180;
+            const word1Y = Math.sin(p * Math.PI) * -60;
+            const word2X = Math.sin(p * Math.PI * 2) * 80;
+            const word2Y = Math.sin(p * Math.PI) * 50;
+            const word3X = p * 210;
+            const word3Y = Math.sin(p * Math.PI) * -80;
 
             phraseWord1.style.transform = `translate3d(${word1X}px, ${word1Y}px, 0)`;
             phraseWord2.style.transform = `translate3d(${word2X}px, ${word2Y}px, 0)`;
@@ -98,7 +98,6 @@ export const HowContinuousTransformation = () => {
     return () => ctx.revert();
   }, [prefersReducedMotion, data.sampleResponse]);
 
-  // Derived narrative stage for copy display without visual discontinuity
   const stageIdx = Math.min(
     Math.floor(activeProgress * data.movements.length),
     data.movements.length - 1
@@ -110,7 +109,7 @@ export const HowContinuousTransformation = () => {
       <div className="pa-px-how-stage-sticky">
         {/* Environmental Workshop Backdrop */}
         <div className="pa-px-how-stage__media-bg">
-          <PublicPicture assetKey="howTransformation" alt="Hands transforming prototype in engineering workshop" />
+          <PersistentMediaSlot actorId="how-workshop-media" assetKey="howTransformation" alt="Hands transforming prototype in engineering workshop" />
         </div>
 
         {/* Editorial Heading */}
@@ -121,7 +120,7 @@ export const HowContinuousTransformation = () => {
 
         {/* The Continuous Transforming Causal Object */}
         <div className="pa-px-how-causal-field">
-          {/* Transforming Source Expression: Semantic words travel along physical trajectories */}
+          {/* Transforming Source Expression */}
           <div className="pa-px-how-source-actor" aria-label={`Source response: ${data.sampleResponse}`}>
             <p className="pa-px-how-source-actor__phrase">
               <span className="pa-px-how-word pa-px-how-word--1">"I clarify the constraints first, </span>

@@ -7,7 +7,7 @@ import { googleLogin as googleLoginApi, signup as signupApi } from '../../api/au
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
 import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../content/public-experience/navigation';
-import { PublicExperienceRoot } from '../../components/public-experience/chrome/PublicExperienceRoot';
+import { PersistentMediaSlot } from '../../components/public-experience/canvas/PersistentMediaSlot';
 import { PublicPicture } from '../../components/public-experience/media/PublicPicture';
 import { PUBLIC_CONTENT } from '../../content/public-experience/publicContent';
 
@@ -139,154 +139,152 @@ export const SignupPage = () => {
   const isSubmitting = signupMutation.isPending || googleMutation.isPending;
 
   return (
-    <PublicExperienceRoot withFooter={false}>
-      <div className="pa-px-auth-root">
-        {/* Full Environmental Ground (Desktop) / Header Crop (Mobile) */}
-        <div className="pa-px-auth-bg-media">
-          <PublicPicture assetKey="authSignup" alt="Workshop baseline environment" priority={true} />
-        </div>
+    <div className="pa-px-auth-root">
+      {/* Full Environmental Ground (Desktop) / Header Crop (Mobile) */}
+      <div className="pa-px-auth-bg-media">
+        <PersistentMediaSlot actorId="auth-signup-media" assetKey="authSignup" alt="Workshop baseline environment" priority={true} />
+      </div>
 
-        {/* Direct Negative Space Form (No Floating Glass Card) */}
-        <div className="pa-px-auth-negative-space-form">
-          <header className="pa-px-auth-form-header">
-            <h1>{content.headline}</h1>
-            <p>{content.support}</p>
-          </header>
+      {/* Direct Negative Space Form (No Floating Glass Card) */}
+      <div className="pa-px-auth-negative-space-form">
+        <header className="pa-px-auth-form-header">
+          <h1>{content.headline}</h1>
+          <p>{content.support}</p>
+        </header>
 
-          {formError && (
-            <div className="pa-px-auth-error" role="alert">
-              {formError}
-            </div>
-          )}
+        {formError && (
+          <div className="pa-px-auth-error" role="alert">
+            {formError}
+          </div>
+        )}
 
-          {successMessage && (
-            <div className="pa-px-auth-success" role="status">
-              {successMessage}
-            </div>
-          )}
+        {successMessage && (
+          <div className="pa-px-auth-success" role="status">
+            {successMessage}
+          </div>
+        )}
 
-          {GOOGLE_CLIENT_ID && (
-            <div className="pa-px-auth-social-wrap">
-              <GoogleLoginButton
-                onSuccess={handleGoogleSuccess}
-                onError={() => setFormError('Google sign-up was interrupted.')}
-                text="signup_with"
-                disabled={isSubmitting}
-              />
-            </div>
-          )}
+        {GOOGLE_CLIENT_ID && (
+          <div className="pa-px-auth-social-wrap">
+            <GoogleLoginButton
+              onSuccess={handleGoogleSuccess}
+              onError={() => setFormError('Google sign-up was interrupted.')}
+              text="signup_with"
+              disabled={isSubmitting}
+            />
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="pa-px-auth-form" noValidate>
-            <div className="pa-px-auth-field">
-              <label htmlFor="signup-name">Full Name</label>
-              <input
-                ref={nameInputRef}
-                id="signup-name"
-                type="text"
-                autoComplete="name"
-                placeholder="Jane Doe"
-                value={form.name}
-                disabled={isSubmitting}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, name: e.target.value }));
-                  if (fieldErrors.name) setFieldErrors((fe) => ({ ...fe, name: undefined }));
-                }}
-              />
-              {fieldErrors.name && (
-                <span className="pa-px-field-error">
-                  {fieldErrors.name}
-                </span>
-              )}
-            </div>
-
-            <div className="pa-px-auth-field">
-              <label htmlFor="signup-email">Email Address</label>
-              <input
-                ref={emailInputRef}
-                id="signup-email"
-                type="email"
-                autoComplete="email"
-                placeholder="name@company.com"
-                value={form.email}
-                disabled={isSubmitting}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, email: e.target.value }));
-                  if (fieldErrors.email) setFieldErrors((fe) => ({ ...fe, email: undefined }));
-                }}
-              />
-              {fieldErrors.email && (
-                <span className="pa-px-field-error">
-                  {fieldErrors.email}
-                </span>
-              )}
-            </div>
-
-            <div className="pa-px-auth-field">
-              <div className="pa-px-auth-field__row">
-                <label htmlFor="signup-password">Password</label>
-                <button
-                  type="button"
-                  className="pa-px-auth-toggle-pwd"
-                  onClick={() => setShowPassword((s) => !s)}
-                >
-                  {showPassword ? 'Hide' : 'Show'}
-                </button>
-              </div>
-              <input
-                ref={passwordInputRef}
-                id="signup-password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="new-password"
-                placeholder="••••••••"
-                value={form.password}
-                disabled={isSubmitting}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, password: e.target.value }));
-                  if (fieldErrors.password) setFieldErrors((fe) => ({ ...fe, password: undefined }));
-                }}
-              />
-              {fieldErrors.password && (
-                <span className="pa-px-field-error">
-                  {fieldErrors.password}
-                </span>
-              )}
-            </div>
-
-            <label className="pa-px-auth-checkbox">
-              <input
-                ref={consentInputRef}
-                type="checkbox"
-                checked={form.terms}
-                disabled={isSubmitting}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, terms: e.target.checked }));
-                  if (fieldErrors.terms) setFieldErrors((fe) => ({ ...fe, terms: undefined }));
-                }}
-              />
-              <span>
-                I agree to the <Link to="/privacy">Privacy Policy</Link> and data governance terms.
-              </span>
-            </label>
-            {fieldErrors.terms && (
+        <form onSubmit={handleSubmit} className="pa-px-auth-form" noValidate>
+          <div className="pa-px-auth-field">
+            <label htmlFor="signup-name">Full Name</label>
+            <input
+              ref={nameInputRef}
+              id="signup-name"
+              type="text"
+              autoComplete="name"
+              placeholder="Jane Doe"
+              value={form.name}
+              disabled={isSubmitting}
+              onChange={(e) => {
+                setForm((f) => ({ ...f, name: e.target.value }));
+                if (fieldErrors.name) setFieldErrors((fe) => ({ ...fe, name: undefined }));
+              }}
+            />
+            {fieldErrors.name && (
               <span className="pa-px-field-error">
-                {fieldErrors.terms}
+                {fieldErrors.name}
               </span>
             )}
-
-            <button type="submit" className="pa-px-btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating account...' : 'Create Account'}
-            </button>
-          </form>
-
-          <div className="pa-px-auth-switch">
-            Already have an account?{' '}
-            <Link to={`/login?next=${encodeURIComponent(safeNext)}`}>
-              Sign in to your record
-            </Link>
           </div>
+
+          <div className="pa-px-auth-field">
+            <label htmlFor="signup-email">Email Address</label>
+            <input
+              ref={emailInputRef}
+              id="signup-email"
+              type="email"
+              autoComplete="email"
+              placeholder="name@company.com"
+              value={form.email}
+              disabled={isSubmitting}
+              onChange={(e) => {
+                setForm((f) => ({ ...f, email: e.target.value }));
+                if (fieldErrors.email) setFieldErrors((fe) => ({ ...fe, email: undefined }));
+              }}
+            />
+            {fieldErrors.email && (
+              <span className="pa-px-field-error">
+                {fieldErrors.email}
+              </span>
+            )}
+          </div>
+
+          <div className="pa-px-auth-field">
+            <div className="pa-px-auth-field__row">
+              <label htmlFor="signup-password">Password</label>
+              <button
+                type="button"
+                className="pa-px-auth-toggle-pwd"
+                onClick={() => setShowPassword((s) => !s)}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+            <input
+              ref={passwordInputRef}
+              id="signup-password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="new-password"
+              placeholder="••••••••"
+              value={form.password}
+              disabled={isSubmitting}
+              onChange={(e) => {
+                setForm((f) => ({ ...f, password: e.target.value }));
+                if (fieldErrors.password) setFieldErrors((fe) => ({ ...fe, password: undefined }));
+              }}
+            />
+            {fieldErrors.password && (
+              <span className="pa-px-field-error">
+                {fieldErrors.password}
+              </span>
+            )}
+          </div>
+
+          <label className="pa-px-auth-checkbox">
+            <input
+              ref={consentInputRef}
+              type="checkbox"
+              checked={form.terms}
+              disabled={isSubmitting}
+              onChange={(e) => {
+                setForm((f) => ({ ...f, terms: e.target.checked }));
+                if (fieldErrors.terms) setFieldErrors((fe) => ({ ...fe, terms: undefined }));
+              }}
+            />
+            <span>
+              I agree to the <Link to="/privacy">Privacy Policy</Link> and data governance terms.
+            </span>
+          </label>
+          {fieldErrors.terms && (
+            <span className="pa-px-field-error">
+              {fieldErrors.terms}
+            </span>
+          )}
+
+          <button type="submit" className="pa-px-btn-primary" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating account...' : 'Create Account'}
+          </button>
+        </form>
+
+        <div className="pa-px-auth-switch">
+          Already have an account?{' '}
+          <Link to={`/login?next=${encodeURIComponent(safeNext)}`}>
+            Sign in to your record
+          </Link>
         </div>
       </div>
-    </PublicExperienceRoot>
+    </div>
   );
 };
 

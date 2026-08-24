@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Temporal Choreography & Motion System Reconstruction (Playwright)', () => {
   test.beforeEach(async ({ page }) => {
-    // Set a standard desktop viewport
     await page.setViewportSize({ width: 1440, height: 900 });
   });
 
@@ -17,7 +16,7 @@ test.describe('Temporal Choreography & Motion System Reconstruction (Playwright)
       // Candidate visual actors across public routes
       const candidateElements = Array.from(
         document.querySelectorAll(
-          '.pa-px-entry-section, .pa-px-entry-stage, .pa-px-entry__primary-media, .pa-px-entry__headline, .pa-px-situation-section, .pa-px-situation-stage, .pa-px-situation__prompt, .pa-px-clause, .pa-px-readings-section, .pa-px-readings-stage, .pa-px-readings__source-anchor, .pa-px-reading-node, .pa-px-journey-section, .pa-px-journey-stage, .pa-px-journey-env, .pa-px-calibration-section, .pa-px-calibration-stage, .pa-px-calibration-mass, .pa-px-time-section, .pa-px-time-stage, .pa-px-time__base-media, .pa-px-trace-section, .pa-px-trace-stage, .pa-px-trace__interpreted-layer, .pa-px-finale-section, .pa-px-finale-stage, .pa-px-finale__title, .pa-px-how-section, .pa-px-how-stage-sticky, .pa-px-how-header-block, .pa-px-how-source-actor, .pa-px-how-vector-stage, .pa-px-how-stage-narrative, .pa-px-career-hero-section, .pa-px-career-hero-content, .pa-px-career-rail-section, .pa-px-trust-section, .pa-px-trust-stage-sticky, .pa-px-trust-record-actor, .pa-px-trust-header, .pa-px-footer, .pa-px-footer__brand, .pa-px-footer__inner'
+          '.pa-px-home-continuous-root, .pa-px-home-sticky-stage, .pa-px-home-world-layer, .pa-px-home-world__primary, .pa-px-home-world__title, .pa-px-entry-section, .pa-px-entry-stage, .pa-px-entry__primary-media, .pa-px-entry__headline, .pa-px-situation-section, .pa-px-situation-stage, .pa-px-situation__prompt, .pa-px-clause, .pa-px-readings-section, .pa-px-readings-stage, .pa-px-readings__source-anchor, .pa-px-reading-node, .pa-px-journey-section, .pa-px-journey-stage, .pa-px-journey-env, .pa-px-calibration-section, .pa-px-calibration-stage, .pa-px-calibration-mass, .pa-px-time-section, .pa-px-time-stage, .pa-px-time__base-media, .pa-px-trace-section, .pa-px-trace-stage, .pa-px-trace__interpreted-layer, .pa-px-finale-section, .pa-px-finale-stage, .pa-px-finale__title, .pa-px-how-section, .pa-px-how-stage-sticky, .pa-px-how-header-block, .pa-px-how-source-actor, .pa-px-how-vector-stage, .pa-px-how-stage-narrative, .pa-px-career-hero-section, .pa-px-career-hero-content, .pa-px-career-rail-section, .pa-px-trust-section, .pa-px-trust-stage-sticky, .pa-px-trust-record-actor, .pa-px-trust-header, .pa-px-footer, .pa-px-footer__brand, .pa-px-footer__inner'
         )
       );
 
@@ -52,7 +51,7 @@ test.describe('Temporal Choreography & Motion System Reconstruction (Playwright)
   test('Home Route: PageDown, ArrowDown, Fast Wheel, and Reverse Stress', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
-    await page.waitForSelector('.pa-px-entry-section');
+    await page.waitForSelector('.pa-px-home-continuous-root, .pa-px-entry-section');
 
     // Initial state check
     await assertViewportActorHealth(page, 'Home - Initial Rest');
@@ -108,7 +107,7 @@ test.describe('Temporal Choreography & Motion System Reconstruction (Playwright)
   test('Route Transition & Shared Actor Carry: Home -> Career, How, Trust', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
-    await page.waitForSelector('.pa-px-entry-section');
+    await page.waitForSelector('.pa-px-home-continuous-root, .pa-px-entry-section');
 
     // 1. Home -> Career (Shared Media Carry)
     await page.click('a[href="/career-intelligence"]');
