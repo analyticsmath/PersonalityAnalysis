@@ -3,40 +3,40 @@ import { useLocation } from 'react-router-dom';
 
 const metadata = {
   '/': [
-    'Personality Assessor | Inspectable professional evidence',
-    'Build an inspectable professional record from personality, vocational interests, work values and the context around your responses.',
+    'Personality Assessor | Context Atlas',
+    'Context Atlas architecture: See how the same professional evidence reads across personality, interests, work values, career conditions, and time.',
   ],
   '/how-it-works': [
     'How It Works | Personality Assessor',
-    'An assessment that separates different kinds of evidence so they can be inspected before they are used together for career exploration.',
+    'See one response extract, branch, weight, and store without numbered steppers or opaque scoring.',
   ],
   '/career-intelligence': [
     'Career Intelligence | Personality Assessor',
-    'Explore the conditions that can create alignment, tension and room to develop across curated professional role profiles.',
+    'Explore 5 workworld environments and 17 canonical role requirements in a navigable spatial atlas.',
   ],
   '/progress': [
     'Progress | Personality Assessor',
-    'Assessment history and longitudinal trend views let later evidence sit beside earlier readings without erasing stable patterns.',
+    'Longitudinal context accumulation where later evidence sits beside earlier readings without erasing stable patterns.',
   ],
   '/methodology': [
     'Methodology | Personality Assessor',
-    'Inspect continuous Big Five dimensions, RIASEC interests, work values, contextual career signals, and deterministic career comparison.',
+    'Inspect continuous Big Five dimensions, RIASEC interests, work values, behavioral signals, and deterministic career calibration.',
   ],
   '/trust': [
-    'Trust & Provenance | Personality Assessor',
-    'Distinguish what you supplied, what the system calculated, what was compared, and what remains under your direct control.',
+    'Trust & Chain of Custody | Personality Assessor',
+    'Follow a reading back to its source: what you supplied, what the system calculated, and what remains under your direct control.',
   ],
   '/privacy': [
-    'Privacy | Personality Assessor',
+    'Privacy Terms | Personality Assessor',
     'Read how Personality Assessor handles assessment data, account security, and explicit data export and deletion controls.',
   ],
   '/login': [
     'Sign In | Personality Assessor',
-    'Return to your record. Reopen assessments, career exploration and progress already tied to your account.',
+    'Return to your record. Reopen assessments, review results, and revisit your career context.',
   ],
   '/signup': [
     'Create Account | Personality Assessor',
-    'Create the first record. Start with your background, then add evidence through staged inquiry.',
+    'Start with one honest record. Create an account to keep assessments and compare later changes over time.',
   ],
 };
 
@@ -70,8 +70,8 @@ export default function PublicMetadata() {
         ? import.meta.env.VITE_SITE_ORIGIN || window.location.origin
         : '';
     const [title, description] = metadata[pathname] || [
-      'Personality Assessor | Inspectable professional evidence',
-      'Inspectable professional evidence for personality, vocational interests, and career intelligence.',
+      'Personality Assessor | Context Atlas',
+      'Adaptive personality and career intelligence keeping evidence attached to the conditions where it occurred.',
     ];
     const url = `${origin}${pathname}`;
     document.title = title;

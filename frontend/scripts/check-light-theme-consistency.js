@@ -113,6 +113,14 @@ const ALLOWLIST_PATHS = new Set([
   'pages/editorial/EditorialMethodologyPage.css',
   'pages/editorial/EditorialTrustPage.css',
 
+  // Context Atlas public atmospheric layer
+  'styles/personality-atlas/tokens.css',
+  'styles/personality-atlas/fonts.css',
+  'styles/personality-atlas/base.css',
+  'styles/personality-atlas/chrome.css',
+  'styles/personality-atlas/motion.css',
+  'styles/personality-atlas/responsive.css',
+
   // Archival and legacy pages
   'pages/Legacy/LegacyStaticAssessmentPage.jsx',
   'pages/PublicSite.css',

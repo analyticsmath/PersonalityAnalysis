@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
-import RouteTransitionCoordinator from './components/personality-v7/motion/RouteTransitionCoordinator';
+import AtlasRouteTransitionCoordinator from './components/personality-atlas/motion/AtlasRouteTransitionCoordinator';
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 import PublicMetadata from './components/public/PublicMetadata';
@@ -41,12 +41,52 @@ const PUBLIC_ROUTE_TONES = {
   '/signup': 'light',
 };
 
-const SuspensePageFallback = ({ pathname = '' }) => {
+const PublicSuspenseFallback = () => (
+  <div
+    className="app-page pa-atlas-suspense-fallback"
+    style={{
+      backgroundColor: 'var(--atlas-field, #163D35)',
+      color: 'var(--atlas-paper, #EFF5F2)',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+    role="status"
+    aria-label="Loading route"
+  >
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+      <div
+        style={{
+          width: '24px',
+          height: '24px',
+          border: '2px solid var(--atlas-signal, #CDD86A)',
+          borderTopColor: 'transparent',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+        }}
+        aria-hidden="true"
+      />
+      <span
+        style={{
+          fontFamily: 'var(--atlas-font-mono, monospace)',
+          fontSize: '0.78rem',
+          letterSpacing: '0.08em',
+          color: 'var(--atlas-signal, #CDD86A)',
+        }}
+      >
+        LOADING CONTEXT ATLAS
+      </span>
+    </div>
+  </div>
+);
+
+const ProtectedSuspenseFallback = ({ pathname = '' }) => {
   const cleanPath = pathname.split('?')[0].split('#')[0];
   const isDark = PUBLIC_ROUTE_TONES[cleanPath] === 'dark' || cleanPath === '/';
   const bg = isDark ? 'var(--pa-carbon, #0D0F0E)' : 'var(--pa-mineral, #F3F5F2)';
   const fg = isDark ? 'var(--pa-mineral, #F3F5F2)' : 'var(--pa-carbon, #0D0F0E)';
-  const traceColor = 'var(--pa-oxblood, #642832)';
 
   return (
     <div
@@ -63,34 +103,17 @@ const SuspensePageFallback = ({ pathname = '' }) => {
       role="status"
       aria-label="Loading route"
     >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-        <div
-          style={{
-            width: '32px',
-            height: '2px',
-            backgroundColor: traceColor,
-            opacity: 0.8,
-          }}
-          aria-hidden="true"
-        />
-        <span
-          style={{
-            fontFamily: 'var(--pa-font-sans, "Instrument Sans", sans-serif)',
-            fontSize: '0.75rem',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            opacity: 0.5,
-          }}
-        >
-          The Living Record
-        </span>
-      </div>
+      <LoadingState />
     </div>
   );
 };
 
-const withSuspense = (node, pathname = '') => (
-  <Suspense fallback={<SuspensePageFallback pathname={pathname} />}>{node}</Suspense>
+const withPublicSuspense = (node) => (
+  <Suspense fallback={<PublicSuspenseFallback />}>{node}</Suspense>
+);
+
+const withProtectedSuspense = (node, pathname = '') => (
+  <Suspense fallback={<ProtectedSuspenseFallback pathname={pathname} />}>{node}</Suspense>
 );
 
 gsap.registerPlugin(ScrollTrigger);
@@ -109,21 +132,21 @@ const AppRoutes = () => {
     <div className="app-root-container">
       <PublicMetadata />
       <Routes location={location} key={`${location.pathname}${location.search}`}>
-        {/* ── Public Routes (Evidence in Context Visual Architecture) ── */}
+        {/* ── Public Routes (Context Atlas Visual Architecture) ── */}
         <Route path="/" element={<EditorialHomePage />} />
-        <Route path="/how-it-works" element={withSuspense(<EditorialHowItWorksPage />, '/how-it-works')} />
-        <Route path="/career-intelligence" element={withSuspense(<EditorialCareerIntelligencePage />, '/career-intelligence')} />
-        <Route path="/progress" element={withSuspense(<EditorialProgressPage />, '/progress')} />
-        <Route path="/methodology" element={withSuspense(<EditorialMethodologyPage />, '/methodology')} />
-        <Route path="/trust" element={withSuspense(<EditorialTrustPage />, '/trust')} />
-        <Route path="/privacy" element={withSuspense(<EditorialPrivacyPage />, '/privacy')} />
-        <Route path="/login" element={withSuspense(<LoginPage />, '/login')} />
-        <Route path="/signup" element={withSuspense(<SignupPage />, '/signup')} />
+        <Route path="/how-it-works" element={withPublicSuspense(<EditorialHowItWorksPage />)} />
+        <Route path="/career-intelligence" element={withPublicSuspense(<EditorialCareerIntelligencePage />)} />
+        <Route path="/progress" element={withPublicSuspense(<EditorialProgressPage />)} />
+        <Route path="/methodology" element={withPublicSuspense(<EditorialMethodologyPage />)} />
+        <Route path="/trust" element={withPublicSuspense(<EditorialTrustPage />)} />
+        <Route path="/privacy" element={withPublicSuspense(<EditorialPrivacyPage />)} />
+        <Route path="/login" element={withPublicSuspense(<LoginPage />)} />
+        <Route path="/signup" element={withPublicSuspense(<SignupPage />)} />
 
         {/* ── Protected Application Routes ── */}
         <Route
           path="/dashboard"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <DashboardPage />
             </ProtectedRoute>
@@ -131,7 +154,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/analytics"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <AnalyticsPage />
             </ProtectedRoute>
@@ -139,7 +162,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/account/privacy"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <PrivacyControlsPage />
             </ProtectedRoute>
@@ -155,7 +178,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/legacy/assessment-static"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <LegacyStaticAssessmentPage />
             </ProtectedRoute>
@@ -163,7 +186,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/assessment/start"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <StartAssessmentFlowPage />
             </ProtectedRoute>
@@ -171,7 +194,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/assessment/test"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <AdaptiveAssessmentTestPage />
             </ProtectedRoute>
@@ -179,7 +202,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/assessment/behavior"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <BehaviorAssessmentPage />
             </ProtectedRoute>
@@ -187,7 +210,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/assessment/career"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <CareerExplorerPage />
             </ProtectedRoute>
@@ -195,7 +218,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/assessment/result"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <AssessmentFlowResultPage />
             </ProtectedRoute>
@@ -219,7 +242,7 @@ const AppRoutes = () => {
         />
         <Route
           path="/result/:assessmentId"
-          element={withSuspense(
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <ResultPage />
             </ProtectedRoute>
@@ -236,9 +259,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <AvatarEventProvider>
-        <RouteTransitionCoordinator>
+        <AtlasRouteTransitionCoordinator>
           <AppRoutes />
-        </RouteTransitionCoordinator>
+        </AtlasRouteTransitionCoordinator>
       </AvatarEventProvider>
     </BrowserRouter>
   );

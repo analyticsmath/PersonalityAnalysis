@@ -2,21 +2,17 @@ import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
 import { googleLogin as googleLoginApi, signup as signupApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { MEDIA_ASSETS_V7 } from '../../content/personality-v7/mediaManifest';
 import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../utils/personality-v4/navigation';
-import PublicLayout from '../../components/personality-v7/chrome/PublicLayout';
-import SmoothScrollProvider from '../../components/personality-v7/motion/SmoothScrollProvider';
-import MagneticTarget from '../../components/personality-v7/motion/MagneticTarget';
-import { useRouteTransition } from '../../components/personality-v7/motion/RouteTransitionCoordinator';
-import EvidenceStrip from '../../components/personality-v7/living-record/EvidenceStrip';
-
-gsap.registerPlugin(ScrollTrigger);
+import AtlasLayout from '../../components/personality-atlas/chrome/AtlasLayout';
+import AtlasScrollProvider from '../../components/personality-atlas/motion/AtlasScrollProvider';
+import AtlasResponsiveImage from '../../components/personality-atlas/media/AtlasResponsiveImage';
+import ResponseFragment from '../../components/personality-atlas/fragments/ResponseFragment';
+import { MEDIA_ASSETS_ATLAS } from '../../content/personality-atlas/mediaManifest';
+import { PUBLIC_CONTENT } from '../../content/personality-atlas/publicContent';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,20 +21,19 @@ export const SignupPage = () => {
   const location = useLocation();
   const auth = useAuth();
   const timerRef = useRef(null);
-  const { navigateWithTransition } = useRouteTransition();
 
   const nameInputRef = useRef(null);
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
   const consentInputRef = useRef(null);
-  const environmentalImageRef = useRef(null);
 
   const [form, setForm] = useState({ name: '', email: '', password: '', terms: false });
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const asset = MEDIA_ASSETS_V7.signupFirstRecord;
+
+  const content = PUBLIC_CONTENT.auth.signup;
 
   const safeNext = useMemo(() => {
     const params =
@@ -54,35 +49,13 @@ export const SignupPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isMobile = window.innerWidth <= 768;
-    if (prefersReduced || isMobile) return;
-
-    gsap.fromTo(
-      environmentalImageRef.current,
-      { y: -20, opacity: 0.8 },
-      {
-        y: 40,
-        opacity: 0.95,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.pa-auth-signup',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 0.8,
-        },
-      }
-    );
-  }, []);
-
   const signupMutation = useMutation({
     mutationFn: signupApi,
     onSuccess: () => {
       setSuccessMessage('Account created. Taking you to sign in.');
       timerRef.current = setTimeout(() => {
         navigate(`/login?next=${encodeURIComponent(safeNext)}`, { replace: true });
-      }, 800);
+      }, 700);
     },
     onError: (error) => {
       const message = error?.message || 'Could not create account. Please check your details.';
@@ -98,7 +71,7 @@ export const SignupPage = () => {
       navigate(safeNext, { replace: true });
     },
     onError: (error) => {
-      const message = error?.message || 'Google sign-up failed. Please retry.';
+      const message = error?.message || 'Google sign-up failed. Please try again.';
       setFormError(message);
       toast.error(message);
     },
@@ -109,284 +82,312 @@ export const SignupPage = () => {
   }
 
   const validate = () => {
-    const errors = {};
+    const nextErrors = {};
     if (!form.name.trim()) {
-      errors.name = 'Please enter your name.';
+      nextErrors.name = 'Full name is required.';
     }
-    if (!form.email.trim()) {
-      errors.email = 'Please enter your email.';
+
+    if (!form.email) {
+      nextErrors.email = 'Email address is required.';
     } else if (!EMAIL_REGEX.test(form.email.trim())) {
-      errors.email = 'Please enter a valid email address.';
+      nextErrors.email = 'Enter a valid email address.';
     }
+
     if (!form.password) {
-      errors.password = 'Please enter a password.';
-    } else if (form.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters.';
+      nextErrors.password = 'Password is required.';
+    } else if (form.password.length < 8) {
+      nextErrors.password = 'Password must be at least 8 characters.';
     }
+
     if (!form.terms) {
-      errors.terms = 'Please accept the privacy policy to continue.';
+      nextErrors.terms = 'You must accept the terms to continue.';
     }
-    return errors;
+
+    setFieldErrors(nextErrors);
+
+    if (nextErrors.name && nameInputRef.current) {
+      nameInputRef.current.focus();
+    } else if (nextErrors.email && emailInputRef.current) {
+      emailInputRef.current.focus();
+    } else if (nextErrors.password && passwordInputRef.current) {
+      passwordInputRef.current.focus();
+    } else if (nextErrors.terms && consentInputRef.current) {
+      consentInputRef.current.focus();
+    }
+
+    return Object.keys(nextErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError('');
-    const errors = validate();
-    setFieldErrors(errors);
-
-    if (Object.keys(errors).length > 0) {
-      if (errors.name && nameInputRef.current) nameInputRef.current.focus();
-      else if (errors.email && emailInputRef.current) emailInputRef.current.focus();
-      else if (errors.password && passwordInputRef.current) passwordInputRef.current.focus();
-      else if (errors.terms && consentInputRef.current) consentInputRef.current.focus();
-      return;
-    }
-
+    if (!validate()) return;
     signupMutation.mutate({
       name: form.name.trim(),
-      email: form.email.trim(),
+      email: form.email.trim().toLowerCase(),
       password: form.password,
     });
   };
 
-  const isPending = signupMutation.isPending || googleMutation.isPending;
-
   return (
-    <SmoothScrollProvider>
-      <PublicLayout headerTheme="light-content" withFooter={false}>
-        <div className="pa-auth-signup" aria-label="Create Account: First Living Record" data-tone="light">
-          {/* Asymmetric Environmental Crossing Layer (Crosses centerline at 36vw) */}
+    <AtlasScrollProvider>
+      <AtlasLayout>
+        <section
+          className="pa-atlas-auth-page pa-atlas-grid"
+          style={{
+            minHeight: '110svh',
+            padding: 'calc(var(--atlas-header-height-desktop) + 40px) var(--atlas-outer-gutter) 80px',
+            backgroundColor: 'var(--atlas-field)',
+            color: 'var(--atlas-paper)',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+          aria-label="Create Record Account"
+        >
+          {/* Upper/Middle Environmental Plane (Spans 72vw, non-split) */}
           <div
-            ref={environmentalImageRef}
-            className="pa-auth-signup__environmental-plane"
-            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              top: '12vh',
+              right: 0,
+              width: '70vw',
+              height: '65vh',
+              overflow: 'hidden',
+              opacity: 0.2,
+              pointerEvents: 'none',
+              zIndex: 1,
+            }}
           >
-            <picture>
-              <source type="image/avif" srcSet={asset.avifSrcSet} sizes="(max-width: 768px) 100vw, 70vw" />
-              <source type="image/webp" srcSet={asset.webpSrcSet} sizes="(max-width: 768px) 100vw, 70vw" />
-              <img
-                src={asset.source}
-                alt={asset.alt}
-                width={asset.intrinsicDimensions.width}
-                height={asset.intrinsicDimensions.height}
-                className="pa-auth-signup__img"
-                loading="eager"
-                decoding="async"
-              />
-            </picture>
-
-            {/* Desktop Specimen Strip embedded in Environmental Plane */}
-            <div className="pa-auth-signup__embedded-strip">
-              <EvidenceStrip
-                variant="new-record"
-                theme="mineral"
-                eyebrow="INITIAL RECORD SPECIMEN"
-                sourceLabel="FIRST RECORD / CLEAN SLATE"
-              />
-            </div>
+            <AtlasResponsiveImage
+              asset={MEDIA_ASSETS_ATLAS.signupFirstRecord}
+              style={{ width: '100%', height: '100%' }}
+            />
           </div>
 
-          {/* Form Container direct on ground */}
-          <div className="pa-auth-signup__form-container">
-            <div className="pa-auth-signup__header">
-              <h1 className="pa-auth-signup__h1">Create your Living Record.</h1>
-              <p className="pa-auth-signup__lead">
-                Establish an inspectable account to preserve your assessments, explore career conditions, and revisit your evidence over time.
-              </p>
-            </div>
-
-            {formError && (
-              <div role="alert" aria-live="assertive" className="pa-auth-alert pa-auth-alert--error">
-                {formError}
-              </div>
-            )}
+          {/* Form Task Column */}
+          <div
+            style={{
+              position: 'relative',
+              zIndex: 2,
+              maxWidth: '480px',
+              width: '100%',
+              margin: '20px 0',
+            }}
+          >
+            <span className="pa-atlas-mono" style={{ color: 'var(--atlas-signal)', fontSize: '0.76rem', display: 'block', marginBottom: '8px' }}>
+              INITIAL RECORD CREATION
+            </span>
+            <h1 className="pa-atlas-heading-xl" style={{ marginBottom: '12px' }}>
+              {content.headline}
+            </h1>
+            <p className="pa-atlas-body" style={{ opacity: 0.88, marginBottom: '32px' }}>
+              {content.lead}
+            </p>
 
             {successMessage && (
-              <div role="status" aria-live="polite" className="pa-auth-alert pa-auth-alert--success">
+              <div
+                role="status"
+                style={{
+                  padding: '14px 18px',
+                  backgroundColor: 'rgba(205, 216, 106, 0.2)',
+                  border: '1px solid var(--atlas-signal)',
+                  borderRadius: 'var(--atlas-radius-xs)',
+                  color: 'var(--atlas-signal)',
+                  fontSize: '0.94rem',
+                  marginBottom: '20px',
+                }}
+              >
                 {successMessage}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="pa-auth-form" noValidate>
-              <div className="pa-auth-field">
-                <label htmlFor="signup-name" className="pa-auth-label">
-                  Full name
+            {formError && (
+              <div
+                role="alert"
+                style={{
+                  padding: '12px 16px',
+                  backgroundColor: 'rgba(100, 40, 50, 0.4)',
+                  border: '1px solid rgba(214, 125, 140, 0.5)',
+                  borderRadius: 'var(--atlas-radius-xs)',
+                  color: '#FFD6DC',
+                  fontSize: '0.92rem',
+                  marginBottom: '20px',
+                }}
+              >
+                {formError}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <div>
+                <label htmlFor="signup-name" className="pa-atlas-mono" style={{ display: 'block', fontSize: '0.78rem', marginBottom: '6px' }}>
+                  {content.nameLabel}
                 </label>
                 <input
-                  ref={nameInputRef}
                   id="signup-name"
+                  ref={nameInputRef}
                   type="text"
-                  name="name"
-                  className="pa-auth-input"
-                  value={form.name}
-                  onChange={(e) => {
-                    setForm({ ...form, name: e.target.value });
-                    if (fieldErrors.name) setFieldErrors({ ...fieldErrors, name: '' });
-                  }}
                   autoComplete="name"
-                  required
-                  aria-invalid={Boolean(fieldErrors.name)}
-                  aria-describedby={fieldErrors.name ? 'signup-name-error' : undefined}
-                  placeholder="Alex Mercer"
+                  value={form.name}
+                  onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    height: '48px',
+                    padding: '0 16px',
+                    backgroundColor: 'rgba(239, 245, 242, 0.08)',
+                    border: fieldErrors.name ? '1px solid #FF8090' : '1px solid rgba(239, 245, 242, 0.2)',
+                    borderRadius: 'var(--atlas-radius-xs)',
+                    color: 'var(--atlas-paper)',
+                    fontSize: '1rem',
+                    fontFamily: 'var(--atlas-font-sans)',
+                  }}
+                  aria-invalid={fieldErrors.name ? 'true' : 'false'}
                 />
                 {fieldErrors.name && (
-                  <span id="signup-name-error" role="alert" className="pa-auth-field-error">
+                  <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '4px', display: 'block' }}>
                     {fieldErrors.name}
                   </span>
                 )}
               </div>
 
-              <div className="pa-auth-field">
-                <label htmlFor="signup-email" className="pa-auth-label">
-                  Email address
+              <div>
+                <label htmlFor="signup-email" className="pa-atlas-mono" style={{ display: 'block', fontSize: '0.78rem', marginBottom: '6px' }}>
+                  {content.emailLabel}
                 </label>
                 <input
-                  ref={emailInputRef}
                   id="signup-email"
+                  ref={emailInputRef}
                   type="email"
-                  name="email"
-                  className="pa-auth-input"
-                  value={form.email}
-                  onChange={(e) => {
-                    setForm({ ...form, email: e.target.value });
-                    if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: '' });
-                  }}
                   autoComplete="email"
-                  required
-                  aria-invalid={Boolean(fieldErrors.email)}
-                  aria-describedby={fieldErrors.email ? 'signup-email-error' : undefined}
-                  placeholder="name@example.com"
+                  value={form.email}
+                  onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    height: '48px',
+                    padding: '0 16px',
+                    backgroundColor: 'rgba(239, 245, 242, 0.08)',
+                    border: fieldErrors.email ? '1px solid #FF8090' : '1px solid rgba(239, 245, 242, 0.2)',
+                    borderRadius: 'var(--atlas-radius-xs)',
+                    color: 'var(--atlas-paper)',
+                    fontSize: '1rem',
+                    fontFamily: 'var(--atlas-font-sans)',
+                  }}
+                  aria-invalid={fieldErrors.email ? 'true' : 'false'}
                 />
                 {fieldErrors.email && (
-                  <span id="signup-email-error" role="alert" className="pa-auth-field-error">
+                  <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '4px', display: 'block' }}>
                     {fieldErrors.email}
                   </span>
                 )}
               </div>
 
-              {/* Mobile mid-form compact new-record strip */}
-              <div className="pa-auth-signup__mobile-strip-wrap" aria-hidden="true">
-                <EvidenceStrip
-                  variant="new-record"
-                  theme="mineral"
-                  eyebrow="INITIAL SPECIMEN"
-                  sourceLabel="FIRST RECORD / CLEAN SLATE"
-                />
-              </div>
-
-              <div className="pa-auth-field">
-                <label htmlFor="signup-password" className="pa-auth-label">
-                  Password
-                </label>
-                <div className="pa-auth-password-wrap">
-                  <input
-                    ref={passwordInputRef}
-                    id="signup-password"
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    className="pa-auth-input"
-                    value={form.password}
-                    onChange={(e) => {
-                      setForm({ ...form, password: e.target.value });
-                      if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: '' });
-                    }}
-                    autoComplete="new-password"
-                    required
-                    aria-invalid={Boolean(fieldErrors.password)}
-                    aria-describedby={fieldErrors.password ? 'signup-password-error' : 'signup-password-helper'}
-                    placeholder="Create a password"
-                  />
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label htmlFor="signup-password" className="pa-atlas-mono" style={{ fontSize: '0.78rem' }}>
+                    {content.passwordLabel}
+                  </label>
                   <button
                     type="button"
-                    className="pa-auth-password-toggle"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    onClick={() => setShowPassword((p) => !p)}
+                    className="pa-atlas-mono"
+                    style={{ fontSize: '0.74rem', color: 'var(--atlas-signal)', opacity: 0.9 }}
                   >
                     {showPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
-                <span id="signup-password-helper" className="pa-auth-helper">
-                  Minimum 6 characters.
-                </span>
+                <input
+                  id="signup-password"
+                  ref={passwordInputRef}
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  value={form.password}
+                  onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    height: '48px',
+                    padding: '0 16px',
+                    backgroundColor: 'rgba(239, 245, 242, 0.08)',
+                    border: fieldErrors.password ? '1px solid #FF8090' : '1px solid rgba(239, 245, 242, 0.2)',
+                    borderRadius: 'var(--atlas-radius-xs)',
+                    color: 'var(--atlas-paper)',
+                    fontSize: '1rem',
+                    fontFamily: 'var(--atlas-font-sans)',
+                  }}
+                  aria-invalid={fieldErrors.password ? 'true' : 'false'}
+                />
                 {fieldErrors.password && (
-                  <span id="signup-password-error" role="alert" className="pa-auth-field-error">
+                  <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '4px', display: 'block' }}>
                     {fieldErrors.password}
                   </span>
                 )}
               </div>
 
-              <div className="pa-auth-field">
-                <label className="pa-auth-consent">
-                  <input
-                    ref={consentInputRef}
-                    type="checkbox"
-                    name="terms"
-                    checked={form.terms}
-                    onChange={(e) => {
-                      setForm({ ...form, terms: e.target.checked });
-                      if (fieldErrors.terms) setFieldErrors({ ...fieldErrors, terms: '' });
-                    }}
-                    aria-invalid={Boolean(fieldErrors.terms)}
-                    aria-describedby={fieldErrors.terms ? 'signup-terms-error' : undefined}
-                  />
-                  <span>
-                    I agree to the{' '}
-                    <Link to="/privacy" style={{ color: 'inherit', textDecoration: 'underline' }}>
-                      Privacy Policy & Terms
-                    </Link>
-                    .
-                  </span>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '4px' }}>
+                <input
+                  id="signup-terms"
+                  ref={consentInputRef}
+                  type="checkbox"
+                  checked={form.terms}
+                  onChange={(e) => setForm((prev) => ({ ...prev, terms: e.target.checked }))}
+                  style={{ marginTop: '4px' }}
+                />
+                <label htmlFor="signup-terms" className="pa-atlas-body" style={{ fontSize: '0.88rem', opacity: 0.9 }}>
+                  {content.termsAgreement}
                 </label>
-                {fieldErrors.terms && (
-                  <span id="signup-terms-error" role="alert" className="pa-auth-field-error">
-                    {fieldErrors.terms}
-                  </span>
-                )}
               </div>
+              {fieldErrors.terms && (
+                <span style={{ color: '#FFB0BC', fontSize: '0.82rem', marginTop: '-10px', display: 'block' }}>
+                  {fieldErrors.terms}
+                </span>
+              )}
 
-              <MagneticTarget>
-                <button
-                  type="submit"
-                  disabled={isPending}
-                  className="pa-btn-primary"
-                  style={{ width: '100%', minHeight: '50px', marginTop: '0.5rem' }}
-                >
-                  {signupMutation.isPending ? 'Creating record…' : 'Create Living Record'}
-                </button>
-              </MagneticTarget>
+              <button
+                type="submit"
+                disabled={signupMutation.isPending}
+                className="pa-atlas-btn-primary"
+                style={{ width: '100%', marginTop: '10px' }}
+              >
+                {signupMutation.isPending ? 'Creating record...' : content.submitBtn}
+              </button>
             </form>
 
             {GOOGLE_CLIENT_ID && (
-              <div className="pa-auth-google-wrap">
-                <span className="pa-auth-or-label">or continue with</span>
+              <div style={{ marginTop: '24px' }}>
                 <GoogleLoginButton
-                  onCredential={(token) => googleMutation.mutate(token)}
-                  onError={(message) => {
-                    const err = message || 'Google sign-up failed. Please retry.';
-                    setFormError(err);
-                    toast.error(err);
-                  }}
+                  onSuccess={(credential) => googleMutation.mutate(credential)}
+                  onError={() => setFormError('Google sign-up failed.')}
+                  disabled={googleMutation.isPending}
                 />
               </div>
             )}
 
-            <div className="pa-auth-switch-link">
-              <a
-                href={`/login?next=${encodeURIComponent(safeNext)}`}
-                className="pa-link-text"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateWithTransition(`/login?next=${encodeURIComponent(safeNext)}`);
-                }}
-              >
-                Already have a record? Sign in &rarr;
-              </a>
+            <div style={{ marginTop: '32px', paddingTop: '20px', borderTop: '1px solid rgba(239, 245, 242, 0.12)' }}>
+              <span className="pa-atlas-body" style={{ opacity: 0.8, fontSize: '0.94rem' }}>
+                {content.loginPrompt}{' '}
+                <Link
+                  to={`/login?next=${encodeURIComponent(safeNext)}`}
+                  style={{ color: 'var(--atlas-signal)', fontWeight: 520, marginLeft: '6px' }}
+                >
+                  {content.loginLinkText}
+                </Link>
+              </span>
             </div>
           </div>
-        </div>
-      </PublicLayout>
-    </SmoothScrollProvider>
+
+          {/* Lower Field Response Fragment */}
+          <div style={{ position: 'relative', zIndex: 2, margin: '20px 0 0' }}>
+            <ResponseFragment
+              variant="response"
+              text="“I clarify responsibilities before committing work.”"
+              sourceId="0x8F4A"
+              date="2026-08"
+            />
+          </div>
+        </section>
+      </AtlasLayout>
+    </AtlasScrollProvider>
   );
 };
 

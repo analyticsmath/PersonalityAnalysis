@@ -1,0 +1,189 @@
+/**
+ * Personality Assessor — Context Atlas Base Styles & Components
+ */
+
+.pa-atlas-root * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.pa-atlas-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pa-atlas-root button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ── Typographic Primitives (Max weight 580) ── */
+
+.pa-atlas-display-xl {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-display-xl);
+  font-weight: var(--atlas-weight-hero);
+  line-height: var(--atlas-lh-display);
+  letter-spacing: -0.03em;
+}
+
+.pa-atlas-display-lg {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-display-lg);
+  font-weight: var(--atlas-weight-title);
+  line-height: var(--atlas-lh-display);
+  letter-spacing: -0.025em;
+}
+
+.pa-atlas-heading-xl {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-heading-xl);
+  font-weight: var(--atlas-weight-title);
+  line-height: var(--atlas-lh-heading);
+  letter-spacing: -0.02em;
+}
+
+.pa-atlas-heading-lg {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-heading-lg);
+  font-weight: var(--atlas-weight-heading);
+  line-height: var(--atlas-lh-heading);
+  letter-spacing: -0.015em;
+}
+
+.pa-atlas-heading-md {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-heading-md);
+  font-weight: var(--atlas-weight-heading);
+  line-height: var(--atlas-lh-heading);
+  letter-spacing: -0.01em;
+}
+
+.pa-atlas-body-lg {
+  font-size: var(--atlas-body-lg);
+  line-height: var(--atlas-lh-body);
+  font-weight: var(--atlas-weight-body);
+}
+
+.pa-atlas-body {
+  font-size: var(--atlas-body);
+  line-height: var(--atlas-lh-body);
+  font-weight: var(--atlas-weight-body);
+}
+
+.pa-atlas-mono {
+  font-family: var(--atlas-font-mono);
+  font-size: var(--atlas-small);
+  font-weight: var(--atlas-weight-mono);
+  letter-spacing: 0.04em;
+}
+
+.pa-atlas-reading-measure {
+  max-width: var(--atlas-measure-reading);
+}
+
+/* ── Buttons & Controls (No pills, no gradients, no glows) ── */
+
+.pa-atlas-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 0 28px;
+  background-color: var(--atlas-signal);
+  color: var(--atlas-field);
+  font-family: var(--atlas-font-sans);
+  font-weight: var(--atlas-weight-btn);
+  font-size: 1.05rem;
+  border-radius: var(--atlas-radius-sm);
+  transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
+  white-space: nowrap;
+}
+
+.pa-atlas-btn-primary:hover {
+  background-color: var(--atlas-paper);
+  color: var(--atlas-field);
+  transform: translateY(-1px);
+}
+
+.pa-atlas-btn-primary:active {
+  transform: translateY(0);
+}
+
+.pa-atlas-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 12px;
+  color: inherit;
+  font-family: var(--atlas-font-sans);
+  font-weight: var(--atlas-weight-btn);
+  font-size: 1.05rem;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.pa-atlas-btn-secondary:hover {
+  opacity: 0.82;
+  transform: translateX(2px);
+}
+
+.pa-atlas-btn-secondary svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 180ms ease;
+}
+
+.pa-atlas-btn-secondary:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── Grid System (Placement tool, no visible grid lines) ── */
+
+.pa-atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--atlas-column-gap);
+  padding: 0 var(--atlas-outer-gutter);
+}
+
+@media (max-width: 1199px) {
+  .pa-atlas-grid {
+    grid-template-columns: repeat(8, 1fr);
+    --atlas-outer-gutter: clamp(24px, 2.8vw, 32px);
+  }
+}
+
+@media (max-width: 767px) {
+  .pa-atlas-grid {
+    grid-template-columns: repeat(4, 1fr);
+    --atlas-outer-gutter: clamp(18px, 4vw, 22px);
+  }
+}
+
+/* ── Accessibility & Focus ── */
+
+.pa-atlas-skip-link {
+  position: absolute;
+  top: -100px;
+  left: 20px;
+  padding: 12px 20px;
+  background: var(--atlas-signal);
+  color: var(--atlas-field);
+  font-weight: 540;
+  z-index: 10000;
+  border-radius: var(--atlas-radius-sm);
+  transition: top 200ms ease;
+}
+
+.pa-atlas-skip-link:focus {
+  top: 20px;
+}
+
+.pa-atlas-root :focus-visible {
+  outline: 2px solid var(--atlas-signal);
+  outline-offset: 3px;
+}
