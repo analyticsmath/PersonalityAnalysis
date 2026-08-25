@@ -148,10 +148,6 @@ export const HeroThesisPoster = () => {
         {/* Unified Overlapping Editorial Foreground */}
         <div className="pa-px-hero-field__editorial-layer">
           <div className="pa-px-hero-field__content">
-            <div className="pa-px-data pa-px-hero-field__kicker">
-              EDITORIAL EVIDENCE ATLAS &middot; ONE ANSWER IS NOT ONE RESULT
-            </div>
-
             <h1 ref={headlineRef} className="pa-px-hero-field__headline">
               <span className="pa-px-hero-mask">
                 <span className="pa-px-hero-line">ONE ANSWER </span>
@@ -179,12 +175,19 @@ export const HeroThesisPoster = () => {
           </div>
 
           {/* Source Protagonist Actor with Drawing Evidence Path */}
-          <div ref={sourceRef} className="pa-px-hero-field__source-actor pa-px-home-primary-actor">
+          <div
+            ref={sourceRef}
+            className="pa-px-hero-field__source-actor pa-px-home-primary-actor"
+            data-transition-actor="home-source-actor"
+          >
             <div className="pa-px-hero-field__source-plate">
               <div className="pa-px-data pa-px-hero-field__source-tag">
-                EVIDENCE PROTAGONIST
+                EVIDENCE PROTAGONIST &middot; CAPTURE REF: 01-A
               </div>
-              <blockquote className="pa-px-hero-field__source-text pa-px-source-sentence">
+              <blockquote
+                className="pa-px-hero-field__source-text pa-px-source-sentence"
+                data-transition-actor="home-source-quote"
+              >
                 &ldquo;{data.response}&rdquo;
               </blockquote>
               <div ref={pathRef} className="pa-px-hero-field__path-wrap">

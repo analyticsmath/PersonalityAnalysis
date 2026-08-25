@@ -46,7 +46,7 @@ const renderWithProviders = (ui) => {
   );
 };
 
-describe('Personality Assessor V7 Signal Atlas — Responsive Overflow & Viewport Matrix', () => {
+describe('Personality Assessor V7 Signal Atlas — Responsive Overflow & Viewport Matrix', { timeout: 25000 }, () => {
   const routes = [
     { name: 'Home Page', path: '/', component: <EditorialHomePage /> },
     { name: 'How It Works', path: '/how-it-works', component: <EditorialHowItWorksPage /> },

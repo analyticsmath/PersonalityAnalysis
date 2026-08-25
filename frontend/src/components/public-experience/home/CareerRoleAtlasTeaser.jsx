@@ -50,9 +50,6 @@ export const CareerRoleAtlasTeaser = () => {
       <div className="pa-px-spatial-career-teaser__inner">
         <header className="pa-px-spatial-career-teaser__header">
           <div>
-            <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-              OCCUPATIONAL EVIDENCE ATLAS &middot; 17 CANONICAL PROFILES
-            </div>
             <h2 className="pa-px-heading-xl">{PUBLIC_CONTENT.career.hero.headline}</h2>
             <p className="pa-px-lead">
               Career fit is an authored spatial field. Select any verified discipline to inspect its working context and multi-factor requirements.

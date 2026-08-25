@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import careersData from '../../../content/careers.json';
 import { PublicPicture } from '../media/PublicPicture';
@@ -31,14 +31,27 @@ export const CareerAtlasExperience = () => {
   const [pointerPos, setPointerPos] = useState({ x: 0, y: 0 });
   const activeRole = careersData[selectedKey];
   const activeMedia = CAREER_MEDIA[selectedKey] || 'workworldPrecision';
-  const { hasFinePointer } = usePublicCapabilities();
+  const { hasFinePointer, prefersReducedMotion, isMobile } = usePublicCapabilities();
+  const selectedIdx = roleKeys.indexOf(selectedKey);
 
   const handleMouseMove = (e) => {
-    if (!hasFinePointer) return;
+    if (!hasFinePointer || prefersReducedMotion) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 16;
     setPointerPos({ x, y });
+  };
+
+  const handleKeyDown = (e, idx) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIdx = (idx + 1) % roleKeys.length;
+      setSelectedKey(roleKeys[nextIdx]);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prevIdx = (idx - 1 + roleKeys.length) % roleKeys.length;
+      setSelectedKey(roleKeys[prevIdx]);
+    }
   };
 
   return (
@@ -48,22 +61,29 @@ export const CareerAtlasExperience = () => {
       onMouseMove={handleMouseMove}
     >
       <header className="pa-px-career-hero">
-        <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-          OCCUPATIONAL SPATIAL ATLAS &middot; 17 OCCUPATIONAL PROFILES
-        </div>
         <h1 className="pa-px-career-hero__headline">{data.hero.headline}</h1>
         <p className="pa-px-career-hero__support">{data.hero.support}</p>
-        <div className="pa-px-data" style={{ marginTop: '8px', color: 'var(--pa-context)' }}>
+        <div className="pa-px-data" style={{ marginTop: '10px', color: 'var(--pa-evidence)' }}>
           17 Occupational Profiles
         </div>
       </header>
 
       <section className="pa-px-career-field-arena" aria-label="17 Canonical Occupational Profiles Field">
-        {/* Typographic Exploration Arena */}
+        {/* Typographic Exploration Arena with Spatial Neighbor Displacement */}
         <div className="pa-px-career-roles-canvas" role="tablist" aria-label="17 Occupational Profiles">
-          {roleKeys.map((key) => {
+          {roleKeys.map((key, idx) => {
             const role = careersData[key];
             const isSelected = selectedKey === key;
+            const diff = idx - selectedIdx;
+
+            // Compute neighbor displacement
+            let displacementY = 0;
+            if (!prefersReducedMotion && !isMobile) {
+              if (diff === 1) displacementY = 16;
+              else if (diff === -1) displacementY = -16;
+              else if (diff === 2) displacementY = 8;
+              else if (diff === -2) displacementY = -8;
+            }
 
             return (
               <button
@@ -72,9 +92,14 @@ export const CareerAtlasExperience = () => {
                 role="tab"
                 aria-selected={isSelected}
                 className={`pa-px-career-role-item ${isSelected ? 'pa-px-career-role-item--active' : ''}`}
+                style={{
+                  transform: prefersReducedMotion ? 'none' : `translate3d(0, ${displacementY}px, 0)`,
+                  transition: 'transform 260ms cubic-bezier(0.2, 0, 0, 1), font-size 260ms ease, color 200ms ease',
+                }}
                 onClick={() => setSelectedKey(key)}
                 onMouseEnter={() => setSelectedKey(key)}
                 onFocus={() => setSelectedKey(key)}
+                onKeyDown={(e) => handleKeyDown(e, idx)}
               >
                 <span className="pa-px-career-role-item__title">{role.title}</span>
                 <span className="pa-px-data pa-px-career-role-item__meta">
@@ -85,12 +110,13 @@ export const CareerAtlasExperience = () => {
           })}
         </div>
 
-        {/* Anchored Detail & Pop-out Emergent Media Plane */}
+        {/* Anchored Detail & Emergent Media Plane */}
         <div className="pa-px-career-inspector-stage" aria-live="polite">
           <div
             className="pa-px-career-inspector-media"
+            data-transition-actor="career-context-media"
             style={{
-              transform: `translate3d(${pointerPos.x}px, ${pointerPos.y}px, 0)`,
+              transform: prefersReducedMotion ? 'none' : `translate3d(${pointerPos.x}px, ${pointerPos.y}px, 0)`,
               transition: 'transform 200ms cubic-bezier(0.2, 0, 0, 1)',
             }}
           >
@@ -146,3 +172,4 @@ export const CareerAtlasExperience = () => {
 
 export const CareerSpatialExperience = CareerAtlasExperience;
 export default CareerAtlasExperience;
+

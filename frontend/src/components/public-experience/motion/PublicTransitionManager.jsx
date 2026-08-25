@@ -51,12 +51,15 @@ export const PublicTransitionManager = () => {
 
     // ── A. SHARED_MEDIA: Home -> Career / Progress ──
     if (transition.family === TRANSITION_FAMILIES.SHARED_MEDIA) {
-      const sourceEl = document.querySelector('.pa-px-home-primary-actor') || document.querySelector('.visual-actor');
+      const sourceEl = document.querySelector('[data-transition-actor="home-source-actor"]') ||
+                       document.querySelector('.pa-px-home-primary-actor') ||
+                       document.querySelector('.visual-actor');
+
       const srcRect = sourceEl ? sourceEl.getBoundingClientRect() : {
-        left: 0,
-        top: 0,
-        width: window.innerWidth,
-        height: window.innerHeight,
+        left: window.innerWidth * 0.08,
+        top: window.innerHeight * 0.2,
+        width: Math.min(window.innerWidth * 0.45, 600),
+        height: 380,
       };
 
       const initialRect = {
@@ -77,60 +80,73 @@ export const PublicTransitionManager = () => {
         window.__PX_DEBUG__.transition.sourceRect = initialRect;
       }
 
-      // Smoothly scroll window to top
       window.scrollTo(0, 0);
 
-      // Destination measurement & animation
-      const targetDestWidth = Math.min(window.innerWidth * 0.48, 680);
-      const targetDestHeight = targetDestWidth * 0.625;
-      const targetDestRect = {
-        x: window.innerWidth * 0.08,
-        y: window.innerHeight * 0.24,
-        width: targetDestWidth,
-        height: targetDestHeight,
-      };
+      // Measure real destination DOM actor after route render
+      requestAnimationFrame(() => {
+        const destEl = document.querySelector('[data-transition-actor="career-context-media"]') ||
+                       document.querySelector('[data-transition-actor="progress-baseline-record"]') ||
+                       document.querySelector('.pa-px-career-inspector-media') ||
+                       document.querySelector('.pa-px-temporal-morph-media');
 
-      if (window.__PX_DEBUG__?.transition) {
-        window.__PX_DEBUG__.transition.destRect = targetDestRect;
-      }
+        const measuredDest = destEl ? destEl.getBoundingClientRect() : {
+          left: window.innerWidth * 0.52,
+          top: 140,
+          width: Math.min(window.innerWidth * 0.42, 580),
+          height: 360,
+        };
 
-      const animState = {
-        x: initialRect.x,
-        y: initialRect.y,
-        width: initialRect.width,
-        height: initialRect.height,
-        opacity: 1,
-      };
+        const targetDestRect = {
+          x: measuredDest.left,
+          y: measuredDest.top,
+          width: measuredDest.width,
+          height: measuredDest.height,
+        };
 
-      gsap.to(animState, {
-        x: targetDestRect.x,
-        y: targetDestRect.y,
-        width: targetDestRect.width,
-        height: targetDestRect.height,
-        opacity: 0,
-        duration: transition.duration || 0.75,
-        ease: 'power3.inOut',
-        onUpdate: function () {
-          transitionPortalController.updateMediaRect(animState, animState.opacity);
-          if (window.__PX_DEBUG__?.transition) {
-            window.__PX_DEBUG__.transition.progress = this.progress();
-            window.__PX_DEBUG__.transition.phase = 'animating';
-          }
-        },
-        onComplete: () => {
-          transitionPortalController.end();
-          if (window.__PX_DEBUG__?.transition) {
-            window.__PX_DEBUG__.transition.phase = 'settled';
-            window.__PX_DEBUG__.transition.progress = 1.0;
-          }
-          publicMotionController.refresh();
-        },
+        if (window.__PX_DEBUG__?.transition) {
+          window.__PX_DEBUG__.transition.destRect = targetDestRect;
+        }
+
+        const animState = {
+          x: initialRect.x,
+          y: initialRect.y,
+          width: initialRect.width,
+          height: initialRect.height,
+          opacity: 1,
+        };
+
+        gsap.to(animState, {
+          x: targetDestRect.x,
+          y: targetDestRect.y,
+          width: targetDestRect.width,
+          height: targetDestRect.height,
+          opacity: 0,
+          duration: transition.duration || 0.65,
+          ease: 'power3.inOut',
+          onUpdate: function () {
+            transitionPortalController.updateMediaRect(animState, animState.opacity);
+            if (window.__PX_DEBUG__?.transition) {
+              window.__PX_DEBUG__.transition.progress = this.progress();
+              window.__PX_DEBUG__.transition.phase = 'animating';
+            }
+          },
+          onComplete: () => {
+            transitionPortalController.end();
+            if (window.__PX_DEBUG__?.transition) {
+              window.__PX_DEBUG__.transition.phase = 'settled';
+              window.__PX_DEBUG__.transition.progress = 1.0;
+            }
+            publicMotionController.refresh();
+          },
+        });
       });
     }
 
     // ── B. SHARED_PHRASE: Home -> How ──
     else if (transition.family === TRANSITION_FAMILIES.SHARED_PHRASE) {
-      const sourcePhraseEl = document.querySelector('.pa-px-source-sentence');
+      const sourcePhraseEl = document.querySelector('[data-transition-actor="home-source-quote"]') ||
+                             document.querySelector('.pa-px-source-sentence');
+
       const srcRect = sourcePhraseEl ? sourcePhraseEl.getBoundingClientRect() : {
         left: window.innerWidth * 0.06,
         top: window.innerHeight * 0.36,
@@ -153,40 +169,52 @@ export const PublicTransitionManager = () => {
 
       window.scrollTo(0, 0);
 
-      const destRect = {
-        x: window.innerWidth * 0.06,
-        y: window.innerHeight * 0.38,
-        width: Math.min(window.innerWidth * 0.5, 700),
-        height: 80,
-      };
+      requestAnimationFrame(() => {
+        const destPhraseEl = document.querySelector('[data-transition-actor="how-source-quote"]') ||
+                             document.querySelector('.pa-px-how-figure__sentence-stage');
 
-      const animState = {
-        x: initialRect.x,
-        y: initialRect.y,
-        width: initialRect.width,
-        opacity: 1,
-      };
+        const measuredDest = destPhraseEl ? destPhraseEl.getBoundingClientRect() : {
+          left: window.innerWidth * 0.52,
+          top: 160,
+          width: Math.min(window.innerWidth * 0.44, 640),
+          height: 80,
+        };
 
-      gsap.to(animState, {
-        x: destRect.x,
-        y: destRect.y,
-        width: destRect.width,
-        opacity: 0,
-        duration: 0.65,
-        ease: 'power2.inOut',
-        onUpdate: function () {
-          transitionPortalController.updatePhraseRect(animState, "'wdth' 90", animState.opacity);
-          if (window.__PX_DEBUG__?.transition) {
-            window.__PX_DEBUG__.transition.progress = this.progress();
-          }
-        },
-        onComplete: () => {
-          transitionPortalController.end();
-          if (window.__PX_DEBUG__?.transition) {
-            window.__PX_DEBUG__.transition.phase = 'settled';
-          }
-          publicMotionController.refresh();
-        },
+        const destRect = {
+          x: measuredDest.left,
+          y: measuredDest.top,
+          width: measuredDest.width,
+          height: measuredDest.height,
+        };
+
+        const animState = {
+          x: initialRect.x,
+          y: initialRect.y,
+          width: initialRect.width,
+          opacity: 1,
+        };
+
+        gsap.to(animState, {
+          x: destRect.x,
+          y: destRect.y,
+          width: destRect.width,
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power2.inOut',
+          onUpdate: function () {
+            transitionPortalController.updatePhraseRect(animState, "'wdth' 90", animState.opacity);
+            if (window.__PX_DEBUG__?.transition) {
+              window.__PX_DEBUG__.transition.progress = this.progress();
+            }
+          },
+          onComplete: () => {
+            transitionPortalController.end();
+            if (window.__PX_DEBUG__?.transition) {
+              window.__PX_DEBUG__.transition.phase = 'settled';
+            }
+            publicMotionController.refresh();
+          },
+        });
       });
     }
 
@@ -211,7 +239,7 @@ export const PublicTransitionManager = () => {
       const animState = { p: 0 };
       gsap.to(animState, {
         p: 1,
-        duration: transition.duration || 0.7,
+        duration: transition.duration || 0.65,
         ease: 'power2.inOut',
         onUpdate: function () {
           transitionPortalController.updatePixelProgress(animState.p);

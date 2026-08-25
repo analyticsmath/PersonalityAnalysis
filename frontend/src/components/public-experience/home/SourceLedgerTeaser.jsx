@@ -33,9 +33,6 @@ export const SourceLedgerTeaser = () => {
     <section className="pa-px-ch-trust-teaser pa-px-ledger-teaser-stage" aria-label="Source Ledger and Trust Teaser">
       <div className="pa-px-ledger-teaser__inner">
         <div className="pa-px-ledger-teaser__content">
-          <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-            PROVENANCE LEDGER &middot; TACTILE APERTURE
-          </div>
           <h2 className="pa-px-heading-xl">{data.headline}</h2>
           <p className="pa-px-lead" style={{ marginBottom: '24px' }}>
             {data.support}

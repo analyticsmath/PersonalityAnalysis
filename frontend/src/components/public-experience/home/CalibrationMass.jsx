@@ -9,9 +9,6 @@ export const CalibrationMass = () => {
     <section className="pa-px-ch-calibration pa-px-calibration-field" aria-label="Deterministic Career Calibration">
       <div className="pa-px-calibration-field__inner">
         <header className="pa-px-calibration-field__header">
-          <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-            DETERMINISTIC MULTI-FACTOR ENGINE
-          </div>
           <h2 className="pa-px-heading-xl">{data.headline}</h2>
           <p className="pa-px-lead">{data.lead}</p>
         </header>
@@ -48,10 +45,7 @@ export const CalibrationMass = () => {
             const activeWeight = data.weights.find((w) => w.id === activeWeightId) || data.weights[0];
             return (
               <div className="pa-px-mass-landscape__detail" aria-live="polite">
-                <div className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>
-                  FACTOR SPECIFICATION &middot; {activeWeight.percentage}% CALIBRATION MASS
-                </div>
-                <h3 className="pa-px-heading-subsection">Factor Specification: {activeWeight.label}</h3>
+                <h3 className="pa-px-heading-subsection">Factor Specification: {activeWeight.label} ({activeWeight.percentage}% mass)</h3>
                 <p className="pa-px-body">{activeWeight.role}</p>
                 <div className="pa-px-data pa-px-mass-landscape__meta">
                   <span>Weighting Type: Fixed Deterministic Formula</span>

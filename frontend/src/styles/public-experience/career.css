@@ -67,12 +67,19 @@
   font-size: clamp(1.1rem, 1.5vw, 1.5rem);
   font-weight: 540;
   color: var(--pa-ink);
-  transition: color 180ms ease;
+  transition: color 180ms ease, font-size 220ms ease, transform 220ms ease;
 }
 
 .pa-px-career-role-item:hover .pa-px-career-role-item__title,
+.pa-px-career-role-item:focus-visible .pa-px-career-role-item__title,
 .pa-px-career-role-item--active .pa-px-career-role-item__title {
   color: var(--pa-evidence);
+  font-size: clamp(1.22rem, 1.7vw, 1.7rem);
+  transform: translateX(6px);
+}
+
+.pa-px-career-role-item:focus-visible {
+  border-bottom-color: var(--pa-evidence);
 }
 
 .pa-px-career-role-item__meta {

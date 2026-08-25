@@ -38,32 +38,35 @@ export const HowCausalEssay = () => {
         },
       });
 
-      const sentenceEl = figure.querySelector('.pa-px-how-figure__sentence');
       const clauseA = figure.querySelector('.pa-px-how-figure__clause-a');
       const clauseB = figure.querySelector('.pa-px-how-figure__clause-b');
+      const pathsSvg = figure.querySelector('.pa-px-how-figure__paths-svg');
       const modelsGrid = figure.querySelector('.pa-px-how-figure__models-grid');
       const weightsGrid = figure.querySelector('.pa-px-how-figure__weights-grid');
       const recordPlate = figure.querySelector('.pa-px-how-figure__record-plate');
 
-      // State 0 -> 1: Clause Separation
+      // State 0 -> 1: Physical Clause Separation with SVG vector emergence
       tl.to([clauseA, clauseB], {
         opacity: 1,
         duration: 0.25,
       }, 0.2);
       tl.to(clauseA, {
-        x: -24,
+        x: -32,
         color: 'var(--pa-evidence)',
         duration: 0.35,
         ease: 'power2.out',
       }, 0.25);
       tl.to(clauseB, {
-        x: 24,
+        x: 32,
         color: 'var(--pa-graphite)',
         duration: 0.35,
         ease: 'power2.out',
       }, 0.25);
+      if (pathsSvg) {
+        tl.to(pathsSvg, { opacity: 1, duration: 0.3 }, 0.3);
+      }
 
-      // State 1 -> 2: Multi-Model Branching
+      // State 1 -> 2: Multi-Model Spatial Branching
       tl.to(modelsGrid, {
         opacity: 1,
         scale: 1,
@@ -74,7 +77,7 @@ export const HowCausalEssay = () => {
 
       // State 2 -> 3: Deterministic Weighting Assembly
       tl.to(modelsGrid, {
-        opacity: 0.25,
+        opacity: 0.2,
         y: -15,
         duration: 0.3,
       }, 1.6);
@@ -107,16 +110,13 @@ export const HowCausalEssay = () => {
   return (
     <div className="pa-px-how-page" data-route="how-it-works">
       <header className="pa-px-how-hero">
-        <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-          CONTINUOUS CAUSAL TRANSFORMATION
-        </div>
         <h1 className="pa-px-how-hero__headline">{data.hero.headline}</h1>
         <p className="pa-px-how-hero__support">{data.hero.support}</p>
       </header>
 
-      {/* Unified Causal Stage (Sticky Visual Figure + Progressive Text Column) */}
+      {/* Unified Open Causal Transformation Stage */}
       <div ref={containerRef} className="pa-px-how-causal-stage">
-        {/* Left Side: Progressive Narrative Narrative Column */}
+        {/* Left Side: Progressive Narrative Column */}
         <div className="pa-px-how-narrative-col">
           {data.movements.map((m, idx) => (
             <section
@@ -133,20 +133,20 @@ export const HowCausalEssay = () => {
           ))}
         </div>
 
-        {/* Right Side: Sticky Continuous Visual Transformation Figure */}
+        {/* Right Side: Open Editorial Transformation Field (Paper Ground, Zero Boxed Dashboard) */}
         <div ref={visualFigureRef} className="pa-px-how-figure-col">
-          <div className="pa-px-how-figure-card" aria-live="polite">
+          <div className="pa-px-how-transformation-field" aria-live="polite">
             <header className="pa-px-how-figure__header">
               <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>
-                PROTAGONIST EVIDENCE ACTOR
-              </span>
-              <span className="pa-px-data">
-                Active State: 0{activeStep + 1} / 05
+                PROTAGONIST EVIDENCE ACTOR &middot; STATE 0{activeStep + 1}/05
               </span>
             </header>
 
-            {/* Stage 0 & 1: Source & Clause Separation */}
-            <div className="pa-px-how-figure__sentence-stage">
+            {/* Stage 0 & 1: Source Sentence & Spatial Clause Separation */}
+            <div
+              className="pa-px-how-figure__sentence-stage"
+              data-transition-actor="how-source-quote"
+            >
               <span className="pa-px-how-figure__clause-a">
                 &ldquo;I clarify the constraints first,
               </span>{' '}
@@ -155,7 +155,13 @@ export const HowCausalEssay = () => {
               </span>
             </div>
 
-            {/* Stage 2: Multi-Model Calibration Branching */}
+            {/* SVG Connecting Vectors */}
+            <svg className="pa-px-how-figure__paths-svg" viewBox="0 0 400 40" fill="none" aria-hidden="true" style={{ opacity: activeStep >= 1 ? 1 : 0, transition: 'opacity 300ms ease' }}>
+              <path d="M 120,0 C 120,20 80,30 40,40" stroke="var(--pa-evidence)" strokeWidth="1.5" strokeDasharray="3 3" />
+              <path d="M 280,0 C 280,20 320,30 360,40" stroke="var(--pa-graphite)" strokeWidth="1.5" strokeDasharray="3 3" />
+            </svg>
+
+            {/* Stage 2: Multi-Model Calibration Branching (Spatial Nodes around Source) */}
             <div
               className="pa-px-how-figure__models-grid"
               style={{
@@ -165,24 +171,24 @@ export const HowCausalEssay = () => {
               }}
             >
               <div className="pa-px-how-model-node">
-                <span className="pa-px-data">Big Five</span>
-                <span className="pa-px-body-sm">Conscientiousness 78</span>
+                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>Big Five</span>
+                <span className="pa-px-body-sm">Conscientiousness: 78</span>
               </div>
               <div className="pa-px-how-model-node">
-                <span className="pa-px-data">RIASEC</span>
-                <span className="pa-px-body-sm">Investigative 72</span>
+                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>RIASEC</span>
+                <span className="pa-px-body-sm">Investigative: 72</span>
               </div>
               <div className="pa-px-how-model-node">
-                <span className="pa-px-data">Work Values</span>
-                <span className="pa-px-body-sm">Independence 84</span>
+                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>Work Values</span>
+                <span className="pa-px-body-sm">Independence: 84</span>
               </div>
               <div className="pa-px-how-model-node">
-                <span className="pa-px-data">Signals</span>
+                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>Signals</span>
                 <span className="pa-px-body-sm">Iterative Scoping</span>
               </div>
             </div>
 
-            {/* Stage 3: Deterministic Career-Fit Weighting */}
+            {/* Stage 3: Deterministic Career-Fit Weighting (Proportional Mass Strip) */}
             <div
               className="pa-px-how-figure__weights-grid"
               style={{
@@ -191,13 +197,16 @@ export const HowCausalEssay = () => {
                 transition: 'opacity 300ms ease, transform 300ms ease',
               }}
             >
+              <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', marginBottom: '8px' }}>
+                CALIBRATION MASS &middot; 100% DETERMINISTIC COMPOSITION
+              </div>
               <div className="pa-px-how-weight-strip">
-                <div style={{ flex: '25', background: 'var(--pa-ink)', color: '#FFF', padding: '6px', textAlign: 'center', fontSize: '0.75rem' }}>RIASEC 25%</div>
-                <div style={{ flex: '25', background: 'var(--pa-graphite)', color: '#FFF', padding: '6px', textAlign: 'center', fontSize: '0.75rem' }}>Skills 25%</div>
-                <div style={{ flex: '20', background: 'var(--pa-context)', color: '#FFF', padding: '6px', textAlign: 'center', fontSize: '0.75rem' }}>Values 20%</div>
-                <div style={{ flex: '15', background: 'var(--pa-mineral)', color: 'var(--pa-ink)', padding: '6px', textAlign: 'center', fontSize: '0.75rem' }}>Traits 15%</div>
-                <div style={{ flex: '10', background: 'var(--pa-paper)', color: 'var(--pa-ink)', padding: '6px', textAlign: 'center', fontSize: '0.75rem' }}>Ed 10%</div>
-                <div style={{ flex: '5', background: 'var(--pa-evidence)', color: '#FFF', padding: '6px', textAlign: 'center', fontSize: '0.75rem' }}>5%</div>
+                <div style={{ flex: '25', background: 'var(--pa-ink)', color: '#FFF', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>RIASEC 25%</div>
+                <div style={{ flex: '25', background: 'var(--pa-graphite)', color: '#FFF', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>Skills 25%</div>
+                <div style={{ flex: '20', background: 'var(--pa-context)', color: '#FFF', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>Values 20%</div>
+                <div style={{ flex: '15', background: 'var(--pa-mineral)', color: 'var(--pa-ink)', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>Traits 15%</div>
+                <div style={{ flex: '10', background: 'var(--pa-paper)', color: 'var(--pa-ink)', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem', border: '1px solid var(--pa-mineral)' }}>Ed 10%</div>
+                <div style={{ flex: '5', background: 'var(--pa-evidence)', color: '#FFF', padding: '8px 2px', textAlign: 'center', fontSize: '0.75rem' }}>5%</div>
               </div>
             </div>
 
@@ -229,3 +238,4 @@ export const HowCausalEssay = () => {
 
 export const HowContinuousTransformation = HowCausalEssay;
 export default HowCausalEssay;
+

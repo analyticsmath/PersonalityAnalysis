@@ -1,5 +1,5 @@
 import { chromium } from '@playwright/test';
-import { spawn } from 'node:child_process';
+import { createServer } from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -27,31 +27,21 @@ const ROUTES = [
   { name: 'auth_login', path: '/login', scrollY: 0 },
 ];
 
-async function waitForServer(url, timeoutMs = 20000) {
-  const start = Date.now();
-  while (Date.now() - start < timeoutMs) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return true;
-    } catch {
-      // server not ready yet
-    }
-    await new Promise((r) => setTimeout(r, 300));
-  }
-  throw new Error(`Server did not respond within ${timeoutMs}ms at ${url}`);
-}
-
 async function main() {
-  console.log('Starting preview server on port 5173...');
-  const server = spawn('npx', ['vite', 'preview', '--port', '5173', '--strictPort'], {
-    shell: true,
-    stdio: 'pipe',
+  console.log('Starting Vite server with createServer API...');
+  const server = await createServer({
+    root: process.cwd(),
+    server: {
+      host: '127.0.0.1',
+      port: 5199,
+    },
   });
+  await server.listen();
+
+  const baseUrl = 'http://127.0.0.1:5199';
 
   try {
-    await waitForServer('http://127.0.0.1:5173/');
-    console.log('Preview server ready.');
-
+    console.log(`Vite server running at ${baseUrl}`);
     const browser = await chromium.launch();
     
     for (const vp of VIEWPORTS) {
@@ -61,7 +51,7 @@ async function main() {
       });
 
       for (const r of ROUTES) {
-        const url = `http://127.0.0.1:5173${r.path}`;
+        const url = `${baseUrl}${r.path}`;
         await page.goto(url, { waitUntil: 'networkidle' });
         await page.waitForTimeout(600);
 
@@ -79,10 +69,58 @@ async function main() {
       await page.close();
     }
 
+    // Additional Intermediate-Motion & Interactive Evidence Captures
+    console.log('Capturing interactive motion states (Progress 50%, Career selection, Trust aperture, Reduced Motion)...');
+    const interactivePage = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+
+    // 1. Progress Scrub intermediate 50% state
+    await interactivePage.goto(`${baseUrl}/progress`, { waitUntil: 'networkidle' });
+    const slider = await interactivePage.$('.pa-px-temporal-slider-input');
+    if (slider) {
+      await slider.evaluate((el) => {
+        el.value = '0.5';
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      await interactivePage.waitForTimeout(400);
+      await interactivePage.screenshot({ path: path.join(OUTPUT_DIR, 'desktop_progress_scrub_50pct_overlap.png') });
+    }
+
+    // 2. Career spatial selection (e.g. ML Engineer)
+    await interactivePage.goto(`${baseUrl}/career-intelligence`, { waitUntil: 'networkidle' });
+    const roleBtns = await interactivePage.$$('.pa-px-career-role-item');
+    if (roleBtns.length > 4) {
+      await roleBtns[4].click();
+      await interactivePage.waitForTimeout(400);
+      await interactivePage.screenshot({ path: path.join(OUTPUT_DIR, 'desktop_career_spatial_ml_active.png') });
+    }
+
+    // 3. Trust aperture Calculated layer (step 3)
+    await interactivePage.goto(`${baseUrl}/trust`, { waitUntil: 'networkidle' });
+    const trustTabs = await interactivePage.$$('.pa-px-aperture-step-btn');
+    if (trustTabs.length > 2) {
+      await trustTabs[2].click();
+      await interactivePage.waitForTimeout(400);
+      await interactivePage.screenshot({ path: path.join(OUTPUT_DIR, 'desktop_trust_aperture_calculated_step.png') });
+    }
+
+    await interactivePage.close();
+
+    // 4. Reduced-Motion verification capture
+    const rmContext = await browser.newContext({
+      viewport: { width: 1440, height: 900 },
+      reducedMotion: 'reduce',
+    });
+    const rmPage = await rmContext.newPage();
+    await rmPage.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    await rmPage.waitForTimeout(600);
+    await rmPage.screenshot({ path: path.join(OUTPUT_DIR, 'desktop_reduced_motion_home.png') });
+    await rmContext.close();
+
     await browser.close();
     console.log('All screenshots captured successfully.');
   } finally {
-    server.kill();
+    await server.close();
   }
 }
 

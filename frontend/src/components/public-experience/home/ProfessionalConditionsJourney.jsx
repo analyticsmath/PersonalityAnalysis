@@ -37,6 +37,32 @@ export const ProfessionalConditionsJourney = () => {
             const raw = self.progress * 3;
             const current = Math.min(3, Math.floor(raw));
             setActiveIdx(current);
+
+            // Expose authoritative Dev & QA debug state
+            if (typeof window !== 'undefined') {
+              window.__PX_DEBUG__ = window.__PX_DEBUG__ || {};
+              const currentPanel = panels[current];
+              const currFrame = currentPanel?.querySelector('.pa-px-condition-silhouette__media-frame');
+              const currImg = currentPanel?.querySelector('img');
+              const currType = currentPanel?.querySelector('.pa-px-condition-silhouette__typography');
+
+              window.__PX_DEBUG__.conditions = {
+                activeCondition: data.conditions[current]?.id,
+                masterProgress: self.progress,
+                activeIdx: current,
+                outgoingActor: current > 0 ? data.conditions[current - 1]?.id : null,
+                incomingActor: current < 3 ? data.conditions[current + 1]?.id : null,
+                outerFrameTransform: currFrame ? window.getComputedStyle(currFrame).transform : 'none',
+                innerImageTransform: currImg ? window.getComputedStyle(currImg).transform : 'none',
+                typeTransform: currType ? window.getComputedStyle(currType).transform : 'none',
+              };
+
+              window.__PX_DEBUG__.home = {
+                dominantScene: current === 3 && self.progress > 0.95 ? 'finale' : data.conditions[current]?.id || 'world',
+                dominantWeight: 0.85,
+                majorOwnerCount: 1,
+              };
+            }
           },
         },
       });
@@ -50,10 +76,8 @@ export const ProfessionalConditionsJourney = () => {
         }
       });
 
-      // Choreography across 3 transitions:
-      // i = 0 -> 1 (Precision to Autonomy)
-      // i = 1 -> 2 (Autonomy to Collaboration)
-      // i = 2 -> 3 (Collaboration to Operational Pressure)
+      // Choreography across 3 transitions following:
+      // READ -> ANTICIPATE -> TRAVEL -> HOLD -> OVERLAP -> TAKEOVER -> RESOLVE -> READ
       for (let i = 0; i < 3; i++) {
         const curr = panels[i];
         const next = panels[i + 1];
@@ -69,88 +93,116 @@ export const ProfessionalConditionsJourney = () => {
         const nextType = next.querySelector('.pa-px-condition-silhouette__typography');
         const nextDetail = next.querySelector('.pa-px-condition-silhouette__detail-plane');
 
-        const startProgress = i;
+        const slotStart = i;
 
-        // 1. Anticipation & Travel A (0.08 - 0.31 of slot)
-        // Current frame begins translating left, inner crop shifts at counter-velocity
-        if (currFrame) {
-          masterTl.to(currFrame, {
-            xPercent: -20,
-            duration: 0.35,
-            ease: 'power2.in',
-          }, startProgress + 0.1);
-        }
-        if (currImg) {
-          masterTl.to(currImg, {
-            xPercent: 12,
-            scale: 1.05,
-            duration: 0.45,
-            ease: 'none',
-          }, startProgress + 0.1);
-        }
-        if (currType) {
-          masterTl.to(currType, {
-            x: -45,
-            opacity: 0.4,
-            duration: 0.3,
-            ease: 'power1.in',
-          }, startProgress + 0.15);
-        }
+        // 1. READ: 0.00 - 0.12 (Settled window)
 
-        // 2. Evidence Hold & Overlap (0.35 - 0.65 of slot)
-        // Incoming actor becomes visible, advances into frame while old remains as residue
-        masterTl.set(next, { zIndex: 6, pointerEvents: 'auto' }, startProgress + 0.35);
-        masterTl.fromTo(
-          next,
-          { opacity: 0, xPercent: 30 },
-          { opacity: 1, xPercent: 0, duration: 0.45, ease: 'power2.out' },
-          startProgress + 0.35
-        );
-
+        // 2. ANTICIPATE: 0.12 - 0.24 (Subtle edge entrance)
+        masterTl.set(next, { zIndex: 6, pointerEvents: 'auto' }, slotStart + 0.12);
         if (nextFrame) {
           masterTl.fromTo(
             nextFrame,
-            { scale: 0.94, yPercent: 4 },
-            { scale: 1, yPercent: 0, duration: 0.45, ease: 'power3.out' },
-            startProgress + 0.38
+            { xPercent: 18, opacity: 0.15, scale: 0.92 },
+            { xPercent: 10, opacity: 0.45, scale: 0.95, duration: 0.12, ease: 'power1.out' },
+            slotStart + 0.12
           );
+        }
+
+        // 3. TRAVEL: 0.24 - 0.44 (Outer frame translates left, inner crop moves at independent velocity)
+        if (currFrame) {
+          masterTl.to(currFrame, {
+            xPercent: -18,
+            duration: 0.20,
+            ease: 'power2.inOut',
+          }, slotStart + 0.24);
+        }
+        if (currImg) {
+          masterTl.to(currImg, {
+            xPercent: 16,
+            scale: 1.06,
+            duration: 0.20,
+            ease: 'none',
+          }, slotStart + 0.24);
+        }
+        if (currType) {
+          masterTl.to(currType, {
+            x: -36,
+            opacity: 0.5,
+            duration: 0.20,
+            ease: 'power1.in',
+          }, slotStart + 0.24);
+        }
+
+        // 4. HOLD: 0.44 - 0.60 (Frame is nearly stationary while inner crop + path residue continue ~18-24px)
+        if (currImg) {
+          masterTl.to(currImg, {
+            xPercent: 24,
+            duration: 0.16,
+            ease: 'none',
+          }, slotStart + 0.44);
+        }
+        if (currResidue) {
+          masterTl.to(currResidue, {
+            x: 20,
+            opacity: 0.8,
+            duration: 0.16,
+            ease: 'none',
+          }, slotStart + 0.44);
+        }
+
+        // 5. OVERLAP: 0.52 - 0.72 (Both scenes coexist with 20-40% incoming visibility)
+        masterTl.fromTo(
+          next,
+          { opacity: 0.45, xPercent: 15 },
+          { opacity: 1, xPercent: 0, duration: 0.20, ease: 'power2.out' },
+          slotStart + 0.52
+        );
+        if (nextFrame) {
+          masterTl.to(nextFrame, {
+            xPercent: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.20,
+            ease: 'power3.out',
+          }, slotStart + 0.52);
         }
         if (nextImg) {
           masterTl.fromTo(
             nextImg,
-            { scale: 1.08, yPercent: -6 },
-            { scale: 1, yPercent: 0, duration: 0.55, ease: 'none' },
-            startProgress + 0.38
+            { scale: 1.08, xPercent: -12 },
+            { scale: 1, xPercent: 0, duration: 0.24, ease: 'none' },
+            slotStart + 0.52
           );
         }
 
-        // 3. Takeover & Resolve (0.65 - 1.00 of slot)
-        // Outgoing actor fades out cleanly, incoming typography counter-travels into reading window
+        // 6. TAKEOVER: 0.72 - 0.86 (Incoming scene becomes dominant, outgoing fades)
         masterTl.to(curr, {
           opacity: 0,
           xPercent: -35,
-          duration: 0.3,
+          duration: 0.14,
           ease: 'power2.in',
-        }, startProgress + 0.55);
-        masterTl.set(curr, { pointerEvents: 'none', zIndex: 1 }, startProgress + 0.85);
+        }, slotStart + 0.72);
 
+        // 7. RESOLVE: 0.86 - 1.00 (Incoming actor snaps cleanly into place)
+        masterTl.set(curr, { pointerEvents: 'none', zIndex: 1 }, slotStart + 0.86);
         if (nextType) {
           masterTl.fromTo(
             nextType,
-            { y: 35, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' },
-            startProgress + 0.6
+            { y: 28, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.14, ease: 'power2.out' },
+            slotStart + 0.86
           );
         }
-
         if (nextDetail) {
           masterTl.fromTo(
             nextDetail,
-            { opacity: 0, xPercent: 20, scale: 0.95 },
-            { opacity: 1, xPercent: 0, scale: 1, duration: 0.35, ease: 'power3.out' },
-            startProgress + 0.68
+            { opacity: 0, xPercent: 18, scale: 0.94 },
+            { opacity: 1, xPercent: 0, scale: 1, duration: 0.16, ease: 'power3.out' },
+            slotStart + 0.84
           );
         }
+
+        // 8. READ: 1.00+ (Settled for reading)
       }
     }, container);
 
@@ -164,9 +216,6 @@ export const ProfessionalConditionsJourney = () => {
       aria-label="Flagship Multi-Plane Professional Conditions Journey"
     >
       <div className="pa-px-conditions-stage__header">
-        <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '6px' }}>
-          FLAGSHIP PARALLAX MOTION &middot; 4 WORK CONDITIONS
-        </div>
         <h2 className="pa-px-conditions-stage__title">{data.headline}</h2>
         <div className="pa-px-conditions-progress-dots" aria-hidden="true">
           {data.conditions.map((c, idx) => (
@@ -216,10 +265,10 @@ export const ProfessionalConditionsJourney = () => {
                   )}
                 </div>
 
-                {/* 2. Counter-Moving Typographic Reading Window */}
+                {/* 2. Counter-Moving Typographic Reading Window (Paper/Mineral background, no white card box) */}
                 <div className="pa-px-condition-silhouette__typography">
                   <div className="pa-px-data pa-px-condition-silhouette__badge">
-                    0{idx + 1} &middot; {cond.name}
+                    0{idx + 1} &middot; {cond.name.toUpperCase()}
                   </div>
                   <h3 className="pa-px-condition-silhouette__interp">
                     {cond.interpretation}
@@ -228,7 +277,7 @@ export const ProfessionalConditionsJourney = () => {
                     {cond.detail}
                   </p>
 
-                  <div className="pa-px-condition-silhouette__source-anchor">
+                  <div className="pa-px-condition-silhouette__source-anchor pa-px-condition-silhouette__residue">
                     <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>
                       HELD SOURCE ANCHOR:
                     </span>

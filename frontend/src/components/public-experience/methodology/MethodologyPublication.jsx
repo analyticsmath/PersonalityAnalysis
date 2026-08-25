@@ -8,9 +8,6 @@ export const MethodologyPublication = () => {
   return (
     <div className="pa-px-methodology-page pa-px-monograph-layout" data-route="methodology">
       <header className="pa-px-methodology-hero">
-        <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-          SCIENTIFIC MONOGRAPH &middot; PSYCHOMETRIC SPECIFICATION
-        </div>
         <h1 className="pa-px-methodology-hero__headline">{data.hero.headline}</h1>
         <p className="pa-px-methodology-hero__support">{data.hero.support}</p>
       </header>

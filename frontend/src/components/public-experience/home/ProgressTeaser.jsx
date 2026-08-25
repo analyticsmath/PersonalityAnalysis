@@ -13,9 +13,6 @@ export const ProgressTeaser = () => {
     <section className="pa-px-ch-progress-teaser pa-px-temporal-teaser-stage" aria-label="Progress Longitudinal Teaser">
       <div className="pa-px-temporal-teaser__inner">
         <div className="pa-px-temporal-teaser__content">
-          <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-            LONGITUDINAL EVIDENCE &middot; TEMPORAL SCRUB
-          </div>
           <h2 className="pa-px-heading-xl">{data.headline}</h2>
           <p className="pa-px-lead" style={{ marginBottom: '24px' }}>
             {data.support}

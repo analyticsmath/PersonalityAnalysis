@@ -10,9 +10,6 @@ export const ModelAtlas = () => {
     <section className="pa-px-ch-models pa-px-spatial-models-atlas" aria-label="Multi-Model Psychometric Atlas">
       <div className="pa-px-spatial-models__inner">
         <header className="pa-px-spatial-models__header">
-          <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
-            DE-CENTRALIZED INTERPRETATION &middot; 6 FRAMEWORKS
-          </div>
           <h2 className="pa-px-heading-xl">{data.headline}</h2>
           <p className="pa-px-lead">
             No single psychometric model owns the full truth. The same source response is interpreted concurrently across six independent analytical dimensions.
