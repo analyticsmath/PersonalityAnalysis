@@ -1,37 +1,41 @@
 /**
  * Personality Assessor - Home Scene Renderer
- * High-performance deterministic frame executor.
- * Translates normalized master scroll progress (0 -> 1) into DOM quickSetters
- * and silent VisualActorRegistry.mutateFrame() updates.
+ * High-performance deterministic frame executor for DOM-First Cinematic Baseline.
+ * Translates normalized master scroll progress (0 -> 1) into direct DOM style transforms,
+ * inner-image counter-parallax, and silent VisualActorRegistry.mutateFrame() GPU mirrors.
  * Zero React rerenders on scroll frames.
  */
 
-import gsap from 'gsap';
 import {
   calculateHomeFrame,
   localProgress,
-  sceneWeight,
-  HOME_RANGES,
+  clamp01,
   easeInOutCubic,
   easeOutCubic,
-  clamp01,
 } from '../motion/homeSceneModel';
 import { VisualActorRegistry } from '../canvas/VisualActorRegistry';
-import { VisualSlotRegistry } from '../canvas/VisualSlotRegistry';
 
 export class HomeSceneRenderer {
   constructor(rootElement) {
     this.root = rootElement;
-    this.setters = {};
     this.cachedTargetRect = null;
-    this.initSetters();
+    this.initDOM();
   }
 
-  initSetters() {
+  initDOM() {
     if (!this.root) return;
 
-    // Cache DOM query targets
+    // Query & cache all critical DOM actors
     this.dom = {
+      // S0 & S1: Primary World Entry & Support DOM Actors
+      primaryActor: this.root.querySelector('.pa-px-home-primary-actor'),
+      primaryCrop: this.root.querySelector('.pa-px-home-primary-actor .visual-actor__crop'),
+      primaryInner: this.root.querySelector('.pa-px-home-primary-actor .visual-actor__inner-image'),
+      supportActor: this.root.querySelector('.pa-px-home-support-actor'),
+      supportInner: this.root.querySelector('.pa-px-home-support-actor .visual-actor__inner-image'),
+      evidenceTargetSlot: this.root.querySelector('.home-evidence-target'),
+
+      // Typography & Trajectory Actors
       heroText: this.root.querySelector('.pa-px-home-hero-text'),
       titleLine1: this.root.querySelector('.pa-px-title-line--1'),
       titleLine2: this.root.querySelector('.pa-px-title-line--2'),
@@ -52,24 +56,33 @@ export class HomeSceneRenderer {
       readingsField: this.root.querySelector('.pa-px-readings-field'),
       readingNodes: this.root.querySelectorAll('.pa-px-reading-node'),
 
+      // Workworld 4-Environment Stage
       workworldLayer: this.root.querySelector('.pa-px-workworld-layer'),
       envPrecision: this.root.querySelector('.pa-px-env--precision'),
       envAutonomy: this.root.querySelector('.pa-px-env--autonomy'),
       envCollaboration: this.root.querySelector('.pa-px-env--collaboration'),
       envPressure: this.root.querySelector('.pa-px-env--pressure'),
+      wwInnerPrecision: this.root.querySelector('.pa-px-env--precision .visual-actor__inner-image'),
+      wwInnerAutonomy: this.root.querySelector('.pa-px-env--autonomy .visual-actor__inner-image'),
+      wwInnerCollaboration: this.root.querySelector('.pa-px-env--collaboration .visual-actor__inner-image'),
+      wwInnerPressure: this.root.querySelector('.pa-px-env--pressure .visual-actor__inner-image'),
 
+      // Calibration Spatial Mass Field
       calibrationStage: this.root.querySelector('.pa-px-calibration-stage'),
       calibrationMasses: this.root.querySelectorAll('.pa-px-mass-item'),
 
+      // Time Double Exposure
       timeStage: this.root.querySelector('.pa-px-time-stage'),
       timeLaterWrapper: this.root.querySelector('.pa-px-time-later-wrapper'),
 
+      // Provenance Inspection
       provenanceStage: this.root.querySelector('.pa-px-provenance-stage'),
+
+      // Finale Synthesis Stage
       finaleStage: this.root.querySelector('.pa-px-finale-stage'),
-      evidenceTargetSlot: this.root.querySelector('.home-evidence-target'),
     };
 
-    // Precalculate SVG path lengths for clean strokeDashoffset scrubbing
+    // Precalculate SVG path lengths for clean stroke scrubbing
     if (this.dom.trajPaths) {
       this.dom.trajPaths.forEach((path) => {
         if (path && typeof path.getTotalLength === 'function') {
@@ -84,12 +97,13 @@ export class HomeSceneRenderer {
   renderFrame(p) {
     if (!this.root || !this.dom) return;
 
+    const clampedP = clamp01(p);
     const vw = typeof window !== 'undefined' ? window.innerWidth : 1440;
     const vh = typeof window !== 'undefined' ? window.innerHeight : 900;
-    const { weights } = calculateHomeFrame(p, { width: vw, height: vh });
+    const { weights } = calculateHomeFrame(clampedP, { width: vw, height: vh });
 
-    // ── 1. World Entry & 4:5 Plate Transformation (0.00 -> 0.22) ──
-    const plateProgress = localProgress(p, 0.04, 0.16);
+    // ── 1. World Entry & DOM 4:5 Evidence Plate Transformation (0.00 -> 0.22) ──
+    const plateProgress = localProgress(clampedP, 0.04, 0.16);
     const easedPlateProgress = easeInOutCubic(plateProgress);
 
     // Target 4:5 plate slot geometry
@@ -108,67 +122,93 @@ export class HomeSceneRenderer {
     }
 
     if (!targetRect) {
-      const plateWidth = Math.max(320, Math.min(vw * 0.32, 470));
+      const plateWidth = Math.max(320, Math.min(vw * 0.31, 470));
       const plateHeight = plateWidth * 1.25; // 4:5 aspect ratio
       targetRect = {
-        x: vw * 0.08,
+        x: vw * 0.06,
         y: vh * 0.22,
         width: plateWidth,
         height: plateHeight,
       };
     }
 
-    // Interpolate primary actor between full screen and 4:5 plate target
-    const primaryRect = {
-      x: (1 - easedPlateProgress) * 0 + easedPlateProgress * targetRect.x,
-      y: (1 - easedPlateProgress) * 0 + easedPlateProgress * targetRect.y,
-      width: (1 - easedPlateProgress) * vw + easedPlateProgress * targetRect.width,
-      height: (1 - easedPlateProgress) * vh + easedPlateProgress * targetRect.height,
-    };
+    // Direct DOM interpolation for Primary Actor
+    const primaryX = (1 - easedPlateProgress) * 0 + easedPlateProgress * targetRect.x;
+    const primaryY = (1 - easedPlateProgress) * 0 + easedPlateProgress * targetRect.y;
+    const primaryW = (1 - easedPlateProgress) * vw + easedPlateProgress * targetRect.width;
+    const primaryH = (1 - easedPlateProgress) * vh + easedPlateProgress * targetRect.height;
+    const primaryOpacity = clampedP < 0.36 ? 1.0 : (1 - localProgress(clampedP, 0.36, 0.46));
+    const primaryVisible = primaryOpacity > 0.01;
 
-    // Primary actor UV counter-travel overscan
-    const primaryUvY = -0.16 * easedPlateProgress;
+    if (this.dom.primaryActor) {
+      this.dom.primaryActor.style.opacity = primaryOpacity;
+      this.dom.primaryActor.style.visibility = primaryVisible ? 'visible' : 'hidden';
 
-    // Mutate primary and secondary media actors
-    if (p < 0.46) {
-      VisualActorRegistry.mutateFrame('home-observation-primary', {
-        mode: 'manual',
-        rect: primaryRect,
-        opacity: p < 0.38 ? 1.0 : (1 - localProgress(p, 0.38, 0.46)),
-        uvOffset: { x: 0, y: primaryUvY },
-      });
-    } else {
-      VisualActorRegistry.mutateFrame('home-observation-primary', {
-        mode: 'hidden',
-        opacity: 0,
-      });
+      if (primaryVisible) {
+        this.dom.primaryActor.style.transform = `translate3d(${primaryX}px, ${primaryY}px, 0)`;
+        this.dom.primaryActor.style.width = `${primaryW}px`;
+        this.dom.primaryActor.style.height = `${primaryH}px`;
+
+        // Inner-image counter-parallax movement with 1.2x overscan
+        if (this.dom.primaryInner) {
+          const innerY = -easedPlateProgress * 60 - clampedP * 120;
+          this.dom.primaryInner.style.transform = `translate3d(0, ${innerY}px, 0) scale(1.18)`;
+        }
+      }
     }
 
-    // Secondary support detail plate: enters at 1.2x velocity
-    const supportProgress = localProgress(p, 0.05, 0.16);
-    const supportX = vw * 1.1 - easeOutCubic(supportProgress) * (vw * 0.65);
-    const supportOpacity = sceneWeight(p, 0.05, 0.09, 0.28, 0.38);
+    // Mutate GPU VisualActor mirror
+    if (primaryVisible) {
+      VisualActorRegistry.mutateFrame('home-observation-primary', {
+        mode: 'manual',
+        rect: { x: primaryX, y: primaryY, width: primaryW, height: primaryH },
+        opacity: primaryOpacity,
+        uvOffset: { x: 0, y: -0.16 * easedPlateProgress },
+      });
+    } else {
+      VisualActorRegistry.mutateFrame('home-observation-primary', { mode: 'hidden', opacity: 0 });
+    }
 
-    if (supportOpacity > 0.01) {
+    // Secondary Support Detail Plate: Enters from right at 1.2x relative velocity
+    const supportProgress = localProgress(clampedP, 0.05, 0.16);
+    const supportEase = easeOutCubic(supportProgress);
+    const supportWidth = Math.min(vw * 0.22, 340);
+    const supportHeight = supportWidth * 1.25;
+    const supportFinalX = vw - supportWidth - vw * 0.06;
+    const supportStartX = vw * 1.15;
+    const supportX = (1 - supportEase) * supportStartX + supportEase * supportFinalX;
+    const supportOpacity = clampedP < 0.05 ? 0 : (clampedP < 0.28 ? easeOutCubic(localProgress(clampedP, 0.05, 0.12)) : (1 - localProgress(clampedP, 0.28, 0.40)));
+    const supportVisible = supportOpacity > 0.01;
+
+    if (this.dom.supportActor) {
+      this.dom.supportActor.style.opacity = supportOpacity;
+      this.dom.supportActor.style.visibility = supportVisible ? 'visible' : 'hidden';
+
+      if (supportVisible) {
+        this.dom.supportActor.style.transform = `translate3d(${supportX}px, ${vh * 0.22}px, 0)`;
+        this.dom.supportActor.style.width = `${supportWidth}px`;
+        this.dom.supportActor.style.height = `${supportHeight}px`;
+
+        if (this.dom.supportInner) {
+          const sInnerX = (1 - supportEase) * 40;
+          this.dom.supportInner.style.transform = `translate3d(${sInnerX}px, 0, 0) scale(1.15)`;
+        }
+      }
+    }
+
+    // GPU mirror for secondary support
+    if (supportVisible) {
       VisualActorRegistry.mutateFrame('home-observation-secondary', {
         mode: 'manual',
-        rect: {
-          x: supportX,
-          y: vh * 0.26,
-          width: Math.min(vw * 0.24, 340),
-          height: Math.min(vw * 0.32, 450),
-        },
+        rect: { x: supportX, y: vh * 0.22, width: supportWidth, height: supportHeight },
         opacity: supportOpacity,
-        uvOffset: { x: 0.08 * (1 - supportProgress), y: 0 },
+        uvOffset: { x: 0.08 * (1 - supportEase), y: 0 },
       });
     } else {
-      VisualActorRegistry.mutateFrame('home-observation-secondary', {
-        mode: 'hidden',
-        opacity: 0,
-      });
+      VisualActorRegistry.mutateFrame('home-observation-secondary', { mode: 'hidden', opacity: 0 });
     }
 
-    // Hero Text Parallax & exit
+    // Hero Text Parallax (Visible immediately at p=0.00)
     if (this.dom.heroText) {
       const heroOpacity = weights.world;
       this.dom.heroText.style.opacity = heroOpacity;
@@ -176,7 +216,7 @@ export class HomeSceneRenderer {
       this.dom.heroText.style.pointerEvents = heroOpacity > 0.4 ? 'auto' : 'none';
 
       if (heroOpacity > 0.01) {
-        const titleY = -p * 240;
+        const titleY = -clampedP * 240;
         if (this.dom.titleLine1) this.dom.titleLine1.style.transform = `translate3d(0, ${titleY * 0.8}px, 0)`;
         if (this.dom.titleLine2) this.dom.titleLine2.style.transform = `translate3d(0, ${titleY * 0.95}px, 0)`;
         if (this.dom.heroSupport) this.dom.heroSupport.style.transform = `translate3d(0, ${titleY * 1.1}px, 0)`;
@@ -191,7 +231,7 @@ export class HomeSceneRenderer {
       this.dom.questionContainer.style.visibility = qOpacity > 0.01 ? 'visible' : 'hidden';
 
       if (qOpacity > 0.01) {
-        const qLocal = localProgress(p, 0.06, 0.14);
+        const qLocal = localProgress(clampedP, 0.06, 0.14);
         const qY = (1 - easeOutCubic(qLocal)) * 60;
         this.dom.questionContainer.style.transform = `translate3d(0, ${qY}px, 0)`;
       }
@@ -204,7 +244,7 @@ export class HomeSceneRenderer {
       this.dom.responseContainer.style.visibility = respOpacity > 0.01 ? 'visible' : 'hidden';
 
       if (respOpacity > 0.01) {
-        const branchProgress = localProgress(p, 0.25, 0.38);
+        const branchProgress = localProgress(clampedP, 0.22, 0.36);
         const bEase = easeInOutCubic(branchProgress);
 
         const frags = this.dom.phraseFragments;
@@ -232,7 +272,7 @@ export class HomeSceneRenderer {
       this.dom.branchingSvg.style.visibility = svgOpacity > 0.01 ? 'visible' : 'hidden';
 
       if (svgOpacity > 0.01) {
-        const pathProg = localProgress(p, 0.26, 0.36);
+        const pathProg = localProgress(clampedP, 0.24, 0.35);
         this.dom.trajPaths.forEach((path) => {
           if (path && typeof path.getTotalLength === 'function') {
             const len = path.getTotalLength();
@@ -250,122 +290,125 @@ export class HomeSceneRenderer {
 
       if (readingsOpacity > 0.01) {
         this.dom.readingNodes.forEach((node, idx) => {
-          const nodeProg = localProgress(p, 0.28 + idx * 0.02, 0.36 + idx * 0.02);
+          const nodeProg = localProgress(clampedP, 0.26 + idx * 0.02, 0.34 + idx * 0.02);
           const nodeY = (1 - easeOutCubic(nodeProg)) * 40;
           node.style.transform = `translate3d(0, ${nodeY}px, 0) scale(${0.9 + easeOutCubic(nodeProg) * 0.1})`;
         });
       }
     }
 
-    // ── 4. Workworld 4-Environment Centerpiece Stage (0.37 -> 0.76) ──
+    // ── 4. Workworld 4-Environment Centerpiece Stage (0.34 -> 0.72) ──
     const wwWeights = weights.workworld;
-    const workworldVisible = (
-      wwWeights.precision > 0.01 ||
-      wwWeights.autonomy > 0.01 ||
-      wwWeights.collaboration > 0.01 ||
-      wwWeights.pressure > 0.01
-    );
+    const workworldVisible = wwWeights.macro > 0.01;
 
     if (this.dom.workworldLayer) {
       this.dom.workworldLayer.style.visibility = workworldVisible ? 'visible' : 'hidden';
     }
 
-    // Environment 1: Precision (0.38 -> 0.57)
+    // Environment 1: Precision
     if (this.dom.envPrecision) {
-      this.dom.envPrecision.style.opacity = wwWeights.precision;
-      this.dom.envPrecision.style.visibility = wwWeights.precision > 0.01 ? 'visible' : 'hidden';
-      if (wwWeights.precision > 0.01) {
-        const precExit = localProgress(p, 0.49, 0.57);
+      const pWeight = wwWeights.precision;
+      this.dom.envPrecision.style.opacity = pWeight;
+      this.dom.envPrecision.style.visibility = pWeight > 0.01 ? 'visible' : 'hidden';
+
+      if (pWeight > 0.01) {
+        const precExit = localProgress(clampedP, 0.42, 0.54);
         const precX = -easeInOutCubic(precExit) * (vw * 0.35);
-        this.dom.envPrecision.style.transform = `translate3d(${precX}px, 0, 0)`;
+        const precScale = 1.0 - precExit * 0.08;
+        this.dom.envPrecision.style.transform = `translate3d(${precX}px, 0, 0) scale(${precScale})`;
+
+        if (this.dom.wwInnerPrecision) {
+          const innerX = easeInOutCubic(precExit) * 60;
+          this.dom.wwInnerPrecision.style.transform = `translate3d(${innerX}px, 0, 0) scale(1.15)`;
+        }
 
         VisualActorRegistry.mutateFrame('home-workworld-precision', {
           mode: 'manual',
-          rect: {
-            x: precX,
-            y: 0,
-            width: vw * (1 - precExit * 0.2),
-            height: vh,
-          },
-          opacity: wwWeights.precision,
-          uvOffset: { x: 0, y: -0.12 * localProgress(p, 0.38, 0.57) },
+          rect: { x: precX, y: 0, width: vw * (1 - precExit * 0.2), height: vh },
+          opacity: pWeight,
+          uvOffset: { x: 0, y: -0.12 * localProgress(clampedP, 0.34, 0.54) },
         });
       } else {
         VisualActorRegistry.mutateFrame('home-workworld-precision', { mode: 'hidden', opacity: 0 });
       }
     }
 
-    // Environment 2: Autonomy (0.48 -> 0.66)
+    // Environment 2: Autonomy
     if (this.dom.envAutonomy) {
-      this.dom.envAutonomy.style.opacity = wwWeights.autonomy;
-      this.dom.envAutonomy.style.visibility = wwWeights.autonomy > 0.01 ? 'visible' : 'hidden';
-      if (wwWeights.autonomy > 0.01) {
-        const autoEntry = localProgress(p, 0.48, 0.54);
-        const autoExit = localProgress(p, 0.59, 0.66);
-        const autoX = (1 - easeOutCubic(autoEntry)) * (vw * 0.6) + easeInOutCubic(autoExit) * (vw * 0.3);
+      const aWeight = wwWeights.autonomy;
+      this.dom.envAutonomy.style.opacity = aWeight;
+      this.dom.envAutonomy.style.visibility = aWeight > 0.01 ? 'visible' : 'hidden';
+
+      if (aWeight > 0.01) {
+        const autoEntry = localProgress(clampedP, 0.42, 0.50);
+        const autoExit = localProgress(clampedP, 0.54, 0.62);
+        const autoX = (1 - easeOutCubic(autoEntry)) * (vw * 0.65) - easeInOutCubic(autoExit) * (vw * 0.30);
         this.dom.envAutonomy.style.transform = `translate3d(${autoX}px, 0, 0)`;
+
+        if (this.dom.wwInnerAutonomy) {
+          const innerY = -0.15 * localProgress(clampedP, 0.42, 0.62) * 60;
+          this.dom.wwInnerAutonomy.style.transform = `translate3d(0, ${innerY}px, 0) scale(1.18)`;
+        }
 
         VisualActorRegistry.mutateFrame('home-workworld-autonomy', {
           mode: 'manual',
-          rect: {
-            x: autoX,
-            y: 0,
-            width: vw * 0.85,
-            height: vh,
-          },
-          opacity: wwWeights.autonomy,
-          uvOffset: { x: 0, y: 0.15 * localProgress(p, 0.48, 0.66) },
+          rect: { x: autoX, y: 0, width: vw * 0.85, height: vh },
+          opacity: aWeight,
+          uvOffset: { x: 0, y: 0.15 * localProgress(clampedP, 0.42, 0.62) },
         });
       } else {
         VisualActorRegistry.mutateFrame('home-workworld-autonomy', { mode: 'hidden', opacity: 0 });
       }
     }
 
-    // Environment 3: Collaboration (0.58 -> 0.74)
+    // Environment 3: Collaboration
     if (this.dom.envCollaboration) {
-      this.dom.envCollaboration.style.opacity = wwWeights.collaboration;
-      this.dom.envCollaboration.style.visibility = wwWeights.collaboration > 0.01 ? 'visible' : 'hidden';
-      if (wwWeights.collaboration > 0.01) {
-        const collabEntry = localProgress(p, 0.58, 0.64);
-        const collabExit = localProgress(p, 0.68, 0.74);
-        const collabX = -(1 - easeOutCubic(collabEntry)) * (vw * 0.5) - easeInOutCubic(collabExit) * (vw * 0.25);
+      const cWeight = wwWeights.collaboration;
+      this.dom.envCollaboration.style.opacity = cWeight;
+      this.dom.envCollaboration.style.visibility = cWeight > 0.01 ? 'visible' : 'hidden';
+
+      if (cWeight > 0.01) {
+        const collabEntry = localProgress(clampedP, 0.52, 0.60);
+        const collabExit = localProgress(clampedP, 0.62, 0.70);
+        const collabX = -(1 - easeOutCubic(collabEntry)) * (vw * 0.55) - easeInOutCubic(collabExit) * (vw * 0.25);
         this.dom.envCollaboration.style.transform = `translate3d(${collabX}px, 0, 0)`;
+
+        if (this.dom.wwInnerCollaboration) {
+          const innerX = localProgress(clampedP, 0.52, 0.70) * 40;
+          this.dom.wwInnerCollaboration.style.transform = `translate3d(${innerX}px, 0, 0) scale(1.15)`;
+        }
 
         VisualActorRegistry.mutateFrame('home-workworld-collaboration', {
           mode: 'manual',
-          rect: {
-            x: collabX,
-            y: 0,
-            width: vw * 0.9,
-            height: vh,
-          },
-          opacity: wwWeights.collaboration,
-          uvOffset: { x: 0.12 * localProgress(p, 0.58, 0.74), y: 0 },
+          rect: { x: collabX, y: 0, width: vw * 0.9, height: vh },
+          opacity: cWeight,
+          uvOffset: { x: 0.12 * localProgress(clampedP, 0.52, 0.70), y: 0 },
         });
       } else {
         VisualActorRegistry.mutateFrame('home-workworld-collaboration', { mode: 'hidden', opacity: 0 });
       }
     }
 
-    // Environment 4: Operational Pressure (0.66 -> 0.78)
+    // Environment 4: Operational Pressure
     if (this.dom.envPressure) {
-      this.dom.envPressure.style.opacity = wwWeights.pressure;
-      this.dom.envPressure.style.visibility = wwWeights.pressure > 0.01 ? 'visible' : 'hidden';
-      if (wwWeights.pressure > 0.01) {
-        const pressProg = localProgress(p, 0.66, 0.74);
+      const prWeight = wwWeights.pressure;
+      this.dom.envPressure.style.opacity = prWeight;
+      this.dom.envPressure.style.visibility = prWeight > 0.01 ? 'visible' : 'hidden';
+
+      if (prWeight > 0.01) {
+        const pressProg = localProgress(clampedP, 0.60, 0.72);
         const pressScale = 1.12 - easeOutCubic(pressProg) * 0.12;
         this.dom.envPressure.style.transform = `scale(${pressScale})`;
 
+        if (this.dom.wwInnerPressure) {
+          this.dom.wwInnerPressure.style.transform = `scale(${1.05 + (1 - pressProg) * 0.1})`;
+        }
+
         VisualActorRegistry.mutateFrame('home-workworld-pressure', {
           mode: 'manual',
-          rect: {
-            x: 0,
-            y: 0,
-            width: vw,
-            height: vh,
-          },
+          rect: { x: 0, y: 0, width: vw, height: vh },
           scale: pressScale,
-          opacity: wwWeights.pressure,
+          opacity: prWeight,
           velocityDeform: 0.008 * (1 - pressProg),
         });
       } else {
@@ -381,9 +424,9 @@ export class HomeSceneRenderer {
       this.dom.calibrationStage.style.pointerEvents = calOpacity > 0.4 ? 'auto' : 'none';
 
       if (calOpacity > 0.01 && this.dom.calibrationMasses) {
-        const calProg = localProgress(p, 0.69, 0.77);
+        const calProg = localProgress(clampedP, 0.68, 0.78);
         this.dom.calibrationMasses.forEach((mass, idx) => {
-          const depthSpeed = 1 + (idx % 3) * 0.3;
+          const depthSpeed = 1 + (idx % 3) * 0.35;
           const massY = (1 - easeOutCubic(calProg)) * (50 * depthSpeed);
           mass.style.transform = `translate3d(0, ${massY}px, 0)`;
         });
@@ -397,13 +440,13 @@ export class HomeSceneRenderer {
       this.dom.timeStage.style.visibility = timeOpacity > 0.01 ? 'visible' : 'hidden';
 
       if (timeOpacity > 0.01 && this.dom.timeLaterWrapper) {
-        const timeProg = localProgress(p, 0.78, 0.86);
+        const timeProg = localProgress(clampedP, 0.77, 0.86);
         const clipPercent = 100 - easeInOutCubic(timeProg) * 65;
         this.dom.timeLaterWrapper.style.clipPath = `polygon(${clipPercent}% 0, 100% 0, 100% 100%, ${Math.max(0, clipPercent - 8)}% 100%)`;
       }
     }
 
-    // ── 7. Provenance Inspection Stage (0.83 -> 0.965) ──
+    // ── 7. Provenance Inspection Stage (0.83 -> 0.96) ──
     if (this.dom.provenanceStage) {
       const provOpacity = weights.provenance;
       this.dom.provenanceStage.style.opacity = provOpacity;
@@ -411,7 +454,7 @@ export class HomeSceneRenderer {
       this.dom.provenanceStage.style.pointerEvents = provOpacity > 0.4 ? 'auto' : 'none';
     }
 
-    // ── 8. Finale Journey Synthesis (0.91 -> 1.00) ──
+    // ── 8. Finale Journey Synthesis (0.90 -> 1.00) ──
     if (this.dom.finaleStage) {
       const finOpacity = weights.finale;
       this.dom.finaleStage.style.opacity = finOpacity;
@@ -419,7 +462,7 @@ export class HomeSceneRenderer {
       this.dom.finaleStage.style.pointerEvents = finOpacity > 0.4 ? 'auto' : 'none';
 
       if (finOpacity > 0.01) {
-        const finProg = localProgress(p, 0.92, 0.98);
+        const finProg = localProgress(clampedP, 0.90, 1.00);
         const finScale = 0.94 + easeOutCubic(finProg) * 0.06;
         this.dom.finaleStage.style.transform = `scale(${finScale})`;
       }
@@ -428,3 +471,4 @@ export class HomeSceneRenderer {
 }
 
 export default HomeSceneRenderer;
+

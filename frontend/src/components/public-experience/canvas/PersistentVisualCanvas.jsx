@@ -15,10 +15,10 @@ import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 
 export const PersistentVisualCanvas = () => {
   const location = useLocation();
-  const { hasWebGL, prefersReducedMotion } = usePublicCapabilities();
+  const { webgl, prefersReducedMotion } = usePublicCapabilities();
   const isCareerRoute = location.pathname === '/career-intelligence';
 
-  if (!hasWebGL || prefersReducedMotion) {
+  if (webgl !== 'supported' || prefersReducedMotion) {
     return null;
   }
 

@@ -1,6 +1,39 @@
 import { useState, useEffect } from 'react';
 
 /**
+ * Three-state WebGL capability detection: 'unknown' | 'supported' | 'unsupported'
+ * Initial state is 'unknown' to ensure DOM baseline renders first without speculative canvas mounting.
+ */
+let cachedWebglStatus = 'unknown';
+
+function detectWebGLSupport() {
+  if (typeof window === 'undefined') return 'unsupported';
+  if (cachedWebglStatus !== 'unknown') return cachedWebglStatus;
+
+  try {
+    const canvas = document.createElement('canvas');
+    const gl =
+      canvas.getContext('webgl2', { failIfMajorPerformanceCaveat: false }) ||
+      canvas.getContext('webgl', { failIfMajorPerformanceCaveat: false }) ||
+      canvas.getContext('experimental-webgl', { failIfMajorPerformanceCaveat: false });
+
+    if (gl) {
+      cachedWebglStatus = 'supported';
+      const loseContextExt = gl.getExtension('WEBGL_lose_context');
+      if (loseContextExt) {
+        loseContextExt.loseContext();
+      }
+    } else {
+      cachedWebglStatus = 'unsupported';
+    }
+  } catch {
+    cachedWebglStatus = 'unsupported';
+  }
+
+  return cachedWebglStatus;
+}
+
+/**
  * Hook to inspect runtime capabilities for public experience scenes
  */
 export function usePublicCapabilities() {
@@ -8,10 +41,11 @@ export function usePublicCapabilities() {
     hasFinePointer: true,
     isTouch: false,
     isMobile: false,
-    hasWebGL: true,
+    webgl: cachedWebglStatus, // 'unknown' | 'supported' | 'unsupported'
+    hasWebGL: cachedWebglStatus === 'supported',
     prefersReducedMotion: false,
     devicePixelRatio: 1,
-    tier: 2, // 0: low/fallback, 1: mobile, 2: standard desktop, 3: high performance
+    tier: 2, // 0: fallback, 1: mobile, 2: standard desktop, 3: high performance
   });
 
   useEffect(() => {
@@ -22,18 +56,12 @@ export function usePublicCapabilities() {
     const isTouchDevice = !finePointerQuery.matches || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     const isMobileViewport = window.innerWidth <= 768;
 
-    let webglSupported = false;
-    try {
-      const canvas = document.createElement('canvas');
-      webglSupported = !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-    } catch {
-      webglSupported = false;
-    }
-
+    const webglStatus = detectWebGLSupport();
+    const hasWebgl = webglStatus === 'supported';
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     let tier = 2;
-    if (reducedMotionQuery.matches || !webglSupported) {
+    if (reducedMotionQuery.matches || !hasWebgl) {
       tier = 0;
     } else if (isMobileViewport || isTouchDevice) {
       tier = 1;
@@ -45,7 +73,8 @@ export function usePublicCapabilities() {
       hasFinePointer: finePointerQuery.matches,
       isTouch: isTouchDevice,
       isMobile: isMobileViewport,
-      hasWebGL: webglSupported,
+      webgl: webglStatus,
+      hasWebGL: hasWebgl,
       prefersReducedMotion: reducedMotionQuery.matches,
       devicePixelRatio: dpr,
       tier,
@@ -56,3 +85,4 @@ export function usePublicCapabilities() {
 }
 
 export default usePublicCapabilities;
+

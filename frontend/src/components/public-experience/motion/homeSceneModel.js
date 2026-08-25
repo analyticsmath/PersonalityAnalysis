@@ -1,25 +1,27 @@
 /**
  * Personality Assessor - Home Scene Model
- * Pure mathematical functions for deterministic scroll interpolation, scene weight curves,
- * and strict visibility budget assertions.
+ * Strict mathematical partition-of-unity model for deterministic scroll interpolation.
+ * Guarantees sum(weights) = 1.0, dominant weight >= 0.5, and zero mathematical blackouts.
  */
 
-export const HOME_RANGES = {
-  world: { start: 0.000, peakIn: 0.000, peakOut: 0.055, end: 0.120 },
-  observe: { start: 0.045, peakIn: 0.090, peakOut: 0.160, end: 0.220 },
-  source: { start: 0.150, peakIn: 0.200, peakOut: 0.280, end: 0.350 },
-  branch: { start: 0.250, peakIn: 0.300, peakOut: 0.380, end: 0.440 },
-  workworld: {
-    precision: { start: 0.380, peakIn: 0.420, peakOut: 0.490, end: 0.570 },
-    autonomy: { start: 0.480, peakIn: 0.530, peakOut: 0.590, end: 0.660 },
-    collaboration: { start: 0.580, peakIn: 0.630, peakOut: 0.680, end: 0.740 },
-    pressure: { start: 0.660, peakIn: 0.700, peakOut: 0.730, end: 0.780 },
-  },
-  calibration: { start: 0.680, peakIn: 0.730, peakOut: 0.780, end: 0.840 },
-  time: { start: 0.760, peakIn: 0.800, peakOut: 0.850, end: 0.900 },
-  provenance: { start: 0.830, peakIn: 0.870, peakOut: 0.930, end: 0.965 },
-  finale: { start: 0.910, peakIn: 0.950, peakOut: 1.000, end: 1.000 },
-};
+export const HOME_KNOTS = [
+  { id: 'world', at: 0.00 },
+  { id: 'observe', at: 0.11 },
+  { id: 'source', at: 0.22 },
+  { id: 'branch', at: 0.34 },
+  { id: 'workworld', at: 0.48 },
+  { id: 'calibration', at: 0.72 },
+  { id: 'time', at: 0.81 },
+  { id: 'provenance', at: 0.90 },
+  { id: 'finale', at: 1.00 },
+];
+
+export const WORKWORLD_KNOTS = [
+  { id: 'precision', at: 0.00 },
+  { id: 'autonomy', at: 0.33 },
+  { id: 'collaboration', at: 0.66 },
+  { id: 'pressure', at: 1.00 },
+];
 
 export function clamp01(val) {
   return Math.max(0, Math.min(1, val));
@@ -27,6 +29,11 @@ export function clamp01(val) {
 
 export function lerp(a, b, t) {
   return a + (b - a) * clamp01(t);
+}
+
+export function smoothstep01(t) {
+  const x = clamp01(t);
+  return x * x * (3 - 2 * x);
 }
 
 export function easeInOutCubic(t) {
@@ -39,36 +46,47 @@ export function easeOutCubic(t) {
   return 1 - Math.pow(1 - x, 3);
 }
 
-export function smoothstep(min, max, value) {
-  const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
-  return x * x * (3 - 2 * x);
-}
-
 export function localProgress(p, start, end) {
   if (p <= start) return 0;
   if (p >= end) return 1;
-  return (p - start) / (end - start);
+  return (p - start) / Math.max(0.0001, end - start);
 }
 
-export function sceneWeight(p, start, peakIn, peakOut, end) {
-  if (p <= start || p >= end) return 0;
-  if (p < peakIn) {
-    return easeInOutCubic((p - start) / Math.max(0.0001, peakIn - start));
-  }
-  if (p <= peakOut) {
-    return 1;
-  }
-  return 1 - easeInOutCubic((p - peakOut) / Math.max(0.0001, end - peakOut));
-}
+/**
+ * Strict Partition-of-Unity macro weight calculator
+ * At any progress p: sum(weights) = 1.0, only adjacent macro scenes coexist, max weight >= 0.5.
+ */
+export function adjacentWeights(p, knots = HOME_KNOTS) {
+  const clampedP = clamp01(p);
+  const result = {};
+  knots.forEach((k) => {
+    result[k.id] = 0;
+  });
 
-export function mixRect(r1, r2, t) {
-  const f = easeInOutCubic(t);
-  return {
-    x: lerp(r1.x, r2.x, f),
-    y: lerp(r1.y, r2.y, f),
-    width: lerp(r1.width, r2.width, f),
-    height: lerp(r1.height, r2.height, f),
-  };
+  if (clampedP <= knots[0].at) {
+    result[knots[0].id] = 1.0;
+    return result;
+  }
+
+  if (clampedP >= knots[knots.length - 1].at) {
+    result[knots[knots.length - 1].id] = 1.0;
+    return result;
+  }
+
+  for (let i = 0; i < knots.length - 1; i++) {
+    const a = knots[i];
+    const b = knots[i + 1];
+    if (clampedP >= a.at && clampedP <= b.at) {
+      const raw = (clampedP - a.at) / Math.max(0.00001, b.at - a.at);
+      const t = smoothstep01(raw);
+      result[a.id] = 1 - t;
+      result[b.id] = t;
+      return result;
+    }
+  }
+
+  result[knots[0].id] = 1.0;
+  return result;
 }
 
 /**
@@ -77,64 +95,83 @@ export function mixRect(r1, r2, t) {
  * @returns {Object} Full scene frame calculation
  */
 export function calculateHomeFrame(p, viewport = { width: 1440, height: 900 }) {
+  const macroWeights = adjacentWeights(p, HOME_KNOTS);
+
+  // Workworld local partition
+  const workworldMacroProgress = localProgress(p, 0.34, 0.72);
+  const wwLocalWeights = adjacentWeights(workworldMacroProgress, WORKWORLD_KNOTS);
+
   const weights = {
-    world: sceneWeight(p, HOME_RANGES.world.start, HOME_RANGES.world.peakIn, HOME_RANGES.world.peakOut, HOME_RANGES.world.end),
-    observe: sceneWeight(p, HOME_RANGES.observe.start, HOME_RANGES.observe.peakIn, HOME_RANGES.observe.peakOut, HOME_RANGES.observe.end),
-    source: sceneWeight(p, HOME_RANGES.source.start, HOME_RANGES.source.peakIn, HOME_RANGES.source.peakOut, HOME_RANGES.source.end),
-    branch: sceneWeight(p, HOME_RANGES.branch.start, HOME_RANGES.branch.peakIn, HOME_RANGES.branch.peakOut, HOME_RANGES.branch.end),
+    world: macroWeights.world,
+    observe: macroWeights.observe,
+    source: macroWeights.source,
+    branch: macroWeights.branch,
     workworld: {
-      precision: sceneWeight(p, HOME_RANGES.workworld.precision.start, HOME_RANGES.workworld.precision.peakIn, HOME_RANGES.workworld.precision.peakOut, HOME_RANGES.workworld.precision.end),
-      autonomy: sceneWeight(p, HOME_RANGES.workworld.autonomy.start, HOME_RANGES.workworld.autonomy.peakIn, HOME_RANGES.workworld.autonomy.peakOut, HOME_RANGES.workworld.autonomy.end),
-      collaboration: sceneWeight(p, HOME_RANGES.workworld.collaboration.start, HOME_RANGES.workworld.collaboration.peakIn, HOME_RANGES.workworld.collaboration.peakOut, HOME_RANGES.workworld.collaboration.end),
-      pressure: sceneWeight(p, HOME_RANGES.workworld.pressure.start, HOME_RANGES.workworld.pressure.peakIn, HOME_RANGES.workworld.pressure.peakOut, HOME_RANGES.workworld.pressure.end),
+      macro: macroWeights.workworld,
+      precision: macroWeights.workworld * wwLocalWeights.precision,
+      autonomy: macroWeights.workworld * wwLocalWeights.autonomy,
+      collaboration: macroWeights.workworld * wwLocalWeights.collaboration,
+      pressure: macroWeights.workworld * wwLocalWeights.pressure,
+      local: wwLocalWeights,
     },
-    calibration: sceneWeight(p, HOME_RANGES.calibration.start, HOME_RANGES.calibration.peakIn, HOME_RANGES.calibration.peakOut, HOME_RANGES.calibration.end),
-    time: sceneWeight(p, HOME_RANGES.time.start, HOME_RANGES.time.peakIn, HOME_RANGES.time.peakOut, HOME_RANGES.time.end),
-    provenance: sceneWeight(p, HOME_RANGES.provenance.start, HOME_RANGES.provenance.peakIn, HOME_RANGES.provenance.peakOut, HOME_RANGES.provenance.end),
-    finale: sceneWeight(p, HOME_RANGES.finale.start, HOME_RANGES.finale.peakIn, HOME_RANGES.finale.peakOut, HOME_RANGES.finale.end),
+    calibration: macroWeights.calibration,
+    time: macroWeights.time,
+    provenance: macroWeights.provenance,
+    finale: macroWeights.finale,
   };
 
-  const workworldTotal = Math.max(
-    weights.workworld.precision,
-    weights.workworld.autonomy,
-    weights.workworld.collaboration,
-    weights.workworld.pressure
-  );
-
-  // Group major owners
+  // Group major macro owners
   const majorOwnerEntries = [
     { name: 'world', weight: weights.world },
     { name: 'observe', weight: weights.observe },
     { name: 'source', weight: weights.source },
     { name: 'branch', weight: weights.branch },
-    { name: 'workworld', weight: workworldTotal },
+    { name: 'workworld', weight: weights.workworld.macro },
     { name: 'calibration', weight: weights.calibration },
     { name: 'time', weight: weights.time },
     { name: 'provenance', weight: weights.provenance },
     { name: 'finale', weight: weights.finale },
   ];
 
-  const activeMajorOwners = majorOwnerEntries.filter((entry) => entry.weight > 0.15);
+  const activeMajorOwners = majorOwnerEntries.filter((entry) => entry.weight > 0.05);
   const dominantOwner = majorOwnerEntries.reduce((prev, curr) => (curr.weight > prev.weight ? curr : prev), majorOwnerEntries[0]);
 
-  // Expose to window.__PX_DEBUG__.home in dev
-  if (typeof window !== 'undefined' && window.__PX_DEBUG__) {
+  // Expose to window.__PX_DEBUG__.home without fake fallbacks
+  if (typeof window !== 'undefined') {
+    window.__PX_DEBUG__ = window.__PX_DEBUG__ || {};
     window.__PX_DEBUG__.home = {
       progress: p,
       sceneWeights: weights,
       majorOwners: activeMajorOwners.map((o) => o.name),
       majorOwnerCount: activeMajorOwners.length,
       dominantOwner: dominantOwner.name,
+      dominantScene: dominantOwner.name,
       dominantWeight: dominantOwner.weight,
+      viewport,
     };
   }
+
 
   return {
     progress: p,
     weights,
     majorOwners: activeMajorOwners.map((o) => o.name),
+    majorOwnerCount: activeMajorOwners.length,
     dominantOwner: dominantOwner.name,
+    dominantWeight: dominantOwner.weight,
   };
 }
 
-export default { HOME_RANGES, calculateHomeFrame, sceneWeight, localProgress, mixRect, clamp01, lerp };
+export default {
+  HOME_KNOTS,
+  WORKWORLD_KNOTS,
+  adjacentWeights,
+  calculateHomeFrame,
+  localProgress,
+  clamp01,
+  lerp,
+  smoothstep01,
+  easeInOutCubic,
+  easeOutCubic,
+};
+

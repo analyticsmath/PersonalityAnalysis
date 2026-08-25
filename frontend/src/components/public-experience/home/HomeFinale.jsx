@@ -7,41 +7,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getSignupAcquisitionUrl } from '../../../content/public-experience/navigation';
-import { PersistentMediaSlot } from '../canvas/PersistentMediaSlot';
+import { PublicPicture } from '../media/PublicPicture';
+
 
 export const HomeFinale = () => {
   return (
     <div className="pa-px-finale-stage" aria-label="Journey Resolution">
       <div className="pa-px-finale-composition">
         {/* Fragment 1: Wide World Origin */}
-        <div className="pa-px-finale-fragment pa-px-fragment--1">
-          <PersistentMediaSlot
-            actorId="home-finale-frag-1"
-            slotId="finale-frag-1-slot"
+        <div className="pa-px-finale-fragment pa-px-fragment--1 visual-actor">
+          <PublicPicture
             assetKey="homeWorldEntry"
             alt="Contextual architectural design studio environment"
           />
         </div>
 
         {/* Fragment 2: Precision Operation Detail */}
-        <div className="pa-px-finale-fragment pa-px-fragment--2">
-          <PersistentMediaSlot
-            actorId="home-finale-frag-2"
-            slotId="finale-frag-2-slot"
+        <div className="pa-px-finale-fragment pa-px-fragment--2 visual-actor">
+          <PublicPicture
             assetKey="workworldPrecision"
             alt="Precision lathe workshop operation"
           />
         </div>
 
         {/* Fragment 3: Deep Technical Inquiry */}
-        <div className="pa-px-finale-fragment pa-px-fragment--3">
-          <PersistentMediaSlot
-            actorId="home-finale-frag-3"
-            slotId="finale-frag-3-slot"
+        <div className="pa-px-finale-fragment pa-px-fragment--3 visual-actor">
+          <PublicPicture
             assetKey="careerDeepInquiry"
             alt="Technical diagnostics investigation"
           />
         </div>
+
 
         {/* Persistent Provenance Trace Mark */}
         <div className="pa-px-finale-trace-mark">

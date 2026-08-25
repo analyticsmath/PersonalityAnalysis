@@ -10,7 +10,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
-import { registerSceneProgress } from '../motion/scrollState';
+import { registerSceneProgress, scrollBus } from '../motion/scrollState';
 import { HomeSceneRenderer } from './HomeSceneRenderer';
 import { HomeTypographyLayer } from './HomeTypographyLayer';
 import { HomeEvidenceLayer } from './HomeEvidenceLayer';
@@ -35,10 +35,21 @@ export const HomeCinematicExperience = () => {
     const renderer = new HomeSceneRenderer(viewportRef.current);
     rendererRef.current = renderer;
 
-    // Render initial frame at p=0
-    renderer.renderFrame(0);
+    // Compute progress directly from container geometry and actual scrollY
+    const computeProgress = () => {
+      if (!containerRef.current) return 0;
+      const start = containerRef.current.offsetTop;
+      const travel = containerRef.current.offsetHeight - window.innerHeight;
+      if (travel <= 0) return 0;
+      return Math.max(0, Math.min(1, (window.scrollY - start) / travel));
+    };
 
-    // Single Authoritative ScrollTrigger for the entire Home experience
+    // Render initial frame at exact current scroll
+    const initialP = computeProgress();
+    renderer.renderFrame(initialP);
+    registerSceneProgress('home-master-journey', initialP, true);
+
+    // Authoritative ScrollTrigger for Home journey
     const st = ScrollTrigger.create({
       trigger: containerRef.current,
       start: 'top top',
@@ -53,16 +64,24 @@ export const HomeCinematicExperience = () => {
       },
     });
 
+    // Central ScrollBus subscription ensures keyboard (ArrowDown, PageDown) immediately renders
+    const unsubscribeBus = scrollBus.subscribe(() => {
+      const p = computeProgress();
+      registerSceneProgress('home-master-journey', p, true);
+      renderer.renderFrame(p);
+    });
+
     const handleResize = () => {
       if (rendererRef.current) {
         rendererRef.current.cachedTargetRect = null;
-        rendererRef.current.renderFrame(st.progress);
+        rendererRef.current.renderFrame(computeProgress());
       }
     };
 
     window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
+      unsubscribeBus();
       window.removeEventListener('resize', handleResize);
       st.kill();
       rendererRef.current = null;
@@ -118,3 +137,4 @@ export const HomeCinematicExperience = () => {
 };
 
 export default HomeCinematicExperience;
+

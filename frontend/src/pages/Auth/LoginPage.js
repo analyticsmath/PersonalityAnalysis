@@ -10,6 +10,8 @@ import { getSafeNextUrl } from '../../content/public-experience/navigation';
 import { PersistentMediaSlot } from '../../components/public-experience/canvas/PersistentMediaSlot';
 import { PublicPicture } from '../../components/public-experience/media/PublicPicture';
 import { PUBLIC_CONTENT } from '../../content/public-experience/publicContent';
+import { AuthFrame } from '../../components/auth/AuthFrame';
+
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -117,104 +119,97 @@ export const LoginPage = () => {
   const isSubmitting = loginMutation.isPending || googleMutation.isPending;
 
   return (
-    <div className="pa-px-auth-root">
-      {/* Full Environmental Ground */}
-      <div className="pa-px-auth-bg-media">
-        <PersistentMediaSlot actorId="auth-login-media" assetKey="authLogin" alt="Professional analysis environment" priority={true} />
-      </div>
+    <AuthFrame mode="login">
+      <header className="pa-px-auth-form-header">
+        <h1>{content.headline}</h1>
+        <p>{content.support}</p>
+      </header>
 
-      {/* Direct Negative Space Form (No Floating Glass Card) */}
-      <div className="pa-px-auth-negative-space-form">
-        <header className="pa-px-auth-form-header">
-          <h1>{content.headline}</h1>
-          <p>{content.support}</p>
-        </header>
-
-        {formError && (
-          <div className="pa-px-auth-error" role="alert">
-            {formError}
-          </div>
-        )}
-
-        {GOOGLE_CLIENT_ID && (
-          <div className="pa-px-auth-social-wrap">
-            <GoogleLoginButton
-              onSuccess={handleGoogleSuccess}
-              onError={() => setFormError('Google sign-in was interrupted.')}
-              text="signin_with"
-              disabled={isSubmitting}
-            />
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="pa-px-auth-form" noValidate>
-          <div className="pa-px-auth-field">
-            <label htmlFor="login-email">Email Address</label>
-            <input
-              ref={emailInputRef}
-              id="login-email"
-              type="email"
-              autoComplete="email"
-              placeholder="name@company.com"
-              value={form.email}
-              disabled={isSubmitting}
-              onChange={(e) => {
-                setForm((f) => ({ ...f, email: e.target.value }));
-                if (fieldErrors.email) setFieldErrors((fe) => ({ ...fe, email: undefined }));
-              }}
-            />
-            {fieldErrors.email && (
-              <span className="pa-px-field-error">
-                {fieldErrors.email}
-              </span>
-            )}
-          </div>
-
-          <div className="pa-px-auth-field">
-            <div className="pa-px-auth-field__row">
-              <label htmlFor="login-password">Password</label>
-              <button
-                type="button"
-                className="pa-px-auth-toggle-pwd"
-                onClick={() => setShowPassword((s) => !s)}
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
-            </div>
-            <input
-              ref={passwordInputRef}
-              id="login-password"
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              placeholder="••••••••"
-              value={form.password}
-              disabled={isSubmitting}
-              onChange={(e) => {
-                setForm((f) => ({ ...f, password: e.target.value }));
-                if (fieldErrors.password) setFieldErrors((fe) => ({ ...fe, password: undefined }));
-              }}
-            />
-            {fieldErrors.password && (
-              <span className="pa-px-field-error">
-                {fieldErrors.password}
-              </span>
-            )}
-          </div>
-
-          <button type="submit" className="pa-px-btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-
-        <div className="pa-px-auth-switch">
-          Don't have an account?{' '}
-          <Link to={`/signup?next=${encodeURIComponent(safeNext)}`}>
-            Start with one record
-          </Link>
+      {formError && (
+        <div className="pa-px-auth-error" role="alert">
+          {formError}
         </div>
+      )}
+
+      {GOOGLE_CLIENT_ID && (
+        <div className="pa-px-auth-social-wrap">
+          <GoogleLoginButton
+            onSuccess={handleGoogleSuccess}
+            onError={() => setFormError('Google sign-in was interrupted.')}
+            text="signin_with"
+            disabled={isSubmitting}
+          />
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="pa-px-auth-form" noValidate>
+        <div className="pa-px-auth-field">
+          <label htmlFor="login-email">Email Address</label>
+          <input
+            ref={emailInputRef}
+            id="login-email"
+            type="email"
+            autoComplete="email"
+            placeholder="name@company.com"
+            value={form.email}
+            disabled={isSubmitting}
+            onChange={(e) => {
+              setForm((f) => ({ ...f, email: e.target.value }));
+              if (fieldErrors.email) setFieldErrors((fe) => ({ ...fe, email: undefined }));
+            }}
+          />
+          {fieldErrors.email && (
+            <span className="pa-px-field-error">
+              {fieldErrors.email}
+            </span>
+          )}
+        </div>
+
+        <div className="pa-px-auth-field">
+          <div className="pa-px-auth-field__row">
+            <label htmlFor="login-password">Password</label>
+            <button
+              type="button"
+              className="pa-px-auth-toggle-pwd"
+              onClick={() => setShowPassword((s) => !s)}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
+          </div>
+          <input
+            ref={passwordInputRef}
+            id="login-password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            placeholder="••••••••"
+            value={form.password}
+            disabled={isSubmitting}
+            onChange={(e) => {
+              setForm((f) => ({ ...f, password: e.target.value }));
+              if (fieldErrors.password) setFieldErrors((fe) => ({ ...fe, password: undefined }));
+            }}
+          />
+          {fieldErrors.password && (
+            <span className="pa-px-field-error">
+              {fieldErrors.password}
+            </span>
+          )}
+        </div>
+
+        <button type="submit" className="pa-px-btn-primary" disabled={isSubmitting}>
+          {isSubmitting ? 'Signing in...' : 'Sign In'}
+        </button>
+      </form>
+
+      <div className="pa-px-auth-switch">
+        Don't have an account?{' '}
+        <Link to={`/signup?next=${encodeURIComponent(safeNext)}`}>
+          Start with one record
+        </Link>
       </div>
-    </div>
+    </AuthFrame>
   );
 };
 
 export default LoginPage;
+

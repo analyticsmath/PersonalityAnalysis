@@ -1,22 +1,36 @@
 /**
  * Personality Assessor - How Scene Model
- * Pure mathematical functions for How It Works causal transformation stages.
+ * Pure mathematical partition-of-unity model for How It Works causal transformation stages.
  */
 
-export const HOW_PHASES = [
-  { id: 'source', name: 'Source capture', range: [0.00, 0.16] },
-  { id: 'isolate', name: 'Clause isolation', range: [0.12, 0.34] },
-  { id: 'branch', name: 'Multi-axis branching', range: [0.28, 0.56] },
-  { id: 'weight', name: 'Deterministic weighting', range: [0.50, 0.78] },
-  { id: 'recompose', name: 'Synthesized record', range: [0.72, 1.00] },
+import { clamp01, smoothstep01, adjacentWeights } from '../motion/homeSceneModel';
+
+export const HOW_KNOTS = [
+  { id: 'source', index: 0, name: 'Source capture', at: 0.00 },
+  { id: 'isolate', index: 1, name: 'Clause isolation', at: 0.25 },
+  { id: 'branch', index: 2, name: 'Multi-axis branching', at: 0.50 },
+  { id: 'weight', index: 3, name: 'Deterministic weighting', at: 0.75 },
+  { id: 'recompose', index: 4, name: 'Synthesized record', at: 1.00 },
 ];
 
+export const HOW_PHASES = HOW_KNOTS.map((k, idx) => ({
+  id: k.id,
+  name: k.name,
+  range: [Math.max(0, k.at - 0.12), Math.min(1, k.at + 0.12)],
+}));
+
 export function phaseFromProgress(p) {
-  if (p < 0.20) return 0;
-  if (p < 0.42) return 1;
-  if (p < 0.62) return 2;
-  if (p < 0.82) return 3;
+  const clamped = clamp01(p);
+  if (clamped < 0.20) return 0;
+  if (clamped < 0.42) return 1;
+  if (clamped < 0.64) return 2;
+  if (clamped < 0.84) return 3;
   return 4;
 }
 
-export default { HOW_PHASES, phaseFromProgress };
+export function calculateHowWeights(p) {
+  return adjacentWeights(p, HOW_KNOTS);
+}
+
+export default { HOW_KNOTS, HOW_PHASES, phaseFromProgress, calculateHowWeights };
+
