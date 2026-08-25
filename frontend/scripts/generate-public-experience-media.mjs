@@ -49,18 +49,6 @@ const assetsConfig = [
     focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 50%' },
   },
   {
-    key: 'workworldAutonomy',
-    sourceFile: 'progress-studio-rjziomx-slq.jpg',
-    id: 'rjziomx-slq',
-    alt: 'Professional working independently in quiet architectural workspace',
-    title: 'Autonomous focus and self-directed creation',
-    sceneRole: 'Workworld Condition: Autonomy',
-    creator: 'Andrej Lišakov',
-    sourcePlatform: 'Unsplash Plus',
-    sceneTone: '#343834',
-    focalPoint: { desktop: '50% 50%', tablet: '50% 50%', mobile: '50% 45%' },
-  },
-  {
     key: 'workworldCollaboration',
     sourceFile: 'home-shared-context-8ayxzntpap0.jpg',
     id: '8ayxzntpap0',
@@ -168,6 +156,46 @@ const assetsConfig = [
     sceneTone: '#2D3230',
     focalPoint: { desktop: '65% 50%', tablet: '50% 50%', mobile: '50% 50%' },
   },
+  {
+    key: 'homeHeroContext', sourceFile: 'unsplash-VWgfW_Df4fQ.jpg', id: 'VWgfW_Df4fQ',
+    title: 'A woman is working on a machine in a room',
+    alt: 'Woman working with a machine in a technology workshop', sceneRole: 'Home Hero Context',
+    creator: "Roberta Sant'Anna", sourcePlatform: 'Unsplash Plus', sceneTone: '#D8DDD8',
+    pageUrl: 'https://unsplash.com/photos/a-woman-is-working-on-a-machine-in-a-room-VWgfW_Df4fQ',
+    focalPoint: { desktop: '52% 42%', tablet: '50% 42%', mobile: '50% 38%' }, safeCrop: { desktop: '4:5 editorial portrait', mobile: '4:5 portrait' }, parallaxOverscan: 'medium'
+  },
+  {
+    key: 'homeProcessDetail', sourceFile: 'unsplash-eCyBQIJM4bs.jpg', id: 'eCyBQIJM4bs',
+    title: 'Close up of an architect working on floor plans and color swatches',
+    alt: 'Hands working over floor plans and color swatches', sceneRole: 'Home Process Detail',
+    creator: 'Getty Images', sourcePlatform: 'Unsplash Plus', sceneTone: '#C7B8A5',
+    pageUrl: 'https://unsplash.com/photos/close-up-of-male-architect-working-on-floor-plans-and-color-swatches-for-interior-design-project-eCyBQIJM4bs',
+    focalPoint: { desktop: '50% 53%', tablet: '50% 53%', mobile: '52% 55%' }, safeCrop: { desktop: 'landscape detail', mobile: '4:5 hands and drawings' }, parallaxOverscan: 'low'
+  },
+  {
+    key: 'workworldAutonomy', sourceFile: 'unsplash-wVc9SZT-Hpw.jpg', id: 'wVc9SZT-Hpw',
+    title: 'A woman sitting at a table working on a 3D printer',
+    alt: 'Woman working independently beside a desktop 3D printer', sceneRole: 'Workworld Condition: Autonomy',
+    creator: "Roberta Sant'Anna", sourcePlatform: 'Unsplash Plus', sceneTone: '#D7D0C4',
+    pageUrl: 'https://unsplash.com/photos/a-woman-sitting-at-a-table-working-on-a-3d-printer-wVc9SZT-Hpw',
+    focalPoint: { desktop: '50% 44%', tablet: '50% 43%', mobile: '50% 40%' }, safeCrop: { desktop: '4:5 maker portrait', mobile: '4:5 full working action' }, parallaxOverscan: 'medium'
+  },
+  {
+    key: 'workworldPressureHuman', sourceFile: 'unsplash-LorHdkRoHvw.jpg', id: 'LorHdkRoHvw',
+    title: 'Young woman working in a broadcast control room',
+    alt: 'Woman working at consoles in a broadcast control room', sceneRole: 'Operational Pressure Human Detail',
+    creator: 'Getty Images', sourcePlatform: 'Unsplash Plus', sceneTone: '#26343A',
+    pageUrl: 'https://unsplash.com/photos/young-beautiful-woman-working-in-a-broadcast-control-room-on-a-tv-station-LorHdkRoHvw',
+    focalPoint: { desktop: '58% 48%', tablet: '56% 48%', mobile: '55% 45%' }, safeCrop: { desktop: 'wide secondary plane', mobile: '4:5 console detail' }, parallaxOverscan: 'low'
+  },
+  {
+    key: 'careerCreativeHuman', sourceFile: 'unsplash-H0pWUDDSTIQ.jpg', id: 'H0pWUDDSTIQ',
+    title: 'Fashion designer in her studio',
+    alt: 'Designer working in a creative studio', sceneRole: 'Career Creative Synthesis Human Detail',
+    creator: 'Curated Lifestyle', sourcePlatform: 'Unsplash Plus', sceneTone: '#E0D6C9',
+    pageUrl: 'https://unsplash.com/photos/fashion-designer-in-her-studio-H0pWUDDSTIQ',
+    focalPoint: { desktop: '50% 45%', tablet: '50% 45%', mobile: '50% 40%' }, safeCrop: { desktop: 'portrait studio plane', mobile: '4:5 portrait' }, parallaxOverscan: 'low'
+  },
 ];
 
 async function generateMedia() {
@@ -175,8 +203,8 @@ async function generateMedia() {
   await fs.mkdir(path.dirname(manifestJsPath), { recursive: true });
 
   const manifest = {};
-  const desktopWidths = [1920, 1440, 1080, 720];
-  const mobileWidths = [720, 480];
+  const desktopWidths = [2560, 1920, 1440, 1080, 720];
+  const mobileWidths = [960, 720, 480];
 
   for (const config of assetsConfig) {
     const inputPath = path.join(sourceDir, config.sourceFile);
@@ -248,8 +276,11 @@ async function generateMedia() {
       sceneRole: config.sceneRole,
       creator: config.creator,
       sourcePlatform: config.sourcePlatform,
+      pageUrl: config.pageUrl,
       sceneTone: config.sceneTone,
       focalPoint: config.focalPoint,
+      safeCrop: config.safeCrop,
+      parallaxOverscan: config.parallaxOverscan || 'none',
       intrinsicDimensions: {
         width: metadata.width,
         height: metadata.height,

@@ -1,7 +1,7 @@
 /**
  * Personality Assessor - Shared AuthFrame Component
- * Anchors the background environmental media and negative-space form layout
- * across both Login and Signup modes, preventing blank screen flashes.
+ * Light-theme negative-space layout: 35-45% photographic region breaking grid,
+ * deliberate light form field with solid white/mineral inputs.
  */
 
 import React from 'react';
@@ -16,40 +16,19 @@ export const AuthFrame = ({ mode = 'login', children }) => {
 
   return (
     <div className="pa-px-auth-root" data-auth-mode={mode}>
-      {/* Full Environmental Ground (Always mounted and anchored) */}
-      <div
-        className="pa-px-auth-bg-media visual-actor"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          width: '100vw',
-          height: '100vh',
-          zIndex: 1,
-          overflow: 'hidden',
-          backgroundColor: 'var(--px-ink, #121416)',
-        }}
-      >
-        <PublicPicture
-          assetKey={assetKey}
-          alt={altText}
-          priority={true}
-        />
+      {/* 35-45% Environmental Photographic Column */}
+      <div className="pa-px-auth-media-col">
+        <div className="pa-px-auth-media-frame">
+          <PublicPicture
+            assetKey={assetKey}
+            alt={altText}
+            priority={true}
+          />
+        </div>
       </div>
 
-      {/* Direct Negative Space Form Container */}
-      <div
-        className="pa-px-auth-negative-space-form"
-        style={{
-          position: 'relative',
-          zIndex: 10,
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: 'clamp(40px, 8vh, 80px) var(--px-outer-gutter, 6vw)',
-          maxWidth: '38rem',
-        }}
-      >
+      {/* Light Negative Space Form Container */}
+      <div className="pa-px-auth-form-col">
         {children}
       </div>
     </div>

@@ -1,12 +1,12 @@
 // frontend/src/editorial-visual-contract.test.jsx
-// Personality Assessor — Under Different Conditions Visual Architecture & Product Truth Guardrails
+// Personality Assessor — Editorial Evidence Atlas Visual Architecture & Product Truth Guardrails
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import { Calibration } from './components/public-experience/home/Calibration';
+import { CalibrationMass } from './components/public-experience/home/CalibrationMass';
 import { getSafeNextUrl } from './content/public-experience/navigation';
 
 const readFile = (relativePath) => {
@@ -14,7 +14,7 @@ const readFile = (relativePath) => {
   return existsSync(fullPath) ? readFileSync(fullPath, 'utf8') : '';
 };
 
-describe('Personality Assessor — Under Different Conditions Visual Architecture & Product Truth Guardrails', () => {
+describe('Personality Assessor — Editorial Evidence Atlas Visual Architecture & Product Truth Guardrails', () => {
   const app = readFile('src/App.js');
   const fontsCss = readFile('src/styles/public-experience/fonts.css');
   const tokensCss = readFile('src/styles/public-experience/tokens.css');
@@ -36,19 +36,22 @@ describe('Personality Assessor — Under Different Conditions Visual Architectur
     }
   });
 
-  it('2. loads Bricolage Grotesque variable font in fonts.css', () => {
-    expect(fontsCss).toContain('@fontsource-variable/bricolage-grotesque');
-    expect(tokensCss).toContain('--px-font-family');
+  it('2. loads Instrument Sans Variable and IBM Plex Mono fonts in fonts.css', () => {
+    expect(fontsCss).toContain('@fontsource-variable/instrument-sans');
+    expect(fontsCss).toContain('@fontsource/ibm-plex-mono');
+    expect(tokensCss).toContain('--pa-font-family');
   });
 
-  it('3. tokens define approved interface neutrals', () => {
-    expect(tokensCss).toContain('--px-ink: #121416;');
-    expect(tokensCss).toContain('--px-white: #F7F8F8;');
-    expect(tokensCss).toContain('--px-soft: #DDE1E3;');
+  it('3. tokens define approved interface light neutrals', () => {
+    expect(tokensCss).toContain('--pa-paper: #F4F5F2;');
+    expect(tokensCss).toContain('--pa-white: #FFFFFF;');
+    expect(tokensCss).toContain('--pa-mineral: #E9ECE8;');
+    expect(tokensCss).toContain('--pa-ink: #171918;');
+    expect(tokensCss).toContain('--pa-evidence: #713641;');
   });
 
-  it('4. renders Calibration with 25/25/20/15/10/5 deterministic layers', () => {
-    render(<Calibration />);
+  it('4. renders Calibration with 25/25/20/15/10/5 deterministic career-fit weights', () => {
+    render(<CalibrationMass />);
     const quarters = screen.getAllByText('25%');
     expect(quarters.length).toBe(2);
     expect(screen.getByText('RIASEC Interests')).toBeInTheDocument();

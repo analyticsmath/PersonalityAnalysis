@@ -1,5 +1,5 @@
 // frontend/src/surgical-corrections.test.jsx
-// Personality Assessor — Under Different Conditions Architectural Contracts Verification
+// Personality Assessor — Editorial Evidence Atlas Architectural Contracts Verification
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -11,10 +11,10 @@ const readFile = (relativePath) => {
   return existsSync(fullPath) ? readFileSync(fullPath, 'utf8') : '';
 };
 
-describe('Under Different Conditions — Architectural Contracts Suite', () => {
+describe('Editorial Evidence Atlas — Architectural Contracts Suite', () => {
   const indexMenu = readFile('src/components/public-experience/chrome/PublicIndex.jsx');
   const googleBtn = readFile('src/components/auth/GoogleLoginButton.jsx');
-  const homeWorldEntry = readFile('src/components/public-experience/home/WorldEntry.jsx');
+  const heroPoster = readFile('src/components/public-experience/home/HeroThesisPoster.jsx');
   const careerPage = readFile('src/pages/editorial/EditorialCareerIntelligencePage.jsx');
   const howItWorksPage = readFile('src/pages/editorial/EditorialHowItWorksPage.jsx');
   const progressPage = readFile('src/pages/editorial/EditorialProgressPage.jsx');
@@ -45,35 +45,35 @@ describe('Under Different Conditions — Architectural Contracts Suite', () => {
     expect(googleBtn).toContain('locale="en"');
   });
 
-  it('4. Home World Entry embeds headline', () => {
-    expect(PUBLIC_CONTENT.home.worldEntry.headline).toBe('UNDER DIFFERENT CONDITIONS');
-    expect(homeWorldEntry).toContain('data.headline');
+  it('4. Home Thesis Poster embeds headline', () => {
+    expect(PUBLIC_CONTENT.home.worldEntry.headline).toBe('ONE ANSWER IS NOT ONE RESULT.');
+    expect(heroPoster).toContain('ONE ANSWER');
   });
 
-  it('5. Career Intelligence uses Workworld Canvas with 17 canonical roles', () => {
-    expect(careerPage).toContain('CareerRolePath');
+  it('5. Career Intelligence uses CareerAtlasExperience with 17 canonical roles', () => {
+    expect(careerPage).toContain('CareerAtlasExperience');
   });
 
-  it('6. How It Works runs continuous transformation stage without numbered steps', () => {
-    expect(howItWorksPage).toContain('HowContinuousTransformation');
+  it('6. How It Works runs causal essay stage without numbered 01-06 stepper', () => {
+    expect(howItWorksPage).toContain('HowCausalEssay');
     expect(howItWorksPage).not.toContain('STAGE 01');
   });
 
-  it('7. Progress uses temporal comparison with overlapping media layers', () => {
-    expect(progressPage).toContain('ProgressTemporalStage');
+  it('7. Progress uses longitudinal comparison with temporal control', () => {
+    expect(progressPage).toContain('ProgressLongitudinalExperience');
   });
 
-  it('8. Trust page has interactive chain of custody and data rights', () => {
-    expect(trustPage).toContain('TrustInspectionStage');
+  it('8. Trust page has interactive provenance chain and data rights', () => {
+    expect(trustPage).toContain('TrustSourceInspection');
   });
 
   it('9. Methodology serves as research publication', () => {
-    expect(methodologyPage).toContain('MethodologyEditorial');
+    expect(methodologyPage).toContain('MethodologyPublication');
   });
 
   it('10. Auth pages render directly on integrated background media without split layout', () => {
-    expect(loginPage).toContain('PublicPicture');
-    expect(signupPage).toContain('PublicPicture');
+    expect(loginPage).toContain('AuthFrame');
+    expect(signupPage).toContain('AuthFrame');
     expect(loginPage).not.toContain('grid-template-columns: 1fr 1fr');
   });
 });

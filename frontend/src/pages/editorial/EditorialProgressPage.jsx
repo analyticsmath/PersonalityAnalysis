@@ -1,10 +1,14 @@
 import React from 'react';
-import { ProgressTemporalStage } from '../../components/public-experience/progress/ProgressTemporalStage';
+import { ProgressLongitudinalExperience } from '../../components/public-experience/progress/ProgressLongitudinalExperience';
 
+/**
+ * Editorial Progress Page - Longitudinal Record Experience
+ * Revisit earlier psychometric baselines across shifted work responsibilities.
+ */
 export const EditorialProgressPage = () => {
   return (
     <div className="pa-px-progress-page-container">
-      <ProgressTemporalStage />
+      <ProgressLongitudinalExperience />
     </div>
   );
 };

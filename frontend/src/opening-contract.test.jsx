@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { WorldEntry } from './components/public-experience/home/WorldEntry';
+import { HeroThesisPoster } from './components/public-experience/home/HeroThesisPoster';
 import { MEDIA_MANIFEST_PX } from './content/public-experience/mediaManifest';
 
 vi.mock('gsap/ScrollTrigger', () => ({
@@ -13,20 +13,20 @@ vi.mock('gsap/ScrollTrigger', () => ({
   },
 }));
 
-describe('Under Different Conditions — World Entry Contracts', () => {
-  it('renders home world entry scene with single H1', () => {
+describe('Editorial Evidence Atlas — Thesis Poster Contracts', () => {
+  it('renders home thesis poster scene with single H1', () => {
     render(
       <BrowserRouter>
-        <WorldEntry />
+        <HeroThesisPoster />
       </BrowserRouter>
     );
 
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1).toHaveTextContent('UNDER DIFFERENT CONDITIONS');
+    expect(h1).toHaveTextContent('ONE ANSWER IS NOT ONE RESULT.');
   });
 
-  it('provides truthful responsive image attributes for homeWorldEntry', () => {
-    const asset = MEDIA_MANIFEST_PX.homeWorldEntry;
+  it('provides truthful responsive image attributes for homeHeroContext', () => {
+    const asset = MEDIA_MANIFEST_PX.homeHeroContext;
     expect(asset.avifSrcSet).toContain('.avif');
     expect(asset.webpSrcSet).toContain('.webp');
   });

@@ -1,15 +1,13 @@
 /**
  * Personality Assessor - Public Experience Layout
- * Persistent shell mounting PublicMotionRoot, PersistentVisualCanvas, PublicTransitionManager,
- * PersistentHeader, PublicRouteStage, and PublicIndex overlay menu.
- * Survives child route navigations continuously without remounting.
+ * Editorial Evidence Atlas: Light-theme persistent shell mounting
+ * PublicMotionRoot, PublicHeader, PublicRouteStage, PublicIndex overlay, and PublicFooter.
+ * Survives child route navigations continuously without blank screen flashes.
  */
 
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PublicMotionRoot } from '../motion/PublicMotionRoot';
-import { PersistentVisualCanvas } from '../canvas/PersistentVisualCanvas';
-import { PublicTransitionManager } from '../motion/PublicTransitionManager';
 import { TransitionPortal } from '../motion/TransitionPortal';
 import { PublicHeader } from '../chrome/PublicHeader';
 import { PublicIndex } from '../chrome/PublicIndex';
@@ -24,25 +22,22 @@ export const PublicExperienceLayout = () => {
 
   return (
     <PublicMotionRoot>
-      <div className="pa-px-shell-root">
-        {/* Fixed GPU Visual Substrate Layer (Mounts only when WebGL is confirmed supported) */}
-        <PersistentVisualCanvas />
+      <div className="pa-public-experience pa-px-shell-root">
+        {/* Accessible Skip Navigation Link */}
+        <a href="#main-content" className="pa-px-skip-link">
+          Skip to main content
+        </a>
 
-        {/* Fixed DOM-First Transition Portal Layer (Always active for cross-route carries) */}
+        {/* Fixed DOM-First Transition Portal Layer */}
         <TransitionPortal />
 
-        {/* Persistent Shared Actor Transition Manager */}
-        <PublicTransitionManager />
-
-        {/* Persistent Minimal Editorial Header */}
+        {/* Persistent Editorial Header */}
         <PublicHeader onOpenIndex={() => setIndexOpen(true)} />
 
         {/* Transition-Aware Route DOM Stage */}
         <main id="main-content" tabIndex="-1" style={{ outline: 'none' }}>
           <PublicRouteStage>
-            <Suspense fallback={null}>
-              <Outlet />
-            </Suspense>
+            <Outlet />
           </PublicRouteStage>
         </main>
 
@@ -57,4 +52,3 @@ export const PublicExperienceLayout = () => {
 };
 
 export default PublicExperienceLayout;
-

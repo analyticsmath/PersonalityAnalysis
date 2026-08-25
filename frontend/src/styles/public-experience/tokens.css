@@ -1,52 +1,81 @@
 /**
  * Personality Assessor - Public Experience Design Tokens
- * Media-Led Architecture: Photography supplies chromatic depth; interface is restrained.
- * Strict ceiling: Font weight 560 maximum. No gradients. No glow. No glassmorphism.
+ * Editorial Evidence Atlas: Light-theme (~85-90% light), restrained oxblood evidence accent.
+ * Strict ceiling: Font weight 580 maximum. No gradients. No glow. No glassmorphism.
  */
 
 :root {
-  /* ── Interface Neutrals ── */
-  --px-ink: #121416;
-  --px-white: #F7F8F8;
-  --px-soft: #DDE1E3;
-  --px-muted: #8E969A;
-  --px-surface-dark: rgba(18, 20, 22, 0.92);
-  --px-surface-light: rgba(247, 248, 248, 0.96);
+  /* ── Authoritative Palette Tokens ── */
+  --pa-paper: #F4F5F2;
+  --pa-white: #FFFFFF;
+  --pa-mineral: #E9ECE8;
+  --pa-ink: #171918;
+  --pa-graphite: #5E6561;
+  --pa-evidence: #713641;
+  --pa-context: #7B8276;
 
-  /* ── Typography: Single Variable Family (Bricolage Grotesque) ── */
-  --px-font-family: 'Bricolage Grotesque Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* ── Compatibility & Semantic Aliases (Deliberately mapped to light environment) ── */
+  --px-paper: var(--pa-paper);
+  --px-mineral: var(--pa-mineral);
+  --px-ink: var(--pa-ink);
+  --px-white: var(--pa-white);
+  --px-soft: var(--pa-graphite);
+  --px-muted: var(--pa-context);
+  --px-evidence: var(--pa-evidence);
+  --px-surface-light: var(--pa-white);
+  --px-surface-paper: var(--pa-paper);
+  --px-surface-mineral: var(--pa-mineral);
+  --px-border-subtle: rgba(23, 25, 24, 0.08);
+  --px-border-medium: rgba(23, 25, 24, 0.16);
+  --px-border-strong: rgba(23, 25, 24, 0.32);
 
-  /* ── Font Weights (Max 560 ceiling) ── */
+  /* ── Typography Families ── */
+  --pa-font-family: 'Instrument Sans Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pa-font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+  --px-font-family: var(--pa-font-family);
+  --px-font-mono: var(--pa-font-mono);
+
+  /* ── Font Weights (Ceiling 580) ── */
   --px-weight-display: 380;
   --px-weight-heading: 440;
-  --px-weight-body: 380;
-  --px-weight-medium: 480;
-  --px-weight-bold: 540;
-
-  /* ── Variable Font Axes Defaults ── */
-  --px-wdth-display: 82;
-  --px-wdth-body: 98;
-  --px-opsz-display: 84;
-  --px-opsz-body: 16;
+  --px-weight-body: 400;
+  --px-weight-medium: 520;
+  --px-weight-bold: 580;
 
   /* ── Type Scale ── */
-  --px-display-xl: clamp(3.2rem, 7.5vw, 6.4rem);
-  --px-display-lg: clamp(2.4rem, 5.5vw, 4.4rem);
-  --px-heading-xl: clamp(1.9rem, 3.8vw, 3.2rem);
-  --px-heading-lg: clamp(1.5rem, 2.8vw, 2.4rem);
+  --px-display-xl: clamp(4.4rem, 8.2vw, 8.8rem);
+  --px-display-lg: clamp(3.3rem, 6vw, 6.6rem);
+  --px-heading-xl: clamp(2.5rem, 4.5vw, 4.8rem);
+  --px-lead: clamp(1.6rem, 2.8vw, 2.8rem);
+  --px-heading-lg: clamp(1.6rem, 2.8vw, 2.8rem);
   --px-heading-md: clamp(1.25rem, 2vw, 1.75rem);
-  --px-body-lg: clamp(1.1rem, 1.4vw, 1.35rem);
-  --px-body: 1rem;
-  --px-body-sm: 0.88rem;
-  --px-caption: 0.76rem;
+  --px-body-lg: clamp(1.08rem, 1.3vw, 1.35rem);
+  --px-body: clamp(1rem, 1.05vw, 1.125rem);
+  --px-body-sm: 0.9rem;
+  --px-evidence: clamp(1.15rem, 1.4vw, 1.65rem);
+  --px-caption: clamp(0.75rem, 0.85vw, 0.875rem);
+  --px-data: clamp(0.75rem, 0.85vw, 0.875rem);
 
   /* ── Spatial Layout & Rhythm ── */
-  --px-outer-gutter: clamp(20px, 4.5vw, 64px);
-  --px-column-gap: clamp(16px, 2.5vw, 40px);
-  --px-measure-reading: 65ch;
+  --px-outer-gutter: clamp(24px, 4.5vw, 68px);
+  --px-column-gap: clamp(16px, 2vw, 28px);
+  --px-measure-body: 65ch;
+  --px-measure-lead: 38ch;
   --px-radius-xs: 2px;
   --px-radius-sm: 4px;
   --px-radius-media: 4px;
+
+  /* ── Spacing Tokens ── */
+  --px-space-micro: 4px;
+  --px-space-xs: 8px;
+  --px-space-sm: 12px;
+  --px-space-md: 16px;
+  --px-space-content: 24px;
+  --px-space-lg: 32px;
+  --px-space-cluster: 40px;
+  --px-space-xl: 48px;
+  --px-space-section: clamp(64px, 8vw, 112px);
+  --px-space-cinematic: clamp(120px, 14vw, 180px);
 
   /* ── Header Heights ── */
   --px-header-height-desktop: 72px;

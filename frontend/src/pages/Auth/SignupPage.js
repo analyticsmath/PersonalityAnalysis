@@ -1,14 +1,12 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import GoogleLoginButton from '../../components/auth/GoogleLoginButton';
-import { googleLogin as googleLoginApi, signup as signupApi } from '../../api/authApi';
+import { signup as signupApi, googleLogin as googleLoginApi } from '../../api/authApi';
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
-import { getSafeNextUrl, DEFAULT_ACQUISITION_TARGET } from '../../content/public-experience/navigation';
-import { PersistentMediaSlot } from '../../components/public-experience/canvas/PersistentMediaSlot';
-import { PublicPicture } from '../../components/public-experience/media/PublicPicture';
+import { getSafeNextUrl } from '../../content/public-experience/navigation';
 import { PUBLIC_CONTENT } from '../../content/public-experience/publicContent';
 import { AuthFrame } from '../../components/auth/AuthFrame';
 
@@ -18,17 +16,19 @@ export const SignupPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
-  const timerRef = useRef(null);
 
   const nameInputRef = useRef(null);
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
-  const consentInputRef = useRef(null);
 
-  const [form, setForm] = useState({ name: '', email: '', password: '', terms: false });
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    termsAccepted: false,
+  });
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const content = PUBLIC_CONTENT.auth.signup;
@@ -38,25 +38,22 @@ export const SignupPage = () => {
       typeof window !== 'undefined' && window.URLSearchParams
         ? new window.URLSearchParams(location.search)
         : { get: () => null };
-    return getSafeNextUrl(params.get('next'), DEFAULT_ACQUISITION_TARGET);
+    return getSafeNextUrl(params.get('next'), '/dashboard');
   }, [location.search]);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
 
   const signupMutation = useMutation({
     mutationFn: signupApi,
-    onSuccess: () => {
-      setSuccessMessage('Account created. Taking you to sign in.');
-      timerRef.current = setTimeout(() => {
-        navigate(`/login?next=${encodeURIComponent(safeNext)}`, { replace: true });
-      }, 700);
+    onSuccess: (payload) => {
+      auth.login(payload);
+      navigate(safeNext, { replace: true });
     },
     onError: (error) => {
-      const message = error?.message || 'Could not create account. Please check your details.';
+      let message = 'Could not create account. Please try again.';
+      if (error?.status === 0 || error?.message?.includes('Network')) {
+        message = 'We could not reach the service. Try again.';
+      } else if (error?.message) {
+        message = error.message;
+      }
       setFormError(message);
       toast.error(message);
     },
@@ -69,7 +66,7 @@ export const SignupPage = () => {
       navigate(safeNext, { replace: true });
     },
     onError: (error) => {
-      const message = error?.message || 'Google sign-up failed. Please try again.';
+      const message = error?.message || 'Google sign-in failed. Please try again.';
       setFormError(message);
       toast.error(message);
     },
@@ -82,7 +79,7 @@ export const SignupPage = () => {
   const validate = () => {
     const nextErrors = {};
     if (!form.name.trim()) {
-      nextErrors.name = 'Full name is required.';
+      nextErrors.name = 'Name is required.';
     }
 
     if (!form.email) {
@@ -97,8 +94,8 @@ export const SignupPage = () => {
       nextErrors.password = 'Password must be at least 8 characters.';
     }
 
-    if (!form.terms) {
-      nextErrors.terms = 'You must agree to the Terms of Service to continue.';
+    if (!form.termsAccepted) {
+      nextErrors.termsAccepted = 'You must agree to the Terms of Service & Privacy Policy.';
     }
 
     setFieldErrors(nextErrors);
@@ -109,8 +106,6 @@ export const SignupPage = () => {
       emailInputRef.current.focus();
     } else if (nextErrors.password && passwordInputRef.current) {
       passwordInputRef.current.focus();
-    } else if (nextErrors.terms && consentInputRef.current) {
-      consentInputRef.current.focus();
     }
 
     return Object.keys(nextErrors).length === 0;
@@ -152,17 +147,11 @@ export const SignupPage = () => {
         </div>
       )}
 
-      {successMessage && (
-        <div className="pa-px-auth-success" role="status">
-          {successMessage}
-        </div>
-      )}
-
       {GOOGLE_CLIENT_ID && (
         <div className="pa-px-auth-social-wrap">
           <GoogleLoginButton
             onSuccess={handleGoogleSuccess}
-            onError={() => setFormError('Google sign-up was interrupted.')}
+            onError={() => setFormError('Google sign-in was interrupted.')}
             text="signup_with"
             disabled={isSubmitting}
           />
@@ -230,7 +219,7 @@ export const SignupPage = () => {
             id="signup-password"
             type={showPassword ? 'text' : 'password'}
             autoComplete="new-password"
-            placeholder="••••••••"
+            placeholder="Minimum 8 characters"
             value={form.password}
             disabled={isSubmitting}
             onChange={(e) => {
@@ -247,22 +236,24 @@ export const SignupPage = () => {
 
         <label className="pa-px-auth-checkbox">
           <input
-            ref={consentInputRef}
             type="checkbox"
-            checked={form.terms}
+            checked={form.termsAccepted}
             disabled={isSubmitting}
             onChange={(e) => {
-              setForm((f) => ({ ...f, terms: e.target.checked }));
-              if (fieldErrors.terms) setFieldErrors((fe) => ({ ...fe, terms: undefined }));
+              setForm((f) => ({ ...f, termsAccepted: e.target.checked }));
+              if (fieldErrors.termsAccepted) {
+                setFieldErrors((fe) => ({ ...fe, termsAccepted: undefined }));
+              }
             }}
           />
           <span>
-            I agree to the <Link to="/privacy">Privacy Policy</Link> and data governance terms.
+            I agree to the <Link to="/terms">Terms of Service</Link> and{' '}
+            <Link to="/privacy">Privacy Policy</Link>.
           </span>
         </label>
-        {fieldErrors.terms && (
+        {fieldErrors.termsAccepted && (
           <span className="pa-px-field-error">
-            {fieldErrors.terms}
+            {fieldErrors.termsAccepted}
           </span>
         )}
 
@@ -282,4 +273,3 @@ export const SignupPage = () => {
 };
 
 export default SignupPage;
-

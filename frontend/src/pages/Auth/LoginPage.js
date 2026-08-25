@@ -7,11 +7,8 @@ import { login as loginApi, googleLogin as googleLoginApi } from '../../api/auth
 import { GOOGLE_CLIENT_ID } from '../../config/env';
 import { useAuth } from '../../hooks/useAuth';
 import { getSafeNextUrl } from '../../content/public-experience/navigation';
-import { PersistentMediaSlot } from '../../components/public-experience/canvas/PersistentMediaSlot';
-import { PublicPicture } from '../../components/public-experience/media/PublicPicture';
 import { PUBLIC_CONTENT } from '../../content/public-experience/publicContent';
 import { AuthFrame } from '../../components/auth/AuthFrame';
-
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -212,4 +209,3 @@ export const LoginPage = () => {
 };
 
 export default LoginPage;
-

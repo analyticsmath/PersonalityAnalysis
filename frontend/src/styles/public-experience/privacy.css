@@ -1,55 +1,60 @@
 /**
- * Personality Assessor - Public Experience Privacy Route Styles
- * Calm Document Architecture
- * Zero Eyebrows, Zero Decorative Dividers, Zero Gradients
+ * Personality Assessor - Privacy Route Styling
+ * Clean, calm document styling with sticky table of contents.
+ * Light editorial theme.
  */
 
-.pa-px-privacy-root {
-  position: relative;
+.pa-px-privacy-page {
   width: 100%;
-  min-height: 100svh;
-  padding: clamp(100px, 14vh, 160px) var(--px-outer-gutter) 100px;
-  background-color: var(--px-ink);
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  padding: calc(var(--px-header-height-desktop) + var(--px-space-section)) var(--px-outer-gutter) var(--px-space-section);
 }
 
 .pa-px-privacy-hero {
-  max-width: 48rem;
-  margin-bottom: clamp(48px, 8vh, 80px);
+  max-width: 1440px;
+  margin: 0 auto var(--px-space-section);
 }
 
-.pa-px-privacy-hero h1 {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
+.pa-px-privacy-hero__headline {
+  font-size: var(--px-display-lg);
   font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 80, 'opsz' 96;
+  color: var(--pa-ink);
+  letter-spacing: -0.03em;
   line-height: 1.05;
-  color: var(--px-white);
-  margin-bottom: 16px;
+  margin-bottom: var(--px-space-content);
 }
 
-.pa-px-privacy-lead {
-  font-size: var(--px-body-lg);
-  color: var(--px-soft);
-  line-height: 1.5;
+.pa-px-privacy-hero__support {
+  font-size: var(--px-lead);
+  color: var(--pa-graphite);
+  max-width: var(--px-measure-lead);
 }
 
 .pa-px-privacy-layout {
+  max-width: 1440px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 240px 1fr;
-  grid-gap: clamp(32px, 6vw, 80px);
-  align-items: start;
+  grid-template-columns: 280px 1fr;
+  gap: var(--px-space-cluster);
+  align-items: flex-start;
 }
 
 .pa-px-privacy-toc {
   position: sticky;
-  top: 120px;
+  top: calc(var(--px-header-height-desktop) + var(--px-space-md));
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-content);
 }
 
 .pa-px-privacy-toc__heading {
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  font-family: var(--pa-font-mono);
+  font-size: var(--px-caption);
+  color: var(--pa-context);
   text-transform: uppercase;
-  color: var(--px-soft);
+  letter-spacing: 0.05em;
   margin-bottom: 12px;
 }
 
@@ -60,45 +65,47 @@
 }
 
 .pa-px-privacy-toc__link {
-  font-size: var(--px-body-sm);
-  color: var(--px-soft);
+  font-size: 0.9rem;
+  color: var(--pa-graphite);
   text-decoration: none;
-  transition: color 150ms ease;
+  transition: color 180ms ease;
+  line-height: 1.4;
 }
 
 .pa-px-privacy-toc__link:hover {
-  color: var(--px-white);
+  color: var(--pa-ink);
 }
 
 .pa-px-privacy-content {
   display: flex;
   flex-direction: column;
-  gap: 48px;
-  max-width: 44rem;
+  gap: var(--px-space-cluster);
+}
+
+.pa-px-privacy-section {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-cluster);
 }
 
 .pa-px-privacy-section h2 {
-  font-family: var(--px-font-family);
-  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
-  font-weight: var(--px-weight-bold);
-  font-variation-settings: 'wdth' 85, 'opsz' 48;
-  color: var(--px-white);
+  font-size: 1.4rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
   margin-bottom: 12px;
 }
 
 .pa-px-privacy-section p {
-  font-size: var(--px-body);
-  color: var(--px-white);
-  opacity: 0.88;
+  font-size: 1.05rem;
+  color: var(--pa-graphite);
   line-height: 1.6;
 }
 
-/* ── Mobile Responsive Rules ── */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .pa-px-privacy-layout {
     grid-template-columns: 1fr;
   }
-
   .pa-px-privacy-toc {
     display: none;
   }

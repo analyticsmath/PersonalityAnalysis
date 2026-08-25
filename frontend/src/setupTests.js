@@ -39,11 +39,11 @@ if (typeof window !== 'undefined') {
   }
 }
 
-if (typeof global !== 'undefined') {
-  if (typeof global.requestAnimationFrame !== 'function') {
-    global.requestAnimationFrame = (callback) => setTimeout(callback, 0);
+if (typeof globalThis !== 'undefined') {
+  if (typeof globalThis.requestAnimationFrame !== 'function') {
+    globalThis.requestAnimationFrame = (callback) => setTimeout(callback, 0);
   }
-  if (typeof global.cancelAnimationFrame !== 'function') {
-    global.cancelAnimationFrame = (id) => clearTimeout(id);
+  if (typeof globalThis.cancelAnimationFrame !== 'function') {
+    globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
   }
 }

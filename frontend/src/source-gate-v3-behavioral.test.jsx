@@ -33,7 +33,7 @@ describe('Source Gate V3 — Public Route Transitions & Navigation Guard', () =>
   });
 });
 
-describe('Source Gate V3 — Under Different Conditions Composition Contracts', () => {
+describe('Source Gate V3 — Editorial Evidence Atlas Composition Contracts', () => {
   it('2. renders Career Intelligence with 17 canonical roles', () => {
     render(
       <MemoryRouter>
@@ -44,14 +44,14 @@ describe('Source Gate V3 — Under Different Conditions Composition Contracts', 
     expect(screen.getByText('17 Occupational Profiles')).toBeInTheDocument();
   });
 
-  it('3. confirms HowItWorks renders continuous transformation stage', () => {
+  it('3. confirms HowItWorks renders causal visual essay stage', () => {
     render(
       <MemoryRouter>
         <EditorialHowItWorksPage />
       </MemoryRouter>
     );
 
-    const howStage = document.querySelector('.pa-px-how-section') || document.querySelector('.pa-px-how-stage-sticky');
+    const howStage = document.querySelector('.pa-px-how-page') || document.querySelector('.pa-px-how-narrative-flow');
     expect(howStage).not.toBeNull();
   });
 

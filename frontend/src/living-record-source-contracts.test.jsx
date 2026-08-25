@@ -1,5 +1,5 @@
 // frontend/src/living-record-source-contracts.test.jsx
-// Personality Assessor — Under Different Conditions Source & Architecture Contract Guardrails
+// Personality Assessor — Editorial Evidence Atlas Source & Architecture Contract Guardrails
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -11,8 +11,8 @@ const readFile = (relativePath) => {
   return existsSync(fullPath) ? readFileSync(fullPath, 'utf8') : '';
 };
 
-describe('Under Different Conditions — Source & Architecture Contract Guardrails', () => {
-  const home = readFile('src/pages/editorial/EditorialHomePage.jsx');
+describe('Editorial Evidence Atlas — Source & Architecture Contract Guardrails', () => {
+  const home = readFile('src/components/public-experience/home/HomeEditorialExperience.jsx');
   const howItWorks = readFile('src/pages/editorial/EditorialHowItWorksPage.jsx');
   const careerIntelligence = readFile('src/pages/editorial/EditorialCareerIntelligencePage.jsx');
   const methodology = readFile('src/pages/editorial/EditorialMethodologyPage.jsx');
@@ -27,21 +27,24 @@ describe('Under Different Conditions — Source & Architecture Contract Guardrai
   const homeCss = readFile('src/styles/public-experience/home.css');
   const mediaManifestJs = readFile('src/content/public-experience/mediaManifest.js');
 
-  it('0. confirms Home page contains continuous 8-movement architecture', () => {
-    expect(home).toContain('WorldEntry');
-    expect(home).toContain('ProfessionalSituation');
-    expect(home).toContain('MultipleReadings');
-    expect(home).toContain('WorkworldJourney');
-    expect(home).toContain('Calibration');
-    expect(home).toContain('TimeExposure');
-    expect(home).toContain('ProvenanceReveal');
-    expect(home).toContain('Finale');
+  it('0. confirms Home page contains 10-chapter Editorial Evidence Atlas architecture', () => {
+    expect(home).toContain('HeroThesisPoster');
+    expect(home).toContain('OneResponseSpread');
+    expect(home).toContain('EvidenceDeck');
+    expect(home).toContain('ProfessionalConditionsJourney');
+    expect(home).toContain('ModelAtlas');
+    expect(home).toContain('CalibrationMass');
+    expect(home).toContain('CareerRoleAtlasTeaser');
+    expect(home).toContain('ProgressTeaser');
+    expect(home).toContain('SourceLedgerTeaser');
+    expect(home).toContain('HomeFinale');
   });
 
-  it('1. prohibits legacy color tokens across public styles', () => {
+  it('1. prohibits legacy dark brand wash tokens across public styles', () => {
     const allStyles = [tokensCss, baseCss, chromeCss, homeCss].join('\n');
     expect(allStyles).not.toContain('#D67D8C');
     expect(allStyles).not.toContain('#163D35');
+    expect(allStyles).not.toContain('--atlas-field');
   });
 
   it('2. prohibits CSS gradients in public styling', () => {
@@ -53,21 +56,21 @@ describe('Under Different Conditions — Source & Architecture Contract Guardrai
 
   it('3. confirms Career Intelligence reads canonical 17 roles from careers.json', () => {
     expect(Object.keys(careersData).length).toBe(17);
-    expect(careerIntelligence).toContain('CareerRolePath');
+    expect(careerIntelligence).toContain('CareerAtlasExperience');
   });
 
   it('4. confirms How It Works contains no synthetic numbers and no 01-06 stepper', () => {
     expect(howItWorks).not.toContain('01 / 06');
     expect(howItWorks).not.toContain('STAGE 01');
-    expect(howItWorks).toContain('HowContinuousTransformation');
+    expect(howItWorks).toContain('HowCausalEssay');
   });
 
   it('5. confirms Progress contains comparative record and calm empty state', () => {
-    expect(progress).toContain('ProgressTemporalStage');
+    expect(progress).toContain('ProgressLongitudinalExperience');
   });
 
   it('6. confirms Trust contains chain of custody and data rights', () => {
-    expect(trustRoute).toContain('TrustInspectionStage');
+    expect(trustRoute).toContain('TrustSourceInspection');
   });
 
   it('7. confirms Auth pages do not use 50/50 split partitions', () => {

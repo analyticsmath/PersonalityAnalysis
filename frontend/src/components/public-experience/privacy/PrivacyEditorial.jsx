@@ -5,14 +5,14 @@ export const PrivacyEditorial = () => {
   const data = PUBLIC_CONTENT.privacy;
 
   return (
-    <div className="pa-px-privacy-root">
+    <div className="pa-px-privacy-page" data-route="privacy">
       <header className="pa-px-privacy-hero">
-        <h1>{data.hero.headline}</h1>
-        <p className="pa-px-privacy-lead">{data.hero.support}</p>
+        <h1 className="pa-px-privacy-hero__headline">{data.hero.headline}</h1>
+        <p className="pa-px-privacy-hero__support">{data.hero.support}</p>
       </header>
 
       <div className="pa-px-privacy-layout">
-        <aside className="pa-px-privacy-toc" aria-label="Table of Contents">
+        <aside className="pa-px-privacy-toc" aria-label="Policy Table of Contents">
           <div className="pa-px-privacy-toc__heading">Policy Sections</div>
           <nav className="pa-px-privacy-toc__nav">
             {data.sections.map((s) => (

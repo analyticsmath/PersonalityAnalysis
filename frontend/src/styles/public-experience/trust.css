@@ -1,171 +1,173 @@
 /**
- * Personality Assessor - Public Experience Trust Route Styles
- * Single Persistent Provenance Record State Engine
- * Zero Card Grids, Zero Eyebrows, Zero Gradients, Zero Numbered Tabs
+ * Personality Assessor - Trust & Governance Route Styling
+ * Inspectable provenance: Supplied -> Inferred -> Calculated -> Compared -> Controlled.
+ * Rights ledger on light editorial ground.
  */
 
-.pa-px-trust-section {
-  position: relative;
+.pa-px-trust-page {
   width: 100%;
-  height: 250svh;
-  background-color: var(--px-ink);
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  padding: calc(var(--px-header-height-desktop) + var(--px-space-section)) var(--px-outer-gutter) var(--px-space-section);
 }
 
-.pa-px-trust-stage-sticky {
-  position: sticky;
-  top: 0;
-  left: 0;
+.pa-px-trust-hero {
+  max-width: 1440px;
+  margin: 0 auto var(--px-space-section);
+}
+
+.pa-px-trust-hero__headline {
+  font-size: var(--px-display-lg);
+  font-weight: var(--px-weight-display);
+  color: var(--pa-ink);
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  margin-bottom: var(--px-space-content);
+}
+
+.pa-px-trust-hero__support {
+  font-size: var(--px-lead);
+  color: var(--pa-graphite);
+  max-width: var(--px-measure-lead);
+}
+
+/* ── Interactive Provenance Chain ── */
+.pa-px-trust-chain {
+  max-width: 1440px;
+  margin: 0 auto var(--px-space-section);
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-cluster);
+}
+
+.pa-px-trust-steps-nav {
+  display: flex;
+  gap: var(--px-space-sm);
+  margin-bottom: var(--px-space-cluster);
+  flex-wrap: wrap;
+}
+
+.pa-px-trust-step-btn {
+  background-color: var(--pa-paper);
+  border: 1px solid var(--pa-mineral);
+  padding: 8px 16px;
+  border-radius: var(--px-radius-xs);
+  font-family: var(--pa-font-mono);
+  font-size: 0.9rem;
+  color: var(--pa-graphite);
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.pa-px-trust-step-btn:hover,
+.pa-px-trust-step-btn--active {
+  background-color: var(--pa-ink);
+  color: var(--pa-white);
+  border-color: var(--pa-ink);
+}
+
+.pa-px-trust-inspector-card {
+  background-color: var(--pa-paper);
+  border-radius: var(--px-radius-xs);
+  padding: var(--px-space-content);
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--px-space-cluster);
+  align-items: center;
+}
+
+.pa-px-trust-inspector__title {
+  font-size: 1.75rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  margin-bottom: 8px;
+}
+
+.pa-px-trust-inspector__desc {
+  font-size: 1.05rem;
+  color: var(--pa-graphite);
+  line-height: 1.55;
+  margin-bottom: var(--px-space-content);
+}
+
+.pa-px-trust-inspector__details {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-xs);
+  padding: var(--px-space-md);
+  font-family: var(--pa-font-mono);
+  font-size: 0.9rem;
+  color: var(--pa-evidence);
+}
+
+.pa-px-trust-inspector__media-plate {
   width: 100%;
-  height: 100svh;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--px-radius-xs);
   overflow: hidden;
+}
+
+/* ── Rights Ledger ── */
+.pa-px-trust-rights {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.pa-px-trust-rights h2 {
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
+  color: var(--pa-ink);
+  margin-bottom: var(--px-space-cluster);
+}
+
+.pa-px-trust-rights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--px-space-content);
+}
+
+.pa-px-rights-card {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-content);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: clamp(80px, 10vh, 120px) var(--px-outer-gutter) clamp(40px, 6vh, 80px);
+  min-height: 220px;
 }
 
-.pa-px-trust-header {
-  position: relative;
-  z-index: 5;
-  max-width: 44rem;
-}
-
-.pa-px-trust-header h1 {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 80, 'opsz' 96;
-  line-height: 1.05;
-  color: var(--px-white);
-  margin-bottom: 12px;
-}
-
-.pa-px-trust-lead {
-  font-size: var(--px-body-lg);
-  color: var(--px-soft);
-  line-height: 1.5;
-}
-
-.pa-px-trust-record-actor {
-  position: relative;
-  z-index: 5;
-  display: grid;
-  grid-template-columns: 1.2fr 1.6fr;
-  grid-gap: clamp(32px, 6vw, 80px);
-  align-items: center;
-  margin: auto 0;
-  outline: none;
-}
-
-.pa-px-trust-geometry-stage {
-  width: 100%;
-  max-width: 440px;
-  aspect-ratio: 16 / 9;
-}
-
-.pa-px-trust-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.pa-px-trust-narrative {
-  position: relative;
-  max-width: 36rem;
-}
-
-.pa-px-trust-stage-tag {
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--px-soft);
-  display: block;
+.pa-px-rights-card h3 {
+  font-size: 1.25rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
   margin-bottom: 8px;
 }
 
-.pa-px-trust-record__title {
-  font-family: var(--px-font-family);
-  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
-  font-weight: var(--px-weight-bold);
-  font-variation-settings: 'wdth' 82, 'opsz' 64;
-  line-height: 1.15;
-  color: var(--px-white);
-  margin-bottom: 12px;
-}
-
-.pa-px-trust-record__desc {
-  font-size: var(--px-body-lg);
-  color: var(--px-white);
-  opacity: 0.92;
+.pa-px-rights-card p {
+  font-size: 0.95rem;
+  color: var(--pa-graphite);
   line-height: 1.5;
-  margin-bottom: 20px;
 }
 
-.pa-px-trust-record__details-layer {
-  border-top: 1px solid rgba(247, 248, 248, 0.15);
-  padding-top: 16px;
-  margin-bottom: 20px;
+.pa-px-rights-card a {
+  margin-top: var(--px-space-md);
+  font-family: var(--pa-font-mono);
+  font-size: 0.85rem;
+  color: var(--pa-evidence);
+  text-decoration: none;
 }
 
-.pa-px-trust-record__details-label {
-  font-size: var(--px-body-sm);
-  font-weight: var(--px-weight-medium);
-  color: var(--px-soft);
-  display: block;
-  margin-bottom: 6px;
+.pa-px-rights-card a:hover {
+  text-decoration: underline;
 }
 
-.pa-px-trust-record__details-body {
-  font-family: var(--px-font-family);
-  font-size: var(--px-body);
-  color: var(--px-white);
-  line-height: 1.45;
-  opacity: 0.95;
-}
-
-.pa-px-trust-rights-actions {
-  border-top: 1px solid rgba(247, 248, 248, 0.15);
-  padding-top: 16px;
-}
-
-.pa-px-trust-rights__label {
-  font-size: var(--px-body-sm);
-  font-weight: var(--px-weight-medium);
-  color: var(--px-soft);
-  display: block;
-  margin-bottom: 8px;
-}
-
-.pa-px-trust-rights__list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.pa-px-trust-right-row {
-  font-size: var(--px-body-sm);
-  color: var(--px-white);
-  line-height: 1.4;
-  opacity: 0.92;
-}
-
-/* ── Mobile Responsive Rules ── */
-@media (max-width: 768px) {
-  .pa-px-trust-section {
-    height: auto;
-    min-height: 100svh;
-  }
-
-  .pa-px-trust-stage-sticky {
-    position: relative;
-    height: auto;
-    min-height: 100svh;
-    padding: 100px var(--px-outer-gutter) 60px;
-    justify-content: flex-start;
-    gap: 32px;
-  }
-
-  .pa-px-trust-record-actor {
+@media (max-width: 900px) {
+  .pa-px-trust-inspector-card {
     grid-template-columns: 1fr;
-    grid-gap: 28px;
+  }
+  .pa-px-trust-rights-grid {
+    grid-template-columns: 1fr;
   }
 }

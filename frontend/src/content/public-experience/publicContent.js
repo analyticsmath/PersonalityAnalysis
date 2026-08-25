@@ -1,16 +1,18 @@
 /**
  * Personality Assessor - Public Experience Content Repository
- * Authoritative content for Under Different Conditions master creative correction.
+ * Editorial Evidence Atlas authoritative content.
  * Strict compliance: Zero em dashes in website copy.
  */
 
 export const PUBLIC_CONTENT = {
   home: {
     worldEntry: {
-      headline: 'UNDER DIFFERENT CONDITIONS',
-      support: 'Personality Assessor reads professional patterns with the work attached.',
+      headline: 'ONE ANSWER IS NOT ONE RESULT.',
+      support: 'Personality Assessor turns your responses, background and career signals into a traceable professional record, then shows how that evidence reads across personality, interests, values and work conditions.',
       ctaPrimary: 'Build my profile',
-      ctaSecondary: 'See how it works',
+      ctaSecondary: 'Follow one answer',
+      prompt: 'How do you make progress when the goal is clear but the implementation is not?',
+      response: 'I clarify the constraints first, then choose the smallest reversible step.',
     },
     situation: {
       prompt: 'How do you make progress when the goal is clear but the implementation is not?',
@@ -40,14 +42,14 @@ export const PUBLIC_CONTENT = {
         },
         {
           id: 'work-values',
-          name: 'O*NET Work Values',
+          name: 'Work Values',
           summary: 'Working conditions, independence, and achievement priority',
           detail: 'Signals high motivation in autonomous environments with clear quality standards.',
-          axis: 'Autonomy & Structure',
+          axis: 'Autonomy and Structure',
         },
         {
           id: 'signals',
-          name: 'Behavioral Signals',
+          name: 'Career Signals',
           summary: 'Iterative execution and defensive risk management',
           detail: 'Captures observable preference for small reversible experiments over large commitments.',
           axis: 'Experimental Velocity',
@@ -55,21 +57,21 @@ export const PUBLIC_CONTENT = {
       ],
     },
     workworlds: {
-      headline: 'THE SAME PATTERN ACROSS FOUR CONDITIONS',
+      headline: 'THE SAME PATTERN READS DIFFERENTLY AT WORK.',
       conditions: [
         {
           id: 'precision',
           name: 'Precision',
           mediaKey: 'workworldPrecision',
           interpretation: 'Clear constraints make this pattern decisive.',
-          detail: 'In structured engineering contexts, establishing boundaries first leads to high-accuracy execution.',
+          detail: 'In structured technical contexts, establishing boundaries first leads to high accuracy execution.',
         },
         {
           id: 'autonomy',
           name: 'Autonomy',
           mediaKey: 'workworldAutonomy',
           interpretation: 'Open methods make the same pattern protective.',
-          detail: 'When left self-directed, the instinct to isolate small steps protects focus and prevents over-commitment.',
+          detail: 'When self-directed, the instinct to isolate small steps protects focus and prevents over-commitment.',
         },
         {
           id: 'collaboration',
@@ -82,14 +84,55 @@ export const PUBLIC_CONTENT = {
           id: 'pressure',
           name: 'Operational Pressure',
           mediaKey: 'workworldPressure',
-          interpretation: 'Under time pressure, the same instinct can become rigidity.',
-          detail: 'When rapid pivots are required, over-indexing on constraint verification can slow decision velocity.',
+          interpretation: 'Under operational pressure, the same instinct requires adaptation.',
+          detail: 'When rapid pivots are required, over-indexing on constraint verification must be balanced against decision speed.',
+        },
+      ],
+    },
+    models: {
+      headline: 'MULTI-MODEL PSYCHOMETRIC ATLAS',
+      list: [
+        {
+          id: 'big-five',
+          name: 'Big Five',
+          role: 'Dimensional Spectrum',
+          description: 'Evaluates Openness, Conscientiousness, Extraversion, Agreeableness, and Emotional Stability as continuous dimensions rather than binary types.',
+        },
+        {
+          id: 'riasec',
+          name: 'RIASEC',
+          role: 'Vocational Interests',
+          description: 'Maps attraction to Realistic, Investigative, Artistic, Social, Enterprising, and Conventional problem domains.',
+        },
+        {
+          id: 'work-values',
+          name: 'Work Values',
+          role: 'Environmental Motivation',
+          description: 'Quantifies organizational conditions that sustain motivation: Achievement, Independence, Working Conditions, Recognition, Relationships, and Support.',
+        },
+        {
+          id: 'career-signals',
+          name: 'Career Signals',
+          role: 'Situational Action Tendencies',
+          description: 'Identifies concrete action habits: iterative scoping, stakeholder alignment, risk containment, and diagnostic inquiry.',
+        },
+        {
+          id: 'background',
+          name: 'Background',
+          role: 'Domain Context',
+          description: 'Integrates educational foundation and technical disciplines to ground analytical interpretations.',
+        },
+        {
+          id: 'goals',
+          name: 'Goals',
+          role: 'Trajectory Alignment',
+          description: 'Weights individual aspirations and target responsibilities in career alignment calculations.',
         },
       ],
     },
     calibration: {
-      headline: 'DETERMINISTIC CAREER CALIBRATION',
-      lead: 'Career alignment calculations assemble six deterministic constraints without black box adjustments.',
+      headline: 'NOT EVERY SIGNAL COUNTS THE SAME.',
+      lead: 'Career-fit weights assemble six deterministic factors without black box adjustments.',
       weights: [
         { id: 'riasec', label: 'RIASEC Interests', percentage: 25, role: 'Occupational domain alignment' },
         { id: 'skills', label: 'Technical & Professional Skills', percentage: 25, role: 'Concrete capability match' },
@@ -100,7 +143,7 @@ export const PUBLIC_CONTENT = {
       ],
     },
     timeExposure: {
-      headline: 'WHAT HOLDS WHEN THE WORK CHANGES?',
+      headline: 'WHAT CHANGED. WHAT HELD.',
       support: 'Revisit your profile as your responsibilities shift to inspect what stayed stable, what moved, and what context changed around it.',
       baselineLabel: 'BASELINE RECORD',
       laterLabel: 'LATER WORK CONTEXT',
@@ -111,20 +154,20 @@ export const PUBLIC_CONTENT = {
     trace: {
       headline: 'SHOW ME WHERE THAT CAME FROM.',
       support: 'Distinguish what you supplied, what the system calculated, where comparison happens, and what remains under your direct control.',
-      inspectPrompt: 'Hover, drag, or press Enter on the inspection aperture to view source layers.',
+      inspectPrompt: 'Inspect the evidence chain connecting your original response to multi-dimensional career alignment.',
     },
     finale: {
-      headline: 'SEE WHAT HOLDS UNDER DIFFERENT CONDITIONS.',
+      headline: 'BUILD A PROFILE THAT KEEPS ITS EVIDENCE.',
       support: 'Build a profile you can inspect, compare and revisit as your work changes.',
       ctaPrimary: 'Build my profile',
-      ctaSecondary: 'Explore how it works',
+      ctaSecondary: 'Follow one answer',
     },
   },
 
   career: {
     hero: {
-      headline: 'WHERE DOES THIS PATTERN WORK?',
-      support: 'Career fit changes when the conditions change.',
+      headline: 'CAREER FIT IS A FIELD, NOT A RANKING.',
+      support: 'Career fit changes when the conditions change. Explore 17 occupational profiles grounded in deterministic evidence.',
     },
     workworlds: [
       {
@@ -186,7 +229,7 @@ export const PUBLIC_CONTENT = {
         id: 'capture',
         name: 'Source capture',
         title: 'Source response is preserved verbatim',
-        description: 'Raw input enters with its situational context intact rather than immediately reduced to a number.',
+        description: 'Raw input enters with its situational context intact rather than immediately reduced to an opaque number.',
       },
       {
         id: 'isolate',
@@ -203,8 +246,8 @@ export const PUBLIC_CONTENT = {
       {
         id: 'weight',
         name: 'Deterministic calculation',
-        title: 'Proportional mathematical calculation',
-        description: 'Scoring formulas apply fixed proportional weights without black box adjustments.',
+        title: 'Proportional career-fit weighting',
+        description: 'Scoring formulas apply fixed career-fit weights (RIASEC 25%, Skills 25%, Values 20%, Personality 15%, Education 10%, Goals 5%) without black box adjustments.',
       },
       {
         id: 'recompose',
@@ -246,47 +289,50 @@ export const PUBLIC_CONTENT = {
       {
         id: 'inferred',
         name: 'Inferred',
-        title: 'Trait vectors & dimensions',
-        description: 'Continuous Big Five and RIASEC scores calculated through standardized item response theory.',
-        details: 'Conscientiousness: 78 | Emotional Stability: 64 | Investigative: 72 | Conventional: 68',
+        title: 'Trait vectors and dimensions',
+        description: 'Continuous Big Five and RIASEC scores calculated through psychometric models with explicit validity checks.',
+        details: 'Validity state: valid (full confidence) | Conscientiousness: 78 | Emotional Stability: 64 | Investigative: 72 | Conventional: 68',
       },
       {
         id: 'calculated',
         name: 'Calculated',
         title: 'Deterministic career calibration',
-        description: 'Multi-factor alignment scored using explicit 25/25/20/15/10/5 mathematical weights.',
+        description: 'Multi-factor alignment scored using explicit 25/25/20/15/10/5 mathematical career-fit weights.',
         details: 'RIASEC (25%) + Skills (25%) + Values (20%) + Traits (15%) + Education (10%) + Goals (5%)',
       },
       {
         id: 'compared',
         name: 'Compared',
         title: 'Occupational benchmarks',
-        description: 'Contextual comparison against 17 engineering, design, and analytical profiles.',
+        description: 'Contextual comparison against 17 canonical engineering, design, and analytical profiles.',
         details: 'Top alignment: Systems Architect (91%), Staff Software Engineer (88%), Research Analyst (85%)',
       },
       {
         id: 'controlled',
         name: 'Controlled',
-        title: 'Direct user ownership',
-        description: 'Immediate account actions to export raw data, disable AI synthesis, or delete all records.',
-        details: 'Sovereign rights: JSON Export, Narrative Control Toggle, Permanent Database Deletion',
+        title: 'Direct user sovereignty and privacy rights',
+        description: 'Authenticated account controls to export raw data, inspect AI transparency, or perform hard deletion of stored records.',
+        details: 'Sovereign rights: Full JSON Data Export, AI Transparency Notice, Hard Deletion of Account & Records',
       },
     ],
     rightsActions: [
       {
         id: 'export',
         label: 'Export full record',
-        description: 'Download complete responses, trait vectors, and historical comparisons in JSON format.',
+        description: 'Download complete responses, trait vectors, and historical comparisons in JSON format from your account.',
+        link: '/account/privacy',
       },
       {
-        id: 'ai-toggle',
-        label: 'AI narrative control',
-        description: 'Enable or disable AI commentary while keeping deterministic scoring reports active.',
+        id: 'ai-transparency',
+        label: 'AI processing transparency',
+        description: 'AI is utilized solely for narrative summarization while scoring calculations remain 100% deterministic code.',
+        link: '/methodology',
       },
       {
         id: 'delete',
-        label: 'Complete record purge',
-        description: 'Permanently remove your account, session logs, and psychometric data from our database.',
+        label: 'Hard deletion of stored records',
+        description: 'Hard deletion of your account and related stored records with immediate removal of all assessment history.',
+        link: '/account/privacy',
       },
     ],
   },
@@ -310,13 +356,13 @@ export const PUBLIC_CONTENT = {
         orbit: ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'],
       },
       workValues: {
-        title: 'O*NET Work Values',
+        title: 'Work Values',
         role: 'Workplace Reward Priority',
         description: 'Quantifies organizational conditions that sustain motivation: Achievement, Independence, Working Conditions, Recognition, Relationships, and Support.',
         priorities: ['Achievement', 'Independence', 'Working Conditions', 'Recognition', 'Relationships', 'Support'],
       },
       behavioralSignals: {
-        title: 'Behavioral Signals',
+        title: 'Career Signals',
         role: 'Situational Action Patterns',
         description: 'Identifies contextual action tendencies: iterative scoping, stakeholder alignment, risk containment, and diagnostic inquiry.',
         patterns: ['Iterative scoping', 'Stakeholder alignment', 'Risk containment', 'Diagnostic inquiry'],
@@ -324,7 +370,12 @@ export const PUBLIC_CONTENT = {
       careerWeights: {
         title: 'Proportional Career Alignment',
         role: 'Deterministic Calibration Engine',
-        description: 'Fixed mathematical weights ensure career alignment scores are transparent, repeatable, and completely unboxed.',
+        description: 'Fixed mathematical career-fit weights ensure alignment scores are transparent, repeatable, and completely unboxed.',
+      },
+      validityStates: {
+        title: 'Scoring Validity and Confidence States',
+        role: 'Truthful Diagnostics',
+        description: 'The scoring system reports real validity states (valid, partial, and insufficient_data) rather than fabricating false confidence values.',
       },
       aiNarrative: {
         title: 'Role of AI Commentary',
@@ -363,7 +414,7 @@ export const PUBLIC_CONTENT = {
       {
         id: 'user-rights',
         title: '4. Sovereign Data Controls',
-        content: 'You maintain permanent sovereignty over your record. You can export your full data in JSON format, toggle narrative AI generation, or permanently delete your account at any time.',
+        content: 'You maintain permanent sovereignty over your record. You can export your full data in JSON format or perform hard deletion of your account and related stored records at any time from your account settings.',
       },
       {
         id: 'security',

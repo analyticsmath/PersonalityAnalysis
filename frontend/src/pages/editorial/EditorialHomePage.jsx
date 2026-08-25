@@ -1,22 +1,24 @@
 import React from 'react';
-import { HomeCinematicExperience } from '../../components/public-experience/home/HomeCinematicExperience';
+import { HomeEditorialExperience } from '../../components/public-experience/home/HomeEditorialExperience';
 
 /**
- * Editorial Home Page - Continuous Cinematic Journey
- * Integrates 8 continuous movements in one unified experience:
- * - WorldEntry (S0)
- * - ProfessionalSituation (S1 & S2)
- * - MultipleReadings (S3)
- * - WorkworldJourney (S4)
- * - Calibration (S5)
- * - TimeExposure (S6)
- * - ProvenanceReveal (S7)
- * - Finale (S8)
+ * Editorial Home Page - Editorial Evidence Atlas
+ * Sequence of 10 authored chapters:
+ * 1. Thesis Poster (Hero)
+ * 2. One Response Spread
+ * 3. Evidence Deck
+ * 4. Professional Conditions Journey
+ * 5. Multi-Model Psychometric Atlas
+ * 6. Deterministic Calibration Mass
+ * 7. Career Role Atlas Teaser
+ * 8. Progress Longitudinal Teaser
+ * 9. Source Ledger & Trust Teaser
+ * 10. Synthesis Finale
  */
 export const EditorialHomePage = () => {
   return (
     <div className="pa-px-home-page-container">
-      <HomeCinematicExperience />
+      <HomeEditorialExperience />
     </div>
   );
 };

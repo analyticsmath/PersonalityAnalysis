@@ -1,236 +1,172 @@
 /**
- * Personality Assessor - Public Experience Career Route Styles
- * 3D Workworld Canvas & Typographic Occupational Rail
- * Zero Card Grids, Zero Eyebrows, Zero Gradients
+ * Personality Assessor - Career Intelligence Route Styling
+ * Editorial Evidence Atlas: 17 Occupational Profiles Atlas & Proportional Fit Composition.
+ * Zero 5 identical Z-cards.
  */
 
-.pa-px-career-root {
-  position: relative;
+.pa-px-career-page {
   width: 100%;
-  min-height: 100svh;
-  background-color: var(--px-ink);
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  padding: calc(var(--px-header-height-desktop) + var(--px-space-section)) var(--px-outer-gutter) var(--px-space-section);
 }
 
-.pa-px-career-hero-section {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background-color: var(--px-ink);
-}
-
-.pa-px-career-stage-sticky {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100svh;
-  overflow: hidden;
-}
-
-.pa-px-career-canvas-wrap {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.pa-px-career-perspective-stage {
-  position: absolute;
-  inset: 0;
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
-  overflow: hidden;
-}
-
-.pa-px-career-world-group {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-}
-
-.pa-px-career-dom-plane {
-  position: absolute;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
-}
-
-.pa-px-career-hero-content {
-  position: relative;
-  z-index: 10;
-  max-width: 54rem;
-}
-
-
-.pa-px-career-hero-content h1 {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  font-weight: var(--px-weight-display);
-  font-variation-settings: 'wdth' 80, 'opsz' 96;
-  line-height: 1.05;
-  color: var(--px-white);
-  margin-bottom: 12px;
-}
-
-.pa-px-career-hero-content p {
-  font-size: var(--px-body-lg);
-  color: var(--px-soft);
-  line-height: 1.45;
-}
-
-/* ── Typographic Career Rail ── */
-.pa-px-career-rail-section {
-  position: relative;
-  width: 100%;
-  padding: clamp(80px, 12vh, 140px) var(--px-outer-gutter);
-  background-color: var(--px-ink);
-}
-
-.pa-px-career-rail-header {
-  max-width: 42rem;
-  margin-bottom: clamp(32px, 6vh, 64px);
-}
-
-.pa-px-career-rail-header h2 {
-  font-family: var(--px-font-family);
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
-  font-weight: var(--px-weight-bold);
-  font-variation-settings: 'wdth' 85, 'opsz' 72;
-  color: var(--px-white);
-  margin-bottom: 12px;
-}
-
-.pa-px-career-rail-lead {
-  font-size: var(--px-body-lg);
-  color: var(--px-soft);
-  line-height: 1.5;
-}
-
-.pa-px-career-rail-container {
+.pa-px-career-hero {
+  max-width: 1440px;
+  margin: 0 auto var(--px-space-section);
   display: grid;
-  grid-template-columns: 1.4fr 1.6fr;
-  grid-gap: clamp(32px, 6vw, 80px);
-  align-items: start;
-  outline: none;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--px-column-gap);
+  align-items: center;
 }
 
-.pa-px-career-rail__list {
+.pa-px-career-hero__text {
+  grid-column: 1 / 8;
+}
+
+.pa-px-career-hero__headline {
+  font-size: var(--px-display-lg);
+  font-weight: var(--px-weight-display);
+  color: var(--pa-ink);
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  margin-bottom: var(--px-space-content);
+}
+
+.pa-px-career-hero__support {
+  font-size: var(--px-lead);
+  color: var(--pa-graphite);
+  max-width: var(--px-measure-lead);
+}
+
+.pa-px-career-hero__media {
+  grid-column: 8 / 13;
+}
+
+.pa-px-career-hero__frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--px-radius-sm);
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(23, 25, 24, 0.08);
+}
+
+/* ── 17-Role Spatial Atlas ── */
+.pa-px-career-atlas {
+  max-width: 1440px;
+  margin: 0 auto var(--px-space-section);
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-cluster);
+}
+
+.pa-px-career-atlas__header {
+  margin-bottom: var(--px-space-cluster);
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 70vh;
-  overflow-y: auto;
-  padding-right: 16px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(247, 248, 248, 0.2) transparent;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.pa-px-career-rail__item {
-  background: transparent;
-  border: none;
-  text-align: left;
-  padding: 12px 16px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  transition: opacity 150ms ease, transform 150ms ease;
-  opacity: 0.55;
-  border-left: 2px solid transparent;
+.pa-px-career-atlas__header h2 {
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
+  color: var(--pa-ink);
 }
 
-.pa-px-career-rail__item:hover,
-.pa-px-career-rail__item:focus-visible {
-  opacity: 0.85;
-  transform: translateX(4px);
+.pa-px-career-atlas__body {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--px-space-cluster);
 }
 
-.pa-px-career-rail__item--active {
-  opacity: 1;
-  border-left-color: var(--px-white);
-  transform: translateX(8px);
-}
-
-.pa-px-career-rail__item-category {
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--px-soft);
-  margin-bottom: 2px;
-}
-
-.pa-px-career-rail__item-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
-  font-weight: var(--px-weight-bold);
-  font-variation-settings: 'wdth' 88, 'opsz' 36;
-  color: var(--px-white);
-}
-
-.pa-px-career-rail__detail-pane {
-  position: sticky;
-  top: 120px;
-  max-width: 32rem;
-}
-
-.pa-px-career-rail__detail-category {
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--px-soft);
-  margin-bottom: 12px;
-}
-
-.pa-px-career-rail__detail-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
-  font-weight: var(--px-weight-bold);
-  font-variation-settings: 'wdth' 82, 'opsz' 64;
-  line-height: 1.15;
-  color: var(--px-white);
-  margin-bottom: 16px;
-}
-
-.pa-px-career-rail__detail-desc {
-  font-size: var(--px-body-lg);
-  color: var(--px-white);
-  opacity: 0.9;
-  line-height: 1.55;
-  margin-bottom: 24px;
-}
-
-.pa-px-career-rail__skills {
+.pa-px-career-roles-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: var(--px-space-sm);
 }
 
-.pa-px-career-rail__skills-label {
-  font-size: var(--px-body-sm);
+.pa-px-role-list-item {
+  background: none;
+  border: 1px solid transparent;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: var(--px-radius-xs);
+  font-family: var(--pa-font-family);
+  font-size: 1.1rem;
+  font-weight: var(--px-weight-body);
+  color: var(--pa-graphite);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 180ms ease;
+}
+
+.pa-px-role-list-item:hover,
+.pa-px-role-list-item--active {
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
   font-weight: var(--px-weight-medium);
-  color: var(--px-soft);
+  border-color: var(--pa-mineral);
 }
 
-.pa-px-career-rail__skills-list {
-  font-size: var(--px-body);
-  color: var(--px-white);
+.pa-px-role-list-item--active {
+  border-color: var(--pa-evidence);
 }
 
-/* ── Mobile Responsive Rules ── */
-@media (max-width: 768px) {
-  .pa-px-career-rail-container {
+.pa-px-career-role-detail-card {
+  background-color: var(--pa-paper);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-content);
+  display: flex;
+  flex-direction: column;
+  gap: var(--px-space-content);
+}
+
+.pa-px-role-detail__title {
+  font-size: 1.75rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+}
+
+.pa-px-role-detail__media {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--px-radius-xs);
+  overflow: hidden;
+}
+
+.pa-px-role-detail__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pa-px-role-skill-badge {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  font-family: var(--pa-font-mono);
+  color: var(--pa-ink);
+  border-radius: var(--px-radius-xs);
+}
+
+@media (max-width: 900px) {
+  .pa-px-career-hero {
     grid-template-columns: 1fr;
-    grid-gap: 40px;
   }
-
-  .pa-px-career-rail__list {
-    max-height: 45vh;
+  .pa-px-career-hero__text,
+  .pa-px-career-hero__media {
+    grid-column: 1 / -1;
   }
-
-  .pa-px-career-rail__detail-pane {
-    position: relative;
-    top: 0;
+  .pa-px-career-atlas__body {
+    grid-template-columns: 1fr;
   }
 }

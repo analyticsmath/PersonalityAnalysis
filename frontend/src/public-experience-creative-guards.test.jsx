@@ -6,16 +6,15 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { PublicExperienceRoot } from './components/public-experience/chrome/PublicExperienceRoot';
-import { PUBLIC_CONTENT } from './content/public-experience/publicContent';
 import { MEDIA_MANIFEST_PX } from './content/public-experience/mediaManifest';
 import { ROUTE_TRANSITION_MAP } from './content/public-experience/transitionMap';
 import careersData from './content/careers.json';
 
 function readFile(relPath) {
-  return fs.readFileSync(path.resolve(__dirname, '..', relPath), 'utf-8');
+  return fs.readFileSync(path.resolve(process.cwd(), relPath), 'utf-8');
 }
 
-describe('Public Experience (Under Different Conditions) — Creative Guards & Architecture Contracts', () => {
+describe('Public Experience (Editorial Evidence Atlas) — Creative Guards & Architecture Contracts', () => {
   const tokensCss = readFile('src/styles/public-experience/tokens.css');
   const fontsCss = readFile('src/styles/public-experience/fonts.css');
   const baseCss = readFile('src/styles/public-experience/base.css');
@@ -32,7 +31,6 @@ describe('Public Experience (Under Different Conditions) — Creative Guards & A
   const reducedMotionCss = readFile('src/styles/public-experience/reduced-motion.css');
 
   const publicContentJs = readFile('src/content/public-experience/publicContent.js');
-  const mediaManifestJs = readFile('src/content/public-experience/mediaManifest.js');
 
   it('1. contains strictly zero em dashes in public content text', () => {
     expect(publicContentJs).not.toContain('—');
@@ -63,21 +61,21 @@ describe('Public Experience (Under Different Conditions) — Creative Guards & A
     expect(allCss).not.toMatch(/conic-gradient/i);
   });
 
-  it('3. loads dedicated variable font Bricolage Grotesque in fonts.css', () => {
-    expect(fontsCss).toContain('@fontsource-variable/bricolage-grotesque');
+  it('3. loads dedicated variable font Instrument Sans in fonts.css', () => {
+    expect(fontsCss).toContain('@fontsource-variable/instrument-sans');
   });
 
-  it('4. enforces font weight ceiling <= 560 in tokens.css', () => {
-    expect(tokensCss).toContain('--px-weight-bold: 540');
+  it('4. enforces font weight ceiling <= 580 in tokens.css', () => {
+    expect(tokensCss).toContain('--px-weight-bold: 580');
     expect(tokensCss).not.toContain('font-weight: 700');
     expect(tokensCss).not.toContain('font-weight: 800');
     expect(tokensCss).not.toContain('font-weight: 900');
   });
 
-  it('5. contains interface neutrals and no green brand wash in tokens.css', () => {
-    expect(tokensCss).toContain('--px-ink: #121416');
-    expect(tokensCss).toContain('--px-white: #F7F8F8');
-    expect(tokensCss).toContain('--px-soft: #DDE1E3');
+  it('5. contains light interface neutrals and no green brand wash in tokens.css', () => {
+    expect(tokensCss).toContain('--pa-paper: #F4F5F2');
+    expect(tokensCss).toContain('--pa-white: #FFFFFF');
+    expect(tokensCss).toContain('--pa-ink: #171918');
     expect(tokensCss).not.toContain('--atlas-field: #163D35');
     expect(tokensCss).not.toContain('--atlas-signal: #CDD86A');
   });

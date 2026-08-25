@@ -1,7 +1,10 @@
 /**
  * Personality Assessor - Public Experience Font Layer
- * Sole Variable Family: Bricolage Grotesque Variable
- * Axes: opsz (12–96), wdth (75–100), wght (200–800)
+ * Primary: Instrument Sans Variable
+ * Data / Provenance: IBM Plex Mono
+ * Retained for backward compatibility: Bricolage Grotesque Variable
  */
 
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource/ibm-plex-mono';
 @import '@fontsource-variable/bricolage-grotesque';

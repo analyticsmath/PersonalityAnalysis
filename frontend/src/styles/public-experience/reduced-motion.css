@@ -1,88 +1,43 @@
 /**
- * Personality Assessor - Public Experience Reduced Motion Styles
- * Complete static document flow alternatives when prefers-reduced-motion: reduce is active.
- * Zero pinned blank spacers, natural editorial document flow with 100% readable content.
+ * Personality Assessor - Reduced Motion Layer
+ * Respects prefers-reduced-motion: reduce
+ * Removes forced scroll pins, provides instant clean transitions and natural document flow.
  */
 
 @media (prefers-reduced-motion: reduce) {
-  .pa-px-home-continuous-root,
-  .pa-px-home-sticky-stage,
-  .pa-px-workworld-layer,
-  .pa-px-calibration-stage,
-  .pa-px-time-stage,
-  .pa-px-provenance-stage,
-  .pa-px-finale-stage,
-  .pa-px-how-section,
-  .pa-px-how-stage-sticky,
-  .pa-px-career-hero-section,
-  .pa-px-trust-section,
-  .pa-px-trust-stage-sticky,
-  .pa-px-progress-section,
-  .pa-px-progress-stage {
-    position: relative !important;
-    height: auto !important;
-    min-height: auto !important;
-    padding: 40px var(--px-outer-gutter, 6vw) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    pointer-events: auto !important;
-    overflow: visible !important;
-  }
-
-  .pa-px-home-typography-root,
-  .pa-px-home-evidence-root,
-  .pa-px-provenance-time-root {
-    position: relative !important;
-    height: auto !important;
-    pointer-events: auto !important;
-  }
-
-  .pa-px-home-hero-text,
-  .pa-px-home-question-container,
-  .pa-px-home-response-container,
-  .pa-px-readings-field {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    max-width: 100% !important;
-    margin-bottom: 40px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-  }
-
-  .home-evidence-target {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    width: 100% !important;
-    max-width: 440px !important;
-    aspect-ratio: 4 / 5 !important;
-    margin-bottom: 32px !important;
-  }
-
-  .pa-px-workworld-env {
-    position: relative !important;
-    height: auto !important;
-    min-height: 45vh !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    margin-bottom: 48px !important;
-  }
-
-  .pa-px-branching-svg,
-  .pa-px-persistent-canvas-root {
-    display: none !important;
-  }
-
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .pa-px-scene-sticky,
+  .pa-px-how-stage-sticky,
+  .pa-px-career-stage-sticky,
+  .pa-px-trust-stage-sticky,
+  .pa-px-home-sticky-stage {
+    position: relative !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .pa-px-conditions-track {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+    gap: var(--px-space-content) !important;
+    padding: 0 var(--px-outer-gutter) !important;
+  }
+
+  .pa-px-condition-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .pa-px-transition-layer {
+    display: none !important;
   }
 }

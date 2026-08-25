@@ -1,10 +1,14 @@
 import React from 'react';
-import { MethodologyEditorial } from '../../components/public-experience/methodology/MethodologyEditorial';
+import { MethodologyPublication } from '../../components/public-experience/methodology/MethodologyPublication';
 
+/**
+ * Editorial Methodology Page - Technical Research Publication
+ * Monograph on unboxed psychometric frameworks and deterministic career-fit weighting.
+ */
 export const EditorialMethodologyPage = () => {
   return (
     <div className="pa-px-methodology-page-container">
-      <MethodologyEditorial />
+      <MethodologyPublication />
     </div>
   );
 };

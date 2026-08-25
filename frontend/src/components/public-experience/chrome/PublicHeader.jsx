@@ -8,7 +8,7 @@ export const PublicHeader = ({ onOpenIndex }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -17,24 +17,44 @@ export const PublicHeader = ({ onOpenIndex }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isActive = (path) => location.pathname === path;
+
   return (
     <header className={`pa-px-header ${isScrolled ? 'pa-px-header--scrolled' : ''}`}>
       <Link to="/" className="pa-px-header__brand" aria-label="Personality Assessor Home">
         Personality Assessor
       </Link>
 
-      <nav className="pa-px-header__nav" aria-label="Primary public routes">
-        <Link to="/career-intelligence" className="pa-px-header__link">
+      <nav className="pa-px-header__nav" aria-label="Primary public navigation">
+        <Link
+          to="/career-intelligence"
+          className={`pa-px-header__link ${isActive('/career-intelligence') ? 'pa-px-header__link--active' : ''}`}
+        >
           Career
         </Link>
-        <Link to="/how-it-works" className="pa-px-header__link">
+        <Link
+          to="/how-it-works"
+          className={`pa-px-header__link ${isActive('/how-it-works') ? 'pa-px-header__link--active' : ''}`}
+        >
           How it works
         </Link>
-        <Link to="/progress" className="pa-px-header__link">
+        <Link
+          to="/progress"
+          className={`pa-px-header__link ${isActive('/progress') ? 'pa-px-header__link--active' : ''}`}
+        >
           Progress
         </Link>
-        <Link to="/trust" className="pa-px-header__link">
+        <Link
+          to="/trust"
+          className={`pa-px-header__link ${isActive('/trust') ? 'pa-px-header__link--active' : ''}`}
+        >
           Trust
+        </Link>
+        <Link
+          to="/methodology"
+          className={`pa-px-header__link ${isActive('/methodology') ? 'pa-px-header__link--active' : ''}`}
+        >
+          Methodology
         </Link>
       </nav>
 

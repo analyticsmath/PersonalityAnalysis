@@ -1,7 +1,7 @@
 /**
  * Personality Assessor - Public Route Stage
- * Clean route stage rendering public route content over a persistent dark Ink substrate.
- * Works seamlessly with TransitionPortal for cross-route visual actor carry without blank flashes.
+ * Clean route stage rendering public route content over a light Paper substrate.
+ * Works seamlessly with TransitionPortal for cross-route visual continuity without blank flashes.
  */
 
 import React from 'react';
@@ -18,8 +18,8 @@ export const PublicRouteStage = ({ children }) => {
         position: 'relative',
         width: '100%',
         minHeight: '100vh',
-        backgroundColor: 'var(--px-ink, #121416)',
-        color: 'var(--px-white, #F7F8F8)',
+        backgroundColor: 'var(--pa-paper, #F4F5F2)',
+        color: 'var(--pa-ink, #171918)',
       }}
     >
       <div
@@ -38,4 +38,3 @@ export const PublicRouteStage = ({ children }) => {
 };
 
 export default PublicRouteStage;
-

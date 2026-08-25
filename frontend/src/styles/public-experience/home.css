@@ -1,721 +1,605 @@
 /**
- * Personality Assessor - Public Experience Home Route Styles
- * Continuous Cinematic Film: THE RESPONSE TRAVELS THROUGH WORLDS
- * Zero Card Grids, Zero Eyebrows, Zero Gradients, Single Viewport Ownership
+ * Personality Assessor - Home Route Styling (10 Authored Chapters)
+ * Editorial Evidence Atlas: Light paper grounds, asymmetrical grids, horizontal conditions track.
+ * Zero CSS gradients, zero full-screen dark sheets.
  */
 
-/* ── Continuous Home Architecture ── */
-.pa-px-home-continuous-root {
+.pa-px-home-container {
+  width: 100%;
+  background-color: var(--pa-paper);
+  color: var(--pa-ink);
+  overflow-x: hidden;
+}
+
+/* ── Chapter 1: Thesis Poster ── */
+.pa-px-ch-poster {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--px-header-height-desktop) + var(--px-space-section)) var(--px-outer-gutter) var(--px-space-section);
   position: relative;
+  background-color: var(--pa-paper);
+}
+
+.pa-px-ch-poster__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--px-column-gap);
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
   width: 100%;
-  background-color: var(--px-ink, #121416);
-  color: var(--px-white, #F7F8F8);
-  contain: paint;
 }
 
-.pa-px-home-sticky-stage {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100svh;
-  overflow: hidden;
-  contain: strict;
+.pa-px-ch-poster__type-col {
+  grid-column: 1 / 9;
+  z-index: 2;
 }
 
-/* ── S0 & S1: World Entry & Typography Layer ── */
-.pa-px-home-typography-root {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.pa-px-home-hero-text {
-  position: absolute;
-  bottom: clamp(40px, 8vh, 90px);
-  left: var(--px-outer-gutter, 6vw);
-  max-width: 92vw;
-  z-index: 12;
-  will-change: transform, opacity;
-  pointer-events: auto;
-}
-
-.pa-px-home-hero-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.8rem, 6.2vw, 6.2rem);
-  font-weight: 480;
-  line-height: 0.92;
+.pa-px-ch-poster__headline {
+  font-family: var(--pa-font-family);
+  font-size: var(--px-display-xl);
+  font-weight: var(--px-weight-display);
+  line-height: 0.94;
   letter-spacing: -0.035em;
-  color: var(--px-white);
-  margin-bottom: 24px;
-  font-variation-settings: 'wdth' 82, 'opsz' 96;
+  color: var(--pa-ink);
+  margin-bottom: var(--px-space-content);
 }
 
-.pa-px-title-line {
-  display: block;
-  will-change: transform;
+.pa-px-ch-poster__support {
+  font-size: var(--px-lead);
+  line-height: 1.35;
+  color: var(--pa-graphite);
+  max-width: var(--px-measure-lead);
+  margin-bottom: var(--px-space-lg);
 }
 
-.pa-px-home-hero-support {
-  font-size: clamp(1.05rem, 1.4vw, 1.35rem);
-  line-height: 1.45;
-  color: var(--px-white);
-  opacity: 0.92;
-  max-width: 38rem;
-  margin-bottom: 32px;
-  font-variation-settings: 'wdth' 94, 'opsz' 24;
-}
-
-.pa-px-home-hero-actions {
+.pa-px-ch-poster__actions {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: var(--px-space-md);
   flex-wrap: wrap;
 }
 
-/* S1: Contextual Inquiry Question */
-.pa-px-home-question-container {
-  position: absolute;
-  bottom: 28%;
-  right: var(--px-outer-gutter, 6vw);
-  max-width: clamp(300px, 32vw, 480px);
-  z-index: 14;
-  will-change: transform, opacity;
+.pa-px-ch-poster__media-col {
+  grid-column: 8 / 13;
+  z-index: 1;
+  position: relative;
 }
 
-.pa-px-inquiry-prompt {
-  font-family: var(--px-font-family);
-  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
-  font-weight: 420;
-  font-variation-settings: 'wdth' 88, 'opsz' 48;
-  line-height: 1.28;
-  color: var(--px-white);
-  letter-spacing: -0.015em;
+.pa-px-ch-poster__media-frame {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--px-radius-sm);
+  background-color: var(--pa-mineral);
+  box-shadow: 0 16px 36px rgba(23, 25, 24, 0.08);
 }
 
-/* S2 & S3: Response Anchor & Branching */
-.pa-px-home-response-container {
-  position: absolute;
-  top: 36%;
-  left: var(--px-outer-gutter, 6vw);
-  max-width: clamp(340px, 50vw, 720px);
-  z-index: 14;
-  will-change: transform, opacity;
+.pa-px-ch-poster__source-cue {
+  margin-top: var(--px-space-cluster);
+  grid-column: 1 / 13;
+  display: flex;
+  align-items: center;
+  gap: var(--px-space-sm);
+  font-family: var(--pa-font-mono);
+  font-size: var(--px-data);
+  color: var(--pa-evidence);
 }
 
-.pa-px-source-sentence {
-  font-family: var(--px-font-family);
-  font-size: clamp(1.6rem, 2.8vw, 2.7rem);
-  font-weight: 520;
-  font-variation-settings: 'wdth' 86, 'opsz' 64;
-  line-height: 1.2;
-  color: var(--px-white);
+/* ── Chapter 2: One Response Spread ── */
+.pa-px-ch-response {
+  background-color: var(--pa-white);
+  padding: var(--px-space-section) var(--px-outer-gutter);
+}
+
+.pa-px-ch-response__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--px-column-gap);
+  align-items: center;
+}
+
+.pa-px-ch-response__content {
+  grid-column: 1 / 9;
+}
+
+.pa-px-ch-response__prompt {
+  font-family: var(--pa-font-mono);
+  font-size: var(--px-caption);
+  color: var(--pa-context);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--px-space-xs);
+}
+
+.pa-px-ch-response__quote {
+  font-family: var(--pa-font-family);
+  font-size: clamp(2rem, 3.8vw, 3.8rem);
+  font-weight: var(--px-weight-heading);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--pa-ink);
+  margin-bottom: var(--px-space-content);
+}
+
+.pa-px-ch-response__highlight {
+  color: var(--pa-evidence);
+  border-bottom: 2px solid var(--pa-evidence);
+  padding-bottom: 2px;
+}
+
+.pa-px-ch-response__aside-media {
+  grid-column: 10 / 13;
+}
+
+.pa-px-ch-response__plate {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--px-radius-sm);
+  background-color: var(--pa-mineral);
+}
+
+/* ── Chapter 3: Evidence Deck ── */
+.pa-px-ch-deck {
+  padding: var(--px-space-section) var(--px-outer-gutter);
+  background-color: var(--pa-paper);
+}
+
+.pa-px-ch-deck__header {
+  max-width: 1440px;
+  margin: 0 auto var(--px-space-cluster);
+}
+
+.pa-px-ch-deck__header h2 {
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
   letter-spacing: -0.02em;
+  color: var(--pa-ink);
 }
 
-.pa-px-phrase-fragment {
-  display: inline-block;
-  will-change: transform, font-variation-settings;
+.pa-px-ch-deck__cards {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--px-space-content);
 }
 
-.pa-px-branching-svg {
-  position: absolute;
-  inset: 0;
+.pa-px-deck-card {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-content);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 320px;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  cursor: default;
+}
+
+.pa-px-deck-card:hover,
+.pa-px-deck-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(23, 25, 24, 0.08);
+  border-color: var(--pa-evidence);
+}
+
+.pa-px-deck-card__tag {
+  font-family: var(--pa-font-mono);
+  font-size: var(--px-caption);
+  color: var(--pa-evidence);
+  text-transform: uppercase;
+}
+
+.pa-px-deck-card__title {
+  font-size: 1.35rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  margin-top: var(--px-space-xs);
+  margin-bottom: var(--px-space-xs);
+}
+
+.pa-px-deck-card__desc {
+  font-size: 0.95rem;
+  color: var(--pa-graphite);
+  line-height: 1.5;
+}
+
+.pa-px-deck-card__axis {
+  font-family: var(--pa-font-mono);
+  font-size: 0.8rem;
+  color: var(--pa-context);
+  margin-top: var(--px-space-md);
+  padding-top: var(--px-space-sm);
+  border-top: 1px solid var(--pa-paper);
+}
+
+/* ── Chapter 4: Professional Conditions Journey ── */
+.pa-px-ch-conditions {
+  background-color: var(--pa-mineral);
+  padding: var(--px-space-section) 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.pa-px-ch-conditions__header {
+  padding: 0 var(--px-outer-gutter);
+  max-width: 1440px;
+  margin: 0 auto var(--px-space-cluster);
+}
+
+.pa-px-ch-conditions__title {
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
+  color: var(--pa-ink);
+}
+
+.pa-px-conditions-track {
+  display: flex;
+  gap: var(--px-space-cluster);
+  padding: 0 var(--px-outer-gutter);
+  width: max-content;
+}
+
+.pa-px-condition-panel {
+  width: clamp(340px, 45vw, 680px);
+  background-color: var(--pa-white);
+  border-radius: var(--px-radius-sm);
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(23, 25, 24, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.pa-px-condition-panel__media-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--pa-paper);
+}
+
+.pa-px-condition-panel--autonomy .pa-px-condition-panel__media-wrap {
+  aspect-ratio: 4 / 5;
+}
+
+.pa-px-condition-panel__media {
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  z-index: 8;
-  will-change: opacity;
+  object-fit: cover;
+  transition: transform 300ms ease;
 }
 
-.pa-px-readings-field {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 12;
+.pa-px-condition-panel__body {
+  padding: var(--px-space-content);
 }
 
-.pa-px-reading-node {
-  position: absolute;
-  max-width: clamp(200px, 20vw, 290px);
-  will-change: transform, opacity;
-  pointer-events: auto;
-}
-
-.pa-px-reading-node--1 {
-  top: 16%;
-  left: 6vw;
-}
-
-.pa-px-reading-node--2 {
-  top: 16%;
-  right: 6vw;
-}
-
-.pa-px-reading-node--3 {
-  bottom: 18%;
-  left: 8vw;
-}
-
-.pa-px-reading-node--4 {
-  bottom: 18%;
-  right: 8vw;
-}
-
-.pa-px-reading-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
-  font-weight: 500;
-  font-variation-settings: 'wdth' 88, 'opsz' 36;
-  color: var(--px-white);
-  display: block;
+.pa-px-condition-panel__name {
+  font-family: var(--pa-font-mono);
+  font-size: var(--px-caption);
+  color: var(--pa-evidence);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   margin-bottom: 6px;
-  letter-spacing: -0.01em;
 }
 
-.pa-px-reading-desc {
-  font-size: clamp(0.85rem, 1vw, 0.95rem);
-  color: var(--px-soft, #DDE1E3);
-  line-height: 1.4;
-  opacity: 0.92;
+.pa-px-condition-panel__interp {
+  font-size: 1.25rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  line-height: 1.35;
+  margin-bottom: 8px;
 }
 
-/* ── Evidence Layer & 4:5 Target Plate ── */
-.pa-px-home-evidence-root {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 4;
+.pa-px-condition-panel__detail {
+  font-size: 0.95rem;
+  color: var(--pa-graphite);
+  line-height: 1.5;
 }
 
-.pa-px-home-world-primary-wrapper {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+/* ── Chapter 5: Model Atlas ── */
+.pa-px-ch-models {
+  padding: var(--px-space-section) var(--px-outer-gutter);
+  background-color: var(--pa-paper);
 }
 
-.home-evidence-target {
-  position: absolute;
-  top: 22%;
-  left: var(--px-outer-gutter, 6vw);
-  width: clamp(320px, 31vw, 470px);
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border-radius: 2px;
+.pa-px-ch-models__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--px-space-cluster);
 }
 
-.pa-px-home-world-secondary-wrapper {
-  position: absolute;
-  top: 18%;
-  right: var(--px-outer-gutter, 6vw);
-  width: clamp(220px, 22vw, 340px);
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
+.pa-px-models-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.pa-px-support-detail-slot {
-  width: 100%;
-  height: 100%;
+.pa-px-model-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--pa-font-family);
+  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+  font-weight: var(--px-weight-heading);
+  color: var(--pa-context);
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pa-mineral);
+  transition: color 180ms ease, padding-left 180ms ease;
 }
 
-/* ── Workworld 4-Environment Centerpiece Stage ── */
-.pa-px-workworld-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 6;
-  pointer-events: none;
+.pa-px-model-btn:hover,
+.pa-px-model-btn--active {
+  color: var(--pa-ink);
+  padding-left: 12px;
+  border-bottom-color: var(--pa-evidence);
 }
 
-.pa-px-workworld-env {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.pa-px-model-display {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: var(--px-space-cluster);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pa-px-model-display__tag {
+  font-family: var(--pa-font-mono);
+  font-size: var(--px-caption);
+  color: var(--pa-evidence);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.pa-px-model-display__title {
+  font-size: 1.75rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  margin-bottom: 12px;
+}
+
+.pa-px-model-display__desc {
+  font-size: 1.05rem;
+  color: var(--pa-graphite);
+  line-height: 1.55;
+  margin-bottom: var(--px-space-content);
+}
+
+/* ── Chapter 6: Deterministic Calibration Mass ── */
+.pa-px-ch-calibration {
+  background-color: var(--pa-white);
+  padding: var(--px-space-section) var(--px-outer-gutter);
+}
+
+.pa-px-ch-calibration__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.pa-px-ch-calibration__header {
+  margin-bottom: var(--px-space-cluster);
+}
+
+.pa-px-ch-calibration__header h2 {
+  font-size: var(--px-heading-xl);
+  font-weight: var(--px-weight-heading);
+  color: var(--pa-ink);
+  margin-bottom: 8px;
+}
+
+.pa-px-ch-calibration__mass-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--px-space-md);
+  align-items: flex-end;
+  min-height: 320px;
+}
+
+.pa-px-mass-block {
+  background-color: var(--pa-mineral);
+  border-radius: var(--px-radius-xs);
+  padding: var(--px-space-content);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 var(--px-outer-gutter, 6vw) clamp(40px, 8vh, 80px);
-  will-change: transform, opacity;
-}
-
-.pa-px-workworld-media-slot {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.pa-px-workworld-copy {
+  transition: background-color 200ms ease, transform 200ms ease;
   position: relative;
-  z-index: 5;
-  max-width: 44rem;
 }
 
-.pa-px-env-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.4rem, 4.4vw, 4.2rem);
-  font-weight: 520;
-  font-variation-settings: 'wdth' 80, 'opsz' 72;
-  line-height: 1.05;
-  color: var(--px-white);
-  margin-bottom: 8px;
-  letter-spacing: -0.025em;
+.pa-px-mass-block:hover {
+  background-color: var(--pa-paper);
+  transform: translateY(-4px);
 }
 
-.pa-px-env-support {
-  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
-  line-height: 1.4;
-  color: var(--px-soft, #DDE1E3);
-  opacity: 0.95;
-}
-
-/* ── S5: Calibration Spatial Mass Field ── */
-.pa-px-calibration-stage {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 var(--px-outer-gutter, 6vw);
-  z-index: 16;
-  will-change: transform, opacity;
-}
-
-.pa-px-calibration-header {
-  max-width: 44rem;
-  margin-bottom: clamp(24px, 4vh, 48px);
-}
-
-.pa-px-calibration-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+.pa-px-mass-block__pct {
+  font-family: var(--pa-font-mono);
+  font-size: clamp(1.8rem, 3.2vw, 3.4rem);
   font-weight: 500;
-  font-variation-settings: 'wdth' 82, 'opsz' 64;
-  color: var(--px-white);
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
+  color: var(--pa-ink);
+  line-height: 1;
+  margin-bottom: 8px;
 }
 
-.pa-px-calibration-lead {
-  font-size: clamp(1rem, 1.3vw, 1.25rem);
-  color: var(--px-soft, #DDE1E3);
-  line-height: 1.45;
+.pa-px-mass-block__label {
+  font-size: 0.95rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  line-height: 1.3;
 }
 
-.pa-px-calibration-spatial-field,
-.pa-px-calibration-masses-field {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-  min-height: 42vh;
+.pa-px-mass-block__role {
+  font-size: 0.8rem;
+  color: var(--pa-graphite);
+  margin-top: 4px;
+}
+
+/* ── Chapter 7: Career Role Atlas Teaser ── */
+.pa-px-ch-roles {
+  padding: var(--px-space-section) var(--px-outer-gutter);
+  background-color: var(--pa-paper);
+}
+
+.pa-px-ch-roles__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.pa-px-ch-roles__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--px-space-cluster);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pa-px-ch-roles__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--px-space-cluster);
+  align-items: center;
+}
+
+.pa-px-roles-tag-cloud {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
-  gap: clamp(24px, 3.5vw, 56px);
+  gap: 10px;
 }
 
-.pa-px-mass-item {
-  display: flex;
-  flex-direction: column;
-  will-change: transform;
+.pa-px-role-tag {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  padding: 8px 16px;
+  border-radius: var(--px-radius-xs);
+  font-size: 0.95rem;
+  color: var(--pa-graphite);
+  cursor: pointer;
+  transition: all 180ms ease;
 }
 
-/* Freeform Asymmetric Spatial Weights */
-.pa-px-mass--riasec {
-  flex: 1 1 clamp(260px, 28vw, 380px);
+.pa-px-role-tag:hover,
+.pa-px-role-tag--active {
+  background-color: var(--pa-ink);
+  color: var(--pa-white);
+  border-color: var(--pa-ink);
 }
 
-.pa-px-mass--skills {
-  flex: 1 1 clamp(260px, 28vw, 380px);
-}
-
-.pa-px-mass--values {
-  flex: 1 1 clamp(220px, 22vw, 300px);
-  margin-top: clamp(0px, 2vh, 24px);
-}
-
-.pa-px-mass--traits {
-  flex: 1 1 clamp(180px, 18vw, 260px);
-  margin-top: clamp(0px, 4vh, 40px);
-}
-
-.pa-px-mass--education {
-  flex: 1 1 clamp(160px, 15vw, 220px);
-}
-
-.pa-px-mass--goals {
-  flex: 1 1 clamp(140px, 12vw, 180px);
-}
-
-.pa-px-mass-val {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.8rem, 5.5vw, 5rem);
-  font-weight: 540;
-  font-variation-settings: 'wdth' 76, 'opsz' 96;
-  line-height: 0.95;
-  color: var(--px-white);
-  margin-bottom: 8px;
-  letter-spacing: -0.03em;
-}
-
-.pa-px-mass--values .pa-px-mass-val {
-  font-size: clamp(2.4rem, 4.4vw, 4rem);
-}
-
-.pa-px-mass--traits .pa-px-mass-val {
-  font-size: clamp(2rem, 3.6vw, 3.2rem);
-}
-
-.pa-px-mass--education .pa-px-mass-val {
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-}
-
-.pa-px-mass--goals .pa-px-mass-val {
-  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
-}
-
-.pa-px-mass-name {
-  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
-  font-weight: 480;
-  color: var(--px-white);
-  margin-bottom: 2px;
-}
-
-.pa-px-mass-desc {
-  font-size: clamp(0.8rem, 0.95vw, 0.9rem);
-  color: var(--px-soft, #DDE1E3);
-  opacity: 0.85;
-}
-
-
-/* ── S6: Time Exposure Stage ── */
-.pa-px-provenance-time-root {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 18;
-}
-
-.pa-px-time-stage {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 var(--px-outer-gutter, 6vw);
-  will-change: opacity;
-}
-
-.pa-px-time-header {
-  position: relative;
-  z-index: 5;
-  max-width: 44rem;
-  margin-bottom: 24px;
-}
-
-.pa-px-time-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
-  font-weight: 520;
-  font-variation-settings: 'wdth' 80, 'opsz' 84;
-  line-height: 1.1;
-  color: var(--px-white);
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
-}
-
-.pa-px-time-support {
-  font-size: clamp(1rem, 1.3vw, 1.25rem);
-  color: var(--px-soft, #DDE1E3);
-  line-height: 1.5;
-}
-
-.pa-px-time-visual-stage {
-  position: relative;
-  width: 100%;
-  height: 52vh;
+.pa-px-role-preview-card {
+  background-color: var(--pa-white);
+  border-radius: var(--px-radius-sm);
   overflow: hidden;
-  border-radius: 2px;
+  border: 1px solid var(--pa-mineral);
 }
 
-.pa-px-time-baseline-wrapper,
-.pa-px-time-later-wrapper {
-  position: absolute;
-  inset: 0;
+.pa-px-role-preview-media {
   width: 100%;
-  height: 100%;
-}
-
-.pa-px-time-tag {
-  position: absolute;
-  top: 18px;
-  left: 20px;
-  font-size: 0.76rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--px-white);
-  background-color: rgba(18, 20, 22, 0.75);
-  padding: 4px 10px;
-  border-radius: 2px;
-  z-index: 10;
-}
-
-.pa-px-tag--later {
-  left: auto;
-  right: 20px;
-}
-
-/* ── S7: Provenance Stage ── */
-.pa-px-provenance-stage {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 var(--px-outer-gutter, 6vw);
-  cursor: crosshair;
-  z-index: 20;
-  will-change: opacity;
-}
-
-.pa-px-provenance-header {
-  position: relative;
-  z-index: 5;
-  max-width: 44rem;
-  margin-bottom: 24px;
-}
-
-.pa-px-provenance-title {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
-  font-weight: 520;
-  font-variation-settings: 'wdth' 80, 'opsz' 84;
-  line-height: 1.1;
-  color: var(--px-white);
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
-}
-
-.pa-px-provenance-support {
-  font-size: clamp(1rem, 1.3vw, 1.25rem);
-  color: var(--px-soft, #DDE1E3);
-  line-height: 1.5;
-  margin-bottom: 8px;
-}
-
-.pa-px-provenance-hint {
-  font-size: 0.84rem;
-  letter-spacing: 0.04em;
-  color: var(--px-soft, #DDE1E3);
-  opacity: 0.8;
-}
-
-.pa-px-provenance-interactive-canvas {
-  position: relative;
-  width: 100%;
-  height: 52vh;
-  overflow: hidden;
-  border-radius: 2px;
-}
-
-.pa-px-provenance-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.pa-px-provenance-aperture {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  transition: clip-path 40ms linear;
-}
-
-/* ── S8: Finale Synthesis Stage ── */
-.pa-px-finale-stage {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 var(--px-outer-gutter, 6vw);
-  z-index: 22;
-  will-change: transform, opacity;
-}
-
-.pa-px-finale-composition {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  height: 75vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.pa-px-finale-fragment {
-  position: absolute;
-  overflow: hidden;
-  border-radius: 2px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
-}
-
-.pa-px-fragment--1 {
-  top: 6%;
-  left: 2%;
-  width: clamp(180px, 20vw, 280px);
-  aspect-ratio: 4 / 3;
-}
-
-.pa-px-fragment--2 {
-  top: 10%;
-  right: 4%;
-  width: clamp(200px, 22vw, 320px);
   aspect-ratio: 16 / 10;
+  object-fit: cover;
 }
 
-.pa-px-fragment--3 {
-  bottom: 8%;
-  right: 8%;
-  width: clamp(190px, 21vw, 300px);
-  aspect-ratio: 1.5;
+.pa-px-role-preview-info {
+  padding: var(--px-space-content);
 }
 
-.pa-px-finale-trace-mark {
-  position: absolute;
-  bottom: 12%;
-  left: 4%;
-  max-width: 24rem;
-  background-color: rgba(18, 20, 22, 0.85);
-  padding: 16px 20px;
-  border-radius: 2px;
+/* ── Chapter 8: Progress Teaser ── */
+.pa-px-ch-progress-teaser {
+  background-color: var(--pa-white);
+  padding: var(--px-space-section) var(--px-outer-gutter);
 }
 
-.pa-px-trace-mark-pill {
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--px-soft, #DDE1E3);
-  display: block;
-  margin-bottom: 6px;
-}
-
-.pa-px-trace-mark-sentence {
-  font-family: var(--px-font-family);
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--px-white);
-  line-height: 1.35;
-}
-
-.pa-px-finale-content {
-  position: relative;
-  z-index: 10;
-  max-width: 44rem;
+.pa-px-ch-progress-teaser__inner {
+  max-width: 1440px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--px-space-cluster);
+  align-items: center;
+}
+
+/* ── Chapter 9: Source Ledger / Trust Teaser ── */
+.pa-px-ch-trust-teaser {
+  background-color: var(--pa-paper);
+  padding: var(--px-space-section) var(--px-outer-gutter);
+}
+
+.pa-px-ch-trust-teaser__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--px-space-cluster);
+  align-items: center;
+}
+
+/* ── Chapter 10: Finale ── */
+.pa-px-ch-finale {
+  padding: var(--px-space-cinematic) var(--px-outer-gutter);
+  background-color: var(--pa-white);
   text-align: center;
 }
 
-.pa-px-finale-headline {
-  font-family: var(--px-font-family);
-  font-size: clamp(2.4rem, 4.4vw, 4.2rem);
-  font-weight: 520;
-  font-variation-settings: 'wdth' 80, 'opsz' 84;
+.pa-px-ch-finale__inner {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.pa-px-ch-finale__headline {
+  font-size: var(--px-display-lg);
+  font-weight: var(--px-weight-display);
+  color: var(--pa-ink);
+  letter-spacing: -0.03em;
   line-height: 1.05;
-  color: var(--px-white);
-  margin-bottom: 18px;
-  letter-spacing: -0.025em;
+  margin-bottom: var(--px-space-content);
 }
 
-.pa-px-finale-support {
-  font-size: clamp(1.05rem, 1.4vw, 1.35rem);
-  line-height: 1.45;
-  color: var(--px-soft, #DDE1E3);
-  margin-bottom: 32px;
+.pa-px-ch-finale__support {
+  font-size: var(--px-lead);
+  color: var(--pa-graphite);
+  margin-bottom: var(--px-space-lg);
+  line-height: 1.4;
 }
 
-.pa-px-finale-actions {
+.pa-px-ch-finale__actions {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: var(--px-space-md);
   flex-wrap: wrap;
 }
 
-/* ── Mobile Viewports (<=768px) ── */
-@media (max-width: 768px) {
-  .home-evidence-target {
-    top: 18%;
-    left: var(--px-outer-gutter, 5vw);
-    width: clamp(260px, 75vw, 360px);
-    aspect-ratio: 4 / 5;
+@media (max-width: 900px) {
+  .pa-px-ch-poster__grid,
+  .pa-px-ch-response__inner,
+  .pa-px-ch-deck__cards,
+  .pa-px-ch-models__inner,
+  .pa-px-ch-calibration__mass-grid,
+  .pa-px-ch-roles__grid,
+  .pa-px-ch-progress-teaser__inner,
+  .pa-px-ch-trust-teaser__inner {
+    grid-template-columns: 1fr;
   }
-
-  .pa-px-home-world-secondary-wrapper {
-    display: none;
+  .pa-px-ch-poster__type-col,
+  .pa-px-ch-poster__media-col,
+  .pa-px-ch-response__content,
+  .pa-px-ch-response__aside-media {
+    grid-column: 1 / -1;
   }
-
-  .pa-px-calibration-masses-field {
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
+  .pa-px-conditions-track {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
   }
-
-  .pa-px-reading-node--1,
-  .pa-px-reading-node--2,
-  .pa-px-reading-node--3,
-  .pa-px-reading-node--4 {
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    max-width: 100%;
-    margin-bottom: 16px;
-  }
-
-  .pa-px-readings-field {
-    position: absolute;
-    top: 22%;
-    left: 5vw;
-    right: 5vw;
-    height: auto;
-  }
-
-  .pa-px-fragment--1,
-  .pa-px-fragment--2,
-  .pa-px-fragment--3 {
-    display: none;
-  }
-
-  .pa-px-finale-trace-mark {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    margin-bottom: 24px;
-    max-width: 100%;
+  .pa-px-condition-panel {
+    scroll-snap-align: start;
+    min-width: 85vw;
   }
 }

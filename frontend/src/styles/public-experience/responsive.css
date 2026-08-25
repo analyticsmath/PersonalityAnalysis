@@ -1,30 +1,68 @@
 /**
- * Personality Assessor - Public Experience Responsive Matrix
- * Viewport tests: 1440x900, 1366x768, 1024x768, 820x1180, 430x930, 390x844, 360x800
+ * Personality Assessor - Responsive & Mobile Art Direction
+ * Viewports: 360, 390, 412, 768, 1024, 1440+
+ * Strict guarantee: scrollWidth <= clientWidth + 1 everywhere.
  */
 
-@media (max-width: 1023px) {
+/* ── Mobile Viewports (<= 768px) ── */
+@media (max-width: 768px) {
   :root {
-    --px-outer-gutter: 24px;
-    --px-column-gap: 20px;
-  }
-}
-
-@media (max-width: 767px) {
-  :root {
-    --px-outer-gutter: 16px;
+    --px-outer-gutter: 20px;
     --px-column-gap: 16px;
-    --px-header-height-desktop: 60px;
+    --px-display-xl: clamp(2.6rem, 9vw, 3.8rem);
+    --px-display-lg: clamp(2.2rem, 7.5vw, 3.2rem);
+    --px-heading-xl: clamp(1.8rem, 6vw, 2.4rem);
+    --px-lead: clamp(1.2rem, 4vw, 1.5rem);
+    --px-space-section: clamp(48px, 10vw, 72px);
+    --px-space-cinematic: clamp(72px, 14vw, 100px);
   }
 
   .pa-px-btn-primary,
   .pa-px-btn-secondary {
     width: 100%;
-    height: 52px;
+    height: 48px;
   }
 
-  .pa-px-auth-root {
-    padding: 80px 16px 40px;
-    justify-content: center;
+  .pa-px-ch-poster__actions,
+  .pa-px-ch-finale__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .pa-px-ch-poster__actions .pa-px-btn-primary,
+  .pa-px-ch-poster__actions .pa-px-btn-secondary,
+  .pa-px-ch-finale__actions .pa-px-btn-primary,
+  .pa-px-ch-finale__actions .pa-px-btn-secondary {
+    width: 100%;
+  }
+
+  .pa-px-ch-deck__cards {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--px-space-md);
+    gap: var(--px-space-md);
+  }
+
+  .pa-px-deck-card {
+    min-width: 82vw;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}
+
+/* ── Tablet Viewports (769px - 1024px) ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --px-outer-gutter: 32px;
+    --px-column-gap: 20px;
+  }
+}
+
+/* ── Large Viewports (>= 1440px) ── */
+@media (min-width: 1440px) {
+  :root {
+    --px-outer-gutter: clamp(40px, 4.5vw, 68px);
+    --px-column-gap: 24px;
   }
 }
