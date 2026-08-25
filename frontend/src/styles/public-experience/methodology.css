@@ -8,202 +8,259 @@
   width: 100%;
   background-color: var(--pa-paper);
   color: var(--pa-ink);
-  padding: calc(var(--px-header-height-desktop) + var(--px-space-section)) var(--px-outer-gutter) var(--px-space-section);
+  padding: calc(var(--pa-space-cinematic) * 0.7) var(--pa-gutter-macro) var(--pa-space-section);
 }
 
 .pa-px-methodology-hero {
   max-width: 1440px;
-  margin: 0 auto var(--px-space-section);
+  margin: 0 auto var(--pa-space-section);
 }
 
 .pa-px-methodology-hero__headline {
-  font-size: var(--px-display-lg);
-  font-weight: var(--px-weight-display);
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-display-route);
+  font-weight: 580;
   color: var(--pa-ink);
   letter-spacing: -0.03em;
   line-height: 1.0;
-  margin-bottom: var(--px-space-content);
+  margin-bottom: 16px;
 }
 
 .pa-px-methodology-hero__support {
-  font-size: var(--px-lead);
+  font-size: var(--pa-lead);
   color: var(--pa-graphite);
-  max-width: var(--px-measure-lead);
+  max-width: 60ch;
 }
 
-/* ── Publication Layout ── */
-.pa-px-publication-grid {
+/* ── Monograph Layout ── */
+.pa-px-monograph-body {
   max-width: 1440px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: var(--px-space-section);
+  gap: var(--pa-space-section);
 }
 
-.pa-px-pub-section {
+.pa-px-monograph-entry {
   background-color: var(--pa-white);
   border: 1px solid var(--pa-mineral);
-  border-radius: var(--px-radius-sm);
-  padding: var(--px-space-cluster);
+  border-radius: 4px;
+  padding: clamp(24px, 3.5vw, 44px);
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--pa-gutter-column);
+  box-shadow: 0 8px 24px rgba(23, 25, 24, 0.04);
 }
 
-.pa-px-pub-section__header {
-  margin-bottom: var(--px-space-content);
-}
-
-.pa-px-pub-section__role {
-  font-family: var(--pa-font-mono);
-  font-size: var(--px-caption);
-  color: var(--pa-evidence);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 6px;
-}
-
-.pa-px-pub-section__title {
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-  font-weight: var(--px-weight-heading);
-  color: var(--pa-ink);
-  margin-bottom: 8px;
-}
-
-.pa-px-pub-section__desc {
-  font-size: var(--px-body);
-  color: var(--pa-graphite);
-  max-width: var(--px-measure-body);
-  line-height: 1.6;
-}
-
-/* Big Five Dimensional Spectrum */
-.pa-px-spectrum-figure {
-  margin-top: var(--px-space-content);
+.pa-px-monograph-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
+  border-right: 1px solid var(--pa-paper);
+  padding-right: 16px;
 }
 
-.pa-px-spectrum-row {
+.pa-px-monograph-num {
+  color: var(--pa-evidence);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+}
+
+.pa-px-monograph-tag {
+  color: var(--pa-graphite);
+  font-size: 0.78rem;
+}
+
+.pa-px-monograph-main {
   display: flex;
-  align-items: center;
-  gap: var(--px-space-md);
+  flex-direction: column;
+  gap: 16px;
 }
 
-.pa-px-spectrum-name {
-  width: 220px;
-  font-size: 0.95rem;
-  font-weight: var(--px-weight-medium);
-  color: var(--pa-ink);
-}
-
-.pa-px-spectrum-bar-wrap {
-  flex: 1;
-  height: 8px;
+/* ── Continuous Big Five Spectrums ── */
+.pa-px-continuous-spectrums-figure {
   background-color: var(--pa-paper);
-  border-radius: var(--px-radius-xs);
-  position: relative;
-  overflow: hidden;
+  border-radius: 4px;
+  padding: 20px;
+  margin-top: 10px;
 }
 
-.pa-px-spectrum-bar {
+.pa-px-spectrum-axis-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 50px;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pa-px-spectrum-axis-label {
+  font-size: 0.92rem;
+  color: var(--pa-ink);
+  font-weight: 500;
+}
+
+.pa-px-spectrum-axis-track {
+  height: 6px;
+  background-color: var(--pa-mineral);
+  border-radius: 3px;
+  position: relative;
+}
+
+.pa-px-spectrum-axis-fill {
   height: 100%;
   background-color: var(--pa-evidence);
-  border-radius: var(--px-radius-xs);
+  border-radius: 3px;
 }
 
-/* RIASEC Orbit Grid */
-.pa-px-riasec-orbit-grid {
-  margin-top: var(--px-space-content);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--px-space-md);
+.pa-px-spectrum-axis-cursor {
+  position: absolute;
+  top: -4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--pa-ink);
+  transform: translateX(-50%);
 }
 
-.pa-px-orbit-card {
-  background-color: var(--pa-paper);
-  padding: var(--px-space-md);
-  border-radius: var(--px-radius-xs);
-}
-
-.pa-px-orbit-card h4 {
-  font-size: 1.1rem;
-  font-weight: var(--px-weight-medium);
-  color: var(--pa-ink);
-}
-
-/* Proportional Calibration Grid */
-.pa-px-calibration-weights-grid {
-  margin-top: var(--px-space-content);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--px-space-md);
-}
-
-.pa-px-weight-cell {
-  background-color: var(--pa-paper);
-  padding: var(--px-space-md);
-  border-radius: var(--px-radius-xs);
-  border-left: 3px solid var(--pa-evidence);
-}
-
-.pa-px-weight-cell__pct {
-  font-family: var(--pa-font-mono);
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: var(--pa-ink);
-}
-
-.pa-px-weight-cell__label {
-  font-size: 0.95rem;
-  font-weight: var(--px-weight-medium);
-  color: var(--pa-ink);
-}
-
-.pa-px-weight-cell__role {
-  font-size: 0.8rem;
-  color: var(--pa-graphite);
-}
-
-/* Validity States */
-.pa-px-validity-grid {
-  margin-top: var(--px-space-content);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--px-space-md);
-}
-
-.pa-px-validity-card {
-  background-color: var(--pa-paper);
-  padding: var(--px-space-md);
-  border-radius: var(--px-radius-xs);
-}
-
-.pa-px-validity-card h4 {
-  font-family: var(--pa-font-mono);
-  font-size: 1rem;
+.pa-px-spectrum-axis-val {
   color: var(--pa-evidence);
-  margin-bottom: 4px;
+  font-size: 0.82rem;
+  text-align: right;
 }
 
-.pa-px-validity-card p {
-  font-size: 0.85rem;
+/* ── Spatial RIASEC Orbit ── */
+.pa-px-riasec-orbit-stage {
+  background-color: var(--pa-paper);
+  border-radius: 4px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.pa-px-riasec-orbit-svg {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+}
+
+.pa-px-riasec-domain-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pa-px-riasec-node-pill {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  padding: 6px 12px;
+  border-radius: 2px;
+  font-family: var(--pa-font-mono);
+  font-size: 0.78rem;
+  color: var(--pa-ink);
+}
+
+/* ── Values & Signals ── */
+.pa-px-values-monograph-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pa-px-values-monograph-item {
+  background-color: var(--pa-paper);
+  padding: 12px;
+  border-radius: 3px;
+  border-left: 2px solid var(--pa-evidence);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pa-px-signals-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pa-px-signal-chip {
+  background-color: var(--pa-paper);
+  border: 1px solid var(--pa-mineral);
+  padding: 8px 14px;
+  border-radius: 2px;
+  font-family: var(--pa-font-mono);
+  font-size: 0.82rem;
+  color: var(--pa-ink);
+}
+
+/* ── Monograph Weights Strip ── */
+.pa-px-monograph-weights-strip {
+  display: flex;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 10px;
+  border: 1px solid var(--pa-mineral);
+}
+
+/* ── Validity Table ── */
+.pa-px-validity-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.92rem;
+}
+
+.pa-px-validity-table th {
+  text-align: left;
+  padding: 10px 14px;
+  background-color: var(--pa-paper);
+  border-bottom: 2px solid var(--pa-mineral);
+  font-family: var(--pa-font-mono);
+  font-size: 0.82rem;
   color: var(--pa-graphite);
+}
+
+.pa-px-validity-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--pa-paper);
+  color: var(--pa-ink);
   line-height: 1.45;
 }
 
+.pa-px-validity-code {
+  background-color: var(--pa-paper);
+  padding: 4px 8px;
+  border-radius: 2px;
+  color: var(--pa-evidence);
+  font-weight: 600;
+  font-size: 0.84rem;
+}
+
+.pa-px-monograph-limits-callout {
+  background-color: var(--pa-paper);
+  border-left: 3px solid var(--pa-evidence);
+  padding: 16px 20px;
+  border-radius: 3px;
+  margin-top: 12px;
+}
+
 @media (max-width: 900px) {
-  .pa-px-spectrum-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .pa-px-spectrum-name {
-    width: 100%;
-  }
-  .pa-px-spectrum-bar-wrap {
-    width: 100%;
-  }
-  .pa-px-riasec-orbit-grid,
-  .pa-px-calibration-weights-grid,
-  .pa-px-validity-grid {
+  .pa-px-monograph-entry {
     grid-template-columns: 1fr;
   }
+  .pa-px-monograph-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--pa-paper);
+    padding-bottom: 12px;
+  }
+  .pa-px-spectrum-axis-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
+

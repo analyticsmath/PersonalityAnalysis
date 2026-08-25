@@ -5,10 +5,11 @@
  * Survives child route navigations continuously without blank screen flashes.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PublicMotionRoot } from '../motion/PublicMotionRoot';
 import { TransitionPortal } from '../motion/TransitionPortal';
+import { PublicTransitionManager } from '../motion/PublicTransitionManager';
 import { PublicHeader } from '../chrome/PublicHeader';
 import { PublicIndex } from '../chrome/PublicIndex';
 import { PublicFooter } from '../chrome/PublicFooter';
@@ -16,6 +17,7 @@ import { PublicRouteStage } from './PublicRouteStage';
 
 export const PublicExperienceLayout = () => {
   const [indexOpen, setIndexOpen] = useState(false);
+  const triggerRef = useRef(null);
   const location = useLocation();
 
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
@@ -31,8 +33,15 @@ export const PublicExperienceLayout = () => {
         {/* Fixed DOM-First Transition Portal Layer */}
         <TransitionPortal />
 
+        {/* Active Route Transition Orchestration Engine */}
+        <PublicTransitionManager />
+
         {/* Persistent Editorial Header */}
-        <PublicHeader onOpenIndex={() => setIndexOpen(true)} />
+        <PublicHeader
+          onOpenIndex={() => setIndexOpen(true)}
+          isIndexOpen={indexOpen}
+          triggerRef={triggerRef}
+        />
 
         {/* Transition-Aware Route DOM Stage */}
         <main id="main-content" tabIndex="-1" style={{ outline: 'none' }}>
@@ -42,7 +51,11 @@ export const PublicExperienceLayout = () => {
         </main>
 
         {/* Creative Site Index Overlay */}
-        <PublicIndex isOpen={indexOpen} onClose={() => setIndexOpen(false)} />
+        <PublicIndex
+          isOpen={indexOpen}
+          onClose={() => setIndexOpen(false)}
+          triggerRef={triggerRef}
+        />
 
         {/* Quiet Utility Footer on Non-Auth Routes */}
         {!isAuthRoute && <PublicFooter />}

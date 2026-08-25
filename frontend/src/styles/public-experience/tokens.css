@@ -42,43 +42,55 @@
   --px-weight-medium: 520;
   --px-weight-bold: 580;
 
-  /* ── Type Scale ── */
-  --px-display-xl: clamp(4.4rem, 8.2vw, 8.8rem);
-  --px-display-lg: clamp(3.3rem, 6vw, 6.6rem);
-  --px-heading-xl: clamp(2.5rem, 4.5vw, 4.8rem);
-  --px-lead: clamp(1.6rem, 2.8vw, 2.8rem);
-  --px-heading-lg: clamp(1.6rem, 2.8vw, 2.8rem);
-  --px-heading-md: clamp(1.25rem, 2vw, 1.75rem);
-  --px-body-lg: clamp(1.08rem, 1.3vw, 1.35rem);
-  --px-body: clamp(1rem, 1.05vw, 1.125rem);
-  --px-body-sm: 0.9rem;
-  --px-evidence: clamp(1.15rem, 1.4vw, 1.65rem);
-  --px-caption: clamp(0.75rem, 0.85vw, 0.875rem);
-  --px-data: clamp(0.75rem, 0.85vw, 0.875rem);
+  /* ── Calibrated Type Scale (Section 5.1) ── */
+  --pa-display-hero: clamp(3.6rem, 6.4vw, 7.2rem);
+  --pa-display-route: clamp(2.8rem, 4.6vw, 5.2rem);
+  --pa-heading-section: clamp(2.0rem, 3.0vw, 3.4rem);
+  --pa-heading-subsection: clamp(1.35rem, 1.9vw, 2.0rem);
+  --pa-lead: clamp(1.18rem, 1.55vw, 1.55rem);
+  --pa-body-lg: clamp(1.05rem, 1.15vw, 1.25rem);
+  --pa-body: clamp(0.98rem, 1vw, 1.08rem);
+  --pa-data: clamp(0.72rem, 0.8vw, 0.84rem);
+
+  /* ── Backward-Compatible Scale Mappings (Recalibrated) ── */
+  --px-display-xl: var(--pa-display-hero);
+  --px-display-lg: var(--pa-display-route);
+  --px-heading-xl: var(--pa-heading-section);
+  --px-heading-lg: var(--pa-heading-subsection);
+  --px-heading-md: clamp(1.15rem, 1.4vw, 1.45rem);
+  --px-lead: var(--pa-lead);
+  --px-body-lg: var(--pa-body-lg);
+  --px-body: var(--pa-body);
+  --px-body-sm: 0.88rem;
+  --px-evidence: clamp(1.05rem, 1.25vw, 1.35rem);
+  --px-caption: clamp(0.72rem, 0.8vw, 0.84rem);
+  --px-data: var(--pa-data);
 
   /* ── Spatial Layout & Rhythm ── */
-  --px-outer-gutter: clamp(24px, 4.5vw, 68px);
+  --px-outer-gutter: clamp(20px, 4vw, 56px);
   --px-column-gap: clamp(16px, 2vw, 28px);
   --px-measure-body: 65ch;
-  --px-measure-lead: 38ch;
+  --px-measure-lead: 42ch;
   --px-radius-xs: 2px;
-  --px-radius-sm: 4px;
+  --px-radius-sm: 3px;
   --px-radius-media: 4px;
 
-  /* ── Spacing Tokens ── */
+  /* ── Calibrated Spacing Tokens (Reduced 20-35% per Section 5.2) ── */
+  --pa-space-section: clamp(48px, 6vw, 88px);
+  --pa-space-cinematic: clamp(88px, 10vw, 132px);
   --px-space-micro: 4px;
   --px-space-xs: 8px;
   --px-space-sm: 12px;
   --px-space-md: 16px;
-  --px-space-content: 24px;
-  --px-space-lg: 32px;
-  --px-space-cluster: 40px;
-  --px-space-xl: 48px;
-  --px-space-section: clamp(64px, 8vw, 112px);
-  --px-space-cinematic: clamp(120px, 14vw, 180px);
+  --px-space-content: 20px;
+  --px-space-lg: 28px;
+  --px-space-cluster: clamp(24px, 3.5vw, 36px);
+  --px-space-xl: 36px;
+  --px-space-section: var(--pa-space-section);
+  --px-space-cinematic: var(--pa-space-cinematic);
 
   /* ── Header Heights ── */
-  --px-header-height-desktop: 72px;
-  --px-header-height-tablet: 66px;
-  --px-header-height-mobile: 60px;
+  --px-header-height-desktop: 68px;
+  --px-header-height-tablet: 62px;
+  --px-header-height-mobile: 56px;
 }

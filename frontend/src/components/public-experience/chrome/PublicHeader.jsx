@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getSignupAcquisitionUrl, getLoginUrl } from '../../../content/public-experience/navigation';
 
-export const PublicHeader = ({ onOpenIndex }) => {
+export const PublicHeader = ({ onOpenIndex, isIndexOpen = false, triggerRef }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
@@ -60,11 +60,12 @@ export const PublicHeader = ({ onOpenIndex }) => {
 
       <div className="pa-px-header__actions">
         <button
+          ref={triggerRef}
           type="button"
           onClick={onOpenIndex}
           className="pa-px-header__index-btn"
           aria-haspopup="dialog"
-          aria-expanded="false"
+          aria-expanded={isIndexOpen ? 'true' : 'false'}
           aria-label="Open Site Index Menu"
         >
           Index

@@ -291,7 +291,7 @@ export const PUBLIC_CONTENT = {
         name: 'Inferred',
         title: 'Trait vectors and dimensions',
         description: 'Continuous Big Five and RIASEC scores calculated through psychometric models with explicit validity checks.',
-        details: 'Validity state: valid (full confidence) | Conscientiousness: 78 | Emotional Stability: 64 | Investigative: 72 | Conventional: 68',
+        details: 'Validity state: valid (meets dimension threshold checks) | Conscientiousness: 78 | Emotional Stability: 64 | Investigative: 72 | Conventional: 68',
       },
       {
         id: 'calculated',
@@ -305,7 +305,7 @@ export const PUBLIC_CONTENT = {
         name: 'Compared',
         title: 'Occupational benchmarks',
         description: 'Contextual comparison against 17 canonical engineering, design, and analytical profiles.',
-        details: 'Top alignment: Systems Architect (91%), Staff Software Engineer (88%), Research Analyst (85%)',
+        details: 'Illustrative sample alignment: Software Engineer, Systems Architect, Data Analyst',
       },
       {
         id: 'controlled',
@@ -325,7 +325,7 @@ export const PUBLIC_CONTENT = {
       {
         id: 'ai-transparency',
         label: 'AI processing transparency',
-        description: 'AI is utilized solely for narrative summarization while scoring calculations remain 100% deterministic code.',
+        description: 'Final scoring formulas are deterministic. AI-assisted profile/CV processing may provide structured inputs used by those formulas, and generative AI may also support narrative interpretation. AI does not replace the deterministic scoring formula.',
         link: '/methodology',
       },
       {
@@ -378,9 +378,9 @@ export const PUBLIC_CONTENT = {
         description: 'The scoring system reports real validity states (valid, partial, and insufficient_data) rather than fabricating false confidence values.',
       },
       aiNarrative: {
-        title: 'Role of AI Commentary',
-        role: 'Explanatory Synthesis Only',
-        description: 'AI is strictly utilized for contextual narrative summarization. Psychometric scoring, trait calculations, and career fit algorithms are 100% deterministic code.',
+        title: 'Role of AI in Assessment Processing',
+        role: 'Structured Inputs and Synthesis',
+        description: 'Final scoring formulas are deterministic. AI-assisted profile and CV processing may provide structured inputs used by those formulas, and generative AI may also support contextual narrative interpretation. AI does not replace the deterministic scoring formula.',
       },
       limits: {
         title: 'Scientific Boundaries & Non-Clinical Scope',

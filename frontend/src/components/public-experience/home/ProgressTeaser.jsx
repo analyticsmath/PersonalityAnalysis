@@ -5,58 +5,84 @@ import { PublicPicture } from '../media/PublicPicture';
 
 export const ProgressTeaser = () => {
   const data = PUBLIC_CONTENT.home.timeExposure;
-  const [temporalState, setTemporalState] = useState('baseline');
+  const [scrubValue, setScrubValue] = useState(0); // 0 = baseline, 1 = later
+
+  const isLater = scrubValue > 0.5;
 
   return (
-    <section className="pa-px-ch-progress-teaser" aria-label="Progress Longitudinal Teaser">
-      <div className="pa-px-ch-progress-teaser__inner">
-        <div>
-          <span className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase' }}>
-            Longitudinal Tracking
-          </span>
-          <h2 className="pa-px-heading-xl" style={{ marginTop: '8px', marginBottom: '16px' }}>
-            {data.headline}
-          </h2>
-          <p className="pa-px-body-lg" style={{ marginBottom: '24px' }}>
+    <section className="pa-px-ch-progress-teaser pa-px-temporal-teaser-stage" aria-label="Progress Longitudinal Teaser">
+      <div className="pa-px-temporal-teaser__inner">
+        <div className="pa-px-temporal-teaser__content">
+          <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
+            LONGITUDINAL EVIDENCE &middot; TEMPORAL SCRUB
+          </div>
+          <h2 className="pa-px-heading-xl">{data.headline}</h2>
+          <p className="pa-px-lead" style={{ marginBottom: '24px' }}>
             {data.support}
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
-            <button
-              type="button"
-              className={`pa-px-btn-${temporalState === 'baseline' ? 'primary' : 'secondary'}`}
-              style={{ height: '42px', padding: '0 18px', fontSize: '0.9rem' }}
-              onClick={() => setTemporalState('baseline')}
-            >
-              {data.baselineLabel}
-            </button>
-            <button
-              type="button"
-              className={`pa-px-btn-${temporalState === 'later' ? 'primary' : 'secondary'}`}
-              style={{ height: '42px', padding: '0 18px', fontSize: '0.9rem' }}
-              onClick={() => setTemporalState('later')}
-            >
-              {data.laterLabel}
-            </button>
-          </div>
-
-          <Link to="/progress" className="pa-px-btn-text">
-            Explore Longitudinal Progress &rarr;
-          </Link>
-        </div>
-
-        <div style={{ background: 'var(--pa-paper)', padding: 'var(--px-space-content)', borderRadius: 'var(--px-radius-sm)', border: '1px solid var(--pa-mineral)' }}>
-          <div style={{ width: '100%', aspectRatio: '16 / 10', borderRadius: 'var(--px-radius-xs)', overflow: 'hidden', marginBottom: '16px' }}>
-            <PublicPicture
-              assetKey={temporalState === 'baseline' ? 'homeSituationDetail' : 'workworldAutonomy'}
-              alt={temporalState === 'baseline' ? 'Initial baseline assessment context' : 'Shifted later responsibilities context'}
+          {/* Interactive Temporal Scrub Slider Control */}
+          <div className="pa-px-mini-scrub-wrap">
+            <div className="pa-px-mini-scrub-labels">
+              <span className={`pa-px-data ${!isLater ? 'pa-px-data--active' : ''}`}>
+                {data.baselineLabel}
+              </span>
+              <span className={`pa-px-data ${isLater ? 'pa-px-data--active' : ''}`}>
+                {data.laterLabel}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={scrubValue}
+              onChange={(e) => setScrubValue(parseFloat(e.target.value))}
+              className="pa-px-temporal-scrub-input"
+              aria-label="Temporal progress scrub control"
             />
           </div>
-          <div className="pa-px-body" style={{ fontWeight: 500, color: 'var(--pa-ink)' }}>
-            {temporalState === 'baseline' ? data.stabilityFinding : data.adaptationFinding}
+
+          <div style={{ marginTop: '24px' }}>
+            <Link to="/progress" className="pa-px-btn-secondary">
+              Explore Full Longitudinal Route &rarr;
+            </Link>
           </div>
-          <div className="pa-px-data" style={{ marginTop: '6px' }}>
-            {data.disclaimer}
+        </div>
+
+        {/* Morphing Context Record Plate */}
+        <div className="pa-px-temporal-teaser__card" aria-live="polite">
+          <div className="pa-px-temporal-teaser__media-frame">
+            <div
+              className="pa-px-temporal-teaser__media-layer"
+              style={{ opacity: 1 - scrubValue }}
+            >
+              <PublicPicture
+                assetKey="homeSituationDetail"
+                alt="Initial baseline assessment context"
+              />
+            </div>
+            <div
+              className="pa-px-temporal-teaser__media-layer"
+              style={{ opacity: scrubValue }}
+            >
+              <PublicPicture
+                assetKey="workworldAutonomy"
+                alt="Shifted later responsibilities context"
+              />
+            </div>
+          </div>
+
+          <div className="pa-px-temporal-teaser__body">
+            <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', marginBottom: '4px' }}>
+              {isLater ? 'LATER RESPONSIBILITIES CONTEXT' : 'BASELINE PROVENANCE RECORD'}
+            </div>
+            <p className="pa-px-body" style={{ color: 'var(--pa-ink)', fontWeight: 500 }}>
+              {isLater ? data.adaptationFinding : data.stabilityFinding}
+            </p>
+            <div className="pa-px-data" style={{ marginTop: '8px', color: 'var(--pa-context)' }}>
+              {data.disclaimer} &middot; Held Traits: Conscientiousness, Technical Inquiry
+            </div>
           </div>
         </div>
       </div>

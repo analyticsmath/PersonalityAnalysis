@@ -10,14 +10,14 @@ import { PublicExperienceLayout } from './components/public-experience/shell/Pub
 
 // Public Experience Canonical Routes
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
-const LoginPage = lazy(() => import('./pages/Auth/LoginPage'));
-const SignupPage = lazy(() => import('./pages/Auth/SignupPage'));
-const EditorialHowItWorksPage = lazy(() => import('./pages/editorial/EditorialHowItWorksPage'));
-const EditorialCareerIntelligencePage = lazy(() => import('./pages/editorial/EditorialCareerIntelligencePage'));
-const EditorialProgressPage = lazy(() => import('./pages/editorial/EditorialProgressPage'));
-const EditorialMethodologyPage = lazy(() => import('./pages/editorial/EditorialMethodologyPage'));
-const EditorialTrustPage = lazy(() => import('./pages/editorial/EditorialTrustPage'));
-const EditorialPrivacyPage = lazy(() => import('./pages/editorial/EditorialPrivacyPage'));
+import LoginPage from './pages/Auth/LoginPage';
+import SignupPage from './pages/Auth/SignupPage';
+import EditorialHowItWorksPage from './pages/editorial/EditorialHowItWorksPage';
+import EditorialCareerIntelligencePage from './pages/editorial/EditorialCareerIntelligencePage';
+import EditorialProgressPage from './pages/editorial/EditorialProgressPage';
+import EditorialMethodologyPage from './pages/editorial/EditorialMethodologyPage';
+import EditorialTrustPage from './pages/editorial/EditorialTrustPage';
+import EditorialPrivacyPage from './pages/editorial/EditorialPrivacyPage';
 import PublicNotFoundPage from './pages/PublicNotFoundPage';
 
 // Protected Application Routes (Preserved)
@@ -78,6 +78,7 @@ const AppRoutes = () => {
           <Route path="/methodology" element={<EditorialMethodologyPage />} />
           <Route path="/trust" element={<EditorialTrustPage />} />
           <Route path="/privacy" element={<EditorialPrivacyPage />} />
+          <Route path="/terms" element={<Navigate to="/privacy" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="*" element={<PublicNotFoundPage />} />

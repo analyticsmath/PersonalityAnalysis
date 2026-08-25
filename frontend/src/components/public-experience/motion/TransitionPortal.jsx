@@ -8,6 +8,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas2DPixelReconstruction } from './PixelReconstructionEngine';
+import { MEDIA_MANIFEST_PX } from '../../../content/public-experience/mediaManifest';
 
 class TransitionPortalController {
   constructor() {
@@ -150,34 +151,39 @@ export const TransitionPortal = () => {
       aria-hidden="true"
     >
       {/* 1. Shared Media Picture Clone */}
-      {state.family === 'SHARED_MEDIA' && state.cloneRect && (
-        <div
-          className="pa-px-transition-media-clone"
-          style={{
-            position: 'absolute',
-            left: `${state.cloneRect.x}px`,
-            top: `${state.cloneRect.y}px`,
-            width: `${state.cloneRect.width}px`,
-            height: `${state.cloneRect.height}px`,
-            opacity: state.opacity,
-            overflow: 'hidden',
-            borderRadius: '2px',
-            boxShadow: '0 20px 48px rgba(0, 0, 0, 0.45)',
-            willChange: 'transform, left, top, width, height, opacity',
-          }}
-        >
-          <img
-            src={state.assetKey === 'homeWorldEntry' ? '/images/evidence/evidence-home-primary.jpg' : '/images/evidence/evidence-career-precision.jpg'}
-            alt={state.alt || ''}
+      {state.family === 'SHARED_MEDIA' && state.cloneRect && (() => {
+        const mediaAsset = MEDIA_MANIFEST_PX[state.assetKey] || MEDIA_MANIFEST_PX.homeWorldEntry;
+        const imgSrc = mediaAsset?.sourceWebp || mediaAsset?.fallbackJpg || '/media/public-experience/homeWorldEntry-720.webp';
+        return (
+          <div
+            className="pa-px-transition-media-clone"
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: '50% 50%',
+              position: 'absolute',
+              left: `${state.cloneRect.x}px`,
+              top: `${state.cloneRect.y}px`,
+              width: `${state.cloneRect.width}px`,
+              height: `${state.cloneRect.height}px`,
+              opacity: state.opacity,
+              overflow: 'hidden',
+              borderRadius: '3px',
+              boxShadow: '0 16px 36px rgba(23, 25, 24, 0.12)',
+              willChange: 'transform, left, top, width, height, opacity',
             }}
-          />
-        </div>
-      )}
+          >
+            <img
+              src={imgSrc}
+              alt=""
+              aria-hidden="true"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: '50% 50%',
+              }}
+            />
+          </div>
+        );
+      })()}
 
       {/* 2. Shared Phrase Typographic Clone */}
       {state.family === 'SHARED_PHRASE' && state.phraseData && (
@@ -189,10 +195,10 @@ export const TransitionPortal = () => {
             top: `${state.phraseData.rect.y}px`,
             width: `${state.phraseData.rect.width}px`,
             opacity: state.opacity,
-            fontSize: 'clamp(1.4rem, 2.4vw, 2.2rem)',
+            fontSize: 'clamp(1.2rem, 2vw, 1.8rem)',
             fontWeight: 500,
             fontVariationSettings: state.phraseData.fontSettings || "'wdth' 90",
-            color: 'var(--px-white, #F7F8F8)',
+            color: 'var(--pa-ink, #171918)',
             lineHeight: 1.25,
             willChange: 'transform, left, top, width, opacity',
           }}

@@ -1,6 +1,6 @@
 /**
  * Personality Assessor - Home Route Styling (10 Authored Chapters)
- * Editorial Evidence Atlas: Light paper grounds, asymmetrical grids, horizontal conditions track.
+ * Editorial Evidence Atlas: Light paper grounds, asymmetrical grids, multi-plane motion.
  * Zero CSS gradients, zero full-screen dark sheets.
  */
 
@@ -11,87 +11,156 @@
   overflow-x: hidden;
 }
 
-/* ── Chapter 1: Thesis Poster ── */
-.pa-px-ch-poster {
-  min-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: calc(var(--px-header-height-desktop) + var(--px-space-section)) var(--px-outer-gutter) var(--px-space-section);
+/* ── Chapter 1: Unified Thesis Poster ── */
+.pa-px-hero-field {
+  min-height: clamp(560px, 86svh, 880px);
   position: relative;
   background-color: var(--pa-paper);
+  padding: calc(var(--pa-space-cinematic) * 0.7) var(--pa-gutter-macro) var(--pa-space-section);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
-.pa-px-ch-poster__grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: var(--px-column-gap);
-  align-items: center;
+.pa-px-hero-field__composition {
+  position: relative;
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+  min-height: clamp(480px, 72svh, 720px);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+}
+
+.pa-px-hero-field__media-plane {
+  grid-column: 5 / 13;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
   width: 100%;
+  height: clamp(380px, 64svh, 620px);
 }
 
-.pa-px-ch-poster__type-col {
+.pa-px-hero-field__media-frame {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--pa-mineral);
+  box-shadow: 0 16px 40px rgba(23, 25, 24, 0.07);
+}
+
+.pa-px-hero-field__media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+}
+
+.pa-px-hero-field__editorial-layer {
   grid-column: 1 / 9;
+  grid-row: 1;
   z-index: 2;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-space-md);
 }
 
-.pa-px-ch-poster__headline {
-  font-family: var(--pa-font-family);
-  font-size: var(--px-display-xl);
-  font-weight: var(--px-weight-display);
-  line-height: 0.94;
+.pa-px-hero-field__content {
+  background-color: rgba(244, 245, 242, 0.88);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: clamp(20px, 2.5vw, 36px);
+  border-radius: 4px;
+  border: 1px solid rgba(233, 236, 232, 0.6);
+  max-width: 680px;
+}
+
+.pa-px-hero-field__kicker {
+  color: var(--pa-evidence);
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.pa-px-hero-field__headline {
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-display-hero);
+  font-weight: 580;
+  line-height: 0.95;
   letter-spacing: -0.035em;
   color: var(--pa-ink);
-  margin-bottom: var(--px-space-content);
+  margin: 0 0 16px 0;
 }
 
-.pa-px-ch-poster__support {
-  font-size: var(--px-lead);
+.pa-px-hero-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.pa-px-hero-line {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.pa-px-hero-field__support {
+  font-size: var(--pa-lead);
   line-height: 1.35;
   color: var(--pa-graphite);
-  max-width: var(--px-measure-lead);
-  margin-bottom: var(--px-space-lg);
+  max-width: 52ch;
+  margin-bottom: 24px;
 }
 
-.pa-px-ch-poster__actions {
+.pa-px-hero-field__actions {
   display: flex;
-  align-items: center;
-  gap: var(--px-space-md);
+  gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
-.pa-px-ch-poster__media-col {
-  grid-column: 8 / 13;
-  z-index: 1;
-  position: relative;
+.pa-px-hero-field__source-actor {
+  margin-top: 12px;
 }
 
-.pa-px-ch-poster__media-frame {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border-radius: var(--px-radius-sm);
-  background-color: var(--pa-mineral);
-  box-shadow: 0 16px 36px rgba(23, 25, 24, 0.08);
+.pa-px-hero-field__source-plate {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--pa-white);
+  padding: 10px 14px;
+  border-radius: 4px;
+  border-left: 3px solid var(--pa-evidence);
+  box-shadow: 0 6px 16px rgba(23, 25, 24, 0.04);
 }
 
-.pa-px-ch-poster__source-cue {
-  margin-top: var(--px-space-cluster);
-  grid-column: 1 / 13;
+.pa-px-hero-field__source-tag {
+  color: var(--pa-evidence);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.pa-px-hero-field__source-text {
+  font-family: var(--pa-font-display);
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--pa-ink);
+  margin: 0;
+}
+
+.pa-px-hero-field__path-wrap {
   display: flex;
   align-items: center;
-  gap: var(--px-space-sm);
-  font-family: var(--pa-font-mono);
-  font-size: var(--px-data);
-  color: var(--pa-evidence);
+  gap: 8px;
+  margin-top: 4px;
 }
 
 /* ── Chapter 2: One Response Spread ── */
 .pa-px-ch-response {
   background-color: var(--pa-white);
-  padding: var(--px-space-section) var(--px-outer-gutter);
+  padding: var(--pa-space-section) var(--pa-gutter-macro);
+  border-top: 1px solid var(--pa-mineral);
+  border-bottom: 1px solid var(--pa-mineral);
 }
 
 .pa-px-ch-response__inner {
@@ -99,454 +168,812 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: var(--px-column-gap);
+  gap: var(--pa-gutter-column);
   align-items: center;
 }
 
 .pa-px-ch-response__content {
-  grid-column: 1 / 9;
+  grid-column: 1 / 8;
 }
 
-.pa-px-ch-response__prompt {
-  font-family: var(--pa-font-mono);
-  font-size: var(--px-caption);
-  color: var(--pa-context);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: var(--px-space-xs);
-}
-
-.pa-px-ch-response__quote {
-  font-family: var(--pa-font-family);
-  font-size: clamp(2rem, 3.8vw, 3.8rem);
-  font-weight: var(--px-weight-heading);
-  line-height: 1.12;
+.pa-px-ch-response__quote-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-heading-section);
+  font-weight: 540;
+  line-height: 1.15;
   letter-spacing: -0.025em;
   color: var(--pa-ink);
-  margin-bottom: var(--px-space-content);
+  margin: 16px 0 24px 0;
 }
 
-.pa-px-ch-response__highlight {
+.pa-px-ch-response__clause--primary {
   color: var(--pa-evidence);
-  border-bottom: 2px solid var(--pa-evidence);
-  padding-bottom: 2px;
+  will-change: transform;
+}
+
+.pa-px-ch-response__clause--secondary {
+  color: var(--pa-ink);
+  will-change: transform;
+}
+
+.pa-px-ch-response__explanation {
+  max-width: 58ch;
+}
+
+.pa-px-ch-response__provenance {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  color: var(--pa-evidence);
 }
 
 .pa-px-ch-response__aside-media {
-  grid-column: 10 / 13;
+  grid-column: 9 / 13;
 }
 
 .pa-px-ch-response__plate {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: var(--px-radius-sm);
+  border-radius: 4px;
   background-color: var(--pa-mineral);
+  box-shadow: 0 10px 24px rgba(23, 25, 24, 0.05);
 }
 
-/* ── Chapter 3: Evidence Deck ── */
-.pa-px-ch-deck {
-  padding: var(--px-space-section) var(--px-outer-gutter);
+/* ── Chapter 3: Overlapping Evidence Objects Deck ── */
+.pa-px-evidence-objects-stage {
+  padding: var(--pa-space-section) var(--pa-gutter-macro);
   background-color: var(--pa-paper);
 }
 
-.pa-px-ch-deck__header {
+.pa-px-deck__header {
   max-width: 1440px;
-  margin: 0 auto var(--px-space-cluster);
+  margin: 0 auto 36px auto;
 }
 
-.pa-px-ch-deck__header h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.02em;
-  color: var(--pa-ink);
-}
-
-.pa-px-ch-deck__cards {
+.pa-px-evidence-objects-field {
   max-width: 1440px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--px-space-content);
+  gap: 16px;
+  position: relative;
 }
 
-.pa-px-deck-card {
+.pa-px-evidence-object {
+  position: relative;
+  z-index: var(--record-z-index, 1);
+  transform: rotate(var(--record-rotation, 0deg));
+  transition: transform 260ms cubic-bezier(0.2, 0, 0, 1), box-shadow 260ms ease, border-color 260ms ease;
+  cursor: pointer;
+  outline: none;
+}
+
+.pa-px-evidence-object:hover,
+.pa-px-evidence-object:focus-visible,
+.pa-px-evidence-object--selected {
+  transform: translateY(-8px) scale(1.02) rotate(0deg) !important;
+  z-index: 12 !important;
+}
+
+.pa-px-evidence-object__surface {
   background-color: var(--pa-white);
   border: 1px solid var(--pa-mineral);
-  border-radius: var(--px-radius-sm);
-  padding: var(--px-space-content);
+  border-radius: 4px;
+  padding: 20px;
+  min-height: 340px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 320px;
-  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-  cursor: default;
+  box-shadow: 0 8px 24px rgba(23, 25, 24, 0.04);
 }
 
-.pa-px-deck-card:hover,
-.pa-px-deck-card:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(23, 25, 24, 0.08);
+.pa-px-evidence-object--selected .pa-px-evidence-object__surface {
   border-color: var(--pa-evidence);
+  box-shadow: 0 16px 36px rgba(113, 54, 65, 0.09);
 }
 
-.pa-px-deck-card__tag {
-  font-family: var(--pa-font-mono);
-  font-size: var(--px-caption);
+.pa-px-evidence-object__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--pa-paper);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.pa-px-evidence-object__prov {
   color: var(--pa-evidence);
-  text-transform: uppercase;
+  font-size: 0.72rem;
 }
 
-.pa-px-deck-card__title {
-  font-size: 1.35rem;
-  font-weight: var(--px-weight-medium);
-  color: var(--pa-ink);
-  margin-top: var(--px-space-xs);
-  margin-bottom: var(--px-space-xs);
-}
-
-.pa-px-deck-card__desc {
-  font-size: 0.95rem;
+.pa-px-evidence-object__framework {
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
   color: var(--pa-graphite);
-  line-height: 1.5;
-}
-
-.pa-px-deck-card__axis {
-  font-family: var(--pa-font-mono);
-  font-size: 0.8rem;
-  color: var(--pa-context);
-  margin-top: var(--px-space-md);
-  padding-top: var(--px-space-sm);
-  border-top: 1px solid var(--pa-paper);
-}
-
-/* ── Chapter 4: Professional Conditions Journey ── */
-.pa-px-ch-conditions {
-  background-color: var(--pa-mineral);
-  padding: var(--px-space-section) 0;
-  overflow: hidden;
-  position: relative;
-}
-
-.pa-px-ch-conditions__header {
-  padding: 0 var(--px-outer-gutter);
-  max-width: 1440px;
-  margin: 0 auto var(--px-space-cluster);
-}
-
-.pa-px-ch-conditions__title {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  color: var(--pa-ink);
-}
-
-.pa-px-conditions-track {
-  display: flex;
-  gap: var(--px-space-cluster);
-  padding: 0 var(--px-outer-gutter);
-  width: max-content;
-}
-
-.pa-px-condition-panel {
-  width: clamp(340px, 45vw, 680px);
-  background-color: var(--pa-white);
-  border-radius: var(--px-radius-sm);
-  overflow: hidden;
-  box-shadow: 0 16px 36px rgba(23, 25, 24, 0.06);
-  display: flex;
-  flex-direction: column;
-}
-
-.pa-px-condition-panel__media-wrap {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  position: relative;
-  background-color: var(--pa-paper);
-}
-
-.pa-px-condition-panel--autonomy .pa-px-condition-panel__media-wrap {
-  aspect-ratio: 4 / 5;
-}
-
-.pa-px-condition-panel__media {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 300ms ease;
-}
-
-.pa-px-condition-panel__body {
-  padding: var(--px-space-content);
-}
-
-.pa-px-condition-panel__name {
-  font-family: var(--pa-font-mono);
-  font-size: var(--px-caption);
-  color: var(--pa-evidence);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 6px;
 }
 
-.pa-px-condition-panel__interp {
-  font-size: 1.25rem;
-  font-weight: var(--px-weight-medium);
+.pa-px-evidence-object__summary {
+  font-size: 1.18rem;
+  font-weight: 560;
   color: var(--pa-ink);
-  line-height: 1.35;
+  line-height: 1.25;
   margin-bottom: 8px;
 }
 
-.pa-px-condition-panel__detail {
-  font-size: 0.95rem;
+.pa-px-evidence-object__detail {
+  font-size: 0.9rem;
   color: var(--pa-graphite);
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
-/* ── Chapter 5: Model Atlas ── */
-.pa-px-ch-models {
-  padding: var(--px-space-section) var(--px-outer-gutter);
+.pa-px-evidence-object__source-fragment {
+  margin-top: 14px;
+  padding: 10px;
+  background-color: var(--pa-paper);
+  border-radius: 3px;
+  border-left: 2px solid var(--pa-evidence);
+}
+
+.pa-px-evidence-object__metric-pill {
+  font-family: var(--pa-font-mono);
+  font-size: 0.76rem;
+  color: var(--pa-ink);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.pa-px-evidence-object__footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--pa-paper);
+  padding-top: 8px;
+}
+
+.pa-px-evidence-object__axis {
+  color: var(--pa-context);
+  font-size: 0.72rem;
+}
+
+.pa-px-evidence-object__status-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--pa-evidence);
+}
+
+/* ── Chapter 4: Flagship Multi-Plane Professional Conditions Stage ── */
+.pa-px-conditions-pinned-stage {
+  background-color: var(--pa-mineral);
+  padding: var(--pa-space-section) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.pa-px-conditions-stage__header {
+  padding: 0 var(--pa-gutter-macro);
+  max-width: 1440px;
+  margin: 0 auto 28px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pa-px-conditions-stage__title {
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-heading-section);
+  font-weight: 560;
+  color: var(--pa-ink);
+  margin: 0;
+}
+
+.pa-px-conditions-progress-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pa-px-cond-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(23, 25, 24, 0.2);
+  transition: all 240ms ease;
+}
+
+.pa-px-cond-dot--active {
+  background-color: var(--pa-evidence);
+  transform: scale(1.3);
+}
+
+.pa-px-conditions-stage__viewport {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: clamp(480px, 68svh, 680px);
+  padding: 0 var(--pa-gutter-macro);
+}
+
+.pa-px-condition-silhouette {
+  position: absolute;
+  top: 0;
+  left: var(--pa-gutter-macro);
+  right: var(--pa-gutter-macro);
+  width: calc(100% - (var(--pa-gutter-macro) * 2));
+  height: 100%;
+  display: flex;
+  align-items: center;
+  will-change: transform, opacity;
+}
+
+.pa-px-condition-silhouette__layout {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--pa-gutter-column);
+  align-items: center;
+}
+
+/* Distinct Silhouettes per Condition */
+.pa-px-condition-silhouette--precision .pa-px-condition-silhouette__media-plane {
+  grid-column: 1 / 7;
+  height: clamp(340px, 52svh, 520px);
+}
+.pa-px-condition-silhouette--precision .pa-px-condition-silhouette__typography {
+  grid-column: 8 / 13;
+}
+
+.pa-px-condition-silhouette--autonomy .pa-px-condition-silhouette__media-plane {
+  grid-column: 7 / 12;
+  height: clamp(380px, 58svh, 560px);
+}
+.pa-px-condition-silhouette--autonomy .pa-px-condition-silhouette__typography {
+  grid-column: 1 / 6;
+  grid-row: 1;
+}
+
+.pa-px-condition-silhouette--collaboration .pa-px-condition-silhouette__media-plane {
+  grid-column: 1 / 8;
+  height: clamp(320px, 50svh, 480px);
+}
+.pa-px-condition-silhouette--collaboration .pa-px-condition-silhouette__typography {
+  grid-column: 9 / 13;
+}
+
+.pa-px-condition-silhouette--pressure .pa-px-condition-silhouette__media-plane {
+  grid-column: 1 / 8;
+  height: clamp(320px, 50svh, 480px);
+  position: relative;
+}
+.pa-px-condition-silhouette--pressure .pa-px-condition-silhouette__typography {
+  grid-column: 9 / 13;
+}
+
+.pa-px-condition-silhouette__media-frame {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--pa-white);
+  box-shadow: 0 16px 36px rgba(23, 25, 24, 0.08);
+}
+
+.pa-px-condition-silhouette__media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.pa-px-condition-silhouette__detail-plane {
+  position: absolute;
+  right: -24px;
+  bottom: -24px;
+  width: clamp(140px, 20vw, 220px);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 3px solid var(--pa-white);
+  box-shadow: 0 12px 28px rgba(23, 25, 24, 0.12);
+  z-index: 3;
+}
+
+.pa-px-condition-silhouette__typography {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: 4px;
+  padding: clamp(20px, 2.5vw, 32px);
+  box-shadow: 0 10px 24px rgba(23, 25, 24, 0.04);
+}
+
+.pa-px-condition-silhouette__badge {
+  color: var(--pa-evidence);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.pa-px-condition-silhouette__interp {
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-heading-subsection);
+  font-weight: 560;
+  color: var(--pa-ink);
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.pa-px-condition-silhouette__detail {
+  font-size: var(--pa-body);
+  color: var(--pa-graphite);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.pa-px-condition-silhouette__source-anchor {
+  border-top: 1px solid var(--pa-paper);
+  padding-top: 10px;
+}
+
+/* ── Chapter 5: Spatial Model Atlas ── */
+.pa-px-spatial-models-atlas {
+  padding: var(--pa-space-section) var(--pa-gutter-macro);
   background-color: var(--pa-paper);
 }
 
-.pa-px-ch-models__inner {
+.pa-px-spatial-models__inner {
   max-width: 1440px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--px-space-cluster);
 }
 
-.pa-px-models-list {
+.pa-px-spatial-models__header {
+  margin-bottom: 36px;
+  max-width: 720px;
+}
+
+.pa-px-spatial-models__arena {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--pa-gutter-column);
+  align-items: center;
+}
+
+.pa-px-spatial-models__center-hub {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: 4px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(23, 25, 24, 0.04);
+  position: relative;
+}
+
+.pa-px-spatial-models__center-kicker {
+  color: var(--pa-evidence);
+  margin-bottom: 8px;
+}
+
+.pa-px-spatial-models__center-quote {
+  font-family: var(--pa-font-display);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--pa-ink);
+  line-height: 1.35;
+  margin: 0 0 16px 0;
+}
+
+.pa-px-spatial-models__dynamic-path {
+  width: 100%;
+  height: 48px;
+}
+
+.pa-px-spatial-models__typographic-field {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.pa-px-model-btn {
+.pa-px-spatial-model-entry {
+  border-bottom: 1px solid var(--pa-mineral);
+  padding-bottom: 12px;
+  transition: transform 200ms ease;
+}
+
+.pa-px-spatial-model-trigger {
+  width: 100%;
   background: none;
   border: none;
   text-align: left;
-  font-family: var(--pa-font-family);
-  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
-  font-weight: var(--px-weight-heading);
-  color: var(--pa-context);
-  cursor: pointer;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--pa-mineral);
-  transition: color 180ms ease, padding-left 180ms ease;
-}
-
-.pa-px-model-btn:hover,
-.pa-px-model-btn--active {
-  color: var(--pa-ink);
-  padding-left: 12px;
-  border-bottom-color: var(--pa-evidence);
-}
-
-.pa-px-model-display {
-  background-color: var(--pa-white);
-  border: 1px solid var(--pa-mineral);
-  border-radius: var(--px-radius-sm);
-  padding: var(--px-space-cluster);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: baseline;
+  cursor: pointer;
+  padding: 6px 0;
+  outline: none;
 }
 
-.pa-px-model-display__tag {
-  font-family: var(--pa-font-mono);
-  font-size: var(--px-caption);
-  color: var(--pa-evidence);
-  text-transform: uppercase;
-  margin-bottom: 8px;
+.pa-px-spatial-model-trigger__name {
+  font-family: var(--pa-font-display);
+  font-size: clamp(1.2rem, 1.8vw, 1.75rem);
+  font-weight: 540;
+  color: var(--pa-context);
+  transition: color 180ms ease;
 }
 
-.pa-px-model-display__title {
-  font-size: 1.75rem;
-  font-weight: var(--px-weight-medium);
+.pa-px-spatial-model-entry--active .pa-px-spatial-model-trigger__name,
+.pa-px-spatial-model-trigger:hover .pa-px-spatial-model-trigger__name {
   color: var(--pa-ink);
-  margin-bottom: 12px;
 }
 
-.pa-px-model-display__desc {
-  font-size: 1.05rem;
+.pa-px-spatial-model-trigger__role {
   color: var(--pa-graphite);
-  line-height: 1.55;
-  margin-bottom: var(--px-space-content);
+}
+
+.pa-px-spatial-model-annotation {
+  margin-top: 8px;
+  padding: 12px;
+  background-color: var(--pa-white);
+  border-radius: 3px;
+  border-left: 2px solid var(--pa-evidence);
+}
+
+.pa-px-spatial-model-annotation__meta {
+  display: flex;
+  gap: 16px;
+  color: var(--pa-evidence);
+  margin-top: 8px;
 }
 
 /* ── Chapter 6: Deterministic Calibration Mass ── */
-.pa-px-ch-calibration {
+.pa-px-calibration-field {
   background-color: var(--pa-white);
-  padding: var(--px-space-section) var(--px-outer-gutter);
+  padding: var(--pa-space-section) var(--pa-gutter-macro);
+  border-top: 1px solid var(--pa-mineral);
+  border-bottom: 1px solid var(--pa-mineral);
 }
 
-.pa-px-ch-calibration__inner {
+.pa-px-calibration-field__inner {
   max-width: 1440px;
   margin: 0 auto;
 }
 
-.pa-px-ch-calibration__header {
-  margin-bottom: var(--px-space-cluster);
+.pa-px-calibration-field__header {
+  margin-bottom: 32px;
+  max-width: 720px;
 }
 
-.pa-px-ch-calibration__header h2 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  color: var(--pa-ink);
-  margin-bottom: 8px;
-}
-
-.pa-px-ch-calibration__mass-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: var(--px-space-md);
-  align-items: flex-end;
-  min-height: 320px;
-}
-
-.pa-px-mass-block {
-  background-color: var(--pa-mineral);
-  border-radius: var(--px-radius-xs);
-  padding: var(--px-space-content);
+.pa-px-mass-landscape {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  transition: background-color 200ms ease, transform 200ms ease;
-  position: relative;
+  gap: 20px;
 }
 
-.pa-px-mass-block:hover {
+.pa-px-mass-landscape__bar {
+  display: flex;
+  width: 100%;
+  min-height: 80px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--pa-mineral);
+  box-shadow: 0 4px 12px rgba(23, 25, 24, 0.04);
+}
+
+.pa-px-mass-segment {
   background-color: var(--pa-paper);
-  transform: translateY(-4px);
+  border: none;
+  border-right: 1px solid var(--pa-mineral);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 180ms ease;
+  outline: none;
 }
 
-.pa-px-mass-block__pct {
+.pa-px-mass-segment:last-child {
+  border-right: none;
+}
+
+.pa-px-mass-segment:hover,
+.pa-px-mass-segment--active {
+  background-color: var(--pa-ink);
+  color: var(--pa-white);
+}
+
+.pa-px-mass-segment--active .pa-px-mass-segment__pct,
+.pa-px-mass-segment:hover .pa-px-mass-segment__pct {
+  color: #FFF;
+}
+
+.pa-px-mass-segment__pct {
   font-family: var(--pa-font-mono);
-  font-size: clamp(1.8rem, 3.2vw, 3.4rem);
-  font-weight: 500;
+  font-size: clamp(1.1rem, 1.6vw, 1.8rem);
+  font-weight: 560;
   color: var(--pa-ink);
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
-.pa-px-mass-block__label {
-  font-size: 0.95rem;
-  font-weight: var(--px-weight-medium);
-  color: var(--pa-ink);
-  line-height: 1.3;
+.pa-px-mass-segment__label {
+  font-size: 0.78rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-.pa-px-mass-block__role {
-  font-size: 0.8rem;
+.pa-px-mass-landscape__detail {
+  background-color: var(--pa-paper);
+  border: 1px solid var(--pa-mineral);
+  border-radius: 4px;
+  padding: 20px;
+  max-width: 620px;
+}
+
+.pa-px-mass-landscape__meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
   color: var(--pa-graphite);
-  margin-top: 4px;
 }
 
-/* ── Chapter 7: Career Role Atlas Teaser ── */
-.pa-px-ch-roles {
-  padding: var(--px-space-section) var(--px-outer-gutter);
+/* ── Chapter 7: Spatial Career Role Atlas Teaser ── */
+.pa-px-spatial-career-teaser {
+  padding: var(--pa-space-section) var(--pa-gutter-macro);
   background-color: var(--pa-paper);
 }
 
-.pa-px-ch-roles__inner {
+.pa-px-spatial-career-teaser__inner {
   max-width: 1440px;
   margin: 0 auto;
 }
 
-.pa-px-ch-roles__header {
+.pa-px-spatial-career-teaser__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: var(--px-space-cluster);
+  margin-bottom: 32px;
   flex-wrap: wrap;
   gap: 16px;
 }
 
-.pa-px-ch-roles__grid {
+.pa-px-spatial-career-teaser__arena {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--pa-gutter-column);
+  align-items: flex-start;
+}
+
+.pa-px-spatial-roles-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pa-px-spatial-role-node {
+  border-bottom: 1px solid var(--pa-mineral);
+  padding-bottom: 8px;
+}
+
+.pa-px-spatial-role-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  cursor: pointer;
+  padding: 6px 0;
+  outline: none;
+}
+
+.pa-px-spatial-role-btn__title {
+  font-family: var(--pa-font-display);
+  font-size: clamp(1.05rem, 1.4vw, 1.4rem);
+  font-weight: 540;
+  color: var(--pa-ink);
+  transition: color 180ms ease;
+}
+
+.pa-px-spatial-role-node--active .pa-px-spatial-role-btn__title {
+  color: var(--pa-evidence);
+}
+
+.pa-px-spatial-role-btn__potential {
+  color: var(--pa-graphite);
+}
+
+.pa-px-spatial-role-inline-competencies {
+  margin-top: 6px;
+  padding-left: 8px;
+}
+
+.pa-px-spatial-role-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.pa-px-role-skill-pill {
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
+  color: var(--pa-ink);
+}
+
+.pa-px-spatial-roles-media-wrap {
+  position: sticky;
+  top: 100px;
+}
+
+.pa-px-spatial-roles-media-frame {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--pa-white);
+  box-shadow: 0 14px 32px rgba(23, 25, 24, 0.08);
+}
+
+.pa-px-spatial-roles-media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pa-px-spatial-roles-media-caption {
+  margin-top: 10px;
+}
+
+/* ── Chapter 8: Temporal Progress Teaser ── */
+.pa-px-temporal-teaser-stage {
+  background-color: var(--pa-white);
+  padding: var(--pa-space-section) var(--pa-gutter-macro);
+  border-top: 1px solid var(--pa-mineral);
+}
+
+.pa-px-temporal-teaser__inner {
+  max-width: 1440px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--px-space-cluster);
+  gap: var(--pa-gutter-column);
   align-items: center;
 }
 
-.pa-px-roles-tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.pa-px-mini-scrub-wrap {
+  background-color: var(--pa-paper);
+  border: 1px solid var(--pa-mineral);
+  border-radius: 4px;
+  padding: 16px;
+  max-width: 440px;
 }
 
-.pa-px-role-tag {
+.pa-px-mini-scrub-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.pa-px-data--active {
+  color: var(--pa-evidence);
+  font-weight: 600;
+}
+
+.pa-px-temporal-scrub-input {
+  width: 100%;
+  accent-color: var(--pa-evidence);
+  cursor: pointer;
+}
+
+.pa-px-temporal-teaser__card {
+  background-color: var(--pa-paper);
+  border: 1px solid var(--pa-mineral);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(23, 25, 24, 0.05);
+}
+
+.pa-px-temporal-teaser__media-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.pa-px-temporal-teaser__media-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 240ms ease;
+}
+
+.pa-px-temporal-teaser__body {
+  padding: 20px;
+}
+
+/* ── Chapter 9: Provenance Ledger / Trust Teaser ── */
+.pa-px-ledger-teaser-stage {
+  background-color: var(--pa-paper);
+  padding: var(--pa-space-section) var(--pa-gutter-macro);
+}
+
+.pa-px-ledger-teaser__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pa-gutter-column);
+  align-items: center;
+}
+
+.pa-px-ledger-layer-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pa-px-ledger-tab-btn {
   background-color: var(--pa-white);
   border: 1px solid var(--pa-mineral);
   padding: 8px 16px;
-  border-radius: var(--px-radius-xs);
-  font-size: 0.95rem;
+  border-radius: 3px;
+  font-family: var(--pa-font-mono);
+  font-size: 0.82rem;
   color: var(--pa-graphite);
   cursor: pointer;
+  text-transform: capitalize;
   transition: all 180ms ease;
 }
 
-.pa-px-role-tag:hover,
-.pa-px-role-tag--active {
+.pa-px-ledger-tab-btn:hover,
+.pa-px-ledger-tab-btn--active {
   background-color: var(--pa-ink);
   color: var(--pa-white);
   border-color: var(--pa-ink);
 }
 
-.pa-px-role-preview-card {
+.pa-px-ledger-teaser__card {
   background-color: var(--pa-white);
-  border-radius: var(--px-radius-sm);
-  overflow: hidden;
   border: 1px solid var(--pa-mineral);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(23, 25, 24, 0.05);
 }
 
-.pa-px-role-preview-media {
+.pa-px-ledger-teaser__media-frame {
   width: 100%;
   aspect-ratio: 16 / 10;
-  object-fit: cover;
+  overflow: hidden;
 }
 
-.pa-px-role-preview-info {
-  padding: var(--px-space-content);
-}
-
-/* ── Chapter 8: Progress Teaser ── */
-.pa-px-ch-progress-teaser {
-  background-color: var(--pa-white);
-  padding: var(--px-space-section) var(--px-outer-gutter);
-}
-
-.pa-px-ch-progress-teaser__inner {
-  max-width: 1440px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--px-space-cluster);
-  align-items: center;
-}
-
-/* ── Chapter 9: Source Ledger / Trust Teaser ── */
-.pa-px-ch-trust-teaser {
-  background-color: var(--pa-paper);
-  padding: var(--px-space-section) var(--px-outer-gutter);
-}
-
-.pa-px-ch-trust-teaser__inner {
-  max-width: 1440px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--px-space-cluster);
-  align-items: center;
+.pa-px-ledger-teaser__body {
+  padding: 20px;
 }
 
 /* ── Chapter 10: Finale ── */
 .pa-px-ch-finale {
-  padding: var(--px-space-cinematic) var(--px-outer-gutter);
+  padding: var(--pa-space-cinematic) var(--pa-gutter-macro);
   background-color: var(--pa-white);
   text-align: center;
+  border-top: 1px solid var(--pa-mineral);
 }
 
 .pa-px-ch-finale__inner {
@@ -555,51 +982,109 @@
 }
 
 .pa-px-ch-finale__headline {
-  font-size: var(--px-display-lg);
-  font-weight: var(--px-weight-display);
+  font-family: var(--pa-font-display);
+  font-size: var(--pa-display-route);
+  font-weight: 580;
   color: var(--pa-ink);
   letter-spacing: -0.03em;
   line-height: 1.05;
-  margin-bottom: var(--px-space-content);
+  margin-bottom: 16px;
 }
 
 .pa-px-ch-finale__support {
-  font-size: var(--px-lead);
+  font-size: var(--pa-lead);
   color: var(--pa-graphite);
-  margin-bottom: var(--px-space-lg);
+  margin-bottom: 28px;
   line-height: 1.4;
 }
 
 .pa-px-ch-finale__actions {
   display: flex;
   justify-content: center;
-  gap: var(--px-space-md);
+  gap: 12px;
   flex-wrap: wrap;
 }
 
+/* ── Mobile Responsive Fallbacks ── */
 @media (max-width: 900px) {
-  .pa-px-ch-poster__grid,
+  .pa-px-hero-field {
+    min-height: auto;
+    padding: calc(var(--px-header-height-mobile, 60px) + 24px) var(--pa-gutter-macro) 36px;
+  }
+  .pa-px-hero-field__composition {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 20px;
+    min-height: auto;
+  }
+  .pa-px-hero-field__media-plane {
+    width: 100%;
+    height: 260px;
+  }
+  .pa-px-hero-field__editorial-layer {
+    width: 100%;
+  }
+  .pa-px-hero-field__content {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+  }
   .pa-px-ch-response__inner,
-  .pa-px-ch-deck__cards,
-  .pa-px-ch-models__inner,
-  .pa-px-ch-calibration__mass-grid,
-  .pa-px-ch-roles__grid,
-  .pa-px-ch-progress-teaser__inner,
-  .pa-px-ch-trust-teaser__inner {
+  .pa-px-spatial-models__arena,
+  .pa-px-spatial-career-teaser__arena,
+  .pa-px-temporal-teaser__inner,
+  .pa-px-ledger-teaser__inner {
     grid-template-columns: 1fr;
   }
-  .pa-px-ch-poster__type-col,
-  .pa-px-ch-poster__media-col,
   .pa-px-ch-response__content,
   .pa-px-ch-response__aside-media {
     grid-column: 1 / -1;
   }
-  .pa-px-conditions-track {
+  .pa-px-evidence-objects-field {
+    display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
   }
-  .pa-px-condition-panel {
+  .pa-px-evidence-object {
+    flex: 0 0 80vw;
     scroll-snap-align: start;
-    min-width: 85vw;
+    transform: none !important;
+  }
+  .pa-px-conditions-stage__viewport {
+    position: relative;
+    min-height: auto;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+  .pa-px-condition-silhouette {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 85vw;
+    flex: 0 0 85vw;
+    scroll-snap-align: start;
+  }
+  .pa-px-condition-silhouette__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pa-px-condition-silhouette__media-plane {
+    width: 100% !important;
+    height: 220px !important;
+  }
+  .pa-px-condition-silhouette__typography {
+    width: 100%;
+  }
+  .pa-px-spatial-roles-media-wrap {
+    position: static;
+    margin-top: 16px;
   }
 }
+

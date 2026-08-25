@@ -12,62 +12,100 @@ export const TrustSourceInspection = () => {
   return (
     <div className="pa-px-trust-page" data-route="trust">
       <header className="pa-px-trust-hero">
+        <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '8px' }}>
+          CHAIN OF CUSTODY &middot; PROVENANCE INSPECTION
+        </div>
         <h1 className="pa-px-trust-hero__headline">{data.hero.headline}</h1>
         <p className="pa-px-trust-hero__support">{data.hero.support}</p>
       </header>
 
-      <section className="pa-px-trust-chain" aria-label="Evidence Chain of Custody">
-        <div className="pa-px-trust-steps-nav" role="tablist" aria-label="Provenance steps">
-          {steps.map((s, idx) => (
-            <button
-              key={s.id}
-              type="button"
-              role="tab"
-              aria-selected={activeStepIdx === idx}
-              className={`pa-px-trust-step-btn ${activeStepIdx === idx ? 'pa-px-trust-step-btn--active' : ''}`}
-              onClick={() => setActiveStepIdx(idx)}
-            >
-              <span className="pa-px-data" style={{ marginRight: '4px' }}>0{idx + 1}.</span>
-              <span>{s.name}</span>
-            </button>
-          ))}
+      {/* Tactile Provenance Aperture Stage */}
+      <section className="pa-px-trust-chain pa-px-aperture-chain-stage" aria-label="Evidence Chain of Custody">
+        <div className="pa-px-aperture-selector" role="tablist" aria-label="Provenance layers">
+          {steps.map((s, idx) => {
+            const isSelected = activeStepIdx === idx;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                className={`pa-px-aperture-step-btn ${isSelected ? 'pa-px-aperture-step-btn--active' : ''}`}
+                onClick={() => setActiveStepIdx(idx)}
+              >
+                <span className="pa-px-data" style={{ marginRight: '6px' }}>0{idx + 1}.</span>
+                <span>{s.name}</span>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="pa-px-trust-inspector-card" aria-live="polite">
-          <div>
-            <span className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase' }}>
-              STEP {activeStepIdx + 1} OF 5: {currentStep.name}
-            </span>
-            <h3 className="pa-px-trust-inspector__title">{currentStep.title}</h3>
-            <p className="pa-px-trust-inspector__desc">{currentStep.description}</p>
-            <div className="pa-px-trust-inspector__details">
-              {currentStep.details}
+        {/* Composite Evidence Record with Aperture Mask Reveal */}
+        <div className="pa-px-aperture-inspector-card" aria-live="polite">
+          <div className="pa-px-aperture-inspector__content">
+            <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '6px' }}>
+              PROVENANCE APERTURE: {currentStep.name.toUpperCase()} LAYER (0{activeStepIdx + 1}/05)
+            </div>
+            <h2 className="pa-px-heading-subsection" style={{ marginBottom: '8px' }}>
+              {currentStep.title}
+            </h2>
+            <p className="pa-px-body" style={{ color: 'var(--pa-graphite)', marginBottom: '16px' }}>
+              {currentStep.description}
+            </p>
+
+            <div className="pa-px-aperture-evidence-box">
+              <div className="pa-px-data" style={{ color: 'var(--pa-ink)', marginBottom: '4px' }}>
+                RECORD TELEMETRY &middot; ILLUSTRATIVE EXAMPLE
+              </div>
+              <p className="pa-px-body-sm" style={{ fontFamily: 'var(--pa-font-mono)', color: 'var(--pa-ink)' }}>
+                {currentStep.details}
+              </p>
             </div>
           </div>
 
-          <div className="pa-px-trust-inspector__media-plate">
+          <div className="pa-px-aperture-inspector__media-frame">
             <PublicPicture
               assetKey="trustDiagnostic"
               alt="Calibrated diagnostic signal analysis"
               priority={true}
             />
+            <div className="pa-px-aperture-glass-overlay">
+              <div className="pa-px-data" style={{ color: '#FFF' }}>
+                CALIBRATED PROVENANCE
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="pa-px-trust-rights" aria-label="Sovereign Data Rights">
-        <h2>Sovereign Data Rights & Governance</h2>
-        <div className="pa-px-trust-rights-grid">
-          {data.rightsActions.map((action) => (
-            <div key={action.id} className="pa-px-rights-card">
-              <div>
-                <h3>{action.label}</h3>
-                <p>{action.description}</p>
+      {/* Quiet Sovereign Rights Ledger */}
+      <section className="pa-px-trust-rights pa-px-sovereign-ledger" aria-label="Sovereign Data Rights and Ledger">
+        <header className="pa-px-sovereign-ledger__header">
+          <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '6px' }}>
+            SOVEREIGNTY &middot; USER RIGHTS
+          </div>
+          <h2 className="pa-px-heading-section">Sovereign Data Rights & Governance Ledger</h2>
+          <p className="pa-px-lead" style={{ maxWidth: '64ch' }}>
+            You maintain permanent legal and technical ownership over your assessment record.
+          </p>
+        </header>
+
+        <div className="pa-px-sovereign-ledger__list" role="list">
+          {data.rightsActions.map((action, idx) => (
+            <article key={action.id} className="pa-px-sovereign-ledger__row" role="listitem">
+              <div className="pa-px-data pa-px-sovereign-ledger__num">
+                0{idx + 1}
               </div>
-              <Link to={action.link}>
-                Access in Account Settings &rarr;
-              </Link>
-            </div>
+              <div className="pa-px-sovereign-ledger__body">
+                <h3 className="pa-px-sovereign-ledger__title">{action.label}</h3>
+                <p className="pa-px-body-sm">{action.description}</p>
+              </div>
+              <div className="pa-px-sovereign-ledger__action">
+                <Link to={action.link} className="pa-px-btn-secondary">
+                  Access in Settings &rarr;
+                </Link>
+              </div>
+            </article>
           ))}
         </div>
       </section>

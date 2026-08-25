@@ -247,7 +247,7 @@ export const SignupPage = () => {
             }}
           />
           <span>
-            I agree to the <Link to="/terms">Terms of Service</Link> and{' '}
+            I agree to the <Link to="/privacy">Terms of Service</Link> and{' '}
             <Link to="/privacy">Privacy Policy</Link>.
           </span>
         </label>
