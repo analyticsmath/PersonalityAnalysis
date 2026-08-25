@@ -1,7 +1,8 @@
 /**
  * Personality Assessor - Public Motion Root
  * Authoritative scroll and motion engine.
- * Unifies Lenis smooth scroll, GSAP RAF ticker, and ScrollTrigger without velocity corruption.
+ * Desktop: Lenis smooth scroll synchronized directly with GSAP RAF ticker and lagSmoothing(0).
+ * Mobile / Touch: Native touch scrolling to prevent jitter and sticky desync.
  */
 
 import React, { useEffect, useRef, useMemo, createContext, useContext } from 'react';
@@ -33,7 +34,7 @@ export const useLenis = () => useContext(PublicMotionContext).getLenis();
 
 export const PublicMotionRoot = ({ children }) => {
   const lenisRef = useRef(null);
-  const { prefersReducedMotion } = usePublicCapabilities();
+  const { prefersReducedMotion, isTouch, isMobile } = usePublicCapabilities();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -45,35 +46,64 @@ export const PublicMotionRoot = ({ children }) => {
 
     let lenis = null;
     let tickerCallback = null;
+    let nativeScrollListener = null;
 
-    try {
-      lenis = new Lenis({
-        lerp: 0.085,
-        smoothWheel: true,
-        wheelMultiplier: 0.9,
-        touchMultiplier: 1.0,
-        syncTouch: false,
-        stopInertiaOnNavigate: true,
-      });
+    // Desktop only with fine pointer: use Lenis
+    const shouldUseLenis = !isTouch && !isMobile;
 
-      lenisRef.current = lenis;
-      publicMotionController.setLenis(lenis);
+    if (shouldUseLenis) {
+      try {
+        lenis = new Lenis({
+          lerp: 0.085,
+          smoothWheel: true,
+          wheelMultiplier: 0.9,
+          touchMultiplier: 1.0,
+          syncTouch: false,
+          stopInertiaOnNavigate: true,
+        });
 
-      // Synchronize Lenis scroll event directly with ScrollTrigger and mutable scrollState
-      lenis.on('scroll', (e) => {
+        lenisRef.current = lenis;
+        publicMotionController.setLenis(lenis);
+
+        // Synchronize Lenis scroll event directly with ScrollTrigger
+        lenis.on('scroll', (e) => {
+          ScrollTrigger.update();
+          updateScrollState(e.scroll, e.velocity, e.direction, e.progress);
+        });
+
+        // Official Lenis + GSAP ticker integration
+        tickerCallback = (time) => {
+          lenis.raf(time * 1000);
+        };
+
+        gsap.ticker.add(tickerCallback);
+        gsap.ticker.lagSmoothing(0);
+      } catch (err) {
+        console.warn('Lenis desktop initialization error, falling back to native:', err);
+      }
+    } else {
+      // Mobile / Touch substrate: Native touch scroll with direct ScrollTrigger listener
+      publicMotionController.setLenis(null);
+      let lastY = window.scrollY;
+      let lastTime = performance.now();
+
+      nativeScrollListener = () => {
+        const now = performance.now();
+        const currentY = window.scrollY;
+        const dt = Math.max(1, now - lastTime);
+        const velocity = (currentY - lastY) / dt;
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const progress = currentY / maxScroll;
+        const direction = currentY >= lastY ? 1 : -1;
+
         ScrollTrigger.update();
-        updateScrollState(e.scroll, e.velocity, e.direction, e.progress);
-      });
+        updateScrollState(currentY, velocity, direction, progress);
 
-      // Hook Lenis into GSAP RAF ticker with zero lag smoothing
-      tickerCallback = (time) => {
-        lenis.raf(time * 1000);
+        lastY = currentY;
+        lastTime = now;
       };
 
-      gsap.ticker.add(tickerCallback);
-      gsap.ticker.lagSmoothing(0);
-    } catch (err) {
-      console.warn('Lenis initialization skipped / fallback:', err);
+      window.addEventListener('scroll', nativeScrollListener, { passive: true });
     }
 
     // Centralized debounced refresh discipline on fonts, media, and layout resize
@@ -101,14 +131,16 @@ export const PublicMotionRoot = ({ children }) => {
       clearTimeout(refreshTimer);
       clearTimeout(resizeTimer);
       window.removeEventListener('resize', handleResize);
+      if (nativeScrollListener) {
+        window.removeEventListener('scroll', nativeScrollListener);
+      }
       if (tickerCallback) gsap.ticker.remove(tickerCallback);
       if (lenis) lenis.destroy();
       lenisRef.current = null;
       publicMotionController.setLenis(null);
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, isTouch, isMobile]);
 
-  // Stable Context API object
   const contextValue = useMemo(() => publicMotionController, []);
 
   return (

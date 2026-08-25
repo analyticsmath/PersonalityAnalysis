@@ -2,31 +2,16 @@
  * Personality Assessor - Persistent Visual Canvas
  * Single fixed Three.js / R3F WebGL canvas layer mounted across all public routes.
  * Owns 2D orthographic media planes, 3D perspective Career scene, and pixel reconstruction shader.
+ * Media planes remain mounted continuously across all routes (including Career).
  */
 
-import React, { useState, useEffect, useSyncExternalStore } from 'react';
+import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useLocation } from 'react-router-dom';
-import * as THREE from 'three';
-import { MediaActorRegistry } from './MediaActorRegistry';
-import { MediaPlane } from './MediaPlane';
+import { MediaPlanesLayer } from './MediaPlanesLayer';
+import { TransitionLayer } from './TransitionLayer';
 import { CareerScene } from './CareerScene';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
-
-const MediaPlanesLayer = () => {
-  const actorIds = useSyncExternalStore(
-    (onStoreChange) => MediaActorRegistry.subscribe(onStoreChange),
-    () => MediaActorRegistry.getActorIds()
-  );
-
-  return (
-    <group>
-      {actorIds.map((id) => (
-        <MediaPlane key={id} actorId={id} />
-      ))}
-    </group>
-  );
-};
 
 export const PersistentVisualCanvas = () => {
   const location = useLocation();
@@ -57,15 +42,19 @@ export const PersistentVisualCanvas = () => {
           antialias: true,
           powerPreference: 'high-performance',
           stencil: false,
+          preserveDrawingBuffer: true,
         }}
-        orthographic={!isCareerRoute}
-        camera={
-          isCareerRoute
-            ? { fov: 45, near: 0.1, far: 100, position: [0, 0, 5] }
-            : { zoom: 1, position: [0, 0, 100], near: 0.1, far: 1000 }
-        }
+        orthographic={true}
+        camera={{ zoom: 1, position: [0, 0, 100], near: 0.1, far: 1000 }}
       >
-        {isCareerRoute ? <CareerScene /> : <MediaPlanesLayer />}
+        {/* 2D Media Planes Layer: ALWAYS MOUNTED on all routes */}
+        <MediaPlanesLayer />
+
+        {/* Pixel Reconstruction / Shader Transition Layer */}
+        <TransitionLayer />
+
+        {/* 3D Career Perspective Scene: active on Career route concurrently */}
+        {isCareerRoute && <CareerScene />}
       </Canvas>
     </div>
   );

@@ -1,26 +1,22 @@
 /**
- * Personality Assessor - Public Route Transition Manager
- * Coordinates persistent shared actor carry, pixel reconstruction, and seamless route coexistence.
- * Zero fullscreen black overlays.
+ * Personality Assessor - Public Transition Manager
+ * Orchestrates shared media carries, shader pixel reconstruction, and route coexistence.
+ * Zero full-screen white/black overlays.
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import gsap from 'gsap';
-import { MediaActorRegistry } from '../canvas/MediaActorRegistry';
-import { getTransitionFamily } from './routeTransitionRegistry';
-import { PixelTransitionCanvas } from './PixelTransitionCanvas';
+import { VisualActorRegistry } from '../canvas/VisualActorRegistry';
+import { VisualSlotRegistry } from '../canvas/VisualSlotRegistry';
+import { getTransitionFamily, TRANSITION_FAMILIES } from './routeTransitionRegistry';
+import { transitionLayerController } from '../canvas/TransitionLayer';
 import { publicMotionController } from './publicMotionController';
 import { usePublicCapabilities } from './usePublicCapabilities';
 
 export const PublicTransitionManager = () => {
   const location = useLocation();
   const prevPathRef = useRef(location.pathname);
-  const [pixelActive, setPixelActive] = useState(false);
-  const [pixelProgress, setPixelProgress] = useState(0);
-  const [pixelSourceKey, setPixelSourceKey] = useState('homeSituationDetail');
-  const [pixelDestKey, setPixelDestKey] = useState('trustDiagnostic');
-
   const { prefersReducedMotion } = usePublicCapabilities();
 
   useEffect(() => {
@@ -29,77 +25,123 @@ export const PublicTransitionManager = () => {
 
     if (fromPath === toPath) return;
 
-    const transitionMeta = getTransitionFamily(fromPath, toPath);
+    const transition = getTransitionFamily(fromPath, toPath);
 
-    // 1. Reset scroll to top smoothly via publicMotionController
-    publicMotionController.scrollTo(0, { immediate: true });
+    if (prefersReducedMotion) {
+      publicMotionController.scrollTo(0, { immediate: true });
+      publicMotionController.refresh();
+      prevPathRef.current = toPath;
+      return;
+    }
 
-    // 2. Family-specific transition logic
-    if (!prefersReducedMotion) {
-      if (transitionMeta.family === 'PIXEL_RECONSTRUCTION') {
-        // Home -> Trust pixel dissolve
-        setPixelSourceKey('homeSituationDetail');
-        setPixelDestKey('trustDiagnostic');
-        setPixelActive(true);
+    // ── A. SHARED_MEDIA: Home -> Career / Progress ──
+    if (transition.family === TRANSITION_FAMILIES.SHARED_MEDIA) {
+      const sourceActor = VisualActorRegistry.get(transition.sourceActorId || 'home-observation-primary');
+      if (sourceActor) {
+        // 1. Capture current source geometry and switch to manual mode
+        const initialRect = { ...sourceActor.rect };
+        VisualActorRegistry.mutateFrame(sourceActor.id, {
+          mode: 'manual',
+          transitionRole: 'shared',
+        });
 
-        gsap.fromTo(
-          { p: 0 },
-          { p: 1, duration: 0.65, ease: 'power2.inOut', onUpdate: function () {
-            setPixelProgress(this.targets()[0].p);
-          }, onComplete: () => {
-            setPixelActive(false);
-            setPixelProgress(0);
-            publicMotionController.refresh();
-          }}
-        );
-      } else if (transitionMeta.family === 'MEDIA_CARRY') {
-        // Carry active Workworld image into Career spatial placement
-        const actor = MediaActorRegistry.get('home-observation-primary');
-        if (actor) {
-          MediaActorRegistry.update('home-observation-primary', {
-            mode: 'manual',
-            transitionRole: 'shared',
-          });
+        // 2. Scroll destination route to top smoothly
+        publicMotionController.scrollTo(0, { immediate: true });
 
-          // Animate actor geometry toward center-screen destination
-          gsap.to(actor.rect, {
-            x: window.innerWidth * 0.25,
-            y: window.innerHeight * 0.2,
-            width: window.innerWidth * 0.5,
-            height: window.innerHeight * 0.6,
-            duration: 0.7,
-            ease: 'power3.inOut',
-            onComplete: () => {
-              MediaActorRegistry.update('home-observation-primary', { mode: 'tracking' });
-              publicMotionController.refresh();
-            },
-          });
+        // 3. Poll / wait for destination slot registration
+        let destinationMeasured = false;
+        const targetSlotId = transition.destSlotId || 'career-entry-world';
+
+        const checkSlotAndAnimate = () => {
+          const destSlot = VisualSlotRegistry.get(targetSlotId);
+          if (destSlot && destSlot.element) {
+            destinationMeasured = true;
+            const destRect = VisualSlotRegistry.updateRect(targetSlotId);
+
+            const animState = {
+              x: initialRect.x || 0,
+              y: initialRect.y || 0,
+              width: initialRect.width || window.innerWidth * 0.4,
+              height: initialRect.height || window.innerHeight * 0.5,
+            };
+
+            gsap.to(animState, {
+              x: destRect.x,
+              y: destRect.y,
+              width: destRect.width,
+              height: destRect.height,
+              duration: transition.duration || 0.75,
+              ease: 'power3.inOut',
+              onUpdate: () => {
+                VisualActorRegistry.mutateFrame(sourceActor.id, {
+                  rect: {
+                    x: animState.x,
+                    y: animState.y,
+                    width: animState.width,
+                    height: animState.height,
+                  },
+                });
+              },
+              onComplete: () => {
+                VisualActorRegistry.updateLifecycle(sourceActor.id, {
+                  mode: 'tracking',
+                  boundSlotId: targetSlotId,
+                });
+                publicMotionController.refresh();
+              },
+            });
+          }
+        };
+
+        // Attempt immediate measurement or delay slightly for DOM mount
+        checkSlotAndAnimate();
+        if (!destinationMeasured) {
+          const timer = setTimeout(checkSlotAndAnimate, 60);
+          return () => clearTimeout(timer);
         }
       } else {
-        // Standard / Quiet transition: refresh ScrollTrigger once destination DOM mounts
-        setTimeout(() => {
-          publicMotionController.refresh();
-        }, 120);
+        publicMotionController.scrollTo(0, { immediate: true });
+        publicMotionController.refresh();
       }
-    } else {
-      publicMotionController.refresh();
+    }
+
+    // ── B. PIXEL_RECONSTRUCTION: Home -> Trust ──
+    else if (transition.family === TRANSITION_FAMILIES.PIXEL_RECONSTRUCTION) {
+      publicMotionController.scrollTo(0, { immediate: true });
+
+      transitionLayerController.start({
+        sourceKey: transition.sourceAssetKey || 'homeSituationDetail',
+        destKey: transition.destAssetKey || 'trustDiagnostic',
+      });
+
+      const animState = { p: 0 };
+      gsap.to(animState, {
+        p: 1,
+        duration: transition.duration || 0.7,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          transitionLayerController.setProgress(animState.p);
+        },
+        onComplete: () => {
+          transitionLayerController.end();
+          publicMotionController.refresh();
+        },
+      });
+    }
+
+    // ── C. QUIET_EDITORIAL / AUTH_LAYOUT / SHARED_PHRASE ──
+    else {
+      publicMotionController.scrollTo(0, { immediate: true });
+      const timer = setTimeout(() => {
+        publicMotionController.refresh();
+      }, 100);
+      return () => clearTimeout(timer);
     }
 
     prevPathRef.current = toPath;
   }, [location.pathname, prefersReducedMotion]);
 
-  return (
-    <>
-      {pixelActive && (
-        <PixelTransitionCanvas
-          progress={pixelProgress}
-          sourceAssetKey={pixelSourceKey}
-          destAssetKey={pixelDestKey}
-          onComplete={() => setPixelActive(false)}
-        />
-      )}
-    </>
-  );
+  return null;
 };
 
 export default PublicTransitionManager;

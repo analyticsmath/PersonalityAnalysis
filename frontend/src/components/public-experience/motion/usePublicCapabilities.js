@@ -5,7 +5,9 @@ import { useState, useEffect } from 'react';
  */
 export function usePublicCapabilities() {
   const [capabilities, setCapabilities] = useState({
-    hasFinePointer: false,
+    hasFinePointer: true,
+    isTouch: false,
+    isMobile: false,
     hasWebGL: true,
     prefersReducedMotion: false,
     devicePixelRatio: 1,
@@ -17,6 +19,8 @@ export function usePublicCapabilities() {
 
     const finePointerQuery = window.matchMedia('(pointer: fine)');
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const isTouchDevice = !finePointerQuery.matches || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isMobileViewport = window.innerWidth <= 768;
 
     let webglSupported = false;
     try {
@@ -27,12 +31,11 @@ export function usePublicCapabilities() {
     }
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const isMobile = window.innerWidth < 768;
 
     let tier = 2;
     if (reducedMotionQuery.matches || !webglSupported) {
       tier = 0;
-    } else if (isMobile) {
+    } else if (isMobileViewport || isTouchDevice) {
       tier = 1;
     } else if (dpr >= 1.5 && finePointerQuery.matches) {
       tier = 3;
@@ -40,6 +43,8 @@ export function usePublicCapabilities() {
 
     setCapabilities({
       hasFinePointer: finePointerQuery.matches,
+      isTouch: isTouchDevice,
+      isMobile: isMobileViewport,
       hasWebGL: webglSupported,
       prefersReducedMotion: reducedMotionQuery.matches,
       devicePixelRatio: dpr,

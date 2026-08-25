@@ -1,7 +1,7 @@
 /**
  * Personality Assessor - Public Experience Design Tokens
  * Media-Led Architecture: Photography supplies chromatic depth; interface is restrained.
- * Strict ceiling: Font weight 560 maximum. No gradients.
+ * Strict ceiling: Font weight 560 maximum. No gradients. No glow. No glassmorphism.
  */
 
 :root {
@@ -9,15 +9,16 @@
   --px-ink: #121416;
   --px-white: #F7F8F8;
   --px-soft: #DDE1E3;
-  --px-glass: rgba(18, 20, 22, 0.72);
-  --px-glass-light: rgba(247, 248, 248, 0.85);
+  --px-muted: #8E969A;
+  --px-surface-dark: rgba(18, 20, 22, 0.92);
+  --px-surface-light: rgba(247, 248, 248, 0.96);
 
   /* ── Typography: Single Variable Family (Bricolage Grotesque) ── */
   --px-font-family: 'Bricolage Grotesque Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* ── Font Weights (Max 560 ceiling) ── */
-  --px-weight-display: 360;
-  --px-weight-heading: 420;
+  --px-weight-display: 380;
+  --px-weight-heading: 440;
   --px-weight-body: 380;
   --px-weight-medium: 480;
   --px-weight-bold: 540;
@@ -43,9 +44,9 @@
   --px-outer-gutter: clamp(20px, 4.5vw, 64px);
   --px-column-gap: clamp(16px, 2.5vw, 40px);
   --px-measure-reading: 65ch;
-  --px-radius-xs: 3px;
-  --px-radius-sm: 6px;
-  --px-radius-media: 8px;
+  --px-radius-xs: 2px;
+  --px-radius-sm: 4px;
+  --px-radius-media: 4px;
 
   /* ── Header Heights ── */
   --px-header-height-desktop: 72px;

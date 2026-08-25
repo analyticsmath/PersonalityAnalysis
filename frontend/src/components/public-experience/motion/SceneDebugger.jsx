@@ -152,7 +152,7 @@ export const SceneDebugger = () => {
         pointerEvents: 'auto',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: '6px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #334155', paddingBottom: '6px', marginBottom: '8px' }}>
         <strong>🎬 Motion & Scroll HUD</strong>
         <button
           type="button"
@@ -171,13 +171,13 @@ export const SceneDebugger = () => {
         <div style={{ gridColumn: 'span 2' }}><strong>Media:</strong> {metrics.mediaReadiness}</div>
       </div>
 
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '6px' }}>
+      <div style={{ borderTop: '1px solid #334155', paddingTop: '6px' }}>
         <strong>Active Viewport Scenes:</strong>
         {metrics.activeScenes.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic' }}>None active</div>
         ) : (
           metrics.activeScenes.map((s, i) => (
-            <div key={i} style={{ marginTop: '4px', padding: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px' }}>
+            <div key={i} style={{ marginTop: '4px', padding: '4px', background: '#1E293B', borderRadius: '3px' }}>
               <div style={{ color: '#7dd3fc', fontWeight: 'bold' }}>{s.id}</div>
               <div>Bounds: [{s.top}px → {s.bottom}px] (H: {s.height}px)</div>
               <div>Opacity: {s.opacity} | Clip: {s.clipPath}</div>

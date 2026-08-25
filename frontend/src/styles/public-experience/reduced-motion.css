@@ -1,71 +1,81 @@
 /**
  * Personality Assessor - Public Experience Reduced Motion Styles
  * Complete static document flow alternatives when prefers-reduced-motion: reduce is active.
- * Zero pinned blank spacers, natural editorial document flow.
+ * Zero pinned blank spacers, natural editorial document flow with 100% readable content.
  */
 
 @media (prefers-reduced-motion: reduce) {
-  .pa-px-scene-sticky,
-  .pa-px-entry-stage,
-  .pa-px-situation-stage,
-  .pa-px-readings-stage,
-  .pa-px-journey-stage,
+  .pa-px-home-continuous-root,
+  .pa-px-home-sticky-stage,
+  .pa-px-workworld-layer,
   .pa-px-calibration-stage,
   .pa-px-time-stage,
-  .pa-px-trace-stage,
+  .pa-px-provenance-stage,
   .pa-px-finale-stage,
+  .pa-px-how-section,
   .pa-px-how-stage-sticky,
+  .pa-px-career-hero-section,
+  .pa-px-trust-section,
   .pa-px-trust-stage-sticky,
+  .pa-px-progress-section,
   .pa-px-progress-stage {
     position: relative !important;
     height: auto !important;
     min-height: auto !important;
-    padding: 60px var(--px-outer-gutter) !important;
+    padding: 40px var(--px-outer-gutter, 6vw) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
   }
 
-  .pa-px-entry-section,
-  .pa-px-situation-section,
-  .pa-px-readings-section,
-  .pa-px-journey-section,
-  .pa-px-calibration-section,
-  .pa-px-time-section,
-  .pa-px-trace-section,
-  .pa-px-finale-section,
-  .pa-px-how-section,
-  .pa-px-trust-section,
-  .pa-px-progress-section {
-    height: auto !important;
-    min-height: auto !important;
-  }
-
-  .pa-px-journey-env {
+  .pa-px-home-typography-root,
+  .pa-px-home-evidence-root,
+  .pa-px-provenance-time-root {
     position: relative !important;
     height: auto !important;
-    min-height: 50vh !important;
-    opacity: 1 !important;
-    clip-path: none !important;
-    transform: none !important;
-    margin-bottom: 40px !important;
+    pointer-events: auto !important;
   }
 
-  .pa-px-entry__secondary-crop {
-    display: block !important;
+  .pa-px-home-hero-text,
+  .pa-px-home-question-container,
+  .pa-px-home-response-container,
+  .pa-px-readings-field {
     position: relative !important;
     top: auto !important;
+    left: auto !important;
     right: auto !important;
-    width: 200px !important;
-    margin-top: 20px !important;
+    bottom: auto !important;
+    max-width: 100% !important;
+    margin-bottom: 40px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
   }
 
-  .pa-px-time__later-media {
+  .home-evidence-target {
     position: relative !important;
-    clip-path: none !important;
-    opacity: 0.8 !important;
-    min-height: 40vh !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    aspect-ratio: 4 / 5 !important;
+    margin-bottom: 32px !important;
   }
 
-  .pa-px-pixel-canvas,
-  .pa-px-transition-carry-actor {
+  .pa-px-workworld-env {
+    position: relative !important;
+    height: auto !important;
+    min-height: 45vh !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    margin-bottom: 48px !important;
+  }
+
+  .pa-px-branching-svg,
+  .pa-px-persistent-canvas-root {
     display: none !important;
   }
 
