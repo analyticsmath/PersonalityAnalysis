@@ -7,68 +7,70 @@ const CONSTELLATION_NODES = [
   {
     id: 'big-five',
     title: 'BIG FIVE',
-    code: 'C 78',
-    sourcePhrase: 'clarify the constraints first',
-    shortSentence: 'Measures deliberate pacing, risk containment, and steady execution under ambiguity.',
+    code: 'C 78 · ES 64',
+    sourcePhrase: 'clarify constraints first',
+    shortSentence: 'Continuous dimensional spectra measuring deliberate execution and emotional stability under ambiguity.',
     weightPct: 15,
-    weightLabel: 'Traits 15%',
-    geometryClass: 'pa-px-node--bigfive',
+    weightLabel: 'Personality Traits (15%)',
+    spatialOffset: { x: '-28%', y: '-18%' },
   },
   {
     id: 'riasec',
     title: 'RIASEC',
     code: 'I 72 · C 68',
     sourcePhrase: 'smallest reversible step',
-    shortSentence: 'Investigative and conventional problem decomposition over speculation.',
+    shortSentence: 'Vocational interest mapping favoring investigative decomposition and systematic verification.',
     weightPct: 25,
-    weightLabel: 'RIASEC 25%',
-    geometryClass: 'pa-px-node--riasec',
+    weightLabel: 'RIASEC Interests (25%)',
+    spatialOffset: { x: '28%', y: '-22%' },
   },
   {
     id: 'work-values',
     title: 'WORK VALUES',
     code: 'Independence 84',
     sourcePhrase: 'clarify constraints first',
-    shortSentence: 'High motivation in autonomous environments with clear quality standards.',
+    shortSentence: 'High intrinsic motivation in high-autonomy working conditions with transparent quality benchmarks.',
     weightPct: 20,
-    weightLabel: 'Values 20%',
-    geometryClass: 'pa-px-node--values',
+    weightLabel: 'Work Values (20%)',
+    spatialOffset: { x: '-24%', y: '26%' },
   },
   {
     id: 'signals',
-    title: 'CAREER SIGNAL',
+    title: 'BEHAVIORAL SIGNALS',
     code: 'Iterative scoping',
     sourcePhrase: 'smallest reversible step',
-    shortSentence: 'Observable preference for small reversible experiments over large commitments.',
+    shortSentence: 'Observable behavioral strategy: decomposing ambiguous tasks into small reversible experiments.',
     weightPct: 25,
-    weightLabel: 'Skills 25%',
-    geometryClass: 'pa-px-node--signals',
+    weightLabel: 'Technical & Professional Skills (25%)',
+    spatialOffset: { x: '26%', y: '28%' },
   },
-];
-
-const SECONDARY_WEIGHTS = [
-  { id: 'education', label: 'Education 10%', pct: 10 },
-  { id: 'goals', label: 'Goals 5%', pct: 5 },
 ];
 
 export const EvidenceConstellation = () => {
   const [activeId, setActiveId] = useState('big-five');
   const [viewMode, setViewMode] = useState('constellation'); // 'constellation' | 'mass'
+  const nodeRefs = useRef([]);
   const { prefersReducedMotion, isMobile } = usePublicCapabilities();
 
+  const activeIdx = CONSTELLATION_NODES.findIndex((n) => n.id === activeId);
+
   const handleKeyDown = (e, idx) => {
+    let nextIdx = idx;
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
-      const nextIdx = (idx + 1) % CONSTELLATION_NODES.length;
-      setActiveId(CONSTELLATION_NODES[nextIdx].id);
+      nextIdx = (idx + 1) % CONSTELLATION_NODES.length;
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
-      const prevIdx = (idx - 1 + CONSTELLATION_NODES.length) % CONSTELLATION_NODES.length;
-      setActiveId(CONSTELLATION_NODES[prevIdx].id);
+      nextIdx = (idx - 1 + CONSTELLATION_NODES.length) % CONSTELLATION_NODES.length;
+    }
+
+    if (nextIdx !== idx) {
+      setActiveId(CONSTELLATION_NODES[nextIdx].id);
+      nodeRefs.current[nextIdx]?.focus();
     }
   };
 
-  const activeNode = CONSTELLATION_NODES.find((n) => n.id === activeId) || CONSTELLATION_NODES[0];
+  const activeNode = CONSTELLATION_NODES[activeIdx] || CONSTELLATION_NODES[0];
 
   return (
     <section
@@ -76,7 +78,7 @@ export const EvidenceConstellation = () => {
       aria-label="Evidence Constellation and Calibration"
     >
       <div className="pa-px-constellation-stage__inner">
-        {/* Minimal Overhead Heading */}
+        {/* Overhead Heading & View Mode Toggle */}
         <header className="pa-px-constellation-stage__header">
           <h2 className="pa-px-constellation-stage__title">
             THE EVIDENCE BRANCHES. THE SOURCE STAYS.
@@ -100,71 +102,88 @@ export const EvidenceConstellation = () => {
           </div>
         </header>
 
-        {/* Spatial Constellation Field */}
+        {/* Spatial Organic Constellation Field (Non-Grid) */}
         {viewMode === 'constellation' ? (
-          <div className="pa-px-constellation-field" role="region" aria-label="Spatial Evidence Constellation">
-            {/* Background Environmental Anchor Plane */}
-            <div className="pa-px-constellation-field__media-anchor" aria-hidden="true">
+          <div
+            className="pa-px-spatial-constellation-arena"
+            role="region"
+            aria-label="Spatial Non-Grid Evidence Constellation"
+          >
+            {/* Ambient Background Environmental Photograph */}
+            <div className="pa-px-constellation-media-underlay" aria-hidden="true">
               <PublicPicture
                 assetKey="homeSituationDetail"
-                alt="Contextual process environment"
+                alt="Contextual workbench environment"
               />
             </div>
 
-            {/* Central Source Protagonist Slip */}
-            <div className="pa-px-constellation-center-source">
-              <span className="pa-px-constellation-source-tag">SOURCE ANCHOR</span>
-              <blockquote className="pa-px-constellation-source-text">
+            {/* Central Gravitational Source Anchor */}
+            <div className="pa-px-constellation-central-core">
+              <div className="pa-px-constellation-core-tag">
+                <span>SOURCE ANCHOR</span>
+                <span className="pa-px-illustrative-pill">Illustrative example</span>
+              </div>
+              <blockquote className="pa-px-constellation-core-quote">
                 &ldquo;I clarify the constraints first, then choose the smallest reversible step.&rdquo;
               </blockquote>
             </div>
 
-            {/* Orbiting Framework Objects */}
-            <div className="pa-px-constellation-orbit">
+            {/* Orbiting Spatial Framework Nodes (Organic Staggered Positions) */}
+            <div
+              className="pa-px-spatial-orbit-plane"
+              role="tablist"
+              aria-label="Framework evidence readings"
+            >
               {CONSTELLATION_NODES.map((node, idx) => {
                 const isSelected = activeId === node.id;
 
                 return (
-                  <motion.article
+                  <motion.div
                     key={node.id}
                     layout={!prefersReducedMotion}
-                    className={`pa-px-constellation-node ${node.geometryClass} ${isSelected ? 'pa-px-constellation-node--active' : ''}`}
-                    onClick={() => setActiveId(node.id)}
+                    ref={(el) => (nodeRefs.current[idx] = el)}
+                    role="tab"
+                    id={`constellation-tab-${node.id}`}
+                    aria-controls={`constellation-panel-${node.id}`}
+                    aria-selected={isSelected}
+                    tabIndex={isSelected ? 0 : -1}
+                    className={`pa-px-spatial-node pa-px-spatial-node--${node.id} ${isSelected ? 'pa-px-spatial-node--active' : ''}`}
+                    onClick={() => {
+                      setActiveId(node.id);
+                      nodeRefs.current[idx]?.focus();
+                    }}
                     onMouseEnter={() => setActiveId(node.id)}
-                    onFocus={() => setActiveId(node.id)}
-                    tabIndex={0}
                     onKeyDown={(e) => handleKeyDown(e, idx)}
-                    aria-expanded={isSelected}
-                    aria-label={`${node.title} evidence reading`}
                   >
-                    <div className="pa-px-constellation-node__header">
-                      <span className="pa-px-constellation-node__title">{node.title}</span>
-                      <span className="pa-px-constellation-node__code">{node.code}</span>
+                    <div className="pa-px-spatial-node__header">
+                      <span className="pa-px-spatial-node__tag">{node.title}</span>
+                      <span className="pa-px-spatial-node__code">{node.code}</span>
                     </div>
 
-                    <div className="pa-px-constellation-node__phrase">
+                    <div className="pa-px-spatial-node__phrase">
                       &ldquo;{node.sourcePhrase}&rdquo;
                     </div>
 
                     <AnimatePresence>
                       {isSelected && (
                         <motion.div
+                          id={`constellation-panel-${node.id}`}
                           initial={prefersReducedMotion ? false : { opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.22, ease: 'easeOut' }}
-                          className="pa-px-constellation-node__expansion"
+                          transition={{ duration: 0.2, ease: 'easeOut' }}
+                          className="pa-px-spatial-node__expansion"
                         >
-                          <p className="pa-px-constellation-node__sentence">
+                          <p className="pa-px-spatial-node__desc">
                             {node.shortSentence}
                           </p>
-                          <div className="pa-px-constellation-node__weight-marker">
-                            Weight factor: {node.weightLabel}
+                          <div className="pa-px-spatial-node__weight">
+                            Calibration factor: {node.weightLabel}
                           </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.article>
+                  </motion.div>
                 );
               })}
             </div>
@@ -180,27 +199,27 @@ export const EvidenceConstellation = () => {
             <div className="pa-px-mass-recomposition__strip">
               <div className="pa-px-mass-block pa-px-mass-block--25" style={{ flex: '25' }}>
                 <span className="pa-px-mass-block__pct">25%</span>
-                <span className="pa-px-mass-block__lbl">RIASEC</span>
+                <span className="pa-px-mass-block__lbl">RIASEC Interests</span>
               </div>
               <div className="pa-px-mass-block pa-px-mass-block--25" style={{ flex: '25' }}>
                 <span className="pa-px-mass-block__pct">25%</span>
-                <span className="pa-px-mass-block__lbl">Skills</span>
+                <span className="pa-px-mass-block__lbl">Technical & Professional Skills</span>
               </div>
               <div className="pa-px-mass-block pa-px-mass-block--20" style={{ flex: '20' }}>
                 <span className="pa-px-mass-block__pct">20%</span>
-                <span className="pa-px-mass-block__lbl">Values</span>
+                <span className="pa-px-mass-block__lbl">Work Values</span>
               </div>
               <div className="pa-px-mass-block pa-px-mass-block--15" style={{ flex: '15' }}>
                 <span className="pa-px-mass-block__pct">15%</span>
-                <span className="pa-px-mass-block__lbl">Traits</span>
+                <span className="pa-px-mass-block__lbl">Personality Traits</span>
               </div>
               <div className="pa-px-mass-block pa-px-mass-block--10" style={{ flex: '10' }}>
                 <span className="pa-px-mass-block__pct">10%</span>
-                <span className="pa-px-mass-block__lbl">Education</span>
+                <span className="pa-px-mass-block__lbl">Educational Background</span>
               </div>
               <div className="pa-px-mass-block pa-px-mass-block--5" style={{ flex: '5' }}>
                 <span className="pa-px-mass-block__pct">5%</span>
-                <span className="pa-px-mass-block__lbl">Goals</span>
+                <span className="pa-px-mass-block__lbl">Career Goals</span>
               </div>
             </div>
 

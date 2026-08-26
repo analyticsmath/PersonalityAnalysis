@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PublicPicture } from '../media/PublicPicture';
@@ -10,7 +10,8 @@ const PROVENANCE_LAYERS = {
     tag: 'SUPPLIED RAW INPUT',
     title: 'Participant Input',
     content: '“I clarify the constraints first, then choose the smallest reversible step.”',
-    detail: 'Captured with verbatim situational context intact.',
+    detail: 'Captured with situational context intact.',
+    isIllustrative: true,
   },
   inferred: {
     tag: 'INFERRED DIMENSIONS',
@@ -21,7 +22,7 @@ const PROVENANCE_LAYERS = {
   calculated: {
     tag: 'CALCULATED WEIGHTS',
     title: 'Deterministic Math',
-    content: '25% RIASEC + 25% Skills + 20% Values + 15% Traits + 10% Ed + 5% Goals',
+    content: '25% RIASEC Interests + 25% Technical Skills + 20% Work Values + 15% Traits + 10% Ed + 5% Goals',
     detail: 'Fixed mathematical formula with zero black-box parameters.',
   },
   compared: {
@@ -38,13 +39,33 @@ const PROVENANCE_LAYERS = {
   },
 };
 
+const TRUST_KEYS = ['supplied', 'inferred', 'calculated', 'compared', 'controlled'];
+
 export const RecordTimeTrustFinale = () => {
   const [scrubValue, setScrubValue] = useState(0); // 0 (baseline) to 1 (later)
   const [activeTrustKey, setActiveTrustKey] = useState('calculated');
+  const pillRefs = useRef([]);
   const { prefersReducedMotion } = usePublicCapabilities();
 
   const isLater = scrubValue > 0.5;
   const currentLayer = PROVENANCE_LAYERS[activeTrustKey] || PROVENANCE_LAYERS.calculated;
+  const activePillIdx = TRUST_KEYS.indexOf(activeTrustKey);
+
+  const handlePillKeyDown = (e, idx) => {
+    let nextIdx = idx;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      nextIdx = (idx + 1) % TRUST_KEYS.length;
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      nextIdx = (idx - 1 + TRUST_KEYS.length) % TRUST_KEYS.length;
+    }
+
+    if (nextIdx !== idx) {
+      setActiveTrustKey(TRUST_KEYS[nextIdx]);
+      pillRefs.current[nextIdx]?.focus();
+    }
+  };
 
   return (
     <div className="pa-px-time-trust-finale-movement">
@@ -95,6 +116,7 @@ export const RecordTimeTrustFinale = () => {
               <div className="pa-px-time-exposure__stable-badge">
                 <span className="pa-px-time-exposure__stable-dot" />
                 <span>Anchored: &ldquo;clarify constraints first&rdquo;</span>
+                <span className="pa-px-illustrative-pill" style={{ marginLeft: 6 }}>Illustrative example</span>
               </div>
             </div>
 
@@ -146,18 +168,25 @@ export const RecordTimeTrustFinale = () => {
               SHOW ME WHERE THAT CAME FROM.
             </h2>
 
-            {/* 5 Provenance State Controls */}
+            {/* 5 Provenance State Controls (Roving Tabindex) */}
             <div className="pa-px-trust-provenance-pills" role="tablist" aria-label="Provenance layers">
-              {['supplied', 'inferred', 'calculated', 'compared', 'controlled'].map((key) => {
+              {TRUST_KEYS.map((key, idx) => {
                 const isSelected = activeTrustKey === key;
                 return (
                   <button
                     key={key}
+                    ref={(el) => (pillRefs.current[idx] = el)}
                     type="button"
                     role="tab"
+                    id={`home-trust-tab-${key}`}
                     aria-selected={isSelected}
+                    tabIndex={isSelected ? 0 : -1}
                     className={`pa-px-trust-pill-btn ${isSelected ? 'pa-px-trust-pill-btn--active' : ''}`}
-                    onClick={() => setActiveTrustKey(key)}
+                    onClick={() => {
+                      setActiveTrustKey(key);
+                      pillRefs.current[idx]?.focus();
+                    }}
+                    onKeyDown={(e) => handlePillKeyDown(e, idx)}
                   >
                     {key.toUpperCase()}
                   </button>
@@ -184,7 +213,12 @@ export const RecordTimeTrustFinale = () => {
                   transition={{ duration: 0.22, ease: 'easeOut' }}
                   className="pa-px-trust-layer-overlay"
                 >
-                  <div className="pa-px-trust-layer-tag">{currentLayer.tag}</div>
+                  <div className="pa-px-trust-layer-header">
+                    <span className="pa-px-trust-layer-tag">{currentLayer.tag}</span>
+                    {currentLayer.isIllustrative && (
+                      <span className="pa-px-illustrative-pill">Illustrative example</span>
+                    )}
+                  </div>
                   <div className="pa-px-trust-layer-content">{currentLayer.content}</div>
                   <div className="pa-px-trust-layer-detail">{currentLayer.detail}</div>
                 </motion.div>

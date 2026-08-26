@@ -78,6 +78,7 @@ export const ProgressLongitudinalExperience = () => {
               <div className="pa-px-temporal-stable-badge">
                 <span className="pa-px-temporal-stable-dot" />
                 <span>Held: &ldquo;clarify constraints first, choose smallest step&rdquo;</span>
+                <span className="pa-px-illustrative-pill" style={{ marginLeft: 6 }}>Illustrative example</span>
               </div>
             </div>
 

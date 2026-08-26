@@ -1,7 +1,7 @@
 /**
  * Personality Assessor - Trust & Governance Route Styling
- * Tactile Provenance Inspection & Sovereign Rights Ledger
- * Zero generic cards, zero full-screen dark sheets.
+ * Tactile Multi-Layer Aperture Inspection & Sovereign Rights Ledger
+ * Dominant diagnostic visual record (60-75% presence), zero generic white boxes.
  */
 
 .pa-px-trust-page {
@@ -33,7 +33,7 @@
   margin: 0;
 }
 
-/* Aperture Stage */
+/* ── Aperture Stage ── */
 .pa-px-aperture-chain-stage {
   max-width: 1440px;
   margin: 0 auto var(--pa-space-section);
@@ -58,6 +58,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  outline: none;
   transition: all 160ms ease;
 }
 
@@ -65,35 +66,76 @@
   color: var(--pa-evidence);
 }
 
+.pa-px-aperture-step-btn:focus-visible,
 .pa-px-aperture-step-btn--active {
   background-color: var(--pa-ink);
   color: #FFF;
   border-color: var(--pa-ink);
 }
 
+.pa-px-aperture-step-btn:focus-visible .pa-px-aperture-step-num,
 .pa-px-aperture-step-btn--active .pa-px-aperture-step-num {
   color: #FFF;
 }
 
-.pa-px-aperture-inspector-card {
-  background-color: var(--pa-white);
-  border: 1px solid var(--pa-mineral);
+/* Cinematic Multi-Layer Aperture Record Viewport */
+.pa-px-aperture-record-viewport {
+  position: relative;
+  width: 100%;
   border-radius: var(--px-radius-sm);
-  padding: clamp(20px, 2.5vw, 36px);
+  overflow: hidden;
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
   gap: var(--px-column-gap);
   align-items: center;
-  box-shadow: 0 14px 36px rgba(23, 25, 24, 0.06);
+  background-color: var(--pa-mineral);
+  padding: clamp(20px, 3vw, 36px);
+  box-shadow: 0 16px 44px rgba(23, 25, 24, 0.07);
 }
 
-.pa-px-aperture-inspector__content {
+.pa-px-aperture-dominant-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border-radius: var(--px-radius-xs);
+  overflow: hidden;
+  background-color: var(--pa-white);
+  box-shadow: 0 10px 28px rgba(23, 25, 24, 0.08);
+}
+
+.pa-px-aperture-dominant-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pa-px-aperture-reticle-badge {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  background-color: rgba(23, 25, 24, 0.92);
+  padding: 6px 12px;
+  border-radius: var(--px-radius-xs);
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
+  color: #FFF;
+  letter-spacing: 0.04em;
+}
+
+/* Dynamic Aperture Information Sheet */
+.pa-px-aperture-data-sheet {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.pa-px-aperture-inspector__tag {
+.pa-px-aperture-data-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pa-px-aperture-data-tag {
   font-family: var(--pa-font-mono);
   font-size: 0.72rem;
   color: var(--pa-evidence);
@@ -101,7 +143,7 @@
   letter-spacing: 0.04em;
 }
 
-.pa-px-aperture-inspector__headline {
+.pa-px-aperture-data-title {
   font-family: var(--pa-font-family);
   font-size: clamp(1.4rem, 2vw, 2.2rem);
   font-weight: var(--px-weight-medium);
@@ -111,73 +153,42 @@
   margin: 0;
 }
 
-.pa-px-aperture-inspector__summary {
+.pa-px-aperture-data-summary {
   font-size: 0.9rem;
   color: var(--pa-graphite);
   line-height: 1.45;
   margin: 0;
 }
 
-.pa-px-aperture-evidence-box {
-  background-color: var(--pa-paper);
+.pa-px-aperture-raw-block {
+  background-color: var(--pa-white);
   border-radius: var(--px-radius-xs);
   border-left: 3px solid var(--pa-evidence);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 4px;
+  box-shadow: 0 4px 14px rgba(23, 25, 24, 0.04);
 }
 
-.pa-px-aperture-evidence-box__lbl {
+.pa-px-aperture-raw-lbl {
   font-family: var(--pa-font-mono);
   font-size: 0.7rem;
   color: var(--pa-evidence);
   font-weight: 500;
 }
 
-.pa-px-aperture-evidence-box__text {
+.pa-px-aperture-raw-text {
   font-family: var(--pa-font-mono);
   font-size: 0.82rem;
   color: var(--pa-ink);
   margin: 0;
 }
 
-.pa-px-aperture-evidence-box__meta {
+.pa-px-aperture-raw-meta {
   font-family: var(--pa-font-mono);
   font-size: 0.72rem;
   color: var(--pa-graphite);
-}
-
-.pa-px-aperture-inspector__media-frame {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 11;
-  border-radius: var(--px-radius-xs);
-  overflow: hidden;
-  background-color: var(--pa-mineral);
-}
-
-.pa-px-aperture-inspector__media-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.pa-px-aperture-reticle-overlay {
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  background-color: rgba(23, 25, 24, 0.9);
-  padding: 6px 12px;
-  border-radius: var(--px-radius-xs);
-}
-
-.pa-px-aperture-reticle__badge {
-  font-family: var(--pa-font-mono);
-  font-size: 0.72rem;
-  color: #FFF;
-  letter-spacing: 0.04em;
 }
 
 /* Sovereign Rights Ledger */
@@ -245,7 +256,7 @@
 }
 
 @media (max-width: 900px) {
-  .pa-px-aperture-inspector-card {
+  .pa-px-aperture-record-viewport {
     grid-template-columns: 1fr;
   }
   .pa-px-sovereign-ledger__row {

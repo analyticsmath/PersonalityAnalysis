@@ -1,39 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { PublicPicture } from '../media/PublicPicture';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const TRANSFORMATION_BEATS = [
-  {
-    step: 0,
-    title: 'Source Capture',
-    annotation: 'Raw response preserved verbatim.',
-  },
-  {
-    step: 1,
-    title: 'Clause Split',
-    annotation: 'Syntactic isolation of pacing and uncertainty strategy.',
-  },
-  {
-    step: 2,
-    title: 'Multi-Model Calibration',
-    annotation: 'Branching into trait dimensions, vocational interests, and values.',
-  },
-  {
-    step: 3,
-    title: 'Deterministic Weighting',
-    annotation: '25/25/20/15/10/5 proportional career calibration formula.',
-  },
-  {
-    step: 4,
-    title: 'Inspectable Record',
-    annotation: 'Unified professional record with unbroken provenance.',
-  },
-];
 
 export const HowCausalEssay = () => {
   const containerRef = useRef(null);
@@ -95,8 +66,6 @@ export const HowCausalEssay = () => {
     return () => ctx.revert();
   }, [prefersReducedMotion, isMobile]);
 
-  const currentBeat = TRANSFORMATION_BEATS[activeStep] || TRANSFORMATION_BEATS[0];
-
   return (
     <div className="pa-px-how-page" data-route="how-it-works">
       <header className="pa-px-how-hero">
@@ -106,30 +75,13 @@ export const HowCausalEssay = () => {
         </p>
       </header>
 
-      {/* Flagship Pinned Causal Transformation Sequence (Zero 5-Stage Essay Column) */}
+      {/* Flagship Pinned Causal Transformation Sequence (Self-Explaining Visual Flow) */}
       <div ref={containerRef} className="pa-px-how-pinned-container">
         <div ref={stageRef} className="pa-px-how-cinematic-stage">
-          <header className="pa-px-how-stage__nav">
-            <div className="pa-px-how-stage__stepper">
-              {TRANSFORMATION_BEATS.map((beat) => (
-                <button
-                  key={beat.step}
-                  type="button"
-                  className={`pa-px-how-step-indicator ${activeStep === beat.step ? 'pa-px-how-step-indicator--active' : ''}`}
-                  onClick={() => setActiveStep(beat.step)}
-                  aria-label={`Step ${beat.step + 1}: ${beat.title}`}
-                >
-                  <span className="pa-px-how-step-num">0{beat.step + 1}</span>
-                  <span className="pa-px-how-step-title">{beat.title}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className="pa-px-how-stage__annotation-line">
-              <span className="pa-px-how-stage__beat-title">{currentBeat.title}</span>
-              <span className="pa-px-how-stage__beat-desc">{currentBeat.annotation}</span>
-            </div>
-          </header>
+          <div className="pa-px-how-stage__header-bar">
+            <span className="pa-px-how-stage__tag">CAUSAL TRANSFORMATION PIPELINE</span>
+            <span className="pa-px-illustrative-pill">Illustrative example</span>
+          </div>
 
           <div className="pa-px-how-stage__arena" aria-live="polite">
             {/* State 0 & 1: Massive Source Sentence & Clause Separation */}
@@ -145,7 +97,7 @@ export const HowCausalEssay = () => {
               </span>
             </div>
 
-            {/* SVG Connecting Paths */}
+            {/* SVG Connecting Branch Vectors */}
             <svg
               className="pa-px-how-stage__paths-svg"
               viewBox="0 0 600 50"
@@ -159,7 +111,7 @@ export const HowCausalEssay = () => {
               <path d="M 440,0 C 440,25 520,35 540,50" stroke="var(--pa-graphite)" strokeWidth="1.5" strokeDasharray="4 4" />
             </svg>
 
-            {/* State 2: Framework Nodes Field */}
+            {/* State 2: Framework Nodes Field (Correct Semantics) */}
             <div
               className="pa-px-how-stage__models-field"
               style={{
@@ -170,18 +122,22 @@ export const HowCausalEssay = () => {
               <div className="pa-px-how-node">
                 <span className="pa-px-how-node__lbl">BIG FIVE</span>
                 <span className="pa-px-how-node__val">C 78 · ES 64</span>
+                <span className="pa-px-how-node__sub">Deliberate execution</span>
               </div>
               <div className="pa-px-how-node">
                 <span className="pa-px-how-node__lbl">RIASEC</span>
                 <span className="pa-px-how-node__val">I 72 · C 68</span>
+                <span className="pa-px-how-node__sub">Investigative problem space</span>
               </div>
               <div className="pa-px-how-node">
                 <span className="pa-px-how-node__lbl">WORK VALUES</span>
                 <span className="pa-px-how-node__val">Independence 84</span>
+                <span className="pa-px-how-node__sub">High autonomy condition</span>
               </div>
               <div className="pa-px-how-node">
-                <span className="pa-px-how-node__lbl">CAREER SIGNALS</span>
+                <span className="pa-px-how-node__lbl">BEHAVIORAL SIGNALS</span>
                 <span className="pa-px-how-node__val">Iterative Scoping</span>
+                <span className="pa-px-how-node__sub">Small reversible experiments</span>
               </div>
             </div>
 
@@ -195,19 +151,19 @@ export const HowCausalEssay = () => {
             >
               <div className="pa-px-how-weights-strip">
                 <div className="pa-px-how-wblock" style={{ flex: '25', background: 'var(--pa-ink)', color: '#FFF' }}>
-                  <strong>25%</strong><span>RIASEC</span>
+                  <strong>25%</strong><span>RIASEC Interests</span>
                 </div>
                 <div className="pa-px-how-wblock" style={{ flex: '25', background: 'var(--pa-graphite)', color: '#FFF' }}>
-                  <strong>25%</strong><span>Skills</span>
+                  <strong>25%</strong><span>Technical Skills</span>
                 </div>
                 <div className="pa-px-how-wblock" style={{ flex: '20', background: 'var(--pa-context)', color: '#FFF' }}>
-                  <strong>20%</strong><span>Values</span>
+                  <strong>20%</strong><span>Work Values</span>
                 </div>
                 <div className="pa-px-how-wblock" style={{ flex: '15', background: 'var(--pa-mineral)', color: 'var(--pa-ink)' }}>
                   <strong>15%</strong><span>Traits</span>
                 </div>
                 <div className="pa-px-how-wblock" style={{ flex: '10', background: 'var(--pa-paper)', color: 'var(--pa-ink)', border: '1px solid var(--pa-mineral)' }}>
-                  <strong>10%</strong><span>Ed</span>
+                  <strong>10%</strong><span>Education</span>
                 </div>
                 <div className="pa-px-how-wblock" style={{ flex: '5', background: 'var(--pa-evidence)', color: '#FFF' }}>
                   <strong>5%</strong><span>Goals</span>

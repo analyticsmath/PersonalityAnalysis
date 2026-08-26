@@ -53,75 +53,20 @@
   box-shadow: 0 14px 36px rgba(23, 25, 24, 0.05);
 }
 
-.pa-px-how-stage__nav {
+.pa-px-how-stage__header-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
   border-bottom: 1px solid var(--pa-paper);
-  padding-bottom: 16px;
+  padding-bottom: 14px;
 }
 
-.pa-px-how-stage__stepper {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.pa-px-how-step-indicator {
-  background: none;
-  border: 1px solid var(--pa-mineral);
-  padding: 6px 12px;
-  border-radius: var(--px-radius-xs);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  outline: none;
-  transition: all 160ms ease;
-}
-
-.pa-px-how-step-indicator--active {
-  background-color: var(--pa-ink);
-  border-color: var(--pa-ink);
-  color: #FFF;
-}
-
-.pa-px-how-step-num {
+.pa-px-how-stage__tag {
   font-family: var(--pa-font-mono);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 500;
   color: var(--pa-evidence);
-}
-
-.pa-px-how-step-indicator--active .pa-px-how-step-num {
-  color: #FFF;
-}
-
-.pa-px-how-step-title {
-  font-family: var(--pa-font-family);
-  font-size: 0.8rem;
-  font-weight: var(--px-weight-medium);
-}
-
-.pa-px-how-stage__annotation-line {
-  display: flex;
-  gap: 12px;
-  align-items: baseline;
-}
-
-.pa-px-how-stage__beat-title {
-  font-family: var(--pa-font-mono);
-  font-size: 0.76rem;
-  color: var(--pa-evidence);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-}
-
-.pa-px-how-stage__beat-desc {
-  font-size: 0.86rem;
-  color: var(--pa-graphite);
+  letter-spacing: 0.05em;
 }
 
 .pa-px-how-stage__arena {

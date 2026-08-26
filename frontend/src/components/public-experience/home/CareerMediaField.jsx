@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import careersData from '../../../content/careers.json';
@@ -29,6 +29,7 @@ export const CareerMediaField = () => {
   const roleKeys = Object.keys(careersData);
   const [activeRoleKey, setActiveRoleKey] = useState('machine_learning_engineer');
   const [pointerOffset, setPointerOffset] = useState({ x: 0, y: 0 });
+  const btnRefs = useRef([]);
   const navigate = useNavigate();
   const { hasFinePointer, prefersReducedMotion, isMobile } = usePublicCapabilities();
 
@@ -45,16 +46,21 @@ export const CareerMediaField = () => {
   };
 
   const handleKeyDown = (e, idx) => {
+    let nextIdx = idx;
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault();
-      const nextIdx = (idx + 1) % roleKeys.length;
-      setActiveRoleKey(roleKeys[nextIdx]);
+      nextIdx = (idx + 1) % roleKeys.length;
     } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
       e.preventDefault();
-      const prevIdx = (idx - 1 + roleKeys.length) % roleKeys.length;
-      setActiveRoleKey(roleKeys[prevIdx]);
+      nextIdx = (idx - 1 + roleKeys.length) % roleKeys.length;
     } else if (e.key === 'Enter') {
       navigate('/career-intelligence');
+      return;
+    }
+
+    if (nextIdx !== idx) {
+      setActiveRoleKey(roleKeys[nextIdx]);
+      btnRefs.current[nextIdx]?.focus();
     }
   };
 
@@ -75,7 +81,7 @@ export const CareerMediaField = () => {
         </header>
 
         <div className="pa-px-career-media-field__arena">
-          {/* Spatial Typographic Field of 17 Canonical Role Names */}
+          {/* Spatial Typographic Field of 17 Canonical Role Names (Roving Tabindex) */}
           <div
             className="pa-px-career-roles-stream"
             role="tablist"
@@ -93,14 +99,19 @@ export const CareerMediaField = () => {
                   className={`pa-px-career-stream-item ${isSelected ? 'pa-px-career-stream-item--active' : ''}`}
                 >
                   <button
+                    ref={(el) => (btnRefs.current[idx] = el)}
                     type="button"
                     role="tab"
+                    id={`home-role-tab-${key}`}
                     aria-selected={isSelected}
+                    tabIndex={isSelected ? 0 : -1}
                     className="pa-px-career-stream-btn"
                     style={{ opacity }}
-                    onClick={() => setActiveRoleKey(key)}
+                    onClick={() => {
+                      setActiveRoleKey(key);
+                      btnRefs.current[idx]?.focus();
+                    }}
                     onMouseEnter={() => setActiveRoleKey(key)}
-                    onFocus={() => setActiveRoleKey(key)}
                     onKeyDown={(e) => handleKeyDown(e, idx)}
                   >
                     <span className="pa-px-career-stream-title">{role.title}</span>

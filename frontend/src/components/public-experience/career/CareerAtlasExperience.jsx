@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import careersData from '../../../content/careers.json';
 import { PublicPicture } from '../media/PublicPicture';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
@@ -29,9 +28,10 @@ export const CareerAtlasExperience = () => {
   const roleKeys = Object.keys(careersData);
   const [selectedKey, setSelectedKey] = useState(roleKeys[0]);
   const [pointerPos, setPointerPos] = useState({ x: 0, y: 0 });
+  const roleRefs = useRef([]);
   const activeRole = careersData[selectedKey] || careersData[roleKeys[0]];
   const activeMedia = CAREER_MEDIA[selectedKey] || 'workworldPrecision';
-  const { hasFinePointer, prefersReducedMotion, isMobile } = usePublicCapabilities();
+  const { hasFinePointer, prefersReducedMotion } = usePublicCapabilities();
   const selectedIdx = roleKeys.indexOf(selectedKey);
 
   const handleMouseMove = (e) => {
@@ -43,14 +43,18 @@ export const CareerAtlasExperience = () => {
   };
 
   const handleKeyDown = (e, idx) => {
-    if (e.key === 'ArrowDown') {
+    let nextIdx = idx;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault();
-      const nextIdx = (idx + 1) % roleKeys.length;
+      nextIdx = (idx + 1) % roleKeys.length;
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      nextIdx = (idx - 1 + roleKeys.length) % roleKeys.length;
+    }
+
+    if (nextIdx !== idx) {
       setSelectedKey(roleKeys[nextIdx]);
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      const prevIdx = (idx - 1 + roleKeys.length) % roleKeys.length;
-      setSelectedKey(roleKeys[prevIdx]);
+      roleRefs.current[nextIdx]?.focus();
     }
   };
 
@@ -70,7 +74,7 @@ export const CareerAtlasExperience = () => {
       </header>
 
       <section className="pa-px-career-field-arena" aria-label="17 Canonical Occupational Profiles Field">
-        {/* Spatial Typographic Stream */}
+        {/* Spatial Typographic Stream with Roving Tabindex */}
         <div className="pa-px-career-roles-canvas" role="tablist" aria-label="17 Occupational Profiles">
           <span className="sr-only">17 Occupational Profiles</span>
           {roleKeys.map((key, idx) => {
@@ -82,14 +86,19 @@ export const CareerAtlasExperience = () => {
             return (
               <button
                 key={key}
+                ref={(el) => (roleRefs.current[idx] = el)}
                 type="button"
                 role="tab"
+                id={`career-atlas-tab-${key}`}
                 aria-selected={isSelected}
+                tabIndex={isSelected ? 0 : -1}
                 className={`pa-px-career-role-item ${isSelected ? 'pa-px-career-role-item--active' : ''}`}
                 style={{ opacity }}
-                onClick={() => setSelectedKey(key)}
+                onClick={() => {
+                  setSelectedKey(key);
+                  roleRefs.current[idx]?.focus();
+                }}
                 onMouseEnter={() => setSelectedKey(key)}
-                onFocus={() => setSelectedKey(key)}
                 onKeyDown={(e) => handleKeyDown(e, idx)}
               >
                 <span className="pa-px-career-role-item__title">{role.title}</span>
@@ -138,7 +147,7 @@ export const CareerAtlasExperience = () => {
 
             <div className="pa-px-career-inspector-section">
               <div className="pa-px-career-inspector-label">
-                CORE COMPETENCIES REQUIRED
+                CORE TECHNICAL COMPETENCIES REQUIRED
               </div>
               <div className="pa-px-career-skills-chips">
                 {activeRole.skills.slice(0, 3).map((skill) => (

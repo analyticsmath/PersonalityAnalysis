@@ -25,7 +25,10 @@ export const MethodologyPublication = () => {
             <div className="pa-px-monograph-tag">{bigFive.role}</div>
           </div>
           <div className="pa-px-monograph-main">
-            <h2 id="mono-sec-bigfive" className="pa-px-monograph-title">{bigFive.title}</h2>
+            <div className="pa-px-monograph-header-row">
+              <h2 id="mono-sec-bigfive" className="pa-px-monograph-title">{bigFive.title}</h2>
+              <span className="pa-px-illustrative-pill">Illustrative example</span>
+            </div>
             <p className="pa-px-monograph-lead">{bigFive.description}</p>
 
             {/* Continuous Axis Figure */}
@@ -112,14 +115,14 @@ export const MethodologyPublication = () => {
           </div>
         </article>
 
-        {/* Section 04: Career Signals */}
+        {/* Section 04: Behavioral / Career Signals (Distinct from Skills) */}
         <article className="pa-px-monograph-entry" aria-labelledby="mono-sec-signals">
           <div className="pa-px-monograph-sidebar">
             <span className="pa-px-monograph-num">04 / SIGNALS</span>
             <div className="pa-px-monograph-tag">{behavioralSignals.role}</div>
           </div>
           <div className="pa-px-monograph-main">
-            <h2 id="mono-sec-signals" className="pa-px-monograph-title">{behavioralSignals.title}</h2>
+            <h2 id="mono-sec-signals" className="pa-px-monograph-title">Behavioral & Problem-Solving Signals</h2>
             <p className="pa-px-monograph-lead">{behavioralSignals.description}</p>
 
             <div className="pa-px-signals-chips-grid">
@@ -144,19 +147,19 @@ export const MethodologyPublication = () => {
 
             <div className="pa-px-monograph-weights-strip" role="region" aria-label="Deterministic weights breakdown">
               <div style={{ flex: '25', background: 'var(--pa-ink)', color: '#FFF', padding: '12px 8px', textAlign: 'center' }}>
-                <strong>25%</strong><div className="pa-px-wlbl" style={{ color: '#DDD' }}>RIASEC</div>
+                <strong>25%</strong><div className="pa-px-wlbl" style={{ color: '#DDD' }}>RIASEC Interests</div>
               </div>
               <div style={{ flex: '25', background: 'var(--pa-graphite)', color: '#FFF', padding: '12px 8px', textAlign: 'center' }}>
-                <strong>25%</strong><div className="pa-px-wlbl" style={{ color: '#DDD' }}>Skills</div>
+                <strong>25%</strong><div className="pa-px-wlbl" style={{ color: '#DDD' }}>Technical Skills</div>
               </div>
               <div style={{ flex: '20', background: 'var(--pa-context)', color: '#FFF', padding: '12px 8px', textAlign: 'center' }}>
-                <strong>20%</strong><div className="pa-px-wlbl" style={{ color: '#DDD' }}>Values</div>
+                <strong>20%</strong><div className="pa-px-wlbl" style={{ color: '#DDD' }}>Work Values</div>
               </div>
               <div style={{ flex: '15', background: 'var(--pa-mineral)', color: 'var(--pa-ink)', padding: '12px 8px', textAlign: 'center' }}>
                 <strong>15%</strong><div className="pa-px-wlbl">Traits</div>
               </div>
               <div style={{ flex: '10', background: 'var(--pa-paper)', color: 'var(--pa-ink)', padding: '12px 8px', textAlign: 'center', border: '1px solid var(--pa-mineral)' }}>
-                <strong>10%</strong><div className="pa-px-wlbl">Ed</div>
+                <strong>10%</strong><div className="pa-px-wlbl">Education</div>
               </div>
               <div style={{ flex: '5', background: 'var(--pa-evidence)', color: '#FFF', padding: '12px 4px', textAlign: 'center' }}>
                 <strong>5%</strong><div className="pa-px-wlbl" style={{ color: '#FFF' }}>Goals</div>

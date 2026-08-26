@@ -11,9 +11,10 @@ const PROVENANCE_STATES = [
     name: 'Supplied',
     tag: 'RAW INPUT & CONTEXT',
     headline: 'Original Participant Response',
-    summary: 'Captured with situational context intact rather than reduced to an opaque number.',
+    summary: 'Captured with situational context intact rather than collapsed into an opaque number.',
     rawEvidence: '“I clarify the constraints first, then choose the smallest reversible step.”',
-    provenanceMeta: 'Prompt: "How do you make progress under ambiguity?" · Source ID: src-clause-7729',
+    provenanceMeta: 'Prompt: "How do you make progress under ambiguity?" · Illustrative baseline',
+    isIllustrative: true,
   },
   {
     id: 'inferred',
@@ -22,7 +23,7 @@ const PROVENANCE_STATES = [
     headline: 'Continuous Trait Dimensions',
     summary: 'Independent psychometric vectors evaluated on continuous spectra with explicit validity state checks.',
     rawEvidence: 'Conscientiousness: 78 · Emotional Stability: 64 · Investigative: 72 · Conventional: 68',
-    provenanceMeta: 'Validity State: valid · Independent dimensional model evaluation',
+    provenanceMeta: 'Validity State: valid · Independent multi-model evaluation',
   },
   {
     id: 'calculated',
@@ -30,15 +31,15 @@ const PROVENANCE_STATES = [
     tag: 'DETERMINISTIC FORMULA',
     headline: 'Deterministic Career Calibration',
     summary: 'Fixed mathematical career-fit weights assembled without black box adjustments or hidden ML weights.',
-    rawEvidence: 'RIASEC (25%) + Skills (25%) + Values (20%) + Traits (15%) + Education (10%) + Goals (5%)',
-    provenanceMeta: 'Formula Type: Deterministic Linear Model · Zero hidden adjustments',
+    rawEvidence: 'RIASEC Interests (25%) + Technical Skills (25%) + Work Values (20%) + Personality Traits (15%) + Education (10%) + Goals (5%)',
+    provenanceMeta: 'Formula Type: Deterministic Linear Model · Zero black-box parameters',
   },
   {
     id: 'compared',
     name: 'Compared',
     tag: 'OCCUPATIONAL BENCHMARKS',
     headline: 'Occupational Field Alignment',
-    summary: 'Comparison against 17 canonical engineering, design, and analytical benchmark profiles.',
+    summary: 'Benchmarking against 17 canonical engineering, design, and analytical profiles in careers corpus.',
     rawEvidence: 'Aligned Profiles: Software Engineer, Systems Architect, Machine Learning Engineer',
     provenanceMeta: 'Benchmark Corpus: 17 Canonical Profiles · Profile Growth Potential metric',
   },
@@ -48,8 +49,8 @@ const PROVENANCE_STATES = [
     tag: 'SOVEREIGN USER RIGHTS',
     headline: 'Permanent Data Sovereignty',
     summary: 'Direct user sovereignty with JSON export, AI transparency notice, and hard deletion of stored records.',
-    rawEvidence: 'Sovereign Controls: Full JSON Export · AI Audit Notice · Hard Deletion of Account & Records',
-    provenanceMeta: 'Zero third-party AI training · AES-256 encrypted at rest · TLS 1.3 in transit',
+    rawEvidence: 'Sovereign Controls: Full JSON Export · AI Processing Notice · Hard Deletion of Account & Records',
+    provenanceMeta: 'Zero third-party model training · Sovereign ownership · Direct controls in Settings',
   },
 ];
 
@@ -64,10 +65,10 @@ export const TrustSourceInspection = () => {
 
   const handleKeyDown = (e, idx) => {
     let nextIdx = idx;
-    if (e.key === 'ArrowRight') {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
       nextIdx = (idx + 1) % PROVENANCE_STATES.length;
-    } else if (e.key === 'ArrowLeft') {
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
       nextIdx = (idx - 1 + PROVENANCE_STATES.length) % PROVENANCE_STATES.length;
     }
@@ -87,8 +88,9 @@ export const TrustSourceInspection = () => {
         </p>
       </header>
 
-      {/* Flagship Tactile Aperture Inspection Stage (60–75% Dominant Visual Record) */}
+      {/* Flagship Tactile Multi-Layer Aperture Stage (Dominant Visual Record, No Generic White Card) */}
       <section className="pa-px-trust-chain pa-px-aperture-chain-stage" aria-label="Evidence Chain of Custody">
+        {/* Optical Aperture Layer Controls (Roving Tabindex) */}
         <div className="pa-px-aperture-selector" role="tablist" aria-label="Provenance layers">
           {PROVENANCE_STATES.map((s, idx) => {
             const isSelected = activeStateId === s.id;
@@ -103,7 +105,10 @@ export const TrustSourceInspection = () => {
                 aria-selected={isSelected}
                 tabIndex={isSelected ? 0 : -1}
                 className={`pa-px-aperture-step-btn ${isSelected ? 'pa-px-aperture-step-btn--active' : ''}`}
-                onClick={() => setActiveStateId(s.id)}
+                onClick={() => {
+                  setActiveStateId(s.id);
+                  tabRefs.current[idx]?.focus();
+                }}
                 onKeyDown={(e) => handleKeyDown(e, idx)}
               >
                 <span className="pa-px-aperture-step-num">0{idx + 1}.</span>
@@ -113,62 +118,55 @@ export const TrustSourceInspection = () => {
           })}
         </div>
 
-        {/* Large Inspectable Diagnostic Record */}
+        {/* Cinematic Multi-Layer Diagnostic Record Field (60–75% Viewport Presence) */}
         <div
           id={`trust-tabpanel-${current.id}`}
           role="tabpanel"
           aria-labelledby={`trust-tab-${current.id}`}
-          className="pa-px-aperture-inspector-card"
+          className="pa-px-aperture-record-viewport"
           data-transition-actor="trust-evidence-record"
           aria-live="polite"
         >
-          <div className="pa-px-aperture-inspector__content">
-            <div className="pa-px-aperture-inspector__tag">
-              {current.tag} (0{activeIdx + 1}/05)
-            </div>
-            <h2 className="pa-px-aperture-inspector__headline">
-              {current.headline}
-            </h2>
-            <p className="pa-px-aperture-inspector__summary">
-              {current.summary}
-            </p>
-
-            <div className="pa-px-aperture-evidence-box">
-              <div className="pa-px-aperture-evidence-box__lbl">
-                RECORD LAYER OUTPUT
-              </div>
-              <p className="pa-px-aperture-evidence-box__text">
-                {current.rawEvidence}
-              </p>
-              <div className="pa-px-aperture-evidence-box__meta">
-                {current.provenanceMeta}
-              </div>
-            </div>
-          </div>
-
-          <div className="pa-px-aperture-inspector__media-frame">
+          <div className="pa-px-aperture-dominant-media">
             <PublicPicture
               assetKey="trustDiagnostic"
               alt="Diagnostic measurement instrument calibration"
               priority={true}
             />
 
-            {/* Dynamic Informational Reticle Layer */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={current.id}
-                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.22, ease: 'easeOut' }}
-                className="pa-px-aperture-reticle-overlay"
-              >
-                <span className="pa-px-aperture-reticle__badge">
-                  LAYER 0{activeIdx + 1} &middot; {current.name.toUpperCase()}
-                </span>
-              </motion.div>
-            </AnimatePresence>
+            {/* In-Frame Aperture Reticle Layer */}
+            <div className="pa-px-aperture-reticle-badge">
+              <span>LAYER 0{activeIdx + 1} &middot; {current.name.toUpperCase()}</span>
+            </div>
           </div>
+
+          {/* Genuine Dynamic Information Aperture Sheet */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="pa-px-aperture-data-sheet"
+            >
+              <div className="pa-px-aperture-data-header">
+                <span className="pa-px-aperture-data-tag">{current.tag}</span>
+                {current.isIllustrative && (
+                  <span className="pa-px-illustrative-pill">Illustrative example</span>
+                )}
+              </div>
+
+              <h2 className="pa-px-aperture-data-title">{current.headline}</h2>
+              <p className="pa-px-aperture-data-summary">{current.summary}</p>
+
+              <div className="pa-px-aperture-raw-block">
+                <div className="pa-px-aperture-raw-lbl">LAYER RECORD OUTPUT</div>
+                <p className="pa-px-aperture-raw-text">{current.rawEvidence}</p>
+                <div className="pa-px-aperture-raw-meta">{current.provenanceMeta}</div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
