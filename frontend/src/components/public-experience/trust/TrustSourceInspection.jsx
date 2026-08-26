@@ -1,44 +1,79 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { PublicPicture } from '../media/PublicPicture';
 import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 
-const APERTURE_GEOMETRIES = [
-  { clip: 'circle(40% at 28% 32%)', focusTag: 'RAW INPUT CLUSTER & TIMESTAMPS' },
-  { clip: 'circle(44% at 68% 28%)', focusTag: 'INFERRED VECTOR SPECTRUM' },
-  { clip: 'circle(42% at 50% 68%)', focusTag: 'DETERMINISTIC WEIGHTING ASSEMBLY' },
-  { clip: 'circle(46% at 76% 62%)', focusTag: 'OCCUPATIONAL BENCHMARK ALIGNMENT' },
-  { clip: 'circle(48% at 38% 50%)', focusTag: 'SOVEREIGN DATA AUDIT LOG' },
+const PROVENANCE_STATES = [
+  {
+    id: 'supplied',
+    name: 'Supplied',
+    tag: 'RAW INPUT & CONTEXT',
+    headline: 'Original Participant Response',
+    summary: 'Captured with situational context intact rather than reduced to an opaque number.',
+    rawEvidence: '“I clarify the constraints first, then choose the smallest reversible step.”',
+    provenanceMeta: 'Prompt: "How do you make progress under ambiguity?" · Source ID: src-clause-7729',
+  },
+  {
+    id: 'inferred',
+    name: 'Inferred',
+    tag: 'PSYCHOMETRIC VECTORS',
+    headline: 'Continuous Trait Dimensions',
+    summary: 'Independent psychometric vectors evaluated on continuous spectra with explicit validity state checks.',
+    rawEvidence: 'Conscientiousness: 78 · Emotional Stability: 64 · Investigative: 72 · Conventional: 68',
+    provenanceMeta: 'Validity State: valid · Independent dimensional model evaluation',
+  },
+  {
+    id: 'calculated',
+    name: 'Calculated',
+    tag: 'DETERMINISTIC FORMULA',
+    headline: 'Deterministic Career Calibration',
+    summary: 'Fixed mathematical career-fit weights assembled without black box adjustments or hidden ML weights.',
+    rawEvidence: 'RIASEC (25%) + Skills (25%) + Values (20%) + Traits (15%) + Education (10%) + Goals (5%)',
+    provenanceMeta: 'Formula Type: Deterministic Linear Model · Zero hidden adjustments',
+  },
+  {
+    id: 'compared',
+    name: 'Compared',
+    tag: 'OCCUPATIONAL BENCHMARKS',
+    headline: 'Occupational Field Alignment',
+    summary: 'Comparison against 17 canonical engineering, design, and analytical benchmark profiles.',
+    rawEvidence: 'Aligned Profiles: Software Engineer, Systems Architect, Machine Learning Engineer',
+    provenanceMeta: 'Benchmark Corpus: 17 Canonical Profiles · Profile Growth Potential metric',
+  },
+  {
+    id: 'controlled',
+    name: 'Controlled',
+    tag: 'SOVEREIGN USER RIGHTS',
+    headline: 'Permanent Data Sovereignty',
+    summary: 'Direct user sovereignty with JSON export, AI transparency notice, and hard deletion of stored records.',
+    rawEvidence: 'Sovereign Controls: Full JSON Export · AI Audit Notice · Hard Deletion of Account & Records',
+    provenanceMeta: 'Zero third-party AI training · AES-256 encrypted at rest · TLS 1.3 in transit',
+  },
 ];
 
 export const TrustSourceInspection = () => {
   const data = PUBLIC_CONTENT.trust;
-  const steps = data.recordStateSteps;
-  const [activeStepIdx, setActiveStepIdx] = useState(0);
+  const [activeStateId, setActiveStateId] = useState('supplied');
   const tabRefs = useRef([]);
-  const currentStep = steps[activeStepIdx] || steps[0];
-  const activeGeo = APERTURE_GEOMETRIES[activeStepIdx] || APERTURE_GEOMETRIES[0];
   const { prefersReducedMotion } = usePublicCapabilities();
+
+  const activeIdx = PROVENANCE_STATES.findIndex((s) => s.id === activeStateId);
+  const current = PROVENANCE_STATES[activeIdx] || PROVENANCE_STATES[0];
 
   const handleKeyDown = (e, idx) => {
     let nextIdx = idx;
     if (e.key === 'ArrowRight') {
       e.preventDefault();
-      nextIdx = (idx + 1) % steps.length;
+      nextIdx = (idx + 1) % PROVENANCE_STATES.length;
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      nextIdx = (idx - 1 + steps.length) % steps.length;
-    } else if (e.key === 'Home') {
-      e.preventDefault();
-      nextIdx = 0;
-    } else if (e.key === 'End') {
-      e.preventDefault();
-      nextIdx = steps.length - 1;
+      nextIdx = (idx - 1 + PROVENANCE_STATES.length) % PROVENANCE_STATES.length;
     }
 
     if (nextIdx !== idx) {
-      setActiveStepIdx(nextIdx);
+      setActiveStateId(PROVENANCE_STATES[nextIdx].id);
       tabRefs.current[nextIdx]?.focus();
     }
   };
@@ -46,15 +81,17 @@ export const TrustSourceInspection = () => {
   return (
     <div className="pa-px-trust-page" data-route="trust">
       <header className="pa-px-trust-hero">
-        <h1 className="pa-px-trust-hero__headline">{data.hero.headline}</h1>
-        <p className="pa-px-trust-hero__support">{data.hero.support}</p>
+        <h1 className="pa-px-trust-hero__headline">SHOW ME WHERE THAT CAME FROM.</h1>
+        <p className="pa-px-trust-hero__support">
+          Inspect what you supplied, what the system inferred, and what was calculated.
+        </p>
       </header>
 
-      {/* Tactile Provenance Aperture Stage with Real Clip-Path Reveal */}
+      {/* Flagship Tactile Aperture Inspection Stage (60–75% Dominant Visual Record) */}
       <section className="pa-px-trust-chain pa-px-aperture-chain-stage" aria-label="Evidence Chain of Custody">
         <div className="pa-px-aperture-selector" role="tablist" aria-label="Provenance layers">
-          {steps.map((s, idx) => {
-            const isSelected = activeStepIdx === idx;
+          {PROVENANCE_STATES.map((s, idx) => {
+            const isSelected = activeStateId === s.id;
             return (
               <button
                 key={s.id}
@@ -66,69 +103,71 @@ export const TrustSourceInspection = () => {
                 aria-selected={isSelected}
                 tabIndex={isSelected ? 0 : -1}
                 className={`pa-px-aperture-step-btn ${isSelected ? 'pa-px-aperture-step-btn--active' : ''}`}
-                onClick={() => setActiveStepIdx(idx)}
+                onClick={() => setActiveStateId(s.id)}
                 onKeyDown={(e) => handleKeyDown(e, idx)}
               >
-                <span className="pa-px-data" style={{ marginRight: '6px' }}>0{idx + 1}.</span>
+                <span className="pa-px-aperture-step-num">0{idx + 1}.</span>
                 <span>{s.name}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Composite Evidence Record with Aperture Mask Reveal */}
+        {/* Large Inspectable Diagnostic Record */}
         <div
-          id={`trust-tabpanel-${currentStep.id}`}
+          id={`trust-tabpanel-${current.id}`}
           role="tabpanel"
-          aria-labelledby={`trust-tab-${currentStep.id}`}
+          aria-labelledby={`trust-tab-${current.id}`}
           className="pa-px-aperture-inspector-card"
           data-transition-actor="trust-evidence-record"
           aria-live="polite"
         >
           <div className="pa-px-aperture-inspector__content">
-            <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', textTransform: 'uppercase', marginBottom: '6px' }}>
-              PROVENANCE APERTURE: {currentStep.name.toUpperCase()} LAYER (0{activeStepIdx + 1}/05)
+            <div className="pa-px-aperture-inspector__tag">
+              {current.tag} (0{activeIdx + 1}/05)
             </div>
-            <h2 className="pa-px-heading-subsection" style={{ marginBottom: '8px' }}>
-              {currentStep.title}
+            <h2 className="pa-px-aperture-inspector__headline">
+              {current.headline}
             </h2>
-            <p className="pa-px-body" style={{ color: 'var(--pa-graphite)', marginBottom: '16px' }}>
-              {currentStep.description}
+            <p className="pa-px-aperture-inspector__summary">
+              {current.summary}
             </p>
 
             <div className="pa-px-aperture-evidence-box">
-              <div className="pa-px-data" style={{ color: 'var(--pa-ink)', marginBottom: '4px' }}>
-                RECORD TELEMETRY &middot; ILLUSTRATIVE EXAMPLE
+              <div className="pa-px-aperture-evidence-box__lbl">
+                RECORD LAYER OUTPUT
               </div>
-              <p className="pa-px-body-sm" style={{ fontFamily: 'var(--pa-font-mono)', color: 'var(--pa-ink)' }}>
-                {currentStep.details}
+              <p className="pa-px-aperture-evidence-box__text">
+                {current.rawEvidence}
               </p>
+              <div className="pa-px-aperture-evidence-box__meta">
+                {current.provenanceMeta}
+              </div>
             </div>
           </div>
 
           <div className="pa-px-aperture-inspector__media-frame">
-            {/* Base Image Layer */}
             <PublicPicture
               assetKey="trustDiagnostic"
-              alt="Calibrated diagnostic signal analysis"
+              alt="Diagnostic measurement instrument calibration"
               priority={true}
             />
 
-            {/* Dynamic Aperture Reveal Overlay Layer */}
-            <div
-              className="pa-px-aperture-reveal-layer"
-              style={{
-                clipPath: prefersReducedMotion ? 'none' : activeGeo.clip,
-                WebkitClipPath: prefersReducedMotion ? 'none' : activeGeo.clip,
-                transition: 'clip-path 360ms cubic-bezier(0.2, 0, 0, 1), -webkit-clip-path 360ms cubic-bezier(0.2, 0, 0, 1)',
-              }}
-            >
-              <div className="pa-px-aperture-reticle">
-                <span className="pa-px-data pa-px-aperture-reticle__tag">
-                  APERTURE FOCUS: {activeGeo.focusTag}
+            {/* Dynamic Informational Reticle Layer */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.id}
+                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="pa-px-aperture-reticle-overlay"
+              >
+                <span className="pa-px-aperture-reticle__badge">
+                  LAYER 0{activeIdx + 1} &middot; {current.name.toUpperCase()}
                 </span>
-              </div>
-            </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </section>
@@ -136,8 +175,8 @@ export const TrustSourceInspection = () => {
       {/* Quiet Sovereign Rights Ledger */}
       <section className="pa-px-trust-rights pa-px-sovereign-ledger" aria-label="Sovereign Data Rights and Ledger">
         <header className="pa-px-sovereign-ledger__header">
-          <h2 className="pa-px-heading-section">Sovereign Data Rights & Governance Ledger</h2>
-          <p className="pa-px-lead" style={{ maxWidth: '64ch' }}>
+          <h2 className="pa-px-sovereign-ledger__title">Sovereign Data Rights & Governance</h2>
+          <p className="pa-px-sovereign-ledger__lead">
             You maintain permanent legal and technical ownership over your assessment record.
           </p>
         </header>
@@ -145,15 +184,15 @@ export const TrustSourceInspection = () => {
         <div className="pa-px-sovereign-ledger__list" role="list">
           {data.rightsActions.map((action, idx) => (
             <article key={action.id} className="pa-px-sovereign-ledger__row" role="listitem">
-              <div className="pa-px-data pa-px-sovereign-ledger__num">
+              <div className="pa-px-sovereign-ledger__num">
                 0{idx + 1}
               </div>
               <div className="pa-px-sovereign-ledger__body">
-                <h3 className="pa-px-sovereign-ledger__title">{action.label}</h3>
-                <p className="pa-px-body-sm">{action.description}</p>
+                <h3 className="pa-px-sovereign-ledger__action-title">{action.label}</h3>
+                <p className="pa-px-sovereign-ledger__desc">{action.description}</p>
               </div>
               <div className="pa-px-sovereign-ledger__action">
-                <Link to={action.link} className="pa-px-btn-secondary">
+                <Link to={action.link} className="pa-px-link-action">
                   Access in Settings &rarr;
                 </Link>
               </div>
@@ -167,4 +206,3 @@ export const TrustSourceInspection = () => {
 
 export const TrustInspectionStage = TrustSourceInspection;
 export default TrustSourceInspection;
-

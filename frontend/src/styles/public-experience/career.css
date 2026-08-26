@@ -1,6 +1,6 @@
 /**
  * Personality Assessor - Career Intelligence Route Styling
- * Editorial Spatial Atlas: 17 Canonical Occupational Profiles with Pointer Parallax.
+ * Editorial Spatial Atlas: 17 Canonical Occupational Profiles with Emergent Media Plane.
  * Zero generic white box containers, zero fake user fit labels.
  */
 
@@ -8,73 +8,73 @@
   width: 100%;
   background-color: var(--pa-paper);
   color: var(--pa-ink);
-  padding: calc(var(--pa-space-cinematic) * 0.7) var(--pa-gutter-macro) var(--pa-space-section);
+  padding: calc(var(--px-header-height-desktop) + 24px) var(--px-outer-gutter) var(--pa-space-section);
 }
 
 .pa-px-career-hero {
   max-width: 1440px;
-  margin: 0 auto var(--pa-space-section);
+  margin: 0 auto 36px auto;
 }
 
 .pa-px-career-hero__headline {
-  font-family: var(--pa-font-display);
-  font-size: var(--pa-display-route);
-  font-weight: 580;
+  font-family: var(--pa-font-family);
+  font-size: clamp(2.4rem, 4.4vw, 4.8rem);
+  font-weight: var(--px-weight-bold);
   color: var(--pa-ink);
-  letter-spacing: -0.03em;
-  line-height: 1.0;
-  margin-bottom: 16px;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  margin: 0 0 12px 0;
 }
 
 .pa-px-career-hero__support {
-  font-size: var(--pa-lead);
+  font-size: clamp(1.05rem, 1.35vw, 1.35rem);
   color: var(--pa-graphite);
-  max-width: 60ch;
+  max-width: 52ch;
+  margin: 0;
 }
 
-/* ── Spatial Career Arena ── */
+/* Spatial Career Arena */
 .pa-px-career-field-arena {
   max-width: 1440px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: var(--pa-gutter-column);
+  gap: var(--px-column-gap);
   align-items: flex-start;
 }
 
 .pa-px-career-roles-canvas {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .pa-px-career-role-item {
   background: none;
   border: none;
   border-bottom: 1px solid var(--pa-mineral);
-  padding: 12px 0;
+  padding: 8px 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: baseline;
   cursor: pointer;
   text-align: left;
   outline: none;
-  transition: all 180ms ease;
+  transition: opacity 180ms ease, border-color 180ms ease;
 }
 
 .pa-px-career-role-item__title {
-  font-family: var(--pa-font-display);
-  font-size: clamp(1.1rem, 1.5vw, 1.5rem);
-  font-weight: 540;
+  font-family: var(--pa-font-family);
+  font-size: clamp(1.1rem, 1.45vw, 1.45rem);
+  font-weight: var(--px-weight-medium);
   color: var(--pa-ink);
-  transition: color 180ms ease, font-size 220ms ease, transform 220ms ease;
+  transition: color 180ms ease, transform 180ms ease;
 }
 
 .pa-px-career-role-item:hover .pa-px-career-role-item__title,
 .pa-px-career-role-item:focus-visible .pa-px-career-role-item__title,
 .pa-px-career-role-item--active .pa-px-career-role-item__title {
   color: var(--pa-evidence);
-  font-size: clamp(1.22rem, 1.7vw, 1.7rem);
   transform: translateX(6px);
 }
 
@@ -82,18 +82,15 @@
   border-bottom-color: var(--pa-evidence);
 }
 
-.pa-px-career-role-item__meta {
-  color: var(--pa-graphite);
-}
-
+/* Inspector Stage */
 .pa-px-career-inspector-stage {
   position: sticky;
   top: 100px;
   background-color: var(--pa-white);
   border: 1px solid var(--pa-mineral);
-  border-radius: 4px;
+  border-radius: var(--px-radius-sm);
   overflow: hidden;
-  box-shadow: 0 16px 36px rgba(23, 25, 24, 0.06);
+  box-shadow: 0 14px 36px rgba(23, 25, 24, 0.06);
 }
 
 .pa-px-career-inspector-media {
@@ -103,14 +100,62 @@
   background-color: var(--pa-mineral);
 }
 
-.pa-px-career-inspector-media img {
+.pa-px-career-inspector-media-inner {
+  width: 100%;
+  height: 100%;
+}
+
+.pa-px-career-inspector-media-inner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 .pa-px-career-inspector-content {
-  padding: clamp(20px, 2.5vw, 32px);
+  padding: clamp(20px, 2.2vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pa-px-career-inspector-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pa-px-career-inspector-growth {
+  font-family: var(--pa-font-mono);
+  font-size: 0.74rem;
+  color: var(--pa-evidence);
+  font-weight: 500;
+}
+
+.pa-px-career-inspector-title {
+  font-family: var(--pa-font-family);
+  font-size: 1.4rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  margin: 0;
+}
+
+.pa-px-career-inspector-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pa-px-career-inspector-label {
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
+  color: var(--pa-graphite);
+  letter-spacing: 0.04em;
+}
+
+.pa-px-career-inspector-text {
+  font-size: 0.88rem;
+  color: var(--pa-ink);
+  margin: 0;
 }
 
 .pa-px-career-skills-chips {
@@ -121,12 +166,14 @@
 
 .pa-px-career-aptitude-strip {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  gap: 12px;
   border-top: 1px solid var(--pa-paper);
   padding-top: 12px;
-  margin-top: 16px;
-  color: var(--pa-graphite);
+  font-family: var(--pa-font-mono);
+  font-size: 0.76rem;
+  color: var(--pa-context);
+  flex-wrap: wrap;
 }
 
 @media (max-width: 900px) {
@@ -138,4 +185,3 @@
     margin-top: 24px;
   }
 }
-

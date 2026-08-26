@@ -4,58 +4,194 @@
  * Strict guarantee: scrollWidth <= clientWidth + 1 everywhere.
  */
 
-/* ── Mobile Viewports (<= 768px) ── */
-@media (max-width: 768px) {
+/* ── Mobile Viewports (<= 900px) ── */
+@media (max-width: 900px) {
   :root {
-    --px-outer-gutter: 20px;
+    --px-outer-gutter: 18px;
     --px-column-gap: 16px;
-    --px-display-xl: clamp(2.6rem, 9vw, 3.8rem);
-    --px-display-lg: clamp(2.2rem, 7.5vw, 3.2rem);
-    --px-heading-xl: clamp(1.8rem, 6vw, 2.4rem);
-    --px-lead: clamp(1.2rem, 4vw, 1.5rem);
-    --px-space-section: clamp(48px, 10vw, 72px);
-    --px-space-cinematic: clamp(72px, 14vw, 100px);
+    --pa-display-hero: clamp(2.4rem, 8.5vw, 3.6rem);
+    --pa-display-route: clamp(2.0rem, 7vw, 2.8rem);
+    --pa-heading-section: clamp(1.6rem, 5.5vw, 2.2rem);
+    --pa-lead: clamp(1.05rem, 3.6vw, 1.25rem);
+    --pa-space-section: clamp(40px, 8vw, 64px);
+    --pa-space-cinematic: clamp(64px, 12vw, 88px);
   }
 
+  /* Full-width Touch Friendly Buttons (48px height) */
   .pa-px-btn-primary,
   .pa-px-btn-secondary {
     width: 100%;
     height: 48px;
   }
 
-  .pa-px-ch-poster__actions,
-  .pa-px-ch-finale__actions {
+  /* Movement 1 (Hero) Mobile */
+  .pa-px-hero-field {
+    min-height: auto;
+    padding-top: calc(var(--px-header-height-desktop) + 16px);
+  }
+
+  .pa-px-hero-field__composition {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 24px;
+    min-height: auto;
+  }
+
+  .pa-px-hero-field__media-plane {
+    width: 100%;
+    height: clamp(240px, 48svh, 360px);
+  }
+
+  .pa-px-hero-field__editorial-layer {
+    width: 100%;
+  }
+
+  .pa-px-hero-field__headline {
+    font-size: clamp(2.4rem, 9vw, 3.6rem);
+  }
+
+  .pa-px-hero-field__actions {
     flex-direction: column;
     width: 100%;
   }
 
-  .pa-px-ch-poster__actions .pa-px-btn-primary,
-  .pa-px-ch-poster__actions .pa-px-btn-secondary,
-  .pa-px-ch-finale__actions .pa-px-btn-primary,
-  .pa-px-ch-finale__actions .pa-px-btn-secondary {
+  /* Movement 2 (Source Split) Mobile */
+  .pa-px-source-split-stage__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .pa-px-source-split__clauses {
+    font-size: clamp(1.4rem, 5.5vw, 2.0rem);
+  }
+
+  .pa-px-source-split__destinations {
+    flex-wrap: wrap;
+    gap: 12px 20px;
+  }
+
+  /* Movement 3 (Constellation) Mobile */
+  .pa-px-constellation-field {
+    min-height: auto;
+  }
+
+  .pa-px-constellation-field__media-anchor {
+    display: none;
+  }
+
+  .pa-px-constellation-center-source {
+    max-width: 100%;
+  }
+
+  .pa-px-constellation-orbit {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .pa-px-mass-recomposition__strip {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .pa-px-mass-block {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 16px;
+  }
+
+  .pa-px-mass-block__pct {
+    margin-bottom: 0;
+  }
+
+  /* Movement 4 (Professional Conditions) Mobile */
+  .pa-px-conditions-stage__viewport {
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .pa-px-condition-silhouette {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .pa-px-condition-silhouette__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pa-px-condition-silhouette__media-plane {
+    width: 100%;
+    height: clamp(240px, 46svh, 340px);
+  }
+
+  .pa-px-condition-silhouette__detail-plane {
+    right: 8px;
+    bottom: 8px;
+    width: 110px;
+  }
+
+  /* Movement 5 (Career Field) Mobile */
+  .pa-px-career-media-field__arena {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* Movement 6 (Time & Trust) Mobile */
+  .pa-px-time-exposure-scene__arena {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .pa-px-finale-scene__inner {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 24px;
+  }
+
+  .pa-px-finale-scene__media-plane {
+    width: 100%;
+    height: 220px;
+  }
+
+  .pa-px-finale-scene__actions {
+    flex-direction: column;
     width: 100%;
   }
 
-  .pa-px-ch-deck__cards {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: var(--px-space-md);
-    gap: var(--px-space-md);
+  /* How It Works Mobile */
+  .pa-px-how-stage__models-field {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
-  .pa-px-deck-card {
-    min-width: 82vw;
-    scroll-snap-align: start;
-    flex-shrink: 0;
+  .pa-px-how-record-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
 /* ── Tablet Viewports (769px - 1024px) ── */
 @media (min-width: 769px) and (max-width: 1024px) {
   :root {
-    --px-outer-gutter: 32px;
+    --px-outer-gutter: 28px;
     --px-column-gap: 20px;
+  }
+
+  .pa-px-constellation-orbit {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pa-px-how-stage__models-field {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

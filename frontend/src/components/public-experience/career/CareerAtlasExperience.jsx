@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import careersData from '../../../content/careers.json';
 import { PublicPicture } from '../media/PublicPicture';
@@ -25,11 +26,10 @@ const CAREER_MEDIA = {
 };
 
 export const CareerAtlasExperience = () => {
-  const data = PUBLIC_CONTENT.career;
   const roleKeys = Object.keys(careersData);
   const [selectedKey, setSelectedKey] = useState(roleKeys[0]);
   const [pointerPos, setPointerPos] = useState({ x: 0, y: 0 });
-  const activeRole = careersData[selectedKey];
+  const activeRole = careersData[selectedKey] || careersData[roleKeys[0]];
   const activeMedia = CAREER_MEDIA[selectedKey] || 'workworldPrecision';
   const { hasFinePointer, prefersReducedMotion, isMobile } = usePublicCapabilities();
   const selectedIdx = roleKeys.indexOf(selectedKey);
@@ -61,29 +61,23 @@ export const CareerAtlasExperience = () => {
       onMouseMove={handleMouseMove}
     >
       <header className="pa-px-career-hero">
-        <h1 className="pa-px-career-hero__headline">{data.hero.headline}</h1>
-        <p className="pa-px-career-hero__support">{data.hero.support}</p>
-        <div className="pa-px-data" style={{ marginTop: '10px', color: 'var(--pa-evidence)' }}>
-          17 Occupational Profiles
-        </div>
+        <h1 className="pa-px-career-hero__headline">
+          CAREER FIT IS A FIELD, NOT A RANKING.
+        </h1>
+        <p className="pa-px-career-hero__support">
+          Career fit changes when work conditions change. Explore 17 canonical occupational profiles.
+        </p>
       </header>
 
       <section className="pa-px-career-field-arena" aria-label="17 Canonical Occupational Profiles Field">
-        {/* Typographic Exploration Arena with Spatial Neighbor Displacement */}
+        {/* Spatial Typographic Stream */}
         <div className="pa-px-career-roles-canvas" role="tablist" aria-label="17 Occupational Profiles">
+          <span className="sr-only">17 Occupational Profiles</span>
           {roleKeys.map((key, idx) => {
             const role = careersData[key];
             const isSelected = selectedKey === key;
-            const diff = idx - selectedIdx;
-
-            // Compute neighbor displacement
-            let displacementY = 0;
-            if (!prefersReducedMotion && !isMobile) {
-              if (diff === 1) displacementY = 16;
-              else if (diff === -1) displacementY = -16;
-              else if (diff === 2) displacementY = 8;
-              else if (diff === -2) displacementY = -8;
-            }
+            const distance = Math.abs(idx - selectedIdx);
+            const opacity = isSelected ? 1 : Math.max(0.45, 0.9 - distance * 0.06);
 
             return (
               <button
@@ -92,25 +86,19 @@ export const CareerAtlasExperience = () => {
                 role="tab"
                 aria-selected={isSelected}
                 className={`pa-px-career-role-item ${isSelected ? 'pa-px-career-role-item--active' : ''}`}
-                style={{
-                  transform: prefersReducedMotion ? 'none' : `translate3d(0, ${displacementY}px, 0)`,
-                  transition: 'transform 260ms cubic-bezier(0.2, 0, 0, 1), font-size 260ms ease, color 200ms ease',
-                }}
+                style={{ opacity }}
                 onClick={() => setSelectedKey(key)}
                 onMouseEnter={() => setSelectedKey(key)}
                 onFocus={() => setSelectedKey(key)}
                 onKeyDown={(e) => handleKeyDown(e, idx)}
               >
                 <span className="pa-px-career-role-item__title">{role.title}</span>
-                <span className="pa-px-data pa-px-career-role-item__meta">
-                  Profile growth potential: {role.growthPotential}%
-                </span>
               </button>
             );
           })}
         </div>
 
-        {/* Anchored Detail & Emergent Media Plane */}
+        {/* Anchored Emergent Media Plane & Active Role Details */}
         <div className="pa-px-career-inspector-stage" aria-live="polite">
           <div
             className="pa-px-career-inspector-media"
@@ -120,28 +108,40 @@ export const CareerAtlasExperience = () => {
               transition: 'transform 200ms cubic-bezier(0.2, 0, 0, 1)',
             }}
           >
-            <PublicPicture
-              key={activeMedia}
-              assetKey={activeMedia}
-              alt={`Working environment for ${activeRole.title}`}
-              priority={true}
-            />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeMedia + selectedKey}
+                initial={{ opacity: 0.4, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0.4, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="pa-px-career-inspector-media-inner"
+              >
+                <PublicPicture
+                  assetKey={activeMedia}
+                  alt={`Working environment for ${activeRole.title}`}
+                  priority={true}
+                />
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <div className="pa-px-career-inspector-content">
-            <div className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>
-              DISCIPLINE PROVENANCE: {activeRole.title.toUpperCase()}
+            <div className="pa-px-career-inspector-header">
+              <span className="pa-px-career-inspector-growth">
+                Profile growth potential: {activeRole.growthPotential}%
+              </span>
+              <h2 className="pa-px-career-inspector-title">
+                {activeRole.title}
+              </h2>
             </div>
-            <h2 className="pa-px-heading-subsection" style={{ marginTop: '4px', marginBottom: '12px' }}>
-              {activeRole.title}
-            </h2>
 
-            <div style={{ marginBottom: '16px' }}>
-              <div className="pa-px-data" style={{ color: 'var(--pa-graphite)', marginBottom: '6px' }}>
+            <div className="pa-px-career-inspector-section">
+              <div className="pa-px-career-inspector-label">
                 CORE COMPETENCIES REQUIRED
               </div>
               <div className="pa-px-career-skills-chips">
-                {activeRole.skills.map((skill) => (
+                {activeRole.skills.slice(0, 3).map((skill) => (
                   <span key={skill} className="pa-px-role-skill-pill">
                     {skill}
                   </span>
@@ -149,19 +149,19 @@ export const CareerAtlasExperience = () => {
               </div>
             </div>
 
-            <div style={{ marginBottom: '16px' }}>
-              <div className="pa-px-data" style={{ color: 'var(--pa-context)', marginBottom: '4px' }}>
-                FOUNDATIONAL PREPARATION DOMAINS
+            <div className="pa-px-career-inspector-section">
+              <div className="pa-px-career-inspector-label">
+                FOUNDATIONAL DOMAINS
               </div>
-              <p className="pa-px-body-sm">
-                {activeRole.subjects.join(', ')}
+              <p className="pa-px-career-inspector-text">
+                {activeRole.subjects.join(' · ')}
               </p>
             </div>
 
-            <div className="pa-px-data pa-px-career-aptitude-strip">
-              <span>Logical Aptitude: {activeRole.aptitude.logical_reasoning}</span>
-              <span>Numerical Aptitude: {activeRole.aptitude.numerical_reasoning}</span>
-              <span>Verbal Aptitude: {activeRole.aptitude.verbal_reasoning}</span>
+            <div className="pa-px-career-aptitude-strip">
+              <span>Logical: {activeRole.aptitude.logical_reasoning}</span>
+              <span>Numerical: {activeRole.aptitude.numerical_reasoning}</span>
+              <span>Verbal: {activeRole.aptitude.verbal_reasoning}</span>
             </div>
           </div>
         </div>
@@ -172,4 +172,3 @@ export const CareerAtlasExperience = () => {
 
 export const CareerSpatialExperience = CareerAtlasExperience;
 export default CareerAtlasExperience;
-

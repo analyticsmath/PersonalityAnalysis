@@ -1,38 +1,39 @@
 /**
  * Personality Assessor - Methodology Route Styling
- * World-class technical publication monograph: continuous dimensional figures, proportional weights.
- * Zero repeated documentation shells.
+ * Monograph Technical Publication with Visual Rhythm
+ * Zero CSS gradients, zero generic card walls.
  */
 
 .pa-px-methodology-page {
   width: 100%;
   background-color: var(--pa-paper);
   color: var(--pa-ink);
-  padding: calc(var(--pa-space-cinematic) * 0.7) var(--pa-gutter-macro) var(--pa-space-section);
+  padding: calc(var(--px-header-height-desktop) + 24px) var(--px-outer-gutter) var(--pa-space-section);
 }
 
 .pa-px-methodology-hero {
   max-width: 1440px;
-  margin: 0 auto var(--pa-space-section);
+  margin: 0 auto 36px auto;
 }
 
 .pa-px-methodology-hero__headline {
-  font-family: var(--pa-font-display);
-  font-size: var(--pa-display-route);
-  font-weight: 580;
+  font-family: var(--pa-font-family);
+  font-size: clamp(2.4rem, 4.4vw, 4.8rem);
+  font-weight: var(--px-weight-bold);
   color: var(--pa-ink);
-  letter-spacing: -0.03em;
-  line-height: 1.0;
-  margin-bottom: 16px;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  margin: 0 0 12px 0;
 }
 
 .pa-px-methodology-hero__support {
-  font-size: var(--pa-lead);
+  font-size: clamp(1.05rem, 1.35vw, 1.35rem);
   color: var(--pa-graphite);
-  max-width: 60ch;
+  max-width: 58ch;
+  margin: 0;
 }
 
-/* ── Monograph Layout ── */
+/* Monograph Layout */
 .pa-px-monograph-body {
   max-width: 1440px;
   margin: 0 auto;
@@ -44,45 +45,65 @@
 .pa-px-monograph-entry {
   background-color: var(--pa-white);
   border: 1px solid var(--pa-mineral);
-  border-radius: 4px;
-  padding: clamp(24px, 3.5vw, 44px);
+  border-radius: var(--px-radius-sm);
+  padding: clamp(24px, 3.2vw, 44px);
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: var(--pa-gutter-column);
+  grid-template-columns: 180px 1fr;
+  gap: var(--px-column-gap);
   box-shadow: 0 8px 24px rgba(23, 25, 24, 0.04);
 }
 
 .pa-px-monograph-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   border-right: 1px solid var(--pa-paper);
   padding-right: 16px;
 }
 
 .pa-px-monograph-num {
+  font-family: var(--pa-font-mono);
   color: var(--pa-evidence);
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
 }
 
 .pa-px-monograph-tag {
+  font-size: 0.8rem;
   color: var(--pa-graphite);
-  font-size: 0.78rem;
 }
 
 .pa-px-monograph-main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
-/* ── Continuous Big Five Spectrums ── */
+.pa-px-monograph-title {
+  font-family: var(--pa-font-family);
+  font-size: clamp(1.4rem, 2vw, 2.2rem);
+  font-weight: var(--px-weight-medium);
+  letter-spacing: -0.025em;
+  color: var(--pa-ink);
+  margin: 0;
+}
+
+.pa-px-monograph-lead {
+  font-size: 0.95rem;
+  color: var(--pa-graphite);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Continuous Axis Spectrums Figure */
 .pa-px-continuous-spectrums-figure {
   background-color: var(--pa-paper);
-  border-radius: 4px;
+  border-radius: var(--px-radius-xs);
   padding: 20px;
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .pa-px-spectrum-axis-row {
@@ -90,11 +111,10 @@
   grid-template-columns: 180px 1fr 50px;
   gap: 16px;
   align-items: center;
-  margin-bottom: 12px;
 }
 
 .pa-px-spectrum-axis-label {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   color: var(--pa-ink);
   font-weight: 500;
 }
@@ -123,15 +143,16 @@
 }
 
 .pa-px-spectrum-axis-val {
+  font-family: var(--pa-font-mono);
   color: var(--pa-evidence);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   text-align: right;
 }
 
-/* ── Spatial RIASEC Orbit ── */
+/* RIASEC Orbit Stage */
 .pa-px-riasec-orbit-stage {
   background-color: var(--pa-paper);
-  border-radius: 4px;
+  border-radius: var(--px-radius-xs);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -141,7 +162,7 @@
 
 .pa-px-riasec-orbit-svg {
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
   height: auto;
 }
 
@@ -156,97 +177,125 @@
   background-color: var(--pa-white);
   border: 1px solid var(--pa-mineral);
   padding: 6px 12px;
-  border-radius: 2px;
+  border-radius: var(--px-radius-xs);
   font-family: var(--pa-font-mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--pa-ink);
 }
 
-/* ── Values & Signals ── */
+/* Values & Signals */
 .pa-px-values-monograph-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px;
-  margin-top: 8px;
+  gap: 8px;
 }
 
 .pa-px-values-monograph-item {
   background-color: var(--pa-paper);
-  padding: 12px;
-  border-radius: 3px;
-  border-left: 2px solid var(--pa-evidence);
+  padding: 10px 14px;
+  border-radius: var(--px-radius-xs);
+  border-left: 3px solid var(--pa-evidence);
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.pa-px-values-num {
+  font-family: var(--pa-font-mono);
+  color: var(--pa-evidence);
+  font-size: 0.74rem;
+}
+
+.pa-px-values-name {
+  font-size: 0.88rem;
+  color: var(--pa-ink);
 }
 
 .pa-px-signals-chips-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
 }
 
 .pa-px-signal-chip {
   background-color: var(--pa-paper);
   border: 1px solid var(--pa-mineral);
-  padding: 8px 14px;
-  border-radius: 2px;
+  padding: 6px 12px;
+  border-radius: var(--px-radius-xs);
   font-family: var(--pa-font-mono);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--pa-ink);
 }
 
-/* ── Monograph Weights Strip ── */
+/* Monograph Weights Strip */
 .pa-px-monograph-weights-strip {
   display: flex;
   width: 100%;
-  border-radius: 4px;
+  border-radius: var(--px-radius-xs);
   overflow: hidden;
-  margin-top: 10px;
   border: 1px solid var(--pa-mineral);
 }
 
-/* ── Validity Table ── */
+.pa-px-wlbl {
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
+  margin-top: 2px;
+}
+
+/* Validity Table */
 .pa-px-validity-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
 }
 
 .pa-px-validity-table th {
   text-align: left;
-  padding: 10px 14px;
+  padding: 10px 12px;
   background-color: var(--pa-paper);
   border-bottom: 2px solid var(--pa-mineral);
   font-family: var(--pa-font-mono);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--pa-graphite);
 }
 
 .pa-px-validity-table td {
-  padding: 12px 14px;
+  padding: 12px;
   border-bottom: 1px solid var(--pa-paper);
   color: var(--pa-ink);
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .pa-px-validity-code {
   background-color: var(--pa-paper);
-  padding: 4px 8px;
-  border-radius: 2px;
+  padding: 3px 6px;
+  border-radius: var(--px-radius-xs);
   color: var(--pa-evidence);
-  font-weight: 600;
-  font-size: 0.84rem;
+  font-family: var(--pa-font-mono);
+  font-weight: 500;
+  font-size: 0.8rem;
 }
 
 .pa-px-monograph-limits-callout {
   background-color: var(--pa-paper);
   border-left: 3px solid var(--pa-evidence);
   padding: 16px 20px;
-  border-radius: 3px;
-  margin-top: 12px;
+  border-radius: var(--px-radius-xs);
+}
+
+.pa-px-limits-heading {
+  font-family: var(--pa-font-family);
+  font-size: 1.05rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  margin: 0 0 6px 0;
+}
+
+.pa-px-limits-text {
+  font-size: 0.88rem;
+  color: var(--pa-graphite);
+  line-height: 1.45;
+  margin: 0;
 }
 
 @media (max-width: 900px) {
@@ -256,11 +305,10 @@
   .pa-px-monograph-sidebar {
     border-right: none;
     border-bottom: 1px solid var(--pa-paper);
-    padding-bottom: 12px;
+    padding-bottom: 8px;
   }
   .pa-px-spectrum-axis-row {
     grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 4px;
   }
 }
-

@@ -7,28 +7,55 @@ import { usePublicCapabilities } from '../motion/usePublicCapabilities';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const TRANSFORMATION_BEATS = [
+  {
+    step: 0,
+    title: 'Source Capture',
+    annotation: 'Raw response preserved verbatim.',
+  },
+  {
+    step: 1,
+    title: 'Clause Split',
+    annotation: 'Syntactic isolation of pacing and uncertainty strategy.',
+  },
+  {
+    step: 2,
+    title: 'Multi-Model Calibration',
+    annotation: 'Branching into trait dimensions, vocational interests, and values.',
+  },
+  {
+    step: 3,
+    title: 'Deterministic Weighting',
+    annotation: '25/25/20/15/10/5 proportional career calibration formula.',
+  },
+  {
+    step: 4,
+    title: 'Inspectable Record',
+    annotation: 'Unified professional record with unbroken provenance.',
+  },
+];
+
 export const HowCausalEssay = () => {
-  const data = PUBLIC_CONTENT.how;
   const containerRef = useRef(null);
-  const visualFigureRef = useRef(null);
+  const stageRef = useRef(null);
   const [activeStep, setActiveStep] = useState(0);
   const { prefersReducedMotion, isMobile } = usePublicCapabilities();
 
   useEffect(() => {
-    if (prefersReducedMotion || isMobile || !containerRef.current || !visualFigureRef.current) return;
+    if (prefersReducedMotion || isMobile || !containerRef.current || !stageRef.current) return;
 
     const container = containerRef.current;
-    const figure = visualFigureRef.current;
+    const stage = stageRef.current;
 
     const ctx = gsap.context(() => {
-      // 5 states over scroll: 0 = Source Capture, 1 = Clause Separation, 2 = Model Branch, 3 = Weighting, 4 = Inspectable Record
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
           start: 'top top',
-          end: '+=280%',
+          end: '+=320%',
           scrub: 0.6,
-          pin: figure,
+          pin: stage,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             const raw = self.progress * 4;
@@ -38,195 +65,176 @@ export const HowCausalEssay = () => {
         },
       });
 
-      const clauseA = figure.querySelector('.pa-px-how-figure__clause-a');
-      const clauseB = figure.querySelector('.pa-px-how-figure__clause-b');
-      const pathsSvg = figure.querySelector('.pa-px-how-figure__paths-svg');
-      const modelsGrid = figure.querySelector('.pa-px-how-figure__models-grid');
-      const weightsGrid = figure.querySelector('.pa-px-how-figure__weights-grid');
-      const recordPlate = figure.querySelector('.pa-px-how-figure__record-plate');
+      const clauseA = stage.querySelector('.pa-px-how-stage__clause-a');
+      const clauseB = stage.querySelector('.pa-px-how-stage__clause-b');
+      const pathsSvg = stage.querySelector('.pa-px-how-stage__paths-svg');
+      const modelsGrid = stage.querySelector('.pa-px-how-stage__models-field');
+      const weightsGrid = stage.querySelector('.pa-px-how-stage__weights-field');
+      const recordPlate = stage.querySelector('.pa-px-how-stage__record-field');
 
-      // State 0 -> 1: Physical Clause Separation with SVG vector emergence
-      tl.to([clauseA, clauseB], {
-        opacity: 1,
-        duration: 0.25,
-      }, 0.2);
-      tl.to(clauseA, {
-        x: -32,
-        color: 'var(--pa-evidence)',
-        duration: 0.35,
-        ease: 'power2.out',
-      }, 0.25);
-      tl.to(clauseB, {
-        x: 32,
-        color: 'var(--pa-graphite)',
-        duration: 0.35,
-        ease: 'power2.out',
-      }, 0.25);
+      // State 0 -> 1: Words physically separate with SVG vector emergence
+      tl.to([clauseA, clauseB], { opacity: 1, duration: 0.2 }, 0.2);
+      tl.to(clauseA, { x: -36, color: 'var(--pa-evidence)', duration: 0.35, ease: 'power2.out' }, 0.25);
+      tl.to(clauseB, { x: 36, color: 'var(--pa-ink)', duration: 0.35, ease: 'power2.out' }, 0.25);
       if (pathsSvg) {
         tl.to(pathsSvg, { opacity: 1, duration: 0.3 }, 0.3);
       }
 
       // State 1 -> 2: Multi-Model Spatial Branching
-      tl.to(modelsGrid, {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 0.4,
-        ease: 'power2.out',
-      }, 0.8);
+      tl.to(modelsGrid, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 0.8);
 
       // State 2 -> 3: Deterministic Weighting Assembly
-      tl.to(modelsGrid, {
-        opacity: 0.2,
-        y: -15,
-        duration: 0.3,
-      }, 1.6);
-      tl.to(weightsGrid, {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 0.4,
-        ease: 'power3.out',
-      }, 1.7);
+      tl.to(modelsGrid, { opacity: 0.15, y: -16, duration: 0.3 }, 1.6);
+      tl.to(weightsGrid, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 1.7);
 
       // State 3 -> 4: Unified Inspectable Record Recomposition
-      tl.to([weightsGrid, modelsGrid], {
-        opacity: 0,
-        y: -25,
-        duration: 0.3,
-      }, 2.5);
-      tl.to(recordPlate, {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 0.45,
-        ease: 'power2.out',
-      }, 2.6);
+      tl.to([weightsGrid, modelsGrid], { opacity: 0, y: -24, duration: 0.3 }, 2.5);
+      tl.to(recordPlate, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 2.6);
     }, container);
 
     return () => ctx.revert();
   }, [prefersReducedMotion, isMobile]);
 
+  const currentBeat = TRANSFORMATION_BEATS[activeStep] || TRANSFORMATION_BEATS[0];
+
   return (
     <div className="pa-px-how-page" data-route="how-it-works">
       <header className="pa-px-how-hero">
-        <h1 className="pa-px-how-hero__headline">{data.hero.headline}</h1>
-        <p className="pa-px-how-hero__support">{data.hero.support}</p>
+        <h1 className="pa-px-how-hero__headline">FOLLOW ONE ANSWER.</h1>
+        <p className="pa-px-how-hero__support">
+          Watch one response become a traceable professional record.
+        </p>
       </header>
 
-      {/* Unified Open Causal Transformation Stage */}
-      <div ref={containerRef} className="pa-px-how-causal-stage">
-        {/* Left Side: Progressive Narrative Column */}
-        <div className="pa-px-how-narrative-col">
-          {data.movements.map((m, idx) => (
-            <section
-              key={m.id}
-              className={`pa-px-how-narrative-entry ${activeStep === idx ? 'pa-px-how-narrative-entry--active' : ''}`}
-              aria-label={`Transformation Step ${idx + 1}: ${m.name}`}
-            >
-              <div className="pa-px-data pa-px-how-step-meta">
-                STAGE 0{idx + 1} &middot; {m.name.toUpperCase()}
-              </div>
-              <h2 className="pa-px-heading-subsection">{m.title}</h2>
-              <p className="pa-px-body">{m.description}</p>
-            </section>
-          ))}
-        </div>
+      {/* Flagship Pinned Causal Transformation Sequence (Zero 5-Stage Essay Column) */}
+      <div ref={containerRef} className="pa-px-how-pinned-container">
+        <div ref={stageRef} className="pa-px-how-cinematic-stage">
+          <header className="pa-px-how-stage__nav">
+            <div className="pa-px-how-stage__stepper">
+              {TRANSFORMATION_BEATS.map((beat) => (
+                <button
+                  key={beat.step}
+                  type="button"
+                  className={`pa-px-how-step-indicator ${activeStep === beat.step ? 'pa-px-how-step-indicator--active' : ''}`}
+                  onClick={() => setActiveStep(beat.step)}
+                  aria-label={`Step ${beat.step + 1}: ${beat.title}`}
+                >
+                  <span className="pa-px-how-step-num">0{beat.step + 1}</span>
+                  <span className="pa-px-how-step-title">{beat.title}</span>
+                </button>
+              ))}
+            </div>
 
-        {/* Right Side: Open Editorial Transformation Field (Paper Ground, Zero Boxed Dashboard) */}
-        <div ref={visualFigureRef} className="pa-px-how-figure-col">
-          <div className="pa-px-how-transformation-field" aria-live="polite">
-            <header className="pa-px-how-figure__header">
-              <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>
-                PROTAGONIST EVIDENCE ACTOR &middot; STATE 0{activeStep + 1}/05
-              </span>
-            </header>
+            <div className="pa-px-how-stage__annotation-line">
+              <span className="pa-px-how-stage__beat-title">{currentBeat.title}</span>
+              <span className="pa-px-how-stage__beat-desc">{currentBeat.annotation}</span>
+            </div>
+          </header>
 
-            {/* Stage 0 & 1: Source Sentence & Spatial Clause Separation */}
+          <div className="pa-px-how-stage__arena" aria-live="polite">
+            {/* State 0 & 1: Massive Source Sentence & Clause Separation */}
             <div
-              className="pa-px-how-figure__sentence-stage"
+              className="pa-px-how-stage__sentence-box"
               data-transition-actor="how-source-quote"
             >
-              <span className="pa-px-how-figure__clause-a">
+              <span className="pa-px-how-stage__clause-a">
                 &ldquo;I clarify the constraints first,
               </span>{' '}
-              <span className="pa-px-how-figure__clause-b">
+              <span className="pa-px-how-stage__clause-b">
                 then choose the smallest reversible step.&rdquo;
               </span>
             </div>
 
-            {/* SVG Connecting Vectors */}
-            <svg className="pa-px-how-figure__paths-svg" viewBox="0 0 400 40" fill="none" aria-hidden="true" style={{ opacity: activeStep >= 1 ? 1 : 0, transition: 'opacity 300ms ease' }}>
-              <path d="M 120,0 C 120,20 80,30 40,40" stroke="var(--pa-evidence)" strokeWidth="1.5" strokeDasharray="3 3" />
-              <path d="M 280,0 C 280,20 320,30 360,40" stroke="var(--pa-graphite)" strokeWidth="1.5" strokeDasharray="3 3" />
+            {/* SVG Connecting Paths */}
+            <svg
+              className="pa-px-how-stage__paths-svg"
+              viewBox="0 0 600 50"
+              fill="none"
+              aria-hidden="true"
+              style={{ opacity: isMobile || activeStep >= 1 ? 1 : 0 }}
+            >
+              <path d="M 160,0 C 160,25 80,35 60,50" stroke="var(--pa-evidence)" strokeWidth="1.5" strokeDasharray="4 4" />
+              <path d="M 220,0 C 220,25 210,35 200,50" stroke="var(--pa-evidence)" strokeWidth="1.5" strokeDasharray="4 4" />
+              <path d="M 380,0 C 380,25 390,35 400,50" stroke="var(--pa-graphite)" strokeWidth="1.5" strokeDasharray="4 4" />
+              <path d="M 440,0 C 440,25 520,35 540,50" stroke="var(--pa-graphite)" strokeWidth="1.5" strokeDasharray="4 4" />
             </svg>
 
-            {/* Stage 2: Multi-Model Calibration Branching (Spatial Nodes around Source) */}
+            {/* State 2: Framework Nodes Field */}
             <div
-              className="pa-px-how-figure__models-grid"
+              className="pa-px-how-stage__models-field"
               style={{
                 opacity: isMobile ? 1 : activeStep >= 2 ? 1 : 0,
                 transform: isMobile ? 'none' : activeStep >= 2 ? 'none' : 'translateY(16px)',
-                transition: 'opacity 300ms ease, transform 300ms ease',
               }}
             >
-              <div className="pa-px-how-model-node">
-                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>Big Five</span>
-                <span className="pa-px-body-sm">Conscientiousness: 78</span>
+              <div className="pa-px-how-node">
+                <span className="pa-px-how-node__lbl">BIG FIVE</span>
+                <span className="pa-px-how-node__val">C 78 · ES 64</span>
               </div>
-              <div className="pa-px-how-model-node">
-                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>RIASEC</span>
-                <span className="pa-px-body-sm">Investigative: 72</span>
+              <div className="pa-px-how-node">
+                <span className="pa-px-how-node__lbl">RIASEC</span>
+                <span className="pa-px-how-node__val">I 72 · C 68</span>
               </div>
-              <div className="pa-px-how-model-node">
-                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>Work Values</span>
-                <span className="pa-px-body-sm">Independence: 84</span>
+              <div className="pa-px-how-node">
+                <span className="pa-px-how-node__lbl">WORK VALUES</span>
+                <span className="pa-px-how-node__val">Independence 84</span>
               </div>
-              <div className="pa-px-how-model-node">
-                <span className="pa-px-data" style={{ color: 'var(--pa-evidence)' }}>Signals</span>
-                <span className="pa-px-body-sm">Iterative Scoping</span>
+              <div className="pa-px-how-node">
+                <span className="pa-px-how-node__lbl">CAREER SIGNALS</span>
+                <span className="pa-px-how-node__val">Iterative Scoping</span>
               </div>
             </div>
 
-            {/* Stage 3: Deterministic Career-Fit Weighting (Proportional Mass Strip) */}
+            {/* State 3: 25/25/20/15/10/5 Deterministic Weight Mass */}
             <div
-              className="pa-px-how-figure__weights-grid"
+              className="pa-px-how-stage__weights-field"
               style={{
                 opacity: isMobile ? 1 : activeStep === 3 ? 1 : 0,
                 transform: isMobile ? 'none' : activeStep === 3 ? 'none' : 'translateY(16px)',
-                transition: 'opacity 300ms ease, transform 300ms ease',
               }}
             >
-              <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', marginBottom: '8px' }}>
-                CALIBRATION MASS &middot; 100% DETERMINISTIC COMPOSITION
-              </div>
-              <div className="pa-px-how-weight-strip">
-                <div style={{ flex: '25', background: 'var(--pa-ink)', color: '#FFF', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>RIASEC 25%</div>
-                <div style={{ flex: '25', background: 'var(--pa-graphite)', color: '#FFF', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>Skills 25%</div>
-                <div style={{ flex: '20', background: 'var(--pa-context)', color: '#FFF', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>Values 20%</div>
-                <div style={{ flex: '15', background: 'var(--pa-mineral)', color: 'var(--pa-ink)', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem' }}>Traits 15%</div>
-                <div style={{ flex: '10', background: 'var(--pa-paper)', color: 'var(--pa-ink)', padding: '8px 4px', textAlign: 'center', fontSize: '0.75rem', border: '1px solid var(--pa-mineral)' }}>Ed 10%</div>
-                <div style={{ flex: '5', background: 'var(--pa-evidence)', color: '#FFF', padding: '8px 2px', textAlign: 'center', fontSize: '0.75rem' }}>5%</div>
+              <div className="pa-px-how-weights-strip">
+                <div className="pa-px-how-wblock" style={{ flex: '25', background: 'var(--pa-ink)', color: '#FFF' }}>
+                  <strong>25%</strong><span>RIASEC</span>
+                </div>
+                <div className="pa-px-how-wblock" style={{ flex: '25', background: 'var(--pa-graphite)', color: '#FFF' }}>
+                  <strong>25%</strong><span>Skills</span>
+                </div>
+                <div className="pa-px-how-wblock" style={{ flex: '20', background: 'var(--pa-context)', color: '#FFF' }}>
+                  <strong>20%</strong><span>Values</span>
+                </div>
+                <div className="pa-px-how-wblock" style={{ flex: '15', background: 'var(--pa-mineral)', color: 'var(--pa-ink)' }}>
+                  <strong>15%</strong><span>Traits</span>
+                </div>
+                <div className="pa-px-how-wblock" style={{ flex: '10', background: 'var(--pa-paper)', color: 'var(--pa-ink)', border: '1px solid var(--pa-mineral)' }}>
+                  <strong>10%</strong><span>Ed</span>
+                </div>
+                <div className="pa-px-how-wblock" style={{ flex: '5', background: 'var(--pa-evidence)', color: '#FFF' }}>
+                  <strong>5%</strong><span>Goals</span>
+                </div>
               </div>
             </div>
 
-            {/* Stage 4: Unified Inspectable Record Recomposition */}
+            {/* State 4: Inspectable Record Recomposition with Supporting Context Photo */}
             <div
-              className="pa-px-how-figure__record-plate"
+              className="pa-px-how-stage__record-field"
               style={{
                 opacity: isMobile ? 1 : activeStep >= 4 ? 1 : 0,
                 transform: isMobile ? 'none' : activeStep >= 4 ? 'none' : 'translateY(16px)',
-                transition: 'opacity 300ms ease, transform 300ms ease',
               }}
             >
-              <div className="pa-px-how-figure__media-inset">
-                <PublicPicture
-                  assetKey="howTransformation"
-                  alt="Hands refining physical technical prototype"
-                />
-              </div>
-              <div className="pa-px-data" style={{ color: 'var(--pa-evidence)', marginTop: '8px' }}>
-                RECORD RECOMPOSED &middot; PROVENANCE CHAIN COMPLETE
+              <div className="pa-px-how-record-card">
+                <div className="pa-px-how-record-media">
+                  <PublicPicture
+                    assetKey="howTransformation"
+                    alt="Hands refining physical technical prototype"
+                  />
+                </div>
+                <div className="pa-px-how-record-info">
+                  <span className="pa-px-how-record-tag">PROVENANCE CHAIN COMPLETE</span>
+                  <p className="pa-px-how-record-title">Unified Inspectable Professional Record</p>
+                  <p className="pa-px-how-record-meta">100% deterministic calibration back to source input.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -238,4 +246,3 @@ export const HowCausalEssay = () => {
 
 export const HowContinuousTransformation = HowCausalEssay;
 export default HowCausalEssay;
-

@@ -1,6 +1,6 @@
 /**
  * Personality Assessor - Chrome Components Styling (Header, Index, Footer)
- * Light Editorial Evidence Atlas theme: No pills, no glassmorphism, no 4-column SaaS footer.
+ * Light Editorial Theme: Solid paper, NO backdrop-blur, NO glass, NO divider line.
  */
 
 /* ── Persistent Editorial Header ── */
@@ -9,21 +9,20 @@
   top: 0;
   left: 0;
   right: 0;
-  height: var(--px-header-height-desktop);
+  height: clamp(64px, 7.5svh, 68px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--px-outer-gutter);
-  background-color: rgba(244, 245, 242, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--pa-paper);
+  border-bottom: none;
   z-index: 100;
   transition: background-color 200ms ease, box-shadow 200ms ease;
 }
 
 .pa-px-header--scrolled {
-  background-color: rgba(244, 245, 242, 0.98);
-  box-shadow: 0 1px 0 rgba(23, 25, 24, 0.06);
+  background-color: var(--pa-paper);
+  box-shadow: 0 2px 8px rgba(23, 25, 24, 0.04);
 }
 
 .pa-px-header__brand {
@@ -46,7 +45,7 @@
 
 .pa-px-header__link {
   font-family: var(--pa-font-family);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: var(--px-weight-body);
   color: var(--pa-graphite);
   text-decoration: none;
@@ -73,9 +72,9 @@
 .pa-px-header__index-btn {
   background: none;
   border: 1px solid var(--pa-mineral);
-  padding: 8px 16px;
+  padding: 7px 14px;
   font-family: var(--pa-font-family);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: var(--px-weight-medium);
   color: var(--pa-ink);
   border-radius: var(--px-radius-xs);
@@ -89,14 +88,14 @@
 }
 
 .pa-px-header__login-link {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--pa-graphite);
 }
 
 .pa-px-header__cta {
-  height: 40px;
-  padding: 0 20px;
-  font-size: 0.9rem;
+  height: 38px;
+  padding: 0 18px;
+  font-size: 0.88rem;
 }
 
 /* ── Fullscreen Light Index Overlay ── */
@@ -131,9 +130,9 @@
 .pa-px-index-overlay__close-btn {
   background: none;
   border: 1px solid var(--pa-mineral);
-  padding: 10px 20px;
+  padding: 8px 16px;
   font-family: var(--pa-font-family);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--pa-ink);
   border-radius: var(--px-radius-xs);
   cursor: pointer;
@@ -164,7 +163,7 @@
 
 .pa-px-index-overlay__nav-item {
   font-family: var(--pa-font-family);
-  font-size: clamp(2rem, 3.8vw, 3.6rem);
+  font-size: clamp(1.8rem, 3.4vw, 3.2rem);
   font-weight: var(--px-weight-display);
   letter-spacing: -0.025em;
   color: var(--pa-context);
@@ -213,7 +212,7 @@
 
 .pa-px-index-overlay__preview-tag {
   font-family: var(--pa-font-mono);
-  font-size: var(--px-caption);
+  font-size: 0.72rem;
   color: var(--pa-evidence);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -223,6 +222,7 @@
   font-size: var(--px-body);
   color: var(--pa-graphite);
   line-height: 1.45;
+  margin: 0;
 }
 
 /* ── Quiet Utility Footer ── */
@@ -231,7 +231,7 @@
   width: 100%;
   background-color: var(--pa-mineral);
   color: var(--pa-ink);
-  padding: var(--px-space-section) var(--px-outer-gutter) var(--px-space-cluster);
+  padding: var(--pa-space-section) var(--px-outer-gutter) var(--px-space-cluster);
 }
 
 .pa-px-footer__inner {
@@ -256,6 +256,7 @@
   color: var(--pa-graphite);
   max-width: 45ch;
   line-height: 1.5;
+  margin: 0;
 }
 
 .pa-px-footer__links {
@@ -265,7 +266,7 @@
 }
 
 .pa-px-footer__links a {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--pa-graphite);
   text-decoration: none;
   transition: color 180ms ease;
@@ -284,7 +285,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: var(--pa-font-mono);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--pa-context);
   flex-wrap: wrap;
   gap: 12px;

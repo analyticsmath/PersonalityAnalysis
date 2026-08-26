@@ -1,49 +1,57 @@
 import React from 'react';
-import { HeroThesisPoster } from './HeroThesisPoster';
-import { OneResponseSpread } from './OneResponseSpread';
-import { EvidenceDeck } from './EvidenceDeck';
+import { HomeHeroSource, HeroThesisPoster } from './HomeHeroSource';
+import { SourceSplitJourney, OneResponseSpread } from './SourceSplitJourney';
+import { EvidenceConstellation, EvidenceDeck } from './EvidenceConstellation';
 import { ProfessionalConditionsJourney } from './ProfessionalConditionsJourney';
+import { CareerMediaField, CareerRoleAtlasTeaser } from './CareerMediaField';
+import { RecordTimeTrustFinale, ProgressTeaser, SourceLedgerTeaser, HomeFinale } from './RecordTimeTrustFinale';
 import { ModelAtlas } from './ModelAtlas';
 import { CalibrationMass } from './CalibrationMass';
-import { CareerRoleAtlasTeaser } from './CareerRoleAtlasTeaser';
-import { ProgressTeaser } from './ProgressTeaser';
-import { SourceLedgerTeaser } from './SourceLedgerTeaser';
-import { HomeFinale } from './HomeFinale';
 
+/**
+ * Personality Assessor — Home Editorial Experience
+ * 6 Continuous Visual Movements:
+ * 1. HomeHeroSource (Hero + Source Protagonist)
+ * 2. SourceSplitJourney (One Answer Splits)
+ * 3. EvidenceConstellation (Evidence Readings & Proportional Mass)
+ * 4. ProfessionalConditionsJourney (Flagship Multi-Plane Working Conditions)
+ * 5. CareerMediaField (17-Role Spatial Stream & Media Emergence)
+ * 6. RecordTimeTrustFinale (Time Scrub + Provenance Aperture + Reused Finale)
+ */
 export const HomeEditorialExperience = () => {
   return (
     <div className="pa-px-home-container" data-route="home">
-      {/* ── Chapter 1: Thesis Poster ── */}
-      <HeroThesisPoster />
+      {/* ── Movement 1: Hero & Source Protagonist ── */}
+      <HomeHeroSource />
 
-      {/* ── Chapter 2: One Response Spread ── */}
-      <OneResponseSpread />
+      {/* ── Movement 2: One Answer Splits ── */}
+      <SourceSplitJourney />
 
-      {/* ── Chapter 3: Evidence Deck ── */}
-      <EvidenceDeck />
+      {/* ── Movement 3: Evidence Constellation & Calibration Mass ── */}
+      <EvidenceConstellation />
 
-      {/* ── Chapter 4: Professional Conditions Journey ── */}
+      {/* ── Movement 4: Professional Conditions Journey ── */}
       <ProfessionalConditionsJourney />
 
-      {/* ── Chapter 5: Multi-Model Psychometric Atlas ── */}
-      <ModelAtlas />
+      {/* ── Movement 5: Career Media Field ── */}
+      <CareerMediaField />
 
-      {/* ── Chapter 6: Deterministic Calibration Mass ── */}
-      <CalibrationMass />
-
-      {/* ── Chapter 7: Career Role Atlas Teaser ── */}
-      <CareerRoleAtlasTeaser />
-
-      {/* ── Chapter 8: Progress Longitudinal Teaser ── */}
-      <ProgressTeaser />
-
-      {/* ── Chapter 9: Source Ledger & Trust Teaser ── */}
-      <SourceLedgerTeaser />
-
-      {/* ── Chapter 10: Synthesis Finale ── */}
-      <HomeFinale />
+      {/* ── Movement 6: Time Exposure, Trust Inspection & Finale ── */}
+      <RecordTimeTrustFinale />
     </div>
   );
+};
+
+export {
+  HeroThesisPoster,
+  OneResponseSpread,
+  EvidenceDeck,
+  ModelAtlas,
+  CalibrationMass,
+  CareerRoleAtlasTeaser,
+  ProgressTeaser,
+  SourceLedgerTeaser,
+  HomeFinale,
 };
 
 export default HomeEditorialExperience;

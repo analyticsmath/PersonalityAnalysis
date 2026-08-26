@@ -1,7 +1,8 @@
 /**
  * Personality Assessor - Auth Routes Styling (Login & Signup)
- * Light negative space: 35-45% photographic region breaking grid, integrated light form.
- * Solid white/mineral inputs, 48px+ touch height, high-contrast focus rings.
+ * Asymmetrical Photographic Environment: 38-44% photographic region breaking grid,
+ * integrated light form on clean paper with solid white inputs.
+ * Zero generic 50/50 split, zero glassmorphism.
  */
 
 .pa-px-auth-root {
@@ -10,7 +11,7 @@
   background-color: var(--pa-paper);
   color: var(--pa-ink);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: clamp(340px, 42vw, 560px) 1fr;
   align-items: center;
   position: relative;
   overflow-x: hidden;
@@ -22,6 +23,7 @@
   top: 0;
   overflow: hidden;
   background-color: var(--pa-mineral);
+  box-shadow: 6px 0 24px rgba(23, 25, 24, 0.04);
 }
 
 .pa-px-auth-media-frame {
@@ -30,44 +32,52 @@
   position: relative;
 }
 
+.pa-px-auth-media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .pa-px-auth-form-col {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: calc(var(--px-header-height-desktop) + var(--px-space-cluster)) var(--px-outer-gutter) var(--px-space-cluster);
-  max-width: 540px;
+  padding: calc(var(--px-header-height-desktop) + 24px) var(--px-outer-gutter) var(--px-space-cluster);
+  max-width: 480px;
   margin: 0 auto;
   width: 100%;
 }
 
 .pa-px-auth-form-header {
-  margin-bottom: var(--px-space-cluster);
+  margin-bottom: 24px;
 }
 
 .pa-px-auth-form-header h1 {
-  font-size: var(--px-heading-xl);
-  font-weight: var(--px-weight-heading);
-  letter-spacing: -0.025em;
+  font-family: var(--pa-font-family);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: var(--px-weight-bold);
+  letter-spacing: -0.03em;
   color: var(--pa-ink);
   margin-bottom: 8px;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .pa-px-auth-form-header p {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--pa-graphite);
-  line-height: 1.5;
+  line-height: 1.45;
+  margin: 0;
 }
 
 .pa-px-auth-error {
   background-color: rgba(113, 54, 65, 0.08);
   border: 1px solid var(--pa-evidence);
   color: var(--pa-evidence);
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: var(--px-radius-xs);
-  font-size: 0.95rem;
-  margin-bottom: var(--px-space-content);
+  font-size: 0.88rem;
+  margin-bottom: var(--px-space-sm);
   line-height: 1.4;
 }
 
@@ -75,22 +85,22 @@
   background-color: rgba(46, 125, 50, 0.08);
   border: 1px solid #2e7d32;
   color: #2e7d32;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: var(--px-radius-xs);
-  font-size: 0.95rem;
-  margin-bottom: var(--px-space-content);
+  font-size: 0.88rem;
+  margin-bottom: var(--px-space-sm);
   line-height: 1.4;
 }
 
 .pa-px-auth-social-wrap {
-  margin-bottom: var(--px-space-content);
+  margin-bottom: var(--px-space-sm);
   width: 100%;
 }
 
 .pa-px-auth-form {
   display: flex;
   flex-direction: column;
-  gap: var(--px-space-content);
+  gap: 16px;
 }
 
 .pa-px-auth-field {
@@ -100,7 +110,7 @@
 }
 
 .pa-px-auth-field label {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: var(--px-weight-medium);
   color: var(--pa-ink);
 }
@@ -115,7 +125,7 @@
   background: none;
   border: none;
   font-family: var(--pa-font-mono);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--pa-graphite);
   cursor: pointer;
   padding: 2px 4px;
@@ -134,7 +144,7 @@
   border: 1px solid var(--pa-mineral);
   border-radius: var(--px-radius-xs);
   font-family: var(--pa-font-family);
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--pa-ink);
   outline: none;
   transition: border-color 180ms ease, box-shadow 180ms ease;
@@ -142,11 +152,11 @@
 
 .pa-px-auth-field input:focus {
   border-color: var(--pa-ink);
-  box-shadow: 0 0 0 2px rgba(23, 25, 24, 0.12);
+  box-shadow: 0 0 0 2px rgba(23, 25, 24, 0.1);
 }
 
 .pa-px-field-error {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--pa-evidence);
 }
 
@@ -154,7 +164,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--pa-graphite);
   cursor: pointer;
   line-height: 1.4;
@@ -171,8 +181,8 @@
 }
 
 .pa-px-auth-switch {
-  margin-top: var(--px-space-content);
-  font-size: 0.95rem;
+  margin-top: 16px;
+  font-size: 0.88rem;
   color: var(--pa-graphite);
   text-align: center;
 }
@@ -192,7 +202,7 @@
     grid-template-columns: 1fr;
   }
   .pa-px-auth-media-col {
-    height: 32svh;
+    height: clamp(200px, 30svh, 280px);
     position: relative;
   }
   .pa-px-auth-form-col {

@@ -1,178 +1,271 @@
 /**
  * Personality Assessor - How It Works Route Styling
- * Continuous Causal Transformation: Sticky visual figure + Progressive narrative column.
- * Zero CSS gradients, zero full-screen dark overlays.
+ * Unified Visual Causal Transformation Stage
+ * Zero CSS gradients, zero full-screen dark sheets.
  */
 
 .pa-px-how-page {
   width: 100%;
   background-color: var(--pa-paper);
   color: var(--pa-ink);
-  padding: calc(var(--pa-space-cinematic) * 0.7) var(--pa-gutter-macro) var(--pa-space-section);
+  padding: calc(var(--px-header-height-desktop) + 24px) var(--px-outer-gutter) var(--pa-space-section);
 }
 
 .pa-px-how-hero {
   max-width: 1440px;
-  margin: 0 auto var(--pa-space-section);
+  margin: 0 auto 36px auto;
 }
 
 .pa-px-how-hero__headline {
-  font-family: var(--pa-font-display);
-  font-size: var(--pa-display-route);
-  font-weight: 580;
+  font-family: var(--pa-font-family);
+  font-size: clamp(2.4rem, 4.4vw, 4.8rem);
+  font-weight: var(--px-weight-bold);
   color: var(--pa-ink);
-  letter-spacing: -0.03em;
-  line-height: 1.0;
-  margin-bottom: 16px;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  margin: 0 0 12px 0;
 }
 
 .pa-px-how-hero__support {
-  font-size: var(--pa-lead);
+  font-size: clamp(1.05rem, 1.35vw, 1.35rem);
   color: var(--pa-graphite);
-  max-width: 60ch;
+  max-width: 52ch;
+  margin: 0;
 }
 
-/* ── Continuous Causal Stage ── */
-.pa-px-how-causal-stage {
+/* Pinned Transformation Container */
+.pa-px-how-pinned-container {
   max-width: 1440px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: var(--pa-gutter-column);
   position: relative;
-  align-items: flex-start;
 }
 
-.pa-px-how-narrative-col {
+.pa-px-how-cinematic-stage {
+  width: 100%;
+  min-height: clamp(480px, 66svh, 660px);
+  background-color: var(--pa-white);
+  border: 1px solid var(--pa-mineral);
+  border-radius: var(--px-radius-sm);
+  padding: clamp(20px, 2.5vw, 36px);
   display: flex;
   flex-direction: column;
-  gap: clamp(60px, 12vh, 120px);
-  padding-bottom: 80px;
+  justify-content: space-between;
+  box-shadow: 0 14px 36px rgba(23, 25, 24, 0.05);
 }
 
-.pa-px-how-narrative-entry {
-  border-left: 2px solid var(--pa-mineral);
-  padding-left: 24px;
-  transition: border-color 240ms ease, opacity 240ms ease;
-  opacity: 0.55;
-}
-
-.pa-px-how-narrative-entry--active {
-  border-color: var(--pa-evidence);
-  opacity: 1;
-}
-
-.pa-px-how-step-meta {
-  color: var(--pa-evidence);
-  margin-bottom: 8px;
-  letter-spacing: 0.05em;
-}
-
-.pa-px-how-figure-col {
-  position: sticky;
-  top: 100px;
-  z-index: 5;
-}
-
-.pa-px-how-transformation-field {
-  background-color: transparent;
-  padding: 0;
-  min-height: 440px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.pa-px-how-figure__header {
+.pa-px-how-stage__nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--pa-mineral);
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-bottom: 1px solid var(--pa-paper);
+  padding-bottom: 16px;
 }
 
-.pa-px-how-figure__sentence-stage {
-  font-family: var(--pa-font-display);
-  font-size: clamp(1.2rem, 1.8vw, 1.8rem);
-  font-weight: 540;
-  line-height: 1.25;
-  color: var(--pa-ink);
-  margin-bottom: 16px;
-  padding: 16px 0;
+.pa-px-how-stage__stepper {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.pa-px-how-figure__clause-a {
-  display: inline-block;
-  will-change: transform, color;
-}
-
-.pa-px-how-figure__clause-b {
-  display: inline-block;
-  will-change: transform, color;
-}
-
-.pa-px-how-figure__paths-svg {
-  width: 100%;
-  height: 40px;
-  margin-bottom: 12px;
-}
-
-.pa-px-how-figure__models-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.pa-px-how-model-node {
-  background-color: var(--pa-paper);
-  padding: 10px 12px;
-  border-radius: 3px;
+.pa-px-how-step-indicator {
+  background: none;
   border: 1px solid var(--pa-mineral);
+  padding: 6px 12px;
+  border-radius: var(--px-radius-xs);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  outline: none;
+  transition: all 160ms ease;
+}
+
+.pa-px-how-step-indicator--active {
+  background-color: var(--pa-ink);
+  border-color: var(--pa-ink);
+  color: #FFF;
+}
+
+.pa-px-how-step-num {
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--pa-evidence);
+}
+
+.pa-px-how-step-indicator--active .pa-px-how-step-num {
+  color: #FFF;
+}
+
+.pa-px-how-step-title {
+  font-family: var(--pa-font-family);
+  font-size: 0.8rem;
+  font-weight: var(--px-weight-medium);
+}
+
+.pa-px-how-stage__annotation-line {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.pa-px-how-stage__beat-title {
+  font-family: var(--pa-font-mono);
+  font-size: 0.76rem;
+  color: var(--pa-evidence);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.pa-px-how-stage__beat-desc {
+  font-size: 0.86rem;
+  color: var(--pa-graphite);
+}
+
+.pa-px-how-stage__arena {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 20px;
+  padding: 24px 0;
+  min-height: 340px;
+  justify-content: center;
 }
 
-.pa-px-how-weight-strip {
+.pa-px-how-stage__sentence-box {
+  font-family: var(--pa-font-family);
+  font-size: clamp(1.4rem, 2.2vw, 2.4rem);
+  font-weight: var(--px-weight-medium);
+  letter-spacing: -0.025em;
+  color: var(--pa-ink);
+  line-height: 1.2;
+}
+
+.pa-px-how-stage__clause-a {
+  display: inline-block;
+  will-change: transform, color;
+}
+
+.pa-px-how-stage__clause-b {
+  display: inline-block;
+  will-change: transform, color;
+}
+
+.pa-px-how-stage__paths-svg {
+  width: 100%;
+  max-width: 600px;
+  height: 44px;
+}
+
+.pa-px-how-stage__models-field {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--px-column-gap);
+}
+
+.pa-px-how-node {
+  background-color: var(--pa-paper);
+  border: 1px solid var(--pa-mineral);
+  padding: 12px 14px;
+  border-radius: var(--px-radius-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pa-px-how-node__lbl {
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
+  color: var(--pa-evidence);
+  font-weight: 500;
+}
+
+.pa-px-how-node__val {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--pa-ink);
+}
+
+.pa-px-how-stage__weights-field {
+  width: 100%;
+}
+
+.pa-px-how-weights-strip {
   display: flex;
   width: 100%;
-  border-radius: 3px;
+  min-height: 72px;
+  border-radius: var(--px-radius-xs);
   overflow: hidden;
-  margin-bottom: 20px;
+  border: 1px solid var(--pa-mineral);
 }
 
-.pa-px-how-figure__record-plate {
-  margin-top: 10px;
+.pa-px-how-wblock {
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 0.8rem;
 }
 
-.pa-px-how-figure__media-inset {
+.pa-px-how-wblock strong {
+  font-family: var(--pa-font-mono);
+  font-size: 1.15rem;
+}
+
+.pa-px-how-stage__record-field {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: 4px;
-  background-color: var(--pa-mineral);
 }
 
-.pa-px-how-figure__media-inset img {
+.pa-px-how-record-card {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--px-column-gap);
+  align-items: center;
+  background-color: var(--pa-paper);
+  padding: 16px;
+  border-radius: var(--px-radius-xs);
+  border: 1px solid var(--pa-mineral);
+}
+
+.pa-px-how-record-media {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--px-radius-xs);
+}
+
+.pa-px-how-record-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-@media (max-width: 900px) {
-  .pa-px-how-causal-stage {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-  .pa-px-how-figure-col {
-    position: static;
-    width: 100%;
-  }
-  .pa-px-how-figure-card {
-    min-height: auto;
-  }
+.pa-px-how-record-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
+.pa-px-how-record-tag {
+  font-family: var(--pa-font-mono);
+  font-size: 0.72rem;
+  color: var(--pa-evidence);
+  font-weight: 500;
+}
+
+.pa-px-how-record-title {
+  font-family: var(--pa-font-family);
+  font-size: 1.2rem;
+  font-weight: var(--px-weight-medium);
+  color: var(--pa-ink);
+  margin: 0;
+}
+
+.pa-px-how-record-meta {
+  font-size: 0.86rem;
+  color: var(--pa-graphite);
+  margin: 0;
+}

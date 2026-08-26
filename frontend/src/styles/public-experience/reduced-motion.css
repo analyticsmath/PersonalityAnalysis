@@ -1,6 +1,6 @@
 /**
  * Personality Assessor - Reduced Motion Layer
- * Respects prefers-reduced-motion: reduce
+ * Respects prefers-reduced-motion: reduce (WCAG AAA Standard)
  * Removes forced scroll pins, provides instant clean transitions and natural document flow.
  */
 
@@ -14,30 +14,42 @@
     scroll-behavior: auto !important;
   }
 
-  .pa-px-scene-sticky,
-  .pa-px-how-stage-sticky,
-  .pa-px-career-stage-sticky,
-  .pa-px-trust-stage-sticky,
-  .pa-px-home-sticky-stage {
+  /* Pinned Stages to Natural Flow */
+  .pa-px-conditions-pinned-stage,
+  .pa-px-how-pinned-container,
+  .pa-px-how-cinematic-stage,
+  .pa-px-conditions-stage__viewport {
     position: relative !important;
     height: auto !important;
+    min-height: auto !important;
     overflow: visible !important;
   }
 
-  .pa-px-conditions-track {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
-    gap: var(--px-space-content) !important;
-    padding: 0 var(--px-outer-gutter) !important;
+  .pa-px-conditions-stage__viewport {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--pa-space-section) !important;
   }
 
-  .pa-px-condition-panel {
+  .pa-px-condition-silhouette {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
     width: 100% !important;
-    min-width: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
   }
 
-  .pa-px-transition-layer {
+  .pa-px-condition-silhouette__media-frame img,
+  .pa-px-hero-field__media-frame img,
+  .pa-px-source-split__media-frame img {
+    transform: none !important;
+  }
+
+  .pa-px-transition-layer,
+  .pa-px-transition-portal-layer {
     display: none !important;
   }
 }
