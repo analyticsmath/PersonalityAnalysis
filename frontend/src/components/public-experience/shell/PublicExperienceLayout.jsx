@@ -22,6 +22,12 @@ export const PublicExperienceLayout = () => {
 
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
 
+  // Home owns its cinematic header, index and footer. All other marketing
+  // routes retain their existing persistent public-experience shell.
+  if (location.pathname === '/') {
+    return <Outlet />;
+  }
+
   return (
     <PublicMotionRoot>
       <div className="pa-public-experience pa-px-shell-root">
