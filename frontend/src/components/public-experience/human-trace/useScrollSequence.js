@@ -65,7 +65,7 @@ export function useScrollSequence(ref, count, onSelect, kind) {
         selectionTimeline = null;
         overlay?.remove();
         overlay = null;
-        belt.style.visibility = '';
+        belt.style.opacity = '';
         track.classList.remove('is-selecting');
       };
       const measure = () => {
@@ -146,7 +146,7 @@ export function useScrollSequence(ref, count, onSelect, kind) {
           overlay.append(panel);
         });
         panelWindow.append(overlay);
-        belt.style.visibility = 'hidden';
+        belt.style.opacity = '0';
         track.classList.add('is-selecting');
         const direction = index > from ? 1 : -1;
         const finish = () => { cancelSelection(); paint(); };
