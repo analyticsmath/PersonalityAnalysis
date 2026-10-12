@@ -4,7 +4,7 @@
 
 ## Independent audit
 
-Career intelligence had a second vertical scroller inside the page, forcing the viewer to target the occupation list. Its information panel also obscured the photograph. Trust had five accurate evidence stages but advanced only through clicks. Progress had correctly assigned sources but the collaborative overlay was clipped to the left, underneath the independent-work label. Fix that geometry rather than swapping the source photographs.
+Career intelligence had a second vertical scroller inside the page, forcing the viewer to target the occupation list. Its information panel also obscured the photograph. Trust had five accurate evidence stages but advanced only through clicks. Progress had correctly assigned sources but the collaborative overlay was clipped to the left, underneath the independent-work label. Fix that clipping geometry while preserving image-to-label ownership. Use the existing overhead collaboration photograph from the homepage to make the shared-workspace side clearer.
 
 ## Reference anchors and transfers
 
@@ -37,4 +37,4 @@ Tests cover sequence bounds, monotonic continuity, direct selections inside read
 
 The main implementation deployed as production commit 081574786ac7c7e04b242bff7c2ef05c5a40c138. Vercel reported READY. Native browser inspection confirmed that page scrolling advances Software Engineer to Frontend Engineer to Backend Engineer, moves the photographic strip and occupation index together, and reconstructs Frontend Engineer on reverse scrolling. The photograph remains physically separate from the readable paper information plane. End reaches Business Analyst and Home returns to Software Engineer.
 
-Trust advances from Supplied to Inferred without a click and carries each chapter's own photograph and copy. Further browser checks of later states, reverse movement and the progress divider are part of final acceptance. Automated checks passed 240 tests; changed-source ESLint and the production build passed. The existing large shared-bundle warning remains; no award score is asserted.
+Trust advances from Supplied to Inferred without a click and carries each chapter's own photograph and copy. Reverse scrolling returned Calculated to Inferred, and direct Controlled selection sought its actual chapter without flashing through intermediate panels. The progress divider was inspected at 55%, 25% and 75%; the solo photograph stays on the left, and the shared environment stays on the right. Automated checks passed 241 tests; changed-source ESLint and the production build passed. The existing large shared-bundle warning remains; no award score is asserted.

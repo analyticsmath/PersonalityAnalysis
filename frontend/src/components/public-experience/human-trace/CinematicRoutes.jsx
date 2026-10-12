@@ -14,6 +14,7 @@ const PHOTO={
   precision:PATH+'1645258044234-f4ba2655baf1.jpg',
   autonomy:PATH+'1742440710402-721332ea7898.jpg',
   shared:'/media/public-experience/digital/studio-1920.webp',
+  collaboration:'/media/public-experience/digital/collaborate-1920.webp',
   pressure:PATH+'1554863798-d89af6030d7d.jpg',
   inquiry:'/media/public-experience/digital/code-detail-1920.webp',
   proof:PATH+'1745845289797-913815100704.jpg',
@@ -182,7 +183,7 @@ export function ProgressCinematicPage(){
     <section className="vt-time-comparison" aria-label="Illustrative timeline comparator">
       <div className="vt-time-stage" style={{'--split':split+'%'}}>
         <img src={PHOTO.autonomy} loading="lazy" alt="Illustrative baseline solo workspace" className="vt-time-image" />
-        <div className="vt-time-mask"><img src={PHOTO.shared} loading="lazy" alt="Illustrative later collaborative workspace" className="vt-time-image" /></div>
+        <div className="vt-time-mask"><img src={PHOTO.collaboration} loading="lazy" alt="Illustrative later collaborative workspace" className="vt-time-image" /></div>
         <span className="vt-time-tag vt-time-tag--left">Independent work</span><span className="vt-time-tag vt-time-tag--right">Working together</span>
         <div className="vt-time-divider" aria-hidden="true"><span>↔</span></div>
       </div>

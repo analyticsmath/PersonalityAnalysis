@@ -27,6 +27,7 @@ export function useScrollSequence(ref, count, onSelect, kind) {
     };
     const mm = gsap.matchMedia();
     mm.add('(min-height:740px) and (prefers-reduced-motion:no-preference)', () => {
+      let running=true;
       track.classList.add('is-scroll-driven'); setDriven(true);
       const belt = track.querySelector('[data-sequence-belt]');
       const indexWindow = track.querySelector('[data-sequence-index-window]');
@@ -78,8 +79,9 @@ export function useScrollSequence(ref, count, onSelect, kind) {
         if(immediate){trigger.update();trigger.getTween()?.progress(1);animation.progress(progress);paint();}
       };
       paint();
-      document.fonts?.ready.then(() => { if (!disposed) { trigger.refresh(); paint(); } });
+      document.fonts?.ready.then(() => { if (!disposed && running) { trigger.refresh(); paint(); } });
       return () => {
+        running=false;
         animation.kill(); trigger.kill(); track.classList.remove('is-scroll-driven'); track.style.removeProperty('--sequence-travel');
         belt.style.transform=''; if(indexBelt) indexBelt.style.transform='';
         panels.forEach(panel=>{ const img=panel.querySelector('img'); if(img)img.style.transform=''; });
