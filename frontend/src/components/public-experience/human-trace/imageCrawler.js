@@ -36,7 +36,7 @@ export function mountImageCrawler(root) {
   on(viewport, 'focusin', event => {
     focused = true;
     const link = event.target.closest('.career-image');
-    if (enabled() && link && group.contains(link)) { distance = wrapDistance(link.offsetLeft - (viewport.clientWidth - link.offsetWidth) / 2, width); paint(); }
+    if (enabled() && !dragging && link && group.contains(link)) { distance = wrapDistance(link.offsetLeft - (viewport.clientWidth - link.offsetWidth) / 2, width); paint(); }
   });
   on(viewport, 'focusout', event => { if (!viewport.contains(event.relatedTarget)) focused = false; });
   on(viewport, 'pointerdown', event => {
