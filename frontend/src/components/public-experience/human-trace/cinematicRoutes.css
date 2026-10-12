@@ -807,3 +807,12 @@ each photo owns a separate, unobscured plane. */
 .vt-career-photo-belt figure,.vt-trust-belt>.vt-trust-inspection,.vt-trust-data {
   min-width:0
 }
+
+.vt-cinema a:focus-visible, .vt-cinema button:focus-visible, .vt-cinema input:focus-visible {
+  outline-color: #8db39e;
+}
+.vt-dark-quote p {
+  font-family: 'Instrument Sans', Arial, sans-serif;
+  font-weight: 450;
+  line-height: 1.1;
+}

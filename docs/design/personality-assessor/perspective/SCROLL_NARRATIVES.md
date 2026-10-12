@@ -15,7 +15,7 @@ Career intelligence had a second vertical scroller inside the page, forcing the 
 
 ## Composition and interaction contracts
 
-Career: page scroll moves all 17 canonical occupations through a visible index and advances an actual horizontal photographic filmstrip. A separate paper plane contains the selected occupation's capabilities and domains. There is no nested list scroller. Button selection and arrow/Home/End keys seek the same page positions; keyboard focus does not move the clipped index itself. The selected photo remains eligible for page-transition snapshots.
+Career: page scroll moves all 17 canonical occupations through a visible index and advances an actual horizontal photographic filmstrip. A separate paper plane contains the selected occupation's capabilities and domains. There is no nested list scroller. Button selection and arrow/Home/End keys seek the same page positions; keyboard focus does not move the clipped index itself. The selected photo remains eligible for page-transition snapshots. Home/End and distant selections seek directly, avoiding a flash through every intervening profile; nearby selections retain the short scroll transition.
 
 Trust: five full photographic/text chapters travel horizontally. Each has a reading hold before the transition into the next. The bottom stage controls select the same timeline positions, and their selected state follows scrolling in both directions. Descriptions remain grounded in the existing canonical record states.
 
@@ -32,3 +32,9 @@ Sequences are driven by native page progress, with .22-second scrub smoothing an
 ## Verification boundary
 
 Tests cover sequence bounds, monotonic continuity, direct selections inside reading holds, the effective progress clipping rule, latest-request navigation, visible-media selection and existing public/product contracts. Build and changed-source lint checks are separate from live visual review. Desktop browser observations do not establish physical-phone performance or an award score.
+
+## Live desktop acceptance
+
+The main implementation deployed as production commit 081574786ac7c7e04b242bff7c2ef05c5a40c138. Vercel reported READY. Native browser inspection confirmed that page scrolling advances Software Engineer to Frontend Engineer to Backend Engineer, moves the photographic strip and occupation index together, and reconstructs Frontend Engineer on reverse scrolling. The photograph remains physically separate from the readable paper information plane. End reaches Business Analyst and Home returns to Software Engineer.
+
+Trust advances from Supplied to Inferred without a click and carries each chapter's own photograph and copy. Further browser checks of later states, reverse movement and the progress divider are part of final acceptance. Automated checks passed 240 tests; changed-source ESLint and the production build passed. The existing large shared-bundle warning remains; no award score is asserted.

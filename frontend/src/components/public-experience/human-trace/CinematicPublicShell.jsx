@@ -39,9 +39,9 @@ export function CinematicPublicShell() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const scrollEngine = useRef(null);
-  const scrollTo = useCallback(position => {
-    if (scrollEngine.current) scrollEngine.current.scrollTo(position,{duration:.65});
-    else window.scrollTo({top:position,behavior:reduced()?"auto":"smooth"});
+  const scrollTo = useCallback((position, options={}) => {
+    if (scrollEngine.current) scrollEngine.current.scrollTo(position,{duration:.65,immediate:options.immediate===true});
+    else window.scrollTo({top:position,behavior:reduced()||options.immediate?"auto":"smooth"});
   },[]);
   const trigger = useRef(null);
   const drawer = useRef(null);

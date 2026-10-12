@@ -70,8 +70,12 @@ export function useScrollSequence(ref, count, onSelect, kind) {
       }});
       const trigger = animation.scrollTrigger;
       controller.current.select = index => {
+        const progress=sequenceProgress(index,count);
+        const immediate=Math.abs(index-selected)>2;
         onSelect(index);
-        scrollTo(trigger.start + (trigger.end-trigger.start)*sequenceProgress(index,count));
+        scrollTo(trigger.start + (trigger.end-trigger.start)*progress,{immediate});
+        // Home/End and distant selections seek directly instead of flashing through every intervening chapter.
+        if(immediate){trigger.update();trigger.getTween()?.progress(1);animation.progress(progress);paint();}
       };
       paint();
       document.fonts?.ready.then(() => { if (!disposed) { trigger.refresh(); paint(); } });
