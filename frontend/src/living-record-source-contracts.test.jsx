@@ -68,12 +68,12 @@ describe('Personality Assessor: evidence-led marketing contracts', () => {
     expect(routes).toContain('role="tabpanel"');
   });
 
-  it('4. represents five causal stages and source response without invented personal scores', () => {
+  it('4. explains five stages without invented responses or personal scores', () => {
     expect(PUBLIC_CONTENT.how.movements).toHaveLength(5);
     expect(routes).toContain('PUBLIC_CONTENT.how.movements');
-    expect(routes).toContain('STATEMENT');
-    expect(PUBLIC_CONTENT.home.worldEntry.response).toBe('I clarify the constraints first, then choose the smallest reversible step.');
-    expect(routes).toContain('NOT A COMPLETE ASSESSMENT RESULT');
+    expect(routes).toContain('Your responses remain part of the record.');
+    expect(routes).not.toContain('I clarify the constraints first');
+    expect(routes).toContain('Read the interpretation alongside its evidence and limits.');
     expect(routes).not.toContain('Conscientiousness: 78');
   });
 

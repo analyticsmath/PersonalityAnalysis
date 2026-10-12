@@ -86,7 +86,7 @@
 .vt-essay-intro--dark h2 em{color:#bfb4a8}
 .vt-source-note{padding:17px 20px 12px;border-top:1px solid currentColor;max-width:570px;background:#ebece6;color:#18221e}
 .vt-source-note--dark{background:rgba(13,21,17,.9);color:#f3eee7;border-color:#a0aea6}
-.vt-source-note blockquote{font-size:clamp(17px,2vw,28px);font-weight:500;line-height:1.35;margin:15px 0}
+.vt-source-note .vt-record-statement{font-size:clamp(17px,2vw,28px);font-weight:500;line-height:1.35;margin:15px 0}
 .vt-source-note small{font:9px/1.5 'DM Mono',monospace;letter-spacing:.06em;opacity:.7}
 .vt-how-sequence{background:#151c18;display:grid;grid-template-columns:1fr 1fr;position:relative}
 .vt-how-fixed{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate}
@@ -163,7 +163,7 @@
 .vt-trust-original img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .vt-trust-original:after{content:"";position:absolute;inset:0;background:rgba(10,25,17,.42)}
 .vt-trust-original>div{position:absolute;z-index:1;bottom:65px;left:var(--vt-side);right:var(--vt-side)}
-.vt-trust-original blockquote{font:400 clamp(38px,4vw,65px)/1.05 Georgia,serif;letter-spacing:-.047em;margin:18px 0}
+.vt-trust-original .vt-record-statement{font:450 clamp(38px,4vw,65px)/1.05 'Instrument Sans',Arial,sans-serif;letter-spacing:-.047em;margin:18px 0}
 .vt-trust-data{padding:clamp(100px,10vw,160px) var(--vt-side) 75px;display:flex;flex-direction:column}
 .vt-trust-data h2{font:400 clamp(65px,7vw,125px)/.85 Georgia,serif;letter-spacing:-.076em;margin:30px 0}
 .vt-trust-data>strong{font-size:19px}
