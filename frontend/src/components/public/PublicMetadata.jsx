@@ -3,20 +3,20 @@ import { useLocation } from 'react-router-dom';
 
 const metadata = {
   '/': [
-    'Personality Assessor | Editorial Evidence Atlas',
-    'One answer is not one result. Trace professional patterns with the work attached across changing conditions, deterministic career calibration, and temporal stability.',
+    'Personality Assessor | The Human Trace',
+    'Explore professional patterns through their supporting evidence, working conditions, career possibilities and change over time.',
   ],
   '/how-it-works': [
     'How It Works | Personality Assessor',
-    'Follow one answer from source capture to multi-model psychometric calibration and deterministic career-fit weighting.',
+    'See how evidence is collected, interpreted and evaluated before it contributes to professional insights.',
   ],
   '/career-intelligence': [
     'Career Intelligence | Personality Assessor',
-    'Spatial workworld exploration across 5 environmental conditions and 17 canonical occupational profiles.',
+    'Explore 17 occupational profiles, their skills, and the working conditions that shape career possibilities.',
   ],
   '/progress': [
     'Progress | Personality Assessor',
-    'Temporal exposure where later evidence sits beside earlier readings to inspect trait stability and contextual adaptation.',
+    'Understand how professional insights may change when later observations add context to an earlier assessment.',
   ],
   '/methodology': [
     'Methodology | Personality Assessor',
@@ -28,7 +28,7 @@ const metadata = {
   ],
   '/privacy': [
     'Privacy Governance | Personality Assessor',
-    'How Personality Assessor collects, computes, stores, and protects your professional evidence with sovereign export and hard deletion rights.',
+    'Read about data handling, privacy policies, and available account controls for your assessment information.',
   ],
   '/login': [
     'Sign In | Personality Assessor',
