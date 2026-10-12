@@ -42,35 +42,35 @@ function usePageChoreography(ref) {
   },[ref]);
 }
 
-function Cover({chapter,eyebrow,lines,image,alt,description,position='center',children,variant=''}) {
+function Cover({eyebrow,lines,image,alt,description,position='center',children,variant=''}) {
   return <section className={'vt-cover vt-cover--'+variant} data-transition-actor="marketing-cover">
     <div className="vt-cover-media">
       <img className="vt-cover-photo" src={image} alt={alt} style={{objectPosition:position}} fetchPriority="high" />
     </div>
     <div className="vt-cover-shade" aria-hidden="true"/>
-    <div className="vt-cover-kicker"><span>{eyebrow}</span><span>{chapter} / 07</span></div>
+    <div className="vt-cover-kicker"><span>{eyebrow}</span></div>
     <div className="vt-cover-copy">
       <h1>{lines.map((line,i)=><span key={i}>{line}</span>)}</h1>
       <p>{description}</p>
       {children}
     </div>
-    <div className="vt-cover-bottom"><span>01—A / THE HUMAN TRACE</span><span>SCROLL TO FOLLOW THE RECORD ↓</span></div>
+    <div className="vt-cover-bottom"><span>EVIDENCE BEFORE INFERENCE</span><span>SCROLL TO EXPLORE ↓</span></div>
   </section>;
 }
 
 function SourceNote({dark=false}) {
   return <aside className={'vt-source-note'+(dark?' vt-source-note--dark':'')} aria-label="Illustrative source response">
-    <span className="vt-micro">EVIDENCE RECORD / 01—A</span>
+    <span className="vt-micro">EXAMPLE SOURCE RESPONSE</span>
     <blockquote>“{STATEMENT}”</blockquote>
     <small>ILLUSTRATIVE RESPONSE. NOT A COMPLETE ASSESSMENT RESULT.</small>
   </aside>;
 }
 
-function NextChapter({to,number,title,subtitle,image}) {
+function NextChapter({to,title,subtitle,image}) {
   return <CinemaLink className="vt-next" to={to}>
     <img src={image} loading="lazy" alt="" />
     <div className="vt-next-shade"/>
-    <div className="vt-next-content"><span className="vt-micro">NEXT CHAPTER / {number}</span><strong>{title}</strong><span>{subtitle}</span></div>
+    <div className="vt-next-content"><span className="vt-micro">EXPLORE NEXT</span><strong>{title}</strong><span>{subtitle}</span></div>
     <span className="vt-next-arrow" aria-hidden="true">↗</span>
   </CinemaLink>;
 }
@@ -85,7 +85,7 @@ export function HowCinematicPage() {
   const steps=PUBLIC_CONTENT.how.movements;
   const weights=PUBLIC_CONTENT.home.calibration.weights;
   return <PageFrame className="how">
-    <Cover chapter="02" eyebrow="FROM RESPONSE TO READING" lines={['FOLLOW','ONE ANSWER.']} image={PHOTO.detail} alt="A person's hand moves a pencil across an architectural drawing" description="A source record keeps its origin while evidence, models and professional context are examined." position="55% 45%" variant="how"/>
+    <Cover eyebrow="FROM RESPONSE TO READING" lines={['FOLLOW','ONE ANSWER.']} image={PHOTO.detail} alt="A person's hand moves a pencil across an architectural drawing" description="A source record keeps its origin while evidence, models and professional context are examined." position="55% 45%" variant="how"/>
     <div className="vt-essay-intro" data-reveal><span className="vt-micro">THE CAUSAL JOURNEY</span><h2>Before the inference,<br/><em>there is a source.</em></h2><p>A single answer can suggest questions worth asking. A scored profile requires sufficient independent evidence.</p></div>
     <div className="vt-how-sequence">
       <aside className="vt-how-fixed">
@@ -94,7 +94,7 @@ export function HowCinematicPage() {
       </aside>
       <div className="vt-how-steps">
         {steps.map((step,i)=><article key={step.id} className="vt-how-step" id={'step-'+step.id} data-reveal>
-          <div className="vt-micro">0{i+1} / {step.name}</div>
+          <div className="vt-micro">{step.name}</div>
           <h2>{step.title}</h2><p>{step.description}</p>
           {i===1&&<div className="vt-clause-pair"><span>“I clarify the constraints first,”</span><span>“then choose the smallest reversible step.”</span></div>}
           {i===2&&<div className="vt-framework-small">{PUBLIC_CONTENT.home.models.list.slice(0,4).map(x=><span key={x.id}>{x.name}</span>)}</div>}
@@ -103,7 +103,7 @@ export function HowCinematicPage() {
       </div>
     </div>
     <section className="vt-quiet-end" data-reveal><span className="vt-micro">THE RECORD REMAINS INSPECTABLE</span><h2>No single response<br/>becomes a verdict.</h2><p>Inputs, inferred dimensions, explicit weights and limitations belong to separate stages of the record.</p><CinemaLink className="vt-text-link" to="/methodology">Examine the methodology ↗</CinemaLink></section>
-    <NextChapter to="/career-intelligence" number="03" title="THE OCCUPATIONAL FIELD." subtitle="The same evidence meets different working conditions." image={PHOTO.precision}/>
+    <NextChapter to="/career-intelligence" title="THE OCCUPATIONAL FIELD." subtitle="The same evidence meets different working conditions." image={PHOTO.precision}/>
   </PageFrame>;
 }
 
@@ -120,7 +120,7 @@ export function CareerCinematicPage(){
   const [key,setKey]=useState(keys[0]);
   const refs=useRef([]);
   const role=careersData[key];
-  const chosen=keys.indexOf(key);
+
   const changeByKeyboard=(event,i)=>{
     if(!['ArrowUp','ArrowDown','Home','End'].includes(event.key))return;
     event.preventDefault();
@@ -128,8 +128,8 @@ export function CareerCinematicPage(){
     setKey(keys[next]);refs.current[next]?.focus();
   };
   return <PageFrame className="career">
-    <Cover chapter="03" eyebrow="CAREER INTELLIGENCE" lines={['FIT IS','A FIELD.']} image={PHOTO.precision} alt="A craftsperson at work in a precise manufacturing environment" description="Explore occupational conditions, capabilities and interests. No career can be reduced to a single ranking." position="55% center" variant="career"/>
-    <div className="vt-essay-intro vt-essay-intro--dark" data-reveal><span className="vt-micro">17 CANONICAL PROFILES / NO PERSONAL SCORES</span><h2>Environments change.<br/><em>The questions change.</em></h2><p>Choose an occupation. Explore the skills and foundational disciplines represented in its canonical profile. This is not a recommendation for a specific person.</p></div>
+    <Cover eyebrow="CAREER INTELLIGENCE" lines={['FIT IS','A FIELD.']} image={PHOTO.precision} alt="A craftsperson at work in a precise manufacturing environment" description="Explore occupational conditions, capabilities and interests. No career can be reduced to a single ranking." position="55% center" variant="career"/>
+    <div className="vt-essay-intro vt-essay-intro--dark" data-reveal><span className="vt-micro">EXPLORE OCCUPATIONAL REQUIREMENTS</span><h2>Environments change.<br/><em>The questions change.</em></h2><p>Choose an occupation. Explore the skills and foundational disciplines represented in its canonical profile. This is not a recommendation for a specific person.</p></div>
     <section className="vt-career-explorer" aria-label="Explore 17 occupations">
       <div className="vt-career-list"><span className="vt-micro">SELECT A WORKING CONTEXT / {String(keys.length).padStart(2,'0')} PROFILES</span>
         <div role="tablist" aria-label="Occupational profiles" aria-orientation="vertical">{keys.map((k,i)=>
@@ -140,7 +140,7 @@ export function CareerCinematicPage(){
         <div className="vt-career-photography" key={key}><img src={mediaForRole(key)} alt={'Illustrative professional working context for '+role.title}/></div>
         <div className="vt-career-portrait-shade"/>
         <div className="vt-career-inspection">
-          <span className="vt-micro">OCCUPATIONAL STUDY / {String(chosen+1).padStart(2,'0')}</span>
+          <span className="vt-micro">OCCUPATIONAL PROFILE</span>
           <h2>{role.title}</h2>
           <div className="vt-career-inspection-grid">
             <div><strong>Core capabilities</strong><p>{role.skills.slice(0,5).join(' · ')}</p></div>
@@ -151,7 +151,7 @@ export function CareerCinematicPage(){
       </div>
     </section>
     <section className="vt-quiet-end" data-reveal><span className="vt-micro">CONTEXT IS NOT DESTINY</span><h2>Look beyond<br/>a job title.</h2><p>Interests, skills, work values, personality, education and goals contribute differently to the complete calculation. See the exact weights rather than assuming a mysterious match.</p><CinemaLink className="vt-text-link" to="/methodology">Explore the scoring model ↗</CinemaLink></section>
-    <NextChapter to="/progress" number="04" title="WHAT CHANGED?" subtitle="Return to the same record over time." image={PHOTO.shared}/>
+    <NextChapter to="/progress" title="WHAT CHANGED?" subtitle="Return to the same record over time." image={PHOTO.shared}/>
   </PageFrame>;
 }
 
@@ -159,7 +159,7 @@ export function ProgressCinematicPage(){
   const [split,setSplit]=useState(55);
   const content=PUBLIC_CONTENT.progress;
   return <PageFrame className="progress">
-    <Cover chapter="04" eyebrow="LONGITUDINAL CONTEXT" lines={['WHAT','CHANGED?']} image={PHOTO.autonomy} alt="A person working independently in a wood-lined study environment" description={content.hero.support} position="center 52%" variant="progress"/>
+    <Cover eyebrow="LONGITUDINAL CONTEXT" lines={['WHAT','CHANGED?']} image={PHOTO.autonomy} alt="A person working independently in a wood-lined study environment" description={content.hero.support} position="center 52%" variant="progress"/>
     <div className="vt-essay-intro" data-reveal><span className="vt-micro">BASELINE / LATER CONDITIONS</span><h2>Time adds context.<br/><em>It does not erase.</em></h2><p>Compare illustrative working environments. A genuine personal change requires at least two complete assessment records.</p></div>
     <section className="vt-time-comparison" aria-label="Illustrative timeline comparator">
       <div className="vt-time-stage" style={{'--split':split+'%'}}>
@@ -171,11 +171,11 @@ export function ProgressCinematicPage(){
       <div className="vt-time-controls"><label htmlFor="vt-longitudinal-slider">MOVE THROUGH THE CHANGE IN CONTEXT</label><input id="vt-longitudinal-slider" type="range" min="5" max="95" value={split} onChange={e=>setSplit(Number(e.target.value))} aria-valuetext={split+' percent of the later illustrative environment'} /><output>{split}%</output></div>
     </section>
     <section className="vt-longitudinal-text">
-      <article data-reveal><span className="vt-micro">01 / PRESERVE THE BASELINE</span><h2>{content.stabilityFinding}</h2><p>Without an earlier record, there is nothing reliable to compare. Source and context must remain available for later inspection.</p></article>
-      <article data-reveal><span className="vt-micro">02 / READ THE CHANGE</span><h2>{content.adaptationFinding}</h2><p>Later conditions can alter the interpretation. Neither photograph represents the assessment history of a real person.</p></article>
+      <article data-reveal><span className="vt-micro">PRESERVE THE BASELINE</span><h2>{content.stabilityFinding}</h2><p>Without an earlier record, there is nothing reliable to compare. Source and context must remain available for later inspection.</p></article>
+      <article data-reveal><span className="vt-micro">UNDERSTAND THE CHANGE</span><h2>{content.adaptationFinding}</h2><p>Later conditions can alter the interpretation. Neither photograph represents the assessment history of a real person.</p></article>
     </section>
     <div className="vt-dark-quote" data-reveal><SourceNote dark/><p>One continuous source. Different contexts. No fabricated timeline.</p></div>
-    <NextChapter to="/trust" number="05" title="FOLLOW THE EVIDENCE." subtitle="Every interpretation starts somewhere." image={PHOTO.proof}/>
+    <NextChapter to="/trust" title="FOLLOW THE EVIDENCE." subtitle="Every interpretation starts somewhere." image={PHOTO.proof}/>
   </PageFrame>;
 }
 
@@ -184,18 +184,18 @@ export function TrustCinematicPage(){
   const [active,setActive]=useState(0);
   const step=steps[active];
   return <PageFrame className="trust">
-    <Cover chapter="05" eyebrow="SOURCE & PROVENANCE" lines={['SHOW','THE SOURCE.']} image={PHOTO.proof} alt="Hands examining and arranging physical printed materials" description="Follow what was supplied, what was inferred, what was calculated, and what remains under your control." variant="trust"/>
+    <Cover eyebrow="SOURCE & PROVENANCE" lines={['SHOW','THE SOURCE.']} image={PHOTO.proof} alt="Hands examining and arranging physical printed materials" description="Follow what was supplied, what was inferred, what was calculated, and what remains under your control." variant="trust"/>
     <div className="vt-essay-intro" data-reveal><span className="vt-micro">THE EVIDENCE NEVER DISAPPEARS</span><h2>Inspect the reading.<br/><em>Then its origin.</em></h2><p>Five stages explain the journey from a contextual answer to a professional comparison. Sample inputs are illustrative, not diagnoses.</p></div>
     <section className="vt-trust-inspection" aria-label="Explore the evidence chain">
       <div className="vt-trust-original"><img src={PHOTO.detail} loading="lazy" alt="Close-up of drafting material that represents source documentation"/><div><span className="vt-micro">ORIGINAL RECORD / ILLUSTRATIVE</span><blockquote>“{STATEMENT}”</blockquote></div></div>
-      <div className="vt-trust-data"><span className="vt-micro">CURRENT LAYER / {String(active+1).padStart(2,'0')} OF 05</span>
+      <div className="vt-trust-data"><span className="vt-micro">EXPLORE THE EVIDENCE CHAIN</span>
         <h2>{step.name}</h2><strong>{step.title}</strong><p>{step.description}</p>
         <div className="vt-trust-step-buttons" role="group" aria-label="Select provenance stage">{steps.map((s,i)=><button key={s.id} className={i===active?'is-selected':''} aria-pressed={i===active} onClick={()=>setActive(i)}><span>{String(i+1).padStart(2,'0')}</span>{s.name}</button>)}</div>
         <p className="vt-trust-note">An illustrative provenance demonstration. The underlying system must pass validity and evidence-sufficiency checks.</p>
       </div>
     </section>
-    <section className="vt-rights" data-reveal><div><span className="vt-micro">CONTROL & RESPONSIBILITY</span><h2>Your record.<br/>Your controls.</h2><p>Review export, transparency and account-removal actions in their authenticated contexts.</p></div><div className="vt-rights-list">{PUBLIC_CONTENT.trust.rightsActions.map((r,i)=><article key={r.id}><span>0{i+1}</span><div><h3>{r.label}</h3><p>{r.description}</p><CinemaLink className="vt-text-link" to={r.link}>Review this control ↗</CinemaLink></div></article>)}</div></section>
-    <NextChapter to="/methodology" number="06" title="HOW IT WORKS." subtitle="The models, formulas and their limits." image={PHOTO.inquiry}/>
+    <section className="vt-rights" data-reveal><div><span className="vt-micro">CONTROL & RESPONSIBILITY</span><h2>Your record.<br/>Your controls.</h2><p>Review export, transparency and account-removal actions in their authenticated contexts.</p></div><div className="vt-rights-list">{PUBLIC_CONTENT.trust.rightsActions.map((r,i)=><article key={r.id}><div><h3>{r.label}</h3><p>{r.description}</p><CinemaLink className="vt-text-link" to={r.link}>Review this control ↗</CinemaLink></div></article>)}</div></section>
+    <NextChapter to="/methodology" title="HOW IT WORKS." subtitle="The models, formulas and their limits." image={PHOTO.inquiry}/>
   </PageFrame>;
 }
 
@@ -212,20 +212,20 @@ function MethodDetail({name,item}){
 export function MethodologyCinematicPage(){
   const sections=PUBLIC_CONTENT.methodology.sections;
   return <PageFrame className="method">
-    <Cover chapter="06" eyebrow="METHODS & LIMITS" lines={['NO BLACK','BOX.']} image={PHOTO.inquiry} alt="A professional examining a complex technical workspace" description="Distinct psychometric frameworks, transparent career-fit weights, and explicit validity thresholds." variant="method"/>
+    <Cover eyebrow="METHODS & LIMITS" lines={['NO BLACK','BOX.']} image={PHOTO.inquiry} alt="A professional examining a complex technical workspace" description="Distinct psychometric frameworks, transparent career-fit weights, and explicit validity thresholds." variant="method"/>
     <div className="vt-method-intro" data-reveal><span className="vt-micro">A RECORD IS ONLY AS SOUND AS ITS EVIDENCE</span><h2>Methods must be<br/><em>visible.</em></h2><p>{PUBLIC_CONTENT.methodology.hero.support}</p></div>
-    <div className="vt-monograph"><div className="vt-monograph-index"><span className="vt-micro">CONTENTS / 08 TOPICS</span>{sectionKeys.map((k,i)=><a href={'#method-'+k} key={k}><span>{String(i+1).padStart(2,'0')}</span>{sections[k].title}</a>)}</div><div className="vt-monograph-articles">{sectionKeys.map((k,i)=><article id={'method-'+k} key={k} data-reveal><div className="vt-micro">0{i+1} / {sections[k].role}</div><h2>{sections[k].title}</h2><p>{sections[k].description}</p><MethodDetail name={k} item={sections[k]}/></article>)}</div></div>
+    <div className="vt-monograph"><div className="vt-monograph-index"><span className="vt-micro">EXPLORE THE METHODOLOGY</span>{sectionKeys.map((k,i)=><a href={'#method-'+k} key={k}>{sections[k].title}</a>)}</div><div className="vt-monograph-articles">{sectionKeys.map((k,i)=><article id={'method-'+k} key={k} data-reveal><div className="vt-micro">{sections[k].role}</div><h2>{sections[k].title}</h2><p>{sections[k].description}</p><MethodDetail name={k} item={sections[k]}/></article>)}</div></div>
     <div className="vt-method-verdict"><span className="vt-micro">BOUNDARY OF THE SYSTEM</span><h2>Professional insight.<br/><em>Not clinical diagnosis.</em></h2><p>{sections.limits.description}</p><CinemaLink className="vt-text-link" to="/trust">Inspect the evidence chain ↗</CinemaLink></div>
-    <NextChapter to="/privacy" number="07" title="YOUR DATA. YOUR TERMS." subtitle="Plain-language governance and account controls." image={PHOTO.detail}/>
+    <NextChapter to="/privacy" title="YOUR DATA. YOUR TERMS." subtitle="Plain-language governance and account controls." image={PHOTO.detail}/>
   </PageFrame>;
 }
 export function PrivacyCinematicPage(){
   const data=PUBLIC_CONTENT.privacy;
   return <PageFrame className="privacy">
-    <Cover chapter="07" eyebrow="GOVERNANCE & CONTROL" lines={['YOUR DATA.','YOUR TERMS.']} image={PHOTO.detail} alt="A professional examining the details of a physical draft" description={data.hero.support} variant="privacy"/>
+    <Cover eyebrow="GOVERNANCE & CONTROL" lines={['YOUR DATA.','YOUR TERMS.']} image={PHOTO.detail} alt="A professional examining the details of a physical draft" description={data.hero.support} variant="privacy"/>
     <div className="vt-privacy-brief" data-reveal><span className="vt-micro">PLAIN-LANGUAGE PRIVACY</span><h2>Make it<br/><em>understandable.</em></h2><p>Read the policies below and open your account controls when you are signed in. This text describes the published product policy.</p></div>
-    <section className="vt-privacy-document"><nav aria-label="Policy table of contents"><span className="vt-micro">INDEX / 06 SECTIONS</span>{data.sections.map((s,i)=><a href={'#'+s.id} key={s.id}><span>{String(i+1).padStart(2,'0')}</span>{s.title}</a>)}</nav><div>{data.sections.map((s,i)=><article key={s.id} id={s.id} data-reveal><span className="vt-micro">POLICY / 0{i+1}</span><h2>{s.title}</h2><p>{s.content}</p></article>)}</div></section>
+    <section className="vt-privacy-document"><nav aria-label="Policy table of contents"><span className="vt-micro">PRIVACY CONTENTS</span>{data.sections.map((s,i)=><a href={'#'+s.id} key={s.id}>{s.title}</a>)}</nav><div>{data.sections.map((s,i)=><article key={s.id} id={s.id} data-reveal><span className="vt-micro">PRIVACY & CONTROL</span><h2>{s.title}</h2><p>{s.content}</p></article>)}</div></section>
     <section className="vt-method-verdict"><span className="vt-micro">ACCOUNT CONTROLS</span><h2>Your record remains<br/><em>inspectable.</em></h2><CinemaLink className="vt-text-link" to="/account/privacy">Open privacy controls ↗</CinemaLink></section>
-    <NextChapter to="/" number="01" title="BACK TO THE BEGINNING." subtitle="The story begins with one source response." image={PHOTO.source}/>
+    <NextChapter to="/" title="BACK TO THE BEGINNING." subtitle="The story begins with one source response." image={PHOTO.source}/>
   </PageFrame>;
 }

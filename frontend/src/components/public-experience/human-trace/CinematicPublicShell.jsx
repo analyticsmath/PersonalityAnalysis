@@ -114,9 +114,9 @@ export function CinematicPublicShell() {
       {menuOpen && <div className="vt-index-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setMenuOpen(false);}}>
         <aside id="vt-site-index" ref={drawer} role="dialog" aria-modal="true" aria-label="Site index" className="vt-index-drawer">
           <div className="vt-index-header"><span>THE EVIDENCE JOURNEY / NAVIGATION</span><button type="button" onClick={()=>setMenuOpen(false)}>CLOSE ×</button></div>
-          <nav aria-label="Complete site index">{NAV.map(([to,label],idx)=>
-            <CinemaLink key={to} to={to} onClick={()=>setMenuOpen(false)} className={location.pathname===to?'is-active':''}><span>0{idx+1}</span>{label}<span aria-hidden="true">↗</span></CinemaLink>)}</nav>
-          <div className="vt-index-foot"><span>01—A / THE HUMAN TRACE</span><p>One response travels across contexts. The source stays visible.</p></div>
+          <nav aria-label="Complete site index">{NAV.map(([to,label])=>
+            <CinemaLink key={to} to={to} onClick={()=>setMenuOpen(false)} className={location.pathname===to?'is-active':''}>{label}<span aria-hidden="true">↗</span></CinemaLink>)}</nav>
+          <div className="vt-index-foot"><span>THE HUMAN TRACE</span><p>One response travels across contexts. The source stays visible.</p></div>
         </aside>
       </div>}
     </div>
