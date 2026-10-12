@@ -8,15 +8,15 @@ import { CinemaLink } from './CinematicPublicShell';
 gsap.registerPlugin(ScrollTrigger);
 const PATH='/media/public-experience/cinematic/';
 const PHOTO={
-  source:PATH+'1503387762-592deb58ef4e.jpg',
-  detail:PATH+'1649688066810-59a394fc0fef.jpg',
+  source:'/media/public-experience/digital/designer-1920.webp',
+  detail:'/media/public-experience/digital/wireframe-1920.webp',
   precision:PATH+'1645258044234-f4ba2655baf1.jpg',
   autonomy:PATH+'1742440710402-721332ea7898.jpg',
-  shared:PATH+'1590649681928-4b179f773bd5.jpg',
+  shared:'/media/public-experience/digital/studio-1920.webp',
   pressure:PATH+'1554863798-d89af6030d7d.jpg',
-  inquiry:PATH+'1576141546153-3e04370b5ff7.jpg',
+  inquiry:'/media/public-experience/digital/code-detail-1920.webp',
   proof:PATH+'1745845289797-913815100704.jpg',
-  design:PATH+'1759884247144-53d52c31f859.jpg'
+  design:'/media/public-experience/digital/designer-1920.webp'
 };
 // Scored profiles remain subject to evidence-sufficiency checks.
 const STATEMENT='I clarify the constraints first, then choose the smallest reversible step.';
@@ -30,13 +30,13 @@ function usePageChoreography(ref) {
       const ctx=gsap.context(()=>{
         const image=scope.querySelector('.vt-cover-photo');
         if(image) gsap.fromTo(image,{scale:1.04,yPercent:-2},{
-          scale:1.17,yPercent:7,ease:'none',scrollTrigger:{trigger:scope.querySelector('.vt-cover'),start:'top top',end:'bottom top',scrub:1,invalidateOnRefresh:true}
+          scale:1.17,yPercent:7,ease:'none',scrollTrigger:{trigger:scope.querySelector('.vt-cover'),start:'top top',end:'bottom top',scrub:.35,invalidateOnRefresh:true}
         });
         const cover = scope.querySelector('.vt-cover');
         const title = scope.querySelector('.vt-cover h1');
         if (title) gsap.fromTo(title, {y: 48, clipPath:'inset(0 0 100% 0)'}, {y:0,clipPath:'inset(0)',duration:1.05,ease:'power3.out'});
         if (cover) gsap.to(scope.querySelector('.vt-cover-copy'), {
-          yPercent:-12,ease:'none',scrollTrigger:{trigger:cover,start:'top top',end:'bottom top',scrub:.7}
+          yPercent:-12,ease:'none',scrollTrigger:{trigger:cover,start:'top top',end:'bottom top',scrub:.3}
         });
         scope.querySelectorAll('[data-reveal]').forEach(el=> {
           const heading = el.querySelector('h2');
@@ -100,11 +100,11 @@ export function HowCinematicPage() {
     ['Bring the picture together.','Your professional profile connects the interpretation to its evidence and keeps its limits visible.']
   ];
   return <PageFrame className="how">
-    <Cover lines={['From your answers.','To your perspective.']} image={PHOTO.detail} alt="A person's hand moves a pencil across an architectural drawing" description="Understand how your responses contribute to a profile of your personality, interests and work values." position="55% 45%" variant="how"/>
+    <Cover lines={['From your answers.','To your perspective.']} image={PHOTO.detail} alt="A website wireframe sketched on paper" description="Understand how your responses contribute to a profile of your personality, interests and work values." position="55% 45%" variant="how"/>
     <div className="vt-essay-intro" data-reveal><h2>Before the inference,<br/><em>there is a source.</em></h2><p>A single answer can suggest questions worth asking. A scored profile requires sufficient independent evidence.</p></div>
     <div className="vt-how-sequence">
       <aside className="vt-how-fixed">
-        <img src={PHOTO.source} loading="lazy" alt="Hands drafting a technical plan" />
+        <img src={PHOTO.source} loading="lazy" alt="A product designer sketching an interface" />
         <div className="vt-how-fixed-shade"/><SourceNote dark/>
       </aside>
       <div className="vt-how-steps">
@@ -126,7 +126,8 @@ const mediaForRole=(key)=>{
   if(/designer|frontend|product_manager/.test(key))return PHOTO.design;
   if(/data|machine_learning|cybersecurity|business_analyst/.test(key))return PHOTO.inquiry;
   if(/success|program_manager/.test(key))return PHOTO.shared;
-  if(/power_systems|control_systems|automation|devops/.test(key))return PHOTO.precision;
+  if(/devops/.test(key))return PHOTO.inquiry;
+  if(/power_systems|control_systems|automation/.test(key))return PHOTO.precision;
   if(/electrical|embedded/.test(key))return PHOTO.precision;
   return PHOTO.autonomy;
 };
@@ -143,7 +144,7 @@ export function CareerCinematicPage(){
     setKey(keys[next]);refs.current[next]?.focus();
   };
   return <PageFrame className="career">
-    <Cover lines={['Find work','that speaks to you.']} image={PHOTO.precision} alt="A craftsperson at work in a precise manufacturing environment" description="Explore the skills, interests and conditions behind different careers. Give your next move a clearer context." position="55% center" variant="career"/>
+    <Cover lines={['Find work','that speaks to you.']} image={PHOTO.design} alt="A product designer sketching a digital interface" description="Explore the skills, interests and conditions behind different careers. Give your next move a clearer context." position="55% center" variant="career"/>
     <div className="vt-essay-intro vt-essay-intro--dark" data-reveal><h2>Environments change.<br/><em>The questions change.</em></h2><p>Choose a career and explore the capabilities it calls for. These profiles describe occupations. A personal comparison needs your completed assessment.</p></div>
     <section className="vt-career-explorer" aria-label="Explore 17 occupations">
       <div className="vt-career-list">
@@ -202,7 +203,7 @@ export function TrustCinematicPage(){
     <Cover lines={['Nothing useful','without trust.']} image={PHOTO.proof} alt="Hands examining and arranging physical printed materials" description="See the evidence behind an interpretation. Understand its limits. Keep control of your information." variant="trust"/>
     <div className="vt-essay-intro" data-reveal><h2>Inspect the reading.<br/><em>Then its origin.</em></h2><p>Five stages explain the journey from a contextual answer to a professional comparison. Sample inputs are illustrative, not diagnoses.</p></div>
     <section className="vt-trust-inspection" aria-label="Explore the evidence chain">
-      <div className="vt-trust-original"><img src={PHOTO.detail} loading="lazy" alt="Close-up of drafting material that represents source documentation"/><div><blockquote>“{STATEMENT}”</blockquote></div></div>
+      <div className="vt-trust-original"><img src={PHOTO.detail} loading="lazy" alt="A website wireframe showing the structure of an idea"/><div><blockquote>“{STATEMENT}”</blockquote></div></div>
       <div className="vt-trust-data">
         <h2>{step.name}</h2><strong>{step.title}</strong><p>{step.description}</p>
         <div className="vt-trust-step-buttons" role="group" aria-label="Select provenance stage">{steps.map((s,i)=><button key={s.id} className={i===active?'is-selected':''} aria-pressed={i===active} onClick={()=>setActive(i)}>{s.name}</button>)}</div>
@@ -227,7 +228,7 @@ function MethodDetail({name,item}){
 export function MethodologyCinematicPage(){
   const sections=PUBLIC_CONTENT.methodology.sections;
   return <PageFrame className="method">
-    <Cover lines={['Understand','the thinking.']} image={PHOTO.inquiry} alt="A professional examining a complex technical workspace" description="Explore the models behind your profile and the factors behind a career comparison." variant="method"/>
+    <Cover lines={['Understand','the thinking.']} image={PHOTO.inquiry} alt="A developer writing software on a laptop" description="Explore the models behind your profile and the factors behind a career comparison." variant="method"/>
     <div className="vt-method-intro" data-reveal><h2>Methods must be<br/><em>visible.</em></h2><p>{PUBLIC_CONTENT.methodology.hero.support}</p></div>
     <div className="vt-monograph"><div className="vt-monograph-index">{sectionKeys.map(k=><a href={'#method-'+k} key={k}>{sections[k].title}</a>)}</div><div className="vt-monograph-articles">{sectionKeys.map(k=><article id={'method-'+k} key={k} data-reveal><h2>{sections[k].title}</h2><p>{sections[k].description}</p><MethodDetail name={k} item={sections[k]}/></article>)}</div></div>
     <div className="vt-method-verdict"><h2>Professional insight.<br/><em>Not clinical diagnosis.</em></h2><p>{sections.limits.description}</p><CinemaLink className="vt-text-link" to="/trust">Inspect the evidence chain ↗</CinemaLink></div>
@@ -237,7 +238,7 @@ export function MethodologyCinematicPage(){
 export function PrivacyCinematicPage(){
   const data=PUBLIC_CONTENT.privacy;
   return <PageFrame className="privacy">
-    <Cover lines={['Your information.','Your choice.']} image={PHOTO.detail} alt="A professional examining the details of a physical draft" description={data.hero.support} variant="privacy"/>
+    <Cover lines={['Your information.','Your choice.']} image={PHOTO.detail} alt="A website wireframe with handwritten planning notes" description={data.hero.support} variant="privacy"/>
     <div className="vt-privacy-brief" data-reveal><h2>Make it<br/><em>understandable.</em></h2><p>Read the policies below and open your account controls when you are signed in. This text describes the published product policy.</p></div>
     <section className="vt-privacy-document"><nav aria-label="Policy table of contents">{data.sections.map(s=><a href={'#'+s.id} key={s.id}>{s.title}</a>)}</nav><div>{data.sections.map(s=><article key={s.id} id={s.id} data-reveal><h2>{s.title}</h2><p>{s.content}</p></article>)}</div></section>
     <section className="vt-method-verdict"><h2>Your record remains<br/><em>inspectable.</em></h2><CinemaLink className="vt-text-link" to="/account/privacy">Open privacy controls ↗</CinemaLink></section>

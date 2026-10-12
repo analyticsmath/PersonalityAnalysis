@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { mountImageCrawler, mountFilmPointer } from './imageCrawler';
 import { navigateCinematic } from './routeNavigation';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -25,7 +26,7 @@ export function mountHumanTrace(root, navigate) {
     if (reduce) return;
     let cleanupScroll = () => {};
     if (desktop && !touch) {
-      lenis = new Lenis({ duration: 1.05, smoothWheel: true, syncTouch: false });
+      lenis = new Lenis({ duration: .85, smoothWheel: true, syncTouch: false });
       lenis.on('scroll', ScrollTrigger.update);
       const tick = time => lenis.raf(time * 1000);
       gsap.ticker.add(tick);
@@ -36,21 +37,21 @@ export function mountHumanTrace(root, navigate) {
     const question = $('#stage-question');
     // The title exits completely before the next text is allowed to enter.
     const opening = gsap.timeline({ scrollTrigger: {
-      trigger: $('#intro'), start: 'top top', end: 'bottom bottom', scrub: touch ? .25 : .65,
+      trigger: $('#intro'), start: 'top top', end: 'bottom bottom', scrub: touch ? .15 : .35,
       invalidateOnRefresh: true,
       onUpdate: self => { state.dominant = self.progress < .6 ? 'opening' : 'assessment'; world.inert = self.progress > .42; question.inert = self.progress < .64; },
     }});
     opening.to(world, { yPercent: -14, clipPath: 'inset(0 0 100% 0)', duration: .32, ease: 'power2.inOut' }, .10)
       .to($('.scroll-cue'), { autoAlpha: 0, duration: .15 }, .05)
       .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: .48, ease: 'power2.inOut' }, .18)
-      .to(media.querySelector('img'), { scale: 1.55, duration: .65, ease: 'none' }, .15)
+      .to(media.querySelector('img'), { scale: 1.18, duration: .65, ease: 'none' }, .15)
       .to($('.image-tint'), { opacity: .52, duration: .25 }, .45)
       .fromTo(question, { autoAlpha: 0, y: 45, clipPath: 'inset(0 0 100% 0)' }, { autoAlpha: 1, y: 0, clipPath: 'inset(0)', duration: .23, ease: 'power2.out' }, .64)
       .to({}, { duration: .20 });
 
     const panels = all('[data-context]');
     const conditions = gsap.timeline({ scrollTrigger: {
-      trigger: $('#conditions'), start: 'top top', end: 'bottom bottom', scrub: touch ? .2 : .7,
+      trigger: $('#conditions'), start: 'top top', end: 'bottom bottom', scrub: touch ? .15 : .3,
       invalidateOnRefresh: true,
       onUpdate: self => {
         selected = self.progress < .33 ? 0 : self.progress < .67 ? 1 : 2;
@@ -66,8 +67,11 @@ export function mountHumanTrace(root, navigate) {
     });
     if (desktop) {
       const picture = $('.evidence-photo img');
-      gsap.fromTo(picture, { yPercent: -8 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: $('.evidence-body'), start: 'top bottom', end: 'bottom top', scrub: .7 }});
-      gsap.fromTo($('.career-gallery'), { x: 0 }, { x: () => -Math.min(100, window.innerWidth * .055), ease: 'none', scrollTrigger: { trigger: $('#career'), start: 'top bottom', end: 'bottom top', scrub: .8 }});
+      gsap.fromTo(picture, { yPercent: -3, scale:1.12 }, { yPercent: 3, scale:1.12, ease: 'none', scrollTrigger: { trigger: $('.evidence-body'), start: 'top bottom', end: 'bottom top', scrub: .7 }});
+      all('[data-dimension]').forEach(article => {
+        gsap.fromTo(article.querySelector('h3'), {x:55,clipPath:'inset(0 0 0 100%)'}, {x:0,clipPath:'inset(0)',ease:'power2.out',scrollTrigger:{trigger:article,start:'top 85%',end:'top 42%',scrub:.25}});
+      });
+      gsap.fromTo($('.footer-wordmark'), {y:80}, {y:0,ease:'none',scrollTrigger:{trigger:$('.grand-footer'),start:'top 80%',end:'bottom bottom',scrub:.25}});
       gsap.fromTo($('.finale>img'), { scale: 1.16, yPercent: -4 }, { scale: 1.04, yPercent: 0, ease: 'none', scrollTrigger: { trigger: $('#finale'), start: 'top bottom', end: 'bottom bottom', scrub: .9 }});
     }
     return () => { cleanupScroll(); world.inert = false; question.inert = false; };
@@ -124,10 +128,13 @@ export function mountHumanTrace(root, navigate) {
       navigateCinematic(navigate, href, anchor);
     }
   });
+  const destroyCrawler = mountImageCrawler(root);
+  const destroyPointer = mountFilmPointer(root);
+  // All media has authored dimensions. Lazy image loads must not remeasure the page mid-scroll.
   const refresh = () => ScrollTrigger.refresh();
-  all('img').forEach(img => { if (!img.complete) on(img, 'load', refresh, { once: true }); });
-  document.fonts.ready.then(() => { if (root.host.isConnected) refresh(); });
+  document.fonts?.ready.then(() => { if (root.host.isConnected) refresh(); });
   return () => {
+    destroyCrawler(); destroyPointer();
     listeners.forEach(remove => remove());
     mm.revert();
     document.body.style.overflow = previousOverflow;

@@ -42,7 +42,7 @@ export function CinematicPublicShell() {
 
   useEffect(() => {
     if (reduced() || window.matchMedia('(pointer: coarse)').matches) return;
-    const lenis = new Lenis({ duration: 1.05, syncTouch: false });
+    const lenis = new Lenis({ duration: .85, syncTouch: false });
     lenis.on('scroll', ScrollTrigger.update);
     const tick = time => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
@@ -98,11 +98,11 @@ export function CinematicPublicShell() {
       <main id="cinema-main" key={location.pathname} tabIndex={-1} className="vt-route-main">
         <Outlet />
       </main>
-      <footer className="vt-footer">
-        <div><strong>PERSONALITY ASSESSOR</strong><span>A professional record with its evidence attached.</span></div>
-        <nav aria-label="Footer navigation">{NAV.map(([to,label])=><CinemaLink to={to} key={to}>{label}</CinemaLink>)}</nav>
-        <span className="vt-footer-note">An analytical tool, not a clinical assessment. Photography illustrates environments.</span>
-        <div className="vt-footer-studio">CREATIVE EXPERIENCE BY VALTUM STUDIO</div>
+      <footer className="vt-footer vt-grand-footer">
+        <div className="vt-footer-invitation"><h2>A clearer view.<br/>A considered next move.</h2><CinemaLink className="vt-primary" to="/signup?next=%2Fassessment%2Fstart">Discover your profile <span aria-hidden="true">↗</span></CinemaLink></div>
+        <nav aria-label="Footer navigation">{NAV.slice(1).map(([to,label])=><CinemaLink to={to} key={to}>{label}</CinemaLink>)}<CinemaLink to="/login">Sign in</CinemaLink></nav>
+        <CinemaLink className="vt-footer-wordmark" to="/" aria-label="Personality Assessor home"><span>Personality</span><span>Assessor</span></CinemaLink>
+        <div className="vt-footer-bottom"><span>Professional insight. Not a clinical diagnosis.</span><span>By Valtum Studio</span></div>
       </footer>
       {menuOpen && <div className="vt-index-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setMenuOpen(false);}}>
         <aside id="vt-site-index" ref={drawer} role="dialog" aria-modal="true" aria-label="Site index" className="vt-index-drawer">
