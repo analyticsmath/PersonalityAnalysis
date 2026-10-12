@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { navigateCinematic } from './routeNavigation';
 
-afterEach(() => { delete document.startViewTransition; document.body.replaceChildren(); vi.restoreAllMocks(); vi.useRealTimers(); });
+afterEach(() => { delete document.startViewTransition; delete document.documentElement.dataset.cinematicTransition; document.body.replaceChildren(); vi.restoreAllMocks(); vi.useRealTimers(); });
 function setup() {
   window.history.replaceState({}, '', '/');
   vi.stubGlobal('matchMedia', vi.fn(() => ({matches:false})));
@@ -42,4 +42,24 @@ describe('Public route navigation', () => {
   it('avoids remounting the same route', () => {
     const { link, go } = setup(); navigateCinematic(go, '/', link); expect(go).not.toHaveBeenCalled();
   });
+  it('lets the latest click supersede an older pending snapshot callback', async () => {
+    const {link,go}=setup(); vi.useFakeTimers();
+    const callbacks=[];
+    document.startViewTransition=vi.fn(update=>{callbacks.push(update);return {ready:Promise.resolve(),updateCallbackDone:new Promise(()=>{}),finished:new Promise(()=>{}),skipTransition:vi.fn()};});
+    navigateCinematic(go,'/trust',link);
+    navigateCinematic(go,'/progress',link);
+    await callbacks[0](); await callbacks[1](); await vi.advanceTimersByTimeAsync(500);
+    expect(go).toHaveBeenCalledTimes(1); expect(go).toHaveBeenCalledWith('/progress');
+  });
+  it('uses the visible photograph when a text link is below the cover', () => {
+    const {go}=setup(); vi.useFakeTimers();
+    document.body.innerHTML='<div class="vt-cover-media"></div><a href="/trust">Trust</a><figure data-transition-media><img alt="Visible chapter"/></figure>';
+    const cover=document.querySelector('.vt-cover-media'), photo=document.querySelector('figure'), link=document.querySelector('a');
+    cover.getBoundingClientRect=()=>({left:0,right:600,top:-1000,bottom:-500});
+    photo.getBoundingClientRect=()=>({left:0,right:600,top:100,bottom:500});
+    document.startViewTransition=vi.fn(()=>({ready:Promise.resolve(),updateCallbackDone:new Promise(()=>{}),finished:new Promise(()=>{}),skipTransition:vi.fn()}));
+    navigateCinematic(go,'/trust',link);
+    expect(photo.style.viewTransitionName).toBe('scene-media'); expect(cover.style.viewTransitionName).toBe('none');
+  });
+
 });

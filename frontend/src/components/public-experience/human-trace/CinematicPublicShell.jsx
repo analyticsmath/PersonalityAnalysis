@@ -12,6 +12,8 @@ const NAV = [
   ['/trust','Trust & evidence'], ['/methodology','Methodology'], ['/privacy','Privacy']
 ];
 const Navigation = createContext(null);
+const CinemaScroll = createContext(position=>window.scrollTo({top:position,behavior:"auto"}));
+export const useCinemaScroll = () => useContext(CinemaScroll);
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // startViewTransition, transition.ready.catch and interruption handling live in routeNavigation.
@@ -36,17 +38,26 @@ export function CinematicPublicShell() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const scrollEngine = useRef(null);
+  const scrollTo = useCallback(position => {
+    if (scrollEngine.current) scrollEngine.current.scrollTo(position,{duration:.65});
+    else window.scrollTo({top:position,behavior:reduced()?"auto":"smooth"});
+  },[]);
   const trigger = useRef(null);
   const drawer = useRef(null);
   const go = useCallback((path, origin) => navigateSafely(navigate, path, origin), [navigate]);
 
   useEffect(() => {
-    if (reduced() || window.matchMedia('(pointer: coarse)').matches) return;
-    const lenis = new Lenis({ duration: .85, syncTouch: false });
-    lenis.on('scroll', ScrollTrigger.update);
-    const tick = time => lenis.raf(time * 1000);
-    gsap.ticker.add(tick);
-    return () => { gsap.ticker.remove(tick); lenis.destroy(); };
+    const mm=gsap.matchMedia();
+    mm.add('(pointer:fine) and (prefers-reduced-motion:no-preference)',()=>{
+      const lenis = new Lenis({ duration: .85, syncTouch: false });
+      scrollEngine.current = lenis;
+      lenis.on('scroll', ScrollTrigger.update);
+      const tick = time => lenis.raf(time * 1000);
+      gsap.ticker.add(tick);
+      return () => { gsap.ticker.remove(tick); lenis.destroy(); scrollEngine.current=null; };
+    });
+    return ()=>mm.revert();
   }, [location.pathname]);
 
   useEffect(() => {
@@ -64,6 +75,7 @@ export function CinematicPublicShell() {
     const previous = document.activeElement;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    scrollEngine.current?.stop();
     const routeMain = document.getElementById('cinema-main');
     routeMain.inert = true;
     drawer.current?.querySelector('button')?.focus();
@@ -77,10 +89,10 @@ export function CinematicPublicShell() {
       }
     };
     document.addEventListener('keydown', key);
-    return () => { document.body.style.overflow = previousOverflow; routeMain.inert = false; document.removeEventListener('keydown', key); (trigger.current || previous)?.focus(); };
+    return () => { document.body.style.overflow = previousOverflow; routeMain.inert = false; scrollEngine.current?.start(); document.removeEventListener('keydown', key); (trigger.current || previous)?.focus(); };
   }, [menuOpen]);
 
-  return <Navigation.Provider value={go}>
+  return <CinemaScroll.Provider value={scrollTo}><Navigation.Provider value={go}>
     <div className="vt-cinema" data-cinematic-route={location.pathname}>
       <a className="vt-skip" href="#cinema-main">Skip to content</a>
       <div className="vt-top-progress" aria-hidden="true" />
@@ -113,6 +125,6 @@ export function CinematicPublicShell() {
         </aside>
       </div>}
     </div>
-  </Navigation.Provider>;
+  </Navigation.Provider></CinemaScroll.Provider>;
 }
 export default CinematicPublicShell;

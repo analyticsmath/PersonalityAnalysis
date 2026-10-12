@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import careersData from '../../../content/careers.json';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
+import { useScrollSequence } from './useScrollSequence';
 import { CinemaLink } from './CinematicPublicShell';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -34,10 +35,16 @@ function usePageChoreography(ref) {
         });
         const cover = scope.querySelector('.vt-cover');
         const title = scope.querySelector('.vt-cover h1');
-        if (title) gsap.fromTo(title, {y: 48, clipPath:'inset(0 0 100% 0)'}, {y:0,clipPath:'inset(0)',duration:1.05,ease:'power3.out'});
+        if (title && !document.documentElement.dataset.cinematicTransition) gsap.fromTo(title, {y: 48, clipPath:'inset(0 0 100% 0)'}, {y:0,clipPath:'inset(0)',duration:1.05,ease:'power3.out'});
         if (cover) gsap.to(scope.querySelector('.vt-cover-copy'), {
           yPercent:-12,ease:'none',scrollTrigger:{trigger:cover,start:'top top',end:'bottom top',scrub:.3}
         });
+        scope.querySelectorAll('.vt-next').forEach(chapter=>{
+          gsap.fromTo(chapter,{clipPath:'inset(8% 5% 0)'},{clipPath:'inset(0)',ease:'none',scrollTrigger:{trigger:chapter,start:'top 90%',end:'top 25%',scrub:.22}});
+          gsap.fromTo(chapter.querySelector('img'),{scale:1.15,yPercent:-4},{scale:1.15,yPercent:4,ease:'none',scrollTrigger:{trigger:chapter,start:'top bottom',end:'bottom top',scrub:.25}});
+        });
+        const comparator=scope.querySelector('.vt-time-stage');
+        if(comparator) gsap.fromTo(comparator.querySelectorAll('img'),{scale:1.1,yPercent:-3},{scale:1.1,yPercent:3,ease:'none',scrollTrigger:{trigger:comparator,start:'top bottom',end:'bottom top',scrub:.25}});
         scope.querySelectorAll('[data-reveal]').forEach(el=> {
           const heading = el.querySelector('h2');
           if (heading) gsap.fromTo(heading,{y:32,clipPath:'inset(0 0 100% 0)'},{
@@ -122,9 +129,10 @@ export function HowCinematicPage() {
   </PageFrame>;
 }
 
+const ROLE_KEYS=Object.keys(careersData);
 const mediaForRole=(key)=>{
   if(/designer|frontend|product_manager/.test(key))return PHOTO.design;
-  if(/data|machine_learning|cybersecurity|business_analyst/.test(key))return PHOTO.inquiry;
+  if(/software|backend|data|machine_learning|cybersecurity|business_analyst/.test(key))return PHOTO.inquiry;
   if(/success|program_manager/.test(key))return PHOTO.shared;
   if(/devops/.test(key))return PHOTO.inquiry;
   if(/power_systems|control_systems|automation/.test(key))return PHOTO.precision;
@@ -132,37 +140,31 @@ const mediaForRole=(key)=>{
   return PHOTO.autonomy;
 };
 export function CareerCinematicPage(){
-  const keys=Object.keys(careersData);
+  const keys=ROLE_KEYS;
   const [key,setKey]=useState(keys[0]);
+  const sequence=useRef(null);
+  const onSelect=useCallback(index=>setKey(ROLE_KEYS[index]),[]);
+  const {controller,driven}=useScrollSequence(sequence,ROLE_KEYS.length,onSelect,"career");
   const refs=useRef([]);
   const role=careersData[key];
 
   const changeByKeyboard=(event,i)=>{
-    if(!['ArrowUp','ArrowDown','Home','End'].includes(event.key))return;
+    if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
     event.preventDefault();
-    const next=event.key==='Home'?0:event.key==='End'?keys.length-1:(i+(event.key==='ArrowDown'?1:-1)+keys.length)%keys.length;
-    setKey(keys[next]);refs.current[next]?.focus();
+    const next=event.key==='Home'?0:event.key==='End'?keys.length-1:(i+(['ArrowDown','ArrowRight'].includes(event.key)?1:-1)+keys.length)%keys.length;
+    controller.current.select(next);refs.current[next]?.focus({preventScroll:true});
   };
   return <PageFrame className="career">
     <Cover lines={['Find work','that speaks to you.']} image={PHOTO.design} alt="A product designer sketching a digital interface" description="Explore the skills, interests and conditions behind different careers. Give your next move a clearer context." position="55% center" variant="career"/>
-    <div className="vt-essay-intro vt-essay-intro--dark" data-reveal><h2>Environments change.<br/><em>The questions change.</em></h2><p>Choose a career and explore the capabilities it calls for. These profiles describe occupations. A personal comparison needs your completed assessment.</p></div>
-    <section className="vt-career-explorer" aria-label="Explore 17 occupations">
-      <div className="vt-career-list">
-        <div role="tablist" aria-label="Occupational profiles" aria-orientation="vertical">{keys.map((k,i)=>
-          <button key={k} ref={el=>refs.current[i]=el} id={'vt-role-tab-'+k} role="tab" aria-controls="vt-career-detail" aria-selected={key===k} tabIndex={key===k?0:-1} onClick={()=>setKey(k)} onKeyDown={e=>changeByKeyboard(e,i)} className={key===k?'is-selected':''}>{careersData[k].title}<span aria-hidden="true">↗</span></button>
-        )}</div>
-      </div>
-      <div className="vt-career-display" id="vt-career-detail" role="tabpanel" aria-labelledby={'vt-role-tab-'+key} tabIndex={0}>
-        <div className="vt-career-photography" data-transition-media key={key}><img src={mediaForRole(key)} alt={'Illustrative professional working context for '+role.title}/></div>
-        <div className="vt-career-portrait-shade"/>
-        <div className="vt-career-inspection">
-
-          <h2>{role.title}</h2>
-          <div className="vt-career-inspection-grid">
-            <div><strong>Core capabilities</strong><p>{role.skills.slice(0,5).join(' · ')}</p></div>
-            <div><strong>Foundational domains</strong><p>{role.subjects.slice(0,4).join(' · ')}</p></div>
-          </div>
-          <small>Occupational requirements. Not a personal career-fit score.</small>
+    <div className="vt-essay-intro vt-essay-intro--dark" data-reveal><h2>Environments change.<br/><em>The questions change.</em></h2><p>Scroll through the work and the capabilities it calls for. These profiles describe occupations. A personal comparison needs your completed assessment.</p></div>
+    <section ref={sequence} className="vt-career-explorer vt-career-sequence" aria-label="Explore 17 occupations">
+      <div className="vt-career-stage" data-sequence-stage>
+        <div className="vt-career-index"><p className="vt-scroll-invitation">Scroll to explore the work <span aria-hidden="true">↓</span></p><div className="vt-career-index-window" data-sequence-index-window>
+          <div className="vt-career-index-belt" data-sequence-index role="tablist" aria-label="Occupational profiles" aria-orientation="vertical">{keys.map((k,i)=><button key={k} ref={el=>refs.current[i]=el} id={'vt-role-tab-'+k} role="tab" aria-controls="vt-career-detail" aria-selected={key===k} tabIndex={key===k?0:-1} onClick={()=>controller.current.select(i)} onKeyDown={e=>changeByKeyboard(e,i)} className={key===k?'is-selected':''}>{careersData[k].title}<span aria-hidden="true">↗</span></button>)}</div>
+        </div></div>
+        <div className="vt-career-display" id="vt-career-detail" role="tabpanel" aria-labelledby={'vt-role-tab-'+key} tabIndex={0}>
+          <div className="vt-career-photo-window"><div className="vt-career-photo-belt" data-sequence-belt>{keys.map(k=><figure data-sequence-panel data-transition-media={key===k?"":undefined} key={k} aria-hidden={driven?key!==k:undefined} className={key===k?'is-selected':''}><img src={mediaForRole(k)} loading="lazy" alt={'Illustrative professional working context for '+careersData[k].title}/></figure>)}</div></div>
+          <div className="vt-career-inspection" key={key}><h2>{role.title}</h2><div className="vt-career-inspection-grid"><div><strong>Core capabilities</strong><p>{role.skills.slice(0,5).join(' · ')}</p></div><div><strong>Foundational domains</strong><p>{role.subjects.slice(0,4).join(' · ')}</p></div></div><small>Occupational requirements. Not a personal career-fit score.</small></div>
         </div>
       </div>
     </section>
@@ -184,7 +186,7 @@ export function ProgressCinematicPage(){
         <span className="vt-time-tag vt-time-tag--left">Independent work</span><span className="vt-time-tag vt-time-tag--right">Working together</span>
         <div className="vt-time-divider" aria-hidden="true"><span>↔</span></div>
       </div>
-      <div className="vt-time-controls"><label htmlFor="vt-longitudinal-slider">Compare the working environments</label><input id="vt-longitudinal-slider" type="range" min="5" max="95" value={split} onChange={e=>setSplit(Number(e.target.value))} aria-valuetext={split+' percent of the later illustrative environment'} /><output>{split}%</output></div>
+      <div className="vt-time-controls"><label htmlFor="vt-longitudinal-slider">Compare the working environments</label><input id="vt-longitudinal-slider" type="range" min="5" max="95" value={split} onChange={e=>setSplit(Number(e.target.value))} aria-valuetext={split+' percent independent work, '+(100-split)+' percent working together'} /><output>{split}% independent</output></div>
     </section>
     <section className="vt-longitudinal-text">
       <article data-reveal><h2>{content.stabilityFinding}</h2><p>Without an earlier record, there is nothing reliable to compare. Source and context must remain available for later inspection.</p></article>
@@ -198,17 +200,18 @@ export function ProgressCinematicPage(){
 export function TrustCinematicPage(){
   const steps=PUBLIC_CONTENT.trust.recordStateSteps;
   const [active,setActive]=useState(0);
-  const step=steps[active];
+  const sequence=useRef(null);
+  const {controller,driven}=useScrollSequence(sequence,steps.length,setActive,"trust");
   return <PageFrame className="trust">
     <Cover lines={['Nothing useful','without trust.']} image={PHOTO.proof} alt="Hands examining and arranging physical printed materials" description="See the evidence behind an interpretation. Understand its limits. Keep control of your information." variant="trust"/>
     <div className="vt-essay-intro" data-reveal><h2>Inspect the reading.<br/><em>Then its origin.</em></h2><p>Follow the stages from a contextual answer to a professional comparison. Each stage has a different purpose and a different limit.</p></div>
-    <section className="vt-trust-inspection" aria-label="Explore the evidence chain">
-      <div className="vt-trust-original"><img src={PHOTO.detail} loading="lazy" alt="A website wireframe showing the structure of an idea"/><div><p className="vt-record-statement">{RECORD_STATEMENT}</p></div></div>
-      <div className="vt-trust-data">
-        <h2>{step.name}</h2><strong>{step.title}</strong><p>{step.description}</p>
-        <div className="vt-trust-step-buttons" role="group" aria-label="Select provenance stage">{steps.map((s,i)=><button key={s.id} className={i===active?'is-selected':''} aria-pressed={i===active} onClick={()=>setActive(i)}>{s.name}</button>)}</div>
-        <p className="vt-trust-note">A personal profile requires enough independent evidence. One response is a starting point, not a conclusion.</p>
-      </div>
+    <section ref={sequence} className="vt-trust-sequence" aria-label="Explore the evidence chain">
+      <div className="vt-trust-stage" data-sequence-stage><div className="vt-trust-panel-window"><div className="vt-trust-belt" data-sequence-belt>
+        {steps.map((step,i)=><article className="vt-trust-inspection" data-sequence-panel key={step.id} aria-hidden={driven?active!==i:undefined}>
+          <div className="vt-trust-original" data-transition-media><img src={[PHOTO.detail,PHOTO.design,PHOTO.inquiry,PHOTO.shared,PHOTO.proof][i]} loading="lazy" alt={['A website wireframe showing the structure of an idea','A designer considering the details of an interface','A developer working with software','Colleagues sharing a digital working environment','Hands reviewing printed source material'][i]}/><div><p className="vt-record-statement">{[RECORD_STATEMENT,'An interpretation begins with context.','See what contributes to the calculation.','A direction deserves more than one perspective.','Your record remains yours to inspect.'][i]}</p></div></div>
+          <div className="vt-trust-data"><h2>{step.name}</h2><strong>{step.title}</strong><p>{step.description}</p><p className="vt-trust-note">A personal profile requires enough independent evidence. One response is a starting point, not a conclusion.</p></div>
+        </article>)}
+      </div></div><div className="vt-trust-step-buttons" role="group" aria-label="Select provenance stage">{steps.map((step,i)=><button key={step.id} className={i===active?'is-selected':''} aria-pressed={i===active} onClick={()=>controller.current.select(i)}>{step.name}</button>)}</div></div>
     </section>
     <section className="vt-rights" data-reveal><div><h2>Your record.<br/>Your controls.</h2><p>Review export, transparency and account-removal actions in their authenticated contexts.</p></div><div className="vt-rights-list">{PUBLIC_CONTENT.trust.rightsActions.map(r=><article key={r.id}><div><h3>{r.label}</h3><p>{r.description}</p><CinemaLink className="vt-text-link" to={r.link}>Review this control ↗</CinemaLink></div></article>)}</div></section>
     <NextChapter to="/methodology" title="Understand the method." subtitle="The models, formulas and their limits." image={PHOTO.inquiry}/>
