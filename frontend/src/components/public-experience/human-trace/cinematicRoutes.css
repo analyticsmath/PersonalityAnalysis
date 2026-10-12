@@ -894,16 +894,16 @@ each photo owns a separate, unobscured plane. */
   color:#15221e;
   isolation:isolate;
   will-change:transform;
-  transform:translate3d(calc(100% * (1 - var(--scene-split, 1))),0,0);
+  transform:translateX(calc(100% * (1 - var(--scene-split, 1))));
 }
 .is-scroll-driven .vt-trust-data h2 {
   font-size:clamp(55px,6.8vw,105px);
-  transform:translate3d(0,calc(40px * (1 - var(--scene-heading, 1))),0);
+  transform:translateY(calc(40px * (1 - var(--scene-heading, 1))));
   opacity:var(--scene-heading, 1);
 }
 .is-scroll-driven .vt-trust-data>strong,
 .is-scroll-driven .vt-trust-data>p {
-  transform:translate3d(0,calc(24px * (1 - var(--scene-body, 1))),0);
+  transform:translateY(calc(24px * (1 - var(--scene-body, 1))));
   opacity:var(--scene-body, 1);
 }
 .is-scroll-driven .vt-trust-data .vt-trust-note { opacity:calc(.75 * var(--scene-body, 1)); }
@@ -965,4 +965,15 @@ each photo owns a separate, unobscured plane. */
   height:100%;
   object-fit:cover;
   object-position:center;
+}
+
+/* Completed reading states leave text in the ordinary paint plane. This also
+   avoids nested transformed-text clipping after a long reverse belt movement. */
+.is-scroll-driven .is-reading .vt-trust-data,
+.is-scroll-driven .is-reading .vt-trust-data h2,
+.is-scroll-driven .is-reading .vt-trust-data>strong,
+.is-scroll-driven .is-reading .vt-trust-data>p,
+.is-scroll-driven .is-reading .vt-trust-original>div {
+  transform:none;
+  will-change:auto;
 }

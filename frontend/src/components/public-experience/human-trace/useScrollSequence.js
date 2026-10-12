@@ -88,6 +88,7 @@ export function useScrollSequence(ref, count, onSelect, kind) {
           }
           if (frame) {
             const phase = trustScenePhase(frame.units - i);
+            panel.classList.toggle('is-reading', phase.body === 1 && phase.split === 1);
             panel.style.setProperty('--scene-split', phase.split);
             panel.style.setProperty('--scene-title-exit', phase.titleExit);
             panel.style.setProperty('--scene-heading', phase.heading);
@@ -174,6 +175,7 @@ export function useScrollSequence(ref, count, onSelect, kind) {
         belt.style.transform = ''; if (indexBelt) indexBelt.style.transform = '';
         panels.forEach((panel, i) => {
           images[i].style.transform = '';
+          panel.classList.remove('is-reading');
           ['--scene-split', '--scene-title-exit', '--scene-heading', '--scene-body'].forEach(name => panel.style.removeProperty(name));
         });
         setDriven(false);
