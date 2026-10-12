@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 const metadata = {
   '/': [
-    'Personality Assessor | The Human Trace',
+    'Personality Assessor | Understand what drives you',
     'Explore professional patterns through their supporting evidence, working conditions, career possibilities and change over time.',
   ],
   '/how-it-works': [

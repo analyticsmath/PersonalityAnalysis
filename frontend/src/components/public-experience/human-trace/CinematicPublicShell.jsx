@@ -1,5 +1,8 @@
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { navigateCinematic } from './routeNavigation';
+import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import './cinematicRoutes.css';
 
@@ -11,31 +14,8 @@ const NAV = [
 const Navigation = createContext(null);
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-let activeRouteTransition = null;
-function navigateSafely(navigate, path) {
-  if (window.location.pathname === path.split('?')[0]) return;
-  let applied = false;
-  const update = () => {
-    if (applied) return;
-    applied = true;
-    flushSync(() => navigate(path));
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  };
-  if (document.startViewTransition && !reduced()) {
-    try {
-      activeRouteTransition?.skipTransition?.();
-      const transition = document.startViewTransition(update);
-      activeRouteTransition = transition;
-      transition.ready.catch(() => {});
-      transition.updateCallbackDone.catch(update);
-      transition.finished.catch(() => {}).finally(() => {
-        if (activeRouteTransition === transition) activeRouteTransition = null;
-      });
-      // Interruption/freeze safeguard: routing may never depend on an animation callback.
-      window.setTimeout(update, 420);
-    } catch { update(); }
-  } else update();
-}
+// startViewTransition, transition.ready.catch and interruption handling live in routeNavigation.
+const navigateSafely = (navigate, path, origin) => navigateCinematic(navigate, path, origin);
 
 export function CinemaLink({ to, children, className, onClick, ...props }) {
   const go = useContext(Navigation);
@@ -46,7 +26,7 @@ export function CinemaLink({ to, children, className, onClick, ...props }) {
     if (event.defaultPrevented) return;
     if (to.startsWith('#')) return;
     event.preventDefault();
-    (go || ((path) => navigateSafely(navigate, path)))(to);
+    (go || ((path, origin) => navigateSafely(navigate, path, origin)))(to, event.currentTarget);
   }, [go, navigate, to, onClick]);
   return <a href={to} className={className} onClick={handler} {...props}>{children}</a>;
 }
@@ -58,7 +38,16 @@ export function CinematicPublicShell() {
   const [scrolled, setScrolled] = useState(false);
   const trigger = useRef(null);
   const drawer = useRef(null);
-  const go = useCallback(path => navigateSafely(navigate, path), [navigate]);
+  const go = useCallback((path, origin) => navigateSafely(navigate, path, origin), [navigate]);
+
+  useEffect(() => {
+    if (reduced() || window.matchMedia('(pointer: coarse)').matches) return;
+    const lenis = new Lenis({ duration: 1.05, syncTouch: false });
+    lenis.on('scroll', ScrollTrigger.update);
+    const tick = time => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    return () => { gsap.ticker.remove(tick); lenis.destroy(); };
+  }, [location.pathname]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -73,6 +62,10 @@ export function CinematicPublicShell() {
   useEffect(() => {
     if (!menuOpen) return;
     const previous = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const routeMain = document.getElementById('cinema-main');
+    routeMain.inert = true;
     drawer.current?.querySelector('button')?.focus();
     const key = e => {
       if (e.key === 'Escape') setMenuOpen(false);
@@ -84,7 +77,7 @@ export function CinematicPublicShell() {
       }
     };
     document.addEventListener('keydown', key);
-    return () => { document.removeEventListener('keydown', key); (trigger.current || previous)?.focus(); };
+    return () => { document.body.style.overflow = previousOverflow; routeMain.inert = false; document.removeEventListener('keydown', key); (trigger.current || previous)?.focus(); };
   }, [menuOpen]);
 
   return <Navigation.Provider value={go}>
@@ -99,7 +92,7 @@ export function CinematicPublicShell() {
         </nav>
         <div className="vt-header-actions">
           <CinemaLink className="vt-primary" to="/signup?next=%2Fassessment%2Fstart">Build my profile <span aria-hidden="true">↗</span></CinemaLink>
-          <button type="button" ref={trigger} className="vt-index-button" aria-haspopup="dialog" aria-controls="vt-site-index" aria-expanded={menuOpen} onClick={()=>setMenuOpen(true)}>INDEX <span aria-hidden="true">+</span></button>
+          <button type="button" ref={trigger} className="vt-index-button" aria-haspopup="dialog" aria-controls="vt-site-index" aria-expanded={menuOpen} onClick={()=>setMenuOpen(true)}>Menu <span aria-hidden="true">+</span></button>
         </div>
       </header>
       <main id="cinema-main" key={location.pathname} tabIndex={-1} className="vt-route-main">
@@ -113,10 +106,10 @@ export function CinematicPublicShell() {
       </footer>
       {menuOpen && <div className="vt-index-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setMenuOpen(false);}}>
         <aside id="vt-site-index" ref={drawer} role="dialog" aria-modal="true" aria-label="Site index" className="vt-index-drawer">
-          <div className="vt-index-header"><span>THE EVIDENCE JOURNEY / NAVIGATION</span><button type="button" onClick={()=>setMenuOpen(false)}>CLOSE ×</button></div>
+          <div className="vt-index-header"><span>Personality Assessor</span><button type="button" onClick={()=>setMenuOpen(false)}>CLOSE ×</button></div>
           <nav aria-label="Complete site index">{NAV.map(([to,label])=>
             <CinemaLink key={to} to={to} onClick={()=>setMenuOpen(false)} className={location.pathname===to?'is-active':''}>{label}<span aria-hidden="true">↗</span></CinemaLink>)}</nav>
-          <div className="vt-index-foot"><span>THE HUMAN TRACE</span><p>One response travels across contexts. The source stays visible.</p></div>
+          <div className="vt-index-foot"><p>Understand your personality. Explore the work ahead.</p></div>
         </aside>
       </div>}
     </div>

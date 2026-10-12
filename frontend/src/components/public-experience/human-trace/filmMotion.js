@@ -1,21 +1,136 @@
-import { flushSync } from 'react-dom';
-// Deterministic scroll choreography derived from the approved photographic prototype.
-export function mountHumanTrace(root, navigate){'use strict';
-const $=id=>root.querySelector('#'+id);root.querySelectorAll('img.photo,img.bridge-image,img.time-before,img.time-after').forEach(img=>{img.addEventListener('error',()=>{img.style.opacity='0';img.dataset.mediaState='unavailable'})});const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));const lerp=(a,b,t)=>a+(b-a)*t;const segment=(p,a,b)=>clamp((p-a)/(b-a));const smooth=t=>t*t*(3-2*t);const show=(v)=>Number(clamp(v).toFixed(4));let progress=0,raf=0,freeze=null;const reduce=matchMedia('(prefers-reduced-motion: reduce)');const coarse=matchMedia('(pointer:coarse)');const state={dominant:'intro',context:0,progress:0,sourceOpacity:1};const inspector=new URL(location.href).searchParams;const debug=inspector.has('director');if(debug){window.__VALTUM_DIRECTOR__={state,renderAt:(p)=>{freeze=clamp(p);render(freeze)},unfreeze:()=>{freeze=null;request()}}}
-const onNavigation=e=>{const anchor=e.target.closest('a[href]');if(!anchor||!root.contains(anchor))return;const href=anchor.getAttribute('href');if(href?.startsWith('#')){const to=root.querySelector(href);if(to){e.preventDefault();to.scrollIntoView({behavior:reduce.matches?'instant':'smooth',block:'start'});window.history.replaceState(window.history.state,'',window.location.pathname+window.location.search+href);}}else if(href?.startsWith('/')){e.preventDefault();let applied=false;const apply=()=>{if(applied)return;applied=true;flushSync(()=>navigate(href));};if(document.startViewTransition&&!reduce.matches){try{const transition=document.startViewTransition(apply);transition.ready.catch(()=>{});transition.updateCallbackDone.catch(apply);transition.finished.catch(()=>{});window.setTimeout(apply,420);}catch{apply();}}else apply();}};root.addEventListener('click',onNavigation);
-const opTrack=$('intro'),stage=$('stage'),world=$('world-frame'),hero=$('hero-actor'),heroPhoto=hero.querySelector('.photo'),trace=$('source-trace'),question=$('stage-question'),evidence=$('stage-evidence'),contexts=$('context-stack'),ctxPanels=[...root.querySelectorAll('[data-context]')],shadow=$('opening-shadow');const contextInfo=[['PRECISION.','Clear constraints can make an approach more decisive.'],['AUTONOMY.','Freedom to decide can change how a pattern emerges.'],['COLLABORATION.','Reasoning becomes useful when others can inspect it.'],['UNDER PRESSURE.','In uncertain settings, smaller reversible actions may reduce risk.']];let selectedContext=0,manualSelectionUntil=0;
-function chooseContext(i,manual=false){i=Math.max(0,Math.min(3,i));selectedContext=i;if(manual)manualSelectionUntil=performance.now()+2200;$('context-title').textContent=contextInfo[i][0];$('context-description').textContent=contextInfo[i][1];root.querySelectorAll('[data-context-button]').forEach((b,n)=>b.setAttribute('aria-current',String(n===i)));state.context=i;render(progress)}
-root.querySelectorAll('[data-context-button]').forEach(btn=>btn.addEventListener('click',()=>chooseContext(+btn.dataset.contextButton,true)));
-const scrollProgress=(el)=>{const box=el.getBoundingClientRect();return clamp(-box.top/Math.max(1,el.offsetHeight-innerHeight))};
-function render(p){p=clamp(p);progress=p;state.progress=p;const heroExit=smooth(segment(p,.12,.235));const qIn=smooth(segment(p,.17,.235)),qOut=smooth(segment(p,.32,.405));const evIn=smooth(segment(p,.365,.392)),evOut=smooth(segment(p,.52,.60));const ctxIn=smooth(segment(p,.56,.63));state.dominant=p<.245?'world':p<.405?'source':p<.59?'evidence':'context';world.style.opacity=String(show(1-heroExit));world.style.transform=`translate3d(0,${(-heroExit*11).toFixed(2)}vh,0)`;heroPhoto.style.transform=`translate3d(${(-4*segment(p,.12,.39)).toFixed(2)}%,${(-2.2*segment(p,.12,.38)).toFixed(2)}%,0) scale(${(1.02+.20*segment(p,.08,.43)).toFixed(3)})`;question.style.opacity=String(show(qIn*(1-qOut)));question.style.transform=`translate3d(0,${lerp(23,0,qIn).toFixed(2)}px,0)`;evidence.style.opacity=String(show(evIn*(1-evOut)));evidence.style.pointerEvents=evIn>.8&&evOut<.3?'auto':'none';contexts.style.opacity=String(show(ctxIn));contexts.style.pointerEvents=ctxIn>.7?'auto':'none';shadow.style.opacity=String(show(smooth(segment(p,.33,.41))*.25*(1-smooth(segment(p,.44,.56)))));
-let contextProgress=segment(p,.63,.965)*4,selected=Math.min(3,Math.floor(contextProgress));if(performance.now()>manualSelectionUntil&&selected!==selectedContext){selectedContext=selected;state.context=selected;$('context-title').textContent=contextInfo[selected][0];$('context-description').textContent=contextInfo[selected][1];root.querySelectorAll('[data-context-button]').forEach((b,n)=>b.setAttribute('aria-current',String(n===selected)))}
-ctxPanels.forEach((panel,i)=>{const local=contextProgress-i;const incoming=smooth(clamp(local/0.43));const isFirst=i===0;const own=(selectedContext===i&&performance.now()<manualSelectionUntil)?1:isFirst?1:incoming;const outgoing=(selectedContext>i&&performance.now()<manualSelectionUntil)?0:smooth(clamp((local-1)/.40));const visibility=clamp(own*(1-outgoing));panel.style.opacity=String(show(visibility));panel.style.clipPath=`inset(0 ${(100*(1-smooth(clamp(local/.36)))).toFixed(1)}% 0 0)`;if(i===0)panel.style.clipPath='inset(0)';panel.querySelector('.photo').style.transform=`scale(${(1.08-.065*clamp(local)).toFixed(3)}) translate3d(0,${(-1.8*clamp(local)).toFixed(2)}%,0)`;});if(performance.now()<manualSelectionUntil){ctxPanels.forEach((panel,i)=>{panel.style.opacity=i===selectedContext?'1':'0';panel.style.clipPath='inset(0)'})}
-const traceOpacity=1-.98*smooth(segment(p,.32,.385))+.9*smooth(segment(p,.62,.69));trace.style.opacity=String(show(traceOpacity));trace.style.background=(evIn>.20?'rgba(17,25,21,.90)':'');trace.style.padding=(evIn>.20?'14px 14px 16px':'12px 0 0');trace.style.transform=`translate3d(${(11*segment(p,.13,.38)*(1-smooth(segment(p,.39,.46)))).toFixed(2)}vw,${(-17*segment(p,.13,.38)*(1-smooth(segment(p,.39,.46)))).toFixed(2)}vh,0)`;trace.style.maxWidth=p>.66?(innerWidth<=900?'72vw':'350px'):'';trace.style.pointerEvents='none';state.sourceOpacity=traceOpacity;}
-let roleLockedUntil=0;const roles={research:{name:'DEEP<br>INQUIRY.',src:'/media/public-experience/cinematic/1576141546153-3e04370b5ff7.jpg'},design:{name:'DESIGN<br>THINKING.',src:'/media/public-experience/cinematic/1759884247144-53d52c31f859.jpg'},coordination:{name:'SHARED<br>DIRECTION.',src:'/media/public-experience/cinematic/1590649681928-4b179f773bd5.jpg'},engineering:{name:'SYSTEMS<br>WORK.',src:'/media/public-experience/cinematic/1645258044234-f4ba2655baf1.jpg'}};function selectRole(k,manual=false){if(!roles[k])return;let d=roles[k],img=$('career-photo');if(img.getAttribute('src')!==d.src){img.src=d.src};$('career-role').innerHTML=d.name;root.querySelectorAll('[data-role]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===k)));if(manual)roleLockedUntil=performance.now()+4000;state.role=k;}
-root.querySelectorAll('[data-role]').forEach(btn=>btn.addEventListener('click',()=>selectRole(btn.dataset.role,true)));selectRole('research');
-const time=$('time'),range=$('time-range');const setSplit=(p)=>time.style.setProperty('--split',p+'%');range.addEventListener('input',()=>setSplit(range.value));setSplit(range.value);
-const menu=$('film-menu'),open=$('open-menu'),close=$('close-menu');let lastFocus=null;const setMenu=b=>{menu.hidden=!b;open.setAttribute('aria-expanded',String(b));document.body.style.overflow=b?'hidden':'';if(b){lastFocus=document.activeElement;close.focus()}else{(lastFocus||open).focus()}};open.addEventListener('click',()=>setMenu(true));close.addEventListener('click',()=>setMenu(false));menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));const onKeydown=e=>{if(e.key==='Escape'&&!menu.hidden)setMenu(false);if(e.key==='Tab'&&!menu.hidden){let focusable=[...menu.querySelectorAll('a,button')],a=focusable[0],z=focusable.at(-1);if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}};document.addEventListener('keydown',onKeydown);
-function update(){raf=0;const sy=scrollY;const end=Math.max(1,document.documentElement.scrollHeight-innerHeight);$('rail').style.width=(100*sy/end).toFixed(2)+'%';if(!reduce.matches){render(freeze===null?scrollProgress(opTrack):freeze);const careerP=scrollProgress($('career'));if(performance.now()>roleLockedUntil){const names=['research','design','coordination','engineering'];const k=names[Math.min(3,Math.floor(careerP*4))];if(state.role!==k)selectRole(k);}const cp=$('career-photo');cp.style.transform=`scale(${(1.035+0.085*careerP).toFixed(3)}) translate3d(0,${(-3*careerP).toFixed(2)}%,0)`}else{state.dominant='reduced';state.progress=0;}}
-function request(){if(!raf)raf=requestAnimationFrame(update)};window.addEventListener('scroll',request,{passive:true});window.addEventListener('resize',request,{passive:true});reduce.addEventListener?.('change',request);request();window.__VALTUM_FILM_STATUS__=state;
-return ()=>{root.removeEventListener('click',onNavigation);window.removeEventListener('scroll',request);window.removeEventListener('resize',request);document.removeEventListener('keydown',onKeydown);reduce.removeEventListener?.('change',request);cancelAnimationFrame(raf);document.body.style.overflow='';delete window.__VALTUM_DIRECTOR__;delete window.__VALTUM_FILM_STATUS__;};
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+import { navigateCinematic } from './routeNavigation';
+
+gsap.registerPlugin(ScrollTrigger);
+
+/** A single clock owns smooth scrolling and scene progress. Native touch scrolling stays native. */
+export function mountHumanTrace(root, navigate) {
+  const $ = selector => root.querySelector(selector);
+  const all = selector => [...root.querySelectorAll(selector)];
+  const mm = gsap.matchMedia();
+  const listeners = [];
+  const on = (node, event, callback, options) => {
+    node.addEventListener(event, callback, options);
+    listeners.push(() => node.removeEventListener(event, callback, options));
+  };
+  let lenis;
+  let selected = 0;
+  const state = { dominant: 'opening', context: 0 };
+  window.__VALTUM_FILM_STATUS__ = state;
+
+  mm.add({ desktop: '(min-width: 801px)', mobile: '(max-width: 800px)', touch: '(pointer: coarse)', reduce: '(prefers-reduced-motion: reduce)' }, context => {
+    const { desktop, touch, reduce } = context.conditions;
+    if (reduce) return;
+    let cleanupScroll = () => {};
+    if (desktop && !touch) {
+      lenis = new Lenis({ duration: 1.05, smoothWheel: true, syncTouch: false });
+      lenis.on('scroll', ScrollTrigger.update);
+      const tick = time => lenis.raf(time * 1000);
+      gsap.ticker.add(tick);
+      cleanupScroll = () => { gsap.ticker.remove(tick); lenis?.destroy(); lenis = undefined; };
+    }
+    const media = $('#hero-actor');
+    const world = $('#world-frame');
+    const question = $('#stage-question');
+    // The title exits completely before the next text is allowed to enter.
+    const opening = gsap.timeline({ scrollTrigger: {
+      trigger: $('#intro'), start: 'top top', end: 'bottom bottom', scrub: touch ? .25 : .65,
+      invalidateOnRefresh: true,
+      onUpdate: self => { state.dominant = self.progress < .6 ? 'opening' : 'assessment'; world.inert = self.progress > .42; question.inert = self.progress < .64; },
+    }});
+    opening.to(world, { yPercent: -14, clipPath: 'inset(0 0 100% 0)', duration: .32, ease: 'power2.inOut' }, .10)
+      .to($('.scroll-cue'), { autoAlpha: 0, duration: .15 }, .05)
+      .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: .48, ease: 'power2.inOut' }, .18)
+      .to(media.querySelector('img'), { scale: 1.14, duration: .65, ease: 'none' }, .15)
+      .to($('.image-tint'), { opacity: .52, duration: .25 }, .45)
+      .fromTo(question, { autoAlpha: 0, y: 45, clipPath: 'inset(0 0 100% 0)' }, { autoAlpha: 1, y: 0, clipPath: 'inset(0)', duration: .23, ease: 'power2.out' }, .64)
+      .to({}, { duration: .20 });
+
+    const panels = all('[data-context]');
+    const conditions = gsap.timeline({ scrollTrigger: {
+      trigger: $('#conditions'), start: 'top top', end: 'bottom bottom', scrub: touch ? .2 : .7,
+      invalidateOnRefresh: true,
+      onUpdate: self => {
+        selected = self.progress < .33 ? 0 : self.progress < .67 ? 1 : 2;
+        state.context = selected;
+        all('[data-context-button]').forEach((b, i) => b.setAttribute('aria-current', String(i === selected)));
+      },
+    }});
+    panels.forEach((panel, i) => {
+      const at = i * 1.2;
+      if (i) conditions.fromTo(panel, { clipPath: 'inset(100% 0 0)' }, { clipPath: 'inset(0)', duration: .5, ease: 'power2.inOut' }, at);
+      conditions.fromTo(panel.querySelector('img'), { scale: 1.10, yPercent: -3 }, { scale: 1.02, yPercent: 0, duration: 1.2, ease: 'none' }, at);
+      if (i) conditions.fromTo(panel.querySelector('.condition-copy'), { y: 70 }, { y: 0, duration: .6, ease: 'power2.out' }, at);
+    });
+    if (desktop) {
+      const picture = $('.evidence-photo img');
+      gsap.fromTo(picture, { yPercent: -8 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: $('.evidence-body'), start: 'top bottom', end: 'bottom top', scrub: .7 }});
+      gsap.fromTo($('.career-gallery'), { x: 0 }, { x: () => -Math.min(100, window.innerWidth * .055), ease: 'none', scrollTrigger: { trigger: $('#career'), start: 'top bottom', end: 'bottom top', scrub: .8 }});
+      gsap.fromTo($('.finale>img'), { scale: 1.16, yPercent: -4 }, { scale: 1.04, yPercent: 0, ease: 'none', scrollTrigger: { trigger: $('#finale'), start: 'top bottom', end: 'bottom bottom', scrub: .9 }});
+    }
+    return cleanupScroll;
+  });
+
+  all('[data-context-button]').forEach((button, index) => on(button, 'click', () => {
+    const track = $('#conditions');
+    const top = track.getBoundingClientRect().top + window.scrollY;
+    const position = top + Math.max(0, track.offsetHeight - window.innerHeight) * [0, .49, .9][index];
+    if (lenis) lenis.scrollTo(position, { duration: .9 });
+    else window.scrollTo({ top: position, behavior: 'smooth' });
+  }));
+  const range = $('#time-range');
+  const split = () => $('#comparison').style.setProperty('--split', range.value + '%');
+  on(range, 'input', split); split();
+
+  const menu = $('#film-menu');
+  const opener = $('#open-menu');
+  const closer = $('#close-menu');
+  const main = $('#main');
+  let previousOverflow = '';
+  const setMenu = open => {
+    menu.hidden = !open;
+    opener.setAttribute('aria-expanded', String(open));
+    main.inert = open;
+    if (open) { previousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; lenis?.stop(); closer.focus(); }
+    else { document.body.style.overflow = previousOverflow; lenis?.start(); opener.focus(); }
+  };
+  on(opener, 'click', () => setMenu(true));
+  on(closer, 'click', () => setMenu(false));
+  on(root, 'keydown', e => {
+    if (menu.hidden) return;
+    if (e.key === 'Escape') setMenu(false);
+    if (e.key === 'Tab') {
+      const controls = all('#film-menu a,#film-menu button');
+      const focused = root.activeElement;
+      if (e.shiftKey && focused === controls[0]) { e.preventDefault(); controls.at(-1).focus(); }
+      else if (!e.shiftKey && focused === controls.at(-1)) { e.preventDefault(); controls[0].focus(); }
+    }
+  });
+  on(root, 'click', event => {
+    const anchor = event.target.closest('a[href]');
+    if (!anchor || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const href = anchor.getAttribute('href');
+    if (href.startsWith('#')) {
+      const target = $(href);
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'auto' });
+      target.focus({ preventScroll: true });
+    } else if (href.startsWith('/')) {
+      event.preventDefault();
+      if (!menu.hidden) setMenu(false);
+      navigateCinematic(navigate, href, anchor);
+    }
+  });
+  const refresh = () => ScrollTrigger.refresh();
+  all('img').forEach(img => { if (!img.complete) on(img, 'load', refresh, { once: true }); });
+  document.fonts.ready.then(() => { if (root.host.isConnected) refresh(); });
+  return () => {
+    listeners.forEach(remove => remove());
+    mm.revert();
+    document.body.style.overflow = previousOverflow;
+    delete window.__VALTUM_FILM_STATUS__;
+  };
 }

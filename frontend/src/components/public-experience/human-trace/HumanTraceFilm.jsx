@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { filmCSS, filmMarkup } from './filmContent';
 import { mountHumanTrace } from './filmMotion';
@@ -24,7 +24,7 @@ export function HumanTraceFilm() {
       shadow.replaceChildren();
     };
   }, [navigate]);
-  return <div ref={host} className="vt-human-trace-host" data-creative-iteration="08" />;
+  return <div ref={host} className="vt-human-trace-host" data-creative-experience="perspective" />;
 }
 
 export default HumanTraceFilm;
