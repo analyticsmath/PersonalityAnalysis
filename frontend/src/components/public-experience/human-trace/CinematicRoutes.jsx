@@ -147,7 +147,6 @@ export function CareerCinematicPage(){
   const onSelect=useCallback(index=>setKey(ROLE_KEYS[index]),[]);
   const {controller,driven}=useScrollSequence(sequence,ROLE_KEYS.length,onSelect,"career");
   const refs=useRef([]);
-  const role=careersData[key];
 
   const changeByKeyboard=(event,i)=>{
     if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
@@ -164,8 +163,13 @@ export function CareerCinematicPage(){
           <div className="vt-career-index-belt" data-sequence-index role="tablist" aria-label="Occupational profiles" aria-orientation="vertical">{keys.map((k,i)=><button key={k} ref={el=>refs.current[i]=el} id={'vt-role-tab-'+k} role="tab" aria-controls="vt-career-detail" aria-selected={key===k} tabIndex={key===k?0:-1} onClick={()=>controller.current.select(i)} onKeyDown={e=>changeByKeyboard(e,i)} className={key===k?'is-selected':''}>{careersData[k].title}<span aria-hidden="true">↗</span></button>)}</div>
         </div></div>
         <div className="vt-career-display" id="vt-career-detail" role="tabpanel" aria-labelledby={'vt-role-tab-'+key} tabIndex={0}>
-          <div className="vt-career-photo-window"><div className="vt-career-photo-belt" data-sequence-belt>{keys.map(k=><figure data-sequence-panel data-transition-media={key===k?"":undefined} key={k} aria-hidden={driven?key!==k:undefined} className={key===k?'is-selected':''}><img src={mediaForRole(k)} loading="lazy" alt={'Illustrative professional working context for '+careersData[k].title}/></figure>)}</div></div>
-          <div className="vt-career-inspection" key={key}><h2>{role.title}</h2><div className="vt-career-inspection-grid"><div><strong>Core capabilities</strong><p>{role.skills.slice(0,5).join(' · ')}</p></div><div><strong>Foundational domains</strong><p>{role.subjects.slice(0,4).join(' · ')}</p></div></div><small>Occupational requirements. Not a personal career-fit score.</small></div>
+          <div className="vt-career-photo-window"><div className="vt-career-photo-belt" data-sequence-belt>{keys.map(k=>{
+            const role=careersData[k];
+            return <figure data-sequence-panel key={k} aria-hidden={driven?key!==k:undefined} className={key===k?'is-selected':''}>
+              <div className="vt-career-image-frame" data-transition-media={key===k?"":undefined}><img src={mediaForRole(k)} loading="lazy" alt={'Illustrative professional working context for '+role.title}/></div>
+              <figcaption className="vt-career-inspection"><h2>{role.title}</h2><div className="vt-career-inspection-grid"><div><strong>Core capabilities</strong><p>{role.skills.slice(0,5).join(' · ')}</p></div><div><strong>Foundational domains</strong><p>{role.subjects.slice(0,4).join(' · ')}</p></div></div><small>Occupational requirements. Not a personal career-fit score.</small></figcaption>
+            </figure>;
+          })}</div></div>
         </div>
       </div>
     </section>
@@ -209,7 +213,7 @@ export function TrustCinematicPage(){
     <section ref={sequence} className="vt-trust-sequence" aria-label="Explore the evidence chain">
       <div className="vt-trust-stage" data-sequence-stage><div className="vt-trust-panel-window"><div className="vt-trust-belt" data-sequence-belt>
         {steps.map((step,i)=><article className="vt-trust-inspection" data-sequence-panel key={step.id} aria-hidden={driven?active!==i:undefined}>
-          <div className="vt-trust-original" data-transition-media><img src={[PHOTO.detail,PHOTO.design,PHOTO.inquiry,PHOTO.shared,PHOTO.proof][i]} loading="lazy" alt={['A website wireframe showing the structure of an idea','A designer considering the details of an interface','A developer working with software','Colleagues sharing a digital working environment','Hands reviewing printed source material'][i]}/><div><p className="vt-record-statement">{[RECORD_STATEMENT,'An interpretation begins with context.','See what contributes to the calculation.','A direction deserves more than one perspective.','Your record remains yours to inspect.'][i]}</p></div></div>
+          <div className="vt-trust-original" data-transition-media={active===i?"":undefined}><img src={[PHOTO.detail,PHOTO.design,PHOTO.inquiry,PHOTO.collaboration,PHOTO.proof][i]} loading="lazy" alt={['A website wireframe showing the structure of an idea','A designer considering the details of an interface','A developer working with software','Colleagues sharing a digital working environment','Hands reviewing printed source material'][i]}/><span className="vt-trust-scene-title" aria-hidden="true">{step.name}</span><div><p className="vt-record-statement">{[RECORD_STATEMENT,'An interpretation begins with context.','See what contributes to the calculation.','A direction deserves more than one perspective.','Your record remains yours to inspect.'][i]}</p></div></div>
           <div className="vt-trust-data"><h2>{step.name}</h2><strong>{step.title}</strong><p>{step.description}</p><p className="vt-trust-note">A personal profile requires enough independent evidence. One response is a starting point, not a conclusion.</p></div>
         </article>)}
       </div></div><div className="vt-trust-step-buttons" role="group" aria-label="Select provenance stage">{steps.map((step,i)=><button key={step.id} className={i===active?'is-selected':''} aria-pressed={i===active} onClick={()=>controller.current.select(i)}>{step.name}</button>)}</div></div>
