@@ -14,6 +14,7 @@ import { PublicHeader } from '../chrome/PublicHeader';
 import { PublicIndex } from '../chrome/PublicIndex';
 import { PublicFooter } from '../chrome/PublicFooter';
 import { PublicRouteStage } from './PublicRouteStage';
+import { CinematicPublicShell } from '../human-trace/CinematicPublicShell';
 
 export const PublicExperienceLayout = () => {
   const [indexOpen, setIndexOpen] = useState(false);
@@ -26,6 +27,10 @@ export const PublicExperienceLayout = () => {
   // routes retain their existing persistent public-experience shell.
   if (location.pathname === '/') {
     return <Outlet />;
+  }
+
+  if (['/how-it-works','/career-intelligence','/progress','/trust','/methodology','/privacy'].includes(location.pathname)) {
+    return <CinematicPublicShell />;
   }
 
   return (

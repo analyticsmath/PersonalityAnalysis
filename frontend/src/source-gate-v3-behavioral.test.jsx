@@ -41,7 +41,8 @@ describe('Source Gate V3 — Editorial Evidence Atlas Composition Contracts', ()
       </MemoryRouter>
     );
 
-    expect(screen.getByText('17 Occupational Profiles')).toBeInTheDocument();
+    expect(screen.getByRole('tablist', { name: 'Occupational profiles' })).toBeInTheDocument();
+    expect(screen.getAllByRole('tab')).toHaveLength(17);
   });
 
   it('3. confirms HowItWorks renders causal visual essay stage', () => {
@@ -51,7 +52,7 @@ describe('Source Gate V3 — Editorial Evidence Atlas Composition Contracts', ()
       </MemoryRouter>
     );
 
-    const howStage = document.querySelector('.pa-px-how-page') || document.querySelector('.pa-px-how-narrative-flow');
+    const howStage = document.querySelector('.vt-how-sequence');
     expect(howStage).not.toBeNull();
   });
 
@@ -62,8 +63,8 @@ describe('Source Gate V3 — Editorial Evidence Atlas Composition Contracts', ()
       </MemoryRouter>
     );
 
-    expect(screen.getByText('SHOW ME WHERE THAT CAME FROM.')).toBeInTheDocument();
-    expect(screen.getByText('Supplied')).toBeInTheDocument();
+    expect(document.querySelectorAll('.vt-trust-step-buttons button')).toHaveLength(5);
+    expect(screen.getByRole('group', { name: 'Select provenance stage' })).toBeInTheDocument();
   });
 
   it('5. confirms Progress page renders temporal comparison stage', () => {
@@ -73,7 +74,8 @@ describe('Source Gate V3 — Editorial Evidence Atlas Composition Contracts', ()
       </MemoryRouter>
     );
 
-    const temporalStage = document.querySelector('.pa-px-progress-stage');
+    const temporalStage = document.querySelector('.vt-time-comparison');
+    expect(screen.getByRole('slider')).toBeInTheDocument();
     expect(temporalStage).not.toBeNull();
   });
 
@@ -84,6 +86,6 @@ describe('Source Gate V3 — Editorial Evidence Atlas Composition Contracts', ()
       </MemoryRouter>
     );
 
-    expect(screen.getByText('WHAT THE SYSTEM USES. WHAT IT DOES NOT.')).toBeInTheDocument();
+    expect(document.querySelectorAll('.vt-monograph-articles article')).toHaveLength(8);
   });
 });

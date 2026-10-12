@@ -1,16 +1,5 @@
 import React from 'react';
-import { TrustSourceInspection } from '../../components/public-experience/trust/TrustSourceInspection';
+import { TrustCinematicPage } from '../../components/public-experience/human-trace/CinematicRoutes';
 
-/**
- * Editorial Trust Page - Provenance & Sovereignty
- * Inspect the evidence chain from participant response to user-sovereign data controls.
- */
-export const EditorialTrustPage = () => {
-  return (
-    <div className="pa-px-trust-page-container">
-      <TrustSourceInspection />
-    </div>
-  );
-};
-
+export const EditorialTrustPage = () => <TrustCinematicPage />;
 export default EditorialTrustPage;

@@ -51,24 +51,27 @@ describe('Editorial Evidence Atlas — Architectural Contracts Suite', () => {
   });
 
   it('5. Career Intelligence uses CareerAtlasExperience with 17 canonical roles', () => {
-    expect(careerPage).toContain('CareerAtlasExperience');
+    expect(careerPage).toContain('CareerCinematicPage');
+    expect(Object.keys(PUBLIC_CONTENT.home.models.list).length).toBeGreaterThan(0);
   });
 
   it('6. How It Works runs causal essay stage without numbered 01-06 stepper', () => {
-    expect(howItWorksPage).toContain('HowCausalEssay');
+    expect(howItWorksPage).toContain('HowCinematicPage');
     expect(howItWorksPage).not.toContain('STAGE 01');
+    expect(PUBLIC_CONTENT.how.movements).toHaveLength(5);
   });
 
   it('7. Progress uses longitudinal comparison with temporal control', () => {
-    expect(progressPage).toContain('ProgressLongitudinalExperience');
+    expect(progressPage).toContain('ProgressCinematicPage');
   });
 
   it('8. Trust page has interactive provenance chain and data rights', () => {
-    expect(trustPage).toContain('TrustSourceInspection');
+    expect(trustPage).toContain('TrustCinematicPage');
+    expect(PUBLIC_CONTENT.trust.recordStateSteps).toHaveLength(5);
   });
 
   it('9. Methodology serves as research publication', () => {
-    expect(methodologyPage).toContain('MethodologyPublication');
+    expect(methodologyPage).toContain('MethodologyCinematicPage');
   });
 
   it('10. Auth pages render directly on integrated background media without split layout', () => {

@@ -1,15 +1,5 @@
 import React from 'react';
-import { PrivacyEditorial } from '../../components/public-experience/privacy/PrivacyEditorial';
+import { PrivacyCinematicPage } from '../../components/public-experience/human-trace/CinematicRoutes';
 
-/**
- * Editorial Privacy Page - Sovereign Data Rights & Plain-Language Governance
- */
-export const EditorialPrivacyPage = () => {
-  return (
-    <div className="pa-px-privacy-page-container">
-      <PrivacyEditorial />
-    </div>
-  );
-};
-
+export const EditorialPrivacyPage = () => <PrivacyCinematicPage />;
 export default EditorialPrivacyPage;
