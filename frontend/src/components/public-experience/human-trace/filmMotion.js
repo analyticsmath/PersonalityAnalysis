@@ -70,7 +70,7 @@ export function mountHumanTrace(root, navigate) {
       gsap.fromTo($('.career-gallery'), { x: 0 }, { x: () => -Math.min(100, window.innerWidth * .055), ease: 'none', scrollTrigger: { trigger: $('#career'), start: 'top bottom', end: 'bottom top', scrub: .8 }});
       gsap.fromTo($('.finale>img'), { scale: 1.16, yPercent: -4 }, { scale: 1.04, yPercent: 0, ease: 'none', scrollTrigger: { trigger: $('#finale'), start: 'top bottom', end: 'bottom bottom', scrub: .9 }});
     }
-    return cleanupScroll;
+    return () => { cleanupScroll(); world.inert = false; question.inert = false; };
   });
 
   all('[data-context-button]').forEach((button, index) => on(button, 'click', () => {

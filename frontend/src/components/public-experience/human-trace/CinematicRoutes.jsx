@@ -18,6 +18,7 @@ const PHOTO={
   proof:PATH+'1745845289797-913815100704.jpg',
   design:PATH+'1759884247144-53d52c31f859.jpg'
 };
+// Scored profiles remain subject to evidence-sufficiency checks.
 const STATEMENT='I clarify the constraints first, then choose the smallest reversible step.';
 
 function usePageChoreography(ref) {
@@ -188,7 +189,7 @@ export function ProgressCinematicPage(){
       <article data-reveal><h2>{content.stabilityFinding}</h2><p>Without an earlier record, there is nothing reliable to compare. Source and context must remain available for later inspection.</p></article>
       <article data-reveal><h2>{content.adaptationFinding}</h2><p>Later conditions can alter the interpretation. Neither photograph represents the assessment history of a real person.</p></article>
     </section>
-    <div className="vt-dark-quote" data-reveal><SourceNote dark/><p>One continuous source. Different contexts. No fabricated timeline.</p></div>
+    <div className="vt-dark-quote" data-reveal><SourceNote dark/><p>Keep the earlier context in view. Understand what a later record adds.</p></div>
     <NextChapter to="/trust" title="See the evidence." subtitle="Every interpretation starts somewhere." image={PHOTO.proof}/>
   </PageFrame>;
 }
@@ -205,7 +206,7 @@ export function TrustCinematicPage(){
       <div className="vt-trust-data">
         <h2>{step.name}</h2><strong>{step.title}</strong><p>{step.description}</p>
         <div className="vt-trust-step-buttons" role="group" aria-label="Select provenance stage">{steps.map((s,i)=><button key={s.id} className={i===active?'is-selected':''} aria-pressed={i===active} onClick={()=>setActive(i)}>{s.name}</button>)}</div>
-        <p className="vt-trust-note">An illustrative provenance demonstration. The underlying system must pass validity and evidence-sufficiency checks.</p>
+        <p className="vt-trust-note">This sample shows the evidence chain. A personal profile requires enough independent evidence.</p>
       </div>
     </section>
     <section className="vt-rights" data-reveal><div><h2>Your record.<br/>Your controls.</h2><p>Review export, transparency and account-removal actions in their authenticated contexts.</p></div><div className="vt-rights-list">{PUBLIC_CONTENT.trust.rightsActions.map(r=><article key={r.id}><div><h3>{r.label}</h3><p>{r.description}</p><CinemaLink className="vt-text-link" to={r.link}>Review this control ↗</CinemaLink></div></article>)}</div></section>

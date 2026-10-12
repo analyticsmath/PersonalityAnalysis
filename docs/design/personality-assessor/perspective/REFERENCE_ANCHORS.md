@@ -53,3 +53,17 @@ GSAP owns scene animation. ScrollTrigger owns normalized progress. Lenis smooths
 ## Validation boundaries
 
 Build and tests establish engineering behavior, not an award score. Browser evidence must be reviewed separately. A successful desktop pass cannot be reported as a mobile or actual-device performance pass. Full photo-rights clearance and psychometric validation are outside a motion test.
+
+## Production review evidence
+
+Implementation deployed directly from main on the original production domain, https://personality-analysis-exploiter.vercel.app/ . The recorded functional code commit before the final cleanup was bbd03a82d69e5835ba30f131d7de2d76f9606ad8. Vercel reported READY for its production target.
+
+Live desktop review reproduced the original overlapping title failure before the rebuild. The replacement opening was inspected with its real photograph, expanded image state, next assessment title, and transition into the dimensions passage. The final hero crop excludes the shirt logo seen in the earlier composition.
+
+Reviewed the rendered Career, Progress, Trust, Methodology and Privacy compositions. Verified career selection changes the profile text, slider input changes its displayed value, provenance selection changes the explanation, menu opening removes background main content from the accessibility tree, Escape returns focus to the menu button, and the primary action reaches the existing signup form with the intended next parameter. No account was created. Reference-browser tabs were closed after research. A transient browser gateway failure interrupted one route reload; the production domain was subsequently opened successfully again.
+
+Engineering checks: production build passed; 36 focused tests cover current marketing contracts, navigation behavior, existing analytics and existing assessment pages. Changed-component ESLint passes. Repository-wide lint still reports 25 errors and 244 warnings in existing files; it is not claimed clean. The build still reports the existing large-chunk warning.
+
+Remaining evidence limits: this browser exposes a desktop viewport but no supported phone emulation or reduced-motion control. Mobile compositions and native-touch/reduced-motion behavior are authored in CSS and responsive lifecycles, but physical phone review, touch performance and a complete accessibility audit were not performed. Do not convert the desktop evidence into a 9/10 award-quality claim.
+
+A further real-photograph review found that the first condition headline escaped its parent stacking context. Each photographic scene now has an isolated, explicitly ordered layer. The regression test checks layer isolation and ordering; the subsequent browser review is the separate visual acceptance check.
