@@ -10,13 +10,17 @@ export function navigateCinematic(navigate, path, origin) {
   if (current) current.style.viewTransitionName = 'none';
   if (selected) selected.style.viewTransitionName = 'scene-media';
   let applied = false;
-  const update = () => {
+  const update = async () => {
     if (applied) return;
     applied = true;
     flushSync(() => navigate(path));
     window.scrollTo({ top: 0, behavior: 'instant' });
     const destination = document.querySelector('.vt-cover-media') || document.querySelector('.vt-human-trace-host')?.shadowRoot?.querySelector('#hero-actor');
     if (destination) destination.style.viewTransitionName = 'scene-media';
+    const image = destination?.querySelector('img');
+    if (image && !image.complete && typeof image.decode === 'function') {
+      await Promise.race([image.decode().catch(() => {}), new Promise(resolve => window.setTimeout(resolve, 500))]);
+    }
     const heading = document.querySelector('main h1') || document.querySelector('.vt-human-trace-host')?.shadowRoot?.querySelector('h1');
     if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
   };

@@ -43,7 +43,7 @@ export function mountHumanTrace(root, navigate) {
     opening.to(world, { yPercent: -14, clipPath: 'inset(0 0 100% 0)', duration: .32, ease: 'power2.inOut' }, .10)
       .to($('.scroll-cue'), { autoAlpha: 0, duration: .15 }, .05)
       .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: .48, ease: 'power2.inOut' }, .18)
-      .to(media.querySelector('img'), { scale: 1.14, duration: .65, ease: 'none' }, .15)
+      .to(media.querySelector('img'), { scale: 1.55, duration: .65, ease: 'none' }, .15)
       .to($('.image-tint'), { opacity: .52, duration: .25 }, .45)
       .fromTo(question, { autoAlpha: 0, y: 45, clipPath: 'inset(0 0 100% 0)' }, { autoAlpha: 1, y: 0, clipPath: 'inset(0)', duration: .23, ease: 'power2.out' }, .64)
       .to({}, { duration: .20 });

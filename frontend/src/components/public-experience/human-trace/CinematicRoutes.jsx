@@ -91,6 +91,13 @@ function PageFrame({children,className=''}) {
 export function HowCinematicPage() {
   const steps=PUBLIC_CONTENT.how.movements;
   const weights=PUBLIC_CONTENT.home.calibration.weights;
+  const copy=[
+    ['Start with your own words.','Your response stays with the question and the situation it describes.'],
+    ['Notice what matters.','Parts of an answer may point to different habits of thinking and acting. One answer is a starting point, not a conclusion.'],
+    ['Look from more than one angle.','Personality, interests and work values describe different parts of the picture. Each needs enough evidence.'],
+    ['See what contributes.','Career comparisons use explicit weights for interests, skills, values, traits, education and goals. You can inspect the calculation.'],
+    ['Bring the picture together.','Your professional profile connects the interpretation to its evidence and keeps its limits visible.']
+  ];
   return <PageFrame className="how">
     <Cover lines={['From your answers.','To your perspective.']} image={PHOTO.detail} alt="A person's hand moves a pencil across an architectural drawing" description="Understand how your responses contribute to a profile of your personality, interests and work values." position="55% 45%" variant="how"/>
     <div className="vt-essay-intro" data-reveal><h2>Before the inference,<br/><em>there is a source.</em></h2><p>A single answer can suggest questions worth asking. A scored profile requires sufficient independent evidence.</p></div>
@@ -102,7 +109,7 @@ export function HowCinematicPage() {
       <div className="vt-how-steps">
         {steps.map((step,i)=><article key={step.id} className="vt-how-step" id={'step-'+step.id} data-reveal>
 
-          <h2>{step.title}</h2><p>{step.description}</p>
+          <h2>{copy[i][0]}</h2><p>{copy[i][1]}</p>
           {i===1&&<div className="vt-clause-pair"><span>“I clarify the constraints first,”</span><span>“then choose the smallest reversible step.”</span></div>}
           {i===2&&<div className="vt-framework-small">{PUBLIC_CONTENT.home.models.list.slice(0,4).map(x=><span key={x.id}>{x.name}</span>)}</div>}
           {i===3&&<div className="vt-weight-tracks">{weights.map(w=><div key={w.id}><span>{w.label}</span><strong>{w.percentage}%</strong><i style={{width:w.percentage*3+'%'}}/></div>)}</div>}
@@ -136,7 +143,7 @@ export function CareerCinematicPage(){
   };
   return <PageFrame className="career">
     <Cover lines={['Find work','that speaks to you.']} image={PHOTO.precision} alt="A craftsperson at work in a precise manufacturing environment" description="Explore the skills, interests and conditions behind different careers. Give your next move a clearer context." position="55% center" variant="career"/>
-    <div className="vt-essay-intro vt-essay-intro--dark" data-reveal><h2>Environments change.<br/><em>The questions change.</em></h2><p>Choose an occupation. Explore the skills and foundational disciplines represented in its canonical profile. This is not a recommendation for a specific person.</p></div>
+    <div className="vt-essay-intro vt-essay-intro--dark" data-reveal><h2>Environments change.<br/><em>The questions change.</em></h2><p>Choose a career and explore the capabilities it calls for. These profiles describe occupations. A personal comparison needs your completed assessment.</p></div>
     <section className="vt-career-explorer" aria-label="Explore 17 occupations">
       <div className="vt-career-list">
         <div role="tablist" aria-label="Occupational profiles" aria-orientation="vertical">{keys.map((k,i)=>
@@ -157,7 +164,7 @@ export function CareerCinematicPage(){
         </div>
       </div>
     </section>
-    <section className="vt-quiet-end" data-reveal><h2>Look beyond<br/>a job title.</h2><p>Interests, skills, work values, personality, education and goals contribute differently to the complete calculation. See the exact weights rather than assuming a mysterious match.</p><CinemaLink className="vt-text-link" to="/methodology">Explore the scoring model ↗</CinemaLink></section>
+    <section className="vt-quiet-end" data-reveal><h2>Look beyond<br/>a job title.</h2><p>Your interests, skills, values and experience each contribute to a career comparison. Explore how the calculation brings them together.</p><CinemaLink className="vt-text-link" to="/methodology">Explore the scoring model ↗</CinemaLink></section>
     <NextChapter to="/progress" title="See what changes." subtitle="Return to the same record over time." image={PHOTO.shared}/>
   </PageFrame>;
 }
