@@ -6,7 +6,7 @@ const galleryItems = [['designer','Shape an idea','A designer sketching a digita
 const galleryCycle = duplicate => `<div class="crawler-cycle" ${duplicate ? 'aria-hidden="true"' : ''}>${galleryItems.map(([name,label,alt])=>`<a href="/career-intelligence" class="career-image" data-transition-media data-pointer="Explore ↗" ${duplicate ? 'tabindex="-1"' : ''}>${digital(name, duplicate ? '' : alt,'loading="lazy"')}<span>${label}<i aria-hidden="true">↗</i></span></a>`).join('')}</div>`;
 const start = '/signup?next=%2Fassessment%2Fstart';
 export const perspectiveLenses = [
-  { name:'Personality', title:'How you approach the world.', model:'Big Five', description:'Patterns in how you think, respond and relate to others.', terms:PUBLIC_CONTENT.methodology.sections.bigFive.dimensions },
+  { name:'Personality', title:'How you approach the work.', model:'Big Five', description:'Patterns in how you think, respond and relate to others.', terms:PUBLIC_CONTENT.methodology.sections.bigFive.dimensions },
   { name:'Interests', title:'What holds your attention.', model:'RIASEC', description:'The activities and problems you are drawn to, across six fields of interest.', terms:PUBLIC_CONTENT.methodology.sections.riasec.orbit },
   { name:'Work values', title:'What makes the work worthwhile.', model:'Work values', description:'The conditions and rewards that matter to you in a working environment.', terms:PUBLIC_CONTENT.methodology.sections.workValues.priorities },
 ];
