@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { mountImageCrawler, mountFilmPointer } from './imageCrawler';
 import { navigateCinematic } from './routeNavigation';
+import { mountLensSequence } from './lensSequence';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,11 +19,13 @@ export function mountHumanTrace(root, navigate) {
   };
   let lenis;
   let selected = 0;
+  let lensController, disposed = false;
+  const scrollTo = position => lenis ? lenis.scrollTo(position,{duration:.8}) : window.scrollTo({top:position,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   const state = { dominant: 'opening', context: 0 };
   window.__VALTUM_FILM_STATUS__ = state;
 
-  mm.add({ desktop: '(min-width: 801px)', mobile: '(max-width: 800px)', touch: '(pointer: coarse)', reduce: '(prefers-reduced-motion: reduce)' }, context => {
-    const { desktop, touch, reduce } = context.conditions;
+  mm.add({ desktop: '(min-width: 801px)', mobile: '(max-width: 800px)', tall: '(min-height:740px)', touch: '(pointer: coarse)', reduce: '(prefers-reduced-motion: reduce)' }, context => {
+    const { desktop, touch, reduce, tall } = context.conditions;
     if (reduce) return;
     let cleanupScroll = () => {};
     if (desktop && !touch) {
@@ -66,15 +69,21 @@ export function mountHumanTrace(root, navigate) {
       if (i) conditions.fromTo(panel.querySelector('.condition-copy'), { y: 70 }, { y: 0, duration: .6, ease: 'power2.out' }, at);
     });
     if (desktop) {
-      const picture = $('.evidence-photo img');
-      gsap.fromTo(picture, { yPercent: -3, scale:1.12 }, { yPercent: 3, scale:1.12, ease: 'none', scrollTrigger: { trigger: $('.evidence-body'), start: 'top bottom', end: 'bottom top', scrub: .7 }});
-      all('[data-dimension]').forEach(article => {
-        gsap.fromTo(article.querySelector('h3'), {x:55,clipPath:'inset(0 0 0 100%)'}, {x:0,clipPath:'inset(0)',ease:'power2.out',scrollTrigger:{trigger:article,start:'top 85%',end:'top 42%',scrub:.25}});
-      });
+      if(tall){
+      lensController = mountLensSequence(root, scrollTo);
+      const time = $('#time');
+      time.classList.add('is-driven');
+      const revisit = gsap.timeline({scrollTrigger:{trigger:time,start:'top 88px',end:'bottom bottom',scrub:.28,invalidateOnRefresh:true}});
+      revisit.to($('.time-copy'),{x:65,autoAlpha:0,duration:.3,ease:'power2.inOut'},.1)
+        .to($('.time-portrait'),{clipPath:'inset(8% 5% 8%)',duration:.45,ease:'power2.inOut'},.22)
+        .to($('.time-portrait img'),{scale:1.14,xPercent:-2,duration:.7,ease:'none'},0)
+        .fromTo($('.time-return'),{autoAlpha:0,y:35},{autoAlpha:1,y:0,duration:.25,ease:'power2.out'},.64)
+        .to({},{duration:.22});
+      }
       gsap.fromTo($('.footer-wordmark'), {y:80}, {y:0,ease:'none',scrollTrigger:{trigger:$('.grand-footer'),start:'top 80%',end:'bottom bottom',scrub:.25}});
       gsap.fromTo($('.finale>img'), { scale: 1.16, yPercent: -4 }, { scale: 1.04, yPercent: 0, ease: 'none', scrollTrigger: { trigger: $('#finale'), start: 'top bottom', end: 'bottom bottom', scrub: .9 }});
     }
-    return () => { cleanupScroll(); world.inert = false; question.inert = false; };
+    return () => { lensController?.dispose(); lensController=undefined; $('#time').classList.remove('is-driven'); cleanupScroll(); world.inert = false; question.inert = false; };
   });
 
   all('[data-context-button]').forEach((button, index) => on(button, 'click', () => {
@@ -84,9 +93,13 @@ export function mountHumanTrace(root, navigate) {
     if (lenis) lenis.scrollTo(position, { duration: .9 });
     else window.scrollTo({ top: position, behavior: 'smooth' });
   }));
-  const range = $('#time-range');
-  const split = () => $('#comparison').style.setProperty('--split', range.value + '%');
-  on(range, 'input', split); split();
+  all('[data-lens-select]').forEach((button,index)=>on(button,'click',()=>{
+    if(lensController) lensController.select(index);
+    else all('[data-lens]')[index].scrollIntoView({behavior:'auto',block:'start'});
+  }));
+  const chrome = $('.chrome');
+  const updateChrome = () => chrome.classList.toggle('is-scrolled',window.scrollY>32);
+  on(window,'scroll',updateChrome,{passive:true}); updateChrome();
 
   const menu = $('#film-menu');
   const opener = $('#open-menu');
@@ -132,8 +145,9 @@ export function mountHumanTrace(root, navigate) {
   const destroyPointer = mountFilmPointer(root);
   // All media has authored dimensions. Lazy image loads must not remeasure the page mid-scroll.
   const refresh = () => ScrollTrigger.refresh();
-  document.fonts?.ready.then(() => { if (root.host.isConnected) refresh(); });
+  document.fonts?.ready.then(() => { if (!disposed && root.host.isConnected) refresh(); });
   return () => {
+    disposed=true;
     destroyCrawler(); destroyPointer();
     listeners.forEach(remove => remove());
     mm.revert();

@@ -62,7 +62,7 @@ describe('progress photograph ownership',()=>{
     const view=render(createElement(MemoryRouter,null,createElement(ProgressCinematicPage)));
     try {
       const stage=view.container.querySelector('.vt-time-stage');
-      expect(stage.querySelector(':scope > img').getAttribute('src')).toContain('1742440710402-721332ea7898.jpg');
+      expect(stage.querySelector(':scope > img').getAttribute('src')).toContain('code-detail-1920.webp');
       expect(stage.querySelector('.vt-time-mask img').getAttribute('src')).toContain('collaborate-1920.webp');
       const slider=view.getByRole('slider');
       fireEvent.change(slider,{target:{value:'25'}});

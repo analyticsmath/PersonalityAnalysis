@@ -1,10 +1,20 @@
+import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
+
 // Real photographs already sourced from Unsplash. No synthetic personality scores.
-const path = '/media/public-experience/cinematic/';
 const digital = (name, alt, extra = '') => `<img src="/media/public-experience/digital/${name}-1920.webp" srcset="/media/public-experience/digital/${name}-960.webp 960w, /media/public-experience/digital/${name}-1920.webp 1920w" sizes="(max-width:800px) 100vw, 75vw" alt="${alt}" ${extra}>`;
 const galleryItems = [['designer','Shape an idea','A designer sketching a digital interface'],['code-detail','Solve a problem','A developer writing code on a laptop'],['wireframe','See the structure','A paper wireframe for a website'],['studio','Share a perspective','Digital colleagues working around a table'],['collaborate','Build together','An overhead view of a collaborative digital workspace']];
 const galleryCycle = duplicate => `<div class="crawler-cycle" ${duplicate ? 'aria-hidden="true"' : ''}>${galleryItems.map(([name,label,alt])=>`<a href="/career-intelligence" class="career-image" data-transition-media data-pointer="Explore ↗" ${duplicate ? 'tabindex="-1"' : ''}>${digital(name, duplicate ? '' : alt,'loading="lazy"')}<span>${label}<i aria-hidden="true">↗</i></span></a>`).join('')}</div>`;
-const photo = (file, alt, extra = '') => `<img src="${path}${file}.jpg" alt="${alt}" ${extra}>`;
 const start = '/signup?next=%2Fassessment%2Fstart';
+export const perspectiveLenses = [
+  { name:'Personality', title:'How you approach the world.', model:'Big Five', description:'Patterns in how you think, respond and relate to others.', terms:PUBLIC_CONTENT.methodology.sections.bigFive.dimensions },
+  { name:'Interests', title:'What holds your attention.', model:'RIASEC', description:'The activities and problems you are drawn to, across six fields of interest.', terms:PUBLIC_CONTENT.methodology.sections.riasec.orbit },
+  { name:'Work values', title:'What makes the work worthwhile.', model:'Work values', description:'The conditions and rewards that matter to you in a working environment.', terms:PUBLIC_CONTENT.methodology.sections.workValues.priorities },
+];
+const lensMarkup = perspectiveLenses.map((lens,i)=>`<article class="lens-scene" data-lens="${i}" id="perspective-${i}">
+  <figure class="lens-mobile-image">${digital('designer','The same designer, viewed through a different professional perspective','loading="lazy"')}</figure>
+  <h2 class="lens-title">${lens.name}.</h2>
+  <div class="lens-details"><h3>${lens.title}</h3><p>${lens.description}</p><div class="lens-model"><strong>${lens.model}</strong><p>${lens.terms.join(' · ')}</p></div></div>
+</article>`).join('');
 export const filmMarkup = `
 <a class="skip" href="#main">Skip to content</a>
 <header class="chrome"><a class="brand" href="/">Personality Assessor</a><nav aria-label="Main navigation"><a href="/how-it-works">The assessment</a><a href="/career-intelligence">Career possibilities</a><a href="/trust">Our approach</a></nav><button id="open-menu" aria-expanded="false" aria-controls="film-menu">Menu <span aria-hidden="true">+</span></button></header>
@@ -16,22 +26,26 @@ export const filmMarkup = `
 <div class="stage-question" id="stage-question"><h2>The way you think.<br>The choices you make.</h2><p>An assessment of your personality, interests and work values. Built from your responses.</p><a class="text-link" href="/how-it-works">Explore the assessment ↗</a></div>
 <div class="scroll-cue" aria-hidden="true">Scroll to discover <span>↓</span></div>
 </div></section>
-<section class="stage-evidence" id="stage-evidence">
-<div class="evidence-heading"><h2>You are more<br>than a type.</h2><p>Understand the dimensions behind your decisions. Explore how your interests, priorities and behavior relate to the work you want to do.</p></div>
-<div class="evidence-body"><figure class="evidence-photo">${digital('designer','The same product designer, considering an interface','loading="lazy"')}</figure><div class="evidence-dimensions"><article data-dimension><h3>How you think.</h3><span class="dimension-name">Personality</span><p>How you tend to think, respond and relate to others.</p></article><article data-dimension><h3>What draws you.</h3><span class="dimension-name">Interests</span><p>The activities and problems that draw your attention.</p></article><article data-dimension><h3>What matters.</h3><span class="dimension-name">Work values</span><p>What matters to you in a working environment.</p></article><a class="text-link" href="/methodology">See the models behind the profile ↗</a></div></div>
+<section class="stage-evidence lenses-track" id="stage-evidence" aria-label="Three perspectives in your professional profile">
+<div class="lenses-stage"><figure class="lens-photo" data-transition-media>${digital('designer','One working context, considered through personality, interests and work values','loading="lazy"')}</figure>
+${lensMarkup}<nav class="lens-controls" aria-label="Explore the profile lenses">${perspectiveLenses.map((lens,i)=>`<button data-lens-select="${i}" aria-current="${i===0?'true':'false'}">${lens.name}</button>`).join('')}<a class="text-link" href="/methodology">Understand the models ↗</a></nav><a class="text-link lens-fallback-link" href="/methodology">Understand the models ↗</a></div>
 </section>
 <section class="conditions-track" id="conditions" aria-label="How working conditions shape an experience"><div class="conditions-stage" id="context-stack">
 <article class="condition" data-context="0">${digital('code-detail','A developer concentrating on a software problem','loading="lazy"')}<div class="condition-copy"><h2>Room to<br>get it right.</h2><p>Some work asks for precision. Clear expectations. Time to pay attention to the details.</p></div></article>
-<article class="condition" data-context="1">${photo('1742440710402-721332ea7898','An independent workspace photographed by Nasik Lababan','loading="lazy"')}<div class="condition-copy"><h2>Space to<br>find your way.</h2><p>Other work gives you room to decide. Choose an approach. Make it your own.</p></div></article>
-<article class="condition" data-context="2">${digital('studio','A group collaborating with laptops at a table','loading="lazy"')}<div class="condition-copy"><h2>Better<br>together.</h2><p>Ideas change when they are shared. A different perspective can open a different possibility.</p></div></article>
+<article class="condition" data-context="1">${digital('designer','A designer independently developing an interface','loading="lazy"')}<div class="condition-copy"><h2>Space to<br>find your way.</h2><p>Other work gives you room to decide. Choose an approach. Make it your own.</p></div></article>
+<article class="condition" data-context="2">${digital('collaborate','A group collaborating with laptops at a table','loading="lazy"')}<div class="condition-copy"><h2>Better<br>together.</h2><p>Ideas change when they are shared. A different perspective can open a different possibility.</p></div></article>
 <nav class="condition-controls" aria-label="Working conditions"><button data-context-button="0" aria-current="true">Precision</button><button data-context-button="1" aria-current="false">Autonomy</button><button data-context-button="2" aria-current="false">Collaboration</button></nav>
 </div></section>
 <section class="career-track" id="career"><div class="career-heading"><h2>Where could<br>you belong?</h2><p>Look beyond a job title. Explore the capabilities, interests and working conditions behind a professional direction.</p><a class="text-link" href="/career-intelligence">Explore career possibilities ↗</a></div>
 <div class="crawler-tools"><p>Ideas. Systems. People. A direction of your own.</p><button id="crawler-pause" aria-pressed="false" type="button">Pause gallery <span aria-hidden="true">Ⅱ</span></button></div>
 <div class="career-gallery" id="image-crawler" aria-label="Explore digital working environments" data-pointer="Drag ↔"><div class="crawler-belt">${galleryCycle(false)}${galleryCycle(true)}${galleryCycle(true)}</div></div><p class="media-note">Photographs illustrate working environments. Career fit is calculated from a completed profile.</p></section>
-<section class="time-scene" id="time"><div class="time-heading"><h2>A new perspective.<br>Still you.</h2><p>Your next assessment can add context to the last. Keep the earlier record. Notice what changes.</p><a class="text-link" href="/progress">Explore your progress ↗</a></div><div class="comparison" id="comparison">${photo('1742440710402-721332ea7898','Illustrative independent working environment','class="time-before" loading="lazy"')}<div class="time-mask">${digital('collaborate','Illustrative collaborative digital workspace','class="time-after" loading="lazy"')}</div><div class="comparison-line" aria-hidden="true"><span>↔</span></div><span class="comparison-label left">Independent work</span><span class="comparison-label right">Working together</span></div><label class="comparison-control" for="time-range">Compare the environments<input id="time-range" type="range" min="5" max="95" value="55" aria-label="Compare illustrative working environments"></label><p class="media-note">An illustration of different conditions, not a personal assessment history.</p></section>
-<section class="trust" id="trust"><div class="trust-heading"><h2>Insight you<br>can question.</h2><p>A useful profile should explain its basis. See what you supplied, what was calculated and where the interpretation stops.</p><a class="text-link" href="/trust">Follow the evidence ↗</a></div><div class="source-trace" id="source-trace"><figure>${photo('1745845289797-913815100704','Hands examining printed material','loading="lazy"')}</figure><div><h3>Keep the evidence in view.</h3><p>Your answers provide the starting point. The profile adds an interpretation. Read them together, with the limits of the assessment in view.</p></div></div></section>
-<section class="finale" id="finale">${digital('designer','The original designer returns to the closing scene','loading="lazy"')}<div class="finale-copy"><h2>Make your<br>next move<br>with perspective.</h2><a class="action" href="${start}">Discover your profile <span aria-hidden="true">↗</span></a></div></section>
+<section class="time-scene time-journey" id="time"><div class="time-stage">
+<figure class="time-portrait" data-transition-media>${digital('designer','The original working context returns for another perspective','loading="lazy"')}</figure>
+<div class="time-copy"><h2>A new perspective.<br>Still you.</h2><p>Return as your responsibilities change. A personal comparison needs two complete assessments, with the earlier responses and context still in view.</p><a class="text-link" href="/progress">Explore your progress ↗</a></div>
+<div class="time-return"><h3>Context changes.<br>The record stays.</h3><p>A personal comparison begins with two complete assessments.</p><a class="text-link" href="/progress">Return with perspective ↗</a></div>
+</div></section>
+<section class="trust" id="trust"><div class="trust-heading"><h2>Insight.<br>With its evidence.</h2><p>Follow the reading back to its source. See what you supplied, how the calculation works and where the interpretation ends.</p><a class="text-link" href="/trust">Follow the evidence ↗</a></div><div class="source-trace" id="source-trace"><figure>${digital('wireframe','A real interface wireframe showing the structure behind an idea','loading="lazy"')}</figure><div><h3>Your words stay in view.</h3><p>Your responses are the source. The profile adds a reading. Keep both available, with the basis and limits of the assessment.</p></div></div></section>
+<section class="finale" id="finale">${digital('designer','The original designer returns to the closing scene','loading="lazy"')}<div class="finale-copy"><h2>Your next move.<br>In perspective.</h2><a class="action" href="${start}">Discover your profile <span aria-hidden="true">↗</span></a></div></section>
 </main>
 <footer class="grand-footer"><div class="footer-invitation"><h2>A clearer view.<br>A considered next move.</h2><a class="action" href="${start}">Discover your profile <span aria-hidden="true">↗</span></a></div><nav aria-label="Footer navigation"><a href="/how-it-works">The assessment</a><a href="/career-intelligence">Career possibilities</a><a href="/progress">Your progress</a><a href="/methodology">Methodology</a><a href="/trust">Trust</a><a href="/privacy">Privacy</a><a href="/login">Sign in</a></nav><a class="footer-wordmark" href="/" aria-label="Personality Assessor home"><span>Personality</span><span>Assessor</span></a><div class="footer-bottom"><p>Professional insight. Not a clinical diagnosis.</p><span>By Valtum Studio</span></div></footer><div class="film-pointer" aria-hidden="true"></div>
 <div class="drawer" id="film-menu" role="dialog" aria-modal="true" aria-label="Site navigation" hidden><button id="close-menu">Close ×</button><nav><a href="/">Home</a><a href="/how-it-works">The assessment</a><a href="/career-intelligence">Career possibilities</a><a href="/progress">Your progress</a><a href="/trust">Trust & evidence</a><a href="/methodology">Methodology</a><a href="/privacy">Privacy</a></nav><a class="action" href="${start}">Discover your profile ↗</a></div>`;
@@ -53,4 +67,71 @@ export const filmCSS = `
 .grand-footer{display:block;background:var(--ink);color:var(--paper);padding:100px var(--side) 35px;overflow:hidden}.footer-invitation{display:flex;align-items:end;justify-content:space-between;gap:40px;margin-bottom:70px}.footer-invitation h2{font-size:clamp(40px,4.7vw,80px);line-height:1.05}.grand-footer .action{background:var(--paper);color:var(--ink)}.grand-footer nav{display:flex;flex-wrap:wrap;gap:12px 30px;font-size:14px}.grand-footer nav a{padding:12px 0}.footer-wordmark{display:block;margin:75px 0 55px;font-size:clamp(80px,17.2vw,330px);line-height:.83;letter-spacing:-.075em;font-weight:450}.footer-wordmark span{display:block}.footer-wordmark span:last-child{margin-left:25%}.footer-bottom{display:flex;justify-content:space-between;gap:30px;font-size:12px}.grand-footer .footer-bottom p{width:auto;font-size:12px}.film-pointer{position:fixed;left:0;top:0;z-index:300;width:86px;height:86px;border-radius:50%;background:var(--paper);color:var(--ink);display:grid;place-items:center;font-size:12px;pointer-events:none;opacity:0;transform:translate(-50%,-50%);box-shadow:0 0 0 1px #15221e18}
 @media(max-width:800px){.evidence-body{display:flex}.evidence-photo{position:relative;top:0;height:440px;min-height:0}.evidence-dimensions article,.evidence-dimensions article:last-of-type{min-height:0;padding:28px 0 35px}.evidence-dimensions h3{font-size:12vw;margin-bottom:20px}.crawler-tools{margin-top:38px;align-items:start}.crawler-tools p{max-width:160px;line-height:1.5}.crawler-tools button{padding:13px;font-size:12px}.crawler-tools button span{padding-left:8px}.career-gallery{touch-action:pan-x pan-y;padding:0 var(--side)}.crawler-cycle{gap:20px;padding-right:20px}.career-image,.career-image:nth-child(2),.career-image:nth-child(3),.career-image:nth-child(4),.career-image:nth-child(5){width:76vw;height:100vw;max-height:540px}.career-image:nth-child(even){height:83vw}.grand-footer{padding:70px var(--side) 30px}.footer-invitation{display:block;margin-bottom:35px}.footer-invitation h2{font-size:9vw;margin-bottom:30px}.grand-footer nav{gap:8px 23px;font-size:13px}.footer-wordmark{font-size:17vw;margin:65px 0 45px;line-height:.9}.footer-wordmark span:last-child{margin-left:18%}.footer-bottom{flex-direction:column;gap:15px}.film-pointer{display:none}}
 @media(prefers-reduced-motion:reduce){.opening-track,.conditions-track{height:auto}.opening-stage{position:relative;height:auto;min-height:100svh}.hero-media{height:55svh}.world-frame{position:relative;height:100svh}.stage-question{position:relative;top:auto;left:auto;max-width:none;padding:65px var(--side);color:var(--ink);opacity:1!important;visibility:visible!important;background:var(--paper)}.conditions-stage{position:relative;height:auto}.condition{position:relative;min-height:80svh;clip-path:none!important}.condition-controls{display:none}.career-image img{transition:none}}
+/* Three lenses share one photographic context and change its framing. */
+.chrome{position:fixed;transition:background .25s,color .25s}
+.chrome.is-scrolled{background:var(--ink);color:var(--paper)}
+.chrome.is-scrolled button{background:var(--paper);color:var(--ink)}
+.stage-evidence.lenses-track{padding:0;background:var(--paper)}
+.lenses-stage{position:relative;padding:65px var(--side)}
+.lens-photo{display:none}
+.lens-scene{position:relative;padding-bottom:70px}
+.lens-mobile-image{height:54svh;min-height:300px;margin-bottom:35px;overflow:hidden}
+.lens-mobile-image img{object-position:59% center}
+.lens-title{font-size:clamp(50px,9vw,130px);line-height:1.02;margin-bottom:30px}
+.lens-details h3{font-size:28px;font-weight:450;letter-spacing:-.035em;line-height:1.12;margin:0 0 18px}
+.lens-details>p{font-size:17px;line-height:1.6;max-width:350px}
+.lens-model{margin-top:30px;max-width:430px}
+.lens-model strong{font-size:13px;font-weight:550}
+.lens-model p{font-size:12px;line-height:1.7;opacity:.7;margin-top:10px}
+.lens-controls{display:none}
+.lenses-track.is-driven{height:300svh}
+.is-driven .lenses-stage{position:sticky;top:88px;height:calc(100svh - 88px);min-height:600px;padding:0;overflow:hidden;isolation:isolate}
+.is-driven .lens-photo{display:block;position:absolute;inset:0;clip-path:inset(12% 5% 12% 42%);overflow:hidden}
+.is-driven .lens-photo img{object-position:59% center;transform:scale(1.08)}
+.is-driven .lens-mobile-image{display:none}
+.is-driven .lens-scene{position:absolute;inset:0;padding:0;z-index:2}
+.is-driven .lens-scene:not(:first-of-type){opacity:0;visibility:hidden}
+.is-driven .lens-title{position:absolute;left:var(--side);top:23%;background:var(--paper);padding:0 .18em .08em 0;font-size:clamp(76px,9.6vw,155px);line-height:1.02;margin:0;width:max-content;max-width:90%}
+.is-driven .lens-details{position:absolute;bottom:17%;left:var(--side);width:29%;background:var(--paper);padding:25px 15px 0 0}
+.is-driven .lens-details h3{font-size:clamp(23px,2.1vw,34px)}
+.is-driven .lens-details>p{font-size:15px;line-height:1.55}
+.is-driven .lens-model{margin-top:22px}
+.is-driven [data-lens="1"] .lens-title{left:48%;top:18%}
+.is-driven [data-lens="1"] .lens-details{left:auto;right:var(--side);width:29%;bottom:17%;padding:25px 0 0 20px}
+.is-driven [data-lens="2"] .lens-title{top:12%}
+.is-driven [data-lens="2"] .lens-details{width:29%;bottom:12%}
+.is-driven .lens-controls{display:flex;align-items:center;gap:32px;position:absolute;left:var(--side);right:var(--side);bottom:3%;z-index:4}
+.lens-controls button{background:none;color:var(--ink);font-size:13px;min-height:44px;padding:10px 0;opacity:.5}
+.lens-controls button[aria-current=true]{opacity:1;text-decoration:underline;text-underline-offset:7px}
+.lens-controls .text-link{margin-left:auto;font-size:12px}
+/* Return to the same photographic source instead of pretending to compare personal history. */
+.time-journey{padding:70px var(--side);background:var(--ink);color:var(--paper)}
+.time-stage{position:relative}
+.time-portrait{height:65svh;overflow:hidden;margin-bottom:45px}
+.time-portrait img{object-position:59% center}
+.time-copy h2{font-size:clamp(50px,6.5vw,105px);line-height:1.02;margin-bottom:30px}
+.time-copy p{max-width:390px;font-size:17px;line-height:1.6}
+.time-return{display:none;margin-top:65px;padding:0 0 30px}
+.time-return h3{font-size:clamp(38px,5vw,85px);line-height:1.06;letter-spacing:-.055em;font-weight:450;margin-bottom:25px}
+.time-return p{font-size:15px;line-height:1.6}
+.time-journey.is-driven{height:185svh;padding:0}
+.time-journey.is-driven .time-stage{height:calc(100svh - 88px);position:sticky;top:88px;min-height:600px;overflow:hidden;isolation:isolate}
+.time-journey.is-driven .time-portrait{position:absolute;inset:0;height:100%;margin:0;clip-path:inset(8% 43% 8% 5%)}
+.time-journey.is-driven .time-portrait img{transform:scale(1.08)}
+.time-journey.is-driven .time-copy{position:absolute;left:60%;right:var(--side);top:21%;z-index:2}
+.time-journey.is-driven .time-copy h2{font-size:clamp(45px,4.8vw,80px)}
+.time-journey.is-driven .time-copy p{font-size:15px}
+.time-journey.is-driven .time-return{display:block;position:absolute;left:var(--side);bottom:14%;max-width:70%;z-index:3;margin:0;opacity:0;visibility:hidden;background:var(--ink);padding:24px 30px 20px 0}
+.trust{padding-top:140px;padding-bottom:140px;grid-template-columns:1fr 54%;gap:5%}
+.trust-heading h2{font-size:clamp(62px,7.2vw,115px)}
+.source-trace figure{height:520px}
+.source-trace>div{margin:-100px 0 0 22%;padding:35px 40px}
+.source-trace h3{font-size:clamp(30px,3.2vw,48px);margin-bottom:20px}
+.finale-copy{top:31%}.finale h2{font-size:clamp(70px,9vw,155px)}
+@media(max-width:800px){
+ .lenses-stage{padding:65px var(--side) 30px}.lens-title{font-size:13vw}.lens-mobile-image{height:48svh}.lens-details h3{font-size:28px}.lens-model{max-width:350px}
+ .time-journey{padding:70px var(--side)}.time-portrait{height:55svh}.time-copy h2{font-size:12vw}.time-copy p{font-size:15px}.time-return{margin-top:55px}.time-return h3{font-size:10vw}
+ .trust{padding:75px var(--side)}.source-trace figure{height:380px}.source-trace>div{margin-left:10%;padding:30px}.trust-heading h2{font-size:13vw}.finale h2{font-size:13vw}
+}
+.is-driven .lens-fallback-link{display:none}
 `;

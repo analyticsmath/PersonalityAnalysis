@@ -12,12 +12,12 @@ const PHOTO={
   source:'/media/public-experience/digital/designer-1920.webp',
   detail:'/media/public-experience/digital/wireframe-1920.webp',
   precision:PATH+'1645258044234-f4ba2655baf1.jpg',
-  autonomy:PATH+'1742440710402-721332ea7898.jpg',
+  autonomy:'/media/public-experience/digital/code-detail-1920.webp',
   shared:'/media/public-experience/digital/studio-1920.webp',
   collaboration:'/media/public-experience/digital/collaborate-1920.webp',
   pressure:PATH+'1554863798-d89af6030d7d.jpg',
   inquiry:'/media/public-experience/digital/code-detail-1920.webp',
-  proof:PATH+'1745845289797-913815100704.jpg',
+  proof:'/media/public-experience/digital/wireframe-1920.webp',
   design:'/media/public-experience/digital/designer-1920.webp'
 };
 // Scored profiles remain subject to evidence-sufficiency checks.
@@ -44,6 +44,19 @@ function usePageChoreography(ref) {
           gsap.fromTo(chapter,{clipPath:'inset(8% 5% 0)'},{clipPath:'inset(0)',ease:'none',scrollTrigger:{trigger:chapter,start:'top 90%',end:'top 25%',scrub:.22}});
           gsap.fromTo(chapter.querySelector('img'),{scale:1.15,yPercent:-4},{scale:1.15,yPercent:4,ease:'none',scrollTrigger:{trigger:chapter,start:'top bottom',end:'bottom top',scrub:.25}});
         });
+        const methodScenes=[...scope.querySelectorAll('[data-method-scene]')];
+        if(methodScenes.length){
+          let current=0;
+          const show=index=>{
+            if(index===current)return;
+            const previous=methodScenes[current],next=methodScenes[index];current=index;
+            gsap.killTweensOf(methodScenes);
+            methodScenes.forEach(scene=>{scene.classList.remove('is-current');scene.setAttribute('aria-hidden',String(scene!==next));gsap.set(scene,{opacity:scene===previous?1:0,zIndex:0});});
+            gsap.set(previous,{zIndex:1});gsap.set(next,{opacity:1,zIndex:2});
+            gsap.fromTo(next,{clipPath:'inset(100% 0 0)'},{clipPath:'inset(0)',duration:.65,ease:'power3.inOut',onComplete:()=>{if(methodScenes[current]===next)gsap.set(previous,{opacity:0});}});
+          };
+          scope.querySelectorAll('[data-method-step]').forEach((step,index)=>ScrollTrigger.create({trigger:step,start:'top 58%',end:'bottom 58%',onEnter:()=>show(index),onEnterBack:()=>show(index)}));
+        }
         const comparator=scope.querySelector('.vt-time-stage');
         if(comparator) gsap.fromTo(comparator.querySelectorAll('img'),{scale:1.1,yPercent:-3},{scale:1.1,yPercent:3,ease:'none',scrollTrigger:{trigger:comparator,start:'top bottom',end:'bottom top',scrub:.25}});
         scope.querySelectorAll('[data-reveal]').forEach(el=> {
@@ -107,20 +120,21 @@ export function HowCinematicPage() {
     ['See what contributes.','Career comparisons use explicit weights for interests, skills, values, traits, education and goals. You can inspect the calculation.'],
     ['Bring the picture together.','Your professional profile connects the interpretation to its evidence and keeps its limits visible.']
   ];
+  const methodImages=[PHOTO.detail,PHOTO.source,PHOTO.collaboration,PHOTO.inquiry,PHOTO.source];
   return <PageFrame className="how">
     <Cover lines={['From your answers.','To your perspective.']} image={PHOTO.detail} alt="A website wireframe sketched on paper" description="Understand how your responses contribute to a profile of your personality, interests and work values." position="55% 45%" variant="how"/>
     <div className="vt-essay-intro" data-reveal><h2>Before the inference,<br/><em>there is a source.</em></h2><p>A single answer can suggest questions worth asking. A scored profile requires sufficient independent evidence.</p></div>
     <div className="vt-how-sequence">
       <aside className="vt-how-fixed">
-        <img src={PHOTO.source} loading="lazy" alt="A product designer sketching an interface" />
+        <div className="vt-method-gallery">{methodImages.map((image,i)=><figure key={i} data-method-scene={i} className={i===0?'is-current':''} aria-hidden={i!==0}><img src={image} loading="lazy" alt={['A wireframe preserves the structure behind an idea','A designer considers an interface in context','Different people bring different views to the same work','Software makes a calculation inspectable','The original working context returns to the profile'][i]}/></figure>)}</div>
         <div className="vt-how-fixed-shade"/><SourceNote dark/>
       </aside>
       <div className="vt-how-steps">
-        {steps.map((step,i)=><article key={step.id} className="vt-how-step" id={'step-'+step.id} data-reveal>
+        {steps.map((step,i)=><article key={step.id} className="vt-how-step" data-method-step={i} id={'step-'+step.id} data-reveal>
 
           <h2>{copy[i][0]}</h2><p>{copy[i][1]}</p>
           {i===1&&<div className="vt-clause-pair"><span>Your words and their context</span><span>The patterns they may suggest</span></div>}
-          {i===2&&<div className="vt-framework-small">{PUBLIC_CONTENT.home.models.list.slice(0,4).map(x=><span key={x.id}>{x.name}</span>)}</div>}
+          {i===2&&<div className="vt-framework-small">{PUBLIC_CONTENT.home.models.list.slice(0,3).map(x=><span key={x.id}>{x.name}</span>)}</div>}
           {i===3&&<div className="vt-weight-tracks">{weights.map(w=><div key={w.id}><span>{w.label}</span><strong>{w.percentage}%</strong><i style={{width:w.percentage*3+'%'}}/></div>)}</div>}
         </article>)}
       </div>
@@ -130,6 +144,11 @@ export function HowCinematicPage() {
   </PageFrame>;
 }
 
+const displayRequirement=value=>({
+  'javascript':'JavaScript', 'typescript':'TypeScript', 'node.js':'Node.js', 'react':'React', 'html/css':'HTML & CSS',
+  'apis':'APIs', 'api design':'API design', 'sql':'SQL', 'nosql':'NoSQL', 'python':'Python', 'c++':'C++',
+  'ci/cd':'CI/CD', 'aws':'AWS', 'ux design':'UX design', 'ui design':'UI design',
+}[value] || value.charAt(0).toUpperCase()+value.slice(1));
 const ROLE_KEYS=Object.keys(careersData);
 const mediaForRole=(key)=>{
   if(/designer|frontend|product_manager/.test(key))return PHOTO.design;
@@ -167,7 +186,7 @@ export function CareerCinematicPage(){
             const role=careersData[k];
             return <figure data-sequence-panel key={k} aria-hidden={driven?key!==k:undefined} className={key===k?'is-selected':''}>
               <div className="vt-career-image-frame" data-transition-media={key===k?"":undefined}><img src={mediaForRole(k)} loading="lazy" alt={'Illustrative professional working context for '+role.title}/></div>
-              <figcaption className="vt-career-inspection"><h2>{role.title}</h2><div className="vt-career-inspection-grid"><div><strong>Core capabilities</strong><p>{role.skills.slice(0,5).join(' · ')}</p></div><div><strong>Foundational domains</strong><p>{role.subjects.slice(0,4).join(' · ')}</p></div></div><small>Occupational requirements. Not a personal career-fit score.</small></figcaption>
+              <figcaption className="vt-career-inspection"><h2>{role.title}</h2><div className="vt-career-inspection-grid"><div><strong>What the work calls for</strong><p>{role.skills.slice(0,5).map(displayRequirement).join(' · ')}</p></div><div><strong>Knowledge behind the work</strong><p>{role.subjects.slice(0,4).map(displayRequirement).join(' · ')}</p></div></div><small>Occupational requirements. Not a personal career-fit score.</small></figcaption>
             </figure>;
           })}</div></div>
         </div>
@@ -182,7 +201,7 @@ export function ProgressCinematicPage(){
   const [split,setSplit]=useState(55);
   const content=PUBLIC_CONTENT.progress;
   return <PageFrame className="progress">
-    <Cover lines={['A little distance.','A different view.']} image={PHOTO.autonomy} alt="A person working independently in a wood-lined study environment" description={content.hero.support} position="center 52%" variant="progress"/>
+    <Cover lines={['A little distance.','A different view.']} image={PHOTO.autonomy} alt="A developer concentrating on work at a laptop" description={content.hero.support} position="center 52%" variant="progress"/>
     <div className="vt-essay-intro" data-reveal><h2>Time adds context.<br/><em>It does not erase.</em></h2><p>Compare illustrative working environments. A genuine personal change requires at least two complete assessment records.</p></div>
     <section className="vt-time-comparison" aria-label="Illustrative timeline comparator">
       <div className="vt-time-stage" style={{'--split':split+'%'}}>
@@ -202,19 +221,26 @@ export function ProgressCinematicPage(){
   </PageFrame>;
 }
 
+const TRUST_READINGS={
+  supplied:['Your response, in context.','The words you entered remain the starting point. They stay with the question and the situation they describe.'],
+  inferred:['An interpretation, with limits.','Personality and interest dimensions describe patterns across your responses. Scored dimensions need enough evidence; one answer is not a result.'],
+  calculated:['A calculation you can inspect.','Career comparisons bring interests, skills, values, traits, education and goals together through explicit weights.'],
+  compared:['Different work. Different demands.','Explore engineering, design and analytical roles against their own capabilities and foundational domains.'],
+  controlled:['Your information. Your choice.','Review your responses, export your record and manage deletion through the controls in your account.'],
+};
 export function TrustCinematicPage(){
   const steps=PUBLIC_CONTENT.trust.recordStateSteps;
   const [active,setActive]=useState(0);
   const sequence=useRef(null);
   const {controller,driven}=useScrollSequence(sequence,steps.length,setActive,"trust");
   return <PageFrame className="trust">
-    <Cover lines={['Nothing useful','without trust.']} image={PHOTO.proof} alt="Hands examining and arranging physical printed materials" description="See the evidence behind an interpretation. Understand its limits. Keep control of your information." variant="trust"/>
+    <Cover lines={['Insight.','With its evidence.']} image={PHOTO.proof} alt="An interface wireframe showing the thinking behind an idea" description="See the evidence behind an interpretation. Understand its limits. Keep control of your information." variant="trust"/>
     <div className="vt-essay-intro" data-reveal><h2>Inspect the reading.<br/><em>Then its origin.</em></h2><p>Follow the stages from a contextual answer to a professional comparison. Each stage has a different purpose and a different limit.</p></div>
     <section ref={sequence} className="vt-trust-sequence" aria-label="Explore the evidence chain">
       <div className="vt-trust-stage" data-sequence-stage><div className="vt-trust-panel-window"><div className="vt-trust-belt" data-sequence-belt>
         {steps.map((step,i)=><article className="vt-trust-inspection" data-sequence-panel key={step.id} aria-hidden={driven?active!==i:undefined}>
-          <div className="vt-trust-original" data-transition-media={active===i?"":undefined}><img src={[PHOTO.detail,PHOTO.design,PHOTO.inquiry,PHOTO.collaboration,PHOTO.proof][i]} loading="lazy" alt={['A website wireframe showing the structure of an idea','A designer considering the details of an interface','A developer working with software','Colleagues sharing a digital working environment','Hands reviewing printed source material'][i]}/><span className="vt-trust-scene-title" aria-hidden="true">{step.name}</span><div><p className="vt-record-statement">{[RECORD_STATEMENT,'An interpretation begins with context.','See what contributes to the calculation.','A direction deserves more than one perspective.','Your record remains yours to inspect.'][i]}</p></div></div>
-          <div className="vt-trust-data"><h2>{step.name}</h2><strong>{step.title}</strong><p>{step.description}</p><p className="vt-trust-note">A personal profile requires enough independent evidence. One response is a starting point, not a conclusion.</p></div>
+          <div className="vt-trust-original" data-transition-media={active===i?"":undefined}><img src={[PHOTO.detail,PHOTO.design,PHOTO.inquiry,PHOTO.collaboration,PHOTO.source][i]} loading="lazy" alt={['A website wireframe showing the structure of an idea','A designer considering the details of an interface','A developer working with software','Colleagues sharing a digital working environment','A designer reviewing their own digital work'][i]}/><span className="vt-trust-scene-title" aria-hidden="true">{step.name}</span><div><p className="vt-record-statement">{[RECORD_STATEMENT,'An interpretation begins with context.','See what contributes to the calculation.','A direction deserves more than one perspective.','Your record remains yours to inspect.'][i]}</p></div></div>
+          <div className="vt-trust-data"><h2>{step.name}</h2><strong>{TRUST_READINGS[step.id][0]}</strong><p>{TRUST_READINGS[step.id][1]}</p></div>
         </article>)}
       </div></div><div className="vt-trust-step-buttons" role="group" aria-label="Select provenance stage">{steps.map((step,i)=><button key={step.id} className={i===active?'is-selected':''} aria-pressed={i===active} onClick={()=>controller.current.select(i)}>{step.name}</button>)}</div></div>
     </section>

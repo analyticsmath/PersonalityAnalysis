@@ -977,3 +977,32 @@ each photo owns a separate, unobscured plane. */
   transform:none;
   will-change:auto;
 }
+
+/* A source, interpretation and calculation share a photographic thread. */
+.vt-method-gallery{position:absolute;inset:0;overflow:hidden}
+.vt-method-gallery figure{position:absolute;inset:0;margin:0;opacity:0;overflow:hidden;isolation:isolate}
+.vt-method-gallery figure.is-current{opacity:1}
+.vt-method-gallery img{width:100%;height:100%;object-fit:cover;object-position:center}
+.vt-how-fixed-shade{pointer-events:none}
+.vt-how-steps{padding-top:55px;padding-bottom:55px;background:#15221e}
+.vt-how-step{min-height:65svh;padding:55px 0}
+.vt-cinema .vt-how-step h2{font-size:clamp(40px,4vw,65px);margin-top:0}
+.vt-how-step>p{font-size:16px;line-height:1.65;color:#d2dfd7}
+.vt-framework-small{display:flex;flex-wrap:wrap;gap:16px 25px}
+.vt-framework-small span{border:0;padding:0;font:16px 'Instrument Sans',Arial,sans-serif}
+.vt-clause-pair span{border:0;background:none;padding:0;font-size:15px}
+.vt-weight-tracks i{background:#8db39e}
+.vt-cinema .vt-trust-data>strong{font-size:22px;line-height:1.2;letter-spacing:-.025em;font-weight:450}
+.vt-trust-data>p{font-size:17px;line-height:1.65}
+.vt-cover--trust .vt-cover-media{left:35%;right:5%;top:13%;bottom:12%}
+.vt-cover--trust .vt-cover-shade{background:none!important}
+.vt-cover--trust .vt-cover-copy{justify-content:end;padding-bottom:14svh}
+.vt-cover--trust h1{background:#15221e;padding:15px 25px 25px 0;width:max-content;max-width:90%}
+.vt-cover--trust .vt-cover-copy p{max-width:300px;font-size:15px}
+@media(max-width:800px){
+ .vt-how-step{min-height:0;padding:45px 0}.vt-how-steps{padding-top:25px;padding-bottom:25px}
+ .vt-how-fixed{position:relative;height:65svh}.vt-method-gallery{height:100%}
+ .vt-cover--trust .vt-cover-media{left:var(--vt-side);right:var(--vt-side);top:15%;bottom:27%}
+ .vt-cover--trust .vt-cover-copy{padding-bottom:8svh}
+ .vt-cinema .vt-trust-data>strong{font-size:18px}
+}
