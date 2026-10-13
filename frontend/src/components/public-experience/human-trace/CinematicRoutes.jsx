@@ -52,8 +52,8 @@ function usePageChoreography(ref) {
             const previous=methodScenes[current],next=methodScenes[index];current=index;
             gsap.killTweensOf(methodScenes);
             methodScenes.forEach(scene=>{scene.classList.remove('is-current');scene.setAttribute('aria-hidden',String(scene!==next));gsap.set(scene,{opacity:scene===previous?1:0,zIndex:0});});
-            gsap.set(previous,{zIndex:1});gsap.set(next,{opacity:1,zIndex:2});
-            gsap.fromTo(next,{clipPath:'inset(100% 0 0)'},{clipPath:'inset(0)',duration:.65,ease:'power3.inOut',onComplete:()=>{if(methodScenes[current]===next)gsap.set(previous,{opacity:0});}});
+            gsap.set(previous,{zIndex:1,clipPath:'inset(0)'});gsap.set(next,{opacity:1,zIndex:2});
+            gsap.fromTo(next,{clipPath:'inset(100% 0 0 0)'},{clipPath:'inset(0 0 0 0)',duration:.65,ease:'power3.inOut',onComplete:()=>{if(methodScenes[current]===next)gsap.set(previous,{opacity:0});}});
           };
           scope.querySelectorAll('[data-method-step]').forEach((step,index)=>ScrollTrigger.create({trigger:step,start:'top 58%',end:'bottom 58%',onEnter:()=>show(index),onEnterBack:()=>show(index)}));
         }
@@ -132,6 +132,7 @@ export function HowCinematicPage() {
       <div className="vt-how-steps">
         {steps.map((step,i)=><article key={step.id} className="vt-how-step" data-method-step={i} id={'step-'+step.id} data-reveal>
 
+          <figure className="vt-how-mobile-source"><img src={methodImages[i]} loading="lazy" alt={['The structure behind an idea, drawn on paper','A designer considering a digital interface','People sharing different views of the same work','A developer inspecting software','The original professional context returns'][i]}/></figure>
           <h2>{copy[i][0]}</h2><p>{copy[i][1]}</p>
           {i===1&&<div className="vt-clause-pair"><span>Your words and their context</span><span>The patterns they may suggest</span></div>}
           {i===2&&<div className="vt-framework-small">{PUBLIC_CONTENT.home.models.list.slice(0,3).map(x=><span key={x.id}>{x.name}</span>)}</div>}

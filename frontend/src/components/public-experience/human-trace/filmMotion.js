@@ -75,8 +75,8 @@ export function mountHumanTrace(root, navigate) {
       time.classList.add('is-driven');
       const revisit = gsap.timeline({scrollTrigger:{trigger:time,start:'top 88px',end:'bottom bottom',scrub:.28,invalidateOnRefresh:true}});
       revisit.to($('.time-copy'),{x:65,autoAlpha:0,duration:.3,ease:'power2.inOut'},.1)
-        .to($('.time-portrait'),{clipPath:'inset(8% 5% 8%)',duration:.45,ease:'power2.inOut'},.22)
-        .to($('.time-portrait img'),{scale:1.14,xPercent:-2,duration:.7,ease:'none'},0)
+        .to($('.time-portrait'),{clipPath:'inset(8% 5% 8% 5%)',duration:.45,ease:'power2.inOut'},.22)
+        .fromTo($('.time-portrait img'),{scale:1.35,yPercent:-14,xPercent:0},{scale:1.28,yPercent:-12,xPercent:-2,duration:.7,ease:'none'},0)
         .fromTo($('.time-return'),{autoAlpha:0,y:35},{autoAlpha:1,y:0,duration:.25,ease:'power2.out'},.64)
         .to({},{duration:.22});
       }

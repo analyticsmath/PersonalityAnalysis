@@ -41,3 +41,9 @@ Finale: the opening person returns with a clearer invitation, followed by the ap
 One GSAP/Lenis clock owns desktop movement; touch scrolling remains native. Lens and revisiting timelines own their styles and cleanup. Direct lens controls address real scroll positions. Delayed font readiness cannot refresh a disposed film. Reduced motion exposes complete content and leaves no invisible selected-only scenes.
 
 Tests check completed lens holds, bounded reversible geometry, competing-title ownership, canonical model terms and the absence of fabricated participant data. Existing assessment, career, navigation, comparator, gallery and product contracts remain required. Final rendered desktop inspection is separate from tests. Physical-phone performance, a full accessibility audit and an award score are not established by this pass.
+
+## Live review corrections
+
+The first deployment showed three distinct lens compositions with synchronized direct controls. Refined the close photographic views around the working gesture; the wider interests view retains the workspace. Smaller-screen assessment steps receive their own photographs rather than inheriting a desktop-only sticky source.
+
+Review also caught an aperture handoff narrowing into a central strip. The two masks used different shorthand lengths; explicit four-edge masks now keep the left edge fixed while the photo opens. The custom gallery cursor is cleared on page scrolling so a stale Explore affordance cannot remain over an unrelated, noninteractive image.

@@ -79,5 +79,6 @@ export function mountFilmPointer(root) {
   };
   const leave = () => { pointer.style.opacity = '0'; };
   root.addEventListener('pointermove', move); root.addEventListener('pointerleave', leave);
-  return () => { root.removeEventListener('pointermove', move); root.removeEventListener('pointerleave', leave); xTo.tween.kill(); yTo.tween.kill(); };
+  window.addEventListener('scroll',leave,{passive:true});
+  return () => { root.removeEventListener('pointermove', move); root.removeEventListener('pointerleave', leave); window.removeEventListener('scroll',leave); xTo.tween.kill(); yTo.tween.kill(); };
 }

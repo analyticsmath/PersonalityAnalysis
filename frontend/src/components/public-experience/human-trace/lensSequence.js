@@ -19,6 +19,7 @@ export const lensFrame = progress => {
   return { from, to, shift, outgoing, incoming, active: shift < .5 ? from : to };
 };
 const apertures = [[12,5,12,42],[12,38,12,5],[18,5,18,29]];
+const crops = [[1.35,-14],[1.08,0],[1.28,-12]];
 
 /** One real environment stays present while the three model perspectives change its framing. */
 export function mountLensSequence(root, scrollTo) {
@@ -35,7 +36,9 @@ export function mountLensSequence(root, scrollTo) {
     const frame = lensFrame(proxy.progress);
     const mask = apertures[frame.from].map((value,i) => value + (apertures[frame.to][i] - value) * frame.shift);
     photo.style.clipPath = `inset(${mask.map(value=>value+'%').join(' ')})`;
-    image.style.transform = `translateX(${-(frame.from + frame.shift) * 2}%) scale(1.08)`;
+    const zoom=crops[frame.from][0]+(crops[frame.to][0]-crops[frame.from][0])*frame.shift;
+    const lift=crops[frame.from][1]+(crops[frame.to][1]-crops[frame.from][1])*frame.shift;
+    image.style.transform = `translate(${-(frame.from + frame.shift) * 2}%,${lift}%) scale(${zoom})`;
     scenes.forEach((scene,i) => {
       const opacity = i === frame.from ? frame.outgoing : i === frame.to ? frame.incoming : 0;
       scene.style.opacity = opacity;
@@ -52,14 +55,14 @@ export function mountLensSequence(root, scrollTo) {
   const animation = gsap.to(proxy,{progress:1,ease:'none',onUpdate:paint,scrollTrigger:{
     trigger:track,start:'top 88px',end:'bottom bottom',scrub:.28,invalidateOnRefresh:true,onRefresh:paint,
   }});
+  const trigger=animation.scrollTrigger;
   paint();
   return {
     select(index) {
-      const trigger = animation.scrollTrigger;
       scrollTo(trigger.start + (trigger.end-trigger.start)*lensProgress(index));
     },
     dispose() {
-      animation.scrollTrigger.kill(); animation.kill();
+      trigger?.kill(); animation.kill();
       track.classList.remove('is-driven');
       photo.style.clipPath = ''; image.style.transform = '';
       scenes.forEach(scene=>{ scene.style.opacity='';scene.style.visibility='';scene.style.transform='';scene.inert=false;scene.removeAttribute('aria-hidden'); });
