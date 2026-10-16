@@ -7,3 +7,131 @@
 
 /* The route already establishes scroll as the chapter mechanism; do not repeat the instruction throughout the pin. */
 .vt-career-onboarding{display:none}
+
+/* Keep the chrome architectural rather than glassy. */
+.vt-header--scrolled{background:rgba(241,244,241,.985);backdrop-filter:none}
+.vt-index-drawer{box-shadow:none;border-left:1px solid var(--vt-line)}
+.vt-index-backdrop{background:rgba(6,12,9,.64)}
+
+/* Primary actions answer with direction, not a generic floating nudge. */
+.vt-primary{position:relative;overflow:hidden;transform:none!important;transition:background .24s var(--vt-ease),color .24s var(--vt-ease)}
+.vt-primary:hover{transform:none!important;background:#243b31}
+.vt-primary span{transition:transform .28s var(--vt-ease)}
+.vt-primary:hover span{transform:translate3d(4px,-4px,0)}
+.vt-text-link{transition:opacity .2s var(--vt-ease),letter-spacing .28s var(--vt-ease)}
+.vt-text-link:hover{opacity:1;letter-spacing:.015em}
+.vt-index-drawer nav a{transition:opacity .24s var(--vt-ease),padding-left .32s var(--vt-ease)}
+.vt-index-drawer nav a:hover,.vt-index-drawer nav a.is-active{padding-left:10px}
+
+/* Each route enters with a different shot rather than one repeated hero crop. */
+@media (min-width:901px){
+  .vt-cover--how .vt-cover-media{inset:12% 4% 7% 34%}
+  .vt-cover--career .vt-cover-media{inset:9% 3% 8% 39%}
+  .vt-cover--progress .vt-cover-media{inset:17% 6% 7% 27%}
+  .vt-cover--trust .vt-cover-media{inset:8% 3% 10% 31%}
+  .vt-cover--method .vt-cover-media{inset:13% 7% 9% 36%}
+  .vt-cover--privacy .vt-cover-media{inset:20% 8% 10% 43%}
+  .vt-cover--career .vt-cover-copy{padding-bottom:12vh}
+  .vt-cover--trust .vt-cover-copy{padding-bottom:7vh}
+  .vt-cover--privacy .vt-cover-copy{padding-bottom:13vh}
+}
+
+.vt-cover-media{border:1px solid rgba(255,255,255,.1)}
+.vt-cover-photo{will-change:transform}
+.vt-cover:hover .vt-cover-photo{transform:scale(1.04)}
+
+/* How it works: keep the source object materially present while its reading changes. */
+.vt-how-source-card{box-shadow:none;border:1px solid rgba(21,34,30,.16)}
+.vt-how-clause-stage span{border:1px solid rgba(21,34,30,.12)}
+.vt-how-record-stage{border:1px solid rgba(21,34,30,.2)}
+.vt-how-branch-stage span{border:1px solid rgba(21,34,30,.16)}
+.vt-how-trace-stage:after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border:1px solid rgba(255,255,255,.07);
+  border-left:0;
+  border-bottom:0;
+}
+.vt-how-step{position:relative}
+.vt-how-step:before{content:attr(data-how-step);position:absolute;right:0;top:12vh;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--vt-muted)}
+
+/* Career worlds: active media takes ownership; local role exploration remains quiet. */
+.vt-career-world{transform-origin:center;transition:opacity .34s var(--vt-ease),visibility .34s}
+.vt-career-world-media{border-right:1px solid rgba(255,255,255,.08)}
+.vt-career-role-tabs button{position:relative;transition:opacity .2s var(--vt-ease),padding-left .28s var(--vt-ease)}
+.vt-career-role-tabs button:before{content:'';position:absolute;left:0;top:50%;width:0;height:1px;background:var(--vt-accent);transition:width .28s var(--vt-ease)}
+.vt-career-role-tabs button.is-selected{padding-left:18px}
+.vt-career-role-tabs button.is-selected:before{width:10px}
+.vt-career-role-detail{border-top:1px solid rgba(255,255,255,.08)}
+
+/* The temporal comparator shares one crisp seam. */
+.vt-time-stage{border:1px solid var(--vt-line)}
+.vt-time-divider span{border-radius:0;width:46px;height:34px;font-family:'DM Mono',monospace;font-size:11px}
+.vt-time-controls input{cursor:ew-resize}
+
+/* Forensic route: evidence feels inspected, not carded. */
+.vt-trust-record{border-right:1px solid var(--vt-line)}
+.vt-trust-inspector button{position:relative;transition:opacity .22s var(--vt-ease),padding-left .3s var(--vt-ease)}
+.vt-trust-inspector button.is-selected{padding-left:12px}
+.vt-trust-inspector button.is-selected:before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:2px;background:var(--vt-accent)}
+.vt-trust-record__pipeline span.is-active{color:var(--vt-ink)}
+
+/* Publication modes stay intentionally un-cinematic where reading should own the frame. */
+.vt-route--method .vt-header--scrolled,.vt-route--privacy .vt-header--scrolled{background:#f5f4ee}
+.vt-monograph-index a,.vt-privacy-document>nav a{transition:padding-left .28s var(--vt-ease),color .22s var(--vt-ease)}
+.vt-monograph-index a:hover,.vt-privacy-document>nav a:hover{padding-left:8px;color:#000}
+.vt-monograph-articles article,.vt-privacy-document article{position:relative}
+.vt-monograph-articles article:after,.vt-privacy-document article:after{content:'';position:absolute;right:0;top:0;width:36px;height:1px;background:var(--vt-ink)}
+
+/* Chapter handoffs move the directional mark; imagery stays composed rather than zooming on hover. */
+.vt-next>img{transition:none!important}
+.vt-next:hover>img{transform:none!important}
+.vt-next-arrow{transition:transform .32s var(--vt-ease)}
+.vt-next:hover .vt-next-arrow{transform:translate3d(8px,-8px,0)}
+
+@media (max-width:900px), (pointer:coarse){
+  .vt-cover-media{border:0}
+  .vt-cover:hover .vt-cover-photo{transform:scale(1.04)}
+  .vt-how-trace-stage:after{display:none}
+  .vt-how-step:before{top:78px;right:0}
+
+  /* Mobile career is authored as alternating tableaux, not five identical cards. */
+  .vt-career-world{padding-top:34px}
+  .vt-career-world-media{min-height:0!important;border-right:0;overflow:hidden}
+  .vt-career-world:nth-child(1) .vt-career-world-media{width:92%;height:54svh;min-height:410px!important;margin-right:auto}
+  .vt-career-world:nth-child(2) .vt-career-world-media{width:84%;height:61svh;min-height:450px!important;margin-left:auto}
+  .vt-career-world:nth-child(3) .vt-career-world-media{width:96%;height:49svh;min-height:390px!important;margin-right:auto}
+  .vt-career-world:nth-child(4) .vt-career-world-media{width:86%;height:58svh;min-height:430px!important;margin-left:auto}
+  .vt-career-world:nth-child(5) .vt-career-world-media{width:93%;height:52svh;min-height:400px!important;margin-right:auto}
+  .vt-career-world-copy{padding-top:44px;padding-bottom:48px}
+  .vt-career-world:nth-child(even) .vt-career-world-copy{padding-left:32px;padding-right:18px}
+  .vt-career-role-tabs button.is-selected{padding-left:0}
+  .vt-career-role-tabs button:before{display:none}
+
+  /* Trust mobile stages change measure and offset to preserve scene rhythm. */
+  .vt-trust-mobile-states article:nth-child(odd){padding-right:11vw}
+  .vt-trust-mobile-states article:nth-child(even){padding-left:9vw}
+  .vt-trust-mobile-states article:nth-child(3){padding-top:92px;padding-bottom:92px}
+
+  .vt-monograph-articles article:after,.vt-privacy-document article:after{width:24px}
+  .vt-index-drawer{border-left:0}
+}
+
+@media (max-width:520px){
+  .vt-career-world{padding-top:26px}
+  .vt-career-world:nth-child(1) .vt-career-world-media{width:94%;height:50svh;min-height:380px!important}
+  .vt-career-world:nth-child(2) .vt-career-world-media{width:86%;height:56svh;min-height:410px!important}
+  .vt-career-world:nth-child(3) .vt-career-world-media{width:97%;height:46svh;min-height:360px!important}
+  .vt-career-world:nth-child(4) .vt-career-world-media{width:88%;height:53svh;min-height:390px!important}
+  .vt-career-world:nth-child(5) .vt-career-world-media{width:95%;height:49svh;min-height:370px!important}
+  .vt-trust-mobile-states article:nth-child(odd){padding-right:6vw}
+  .vt-trust-mobile-states article:nth-child(even){padding-left:5vw}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .vt-cover:hover .vt-cover-photo,.vt-next:hover>img{transform:none!important}
+  .vt-primary:hover span,.vt-next:hover .vt-next-arrow{transform:none!important}
+  .vt-index-drawer nav a:hover,.vt-index-drawer nav a.is-active,.vt-monograph-index a:hover,.vt-privacy-document>nav a:hover{padding-left:0}
+}
