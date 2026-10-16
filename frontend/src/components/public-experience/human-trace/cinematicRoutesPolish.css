@@ -64,7 +64,7 @@
   border-bottom:0;
 }
 .vt-how-step{position:relative}
-.vt-how-step:before{content:attr(data-how-step);position:absolute;right:0;top:12vh;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--vt-muted)}
+
 
 /* Career worlds: active media takes ownership; local role exploration remains quiet. */
 .vt-career-world{transform-origin:center;transition:opacity .34s var(--vt-ease),visibility .34s}
@@ -113,7 +113,7 @@
 @media (max-width:900px), (pointer:coarse){
   .vt-cover-media{border:0}
   .vt-how-trace-stage:after{display:none}
-  .vt-how-step:before{top:78px;right:0}
+
 
   /* Mobile career is authored as alternating tableaux, not five identical cards. */
   .vt-career-world{padding-top:34px}
