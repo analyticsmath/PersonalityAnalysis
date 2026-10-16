@@ -1,24 +1,23 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LoadingState from './components/ui/LoadingState';
 import ProtectedRoute from './components/ui/ProtectedRoute';
 import { AvatarEventProvider } from './components/avatar/AvatarEvents';
 import PublicMetadata from './components/public/PublicMetadata';
 import { PublicExperienceLayout } from './components/public-experience/shell/PublicExperienceLayout';
-
-// Public Experience Canonical Routes
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
-import LoginPage from './pages/Auth/LoginPage';
-import SignupPage from './pages/Auth/SignupPage';
-import EditorialHowItWorksPage from './pages/editorial/EditorialHowItWorksPage';
-import EditorialCareerIntelligencePage from './pages/editorial/EditorialCareerIntelligencePage';
-import EditorialProgressPage from './pages/editorial/EditorialProgressPage';
-import EditorialMethodologyPage from './pages/editorial/EditorialMethodologyPage';
-import EditorialTrustPage from './pages/editorial/EditorialTrustPage';
-import EditorialPrivacyPage from './pages/editorial/EditorialPrivacyPage';
-import PublicNotFoundPage from './pages/PublicNotFoundPage';
+
+// Secondary public routes are split away from the opening film. Home prewarms the
+// shared cinematic route chunk after first paint so subsequent navigation stays fluid.
+const EditorialHowItWorksPage = lazy(() => import('./pages/editorial/EditorialHowItWorksPage'));
+const EditorialCareerIntelligencePage = lazy(() => import('./pages/editorial/EditorialCareerIntelligencePage'));
+const EditorialProgressPage = lazy(() => import('./pages/editorial/EditorialProgressPage'));
+const EditorialMethodologyPage = lazy(() => import('./pages/editorial/EditorialMethodologyPage'));
+const EditorialTrustPage = lazy(() => import('./pages/editorial/EditorialTrustPage'));
+const EditorialPrivacyPage = lazy(() => import('./pages/editorial/EditorialPrivacyPage'));
+const LoginPage = lazy(() => import('./pages/Auth/LoginPage'));
+const SignupPage = lazy(() => import('./pages/Auth/SignupPage'));
+const PublicNotFoundPage = lazy(() => import('./pages/PublicNotFoundPage'));
 
 // Protected Application Routes (Preserved)
 const DashboardPage = lazy(() => import('./pages/Dashboard'));
@@ -51,11 +50,21 @@ const ProtectedSuspenseFallback = () => (
   </div>
 );
 
+const PublicSuspenseFallback = () => (
+  <div
+    style={{ minHeight: '100svh', background: '#f1f4f1' }}
+    aria-busy="true"
+    aria-label="Loading page"
+  />
+);
+
 const withProtectedSuspense = (node) => (
   <Suspense fallback={<ProtectedSuspenseFallback />}>{node}</Suspense>
 );
 
-gsap.registerPlugin(ScrollTrigger);
+const withPublicSuspense = (node) => (
+  <Suspense fallback={<PublicSuspenseFallback />}>{node}</Suspense>
+);
 
 /** Preserves query string when normalizing /assessment → /assessment/start */
 const AssessmentRootRedirect = () => {
@@ -72,16 +81,16 @@ const AppRoutes = () => {
         {/* ── Public Experience Routes (Inside Persistent Shell) ── */}
         <Route element={<PublicExperienceLayout />}>
           <Route path="/" element={<EditorialHomePage />} />
-          <Route path="/how-it-works" element={<EditorialHowItWorksPage />} />
-          <Route path="/career-intelligence" element={<EditorialCareerIntelligencePage />} />
-          <Route path="/progress" element={<EditorialProgressPage />} />
-          <Route path="/methodology" element={<EditorialMethodologyPage />} />
-          <Route path="/trust" element={<EditorialTrustPage />} />
-          <Route path="/privacy" element={<EditorialPrivacyPage />} />
+          <Route path="/how-it-works" element={withPublicSuspense(<EditorialHowItWorksPage />)} />
+          <Route path="/career-intelligence" element={withPublicSuspense(<EditorialCareerIntelligencePage />)} />
+          <Route path="/progress" element={withPublicSuspense(<EditorialProgressPage />)} />
+          <Route path="/methodology" element={withPublicSuspense(<EditorialMethodologyPage />)} />
+          <Route path="/trust" element={withPublicSuspense(<EditorialTrustPage />)} />
+          <Route path="/privacy" element={withPublicSuspense(<EditorialPrivacyPage />)} />
           <Route path="/terms" element={<Navigate to="/privacy" replace />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="*" element={<PublicNotFoundPage />} />
+          <Route path="/login" element={withPublicSuspense(<LoginPage />)} />
+          <Route path="/signup" element={withPublicSuspense(<SignupPage />)} />
+          <Route path="*" element={withPublicSuspense(<PublicNotFoundPage />)} />
         </Route>
 
         {/* ── Protected Application Routes (Preserved) ── */}
