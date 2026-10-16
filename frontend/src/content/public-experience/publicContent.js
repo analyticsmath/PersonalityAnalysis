@@ -346,19 +346,19 @@ export const PUBLIC_CONTENT = {
       {
         id: 'export',
         label: 'Export full record',
-        description: 'Download complete responses, trait vectors, and historical comparisons in JSON format from your account.',
+        description: 'Download a JSON snapshot of account details, assessment sessions, results, and roadmap progress. Password hashes and in-process AI audit events are excluded.',
         link: '/account/privacy',
       },
       {
         id: 'ai-transparency',
         label: 'AI processing transparency',
-        description: 'Final scoring formulas are deterministic. AI-assisted profile/CV processing may provide structured inputs used by those formulas, and generative AI may also support narrative interpretation. AI does not replace the deterministic scoring formula.',
+        description: 'CV or manually entered profile data may provide structured inputs, and AI may support narrative interpretation. Career scoring uses the published deterministic formula.',
         link: '/methodology',
       },
       {
         id: 'delete',
-        label: 'Hard deletion of stored records',
-        description: 'Hard deletion of your account and related stored records with immediate removal of all assessment history.',
+        label: 'Delete account and related records',
+        description: 'The account control deletes the account, assessment sessions, results, and roadmap progress from this deployment. It requires confirmation and signs you out.',
         link: '/account/privacy',
       },
     ],
@@ -420,38 +420,38 @@ export const PUBLIC_CONTENT = {
   privacy: {
     hero: {
       headline: 'PLAIN-LANGUAGE GOVERNANCE & SOVEREIGN DATA RIGHTS',
-      support: 'Your assessment data belongs to you. We do not sell your personal evidence or train third-party foundation models on your responses.',
+      support: 'See what assessment data this deployment stores, how the product uses it, and which controls are available in your account.',
     },
     sections: [
       {
         id: 'data-collection',
         title: '1. What We Collect',
-        content: 'We collect your email address, account credentials, and responses provided during assessment inquiries. Technical telemetry is limited to essential operational diagnostics.',
+        content: 'Accounts store identity and authentication data. Assessment sessions and results may include responses, CV-derived or manually entered profile details, scoring evidence, career recommendations, chat history, and roadmap progress.',
       },
       {
         id: 'data-usage',
         title: '2. How Data Is Used',
-        content: 'Your responses are processed solely to compute your psychometric profile, generate career comparisons, and render your longitudinal progress record.',
+        content: 'These records support assessment sessions, personality and interest scoring, career comparisons, result history, reporting, and roadmap progress. Career comparisons use the fixed deterministic weights described in Methodology.',
       },
       {
         id: 'ai-governance',
-        title: '3. AI Models & Data Sharing',
-        content: 'We do not sell personal data to brokers or advertisers. Assessment responses are never used to train generalized third-party machine learning models.',
+        title: '3. AI-Assisted Processing',
+        content: 'AI-assisted CV or profile processing may provide structured inputs. Generative AI may also support narrative interpretation. Career scores use the published deterministic formula; AI does not replace that calculation.',
       },
       {
         id: 'user-rights',
-        title: '4. Sovereign Data Controls',
-        content: 'You maintain permanent sovereignty over your record. You can export your full data in JSON format or perform hard deletion of your account and related stored records at any time from your account settings.',
+        title: '4. Retention & Account Controls',
+        content: 'Assessment and profile data remain in this deployment until you delete them through account controls or delete your account; no automatic inactivity purge is configured. Account controls can export a JSON snapshot, clear profile/CV fields, delete one assessment by result ID, or delete the account.',
       },
       {
         id: 'security',
-        title: '5. Storage & Cryptographic Protection',
-        content: 'All data is encrypted in transit via TLS 1.3 and at rest using industry-standard AES-256 encryption. Authentication utilizes secure salted hashing and tokenized sessions.',
+        title: '5. Sensitive Information',
+        content: 'Avoid uploading unredacted personal identifiers or confidential trade secrets. This product page does not specify at-rest encryption, backup retention, or model-provider retention details.',
       },
       {
         id: 'contact',
-        title: '6. Privacy Inquiries',
-        content: 'For questions regarding your data rights or to submit an explicit verification request, contact our privacy governance team directly through your account dashboard.',
+        title: '6. About This Summary',
+        content: 'This page summarizes product behavior and controls in this deployment. It is not a security certification or a full account of external processing and backups.',
       },
     ],
   },

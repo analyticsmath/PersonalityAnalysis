@@ -574,7 +574,7 @@ export function PrivacyCinematicPage() {
   return (
     <PageFrame className="privacy">
       <Cover lines={['Your information.', 'Your choice.']} image={PHOTO.detail} alt="A website wireframe with handwritten planning notes" description={data.hero.support} variant="privacy" family="quiet-editorial" transitionKey="privacy" />
-      <div className="vt-privacy-brief"><h2>Make it<br/><em>understandable.</em></h2><p>Read the published product policy below and open your account controls when you are signed in.</p></div>
+      <div className="vt-privacy-brief"><h2>Make it<br/><em>understandable.</em></h2><p>Review how this deployment handles assessment data and open your account controls when you are signed in.</p></div>
       <section className="vt-privacy-document">
         <nav aria-label="Policy table of contents">{data.sections.map((section) => <a href={`#${section.id}`} key={section.id}>{section.title}</a>)}</nav>
         <div>{data.sections.map((section) => <article key={section.id} id={section.id}><h2>{section.title}</h2><p>{section.content}</p></article>)}</div>
