@@ -70,6 +70,11 @@
 .vt-career-role-tabs button.is-selected{padding-left:18px}
 .vt-career-role-tabs button.is-selected:before{width:10px}
 .vt-career-role-detail{border-top:1px solid rgba(255,255,255,.08)}
+.vt-career-worlds-stage[data-career-directed="true"] .vt-career-world,
+.vt-career-worlds-stage[data-career-directed="true"] .vt-career-world-media img,
+.vt-career-worlds-stage[data-career-directed="true"] .vt-career-world-copy,
+.vt-career-worlds-stage[data-career-directed="true"] .vt-career-role-field,
+.vt-career-worlds-stage[data-career-directed="true"] .vt-career-world-index>span{transition:none!important}
 
 /* The temporal comparator shares one crisp seam. */
 .vt-time-stage{border:1px solid var(--vt-line)}
@@ -82,6 +87,11 @@
 .vt-trust-inspector button.is-selected{padding-left:12px}
 .vt-trust-inspector button.is-selected:before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:2px;background:var(--vt-accent)}
 .vt-trust-record__pipeline span.is-active{color:var(--vt-ink)}
+.vt-trust-stage[data-trust-directed="true"] .vt-trust-record,
+.vt-trust-stage[data-trust-directed="true"] .vt-trust-record>blockquote,
+.vt-trust-stage[data-trust-directed="true"] .vt-trust-record__reading,
+.vt-trust-stage[data-trust-directed="true"] .vt-trust-record__pipeline span,
+.vt-trust-stage[data-trust-directed="true"] .vt-trust-inspector button{transition:none!important}
 
 /* Publication modes stay intentionally un-cinematic where reading should own the frame. */
 .vt-route--method .vt-header--scrolled,.vt-route--privacy .vt-header--scrolled{background:#f5f4ee}
@@ -115,7 +125,7 @@
   .vt-career-role-tabs button.is-selected{padding-left:0}
   .vt-career-role-tabs button:before{display:none}
 
-  /* Trust mobile stages change measure and offset to preserve scene rhythm. */
+  /* Trust mobile states change measure and offset to preserve scene rhythm. */
   .vt-trust-mobile-states article:nth-child(odd){padding-right:11vw}
   .vt-trust-mobile-states article:nth-child(even){padding-left:9vw}
   .vt-trust-mobile-states article:nth-child(3){padding-top:92px;padding-bottom:92px}
