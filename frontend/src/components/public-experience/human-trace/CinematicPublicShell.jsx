@@ -96,6 +96,24 @@ export function CinematicPublicShell() {
   }, [location.pathname]);
 
   useEffect(() => {
+    if (location.pathname !== '/how-it-works') return undefined;
+    let cancelled = false;
+    let dispose = () => {};
+    const frame = window.requestAnimationFrame(() => {
+      import('./howTraceDirector')
+        .then(({ mountHowTraceDirector }) => {
+          if (!cancelled) dispose = mountHowTraceDirector(document);
+        })
+        .catch(() => {});
+    });
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+      dispose();
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
     setMenuOpen(false);
     window.requestAnimationFrame(() => {
       if (scrollEngine.current) scrollEngine.current.scrollTo(0, { immediate: true });
