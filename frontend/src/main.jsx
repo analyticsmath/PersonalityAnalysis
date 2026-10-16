@@ -22,16 +22,20 @@ import './styles/public-experience/reduced-motion.css';
 let refreshingBundle = false;
 function refreshBundleOnce() {
   if (refreshingBundle) return true;
+  let destination = null;
   try {
     const key = 'pa:last-bundle-refresh';
     const previous = Number(sessionStorage.getItem(key) || 0);
     if (Date.now() - previous < 15000) return false;
     sessionStorage.setItem(key, String(Date.now()));
+    destination = sessionStorage.getItem('pa:pending-route');
+    sessionStorage.removeItem('pa:pending-route');
   } catch {
     return false;
   }
   refreshingBundle = true;
-  window.location.reload();
+  if (destination && /^\/(?!\/)/.test(destination)) window.location.replace(destination);
+  else window.location.reload();
   return true;
 }
 

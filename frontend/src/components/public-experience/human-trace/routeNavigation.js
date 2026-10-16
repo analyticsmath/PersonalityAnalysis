@@ -31,6 +31,7 @@ export function navigateCinematic(navigate, path) {
   if (window.location.pathname + window.location.search === path) return;
   const request = ++epoch;
   cancelActive();
+  try { sessionStorage.setItem('pa:pending-route', path); } catch { /* Navigation works without storage. */ }
   const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   const documentRoot = document.documentElement;
   const animations = [];
@@ -47,7 +48,10 @@ export function navigateCinematic(navigate, path) {
     cleaned = true;
     animations.forEach((animation) => animation.cancel());
     curtain.remove();
-    if (request === epoch) delete documentRoot.dataset.cinematicTransition;
+    if (request === epoch) {
+      delete documentRoot.dataset.cinematicTransition;
+      try { sessionStorage.removeItem('pa:pending-route'); } catch { /* Optional recovery hint. */ }
+    }
   };
   cancelActive = cleanup;
 
