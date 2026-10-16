@@ -1,10 +1,8 @@
 /**
  * Personality Assessor - Public Experience Layout
- * Editorial Evidence Atlas: Light-theme persistent shell mounting
- * PublicMotionRoot, PublicHeader, PublicRouteStage, PublicIndex overlay, and PublicFooter.
- * Survives child route navigations continuously without blank screen flashes.
+ * Marketing routes share one cinematic shell. Authentication routes retain the
+ * existing public application shell so product/auth behavior remains isolated.
  */
-
 import React, { useState, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PublicMotionRoot } from '../motion/PublicMotionRoot';
@@ -16,6 +14,16 @@ import { PublicFooter } from '../chrome/PublicFooter';
 import { PublicRouteStage } from './PublicRouteStage';
 import { CinematicPublicShell } from '../human-trace/CinematicPublicShell';
 
+const CINEMATIC_MARKETING_ROUTES = new Set([
+  '/',
+  '/how-it-works',
+  '/career-intelligence',
+  '/progress',
+  '/trust',
+  '/methodology',
+  '/privacy',
+]);
+
 export const PublicExperienceLayout = () => {
   const [indexOpen, setIndexOpen] = useState(false);
   const triggerRef = useRef(null);
@@ -23,52 +31,31 @@ export const PublicExperienceLayout = () => {
 
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
 
-  // Home owns its cinematic header, index and footer. All other marketing
-  // routes retain their existing persistent public-experience shell.
-  if (location.pathname === '/') {
-    return <Outlet />;
-  }
-
-  if (['/how-it-works','/career-intelligence','/progress','/trust','/methodology','/privacy'].includes(location.pathname)) {
+  if (CINEMATIC_MARKETING_ROUTES.has(location.pathname)) {
     return <CinematicPublicShell />;
   }
 
   return (
     <PublicMotionRoot>
       <div className="pa-public-experience pa-px-shell-root">
-        {/* Accessible Skip Navigation Link */}
-        <a href="#main-content" className="pa-px-skip-link">
-          Skip to main content
-        </a>
-
-        {/* Fixed DOM-First Transition Portal Layer */}
+        <a href="#main-content" className="pa-px-skip-link">Skip to main content</a>
         <TransitionPortal />
-
-        {/* Active Route Transition Orchestration Engine */}
         <PublicTransitionManager />
-
-        {/* Persistent Editorial Header */}
         <PublicHeader
           onOpenIndex={() => setIndexOpen(true)}
           isIndexOpen={indexOpen}
           triggerRef={triggerRef}
         />
-
-        {/* Transition-Aware Route DOM Stage */}
         <main id="main-content" tabIndex="-1" style={{ outline: 'none' }}>
           <PublicRouteStage>
             <Outlet />
           </PublicRouteStage>
         </main>
-
-        {/* Creative Site Index Overlay */}
         <PublicIndex
           isOpen={indexOpen}
           onClose={() => setIndexOpen(false)}
           triggerRef={triggerRef}
         />
-
-        {/* Quiet Utility Footer on Non-Auth Routes */}
         {!isAuthRoute && <PublicFooter />}
       </div>
     </PublicMotionRoot>
