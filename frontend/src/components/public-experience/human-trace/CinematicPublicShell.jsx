@@ -82,7 +82,7 @@ export function CinematicPublicShell() {
 
   useEffect(() => {
     setMenuOpen(false);
-    requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
       if (scrollEngine.current) scrollEngine.current.scrollTo(0, { immediate: true });
       else window.scrollTo({ top: 0, behavior: 'auto' });
       ScrollTrigger.refresh();
