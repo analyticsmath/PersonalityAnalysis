@@ -319,3 +319,13 @@
 
 .vt-cinema h1[tabindex="-1"]:focus{outline:none}
 .vt-cinema .vt-career-disclaimer{font-family:inherit;font-size:14px;line-height:1.6;letter-spacing:0;text-transform:none;border:0;padding:30px var(--vt-side)}
+
+.vt-cinema[data-cinematic-route="/methodology"] .vt-header,
+.vt-cinema[data-cinematic-route="/how-it-works"] .vt-header,
+.vt-cinema[data-cinematic-route="/privacy"] .vt-header{color:#15221e}
+.vt-cinema[data-cinematic-route="/methodology"] .vt-index-button,
+.vt-cinema[data-cinematic-route="/how-it-works"] .vt-index-button,
+.vt-cinema[data-cinematic-route="/privacy"] .vt-index-button{background:#15221e;color:#f1f4f1}
+.vt-cinema .vt-header--scrolled,.vt-cinema .vt-footer-invitation,.vt-cinema .vt-career-world-index{border:0}
+.vt-cinema .vt-footer-bottom{font-family:inherit;font-size:12px;letter-spacing:0;color:#b6c9b3}
+.vt-cinema .vt-how-trace-stage:after{display:none}

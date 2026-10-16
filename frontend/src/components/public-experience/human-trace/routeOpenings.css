@@ -105,3 +105,12 @@
  .vt-opening-document{width:60%;bottom:7%;right:8%}
 }
 @media(prefers-reduced-motion:reduce){.vt-opening-title,.vt-opening-media img,.vt-opening-plane{transform:none!important;opacity:1!important}}
+
+.vt-opening--method,.vt-opening--trust,.vt-opening--progress{min-height:100svh}
+.vt-opening--method .vt-opening-formula{height:28%;bottom:8%}
+.vt-opening--trust .vt-opening-evidence{height:30%;bottom:5%}
+@media(max-width:520px){
+ .vt-opening--method{min-height:100svh}
+ .vt-opening--method .vt-opening-formula{height:24%;bottom:10%}
+ .vt-opening--trust .vt-opening-evidence{height:24%}
+}
