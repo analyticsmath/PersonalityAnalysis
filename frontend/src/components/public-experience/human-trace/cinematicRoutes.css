@@ -161,3 +161,36 @@ html[data-cinematic-transition-family="quiet-editorial"]::view-transition-old(ro
 html[data-cinematic-pending]::after{content:'';position:fixed;top:calc(var(--vt-header) + 12px);left:50%;z-index:99999;width:18px;height:18px;margin-left:-9px;border:1px solid rgba(255,255,255,.18);border-top-color:var(--vt-accent);border-right-color:var(--vt-accent);border-radius:50%;pointer-events:none;animation:vtRouteSpinner .78s linear infinite}
 @keyframes vtRouteSpinner{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){html[data-cinematic-pending]::after{animation:none}}
+
+/* Route changes keep the content handoff brief while the selected media carries across. */
+html[data-cinematic-transition]::view-transition-old(root){
+  animation:vt-page-exit 150ms cubic-bezier(.4,0,1,1) both;
+}
+html[data-cinematic-transition]::view-transition-new(root){
+  animation:vt-page-enter 320ms cubic-bezier(.22,1,.36,1) 40ms both;
+}
+html[data-cinematic-transition-family="quiet-editorial"]::view-transition-new(root){
+  animation-duration:280ms;
+  animation-delay:0ms;
+}
+html[data-cinematic-transition]::view-transition-group(vt-semantic-actor){
+  animation-duration:620ms;
+  animation-timing-function:cubic-bezier(.22,1,.36,1);
+}
+html[data-cinematic-transition]::view-transition-old(vt-semantic-actor){
+  animation:vt-actor-exit 220ms ease-out both;
+}
+html[data-cinematic-transition]::view-transition-new(vt-semantic-actor){
+  animation:vt-actor-enter 300ms cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes vt-page-exit{to{opacity:0}}
+@keyframes vt-page-enter{from{opacity:0;transform:translate3d(0,8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes vt-actor-exit{to{opacity:0}}
+@keyframes vt-actor-enter{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  html[data-cinematic-transition]::view-transition-old(root),
+  html[data-cinematic-transition]::view-transition-new(root),
+  html[data-cinematic-transition]::view-transition-group(vt-semantic-actor),
+  html[data-cinematic-transition]::view-transition-old(vt-semantic-actor),
+  html[data-cinematic-transition]::view-transition-new(vt-semantic-actor){animation:none!important}
+}

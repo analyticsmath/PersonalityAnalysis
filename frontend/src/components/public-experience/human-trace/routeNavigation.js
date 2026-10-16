@@ -106,7 +106,7 @@ async function runFallbackTransition(navigate, path, family, preferredKey, reque
   const exit = animateRouteNode(outgoing, [
     { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
     { opacity: 0, transform: `translate3d(-${distance}px, 0, 0) scale(.996)` },
-  ], 320);
+  ], 180);
 
   activeFallbackAnimation = exit;
   if (exit) await exit.finished.catch(() => {});
@@ -126,7 +126,7 @@ async function runFallbackTransition(navigate, path, family, preferredKey, reque
   const enter = animateRouteNode(incoming, [
     { opacity: 0, transform: `translate3d(${enterDistance}px, 0, 0) scale(.996)` },
     { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
-  ], 720);
+  ], 420);
   activeFallbackAnimation = enter;
   if (enter) await enter.finished.catch(() => {});
   enter?.cancel();
