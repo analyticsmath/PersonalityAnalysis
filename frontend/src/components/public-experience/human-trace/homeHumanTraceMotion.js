@@ -188,7 +188,7 @@ export function mountHomeHumanTrace(root) {
         const finalResolve = range(p, 0.83, 0.865);
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        const x = mix(vw * 0.065, vw * 0.555, travel);
+        const x = mix(vw * 0.56, vw * 0.555, travel);
         const y = mix(vh * 0.68, vh * 0.105, travel);
         const scale = mix(1.03, 0.63, travel);
         const rotate = mix(-0.45, 0.2, travel) * (1 - settle);
