@@ -22,10 +22,38 @@ function resetTransitionDocumentState() {
   delete document.documentElement.dataset.cinematicTransitionFamily;
 }
 
+function waitForDestination(family, preferredKey, request) {
+  const started = performance.now();
+
+  return new Promise((resolve) => {
+    const inspect = () => {
+      if (request !== epoch || performance.now() - started >= 1600) {
+        resolve(family === TRANSITION_FAMILIES.QUIET
+          ? null
+          : findSemanticActor(document, family, preferredKey));
+        return;
+      }
+
+      const heading = document.querySelector('#cinema-main h1');
+      const actor = family === TRANSITION_FAMILIES.QUIET
+        ? null
+        : findSemanticActor(document, family, preferredKey);
+
+      if (heading) {
+        resolve(actor);
+        return;
+      }
+
+      window.requestAnimationFrame(inspect);
+    };
+
+    inspect();
+  });
+}
+
 /**
- * Same-document navigation with authored semantic carries.
- * Semantic geometry is reserved for links that explicitly declare a transition actor.
- * Global navigation stays quiet so hidden or unrelated media never becomes a fake carry.
+ * Keep the old view in place until the lazy destination has mounted, then
+ * let the browser capture the complete page for its view transition.
  */
 export function navigateCinematic(navigate, path, origin) {
   const currentUrl = window.location.pathname + window.location.search;
@@ -37,22 +65,18 @@ export function navigateCinematic(navigate, path, origin) {
   const explicitActor = semanticActorFromOrigin(origin);
   const explicitFamily = explicitActor?.dataset.transitionFamily;
   const preferredKey = explicitActor?.dataset.transitionKey;
-  const family = explicitFamily
-    ? resolveTransitionFamily(window.location.pathname, path, explicitFamily)
-    : TRANSITION_FAMILIES.QUIET;
+  const family = resolveTransitionFamily(window.location.pathname, path, explicitFamily);
   const source = family === TRANSITION_FAMILIES.QUIET
     ? null
     : (explicitActor || findSemanticActor(sourceRoot, family, preferredKey));
 
   let destination = null;
   let applied = false;
-  let timer = null;
 
   const cleanup = () => {
     clearTransitionName(source);
     clearTransitionName(destination);
     resetTransitionDocumentState();
-    if (timer) window.clearTimeout(timer);
   };
 
   const update = async () => {
@@ -61,12 +85,11 @@ export function navigateCinematic(navigate, path, origin) {
     flushSync(() => navigate(path));
     window.scrollTo({ top: 0, behavior: 'auto' });
 
-    if (family !== TRANSITION_FAMILIES.QUIET) {
-      destination = preferredKey
-        ? findSemanticActor(document, family, preferredKey)
-        : findSemanticActor(document, family);
-      if (destination) destination.style.viewTransitionName = 'vt-semantic-actor';
-      const image = destination?.querySelector?.('img');
+    destination = await waitForDestination(family, preferredKey, request);
+    if (request !== epoch) return;
+    if (family !== TRANSITION_FAMILIES.QUIET && destination) {
+      destination.style.viewTransitionName = 'vt-semantic-actor';
+      const image = destination.querySelector('img');
       if (image && !image.complete && typeof image.decode === 'function') {
         await Promise.race([
           image.decode().catch(() => {}),
@@ -104,8 +127,6 @@ export function navigateCinematic(navigate, path, origin) {
         cleanup();
         if (activeTransition === transition) activeTransition = null;
       });
-
-    timer = window.setTimeout(update, 420);
   } catch {
     cleanup();
     update();

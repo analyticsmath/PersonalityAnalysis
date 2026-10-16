@@ -53,7 +53,7 @@ export function HomeHumanTracePage() {
 
           <div className="vt-home-frame" aria-hidden="true">
             <span>PERSONALITY ASSESSOR</span>
-            <span>HUMAN TRACE / 01</span>
+            <span>PERSONALITY • INTERESTS • WORK</span>
           </div>
 
           <blockquote
@@ -62,17 +62,17 @@ export function HomeHumanTracePage() {
             data-transition-family="human-trace"
             data-transition-key="source-response"
           >
-            <span>SOURCE RESPONSE</span>
+            <span>EXAMPLE ANSWER</span>
             <p>“{home.situation.response}”</p>
           </blockquote>
 
           <div className="vt-home-scroll-cue" data-home-scroll-cue aria-hidden="true">
-            <span>Scroll to enter the trace</span>
+            <span>Scroll to see how an answer is assessed</span>
             <span>↓</span>
           </div>
 
           <div className="vt-home-scenes">
-            <Scene id="human" index={0} eyebrow="The human">
+            <Scene id="human" index={0} eyebrow="Start with you">
               <div className="vt-home-human-copy">
                 <h1><span>Understand</span><span>what drives you.</span></h1>
                 <div className="vt-home-human-bottom">
@@ -82,19 +82,19 @@ export function HomeHumanTracePage() {
               </div>
             </Scene>
 
-            <Scene id="source" index={1} eyebrow="The source">
+            <Scene id="source" index={1} eyebrow="Your answer">
               <div className="vt-home-source-copy">
                 <h2>One answer<br/>is not one result.</h2>
                 <p>{home.worldEntry.prompt}</p>
                 <small>A single response can suggest questions worth asking. A scored profile requires sufficient independent evidence.</small>
               </div>
               <blockquote className="vt-home-source-mobile" data-transition-family="human-trace" data-transition-key="source-response">
-                <span>SOURCE RESPONSE</span>
+                <span>EXAMPLE ANSWER</span>
                 <p>“{home.situation.response}”</p>
               </blockquote>
             </Scene>
 
-            <Scene id="branch" index={2} eyebrow="The branch">
+            <Scene id="branch" index={2} eyebrow="Different measures">
               <div className="vt-home-branch-copy">
                 <h2>One response.<br/><em>More than one reading.</em></h2>
                 <p>Keep the source intact while different models ask different questions of it.</p>
@@ -116,7 +116,7 @@ export function HomeHumanTracePage() {
               </div>
             </Scene>
 
-            <Scene id="worlds" index={3} eyebrow="The worlds">
+            <Scene id="worlds" index={3} eyebrow="Work conditions">
               <div className="vt-home-worlds-heading">
                 <h2>The same pattern<br/><em>reads differently at work.</em></h2>
                 <p>Context does not replace the evidence. It changes the question the evidence has to answer.</p>
@@ -139,7 +139,7 @@ export function HomeHumanTracePage() {
               </div>
             </Scene>
 
-            <Scene id="weight" index={4} eyebrow="The weight">
+            <Scene id="weight" index={4} eyebrow="Career-fit score">
               <div className="vt-home-weight-copy">
                 <h2>Not every signal<br/><em>counts the same.</em></h2>
                 <p>{home.calibration.lead}</p>
@@ -155,7 +155,7 @@ export function HomeHumanTracePage() {
               <p className="vt-home-weight-note">Fixed contribution weights. No black-box adjustment to the final career-fit formula.</p>
             </Scene>
 
-            <Scene id="time" index={5} eyebrow="The time">
+            <Scene id="time" index={5} eyebrow="Over time">
               <div className="vt-home-time-copy">
                 <h2>What changed.<br/><em>What held.</em></h2>
                 <p>{home.timeExposure.support}</p>
@@ -169,7 +169,7 @@ export function HomeHumanTracePage() {
               </div>
             </Scene>
 
-            <Scene id="provenance" index={6} eyebrow="The trace">
+            <Scene id="provenance" index={6} eyebrow="Show the evidence">
               <div className="vt-home-provenance-copy">
                 <h2>Show me where<br/><em>that came from.</em></h2>
                 <p>{home.trace.support}</p>
@@ -184,7 +184,7 @@ export function HomeHumanTracePage() {
               </div>
             </Scene>
 
-            <Scene id="record" index={7} eyebrow="The record">
+            <Scene id="record" index={7} eyebrow="Your profile">
               <div className="vt-home-record-copy">
                 <h2>Build a profile<br/><em>that keeps its evidence.</em></h2>
                 <p>{home.finale.support}</p>
@@ -203,9 +203,9 @@ export function HomeHumanTracePage() {
         </div>
       </div>
 
-      <section className="vt-home-afterword" aria-label="Continue the Human Trace">
-        <div><span>NEXT CHAPTER</span><h2>Follow one answer.<br/>Watch the evidence change form.</h2></div>
-        <CinemaLink className="vt-text-link" to="/how-it-works" data-transition-family="human-trace" data-transition-key="source-response">How the assessment works ↗</CinemaLink>
+      <section className="vt-home-afterword" aria-label="How the assessment works">
+        <div><span>HOW THE ASSESSMENT WORKS</span><h2>See how one answer<br/>shapes a career comparison.</h2></div>
+        <CinemaLink className="vt-text-link" to="/how-it-works" data-transition-family="human-trace" data-transition-key="source-response">See the assessment process ↗</CinemaLink>
       </section>
     </div>
   );

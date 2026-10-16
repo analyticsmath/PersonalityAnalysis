@@ -39,17 +39,38 @@ export function transitionActorSelector(family) {
   return `[data-transition-family="${family}"]`;
 }
 
-export function findSemanticActor(root, family, preferredKey) {
-  if (!root?.querySelector || family === TRANSITION_FAMILIES.QUIET) return null;
+function isVisibleTransitionActor(node) {
+  if (!node?.getClientRects?.().length) return false;
 
-  if (preferredKey) {
-    const exact = root.querySelector(
-      `${transitionActorSelector(family)}[data-transition-key="${preferredKey}"]`
-    );
-    if (exact) return exact;
+  let current = node;
+  while (current && current.nodeType === 1) {
+    const style = window.getComputedStyle(current);
+    if (
+      style.display === 'none'
+      || style.visibility === 'hidden'
+      || Number(style.opacity) <= 0.02
+      || current.getAttribute('aria-hidden') === 'true'
+    ) return false;
+    current = current.parentElement;
   }
 
-  return root.querySelector(transitionActorSelector(family));
+  return true;
+}
+
+export function findSemanticActor(root, family, preferredKey) {
+  if (!root?.querySelectorAll || family === TRANSITION_FAMILIES.QUIET) return null;
+
+  const actors = [...root.querySelectorAll(transitionActorSelector(family))];
+  if (!actors.length) return null;
+
+  if (preferredKey) {
+    const exact = actors.filter((actor) => actor.dataset.transitionKey === preferredKey);
+    const visibleExact = exact.find(isVisibleTransitionActor);
+    if (visibleExact) return visibleExact;
+    if (exact.length) return exact[0];
+  }
+
+  return actors.find(isVisibleTransitionActor) || actors[0];
 }
 
 export function semanticActorFromOrigin(origin) {

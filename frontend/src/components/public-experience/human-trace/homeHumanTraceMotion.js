@@ -3,7 +3,15 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HOME_KNOTS = [0, 0.12, 0.28, 0.49, 0.64, 0.76, 0.88, 1];
+const HOME_HANDOFFS = [
+  [0.08, 0.115],
+  [0.205, 0.24],
+  [0.33, 0.365],
+  [0.455, 0.49],
+  [0.58, 0.615],
+  [0.705, 0.74],
+  [0.83, 0.865],
+];
 const clamp = (value) => Math.max(0, Math.min(1, value));
 const smooth = (value) => {
   const t = clamp(value);
@@ -25,28 +33,23 @@ const SHOT_GRAMMAR = [
 
 function sceneWeights(progress) {
   const p = clamp(progress);
-  const weights = HOME_KNOTS.map(() => 0);
+  const weights = Array.from({ length: HOME_HANDOFFS.length + 1 }, () => 0);
 
-  if (p <= HOME_KNOTS[0]) {
-    weights[0] = 1;
-    return weights;
-  }
-  if (p >= HOME_KNOTS.at(-1)) {
-    weights[weights.length - 1] = 1;
-    return weights;
-  }
-
-  for (let index = 0; index < HOME_KNOTS.length - 1; index += 1) {
-    const start = HOME_KNOTS[index];
-    const end = HOME_KNOTS[index + 1];
-    if (p < start || p > end) continue;
-    const local = smooth((p - start) / Math.max(0.0001, end - start));
-    weights[index] = 1 - local;
-    weights[index + 1] = local;
-    return weights;
+  for (let index = 0; index < HOME_HANDOFFS.length; index += 1) {
+    const [start, end] = HOME_HANDOFFS[index];
+    if (p < start) {
+      weights[index] = 1;
+      return weights;
+    }
+    if (p <= end) {
+      const local = smooth((p - start) / Math.max(0.0001, end - start));
+      weights[index] = 1 - local;
+      weights[index + 1] = local;
+      return weights;
+    }
   }
 
-  weights[0] = 1;
+  weights[weights.length - 1] = 1;
   return weights;
 }
 
@@ -63,11 +66,10 @@ function clipPath(values) {
 }
 
 function paintScene(scene, index, progress, weight, dominant) {
-  const previous = index === 0 ? HOME_KNOTS[0] : HOME_KNOTS[index - 1];
-  const center = HOME_KNOTS[index];
-  const next = index === HOME_KNOTS.length - 1 ? HOME_KNOTS.at(-1) : HOME_KNOTS[index + 1];
-  const enter = index === 0 ? 1 : range(progress, previous, center);
-  const exit = index === HOME_KNOTS.length - 1 ? 0 : range(progress, center, next);
+  const previousHandoff = HOME_HANDOFFS[index - 1];
+  const nextHandoff = HOME_HANDOFFS[index];
+  const enter = index === 0 ? 1 : range(progress, previousHandoff[0], previousHandoff[1]);
+  const exit = index === HOME_HANDOFFS.length ? 0 : range(progress, nextHandoff[0], nextHandoff[1]);
   const shot = SHOT_GRAMMAR[index] || SHOT_GRAMMAR[0];
 
   let x = mix(shot.enterX, 0, enter);
@@ -166,24 +168,24 @@ export function mountHomeHumanTrace(root) {
       }
 
       if (worldMedia) {
-        const sourceTakeover = range(p, 0.06, 0.2);
-        const cropResolve = range(p, 0.18, 0.42);
-        const darken = range(p, 0.11, 0.34);
-        const returnPulse = range(p, 0.7, 0.84);
+        const sourceTakeover = range(p, 0.08, 0.205);
+        const cropResolve = range(p, 0.205, 0.33);
+        const darken = range(p, 0.205, 0.455);
+        const returnPulse = range(p, 0.705, 0.83);
         worldMedia.style.transform = `translate3d(${mix(0, -2.5, p)}%, ${mix(0, -3.5, p)}%, 0) scale(${mix(1.025, 1.16, sourceTakeover)})`;
         worldMedia.style.clipPath = `inset(${mix(0, 4.5, cropResolve)}% ${mix(0, 6, cropResolve)}% ${mix(0, 4.5, cropResolve)}% ${mix(0, 6, cropResolve)}%)`;
         worldMedia.style.setProperty('--home-veil-opacity', String(mix(0.08, 0.74, darken)));
-        const baseOpacity = mix(1, 0.2, range(p, 0.29, 0.58));
+        const baseOpacity = mix(1, 0.2, range(p, 0.33, 0.58));
         worldMedia.style.opacity = String(mix(baseOpacity, 0.5, returnPulse));
       }
 
       if (source) {
-        const enter = range(p, 0.07, 0.145);
-        const travel = range(p, 0.19, 0.45);
-        const settle = range(p, 0.43, 0.54);
-        const residueFade = range(p, 0.5, 0.62);
-        const provenanceReturn = range(p, 0.79, 0.885);
-        const finalResolve = range(p, 0.925, 0.985);
+        const enter = range(p, 0.08, 0.115);
+        const travel = range(p, 0.115, 0.205);
+        const settle = range(p, 0.205, 0.24);
+        const residueFade = range(p, 0.33, 0.365);
+        const provenanceReturn = range(p, 0.705, 0.74);
+        const finalResolve = range(p, 0.83, 0.865);
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const x = mix(vw * 0.065, vw * 0.555, travel);
@@ -198,7 +200,7 @@ export function mountHomeHumanTrace(root) {
         source.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale}) rotate(${rotate}deg)`;
       }
 
-      const branchProgress = range(p, 0.235, 0.395);
+      const branchProgress = range(p, 0.205, 0.33);
       branchPaths.forEach((path, index) => {
         const length = Number(path.dataset.pathLength || 1000);
         const staggered = range(branchProgress, index * 0.07, 0.58 + index * 0.07);
@@ -206,9 +208,9 @@ export function mountHomeHumanTrace(root) {
         path.style.opacity = String(mix(0.22, 0.92, staggered));
       });
 
-      setActiveWorld(worldItems, worldLabels, range(p, 0.385, 0.595));
+      setActiveWorld(worldItems, worldLabels, range(p, 0.33, 0.455));
 
-      const weightProgress = range(p, 0.555, 0.72);
+      const weightProgress = range(p, 0.455, 0.58);
       masses.forEach((mass, index) => {
         const stagger = range(weightProgress, index * 0.05, 0.52 + index * 0.05);
         mass.style.transform = `translate3d(0, ${mix(8, 0, stagger)}%, 0) scaleY(${mix(0.045, 1, stagger)})`;
@@ -216,7 +218,7 @@ export function mountHomeHumanTrace(root) {
       });
 
       if (timeLater) {
-        const timeProgress = range(p, 0.69, 0.835);
+        const timeProgress = range(p, 0.58, 0.705);
         const split = mix(100, 48, timeProgress);
         timeLater.style.clipPath = `inset(0 0 0 ${split}%)`;
         timeFrame?.style.setProperty('--home-time-split', `${split}%`);
@@ -224,7 +226,7 @@ export function mountHomeHumanTrace(root) {
         if (timeLaterImage) timeLaterImage.style.transform = `translate3d(${mix(4.5, 0, timeProgress)}%, 0, 0) scale(${mix(1.085, 1.035, timeProgress)})`;
       }
 
-      const provenanceProgress = range(p, 0.8, 0.93);
+      const provenanceProgress = range(p, 0.705, 0.83);
       provenanceSteps.forEach((step, index) => {
         const reveal = range(provenanceProgress, index * 0.1, 0.39 + index * 0.1);
         step.style.opacity = String(reveal);
@@ -232,7 +234,7 @@ export function mountHomeHumanTrace(root) {
       });
 
       if (recordObject) {
-        const recordProgress = range(p, 0.9, 1);
+        const recordProgress = range(p, 0.83, 0.965);
         recordObject.style.transform = `translate3d(${mix(7, 0, recordProgress)}vw, ${mix(60, 0, recordProgress)}px, 0) scale(${mix(0.925, 1, recordProgress)}) rotate(${mix(0.8, 0, recordProgress)}deg)`;
         recordObject.style.opacity = String(recordProgress);
       }
@@ -244,8 +246,7 @@ export function mountHomeHumanTrace(root) {
       trigger: track,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 0.24,
-      fastScrollEnd: 1800,
+      scrub: 0.72,
       invalidateOnRefresh: true,
       onUpdate: (self) => render(self.progress),
       onRefresh: (self) => render(self.progress),

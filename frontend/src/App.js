@@ -73,11 +73,9 @@ const ProtectedSuspenseFallback = () => (
 );
 
 const PublicSuspenseFallback = () => (
-  <div
-    style={{ minHeight: '100svh', background: '#f1f4f1' }}
-    aria-busy="true"
-    aria-label="Loading page"
-  />
+  <div className="vt-public-page-loader" role="status" aria-label="Loading page">
+    <span className="vt-public-page-loader__spinner" aria-hidden="true" />
+  </div>
 );
 
 const withProtectedSuspense = (node) => (

@@ -10,7 +10,7 @@
   overflow:clip;
 }
 
-.vt-home-film-track{height:560svh;position:relative;background:var(--vt-home-dark)}
+.vt-home-film-track{height:900svh;position:relative;background:var(--vt-home-dark)}
 .vt-home-film-stage{height:100svh;min-height:640px;position:sticky;top:0;overflow:hidden;isolation:isolate;background:var(--vt-home-dark);color:white}
 .vt-home-world-media{--home-veil-opacity:.08;position:absolute;inset:0;z-index:0;margin:0;transform-origin:center;will-change:transform,opacity;overflow:hidden}
 .vt-home-world-media img{width:100%;height:100%;object-fit:cover;object-position:58% 48%;display:block;transform:scale(1.035)}

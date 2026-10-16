@@ -8,6 +8,8 @@ import { CinemaLink } from './CinematicPublicShell';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const CAREER_RAIL_QUERY = '(min-width: 901px) and (min-height: 700px) and (pointer: fine) and (prefers-reduced-motion: no-preference)';
+
 const PATH = '/media/public-experience/cinematic/';
 const PHOTO = {
   source: '/media/public-experience/digital/designer-1920.webp',
@@ -50,7 +52,7 @@ function SourceNote({ dark = false }) {
   );
 }
 
-function NextChapter({ to, eyebrow = 'Next chapter', title, subtitle, image, family = 'context-media', transitionKey = 'working-context' }) {
+function NextChapter({ to, eyebrow = 'Explore further', title, subtitle, image, family = 'context-media', transitionKey = 'working-context' }) {
   return (
     <CinemaLink className="vt-next" to={to} data-transition-family={family} data-transition-key={transitionKey}>
       <img src={image} loading="lazy" alt="" />
@@ -124,7 +126,7 @@ export function HowCinematicPage() {
         <aside className="vt-how-fixed">
           <div className="vt-how-trace-stage" data-how-stage data-how-state="capture" data-transition-family="human-trace" data-transition-key="source-response">
             <figure className="vt-how-context"><img src={PHOTO.source} alt="A designer considering an interface in context" loading="lazy" /><div aria-hidden="true" /></figure>
-            <blockquote className="vt-how-source-card"><small>SOURCE RESPONSE</small>“{PUBLIC_CONTENT.how.sampleResponse}”</blockquote>
+            <blockquote className="vt-how-source-card"><small>EXAMPLE ANSWER</small>“{PUBLIC_CONTENT.how.sampleResponse}”</blockquote>
             <div className="vt-how-clause-stage" aria-hidden="true"><span>clarify</span><span>constraints</span><span>smallest</span><span>reversible</span><span>step</span></div>
             <div className="vt-how-branch-stage" aria-hidden="true"><span>Big Five</span><span>RIASEC</span><span>Work Values</span></div>
             <div className="vt-how-weight-stage" aria-hidden="true">{weights.map((weight) => <i key={weight.id} style={{ '--weight': weight.percentage }}><b>{weight.percentage}%</b><span>{weight.label}</span></i>)}</div>
@@ -148,7 +150,7 @@ export function HowCinematicPage() {
       </div>
 
       <section className="vt-quiet-end"><h2>No single response<br/>becomes a verdict.</h2><p>Inputs, inferred dimensions, explicit weights and limitations belong to separate stages of the record.</p><CinemaLink className="vt-text-link" to="/methodology">Examine the methodology ↗</CinemaLink></section>
-      <NextChapter to="/career-intelligence" title="Explore your possibilities." subtitle="The same evidence meets different working conditions." image={PHOTO.precision} family="human-trace" transitionKey="source-response" />
+      <NextChapter to="/career-intelligence" eyebrow="CAREER INTELLIGENCE" title="Explore your possibilities." subtitle="The same evidence meets different working conditions." image={PHOTO.precision} family="human-trace" transitionKey="source-response" />
     </PageFrame>
   );
 }
@@ -171,28 +173,44 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
   useEffect(() => {
     const root = rootRef.current;
     const track = root?.querySelector('[data-career-world-track]');
-    if (!track) return undefined;
+    const rail = track?.querySelector('.vt-career-world-stack');
+    if (!track || !rail) return undefined;
 
     const mm = gsap.matchMedia();
-    mm.add('(min-width: 901px) and (min-height:700px) and (prefers-reduced-motion:no-preference)', () => {
+    mm.add(CAREER_RAIL_QUERY, () => {
       let previous = -1;
+      const render = (progress) => {
+        const position = Math.max(0, Math.min(1, progress)) * (CAREER_WORLDS.length - 1);
+        const index = Math.round(position);
+        rail.style.transform = `translate3d(${-position * 20}%, 0, 0)`;
+
+        if (index !== previous) {
+          previous = index;
+          setActiveWorld(index);
+        }
+      };
+
+      render(0);
       const trigger = ScrollTrigger.create({
         trigger: track,
         start: 'top 84px',
         end: 'bottom bottom',
-        scrub: 0.25,
-        fastScrollEnd: true,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const index = Math.min(CAREER_WORLDS.length - 1, Math.round(self.progress * (CAREER_WORLDS.length - 1)));
-          if (index !== previous) {
-            previous = index;
-            setActiveWorld(index);
-          }
-          track.style.setProperty('--world-progress', self.progress.toFixed(4));
+        scrub: 0.72,
+        snap: {
+          snapTo: 1 / (CAREER_WORLDS.length - 1),
+          duration: { min: 0.42, max: 0.78 },
+          delay: 0.12,
+          ease: 'power2.out',
         },
+        invalidateOnRefresh: true,
+        onUpdate: (self) => render(self.progress),
+        onRefresh: (self) => render(self.progress),
       });
-      return () => trigger.kill();
+
+      return () => {
+        trigger.kill();
+        rail.style.removeProperty('transform');
+      };
     });
     return () => mm.revert();
   }, [rootRef, setActiveWorld]);
@@ -201,10 +219,21 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
 export function CareerCinematicPage() {
   const rootRef = useRef(null);
   const [activeWorld, setActiveWorld] = useState(0);
+  const [horizontalWorlds, setHorizontalWorlds] = useState(
+    () => window.matchMedia(CAREER_RAIL_QUERY).matches
+  );
   const [selectedByWorld, setSelectedByWorld] = useState(() => Object.fromEntries(CAREER_WORLDS.map((world) => [world.id, world.roleKeys[0]])));
   const roleRefs = useRef({});
 
   useCareerWorldTimeline(rootRef, setActiveWorld);
+
+  useEffect(() => {
+    const media = window.matchMedia(CAREER_RAIL_QUERY);
+    const update = (event) => setHorizontalWorlds(event.matches);
+    update(media);
+    media.addEventListener?.('change', update);
+    return () => media.removeEventListener?.('change', update);
+  }, []);
 
   const handleRoleKeyDown = (event, world, roleIndex) => {
     if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
@@ -224,12 +253,11 @@ export function CareerCinematicPage() {
     <PageFrame className="career" rootRef={rootRef}>
       <Cover eyebrow="Career intelligence" lines={['Find work', 'that speaks to you.']} image={PHOTO.design} alt="A product designer sketching a digital interface" description="Explore the skills, interests and conditions behind different careers. Give your next move a clearer context." position="55% center" variant="career" family="context-media" transitionKey="career-world" />
 
-      <div className="vt-essay-intro vt-essay-intro--dark"><h2>Environments change.<br/><em>The questions change.</em></h2><p>Scroll through five working worlds. Explore occupations inside them without turning seventeen database records into seventeen compulsory scroll stops.</p></div>
+      <div className="vt-essay-intro vt-essay-intro--dark"><h2>Environments change.<br/><em>The questions change.</em></h2><p>Explore 17 careers across five working environments. Each environment brings together related roles, the conditions that suit them and the trade-offs to consider.</p></div>
 
       <section className="vt-career-worlds-track" data-career-world-track aria-label="Five working environments">
         <div className="vt-career-worlds-stage">
           <div className="vt-career-world-index" aria-hidden="true">
-            <p className="vt-career-onboarding">Scroll through the working worlds <span>↓</span></p>
             {CAREER_WORLDS.map((world, index) => <span key={world.id} className={activeWorld === index ? 'is-active' : ''}>{world.index} {world.name}</span>)}
           </div>
 
@@ -238,7 +266,13 @@ export function CareerCinematicPage() {
               const selectedKey = selectedByWorld[world.id];
               const selectedRole = careersData[selectedKey] || careersData[world.roleKeys[0]];
               return (
-                <article key={world.id} className={`vt-career-world${activeWorld === worldIndex ? ' is-active' : ''}`} data-career-world={world.id}>
+                <article
+                  key={world.id}
+                  className={`vt-career-world${activeWorld === worldIndex ? ' is-active' : ''}`}
+                  data-career-world={world.id}
+                  aria-hidden={horizontalWorlds ? activeWorld !== worldIndex : undefined}
+                  inert={horizontalWorlds && activeWorld !== worldIndex ? true : undefined}
+                >
                   <div className={`vt-career-world-media vt-career-world-media--${world.physics}`} data-transition-family="context-media" data-transition-key="career-world">
                     <img src={mediaForRole(selectedKey, world.media)} alt={`Illustrative working context for ${selectedRole.title}`} loading={worldIndex === 0 ? 'eager' : 'lazy'} />
                     <div className="vt-career-world-media__shade" aria-hidden="true" />
@@ -290,7 +324,7 @@ export function CareerCinematicPage() {
 
       <p className="vt-career-disclaimer">{CAREER_PRESENTATION_DISCLAIMER}</p>
       <section className="vt-quiet-end"><h2>Look beyond<br/>a job title.</h2><p>Your interests, skills, values and experience each contribute to a career comparison. Explore how the calculation brings them together.</p><CinemaLink className="vt-text-link" to="/methodology">Explore the scoring model ↗</CinemaLink></section>
-      <NextChapter to="/progress" title="See what changes." subtitle="Return to the same record over time." image={PHOTO.shared} family="context-media" transitionKey="career-world" />
+      <NextChapter to="/progress" eyebrow="YOUR PROFILE OVER TIME" title="See what changes." subtitle="Return to the same record over time." image={PHOTO.shared} family="context-media" transitionKey="career-world" />
     </PageFrame>
   );
 }
@@ -322,7 +356,7 @@ export function ProgressCinematicPage() {
         <article><span>ADAPTATION</span><h2>{content.adaptationFinding}</h2><p>Later conditions can alter the interpretation. Neither photograph represents the assessment history of a real person.</p></article>
       </section>
       <div className="vt-dark-quote"><SourceNote dark /><p>Keep the earlier context in view. Understand what a later record adds.</p></div>
-      <NextChapter to="/trust" title="See the evidence." subtitle="Every interpretation starts somewhere." image={PHOTO.proof} family="human-trace" transitionKey="evidence-record" />
+      <NextChapter to="/trust" eyebrow="EVIDENCE & PRIVACY" title="See the evidence." subtitle="Every interpretation starts somewhere." image={PHOTO.proof} family="human-trace" transitionKey="evidence-record" />
     </PageFrame>
   );
 }
@@ -341,18 +375,31 @@ function useTrustTimeline(rootRef, setActive) {
     const track = root?.querySelector('[data-trust-track]');
     if (!track) return undefined;
     const mm = gsap.matchMedia();
-    mm.add('(min-width:901px) and (min-height:700px) and (prefers-reduced-motion:no-preference)', () => {
+    mm.add('(min-width:901px) and (min-height:700px) and (pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
       let previous = -1;
+      const render = (progress) => {
+        const index = Math.min(4, Math.round(progress * 4));
+        if (index !== previous) {
+          previous = index;
+          setActive(index);
+        }
+      };
+
+      render(0);
       const trigger = ScrollTrigger.create({
         trigger: track,
         start: 'top 84px',
         end: 'bottom bottom',
-        scrub: 0.28,
-        fastScrollEnd: true,
-        onUpdate: (self) => {
-          const index = Math.min(4, Math.round(self.progress * 4));
-          if (index !== previous) { previous = index; setActive(index); }
+        scrub: 0.68,
+        snap: {
+          snapTo: 1 / 4,
+          duration: { min: 0.42, max: 0.78 },
+          delay: 0.12,
+          ease: 'power2.out',
         },
+        invalidateOnRefresh: true,
+        onUpdate: (self) => render(self.progress),
+        onRefresh: (self) => render(self.progress),
       });
       return () => trigger.kill();
     });
@@ -374,7 +421,7 @@ export function TrustCinematicPage() {
       <section className="vt-trust-track" data-trust-track aria-label="Five-stage evidence chain">
         <div className="vt-trust-stage">
           <div className="vt-trust-record" data-transition-family="human-trace" data-transition-key="evidence-record">
-            <div className="vt-trust-record__header"><span>HUMAN TRACE / EVIDENCE RECORD</span><span>0{active + 1} / 05</span></div>
+            <div className="vt-trust-record__header"><span>EXAMPLE EVIDENCE RECORD</span><span>0{active + 1} / 05</span></div>
             <blockquote>“{PUBLIC_CONTENT.how.sampleResponse}”</blockquote>
             <div className="vt-trust-record__pipeline" aria-hidden="true">
               {steps.map((step, index) => <span key={step.id} className={index <= active ? 'is-active' : ''}>{step.name}</span>)}
@@ -403,7 +450,7 @@ export function TrustCinematicPage() {
       </section>
 
       <section className="vt-rights"><div><span>CONTROL</span><h2>Your record.<br/>Your controls.</h2><p>Review export, transparency and account-removal actions in their authenticated contexts.</p></div><div className="vt-rights-list">{PUBLIC_CONTENT.trust.rightsActions.map((right) => <article key={right.id}><h3>{right.label}</h3><p>{right.description}</p><CinemaLink className="vt-text-link" to={right.link}>Review this control ↗</CinemaLink></article>)}</div></section>
-      <NextChapter to="/methodology" title="Understand the method." subtitle="The models, formulas and their limits." image={PHOTO.inquiry} family="quiet-editorial" transitionKey="method" />
+      <NextChapter to="/methodology" eyebrow="SCORING METHOD" title="Understand the method." subtitle="The models, formulas and their limits." image={PHOTO.inquiry} family="quiet-editorial" transitionKey="method" />
     </PageFrame>
   );
 }
@@ -431,7 +478,7 @@ export function MethodologyCinematicPage() {
         <div className="vt-monograph-articles">{sectionKeys.map((key, index) => <article id={`method-${key}`} key={key}><span className="vt-method-article-index">0{index + 1} / 08 · {sections[key].role}</span><h2>{sections[key].title}</h2><p>{sections[key].description}</p><MethodDetail name={key} item={sections[key]} /></article>)}</div>
       </div>
       <div className="vt-method-verdict"><h2>Professional insight.<br/><em>Not clinical diagnosis.</em></h2><p>{sections.limits.description}</p><CinemaLink className="vt-text-link" to="/trust">Inspect the evidence chain ↗</CinemaLink></div>
-      <NextChapter to="/privacy" title="Your information. Your choice." subtitle="Plain-language governance and account controls." image={PHOTO.detail} family="quiet-editorial" transitionKey="privacy" />
+      <NextChapter to="/privacy" eyebrow="YOUR DATA RIGHTS" title="Your information. Your choice." subtitle="Plain-language governance and account controls." image={PHOTO.detail} family="quiet-editorial" transitionKey="privacy" />
     </PageFrame>
   );
 }
@@ -447,7 +494,7 @@ export function PrivacyCinematicPage() {
         <div>{data.sections.map((section) => <article key={section.id} id={section.id}><h2>{section.title}</h2><p>{section.content}</p></article>)}</div>
       </section>
       <section className="vt-method-verdict"><h2>Your record remains<br/><em>inspectable.</em></h2><CinemaLink className="vt-text-link" to="/account/privacy">Open privacy controls ↗</CinemaLink></section>
-      <NextChapter to="/" title="A clearer direction." subtitle="Return to the Human Trace." image={PHOTO.source} family="quiet-editorial" transitionKey="home" />
+      <NextChapter to="/" eyebrow="PERSONALITY ASSESSOR" title="A clearer direction." subtitle="Explore your personality, interests and work priorities." image={PHOTO.source} family="quiet-editorial" transitionKey="home" />
     </PageFrame>
   );
 }

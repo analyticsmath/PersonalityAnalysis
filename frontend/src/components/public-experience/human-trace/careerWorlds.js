@@ -57,7 +57,7 @@ export const CAREER_WORLDS = [
 ];
 
 export const CAREER_PRESENTATION_DISCLAIMER =
-  'Work-world grouping is editorial presentation, not a scoring rule. A completed profile is required for personal career comparison.';
+  'These five environments organize related roles for exploration. They do not predict your personal match; complete your profile to compare careers against your own assessment results.';
 
 export function getCareerWorldForRole(roleKey) {
   return CAREER_WORLDS.find((world) => world.roleKeys.includes(roleKey)) || null;
