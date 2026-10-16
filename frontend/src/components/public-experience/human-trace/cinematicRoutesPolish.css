@@ -38,7 +38,11 @@
 
 .vt-cover-media{border:1px solid rgba(255,255,255,.1)}
 .vt-cover-photo{will-change:transform}
-.vt-cover:hover .vt-cover-photo{transform:scale(1.04)}
+.vt-cover[data-cover-directed="true"] .vt-cover-media,
+.vt-cover[data-cover-directed="true"] .vt-cover-photo,
+.vt-cover[data-cover-directed="true"] .vt-cover-copy,
+.vt-cover[data-cover-directed="true"] .vt-cover-folio,
+.vt-cover[data-cover-directed="true"] .vt-cover-shade{transition:none!important}
 
 /* How it works: keep the source object materially present while its reading changes. */
 .vt-how-source-card{box-shadow:none;border:1px solid rgba(21,34,30,.16)}
@@ -108,7 +112,6 @@
 
 @media (max-width:900px), (pointer:coarse){
   .vt-cover-media{border:0}
-  .vt-cover:hover .vt-cover-photo{transform:scale(1.04)}
   .vt-how-trace-stage:after{display:none}
   .vt-how-step:before{top:78px;right:0}
 
@@ -146,7 +149,7 @@
 }
 
 @media (prefers-reduced-motion:reduce){
-  .vt-cover:hover .vt-cover-photo,.vt-next:hover>img{transform:none!important}
+  .vt-next:hover>img{transform:none!important}
   .vt-primary:hover span,.vt-next:hover .vt-next-arrow{transform:none!important}
   .vt-index-drawer nav a:hover,.vt-index-drawer nav a.is-active,.vt-monograph-index a:hover,.vt-privacy-document>nav a:hover{padding-left:0}
 }
