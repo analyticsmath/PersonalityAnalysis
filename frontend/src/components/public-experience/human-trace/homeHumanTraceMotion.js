@@ -12,6 +12,17 @@ const smooth = (value) => {
 const range = (value, start, end) => smooth((value - start) / Math.max(0.0001, end - start));
 const mix = (a, b, value) => a + (b - a) * clamp(value);
 
+const SHOT_GRAMMAR = [
+  { enterX: 0, enterY: 0, enterScale: 1, exitX: -2, exitY: -4, exitScale: 0.985, enterClip: [0, 0, 0, 0], exitClip: [0, 0, 8, 0] },
+  { enterX: 0, enterY: 9, enterScale: 1.035, exitX: -3, exitY: -7, exitScale: 0.97, enterClip: [16, 0, 0, 0], exitClip: [0, 0, 12, 0] },
+  { enterX: 7, enterY: 2, enterScale: 1.02, exitX: -8, exitY: -2, exitScale: 0.98, enterClip: [0, 18, 0, 0], exitClip: [0, 0, 0, 14] },
+  { enterX: 11, enterY: 0, enterScale: 1.04, exitX: -9, exitY: 0, exitScale: 0.985, enterClip: [0, 24, 0, 0], exitClip: [0, 0, 0, 12] },
+  { enterX: 0, enterY: 8, enterScale: 1.03, exitX: 0, exitY: -8, exitScale: 0.975, enterClip: [14, 0, 0, 0], exitClip: [0, 0, 12, 0] },
+  { enterX: 8, enterY: 0, enterScale: 1.025, exitX: -8, exitY: 0, exitScale: 0.98, enterClip: [0, 18, 0, 0], exitClip: [0, 0, 0, 14] },
+  { enterX: -8, enterY: 0, enterScale: 1.025, exitX: 8, exitY: 0, exitScale: 0.98, enterClip: [0, 0, 0, 18], exitClip: [0, 14, 0, 0] },
+  { enterX: 0, enterY: 10, enterScale: 0.965, exitX: 0, exitY: 0, exitScale: 1, enterClip: [18, 0, 0, 0], exitClip: [0, 0, 0, 0] },
+];
+
 function sceneWeights(progress) {
   const p = clamp(progress);
   const weights = HOME_KNOTS.map(() => 0);
@@ -47,6 +58,38 @@ function dominantIndex(weights) {
   return best;
 }
 
+function clipPath(values) {
+  return `inset(${values.map((value) => `${Math.max(0, value).toFixed(2)}%`).join(' ')})`;
+}
+
+function paintScene(scene, index, progress, weight, dominant) {
+  const previous = index === 0 ? HOME_KNOTS[0] : HOME_KNOTS[index - 1];
+  const center = HOME_KNOTS[index];
+  const next = index === HOME_KNOTS.length - 1 ? HOME_KNOTS.at(-1) : HOME_KNOTS[index + 1];
+  const enter = index === 0 ? 1 : range(progress, previous, center);
+  const exit = index === HOME_KNOTS.length - 1 ? 0 : range(progress, center, next);
+  const shot = SHOT_GRAMMAR[index] || SHOT_GRAMMAR[0];
+
+  let x = mix(shot.enterX, 0, enter);
+  let y = mix(shot.enterY, 0, enter);
+  let scale = mix(shot.enterScale, 1, enter);
+  const enteringClip = shot.enterClip.map((value) => mix(value, 0, enter));
+
+  x = mix(x, shot.exitX, exit);
+  y = mix(y, shot.exitY, exit);
+  scale = mix(scale, shot.exitScale, exit);
+  const finalClip = enteringClip.map((value, clipIndex) => mix(value, shot.exitClip[clipIndex], exit));
+
+  const visible = weight > 0.012;
+  scene.style.opacity = String(weight);
+  scene.style.visibility = visible ? 'visible' : 'hidden';
+  scene.style.pointerEvents = weight > 0.62 ? 'auto' : 'none';
+  scene.style.transform = `translate3d(${x}vw, ${y}vh, 0) scale(${scale})`;
+  scene.style.clipPath = clipPath(finalClip);
+  scene.style.zIndex = String(index === dominant ? 3 : index < dominant ? 1 : 2);
+  scene.setAttribute('aria-hidden', String(!visible));
+}
+
 function setActiveWorld(items, labels, progress) {
   const position = clamp(progress) * Math.max(0, items.length - 1);
   const current = Math.min(items.length - 1, Math.round(position));
@@ -54,17 +97,26 @@ function setActiveWorld(items, labels, progress) {
   items.forEach((item, index) => {
     const delta = index - position;
     const distance = Math.abs(delta);
-    const visible = distance < 1.05;
-    item.style.opacity = visible ? String(Math.max(0, 1 - distance * 0.88)) : '0';
+    const visible = distance < 1.06;
+    const arrival = clamp(1 - distance);
+    item.style.opacity = visible ? String(Math.max(0, 1 - distance * 0.82)) : '0';
     item.style.visibility = visible ? 'visible' : 'hidden';
-    item.style.transform = `translate3d(0, ${delta * 16}%, 0) scale(${1 + Math.max(-0.04, 0.035 * (1 - distance))})`;
-    item.style.clipPath = delta > 0 ? `inset(${Math.min(100, distance * 45)}% 0 0 0)` : 'inset(0)';
+    item.style.transform = `translate3d(${delta * 8}%, ${delta * 24}%, 0) scale(${mix(0.94, 1.035, arrival)})`;
+    item.style.clipPath = delta >= 0
+      ? `inset(${Math.min(100, distance * 58)}% 0 0 0)`
+      : `inset(0 0 ${Math.min(100, distance * 34)}% 0)`;
+    item.style.zIndex = String(index === current ? 3 : 2);
     item.setAttribute('aria-hidden', String(index !== current));
   });
 
   labels.forEach((label, index) => {
     label.classList.toggle('is-active', index === current);
   });
+}
+
+function removeInlineStyles(element, properties) {
+  if (!element) return;
+  properties.forEach((property) => element.style.removeProperty(property));
 }
 
 export function mountHomeHumanTrace(root) {
@@ -80,7 +132,10 @@ export function mountHomeHumanTrace(root) {
   const worldLabels = [...root.querySelectorAll('[data-home-world-label]')];
   const branchPaths = [...root.querySelectorAll('[data-home-branch-path]')];
   const masses = [...root.querySelectorAll('[data-home-mass]')];
+  const timeFrame = root.querySelector('[data-home-time-frame]');
   const timeLater = root.querySelector('[data-home-time-later]');
+  const timeBaseImage = timeFrame?.querySelector(':scope > img');
+  const timeLaterImage = timeLater?.querySelector('img');
   const provenanceSteps = [...root.querySelectorAll('[data-home-provenance-step]')];
   const recordObject = root.querySelector('[data-home-record-object]');
 
@@ -100,17 +155,9 @@ export function mountHomeHumanTrace(root) {
       const weights = sceneWeights(p);
       const dominant = dominantIndex(weights);
       stage.dataset.homeDominant = scenes[dominant]?.dataset.homeSceneId || 'human';
+      stage.style.setProperty('--home-progress', String(p));
 
-      scenes.forEach((scene, index) => {
-        const weight = weights[index];
-        const visible = weight > 0.015;
-        const direction = index < dominant ? -1 : index > dominant ? 1 : 0;
-        scene.style.opacity = String(weight);
-        scene.style.visibility = visible ? 'visible' : 'hidden';
-        scene.style.pointerEvents = weight > 0.62 ? 'auto' : 'none';
-        scene.style.transform = `translate3d(0, ${direction * (1 - weight) * 38}px, 0)`;
-        scene.setAttribute('aria-hidden', String(!visible));
-      });
+      scenes.forEach((scene, index) => paintScene(scene, index, p, weights[index], dominant));
 
       if (scrollCue) {
         const cueOpacity = 1 - range(p, 0.015, 0.07);
@@ -119,63 +166,74 @@ export function mountHomeHumanTrace(root) {
       }
 
       if (worldMedia) {
-        const sourceTakeover = range(p, 0.08, 0.2);
-        const darken = range(p, 0.12, 0.33);
-        worldMedia.style.transform = `scale(${mix(1.02, 1.13, sourceTakeover)}) translate3d(0, ${mix(0, -2.5, p)}%, 0)`;
-        worldMedia.style.setProperty('--home-veil-opacity', String(mix(0.08, 0.72, darken)));
-        worldMedia.style.opacity = String(mix(1, 0.22, range(p, 0.3, 0.58)) + mix(0, 0.36, range(p, 0.7, 0.84)));
+        const sourceTakeover = range(p, 0.06, 0.2);
+        const cropResolve = range(p, 0.18, 0.42);
+        const darken = range(p, 0.11, 0.34);
+        const returnPulse = range(p, 0.7, 0.84);
+        worldMedia.style.transform = `translate3d(${mix(0, -2.5, p)}%, ${mix(0, -3.5, p)}%, 0) scale(${mix(1.025, 1.16, sourceTakeover)})`;
+        worldMedia.style.clipPath = `inset(${mix(0, 4.5, cropResolve)}% ${mix(0, 6, cropResolve)}% ${mix(0, 4.5, cropResolve)}% ${mix(0, 6, cropResolve)}%)`;
+        worldMedia.style.setProperty('--home-veil-opacity', String(mix(0.08, 0.74, darken)));
+        const baseOpacity = mix(1, 0.2, range(p, 0.29, 0.58));
+        worldMedia.style.opacity = String(mix(baseOpacity, 0.5, returnPulse));
       }
 
       if (source) {
-        const enter = range(p, 0.075, 0.16);
-        const travel = range(p, 0.22, 0.46);
-        const residueFade = range(p, 0.42, 0.58);
-        const provenanceReturn = range(p, 0.80, 0.89);
-        const finalResolve = range(p, 0.93, 0.985);
+        const enter = range(p, 0.07, 0.145);
+        const travel = range(p, 0.19, 0.45);
+        const settle = range(p, 0.43, 0.54);
+        const residueFade = range(p, 0.5, 0.62);
+        const provenanceReturn = range(p, 0.79, 0.885);
+        const finalResolve = range(p, 0.925, 0.985);
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        const x = mix(vw * 0.08, vw * 0.56, travel);
-        const y = mix(vh * 0.66, vh * 0.09, travel);
-        const scale = mix(1, 0.64, travel);
-        const residueOpacity = mix(1, 0.3, residueFade);
-        const restoredOpacity = mix(residueOpacity, 0.58, provenanceReturn);
+        const x = mix(vw * 0.065, vw * 0.555, travel);
+        const y = mix(vh * 0.68, vh * 0.105, travel);
+        const scale = mix(1.03, 0.63, travel);
+        const rotate = mix(-0.45, 0.2, travel) * (1 - settle);
+        const residueOpacity = mix(1, 0.24, residueFade);
+        const restoredOpacity = mix(residueOpacity, 0.64, provenanceReturn);
         const sourceOpacity = enter * restoredOpacity * (1 - finalResolve);
         source.style.opacity = String(sourceOpacity);
         source.style.visibility = sourceOpacity > 0.02 ? 'visible' : 'hidden';
-        source.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+        source.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale}) rotate(${rotate}deg)`;
       }
 
-      const branchProgress = range(p, 0.245, 0.39);
+      const branchProgress = range(p, 0.235, 0.395);
       branchPaths.forEach((path, index) => {
         const length = Number(path.dataset.pathLength || 1000);
-        const staggered = range(branchProgress, index * 0.08, 0.62 + index * 0.08);
+        const staggered = range(branchProgress, index * 0.07, 0.58 + index * 0.07);
         path.style.strokeDashoffset = String(length * (1 - staggered));
+        path.style.opacity = String(mix(0.22, 0.92, staggered));
       });
 
-      setActiveWorld(worldItems, worldLabels, range(p, 0.39, 0.59));
+      setActiveWorld(worldItems, worldLabels, range(p, 0.385, 0.595));
 
-      const weightProgress = range(p, 0.565, 0.72);
+      const weightProgress = range(p, 0.555, 0.72);
       masses.forEach((mass, index) => {
-        const stagger = range(weightProgress, index * 0.055, 0.55 + index * 0.055);
-        mass.style.transform = `scaleY(${mix(0.08, 1, stagger)})`;
-        mass.style.opacity = String(mix(0.18, 1, stagger));
+        const stagger = range(weightProgress, index * 0.05, 0.52 + index * 0.05);
+        mass.style.transform = `translate3d(0, ${mix(8, 0, stagger)}%, 0) scaleY(${mix(0.045, 1, stagger)})`;
+        mass.style.opacity = String(mix(0.12, 1, stagger));
       });
 
       if (timeLater) {
-        const timeProgress = range(p, 0.7, 0.835);
-        timeLater.style.clipPath = `inset(0 0 0 ${mix(100, 47, timeProgress)}%)`;
+        const timeProgress = range(p, 0.69, 0.835);
+        const split = mix(100, 48, timeProgress);
+        timeLater.style.clipPath = `inset(0 0 0 ${split}%)`;
+        timeFrame?.style.setProperty('--home-time-split', `${split}%`);
+        if (timeBaseImage) timeBaseImage.style.transform = `translate3d(${mix(0, -3.8, timeProgress)}%, 0, 0) scale(${mix(1.035, 1.085, timeProgress)})`;
+        if (timeLaterImage) timeLaterImage.style.transform = `translate3d(${mix(4.5, 0, timeProgress)}%, 0, 0) scale(${mix(1.085, 1.035, timeProgress)})`;
       }
 
-      const provenanceProgress = range(p, 0.805, 0.93);
+      const provenanceProgress = range(p, 0.8, 0.93);
       provenanceSteps.forEach((step, index) => {
-        const reveal = range(provenanceProgress, index * 0.12, 0.42 + index * 0.12);
+        const reveal = range(provenanceProgress, index * 0.1, 0.39 + index * 0.1);
         step.style.opacity = String(reveal);
-        step.style.transform = `translate3d(${mix(40, 0, reveal)}px, 0, 0)`;
+        step.style.transform = `translate3d(${mix(52, 0, reveal)}px, ${mix(8, 0, reveal)}px, 0)`;
       });
 
       if (recordObject) {
-        const recordProgress = range(p, 0.91, 1);
-        recordObject.style.transform = `translate3d(0, ${mix(70, 0, recordProgress)}px, 0) scale(${mix(0.94, 1, recordProgress)})`;
+        const recordProgress = range(p, 0.9, 1);
+        recordObject.style.transform = `translate3d(${mix(7, 0, recordProgress)}vw, ${mix(60, 0, recordProgress)}px, 0) scale(${mix(0.925, 1, recordProgress)}) rotate(${mix(0.8, 0, recordProgress)}deg)`;
         recordObject.style.opacity = String(recordProgress);
       }
     };
@@ -186,8 +244,8 @@ export function mountHomeHumanTrace(root) {
       trigger: track,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 0.32,
-      fastScrollEnd: true,
+      scrub: 0.24,
+      fastScrollEnd: 1800,
       invalidateOnRefresh: true,
       onUpdate: (self) => render(self.progress),
       onRefresh: (self) => render(self.progress),
@@ -195,13 +253,28 @@ export function mountHomeHumanTrace(root) {
 
     return () => {
       trigger.kill();
+      delete stage.dataset.homeDominant;
+      stage.style.removeProperty('--home-progress');
       scenes.forEach((scene) => {
-        scene.style.removeProperty('opacity');
-        scene.style.removeProperty('visibility');
-        scene.style.removeProperty('pointer-events');
-        scene.style.removeProperty('transform');
+        removeInlineStyles(scene, ['opacity', 'visibility', 'pointer-events', 'transform', 'clip-path', 'z-index']);
         scene.removeAttribute('aria-hidden');
       });
+      removeInlineStyles(scrollCue, ['opacity', 'visibility']);
+      removeInlineStyles(worldMedia, ['transform', 'clip-path', 'opacity', '--home-veil-opacity']);
+      removeInlineStyles(source, ['opacity', 'visibility', 'transform']);
+      branchPaths.forEach((path) => removeInlineStyles(path, ['stroke-dasharray', 'stroke-dashoffset', 'opacity']));
+      worldItems.forEach((item) => {
+        removeInlineStyles(item, ['opacity', 'visibility', 'transform', 'clip-path', 'z-index']);
+        item.removeAttribute('aria-hidden');
+      });
+      worldLabels.forEach((label) => label.classList.remove('is-active'));
+      masses.forEach((mass) => removeInlineStyles(mass, ['transform', 'opacity']));
+      removeInlineStyles(timeLater, ['clip-path']);
+      removeInlineStyles(timeBaseImage, ['transform']);
+      removeInlineStyles(timeLaterImage, ['transform']);
+      timeFrame?.style.removeProperty('--home-time-split');
+      provenanceSteps.forEach((step) => removeInlineStyles(step, ['opacity', 'transform']));
+      removeInlineStyles(recordObject, ['transform', 'opacity']);
     };
   });
 
