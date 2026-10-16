@@ -114,6 +114,24 @@ export function CinematicPublicShell() {
   }, [location.pathname]);
 
   useEffect(() => {
+    if (!['/career-intelligence', '/trust'].includes(location.pathname)) return undefined;
+    let cancelled = false;
+    let dispose = () => {};
+    const frame = window.requestAnimationFrame(() => {
+      import('./secondaryRouteDirectors')
+        .then(({ mountSecondaryRouteDirector }) => {
+          if (!cancelled) dispose = mountSecondaryRouteDirector(document, location.pathname);
+        })
+        .catch(() => {});
+    });
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+      dispose();
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
     setMenuOpen(false);
     window.requestAnimationFrame(() => {
       if (scrollEngine.current) scrollEngine.current.scrollTo(0, { immediate: true });
