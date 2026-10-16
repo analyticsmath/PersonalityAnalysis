@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const HOME_KNOTS = [0, 0.12, 0.28, 0.49, 0.64, 0.76, 0.88, 1];
 const clamp = (value) => Math.max(0, Math.min(1, value));
 const smooth = (value) => {
   const t = clamp(value);
@@ -11,17 +12,31 @@ const smooth = (value) => {
 const range = (value, start, end) => smooth((value - start) / Math.max(0.0001, end - start));
 const mix = (a, b, value) => a + (b - a) * clamp(value);
 
-function sceneWeights(progress, count) {
-  const position = clamp(progress) * (count - 1);
-  const lower = Math.min(count - 1, Math.floor(position));
-  const upper = Math.min(count - 1, lower + 1);
-  const t = smooth(position - lower);
-  return Array.from({ length: count }, (_, index) => {
-    if (lower === upper) return index === lower ? 1 : 0;
-    if (index === lower) return 1 - t;
-    if (index === upper) return t;
-    return 0;
-  });
+function sceneWeights(progress) {
+  const p = clamp(progress);
+  const weights = HOME_KNOTS.map(() => 0);
+
+  if (p <= HOME_KNOTS[0]) {
+    weights[0] = 1;
+    return weights;
+  }
+  if (p >= HOME_KNOTS.at(-1)) {
+    weights[weights.length - 1] = 1;
+    return weights;
+  }
+
+  for (let index = 0; index < HOME_KNOTS.length - 1; index += 1) {
+    const start = HOME_KNOTS[index];
+    const end = HOME_KNOTS[index + 1];
+    if (p < start || p > end) continue;
+    const local = smooth((p - start) / Math.max(0.0001, end - start));
+    weights[index] = 1 - local;
+    weights[index + 1] = local;
+    return weights;
+  }
+
+  weights[0] = 1;
+  return weights;
 }
 
 function dominantIndex(weights) {
@@ -82,7 +97,7 @@ export function mountHomeHumanTrace(root) {
   mm.add('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
     const render = (progress) => {
       const p = clamp(progress);
-      const weights = sceneWeights(p, scenes.length);
+      const weights = sceneWeights(p);
       const dominant = dominantIndex(weights);
       stage.dataset.homeDominant = scenes[dominant]?.dataset.homeSceneId || 'human';
 
@@ -114,14 +129,19 @@ export function mountHomeHumanTrace(root) {
       if (source) {
         const enter = range(p, 0.075, 0.16);
         const travel = range(p, 0.22, 0.46);
-        const resolve = range(p, 0.83, 0.96);
+        const residueFade = range(p, 0.42, 0.58);
+        const provenanceReturn = range(p, 0.80, 0.89);
+        const finalResolve = range(p, 0.93, 0.985);
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const x = mix(vw * 0.08, vw * 0.56, travel);
         const y = mix(vh * 0.66, vh * 0.09, travel);
-        const scale = mix(1, 0.7, travel);
-        source.style.opacity = String(enter * (1 - resolve));
-        source.style.visibility = enter * (1 - resolve) > 0.02 ? 'visible' : 'hidden';
+        const scale = mix(1, 0.64, travel);
+        const residueOpacity = mix(1, 0.3, residueFade);
+        const restoredOpacity = mix(residueOpacity, 0.58, provenanceReturn);
+        const sourceOpacity = enter * restoredOpacity * (1 - finalResolve);
+        source.style.opacity = String(sourceOpacity);
+        source.style.visibility = sourceOpacity > 0.02 ? 'visible' : 'hidden';
         source.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
       }
 
