@@ -37,7 +37,7 @@
 .vt-home-experience .vt-home-provenance-record,.vt-home-experience .vt-home-record-object{border:0;box-shadow:none}
 .vt-home-experience .vt-home-record-object__statement{font-family:inherit;font-size:clamp(26px,3vw,44px);line-height:1.15}
 .vt-home-experience .vt-home-record-object__meta{font-family:inherit;font-size:12px;letter-spacing:0;text-transform:none}
-.vt-home-experience .vt-home-provenance-step{border:0}
+.vt-home-experience .vt-home-provenance-step{border:0;grid-template-columns:1fr;gap:8px;padding:18px 0}.vt-home-experience .vt-home-provenance-step>p{margin:0;font-size:15px;line-height:1.4;max-width:360px;color:#3c4d42}
 .vt-home-experience .vt-home-afterword{min-height:35svh;border:0}
 @media(min-width:901px) and (prefers-reduced-motion:no-preference){
  .vt-home-experience .vt-home-scene{background:#09110d}

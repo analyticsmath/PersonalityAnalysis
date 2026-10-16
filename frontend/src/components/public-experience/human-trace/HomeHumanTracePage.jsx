@@ -163,9 +163,14 @@ export function HomeHumanTracePage() {
                 <p>{home.trace.support}</p>
               </div>
               <div className="vt-home-provenance-record" data-transition-family="human-trace" data-transition-key="evidence-record">
-                {['Result', 'Calculation', 'Evidence', 'Source'].map((label, idx) => (
+                {[
+                  ['Result', 'The profile or career comparison you can review.'],
+                  ['Calculation', 'The published weights used in career comparisons.'],
+                  ['Evidence', 'The assessment dimensions behind the result.'],
+                  ['Source', 'The answer and question that supplied the evidence.'],
+                ].map(([label, description], idx) => (
                   <div key={label} className="vt-home-provenance-step" data-home-provenance-step={idx}>
-                    <strong>{label}</strong><i aria-hidden="true" />
+                    <strong>{label}</strong><p>{description}</p>
                   </div>
                 ))}
                 <p>Your answer keeps its question and context.</p>
