@@ -3,7 +3,7 @@
  * Marketing routes share one cinematic shell. Authentication routes use a
  * focused transactional frame; all other public fallbacks retain the legacy shell.
  */
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PublicMotionRoot } from '../motion/PublicMotionRoot';
 import { TransitionPortal } from '../motion/TransitionPortal';
