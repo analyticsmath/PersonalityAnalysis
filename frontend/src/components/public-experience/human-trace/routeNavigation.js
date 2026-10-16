@@ -10,7 +10,16 @@ import {
 
 let activeTransition = null;
 let activeFallbackAnimation = null;
+let activePendingTimer = null;
+let activePendingRequest = 0;
 let epoch = 0;
+
+function clearPendingIndicator(request) {
+  if (activePendingRequest !== request) return;
+  if (activePendingTimer) window.clearTimeout(activePendingTimer);
+  activePendingTimer = null;
+  delete document.documentElement.dataset.cinematicPending;
+}
 
 function routeMain() {
   return document.querySelector('#cinema-main, #main-content');
@@ -133,6 +142,10 @@ export function navigateCinematic(navigate, path, origin) {
   if (currentUrl === path) return;
 
   const request = ++epoch;
+  if (activePendingTimer) window.clearTimeout(activePendingTimer);
+  activePendingTimer = null;
+  activePendingRequest = request;
+  delete document.documentElement.dataset.cinematicPending;
   activeTransition?.skipTransition?.();
   activeFallbackAnimation?.cancel();
   activeFallbackAnimation = null;
@@ -151,6 +164,7 @@ export function navigateCinematic(navigate, path, origin) {
   let applied = false;
 
   const cleanup = () => {
+    clearPendingIndicator(request);
     clearTransitionName(source);
     clearTransitionName(destination);
     resetTransitionDocumentState();
@@ -164,7 +178,14 @@ export function navigateCinematic(navigate, path, origin) {
   };
 
   const begin = async () => {
+    activePendingTimer = window.setTimeout(() => {
+      activePendingTimer = null;
+      if (request === epoch && activePendingRequest === request) {
+        document.documentElement.dataset.cinematicPending = String(request);
+      }
+    }, 140);
     await preloadRoute(path).catch(() => {});
+    clearPendingIndicator(request);
     if (request !== epoch) return;
 
     if (reducedMotion) {
@@ -206,5 +227,6 @@ export function navigateCinematic(navigate, path, origin) {
 
   begin().catch(() => {
     if (request === epoch) cleanup();
+    else clearPendingIndicator(request);
   });
 }

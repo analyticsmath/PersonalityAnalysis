@@ -156,3 +156,8 @@ html[data-cinematic-transition-family="quiet-editorial"]::view-transition-old(ro
   .vt-career-worlds-track,.vt-trust-track{height:auto!important}.vt-career-worlds-stage,.vt-trust-stage{position:relative!important;top:auto!important;height:auto!important}.vt-career-world-index{display:none}.vt-career-worlds-stage{display:block!important}.vt-career-world-viewport{height:auto!important;overflow:visible!important}.vt-career-world-stack{display:block!important;width:100%!important;height:auto!important;transform:none!important;will-change:auto!important}.vt-career-world{position:relative!important;inset:auto!important;flex:none!important;width:100%!important;height:auto!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important}.vt-trust-stage{display:none}.vt-trust-mobile-states{display:block}
   .vt-next:hover>img,.vt-cover-media img{transform:none!important}
 }
+
+
+html[data-cinematic-pending]::after{content:'';position:fixed;top:calc(var(--vt-header) + 12px);left:50%;z-index:99999;width:18px;height:18px;margin-left:-9px;border:1px solid rgba(255,255,255,.18);border-top-color:var(--vt-accent);border-right-color:var(--vt-accent);border-radius:50%;pointer-events:none;animation:vtRouteSpinner .78s linear infinite}
+@keyframes vtRouteSpinner{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){html[data-cinematic-pending]::after{animation:none}}
