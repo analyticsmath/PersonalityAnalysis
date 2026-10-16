@@ -391,30 +391,9 @@ function useTrustTimeline(rootRef, setActive) {
     mm.add('(min-width:901px) and (min-height:700px) and (pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
       const lastStep = Math.max(1, track.querySelectorAll('.vt-trust-record__pipeline span').length - 1);
       let previous = -1;
-      let settledStep = 0;
-      const syncSettledStep = (progress) => {
-        const value = Math.max(0, Math.min(1, progress));
-        if (value <= 0.02) {
-          settledStep = 0;
-          return;
-        }
-        if (value >= 0.98) {
-          settledStep = lastStep;
-          return;
-        }
-        const nearest = Math.round(value * lastStep);
-        if (Math.abs(value - nearest / lastStep) <= 0.025) settledStep = nearest;
-      };
-      const stepForProgress = (progress) => {
-        const rawPosition = Math.max(0, Math.min(1, progress)) * lastStep;
-        const forwardThreshold = settledStep === 0 ? 0.5 : 0.25;
-        if (rawPosition > settledStep + forwardThreshold) return Math.min(lastStep, settledStep + 1);
-        if (rawPosition < settledStep - 0.5) return Math.max(0, settledStep - 1);
-        return settledStep;
-      };
-      const boundedSnapStop = (progress) => stepForProgress(progress) / lastStep;
       const render = (progress) => {
-        const index = stepForProgress(progress);
+        const value = Math.max(0, Math.min(1, progress));
+        const index = Math.round(value * lastStep);
         if (index !== previous) {
           previous = index;
           setActive(index);
@@ -426,20 +405,10 @@ function useTrustTimeline(rootRef, setActive) {
         trigger: track,
         start: 'top 84px',
         end: 'bottom bottom',
-        scrub: 0.55,
-        snap: {
-          snapTo: boundedSnapStop,
-          duration: { min: 0.72, max: 1.0 },
-          delay: 0.16,
-          ease: 'power2.out',
-        },
+        scrub: 0.5,
         invalidateOnRefresh: true,
         onUpdate: (self) => render(self.progress),
-        onSnapComplete: (self) => { settledStep = Math.round(self.progress * lastStep); },
-        onRefresh: (self) => {
-          syncSettledStep(self.progress);
-          render(self.progress);
-        },
+        onRefresh: (self) => render(self.progress),
       });
       return () => trigger.kill();
     });
