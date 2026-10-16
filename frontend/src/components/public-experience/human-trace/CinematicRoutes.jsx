@@ -4,8 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import careersData from '../../../content/careers.json';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { CAREER_PRESENTATION_DISCLAIMER, CAREER_WORLDS } from './careerWorlds';
-import { CinemaLink, useCinemaLenis } from './CinematicPublicShell';
-import Snap from 'lenis/snap';
+import { CinemaLink } from './CinematicPublicShell';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -170,7 +169,7 @@ const mediaForRole = (key, fallback) => {
   return fallback || PHOTO.autonomy;
 };
 
-function useCareerWorldTimeline(rootRef, setActiveWorld, lenis) {
+function useCareerWorldTimeline(rootRef, setActiveWorld) {
   useEffect(() => {
     const root = rootRef.current;
     const track = root?.querySelector('[data-career-world-track]');
@@ -183,32 +182,12 @@ function useCareerWorldTimeline(rootRef, setActiveWorld, lenis) {
       const render = (progress) => {
         const position = Math.max(0, Math.min(1, progress)) * (CAREER_WORLDS.length - 1);
         const index = Math.round(position);
-        rail.style.transform = 'translate3d(' + (-position * 20) + '%, 0, 0)';
+        rail.style.transform = `translate3d(${-position * 20}%, 0, 0)`;
 
         if (index !== previous) {
           previous = index;
           setActiveWorld(index);
         }
-      };
-
-      const snap = lenis
-        ? new Snap(lenis, {
-            type: 'lock',
-            distanceThreshold: '100%',
-            debounce: 140,
-            duration: 0.86,
-          })
-        : null;
-      snap?.stop();
-      let removeSnapStops = [];
-
-      const replaceSnapStops = (self) => {
-        removeSnapStops.forEach((remove) => remove());
-        removeSnapStops = snap
-          ? CAREER_WORLDS.map((_, index) => snap.add(
-              self.start + ((self.end - self.start) * index) / (CAREER_WORLDS.length - 1)
-            ))
-          : [];
       };
 
       render(0);
@@ -217,45 +196,24 @@ function useCareerWorldTimeline(rootRef, setActiveWorld, lenis) {
         start: 'top 84px',
         end: 'bottom bottom',
         scrub: 0.38,
-        ...(!snap ? {
-          snap: {
-            snapTo: 1 / (CAREER_WORLDS.length - 1),
-            duration: { min: 0.42, max: 0.78 },
-            delay: 0.12,
-            ease: 'power2.out',
-          },
-        } : {}),
+        snap: {
+          snapTo: 1 / (CAREER_WORLDS.length - 1),
+          duration: { min: 0.55, max: 0.9 },
+          delay: 0.16,
+          ease: 'power2.out',
+        },
         invalidateOnRefresh: true,
         onUpdate: (self) => render(self.progress),
-        onRefresh: (self) => {
-          replaceSnapStops(self);
-          render(self.progress);
-        },
-        onEnter: () => {
-          if (!snap) return;
-          snap.start();
-          snap.goTo(0);
-        },
-        onEnterBack: () => {
-          if (!snap) return;
-          snap.start();
-          snap.goTo(CAREER_WORLDS.length - 1);
-        },
-        onLeave: () => snap?.stop(),
-        onLeaveBack: () => snap?.stop(),
+        onRefresh: (self) => render(self.progress),
       });
-
-      replaceSnapStops(trigger);
 
       return () => {
         trigger.kill();
-        removeSnapStops.forEach((remove) => remove());
-        snap?.destroy();
         rail.style.removeProperty('transform');
       };
     });
     return () => mm.revert();
-  }, [rootRef, setActiveWorld, lenis]);
+  }, [rootRef, setActiveWorld]);
 }
 export function CareerCinematicPage() {
   const rootRef = useRef(null);
@@ -266,8 +224,7 @@ export function CareerCinematicPage() {
   const [selectedByWorld, setSelectedByWorld] = useState(() => Object.fromEntries(CAREER_WORLDS.map((world) => [world.id, world.roleKeys[0]])));
   const roleRefs = useRef({});
 
-  const lenis = useCinemaLenis();
-  useCareerWorldTimeline(rootRef, setActiveWorld, lenis);
+  useCareerWorldTimeline(rootRef, setActiveWorld);
 
   useEffect(() => {
     const media = window.matchMedia(CAREER_RAIL_QUERY);
