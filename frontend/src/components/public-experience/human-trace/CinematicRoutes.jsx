@@ -175,11 +175,23 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
 
     const mm = gsap.matchMedia();
     mm.add(CAREER_RAIL_QUERY, () => {
+      const lastWorld = CAREER_WORLDS.length - 1;
       let previous = -1;
+      let settledWorld = 0;
+      let initialized = false;
+      const boundedProgress = (progress) => {
+        const rawPosition = Math.max(0, Math.min(1, progress)) * lastWorld;
+        return Math.max(settledWorld - 1, Math.min(settledWorld + 1, rawPosition));
+      };
+      const boundedSnapStop = (progress) => {
+        const requested = Math.round(Math.max(0, Math.min(1, progress)) * lastWorld);
+        const allowed = Math.max(settledWorld - 1, Math.min(settledWorld + 1, requested));
+        return allowed / lastWorld;
+      };
       const render = (progress) => {
-        const position = Math.max(0, Math.min(1, progress)) * (CAREER_WORLDS.length - 1);
+        const position = boundedProgress(progress);
         const index = Math.round(position);
-        rail.style.transform = `translate3d(${-position * 20}%, 0, 0)`;
+        rail.style.transform = 'translate3d(' + (-position * 20) + '%, 0, 0)';
 
         if (index !== previous) {
           previous = index;
@@ -194,14 +206,21 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
         end: 'bottom bottom',
         scrub: 0.95,
         snap: {
-          snapTo: 1 / (CAREER_WORLDS.length - 1),
+          snapTo: boundedSnapStop,
           duration: { min: 0.78, max: 1.15 },
           delay: 0.3,
           ease: 'power2.out',
         },
         invalidateOnRefresh: true,
         onUpdate: (self) => render(self.progress),
-        onRefresh: (self) => render(self.progress),
+        onSnapComplete: (self) => { settledWorld = Math.round(self.progress * lastWorld); },
+        onRefresh: (self) => {
+          if (!initialized) {
+            settledWorld = Math.round(self.progress * lastWorld);
+            initialized = true;
+          }
+          render(self.progress);
+        },
       });
 
       return () => {
@@ -372,9 +391,21 @@ function useTrustTimeline(rootRef, setActive) {
     if (!track) return undefined;
     const mm = gsap.matchMedia();
     mm.add('(min-width:901px) and (min-height:700px) and (pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
+      const lastStep = 4;
       let previous = -1;
+      let settledStep = 0;
+      let initialized = false;
+      const boundedProgress = (progress) => {
+        const rawPosition = Math.max(0, Math.min(1, progress)) * lastStep;
+        return Math.max(settledStep - 1, Math.min(settledStep + 1, rawPosition));
+      };
+      const boundedSnapStop = (progress) => {
+        const requested = Math.round(Math.max(0, Math.min(1, progress)) * lastStep);
+        const allowed = Math.max(settledStep - 1, Math.min(settledStep + 1, requested));
+        return allowed / lastStep;
+      };
       const render = (progress) => {
-        const index = Math.min(4, Math.round(progress * 4));
+        const index = Math.round(boundedProgress(progress));
         if (index !== previous) {
           previous = index;
           setActive(index);
@@ -388,14 +419,21 @@ function useTrustTimeline(rootRef, setActive) {
         end: 'bottom bottom',
         scrub: 0.95,
         snap: {
-          snapTo: 1 / 4,
+          snapTo: boundedSnapStop,
           duration: { min: 0.78, max: 1.15 },
           delay: 0.3,
           ease: 'power2.out',
         },
         invalidateOnRefresh: true,
         onUpdate: (self) => render(self.progress),
-        onRefresh: (self) => render(self.progress),
+        onSnapComplete: (self) => { settledStep = Math.round(self.progress * lastStep); },
+        onRefresh: (self) => {
+          if (!initialized) {
+            settledStep = Math.round(self.progress * lastStep);
+            initialized = true;
+          }
+          render(self.progress);
+        },
       });
       return () => trigger.kill();
     });

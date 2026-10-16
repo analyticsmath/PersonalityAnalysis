@@ -5,6 +5,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 const HOME_SCENE_STOPS = [0.04, 0.16, 0.285, 0.41, 0.535, 0.66, 0.785, 0.935];
 
+function closestSceneStop(progress) {
+  return HOME_SCENE_STOPS.reduce((best, stop, index) =>
+    Math.abs(stop - progress) < Math.abs(HOME_SCENE_STOPS[best] - progress) ? index : best, 0);
+}
+
 const HOME_HANDOFFS = [
   [0.08, 0.115],
   [0.205, 0.24],
@@ -154,8 +159,21 @@ export function mountHomeHumanTrace(root) {
   const mm = gsap.matchMedia();
 
   mm.add('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+    const lastScene = HOME_SCENE_STOPS.length - 1;
+    let settledScene = 0;
+    let initialized = false;
+    const boundedProgress = (progress) => {
+      const lower = settledScene === 0 ? 0 : HOME_SCENE_STOPS[settledScene - 1];
+      const upper = settledScene === lastScene ? 1 : HOME_SCENE_STOPS[settledScene + 1];
+      return Math.max(lower, Math.min(upper, clamp(progress)));
+    };
+    const boundedSnapStop = (progress) => {
+      const requested = closestSceneStop(clamp(progress));
+      const allowed = Math.max(settledScene - 1, Math.min(settledScene + 1, requested));
+      return HOME_SCENE_STOPS[allowed];
+    };
     const render = (progress) => {
-      const p = clamp(progress);
+      const p = boundedProgress(progress);
       const weights = sceneWeights(p);
       const dominant = dominantIndex(weights);
       stage.dataset.homeDominant = scenes[dominant]?.dataset.homeSceneId || 'human';
@@ -250,14 +268,21 @@ export function mountHomeHumanTrace(root) {
       end: 'bottom bottom',
       scrub: 1,
       snap: {
-        snapTo: HOME_SCENE_STOPS,
+        snapTo: boundedSnapStop,
         duration: { min: 0.78, max: 1.15 },
         delay: 0.3,
         ease: 'power2.out',
       },
       invalidateOnRefresh: true,
       onUpdate: (self) => render(self.progress),
-      onRefresh: (self) => render(self.progress),
+      onSnapComplete: (self) => { settledScene = closestSceneStop(self.progress); },
+      onRefresh: (self) => {
+        if (!initialized) {
+          settledScene = closestSceneStop(self.progress);
+          initialized = true;
+        }
+        render(self.progress);
+      },
     });
 
     return () => {
