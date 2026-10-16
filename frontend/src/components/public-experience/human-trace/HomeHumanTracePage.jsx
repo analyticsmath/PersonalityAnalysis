@@ -3,6 +3,7 @@ import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent
 import { CinemaLink } from './CinematicPublicShell';
 import { mountHomeHumanTrace } from './homeHumanTraceMotion';
 import './homeHumanTrace.css';
+import './homeHumanTracePolish.css';
 
 const PHOTO = {
   human: '/media/public-experience/digital/designer-1920.webp',
@@ -87,6 +88,10 @@ export function HomeHumanTracePage() {
                 <p>{home.worldEntry.prompt}</p>
                 <small>A single response can suggest questions worth asking. A scored profile requires sufficient independent evidence.</small>
               </div>
+              <blockquote className="vt-home-source-mobile" data-transition-family="human-trace" data-transition-key="source-response">
+                <span>SOURCE RESPONSE</span>
+                <p>“{home.situation.response}”</p>
+              </blockquote>
             </Scene>
 
             <Scene id="branch" index={2} eyebrow="The branch">
