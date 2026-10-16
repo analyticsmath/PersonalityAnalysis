@@ -53,7 +53,7 @@ export function CinematicPublicShell() {
   const scrollTo = useCallback((position, options = {}) => {
     if (scrollEngine.current) {
       scrollEngine.current.scrollTo(position, {
-        duration: options.immediate ? 0 : 0.62,
+        duration: options.immediate ? 0 : 0.56,
         immediate: options.immediate === true,
       });
       return;
@@ -66,7 +66,7 @@ export function CinematicPublicShell() {
   useEffect(() => {
     const mm = gsap.matchMedia();
     mm.add('(pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
-      const lenis = new Lenis({ duration: 0.78, smoothWheel: true, syncTouch: false });
+      const lenis = new Lenis({ duration: 0.6, smoothWheel: true, syncTouch: false });
       scrollEngine.current = lenis;
       lenis.on('scroll', ScrollTrigger.update);
       const tick = (time) => lenis.raf(time * 1000);
