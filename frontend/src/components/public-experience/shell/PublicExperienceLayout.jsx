@@ -1,7 +1,7 @@
 /**
  * Personality Assessor - Public Experience Layout
- * Marketing routes share one cinematic shell. Authentication routes retain the
- * existing public application shell so product/auth behavior remains isolated.
+ * Marketing routes share one cinematic shell. Authentication routes use a
+ * focused transactional frame; all other public fallbacks retain the legacy shell.
  */
 import React, { useState, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -28,11 +28,27 @@ export const PublicExperienceLayout = () => {
   const [indexOpen, setIndexOpen] = useState(false);
   const triggerRef = useRef(null);
   const location = useLocation();
-
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
 
   if (CINEMATIC_MARKETING_ROUTES.has(location.pathname)) {
     return <CinematicPublicShell />;
+  }
+
+  if (isAuthRoute) {
+    return (
+      <PublicMotionRoot>
+        <div className="pa-public-experience pa-px-shell-root pa-px-shell-root--auth">
+          <a href="#main-content" className="pa-px-skip-link">Skip to main content</a>
+          <TransitionPortal />
+          <PublicTransitionManager />
+          <main id="main-content" tabIndex="-1" style={{ outline: 'none' }}>
+            <PublicRouteStage>
+              <Outlet />
+            </PublicRouteStage>
+          </main>
+        </div>
+      </PublicMotionRoot>
+    );
   }
 
   return (
@@ -56,7 +72,7 @@ export const PublicExperienceLayout = () => {
           onClose={() => setIndexOpen(false)}
           triggerRef={triggerRef}
         />
-        {!isAuthRoute && <PublicFooter />}
+        <PublicFooter />
       </div>
     </PublicMotionRoot>
   );
