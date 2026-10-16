@@ -45,6 +45,11 @@
 .vt-how-clause-stage span{border:1px solid rgba(21,34,30,.12)}
 .vt-how-record-stage{border:1px solid rgba(21,34,30,.2)}
 .vt-how-branch-stage span{border:1px solid rgba(21,34,30,.16)}
+.vt-how-trace-stage[data-how-directed="true"] .vt-how-source-card,
+.vt-how-trace-stage[data-how-directed="true"] .vt-how-clause-stage,
+.vt-how-trace-stage[data-how-directed="true"] .vt-how-branch-stage,
+.vt-how-trace-stage[data-how-directed="true"] .vt-how-weight-stage,
+.vt-how-trace-stage[data-how-directed="true"] .vt-how-record-stage{transition:none!important}
 .vt-how-trace-stage:after{
   content:'';
   position:absolute;
