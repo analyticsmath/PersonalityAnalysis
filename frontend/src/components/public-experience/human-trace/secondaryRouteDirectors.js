@@ -10,9 +10,69 @@ const smooth = (value) => {
 };
 const mix = (a, b, value) => a + (b - a) * clamp(value);
 
+const COVER_GRAMMAR = {
+  '/how-it-works': { x: -3.5, y: -1.8, fromScale: 1.04, toScale: 1.14, mediaX: -1.4, mediaY: -1.2, copyY: -3.8, shade: 0.1 },
+  '/career-intelligence': { x: -4.8, y: 0, fromScale: 1.05, toScale: 1.13, mediaX: -2.2, mediaY: 0, copyY: -4.8, shade: 0.06 },
+  '/progress': { x: 2.2, y: -1, fromScale: 1.11, toScale: 1.025, mediaX: 1.1, mediaY: -1.4, copyY: -3.2, shade: -0.04 },
+  '/trust': { x: -2.2, y: -2.2, fromScale: 1.04, toScale: 1.12, mediaX: -1.3, mediaY: -1.8, copyY: -4.2, shade: 0.11 },
+  '/methodology': { x: -1.3, y: -0.8, fromScale: 1.035, toScale: 1.07, mediaX: -0.8, mediaY: -0.7, copyY: -2.2, shade: 0.03 },
+  '/privacy': { x: 1.1, y: -0.6, fromScale: 1.025, toScale: 1.055, mediaX: 0.7, mediaY: -0.5, copyY: -1.8, shade: 0.02 },
+};
+
 function clear(element, properties) {
   if (!element) return;
   properties.forEach((property) => element.style.removeProperty(property));
+}
+
+function mountCover(root, pathname) {
+  const route = root.querySelector?.('.vt-route');
+  const cover = route?.querySelector('.vt-cover');
+  const media = cover?.querySelector('.vt-cover-media');
+  const image = cover?.querySelector('.vt-cover-photo');
+  const shade = cover?.querySelector('.vt-cover-shade');
+  const copy = cover?.querySelector('.vt-cover-copy');
+  const folio = cover?.querySelector('.vt-cover-folio');
+  const grammar = COVER_GRAMMAR[pathname];
+  if (!cover || !media || !image || !copy || !grammar) return () => {};
+
+  const mm = gsap.matchMedia();
+  mm.add('(min-width:901px) and (pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
+    cover.dataset.coverDirected = 'true';
+
+    const render = (value) => {
+      const p = clamp(value);
+      const release = smooth(p);
+      image.style.transform = `translate3d(${mix(0, grammar.x, release)}%, ${mix(0, grammar.y, release)}%, 0) scale(${mix(grammar.fromScale, grammar.toScale, release)})`;
+      media.style.transform = `translate3d(${mix(0, grammar.mediaX, release)}vw, ${mix(0, grammar.mediaY, release)}vh, 0)`;
+      copy.style.transform = `translate3d(0, ${mix(0, grammar.copyY, release)}vh, 0)`;
+      if (folio) folio.style.transform = `translate3d(0, ${mix(0, -12, release)}px, 0)`;
+      if (shade) shade.style.opacity = String(clamp(1 + grammar.shade * release));
+    };
+
+    render(0);
+    const trigger = ScrollTrigger.create({
+      trigger: cover,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 0.18,
+      fastScrollEnd: 1600,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => render(self.progress),
+      onRefresh: (self) => render(self.progress),
+    });
+
+    return () => {
+      trigger.kill();
+      delete cover.dataset.coverDirected;
+      clear(image, ['transform']);
+      clear(media, ['transform']);
+      clear(copy, ['transform']);
+      clear(folio, ['transform']);
+      clear(shade, ['opacity']);
+    };
+  });
+
+  return () => mm.revert();
 }
 
 function mountCareer(root) {
@@ -40,21 +100,23 @@ function mountCareer(root) {
         const proximity = smooth(1 - Math.min(1, distance));
         const incoming = delta > 0;
         const ownsInteraction = index === dominant && distance < 0.56;
+        const ownsFocus = world.contains(document.activeElement);
+        const accessibilityOwner = ownsInteraction || ownsFocus;
         const media = world.querySelector('.vt-career-world-media');
         const image = media?.querySelector('img');
         const copy = world.querySelector('.vt-career-world-copy');
         const roleField = world.querySelector('.vt-career-role-field');
 
         world.style.opacity = visible ? String(Math.max(0, 1 - distance * 0.9)) : '0';
-        world.style.visibility = visible ? 'visible' : 'hidden';
+        world.style.visibility = visible || ownsFocus ? 'visible' : 'hidden';
         world.style.pointerEvents = ownsInteraction ? 'auto' : 'none';
         world.style.zIndex = String(index === dominant ? 3 : incoming ? 2 : 1);
         world.style.transform = `translate3d(${delta * 8.5}%, ${delta * 2.2}%, 0) scale(${mix(0.972, 1, proximity)})`;
         world.style.clipPath = incoming
           ? `inset(0 0 0 ${Math.min(100, distance * 32)}%)`
           : `inset(0 ${Math.min(100, distance * 22)}% 0 0)`;
-        world.setAttribute('aria-hidden', String(!ownsInteraction));
-        world.inert = !ownsInteraction;
+        world.setAttribute('aria-hidden', String(!accessibilityOwner));
+        world.inert = !accessibilityOwner;
 
         if (image) {
           image.style.transform = `translate3d(${delta * -3.8}%, 0, 0) scale(${mix(1.09, 1.015, proximity)})`;
@@ -188,9 +250,10 @@ function mountTrust(root) {
 }
 
 export function mountSecondaryRouteDirector(root = document, pathname = window.location.pathname) {
-  if (pathname === '/career-intelligence') return mountCareer(root);
-  if (pathname === '/trust') return mountTrust(root);
-  return () => {};
+  const cleanups = [mountCover(root, pathname)];
+  if (pathname === '/career-intelligence') cleanups.push(mountCareer(root));
+  if (pathname === '/trust') cleanups.push(mountTrust(root));
+  return () => cleanups.forEach((cleanup) => cleanup?.());
 }
 
 export default mountSecondaryRouteDirector;
