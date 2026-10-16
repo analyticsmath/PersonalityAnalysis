@@ -4,6 +4,26 @@
 .vt-home-frame{top:104px;justify-content:flex-end}
 .vt-home-frame span:first-child{display:none}
 
+/* The film is staged as changing shots, not stacked sections. */
+.vt-home-film-stage{--home-time-split:53%;perspective:1400px}
+.vt-home-scene{transform-origin:center 52%;overflow:hidden;backface-visibility:hidden}
+.vt-home-film-stage:after{
+  content:'';
+  position:absolute;
+  z-index:8;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent calc(50% - .5px),rgba(255,255,255,.045) 50%,transparent calc(50% + .5px)),
+    linear-gradient(0deg,rgba(0,0,0,.18),transparent 18%,transparent 80%,rgba(0,0,0,.12));
+  mix-blend-mode:soft-light;
+}
+
+/* Material authority comes from geometry and crop, not generic soft elevation. */
+.vt-home-source-actor{box-shadow:none;border:1px solid rgba(21,34,30,.18)}
+.vt-home-record-object{box-shadow:none;border:1px solid rgba(21,34,30,.24)}
+.vt-home-provenance-record{border:1px solid rgba(21,34,30,.14)}
+
 /* Explicit physical territory avoids relying on CSS multiplication support. */
 .vt-home-mass__item:nth-child(1),.vt-home-mass__item:nth-child(2){height:66.25%}
 .vt-home-mass__item:nth-child(3){height:53%}
@@ -11,8 +31,29 @@
 .vt-home-mass__item:nth-child(5){height:26.5%}
 .vt-home-mass__item:nth-child(6){height:18%}
 
+/* The temporal cut has one shared moving seam. */
+.vt-home-time-frame__axis{left:var(--home-time-split);transition:none}
+.vt-home-time-frame>img,.vt-home-time-frame__later img{will-change:transform}
+.vt-home-time-frame__later{will-change:clip-path}
+
+/* Increase silhouette contrast between successive desktop worlds. */
+.vt-home-world:nth-child(1) .vt-home-world__copy{max-width:82%}
+.vt-home-world:nth-child(2) .vt-home-world__copy{left:12%;bottom:18%}
+.vt-home-world:nth-child(3) .vt-home-world__copy{left:7%;right:16%;bottom:10%}
+.vt-home-world:nth-child(4) .vt-home-world__copy{left:14%;right:7%;bottom:16%}
+.vt-home-world:nth-child(2) img{object-position:58% center}
+.vt-home-world:nth-child(3) img{object-position:45% center}
+.vt-home-world:nth-child(4) img{object-position:62% center}
+
+/* A decisive CTA response: no floating button nudge. */
+.vt-home-primary{transition:background .24s cubic-bezier(.22,1,.36,1),color .24s cubic-bezier(.22,1,.36,1)}
+.vt-home-primary:hover{transform:none!important}
+.vt-home-primary span{transition:transform .28s cubic-bezier(.22,1,.36,1)}
+.vt-home-primary:hover span{transform:translate3d(4px,-4px,0)}
+
 @media (max-width:900px), (pointer:coarse){
   .vt-home-frame{top:90px;left:20px;right:20px}
+  .vt-home-film-stage:after{display:none}
   .vt-home-source-actor{display:none!important}
   .vt-home-scene--human{
     margin-top:-74svh;
@@ -32,19 +73,51 @@
     padding:20px;
     background:var(--vt-home-paper);
     color:var(--vt-home-ink);
+    border:1px solid rgba(21,34,30,.16);
   }
   .vt-home-source-mobile>span{display:block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;margin-bottom:20px;opacity:.58}
   .vt-home-source-mobile p{margin:0;font-family:'Newsreader Variable',Georgia,serif;font-size:clamp(24px,6.4vw,36px);line-height:1.08;letter-spacing:-.035em}
+
+  /* Mobile is a separate cut: the four work worlds use different shot sizes and offsets. */
+  .vt-home-worlds{padding:18px 0 72px;background:#0d1712}
+  .vt-home-world{min-height:0!important;margin:0!important;border-top:0!important;overflow:hidden}
+  .vt-home-world:nth-child(1){width:92%;height:54svh;min-height:420px!important;margin-left:0!important}
+  .vt-home-world:nth-child(2){width:82%;height:61svh;min-height:460px!important;margin:34px 0 0 auto!important}
+  .vt-home-world:nth-child(3){width:94%;height:49svh;min-height:400px!important;margin:38px auto 0 0!important}
+  .vt-home-world:nth-child(4){width:86%;height:58svh;min-height:440px!important;margin:34px 0 0 auto!important}
+  .vt-home-world__copy{left:18px!important;right:18px!important;bottom:20px!important;max-width:none!important}
+  .vt-home-world:nth-child(2) .vt-home-world__copy,.vt-home-world:nth-child(4) .vt-home-world__copy{left:24px!important}
+  .vt-home-world img{transform:scale(1.035)!important}
+
+  .vt-home-branch-field{height:500px}
+  .vt-home-branch-node--1{top:3%;left:0}
+  .vt-home-branch-node--2{top:38%;right:0}
+  .vt-home-branch-node--3{left:8%;bottom:0}
+  .vt-home-branch-core{transform:translate(-50%,-50%) rotate(-1.2deg)}
+
+  .vt-home-mass{align-items:flex-end}
+  .vt-home-mass__item{border-right:1px solid rgba(21,34,30,.12)}
+  .vt-home-time-frame__axis{left:52%}
+  .vt-home-record-object{transform:none!important}
 }
 
 @media (max-width:520px){
   .vt-home-frame{top:82px;left:16px;right:16px}
   .vt-home-scene--human{margin-top:-68svh;min-height:68svh!important;padding-bottom:46px!important}
   .vt-home-source-mobile{margin-top:34px;padding:16px}
+  .vt-home-worlds{padding-bottom:54px}
+  .vt-home-world:nth-child(1){width:94%;height:51svh;min-height:390px!important}
+  .vt-home-world:nth-child(2){width:84%;height:57svh;min-height:420px!important}
+  .vt-home-world:nth-child(3){width:96%;height:47svh;min-height:370px!important}
+  .vt-home-world:nth-child(4){width:88%;height:54svh;min-height:400px!important}
+  .vt-home-world__copy h3{font-size:42px!important}
+  .vt-home-branch-field{height:450px}
 }
 
 @media (prefers-reduced-motion:reduce){
   .vt-home-source-actor{display:none!important}
+  .vt-home-film-stage:after{display:none}
+  .vt-home-scene{clip-path:none!important}
   .vt-home-scene--human{
     margin-top:-68svh;
     min-height:68svh!important;
@@ -53,7 +126,8 @@
     display:flex;
     align-items:flex-end;
   }
-  .vt-home-source-mobile{display:block;margin:42px 0 0;padding:20px;background:var(--vt-home-paper);color:var(--vt-home-ink)}
+  .vt-home-source-mobile{display:block;margin:42px 0 0;padding:20px;background:var(--vt-home-paper);color:var(--vt-home-ink);border:1px solid rgba(21,34,30,.16)}
   .vt-home-source-mobile>span{display:block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;margin-bottom:20px;opacity:.58}
   .vt-home-source-mobile p{margin:0;font-family:'Newsreader Variable',Georgia,serif;font-size:clamp(24px,4vw,38px);line-height:1.08;letter-spacing:-.035em}
+  .vt-home-time-frame__axis{left:50%}
 }
