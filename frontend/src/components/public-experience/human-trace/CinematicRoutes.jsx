@@ -24,8 +24,6 @@ const PHOTO = {
   design: '/media/public-experience/digital/designer-1920.webp',
 };
 
-const RECORD_STATEMENT = 'Your responses remain part of the record.';
-
 function Cover({ lines, image, alt, description, position = 'center', variant = '', family = 'context-media', transitionKey = 'working-context' }) {
   return (
     <section className={`vt-cover vt-cover--${variant}`}>
@@ -38,15 +36,6 @@ function Cover({ lines, image, alt, description, position = 'center', variant = 
         <p>{description}</p>
       </div>
     </section>
-  );
-}
-
-function SourceNote({ dark = false }) {
-  return (
-    <aside className={`vt-source-note${dark ? ' vt-source-note--dark' : ''}`} aria-label="Your response and its interpretation">
-      <p className="vt-record-statement">{RECORD_STATEMENT}</p>
-      <small>Read the interpretation alongside its evidence and limits.</small>
-    </aside>
   );
 }
 
@@ -129,7 +118,7 @@ export function HowCinematicPage() {
             <div className="vt-how-branch-stage" aria-hidden="true"><span>Big Five</span><span>RIASEC</span><span>Work Values</span></div>
             <div className="vt-how-weight-stage" aria-hidden="true">{weights.map((weight) => <i key={weight.id} style={{ '--weight': weight.percentage }}><b>{weight.percentage}%</b><span>{weight.label}</span></i>)}</div>
             <div className="vt-how-record-stage" aria-hidden="true"><strong>Source retained.</strong><strong>Weights explicit.</strong><strong>Limits visible.</strong></div>
-            <SourceNote dark />
+            
           </div>
         </aside>
 
@@ -370,8 +359,8 @@ export function ProgressCinematicPage() {
         </div>
         <div className="vt-time-controls">
           <label htmlFor="vt-longitudinal-slider">Inspect the relationship between two illustrative contexts</label>
-          <input id="vt-longitudinal-slider" type="range" min="5" max="95" value={split} onChange={(event) => setSplit(Number(event.target.value))} aria-valuetext={`${split} percent baseline context, ${100 - split} percent later context`} />
-          <output>{split}% baseline</output>
+          <input id="vt-longitudinal-slider" type="range" min="5" max="95" value={split} onChange={(event) => setSplit(Number(event.target.value))} aria-valuetext={`Divider at ${split} percent across the comparison`} />
+          
         </div>
       </section>
 
@@ -379,7 +368,7 @@ export function ProgressCinematicPage() {
         <article><h2>{content.stabilityFinding}</h2><p>Without an earlier record, there is nothing reliable to compare. Source and context must remain available for later inspection.</p></article>
         <article><h2>{content.adaptationFinding}</h2><p>Later conditions can alter the interpretation. Neither photograph represents the assessment history of a real person.</p></article>
       </section>
-      <div className="vt-dark-quote"><SourceNote dark /><p>Keep the earlier context in view. Understand what a later record adds.</p></div>
+      <div className="vt-dark-quote"><p>Keep the earlier context in view. Understand what a later record adds.</p></div>
       <NextChapter to="/trust" title="See the evidence." subtitle="Every interpretation starts somewhere." image={PHOTO.proof} family="human-trace" transitionKey="evidence-record" />
     </PageFrame>
   );

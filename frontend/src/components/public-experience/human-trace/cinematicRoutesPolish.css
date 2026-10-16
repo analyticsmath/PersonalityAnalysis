@@ -102,7 +102,7 @@
 .vt-monograph-index a,.vt-privacy-document>nav a{transition:padding-left .28s var(--vt-ease),color .22s var(--vt-ease)}
 .vt-monograph-index a:hover,.vt-privacy-document>nav a:hover{padding-left:8px;color:#000}
 .vt-monograph-articles article,.vt-privacy-document article{position:relative}
-.vt-monograph-articles article:after,.vt-privacy-document article:after{content:'';position:absolute;right:0;top:0;width:36px;height:1px;background:var(--vt-ink)}
+
 
 /* Chapter handoffs move the directional mark; imagery stays composed rather than zooming on hover. */
 .vt-next>img{transition:none!important}
@@ -133,7 +133,6 @@
   .vt-trust-mobile-states article:nth-child(even){padding-left:9vw}
   .vt-trust-mobile-states article:nth-child(3){padding-top:92px;padding-bottom:92px}
 
-  .vt-monograph-articles article:after,.vt-privacy-document article:after{width:24px}
   .vt-index-drawer{border-left:0}
 }
 
