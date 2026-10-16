@@ -1,54 +1,109 @@
 import { flushSync } from 'react-dom';
+import {
+  TRANSITION_FAMILIES,
+  clearTransitionName,
+  findSemanticActor,
+  resolveTransitionFamily,
+  semanticActorFromOrigin,
+} from './semanticTransitions';
 
-let active, epoch=0;
-const owners=new WeakMap();
-const visibleArea = element => {
-  const rect=element.getBoundingClientRect();
-  return Math.max(0,Math.min(rect.right,window.innerWidth)-Math.max(rect.left,0))*Math.max(0,Math.min(rect.bottom,window.innerHeight)-Math.max(rect.top,0));
-};
-/** One request owns navigation and its snapshots. A later click supersedes pending callbacks. */
+let activeTransition = null;
+let epoch = 0;
+
+function focusDestination() {
+  const heading = document.querySelector('#cinema-main h1');
+  if (!heading) return;
+  heading.setAttribute('tabindex', '-1');
+  heading.focus({ preventScroll: true });
+}
+
+function resetTransitionDocumentState() {
+  delete document.documentElement.dataset.cinematicTransition;
+  delete document.documentElement.dataset.cinematicTransitionFamily;
+}
+
+/**
+ * Same-document navigation with authored semantic carries.
+ * Missing matching actors deliberately fall back to a quiet route transition rather
+ * than guessing a target rectangle or selecting the largest visible image.
+ */
 export function navigateCinematic(navigate, path, origin) {
-  if (window.location.pathname + window.location.search === path) return;
-  const request=++epoch;
-  const root = origin?.getRootNode() || document;
-  const current = root.querySelector('[data-transition-media], .vt-cover-media');
-  const explicit = origin?.closest('[data-transition-media]') || origin?.querySelector('img');
-  const visible=[...root.querySelectorAll('[data-transition-media], .vt-cover-media')].sort((a,b)=>visibleArea(b)-visibleArea(a))[0];
-  const selected=explicit || (visible && visibleArea(visible)>0 ? visible : null);
-  let applied = false, timer;
+  const currentUrl = window.location.pathname + window.location.search;
+  if (currentUrl === path) return;
+
+  const request = ++epoch;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sourceRoot = origin?.getRootNode?.() || document;
+  const explicitActor = semanticActorFromOrigin(origin);
+  const explicitFamily = explicitActor?.dataset.transitionFamily;
+  const preferredKey = explicitActor?.dataset.transitionKey;
+  const family = resolveTransitionFamily(window.location.pathname, path, explicitFamily);
+  const source = family === TRANSITION_FAMILIES.QUIET
+    ? null
+    : (explicitActor || findSemanticActor(sourceRoot, family, preferredKey));
+
+  let destination = null;
+  let applied = false;
+  let timer = null;
+
+  const cleanup = () => {
+    clearTransitionName(source);
+    clearTransitionName(destination);
+    resetTransitionDocumentState();
+    if (timer) window.clearTimeout(timer);
+  };
+
   const update = async () => {
-    if (applied || request!==epoch) return;
+    if (applied || request !== epoch) return;
     applied = true;
     flushSync(() => navigate(path));
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    const destination = document.querySelector('.vt-cover-media') || document.querySelector('.vt-human-trace-host')?.shadowRoot?.querySelector('#hero-actor');
-    if (destination) destination.style.viewTransitionName = 'scene-media';
-    const image = destination?.querySelector('img');
-    if (image && !image.complete && typeof image.decode === 'function') {
-      await Promise.race([image.decode().catch(() => {}), new Promise(resolve => window.setTimeout(resolve, 350))]);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    if (family !== TRANSITION_FAMILIES.QUIET) {
+      destination = findSemanticActor(document, family, preferredKey) || findSemanticActor(document, family);
+      if (destination) destination.style.viewTransitionName = 'vt-semantic-actor';
+      const image = destination?.querySelector?.('img');
+      if (image && !image.complete && typeof image.decode === 'function') {
+        await Promise.race([
+          image.decode().catch(() => {}),
+          new Promise((resolve) => window.setTimeout(resolve, 280)),
+        ]);
+      }
     }
-    if (request!==epoch) return;
-    const heading = document.querySelector('main h1') || document.querySelector('.vt-human-trace-host')?.shadowRoot?.querySelector('h1');
-    if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
+
+    if (request === epoch) focusDestination();
   };
-  const finish = () => {
-    if (!applied && request===epoch) update();
-    window.clearTimeout(timer);
-    if (selected?.isConnected && owners.get(selected)===request) {selected.style.viewTransitionName='';owners.delete(selected);}
-    if (document.documentElement.dataset.cinematicTransition===String(request)) delete document.documentElement.dataset.cinematicTransition;
-  };
-  if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    try {
-      active?.skipTransition();
-      if (current) current.style.viewTransitionName = 'none';
-      if (selected) {selected.style.viewTransitionName = 'scene-media';owners.set(selected,request);}
-      document.documentElement.dataset.cinematicTransition=String(request);
-      const transition = document.startViewTransition(update);
-      active = transition;
-      transition.ready.catch(() => {});
-      transition.updateCallbackDone.catch(update);
-      transition.finished.catch(() => {}).finally(() => {finish();if(active===transition)active=null;});
-      timer=window.setTimeout(update,450);
-    } catch {finish();update();}
-  } else {active?.skipTransition();delete document.documentElement.dataset.cinematicTransition;update();}
+
+  if (!document.startViewTransition || reducedMotion) {
+    activeTransition?.skipTransition?.();
+    cleanup();
+    update();
+    return;
+  }
+
+  try {
+    activeTransition?.skipTransition?.();
+    cleanup();
+
+    if (source) source.style.viewTransitionName = 'vt-semantic-actor';
+    document.documentElement.dataset.cinematicTransition = String(request);
+    document.documentElement.dataset.cinematicTransitionFamily = family;
+
+    const transition = document.startViewTransition(update);
+    activeTransition = transition;
+
+    transition.ready.catch(() => {});
+    transition.updateCallbackDone.catch(update);
+    transition.finished
+      .catch(() => {})
+      .finally(() => {
+        cleanup();
+        if (activeTransition === transition) activeTransition = null;
+      });
+
+    timer = window.setTimeout(update, 420);
+  } catch {
+    cleanup();
+    update();
+  }
 }
