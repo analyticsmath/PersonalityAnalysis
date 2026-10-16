@@ -24,8 +24,8 @@ function resetTransitionDocumentState() {
 
 /**
  * Same-document navigation with authored semantic carries.
- * Missing matching actors deliberately fall back to a quiet route transition rather
- * than guessing a target rectangle or selecting the largest visible image.
+ * Semantic geometry is reserved for links that explicitly declare a transition actor.
+ * Global navigation stays quiet so hidden or unrelated media never becomes a fake carry.
  */
 export function navigateCinematic(navigate, path, origin) {
   const currentUrl = window.location.pathname + window.location.search;
@@ -37,7 +37,9 @@ export function navigateCinematic(navigate, path, origin) {
   const explicitActor = semanticActorFromOrigin(origin);
   const explicitFamily = explicitActor?.dataset.transitionFamily;
   const preferredKey = explicitActor?.dataset.transitionKey;
-  const family = resolveTransitionFamily(window.location.pathname, path, explicitFamily);
+  const family = explicitFamily
+    ? resolveTransitionFamily(window.location.pathname, path, explicitFamily)
+    : TRANSITION_FAMILIES.QUIET;
   const source = family === TRANSITION_FAMILIES.QUIET
     ? null
     : (explicitActor || findSemanticActor(sourceRoot, family, preferredKey));
