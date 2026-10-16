@@ -42,6 +42,7 @@ export function navigateCinematic(navigate, path) {
   const accent = curtain.firstElementChild;
   const surface = curtain.lastElementChild;
   const outgoing = main();
+  let outgoingMotion;
   let cleaned = false;
   const cleanup = () => {
     if (cleaned) return;
@@ -65,13 +66,17 @@ export function navigateCinematic(navigate, path) {
       const first = play(accent, [from, to], 630);
       const cover = play(surface, [from, to], 680, 80);
       animations.push(first, cover);
-      if (outgoing) animations.push(play(outgoing, [
+      if (outgoing) {
+        outgoingMotion = play(outgoing, [
         { transform: 'translate3d(0,0,0)', opacity: 1 },
         { transform: 'translate3d(0,-35px,0)', opacity: 0.55 },
-      ], 650));
+      ], 650);
+        animations.push(outgoingMotion);
+      }
       await Promise.all([cover.finished.catch(() => {}), preload]);
     } else await preload;
     if (request !== epoch) return;
+    outgoingMotion?.cancel();
     flushSync(() => navigate(path));
     window.scrollTo({ top: 0, behavior: 'instant' });
     const incoming = await destinationReady(request);
@@ -86,10 +91,11 @@ export function navigateCinematic(navigate, path) {
         { transform: 'translate3d(0,0,0)' },
         { transform: 'translate3d(0,-110%,0)' },
       ], 820));
-      if (incoming) animations.push(play(incoming, [
+      const arrival = incoming ? play(incoming, [
         { transform: 'translate3d(0,55px,0)' }, { transform: 'translate3d(0,0,0)' },
-      ], 1100));
-      await reveal.finished.catch(() => {});
+      ], 1100) : null;
+      if (arrival) animations.push(arrival);
+      await Promise.all([reveal.finished.catch(() => {}), arrival?.finished.catch(() => {})]);
     }
     const heading = incoming?.querySelector('h1');
     heading?.setAttribute('tabindex', '-1');

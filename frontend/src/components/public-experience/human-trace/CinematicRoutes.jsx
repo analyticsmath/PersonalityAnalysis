@@ -421,17 +421,67 @@ function useMethodologyTrace(rootRef, setActive) {
       onEnterBack: () => setActive(sectionKeys[index]),
     }));
 
-    return () => triggers.forEach((trigger) => trigger.kill());
+    const motion = gsap.context(() => {
+      if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+      root.querySelectorAll('[data-method-reveal], .vt-method-weights>div').forEach((row) => {
+        gsap.fromTo(row, { y: 22, opacity: 0.65 }, { y: 0, opacity: 1, ease: 'none',
+          scrollTrigger: { trigger: row, start: 'top 94%', end: 'top 68%', scrub: 0.7 } });
+      });
+    }, root);
+    return () => { triggers.forEach((trigger) => trigger.kill()); motion.revert(); };
   }, [rootRef, setActive]);
 }
 
+const METHOD_EXPLANATIONS = {
+  bigFive: [
+    ['Openness to Experience', 'Curiosity, imagination and receptiveness to unfamiliar ideas.'],
+    ['Conscientiousness', 'Planning, organization and follow-through.'],
+    ['Extraversion', 'Social engagement, assertiveness and outward energy.'],
+    ['Agreeableness', 'Cooperation, consideration and approach to other people.'],
+    ['Emotional Stability', 'Patterns of emotional response under stress.'],
+  ],
+  riasec: [
+    ['Realistic', 'Building, repairing and working with physical things.'],
+    ['Investigative', 'Researching questions and examining evidence.'],
+    ['Artistic', 'Creating, designing and expressing original ideas.'],
+    ['Social', 'Teaching, advising and helping other people.'],
+    ['Enterprising', 'Leading, negotiating and developing business initiatives.'],
+    ['Conventional', 'Organizing information through clear procedures.'],
+  ],
+  workValues: [
+    ['Achievement', 'Opportunities to use your abilities and see meaningful results.'],
+    ['Independence', 'Room to make decisions and take ownership.'],
+    ['Working Conditions', 'The practical conditions in which the work happens.'],
+    ['Recognition', 'How contribution and professional progress are acknowledged.'],
+    ['Relationships', 'The quality of day-to-day interaction with other people.'],
+    ['Support', 'The guidance and resources available around you.'],
+  ],
+  behavioralSignals: [
+    ['Iterative scoping', 'Refining a problem through successive decisions.'],
+    ['Stakeholder alignment', 'Working toward a shared understanding of priorities.'],
+    ['Risk containment', 'Identifying constraints before committing to action.'],
+    ['Diagnostic inquiry', 'Examining causes before deciding on a response.'],
+  ],
+  validityStates: [
+    ['Enough evidence', 'The record meets the requirements for scoring.'],
+    ['Partial evidence', 'Some evidence is available; the picture remains incomplete.'],
+    ['More evidence needed', 'Continue the assessment before drawing a scored conclusion.'],
+  ],
+};
+
+function MethodTerms({ name }) {
+  return <div className="vt-method-explanation">
+    <dl className="vt-method-terms">{METHOD_EXPLANATIONS[name].map(([term, meaning]) =>
+      <div key={term} data-method-reveal><dt>{term}</dt><dd>{meaning}</dd></div>
+    )}</dl>
+    {name === 'riasec' && <a className="vt-method-reference" href="https://www.onetonline.org/find/descriptor/browse/1.B.1/">Explore the interest definitions at O*NET ↗</a>}
+  </div>;
+}
+
 function MethodDetail({ name, item }) {
-  if (name === 'bigFive') return <div className="vt-method-spectrum">{item.dimensions.map((dimension, index) => <span key={dimension} style={{ '--i': index }}>{dimension}</span>)}</div>;
-  if (name === 'riasec') return <div className="vt-method-orbit">{item.orbit.map((dimension) => <span key={dimension}>{dimension}</span>)}</div>;
-  if (name === 'workValues') return <div className="vt-method-chip-field">{item.priorities.map((dimension) => <span key={dimension}>{dimension}</span>)}</div>;
-  if (name === 'behavioralSignals') return <div className="vt-method-chip-field">{item.patterns.map((dimension) => <span key={dimension}>{dimension}</span>)}</div>;
-  if (name === 'careerWeights') return <div className="vt-method-weights">{PUBLIC_CONTENT.home.calibration.weights.map((weight) => <div key={weight.id}><span>{weight.label}</span><b>{weight.percentage}%</b><i style={{ width: `${weight.percentage * 3}%` }} /></div>)}</div>;
-  if (name === 'validityStates') return <div className="vt-method-chip-field">{[['valid', 'Enough evidence'], ['partial', 'Partial evidence'], ['insufficient_data', 'More evidence needed']].map(([state, label]) => <span key={state}>{label}</span>)}</div>;
+  if (METHOD_EXPLANATIONS[name]) return <MethodTerms name={name} />;
+  if (name === 'careerWeights') return <div className="vt-method-weights">{PUBLIC_CONTENT.home.calibration.weights.map((weight) => <div key={weight.id}><span>{weight.label}</span><b>{weight.percentage}%</b><i style={{ width: `${weight.percentage * 4}%` }} /></div>)}</div>;
+
   if (name === 'aiNarrative') return (
     <div className="vt-method-ai-boundary">
       <section><h3>Scoring</h3><strong>Deterministic formula</strong><p>Profile and CV processing may provide structured inputs. AI does not replace the formula.</p></section>

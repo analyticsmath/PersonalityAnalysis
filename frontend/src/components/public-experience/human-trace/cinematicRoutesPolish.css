@@ -98,7 +98,7 @@
 .vt-trust-stage[data-trust-directed="true"] .vt-trust-inspector button{transition:none!important}
 
 /* Publication modes stay intentionally un-cinematic where reading should own the frame. */
-.vt-route--method .vt-header--scrolled,.vt-route--privacy .vt-header--scrolled{background:#f5f4ee}
+.vt-route--method .vt-header--scrolled,.vt-route--privacy .vt-header--scrolled{background:#f1f4f1}
 .vt-monograph-index a,.vt-privacy-document>nav a{transition:padding-left .28s var(--vt-ease),color .22s var(--vt-ease)}
 .vt-monograph-index a:hover,.vt-privacy-document>nav a:hover{padding-left:8px;color:#000}
 .vt-monograph-articles article,.vt-privacy-document article{position:relative}
@@ -212,7 +212,7 @@
   .vt-trust-mobile-states article p{max-width:520px;margin-top:18px;font-size:15px;line-height:1.55}
   .vt-trust-mobile-states article.is-active{opacity:1}
   .vt-monograph{grid-template-columns:1fr;gap:0}
-  .vt-monograph-index{position:sticky;z-index:5;top:var(--vt-header);margin:0 -20px 32px;padding:8px 20px;overflow-x:auto;flex-direction:row;gap:8px;background:#f5f4ee;border-bottom:1px solid var(--vt-line)}
+  .vt-monograph-index{position:sticky;z-index:5;top:var(--vt-header);margin:0 -20px 32px;padding:8px 20px;overflow-x:auto;flex-direction:row;gap:8px;background:#f1f4f1;border-bottom:1px solid var(--vt-line)}
   .vt-monograph-index a{flex:0 0 auto;border:0;padding:10px 4px}
   .vt-monograph-index a.is-active{padding-left:4px;border-left:0;border-bottom:1px solid var(--vt-ink)}
   .vt-monograph-articles article{min-height:60svh;padding:10vh 0;opacity:1}
@@ -331,3 +331,39 @@
 .vt-cinema .vt-how-trace-stage:after{display:none}
 
 .vt-cinema:has(.vt-public-page-loader) .vt-header{background:#f1f4f1;color:#15221e}
+
+/* Read the models through their meanings, with time for each row to settle. */
+.vt-route--method .vt-monograph{grid-template-columns:minmax(190px,.7fr) minmax(0,1.8fr);gap:clamp(40px,6vw,96px)}
+.vt-route--method .vt-monograph-index{border:0}
+.vt-route--method .vt-monograph-index a{font-size:14px;min-height:44px;color:#526459}
+.vt-route--method .vt-monograph-index a.is-active{color:#15221e;font-weight:550;padding-left:0;border:0}
+.vt-route--method .vt-monograph-articles article{min-height:0;padding:clamp(75px,10vw,140px) 0;justify-content:flex-start;opacity:1}
+.vt-route--method .vt-monograph-articles h2{margin-top:0;font-size:clamp(40px,4.5vw,72px);line-height:1}
+.vt-route--method .vt-monograph-articles article.is-active h2{animation:none}
+.vt-method-terms{margin:45px 0 0;display:flex;flex-direction:column;gap:30px}
+.vt-method-terms>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:30px;align-items:baseline}
+.vt-method-terms dt{font-size:clamp(23px,2.5vw,37px);font-weight:450;line-height:1.12;letter-spacing:-.035em}
+.vt-method-terms dd{margin:0;font-size:16px;line-height:1.55;color:#425b4b}
+.vt-cinema a.vt-method-reference{display:inline-block;margin-top:35px;padding:12px 0;font-size:14px;color:#344d3e;text-decoration:underline;text-underline-offset:5px}
+.vt-route--method .vt-method-weights>div{padding:18px 0;gap:12px;border:0}
+.vt-route--method .vt-method-weights span,.vt-route--method .vt-method-weights b{font-size:16px;font-weight:450}
+.vt-route--method .vt-method-weights i{height:18px;background:#a8bea5;transform-origin:left}
+.vt-route--method .vt-method-ai-boundary p{font-size:16px}
+@media(max-width:900px){
+ .vt-route--method .vt-monograph{display:block}
+ .vt-route--method .vt-monograph-index{border:0;max-width:calc(100% + 40px);scrollbar-width:thin}
+ .vt-route--method .vt-monograph-index a{min-height:44px;padding:12px 14px 12px 0;font-size:14px}
+ .vt-route--method .vt-monograph-index a.is-active{padding:12px 14px 12px 0}
+ .vt-route--method .vt-monograph-articles article{padding:75px 0;scroll-margin-top:155px}
+ .vt-method-terms>div{gap:22px}
+}
+@media(max-width:600px){
+ .vt-method-terms{gap:28px;margin-top:35px}
+ .vt-method-terms>div{display:block}
+ .vt-method-terms dt{font-size:28px}
+ .vt-method-terms dd{margin-top:9px}
+ .vt-route--method .vt-monograph-articles h2{font-size:clamp(34px,8.5vw,46px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .vt-method-terms>div,.vt-method-weights>div{opacity:1!important;transform:none!important}
+}

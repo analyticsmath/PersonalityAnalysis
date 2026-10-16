@@ -113,3 +113,13 @@
 
 .vt-home-experience .vt-home-record-object__meta{border:0}
 @media(min-width:901px) and (prefers-reduced-motion:no-preference){.vt-home-experience .vt-home-mass__item strong{position:absolute;left:0;top:-46px;line-height:1;color:#15221e}}
+
+@media(max-width:600px){
+ .vt-home-experience .vt-home-branch-field{height:auto;min-height:0;display:flex;flex-direction:column;gap:28px;margin-top:40px}
+ .vt-home-experience .vt-home-branch-lines{display:none}
+ .vt-home-experience .vt-home-branch-core{position:relative;left:auto;top:auto;transform:none;width:100%;padding:24px}
+ .vt-home-experience .vt-home-branch-node{position:relative;inset:auto;width:100%;padding:0}
+ .vt-home-experience .vt-home-branch-node h3{margin:0 0 8px;font-size:28px}
+ .vt-home-experience .vt-home-branch-node p{font-size:16px;max-width:320px}
+ .vt-home-experience .vt-home-provenance-step>strong{font-size:24px}
+}
