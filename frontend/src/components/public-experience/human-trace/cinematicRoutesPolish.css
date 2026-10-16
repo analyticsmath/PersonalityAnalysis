@@ -381,3 +381,8 @@
  .vt-trust-record__path{height:34px;margin-top:12px}
  .vt-route--trust .vt-trust-record__pipeline{margin-top:8px}
 }
+
+.vt-route--trust .vt-trust-record__pipeline span{background:transparent;color:#53675a;opacity:1;padding:0;font-size:13px}
+.vt-route--trust .vt-trust-record__pipeline span.is-active{background:transparent;color:#15221e;font-weight:550}
+.vt-trust-inspector li{grid-template-columns:1fr}
+.vt-trust-inspector li i{display:none}
