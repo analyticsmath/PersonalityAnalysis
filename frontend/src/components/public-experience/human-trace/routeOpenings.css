@@ -114,3 +114,5 @@
  .vt-opening--method .vt-opening-formula{height:24%;bottom:10%}
  .vt-opening--trust .vt-opening-evidence{height:24%}
 }
+
+.vt-opening-formula strong{position:absolute;left:0;top:-42px;line-height:1;color:#15221e}

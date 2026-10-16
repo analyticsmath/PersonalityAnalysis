@@ -110,3 +110,6 @@
  .vt-home-experience .vt-home-scene{border:0}
  .vt-home-experience .vt-home-mass__item span{position:static;color:inherit}
 }
+
+.vt-home-experience .vt-home-record-object__meta{border:0}
+@media(min-width:901px) and (prefers-reduced-motion:no-preference){.vt-home-experience .vt-home-mass__item strong{position:absolute;left:0;top:-46px;line-height:1;color:#15221e}}
