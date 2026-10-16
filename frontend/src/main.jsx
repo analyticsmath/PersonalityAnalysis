@@ -12,21 +12,16 @@ import './index.css';
 import './styles/fonts.css';
 import './styles/foundation.css';
 
-/* ── Public Experience Styles ── */
+/* ── Shared / fallback public experience styles ── */
 import './styles/public-experience/fonts.css';
 import './styles/public-experience/tokens.css';
 import './styles/public-experience/base.css';
 import './styles/public-experience/chrome.css';
-import './styles/public-experience/home.css';
-import './styles/public-experience/career.css';
-import './styles/public-experience/how.css';
-import './styles/public-experience/progress.css';
-import './styles/public-experience/trust.css';
-import './styles/public-experience/methodology.css';
-import './styles/public-experience/privacy.css';
 import './styles/public-experience/auth.css';
 import './styles/public-experience/responsive.css';
 import './styles/public-experience/reduced-motion.css';
+
+/* Canonical marketing routes load their authored cinematic CSS with their route shell. */
 
 /* ── Protected Product Styles ── */
 import './styles/product-shell.css';
