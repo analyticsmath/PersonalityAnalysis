@@ -39,6 +39,7 @@ function mountCareer(root) {
         const visible = distance < 1.02;
         const proximity = smooth(1 - Math.min(1, distance));
         const incoming = delta > 0;
+        const ownsInteraction = index === dominant && distance < 0.56;
         const media = world.querySelector('.vt-career-world-media');
         const image = media?.querySelector('img');
         const copy = world.querySelector('.vt-career-world-copy');
@@ -46,12 +47,14 @@ function mountCareer(root) {
 
         world.style.opacity = visible ? String(Math.max(0, 1 - distance * 0.9)) : '0';
         world.style.visibility = visible ? 'visible' : 'hidden';
-        world.style.pointerEvents = index === dominant && distance < 0.56 ? 'auto' : 'none';
+        world.style.pointerEvents = ownsInteraction ? 'auto' : 'none';
         world.style.zIndex = String(index === dominant ? 3 : incoming ? 2 : 1);
         world.style.transform = `translate3d(${delta * 8.5}%, ${delta * 2.2}%, 0) scale(${mix(0.972, 1, proximity)})`;
         world.style.clipPath = incoming
           ? `inset(0 0 0 ${Math.min(100, distance * 32)}%)`
           : `inset(0 ${Math.min(100, distance * 22)}% 0 0)`;
+        world.setAttribute('aria-hidden', String(!ownsInteraction));
+        world.inert = !ownsInteraction;
 
         if (image) {
           image.style.transform = `translate3d(${delta * -3.8}%, 0, 0) scale(${mix(1.09, 1.015, proximity)})`;
@@ -92,6 +95,8 @@ function mountCareer(root) {
       stage.style.removeProperty('--career-progress');
       worlds.forEach((world) => {
         clear(world, ['opacity', 'visibility', 'pointer-events', 'z-index', 'transform', 'clip-path']);
+        world.removeAttribute('aria-hidden');
+        world.inert = false;
         clear(world.querySelector('.vt-career-world-media img'), ['transform']);
         clear(world.querySelector('.vt-career-world-copy'), ['transform', 'opacity']);
         clear(world.querySelector('.vt-career-role-field'), ['transform', 'opacity']);
