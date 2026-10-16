@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { navigateCinematic } from './routeNavigation';
 import './cinematicRoutes.css';
+import './cinematicRoutesPolish.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
