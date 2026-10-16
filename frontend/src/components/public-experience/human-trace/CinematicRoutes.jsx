@@ -283,13 +283,32 @@ export function CareerCinematicPage() {
 
 export function ProgressCinematicPage() {
   const [split, setSplit] = useState(55);
+  const comparisonRef = useRef(null);
+  const manuallyControlled = useRef(false);
+  useEffect(() => {
+    const comparison = comparisonRef.current;
+    if (!comparison) return undefined;
+    const motion = gsap.matchMedia();
+    motion.add('(prefers-reduced-motion:no-preference)', () => {
+      const position = { value: 22 };
+      const animation = gsap.to(position, {
+        value: 78, ease: 'none',
+        onUpdate: () => {
+          if (!manuallyControlled.current) setSplit(Math.round(position.value));
+        },
+        scrollTrigger: { trigger: comparison, start: 'top 85%', end: 'bottom 25%', scrub: 0.8, invalidateOnRefresh: true },
+      });
+      return () => { animation.scrollTrigger?.kill(); animation.kill(); };
+    });
+    return () => motion.revert();
+  }, []);
   const content = PUBLIC_CONTENT.progress;
   return (
     <PageFrame className="progress">
       <Cover lines={['A little distance.', 'A different view.']} image={PHOTO.autonomy} alt="A developer concentrating on work at a laptop" description={content.hero.support} position="center 52%" variant="progress" family="context-media" transitionKey="career-world" />
       <div className="vt-essay-intro"><h2>Time adds context.<br/><em>It does not erase.</em></h2><p>Compare illustrative working environments. A genuine personal change requires at least two complete assessment records.</p></div>
 
-      <section className="vt-time-comparison" aria-label="Illustrative timeline comparator">
+      <section ref={comparisonRef} className="vt-time-comparison" aria-label="Illustrative timeline comparator">
         <div className="vt-time-stage" style={{ '--split': `${split}%` }} data-transition-family="context-media" data-transition-key="career-world">
           <img src={PHOTO.autonomy} loading="lazy" alt="Illustrative baseline solo workspace" className="vt-time-image" />
           <div className="vt-time-mask"><img src={PHOTO.collaboration} loading="lazy" alt="Illustrative later collaborative workspace" className="vt-time-image" /></div>
@@ -298,7 +317,7 @@ export function ProgressCinematicPage() {
         </div>
         <div className="vt-time-controls">
           <label htmlFor="vt-longitudinal-slider">Inspect the relationship between two illustrative contexts</label>
-          <input id="vt-longitudinal-slider" type="range" min="5" max="95" value={split} onChange={(event) => setSplit(Number(event.target.value))} aria-valuetext={`Divider at ${split} percent across the comparison`} />
+          <input id="vt-longitudinal-slider" type="range" min="5" max="95" value={split} onFocus={() => { manuallyControlled.current = true; }} onPointerDown={() => { manuallyControlled.current = true; }} onChange={(event) => { manuallyControlled.current = true; setSplit(Number(event.target.value)); }} aria-valuetext={`Divider at ${split} percent across the comparison`} />
           
         </div>
       </section>

@@ -12,7 +12,7 @@
 .vt-final-footer__navigation>a[aria-current="page"]{font-weight:550}
 .vt-final-footer__signature{display:block;overflow:hidden;margin-top:76px;padding:0 0 8px;width:100%}
 .vt-final-footer__signature svg{display:block;width:100%;height:auto;overflow:visible}
-.vt-final-footer__signature text{font-family:'Instrument Sans',Arial,sans-serif;font-size:155px;font-weight:450;letter-spacing:-8px;fill:currentColor}
+.vt-final-footer__signature text{font-family:'Instrument Sans',Arial,sans-serif;font-size:155px;font-weight:450;letter-spacing:-6px;word-spacing:20px;fill:currentColor}
 .vt-final-footer__bottom{display:flex;align-items:center;justify-content:space-between;gap:28px;margin-top:24px;font-size:13px;line-height:1.5}
 .vt-final-footer__bottom p{margin:0}
 .vt-final-footer__bottom button{display:flex;align-items:center;gap:28px;min-height:44px;border:0;background:transparent;color:inherit;padding:0;font:inherit;cursor:pointer}
