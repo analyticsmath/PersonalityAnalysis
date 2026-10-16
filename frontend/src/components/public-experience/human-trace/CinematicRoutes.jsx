@@ -5,10 +5,12 @@ import careersData from '../../../content/careers.json';
 import { PUBLIC_CONTENT } from '../../../content/public-experience/publicContent';
 import { CAREER_PRESENTATION_DISCLAIMER, CAREER_WORLDS } from './careerWorlds';
 import { CinemaLink } from './CinematicPublicShell';
+import Cover from './RouteOpening';
+import { observeScrollProgress, readingPosition } from './scrollProgress';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CAREER_RAIL_QUERY = '(min-width: 901px) and (min-height: 700px) and (pointer: fine) and (prefers-reduced-motion: no-preference)';
+const CAREER_RAIL_QUERY = '(min-width:901px) and (prefers-reduced-motion:no-preference)';
 
 const PATH = '/media/public-experience/cinematic/';
 const PHOTO = {
@@ -24,26 +26,9 @@ const PHOTO = {
   design: '/media/public-experience/digital/designer-1920.webp',
 };
 
-function Cover({ lines, image, alt, description, position = 'center', variant = '', family = 'context-media', transitionKey = 'working-context' }) {
-  return (
-    <section className={`vt-cover vt-cover--${variant}`}>
-      <div className="vt-cover-media" data-transition-family={family} data-transition-key={transitionKey}>
-        <img className="vt-cover-photo" src={image} alt={alt} style={{ objectPosition: position }} fetchPriority="high" />
-        <div className="vt-cover-shade" aria-hidden="true" />
-      </div>
-      <div className="vt-cover-copy">
-        <h1>{lines.map((line) => <span key={line}>{line}</span>)}</h1>
-        <p>{description}</p>
-      </div>
-    </section>
-  );
-}
-
 function NextChapter({ to, title, subtitle, image, family = 'context-media', transitionKey = 'working-context' }) {
   return (
     <CinemaLink className="vt-next" to={to} data-transition-family={family} data-transition-key={transitionKey}>
-      <img src={image} loading="lazy" alt="" />
-      <div className="vt-next-shade" aria-hidden="true" />
       <div className="vt-next-content"><strong>{title}</strong><span>{subtitle}</span></div>
       <span className="vt-next-arrow" aria-hidden="true">↗</span>
     </CinemaLink>
@@ -164,65 +149,19 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
 
     const mm = gsap.matchMedia();
     mm.add(CAREER_RAIL_QUERY, () => {
-      const lastWorld = CAREER_WORLDS.length - 1;
       let previous = -1;
-      let settledWorld = 0;
-      const syncSettledWorld = (progress) => {
-        const value = Math.max(0, Math.min(1, progress));
-        if (value <= 0.02) {
-          settledWorld = 0;
-          return;
-        }
-        if (value >= 0.98) {
-          settledWorld = lastWorld;
-          return;
-        }
-        const nearest = Math.round(value * lastWorld);
-        if (Math.abs(value - nearest / lastWorld) <= 0.025) settledWorld = nearest;
-      };
-      const boundedProgress = (progress) => {
-        const rawPosition = Math.max(0, Math.min(1, progress)) * lastWorld;
-        return Math.max(settledWorld - 1, Math.min(settledWorld + 1, rawPosition));
-      };
-      const boundedSnapStop = (progress) => {
-        const requested = Math.round(Math.max(0, Math.min(1, progress)) * lastWorld);
-        const allowed = Math.max(settledWorld - 1, Math.min(settledWorld + 1, requested));
-        return allowed / lastWorld;
-      };
-      const render = (progress) => {
-        const position = boundedProgress(progress);
+      const stop = observeScrollProgress(track, (progress) => {
+        const position = readingPosition(progress, CAREER_WORLDS.length);
         const index = Math.round(position);
         rail.style.transform = 'translate3d(' + (-position * 20) + '%, 0, 0)';
-
+        track.style.setProperty('--career-progress', String(progress));
         if (index !== previous) {
           previous = index;
           setActiveWorld(index);
         }
-      };
-
-      render(0);
-      const trigger = ScrollTrigger.create({
-        trigger: track,
-        start: 'top 84px',
-        end: 'bottom bottom',
-        scrub: 0.7,
-        snap: {
-          snapTo: boundedSnapStop,
-          duration: { min: 0.72, max: 1.0 },
-          delay: 0.18,
-          ease: 'power2.out',
-        },
-        invalidateOnRefresh: true,
-        onUpdate: (self) => render(self.progress),
-        onSnapComplete: (self) => { settledWorld = Math.round(self.progress * lastWorld); },
-        onRefresh: (self) => {
-          syncSettledWorld(self.progress);
-          render(self.progress);
-        },
-      });
-
+      }, { offset: () => document.querySelector('.vt-header')?.offsetHeight || 84, response: 180 });
       return () => {
-        trigger.kill();
+        stop();
         rail.style.removeProperty('transform');
       };
     });
@@ -288,7 +227,7 @@ export function CareerCinematicPage() {
                   inert={horizontalWorlds && activeWorld !== worldIndex ? true : undefined}
                 >
                   <div className={`vt-career-world-media vt-career-world-media--${world.physics}`} data-transition-family="context-media" data-transition-key="career-world">
-                    <img src={mediaForRole(selectedKey, world.media)} alt={`Illustrative working context for ${selectedRole.title}`} loading={worldIndex === 0 ? 'eager' : 'lazy'} />
+                    <img src={world.media} alt={`Working context for ${world.name}`} loading={worldIndex === 0 ? 'eager' : 'lazy'} />
                     <div className="vt-career-world-media__shade" aria-hidden="true" />
                   </div>
 
@@ -388,7 +327,7 @@ function useTrustTimeline(rootRef, setActive) {
     const track = root?.querySelector('[data-trust-track]');
     if (!track) return undefined;
     const mm = gsap.matchMedia();
-    mm.add('(min-width:901px) and (min-height:700px) and (pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
+    mm.add('(min-width:901px) and (prefers-reduced-motion:no-preference)', () => {
       const lastStep = Math.max(1, track.querySelectorAll('.vt-trust-record__pipeline span').length - 1);
       let previous = -1;
       const render = (progress) => {
@@ -400,21 +339,12 @@ function useTrustTimeline(rootRef, setActive) {
         }
       };
 
-      render(0);
-      const trigger = ScrollTrigger.create({
-        trigger: track,
-        start: 'top 84px',
-        end: 'bottom bottom',
-        scrub: 0.5,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => render(self.progress),
-        onRefresh: (self) => render(self.progress),
-      });
-      return () => trigger.kill();
+      const stop = observeScrollProgress(track, render, { offset: () => document.querySelector('.vt-header')?.offsetHeight || 84, response: 160 });
+      return stop;
     });
 
     const mobileStates = [...track.querySelectorAll('.vt-trust-mobile-states article')];
-    mm.add('(max-width:900px), (pointer:coarse)', () => {
+    mm.add('(max-width:900px)', () => {
       const triggers = mobileStates.map((article, index) => ScrollTrigger.create({
         trigger: article,
         start: 'top 62%',

@@ -1,232 +1,102 @@
 import { flushSync } from 'react-dom';
 import { preloadRoute } from '../motion/routePreloadRegistry';
-import {
-  TRANSITION_FAMILIES,
-  clearTransitionName,
-  findSemanticActor,
-  resolveTransitionFamily,
-  semanticActorFromOrigin,
-} from './semanticTransitions';
 
-let activeTransition = null;
-let activeFallbackAnimation = null;
-let activePendingTimer = null;
-let activePendingRequest = 0;
 let epoch = 0;
+let cancelActive = () => {};
 
-function clearPendingIndicator(request) {
-  if (activePendingRequest !== request) return;
-  if (activePendingTimer) window.clearTimeout(activePendingTimer);
-  activePendingTimer = null;
-  delete document.documentElement.dataset.cinematicPending;
-}
+const nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+const main = () => document.querySelector('#cinema-main, #main-content');
 
-function routeMain() {
-  return document.querySelector('#cinema-main, #main-content');
-}
-
-function focusDestination() {
-  const heading = document.querySelector('#cinema-main h1, #main-content h1');
-  if (!heading) return;
-  heading.setAttribute('tabindex', '-1');
-  heading.focus({ preventScroll: true });
-}
-
-function resetTransitionDocumentState() {
-  delete document.documentElement.dataset.cinematicTransition;
-  delete document.documentElement.dataset.cinematicTransitionFamily;
-}
-
-function waitForDestination(family, preferredKey, request) {
+async function destinationReady(request) {
   const started = performance.now();
-
-  return new Promise((resolve) => {
-    const inspect = () => {
-      const expired = performance.now() - started >= 1000;
-      if (request !== epoch || expired) {
-        resolve(family === TRANSITION_FAMILIES.QUIET
-          ? null
-          : findSemanticActor(document, family, preferredKey));
-        return;
-      }
-
-      const main = routeMain();
-      const heading = main?.querySelector('h1');
-      const page = main?.querySelector('.vt-route, [data-route-ready="true"]');
-      const actor = family === TRANSITION_FAMILIES.QUIET
-        ? null
-        : findSemanticActor(document, family, preferredKey);
-
-      if (heading || page) {
-        resolve(actor);
-        return;
-      }
-
-      window.requestAnimationFrame(inspect);
-    };
-
-    inspect();
-  });
-}
-
-function animateRouteNode(element, keyframes, duration) {
-  if (!element?.animate) return null;
-  return element.animate(keyframes, {
-    duration,
-    easing: 'cubic-bezier(.76, 0, .24, 1)',
-    fill: 'both',
-  });
-}
-
-async function updateRoute(navigate, path, family, preferredKey, request) {
-  flushSync(() => navigate(path));
-  window.scrollTo({ top: 0, behavior: 'auto' });
-
-  const destination = await waitForDestination(family, preferredKey, request);
-  if (request !== epoch) return null;
-
-  if (family !== TRANSITION_FAMILIES.QUIET && destination) {
-    destination.style.viewTransitionName = 'vt-semantic-actor';
-    const image = destination.querySelector('img');
-    if (image && !image.complete && typeof image.decode === 'function') {
-      await Promise.race([
-        image.decode().catch(() => {}),
-        new Promise((resolve) => window.setTimeout(resolve, 280)),
-      ]);
+  while (request === epoch && performance.now() - started < 4000) {
+    const root = main();
+    if (root?.querySelector('h1, [data-route-ready="true"], form')) {
+      await nextFrame();
+      return root;
     }
+    await nextFrame();
   }
-
-  if (request === epoch) focusDestination();
-  return destination;
+  return main();
 }
 
-async function runFallbackTransition(navigate, path, family, preferredKey, request, update) {
-  const outgoing = routeMain();
-  const distance = family === TRANSITION_FAMILIES.QUIET ? 8 : 18;
-  const exit = animateRouteNode(outgoing, [
-    { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
-    { opacity: 0, transform: `translate3d(-${distance}px, 0, 0) scale(.996)` },
-  ], 180);
-
-  activeFallbackAnimation = exit;
-  if (exit) await exit.finished.catch(() => {});
-  if (request !== epoch) {
-    exit?.cancel();
-    return;
-  }
-
-  const destination = await update();
-  exit?.cancel();
-  if (activeFallbackAnimation === exit) activeFallbackAnimation = null;
-  if (request !== epoch) return;
-
-  const incoming = routeMain();
-  if (!incoming) return;
-  const enterDistance = family === TRANSITION_FAMILIES.QUIET ? 8 : 18;
-  const enter = animateRouteNode(incoming, [
-    { opacity: 0, transform: `translate3d(${enterDistance}px, 0, 0) scale(.996)` },
-    { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
-  ], 420);
-  activeFallbackAnimation = enter;
-  if (enter) await enter.finished.catch(() => {});
-  enter?.cancel();
-  if (activeFallbackAnimation === enter) activeFallbackAnimation = null;
+function play(element, frames, duration, delay = 0) {
+  const animation = element.animate(frames, {
+    duration, delay, fill: 'both', easing: 'cubic-bezier(.76,0,.24,1)',
+  });
+  return animation;
 }
 
-/**
- * Preload the destination while the current page remains visible, then animate
- * the route change with the native API or an equivalent Web Animations fallback.
- */
-export function navigateCinematic(navigate, path, origin) {
-  const currentUrl = window.location.pathname + window.location.search;
-  if (currentUrl === path) return;
-
+export function navigateCinematic(navigate, path) {
+  if (window.location.pathname + window.location.search === path) return;
   const request = ++epoch;
-  if (activePendingTimer) window.clearTimeout(activePendingTimer);
-  activePendingTimer = null;
-  activePendingRequest = request;
-  delete document.documentElement.dataset.cinematicPending;
-  activeTransition?.skipTransition?.();
-  activeFallbackAnimation?.cancel();
-  activeFallbackAnimation = null;
-
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const sourceRoot = origin?.getRootNode?.() || document;
-  const explicitActor = semanticActorFromOrigin(origin);
-  const explicitFamily = explicitActor?.dataset.transitionFamily;
-  const preferredKey = explicitActor?.dataset.transitionKey;
-  const family = resolveTransitionFamily(window.location.pathname, path, explicitFamily);
-  const source = family === TRANSITION_FAMILIES.QUIET
-    ? null
-    : (explicitActor || findSemanticActor(sourceRoot, family, preferredKey));
-
-  let destination = null;
-  let applied = false;
-
+  cancelActive();
+  const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const documentRoot = document.documentElement;
+  const animations = [];
+  const curtain = document.createElement('div');
+  curtain.className = 'vt-route-curtain';
+  curtain.setAttribute('aria-hidden', 'true');
+  curtain.innerHTML = '<div class="vt-route-curtain__accent"></div><div class="vt-route-curtain__surface"><span class="vt-route-curtain__orbit"></span></div>';
+  const accent = curtain.firstElementChild;
+  const surface = curtain.lastElementChild;
+  const outgoing = main();
+  let cleaned = false;
   const cleanup = () => {
-    clearPendingIndicator(request);
-    clearTransitionName(source);
-    clearTransitionName(destination);
-    resetTransitionDocumentState();
+    if (cleaned) return;
+    cleaned = true;
+    animations.forEach((animation) => animation.cancel());
+    curtain.remove();
+    if (request === epoch) delete documentRoot.dataset.cinematicTransition;
   };
+  cancelActive = cleanup;
 
-  const update = async () => {
-    if (applied || request !== epoch) return null;
-    applied = true;
-    destination = await updateRoute(navigate, path, family, preferredKey, request);
-    return destination;
-  };
-
-  const begin = async () => {
-    activePendingTimer = window.setTimeout(() => {
-      activePendingTimer = null;
-      if (request === epoch && activePendingRequest === request) {
-        document.documentElement.dataset.cinematicPending = String(request);
-      }
-    }, 140);
-    await preloadRoute(path).catch(() => {});
-    clearPendingIndicator(request);
+  const run = async () => {
+    const preload = preloadRoute(path).catch(() => {});
+    if (!reduced) {
+      documentRoot.dataset.cinematicTransition = String(request);
+      document.body.appendChild(curtain);
+      const from = { transform: 'translate3d(0,110%,0)', borderRadius: '48% 48% 0 0' };
+      const to = { transform: 'translate3d(0,0,0)', borderRadius: '0' };
+      const first = play(accent, [from, to], 630);
+      const cover = play(surface, [from, to], 680, 80);
+      animations.push(first, cover);
+      if (outgoing) animations.push(play(outgoing, [
+        { transform: 'translate3d(0,0,0)', opacity: 1 },
+        { transform: 'translate3d(0,-35px,0)', opacity: 0.55 },
+      ], 650));
+      await Promise.all([cover.finished.catch(() => {}), preload]);
+    } else await preload;
     if (request !== epoch) return;
-
-    if (reducedMotion) {
-      cleanup();
-      await update();
-      return;
+    flushSync(() => navigate(path));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    const incoming = await destinationReady(request);
+    if (request !== epoch) return;
+    window.dispatchEvent(new Event('cinematic:reveal'));
+    if (!reduced) {
+      const reveal = play(surface, [
+        { transform: 'translate3d(0,0,0)', borderRadius: '0' },
+        { transform: 'translate3d(0,-110%,0)', borderRadius: '0 0 45% 45%' },
+      ], 950);
+      animations.push(reveal, play(accent, [
+        { transform: 'translate3d(0,0,0)' },
+        { transform: 'translate3d(0,-110%,0)' },
+      ], 820));
+      if (incoming) animations.push(play(incoming, [
+        { transform: 'translate3d(0,55px,0)' }, { transform: 'translate3d(0,0,0)' },
+      ], 1100));
+      await reveal.finished.catch(() => {});
     }
-
-    if (!document.startViewTransition) {
-      try {
-        await runFallbackTransition(navigate, path, family, preferredKey, request, update);
-      } finally {
-        if (request === epoch) cleanup();
-      }
-      return;
-    }
-
-    try {
-      if (source) source.style.viewTransitionName = 'vt-semantic-actor';
-      document.documentElement.dataset.cinematicTransition = String(request);
-      document.documentElement.dataset.cinematicTransitionFamily = family;
-
-      const transition = document.startViewTransition(update);
-      activeTransition = transition;
-      transition.ready.catch(() => {});
-      transition.updateCallbackDone.catch(update);
-      transition.finished
-        .catch(() => {})
-        .finally(() => {
-          cleanup();
-          if (activeTransition === transition) activeTransition = null;
-        });
-    } catch {
-      cleanup();
-      await runFallbackTransition(navigate, path, family, preferredKey, request, update);
-      if (request === epoch) cleanup();
-    }
+    const heading = incoming?.querySelector('h1');
+    heading?.setAttribute('tabindex', '-1');
+    heading?.focus({ preventScroll: true });
+    cleanup();
   };
-
-  begin().catch(() => {
-    if (request === epoch) cleanup();
-    else clearPendingIndicator(request);
+  run().catch(() => {
+    cleanup();
+    if (request === epoch) {
+      navigate(path);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   });
 }

@@ -1,23 +1,17 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { observeScrollProgress } from './scrollProgress';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HOME_SCENE_STOPS = [0.04, 0.16, 0.285, 0.41, 0.535, 0.66, 0.785, 0.935];
-
-function closestSceneStop(progress) {
-  return HOME_SCENE_STOPS.reduce((best, stop, index) =>
-    Math.abs(stop - progress) < Math.abs(HOME_SCENE_STOPS[best] - progress) ? index : best, 0);
-}
-
 const HOME_HANDOFFS = [
-  [0.08, 0.115],
-  [0.205, 0.24],
-  [0.33, 0.365],
-  [0.455, 0.49],
-  [0.58, 0.615],
-  [0.705, 0.74],
-  [0.83, 0.865],
+  [0.07, 0.11],
+  [0.17, 0.21],
+  [0.27, 0.31],
+  [0.57, 0.61],
+  [0.68, 0.72],
+  [0.78, 0.82],
+  [0.88, 0.92],
 ];
 const clamp = (value) => Math.max(0, Math.min(1, value));
 const smooth = (value) => {
@@ -108,12 +102,10 @@ function setActiveWorld(items, labels, progress) {
     const distance = Math.abs(delta);
     const visible = distance < 1.06;
     const arrival = clamp(1 - distance);
-    item.style.opacity = visible ? String(Math.max(0, 1 - distance * 0.82)) : '0';
+    item.style.opacity = visible ? '1' : '0';
     item.style.visibility = visible ? 'visible' : 'hidden';
-    item.style.transform = `translate3d(${delta * 8}%, ${delta * 24}%, 0) scale(${mix(0.94, 1.035, arrival)})`;
-    item.style.clipPath = delta >= 0
-      ? `inset(${Math.min(100, distance * 58)}% 0 0 0)`
-      : `inset(0 0 ${Math.min(100, distance * 34)}% 0)`;
+    item.style.transform = `translate3d(${delta * 100}%, 0, 0) scale(${mix(1.06, 1, arrival)})`;
+    item.style.clipPath = 'none';
     item.style.zIndex = String(index === current ? 3 : 2);
     item.setAttribute('aria-hidden', String(index !== current));
   });
@@ -158,34 +150,10 @@ export function mountHomeHumanTrace(root) {
 
   const mm = gsap.matchMedia();
 
-  mm.add('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
-    const lastScene = HOME_SCENE_STOPS.length - 1;
-    let settledScene = 0;
-    const syncSettledScene = (progress) => {
-      const value = clamp(progress);
-      if (value <= 0.02) {
-        settledScene = 0;
-        return;
-      }
-      if (value >= 0.98) {
-        settledScene = lastScene;
-        return;
-      }
-      const nearest = closestSceneStop(value);
-      if (Math.abs(value - HOME_SCENE_STOPS[nearest]) <= 0.025) settledScene = nearest;
-    };
-    const boundedProgress = (progress) => {
-      const lower = settledScene === 0 ? 0 : HOME_SCENE_STOPS[settledScene - 1];
-      const upper = settledScene === lastScene ? 1 : HOME_SCENE_STOPS[settledScene + 1];
-      return Math.max(lower, Math.min(upper, clamp(progress)));
-    };
-    const boundedSnapStop = (progress) => {
-      const requested = closestSceneStop(clamp(progress));
-      const allowed = Math.max(settledScene - 1, Math.min(settledScene + 1, requested));
-      return HOME_SCENE_STOPS[allowed];
-    };
+  mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', () => {
+    const heroCopy = root.querySelector('.vt-home-human-copy');
     const render = (progress) => {
-      const p = boundedProgress(progress);
+      const p = clamp(progress);
       const weights = sceneWeights(p);
       const dominant = dominantIndex(weights);
       stage.dataset.homeDominant = scenes[dominant]?.dataset.homeSceneId || 'human';
@@ -200,24 +168,26 @@ export function mountHomeHumanTrace(root) {
       }
 
       if (worldMedia) {
-        const sourceTakeover = range(p, 0.08, 0.205);
-        const cropResolve = range(p, 0.205, 0.33);
-        const darken = range(p, 0.205, 0.455);
-        const returnPulse = range(p, 0.705, 0.83);
+        const sourceTakeover = range(p, 0, 0.17);
+        const cropResolve = range(p, 0.17, 0.27);
+        const darken = range(p, 0.17, 0.57);
+        const returnPulse = range(p, 0.78, 0.88);
         worldMedia.style.transform = `translate3d(${mix(0, -2.5, p)}%, ${mix(0, -3.5, p)}%, 0) scale(${mix(1.025, 1.16, sourceTakeover)})`;
-        worldMedia.style.clipPath = `inset(${mix(0, 4.5, cropResolve)}% ${mix(0, 6, cropResolve)}% ${mix(0, 4.5, cropResolve)}% ${mix(0, 6, cropResolve)}%)`;
-        worldMedia.style.setProperty('--home-veil-opacity', String(mix(0.08, 0.74, darken)));
-        const baseOpacity = mix(1, 0.2, range(p, 0.33, 0.58));
+        const opening = range(p, 0, 0.07);
+        worldMedia.style.clipPath = `inset(${mix(14, 0, opening)}% ${mix(5, 0, opening)}% ${mix(10, 0, opening)}% ${mix(30, 0, opening)}%)`;
+        if (heroCopy) heroCopy.style.transform = `translate3d(0, ${mix(0, -5, opening)}vh, 0)`;
+        worldMedia.style.setProperty('--home-veil-opacity', String(mix(0.55, 0.82, darken)));
+        const baseOpacity = mix(1, 0.2, range(p, 0.27, 0.68));
         worldMedia.style.opacity = String(mix(baseOpacity, 0.5, returnPulse));
       }
 
       if (source) {
-        const enter = range(p, 0.08, 0.115);
-        const travel = range(p, 0.115, 0.205);
-        const settle = range(p, 0.205, 0.24);
-        const residueFade = range(p, 0.33, 0.365);
-        const provenanceReturn = range(p, 0.705, 0.74);
-        const finalResolve = range(p, 0.83, 0.865);
+        const enter = range(p, 0.07, 0.11);
+        const travel = range(p, 0.11, 0.17);
+        const settle = range(p, 0.17, 0.21);
+        const residueFade = range(p, 0.27, 0.31);
+        const provenanceReturn = range(p, 0.78, 0.82);
+        const finalResolve = range(p, 0.88, 0.92);
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const x = mix(vw * 0.56, vw * 0.555, travel);
@@ -232,7 +202,7 @@ export function mountHomeHumanTrace(root) {
         source.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale}) rotate(${rotate}deg)`;
       }
 
-      const branchProgress = range(p, 0.205, 0.33);
+      const branchProgress = range(p, 0.17, 0.27);
       branchPaths.forEach((path, index) => {
         const length = Number(path.dataset.pathLength || 1000);
         const staggered = range(branchProgress, index * 0.07, 0.58 + index * 0.07);
@@ -240,9 +210,9 @@ export function mountHomeHumanTrace(root) {
         path.style.opacity = String(mix(0.22, 0.92, staggered));
       });
 
-      setActiveWorld(worldItems, worldLabels, range(p, 0.33, 0.455));
+      setActiveWorld(worldItems, worldLabels, range(p, 0.31, 0.57));
 
-      const weightProgress = range(p, 0.455, 0.58);
+      const weightProgress = range(p, 0.57, 0.68);
       masses.forEach((mass, index) => {
         const stagger = range(weightProgress, index * 0.05, 0.52 + index * 0.05);
         mass.style.transform = `translate3d(0, ${mix(8, 0, stagger)}%, 0) scaleY(${mix(0.045, 1, stagger)})`;
@@ -250,7 +220,7 @@ export function mountHomeHumanTrace(root) {
       });
 
       if (timeLater) {
-        const timeProgress = range(p, 0.58, 0.705);
+        const timeProgress = range(p, 0.68, 0.78);
         const split = mix(100, 48, timeProgress);
         timeLater.style.clipPath = `inset(0 0 0 ${split}%)`;
         timeFrame?.style.setProperty('--home-time-split', `${split}%`);
@@ -258,7 +228,7 @@ export function mountHomeHumanTrace(root) {
         if (timeLaterImage) timeLaterImage.style.transform = `translate3d(${mix(4.5, 0, timeProgress)}%, 0, 0) scale(${mix(1.085, 1.035, timeProgress)})`;
       }
 
-      const provenanceProgress = range(p, 0.705, 0.83);
+      const provenanceProgress = range(p, 0.78, 0.88);
       provenanceSteps.forEach((step, index) => {
         const reveal = range(provenanceProgress, index * 0.1, 0.39 + index * 0.1);
         step.style.opacity = String(reveal);
@@ -266,7 +236,7 @@ export function mountHomeHumanTrace(root) {
       });
 
       if (recordObject) {
-        const recordProgress = range(p, 0.83, 0.965);
+        const recordProgress = range(p, 0.88, 0.98);
         recordObject.style.transform = `translate3d(${mix(7, 0, recordProgress)}vw, ${mix(60, 0, recordProgress)}px, 0) scale(${mix(0.925, 1, recordProgress)}) rotate(${mix(0.8, 0, recordProgress)}deg)`;
         recordObject.style.opacity = String(recordProgress);
       }
@@ -274,28 +244,11 @@ export function mountHomeHumanTrace(root) {
 
     render(0);
 
-    const trigger = ScrollTrigger.create({
-      trigger: track,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1,
-      snap: {
-        snapTo: boundedSnapStop,
-        duration: { min: 0.78, max: 1.15 },
-        delay: 0.3,
-        ease: 'power2.out',
-      },
-      invalidateOnRefresh: true,
-      onUpdate: (self) => render(self.progress),
-      onSnapComplete: (self) => { settledScene = closestSceneStop(self.progress); },
-      onRefresh: (self) => {
-        syncSettledScene(self.progress);
-        render(self.progress);
-      },
-    });
+    const stop = observeScrollProgress(track, render, { response: 190 });
 
     return () => {
-      trigger.kill();
+      stop();
+      heroCopy?.style.removeProperty('transform');
       delete stage.dataset.homeDominant;
       stage.style.removeProperty('--home-progress');
       scenes.forEach((scene) => {
@@ -319,6 +272,18 @@ export function mountHomeHumanTrace(root) {
       provenanceSteps.forEach((step) => removeInlineStyles(step, ['opacity', 'transform']));
       removeInlineStyles(recordObject, ['transform', 'opacity']);
     };
+  });
+
+  mm.add('(max-width:900px) and (prefers-reduced-motion:no-preference)', () => {
+    const context = gsap.context(() => {
+      root.querySelectorAll('.vt-home-scene h2').forEach((heading) => {
+        gsap.fromTo(heading, { y: 40, opacity: 0.4 }, { y: 0, opacity: 1, ease: 'none',
+          scrollTrigger: { trigger: heading, start: 'top 95%', end: 'top 55%', scrub: 0.6 } });
+      });
+      worldItems.forEach((item) => gsap.fromTo(item.querySelector('img'), { yPercent: -7, scale: 1.16 },
+        { yPercent: 7, scale: 1.05, ease: 'none', scrollTrigger: { trigger: item, start: 'top bottom', end: 'bottom top', scrub: 0.6 } }));
+    }, root);
+    return () => context.revert();
   });
 
   return () => mm.revert();

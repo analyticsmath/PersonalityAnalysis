@@ -126,7 +126,7 @@ html[data-cinematic-transition-family="quiet-editorial"]::view-transition-old(ro
   .vt-trust-stage{grid-template-columns:66% 34%}
 }
 
-@media (max-width:900px), (pointer:coarse){
+@media (max-width:900px){
   :root{--vt-header:72px;--vt-side:22px}
   .vt-header{height:72px;padding:0 18px;grid-template-columns:1fr auto;background:rgba(241,244,241,.94);color:var(--vt-ink);border-bottom:1px solid var(--vt-line)}.vt-header-actions .vt-primary{display:none}.vt-index-button,.vt-header--scrolled .vt-index-button{background:var(--vt-ink);color:white;min-height:42px}.vt-brand{font-size:15px}
   .vt-cover{min-height:92svh}.vt-cover-media{inset:0}.vt-cover-copy{min-height:92svh;padding:120px 20px 74px;justify-content:flex-end}.vt-cover h1{font-size:clamp(54px,14vw,90px)}.vt-cover h1 span{background:rgba(21,34,30,.92)}.vt-cover-copy>p{font-size:14px;max-width:310px}.vt-cover-folio{left:20px;right:20px;bottom:18px}

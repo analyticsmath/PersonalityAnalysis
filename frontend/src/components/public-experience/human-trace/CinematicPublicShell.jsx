@@ -242,15 +242,11 @@ export function CinematicPublicShell() {
           </main>
 
           <footer className="vt-footer vt-grand-footer">
-            <div className="vt-footer-invitation">
-              <h2>A clearer view.<br/>A considered next move.</h2>
-              <CinemaLink className="vt-primary" to="/signup?next=%2Fassessment%2Fstart">Discover your profile <span aria-hidden="true">↗</span></CinemaLink>
-            </div>
+            <div className="vt-footer-invitation"><p>Personality, interests and work values.<br/>Connected to their evidence.</p></div>
             <nav aria-label="Footer navigation">
               {NAV.slice(1).map(([to, label]) => <CinemaLink to={to} key={to}>{label}</CinemaLink>)}
               <CinemaLink to="/login">Sign in</CinemaLink>
             </nav>
-            <CinemaLink className="vt-footer-wordmark" to="/" aria-label="Personality Assessor home"><span>Personality</span><span>Assessor</span></CinemaLink>
             <div className="vt-footer-bottom"><span>Professional insight. Not a clinical diagnosis.</span><span>By Valtum Studio</span></div>
           </footer>
 

@@ -106,7 +106,7 @@
   .vt-home-branch-field{left:39%}
 }
 
-@media (max-width:900px), (pointer:coarse){
+@media (max-width:900px){
   .vt-home-experience{overflow:visible}
   .vt-home-film-track{height:auto;background:var(--vt-home-dark)}
   .vt-home-film-stage{height:auto;min-height:0;position:relative;overflow:visible}
