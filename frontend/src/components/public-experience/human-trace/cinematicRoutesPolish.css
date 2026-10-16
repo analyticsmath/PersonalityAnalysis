@@ -1,0 +1,13 @@
+/* Final route-level geometry and interaction corrections. */
+.vt-how-weight-stage i:nth-child(1),.vt-how-weight-stage i:nth-child(2){height:62.5%}
+.vt-how-weight-stage i:nth-child(3){height:50%}
+.vt-how-weight-stage i:nth-child(4){height:37.5%}
+.vt-how-weight-stage i:nth-child(5){height:25%}
+.vt-how-weight-stage i:nth-child(6){height:18%}
+
+/* Onboarding is orientation, not permanent instruction. Fade it once the world index is visually active. */
+.vt-career-world-index>span.is-active~.vt-career-onboarding{opacity:.25}
+
+@media (max-width:900px), (pointer:coarse){
+  .vt-career-onboarding{display:none}
+}
