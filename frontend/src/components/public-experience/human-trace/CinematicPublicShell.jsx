@@ -82,6 +82,20 @@ export function CinematicPublicShell() {
   }, []);
 
   useEffect(() => {
+    if (location.pathname !== '/') return undefined;
+    const warmSecondaryFilm = () => {
+      import('./CinematicRoutes').catch(() => {});
+    };
+    let handle;
+    if (typeof window.requestIdleCallback === 'function') {
+      handle = window.requestIdleCallback(warmSecondaryFilm, { timeout: 1800 });
+      return () => window.cancelIdleCallback?.(handle);
+    }
+    handle = window.setTimeout(warmSecondaryFilm, 900);
+    return () => window.clearTimeout(handle);
+  }, [location.pathname]);
+
+  useEffect(() => {
     setMenuOpen(false);
     window.requestAnimationFrame(() => {
       if (scrollEngine.current) scrollEngine.current.scrollTo(0, { immediate: true });
