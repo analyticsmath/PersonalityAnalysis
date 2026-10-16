@@ -3,6 +3,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const HOME_SCENE_STOPS = [0.04, 0.16, 0.285, 0.41, 0.535, 0.66, 0.785, 0.935];
+
 const HOME_HANDOFFS = [
   [0.08, 0.115],
   [0.205, 0.24],
@@ -246,7 +248,13 @@ export function mountHomeHumanTrace(root) {
       trigger: track,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 0.72,
+      scrub: 1,
+      snap: {
+        snapTo: HOME_SCENE_STOPS,
+        duration: { min: 0.78, max: 1.15 },
+        delay: 0.3,
+        ease: 'power2.out',
+      },
       invalidateOnRefresh: true,
       onUpdate: (self) => render(self.progress),
       onRefresh: (self) => render(self.progress),

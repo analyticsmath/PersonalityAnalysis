@@ -26,7 +26,7 @@ const PHOTO = {
 
 const RECORD_STATEMENT = 'Your responses remain part of the record.';
 
-function Cover({ eyebrow, lines, image, alt, description, position = 'center', variant = '', family = 'context-media', transitionKey = 'working-context' }) {
+function Cover({ lines, image, alt, description, position = 'center', variant = '', family = 'context-media', transitionKey = 'working-context' }) {
   return (
     <section className={`vt-cover vt-cover--${variant}`}>
       <div className="vt-cover-media" data-transition-family={family} data-transition-key={transitionKey}>
@@ -34,11 +34,9 @@ function Cover({ eyebrow, lines, image, alt, description, position = 'center', v
         <div className="vt-cover-shade" aria-hidden="true" />
       </div>
       <div className="vt-cover-copy">
-        <span className="vt-cover-eyebrow">{eyebrow}</span>
         <h1>{lines.map((line) => <span key={line}>{line}</span>)}</h1>
         <p>{description}</p>
       </div>
-      <div className="vt-cover-folio" aria-hidden="true"><span>PERSONALITY ASSESSOR</span><span>{eyebrow.toUpperCase()}</span></div>
     </section>
   );
 }
@@ -52,12 +50,12 @@ function SourceNote({ dark = false }) {
   );
 }
 
-function NextChapter({ to, eyebrow = 'Explore further', title, subtitle, image, family = 'context-media', transitionKey = 'working-context' }) {
+function NextChapter({ to, title, subtitle, image, family = 'context-media', transitionKey = 'working-context' }) {
   return (
     <CinemaLink className="vt-next" to={to} data-transition-family={family} data-transition-key={transitionKey}>
       <img src={image} loading="lazy" alt="" />
       <div className="vt-next-shade" aria-hidden="true" />
-      <div className="vt-next-content"><small>{eyebrow}</small><strong>{title}</strong><span>{subtitle}</span></div>
+      <div className="vt-next-content"><strong>{title}</strong><span>{subtitle}</span></div>
       <span className="vt-next-arrow" aria-hidden="true">↗</span>
     </CinemaLink>
   );
@@ -93,7 +91,7 @@ function useHowTrace(rootRef) {
 function HowMobileArtifact({ state }) {
   return (
     <div className={`vt-how-mobile-state vt-how-mobile-state--${state}`} aria-hidden="true">
-      <span>“clarify constraints first”</span>
+      <span>Your response stays in context.</span>
       {state === 'isolate' && <div className="vt-how-mini-clauses"><i /><i /><i /></div>}
       {state === 'branch' && <div className="vt-how-mini-branch"><i /><i /><i /></div>}
       {state === 'weight' && <div className="vt-how-mini-mass"><i /><i /><i /><i /></div>}
@@ -118,7 +116,7 @@ export function HowCinematicPage() {
 
   return (
     <PageFrame className="how" rootRef={rootRef}>
-      <Cover eyebrow="How it works" lines={['From your answers.', 'To your perspective.']} image={PHOTO.detail} alt="A website wireframe sketched on paper" description="Understand how your responses contribute to a profile of your personality, interests and work values." position="55% 45%" variant="how" family="human-trace" transitionKey="source-response" />
+      <Cover lines={['From your answers.', 'To your perspective.']} image={PHOTO.detail} alt="A website wireframe sketched on paper" description="Understand how your responses contribute to a profile of your personality, interests and work values." position="55% 45%" variant="how" family="human-trace" transitionKey="source-response" />
 
       <div className="vt-essay-intro"><h2>Before the inference,<br/><em>there is a source.</em></h2><p>A single answer can suggest questions worth asking. A scored profile requires sufficient independent evidence.</p></div>
 
@@ -126,11 +124,11 @@ export function HowCinematicPage() {
         <aside className="vt-how-fixed">
           <div className="vt-how-trace-stage" data-how-stage data-how-state="capture" data-transition-family="human-trace" data-transition-key="source-response">
             <figure className="vt-how-context"><img src={PHOTO.source} alt="A designer considering an interface in context" loading="lazy" /><div aria-hidden="true" /></figure>
-            <blockquote className="vt-how-source-card"><small>EXAMPLE ANSWER</small>“{PUBLIC_CONTENT.how.sampleResponse}”</blockquote>
-            <div className="vt-how-clause-stage" aria-hidden="true"><span>clarify</span><span>constraints</span><span>smallest</span><span>reversible</span><span>step</span></div>
+            <p className="vt-how-source-card">Your response stays connected to the question and situation it describes.</p>
+            <div className="vt-how-clause-stage" aria-hidden="true"><span>Response</span><span>Context</span><span>Evidence</span><span>Interpretation</span><span>Limit</span></div>
             <div className="vt-how-branch-stage" aria-hidden="true"><span>Big Five</span><span>RIASEC</span><span>Work Values</span></div>
             <div className="vt-how-weight-stage" aria-hidden="true">{weights.map((weight) => <i key={weight.id} style={{ '--weight': weight.percentage }}><b>{weight.percentage}%</b><span>{weight.label}</span></i>)}</div>
-            <div className="vt-how-record-stage" aria-hidden="true"><small>INSPECTABLE RECORD</small><strong>Source retained.</strong><strong>Weights explicit.</strong><strong>Limits visible.</strong></div>
+            <div className="vt-how-record-stage" aria-hidden="true"><strong>Source retained.</strong><strong>Weights explicit.</strong><strong>Limits visible.</strong></div>
             <SourceNote dark />
           </div>
         </aside>
@@ -138,7 +136,6 @@ export function HowCinematicPage() {
         <div className="vt-how-steps">
           {steps.map((step, index) => (
             <article key={step.id} className="vt-how-step" data-how-step={step.id} id={`step-${step.id}`}>
-              <span className="vt-how-step__index">0{index + 1} / 05</span>
               <HowMobileArtifact state={step.id} />
               <h2>{copy[index][0]}</h2>
               <p>{copy[index][1]}</p>
@@ -150,7 +147,7 @@ export function HowCinematicPage() {
       </div>
 
       <section className="vt-quiet-end"><h2>No single response<br/>becomes a verdict.</h2><p>Inputs, inferred dimensions, explicit weights and limitations belong to separate stages of the record.</p><CinemaLink className="vt-text-link" to="/methodology">Examine the methodology ↗</CinemaLink></section>
-      <NextChapter to="/career-intelligence" eyebrow="CAREER INTELLIGENCE" title="Explore your possibilities." subtitle="The same evidence meets different working conditions." image={PHOTO.precision} family="human-trace" transitionKey="source-response" />
+      <NextChapter to="/career-intelligence" title="Explore your possibilities." subtitle="The same evidence meets different working conditions." image={PHOTO.precision} family="human-trace" transitionKey="source-response" />
     </PageFrame>
   );
 }
@@ -195,11 +192,11 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
         trigger: track,
         start: 'top 84px',
         end: 'bottom bottom',
-        scrub: 0.38,
+        scrub: 0.95,
         snap: {
           snapTo: 1 / (CAREER_WORLDS.length - 1),
-          duration: { min: 0.55, max: 0.9 },
-          delay: 0.16,
+          duration: { min: 0.78, max: 1.15 },
+          delay: 0.3,
           ease: 'power2.out',
         },
         invalidateOnRefresh: true,
@@ -250,14 +247,14 @@ export function CareerCinematicPage() {
 
   return (
     <PageFrame className="career" rootRef={rootRef}>
-      <Cover eyebrow="Career intelligence" lines={['Find work', 'that speaks to you.']} image={PHOTO.design} alt="A product designer sketching a digital interface" description="Explore the skills, interests and conditions behind different careers. Give your next move a clearer context." position="55% center" variant="career" family="context-media" transitionKey="career-world" />
+      <Cover lines={['Find work', 'that speaks to you.']} image={PHOTO.design} alt="A product designer sketching a digital interface" description="Explore the skills, interests and conditions behind different careers. Give your next move a clearer context." position="55% center" variant="career" family="context-media" transitionKey="career-world" />
 
       <div className="vt-essay-intro vt-essay-intro--dark"><h2>Environments change.<br/><em>The questions change.</em></h2><p>Explore 17 careers across five working environments. Each environment brings together related roles, the conditions that suit them and the trade-offs to consider.</p></div>
 
-      <section className="vt-career-worlds-track" data-career-world-track aria-label="Five working environments">
+      <section className="vt-career-worlds-track" data-career-world-track aria-label="Working environments">
         <div className="vt-career-worlds-stage">
           <div className="vt-career-world-index" aria-hidden="true">
-            {CAREER_WORLDS.map((world, index) => <span key={world.id} className={activeWorld === index ? 'is-active' : ''}>{world.index} {world.name}</span>)}
+            {CAREER_WORLDS.map((world, index) => <span key={world.id} className={activeWorld === index ? 'is-active' : ''}>{world.name}</span>)}
           </div>
 
           <div className="vt-career-world-viewport">
@@ -276,15 +273,13 @@ export function CareerCinematicPage() {
                   <div className={`vt-career-world-media vt-career-world-media--${world.physics}`} data-transition-family="context-media" data-transition-key="career-world">
                     <img src={mediaForRole(selectedKey, world.media)} alt={`Illustrative working context for ${selectedRole.title}`} loading={worldIndex === 0 ? 'eager' : 'lazy'} />
                     <div className="vt-career-world-media__shade" aria-hidden="true" />
-                    <div className="vt-career-world-media__annotation" aria-hidden="true"><span>{world.index}</span><span>{world.physics.toUpperCase()}</span></div>
                   </div>
 
                   <div className="vt-career-world-copy">
-                    <span className="vt-career-world-copy__index">{world.index} / 05</span>
                     <h2>{world.name}</h2>
                     <strong>{world.thesis}</strong>
                     <p>{world.description}</p>
-                    <small>Tension: {world.tension}</small>
+                    <p className="vt-career-world-tradeoff">{world.tension}</p>
                   </div>
 
                   <div className="vt-career-role-field">
@@ -325,7 +320,7 @@ export function CareerCinematicPage() {
 
       <p className="vt-career-disclaimer">{CAREER_PRESENTATION_DISCLAIMER}</p>
       <section className="vt-quiet-end"><h2>Look beyond<br/>a job title.</h2><p>Your interests, skills, values and experience each contribute to a career comparison. Explore how the calculation brings them together.</p><CinemaLink className="vt-text-link" to="/methodology">Explore the scoring model ↗</CinemaLink></section>
-      <NextChapter to="/progress" eyebrow="YOUR PROFILE OVER TIME" title="See what changes." subtitle="Return to the same record over time." image={PHOTO.shared} family="context-media" transitionKey="career-world" />
+      <NextChapter to="/progress" title="See what changes." subtitle="Return to the same record over time." image={PHOTO.shared} family="context-media" transitionKey="career-world" />
     </PageFrame>
   );
 }
@@ -335,14 +330,14 @@ export function ProgressCinematicPage() {
   const content = PUBLIC_CONTENT.progress;
   return (
     <PageFrame className="progress">
-      <Cover eyebrow="Progress" lines={['A little distance.', 'A different view.']} image={PHOTO.autonomy} alt="A developer concentrating on work at a laptop" description={content.hero.support} position="center 52%" variant="progress" family="context-media" transitionKey="career-world" />
+      <Cover lines={['A little distance.', 'A different view.']} image={PHOTO.autonomy} alt="A developer concentrating on work at a laptop" description={content.hero.support} position="center 52%" variant="progress" family="context-media" transitionKey="career-world" />
       <div className="vt-essay-intro"><h2>Time adds context.<br/><em>It does not erase.</em></h2><p>Compare illustrative working environments. A genuine personal change requires at least two complete assessment records.</p></div>
 
       <section className="vt-time-comparison" aria-label="Illustrative timeline comparator">
         <div className="vt-time-stage" style={{ '--split': `${split}%` }} data-transition-family="context-media" data-transition-key="career-world">
           <img src={PHOTO.autonomy} loading="lazy" alt="Illustrative baseline solo workspace" className="vt-time-image" />
           <div className="vt-time-mask"><img src={PHOTO.collaboration} loading="lazy" alt="Illustrative later collaborative workspace" className="vt-time-image" /></div>
-          <span className="vt-time-tag vt-time-tag--left">BASELINE CONTEXT</span><span className="vt-time-tag vt-time-tag--right">LATER CONTEXT</span>
+          <span className="vt-time-tag vt-time-tag--left">Earlier record</span><span className="vt-time-tag vt-time-tag--right">Later context</span>
           <div className="vt-time-divider" aria-hidden="true"><span>↔</span></div>
         </div>
         <div className="vt-time-controls">
@@ -353,11 +348,11 @@ export function ProgressCinematicPage() {
       </section>
 
       <section className="vt-longitudinal-text">
-        <article><span>STABILITY</span><h2>{content.stabilityFinding}</h2><p>Without an earlier record, there is nothing reliable to compare. Source and context must remain available for later inspection.</p></article>
-        <article><span>ADAPTATION</span><h2>{content.adaptationFinding}</h2><p>Later conditions can alter the interpretation. Neither photograph represents the assessment history of a real person.</p></article>
+        <article><h2>{content.stabilityFinding}</h2><p>Without an earlier record, there is nothing reliable to compare. Source and context must remain available for later inspection.</p></article>
+        <article><h2>{content.adaptationFinding}</h2><p>Later conditions can alter the interpretation. Neither photograph represents the assessment history of a real person.</p></article>
       </section>
       <div className="vt-dark-quote"><SourceNote dark /><p>Keep the earlier context in view. Understand what a later record adds.</p></div>
-      <NextChapter to="/trust" eyebrow="EVIDENCE & PRIVACY" title="See the evidence." subtitle="Every interpretation starts somewhere." image={PHOTO.proof} family="human-trace" transitionKey="evidence-record" />
+      <NextChapter to="/trust" title="See the evidence." subtitle="Every interpretation starts somewhere." image={PHOTO.proof} family="human-trace" transitionKey="evidence-record" />
     </PageFrame>
   );
 }
@@ -391,11 +386,11 @@ function useTrustTimeline(rootRef, setActive) {
         trigger: track,
         start: 'top 84px',
         end: 'bottom bottom',
-        scrub: 0.68,
+        scrub: 0.95,
         snap: {
           snapTo: 1 / 4,
-          duration: { min: 0.42, max: 0.78 },
-          delay: 0.12,
+          duration: { min: 0.78, max: 1.15 },
+          delay: 0.3,
           ease: 'power2.out',
         },
         invalidateOnRefresh: true,
@@ -404,6 +399,19 @@ function useTrustTimeline(rootRef, setActive) {
       });
       return () => trigger.kill();
     });
+
+    const mobileStates = [...track.querySelectorAll('.vt-trust-mobile-states article')];
+    mm.add('(max-width:900px), (pointer:coarse)', () => {
+      const triggers = mobileStates.map((article, index) => ScrollTrigger.create({
+        trigger: article,
+        start: 'top 62%',
+        end: 'bottom 62%',
+        onEnter: () => setActive(index),
+        onEnterBack: () => setActive(index),
+      }));
+      return () => triggers.forEach((trigger) => trigger.kill());
+    });
+
     return () => mm.revert();
   }, [rootRef, setActive]);
 }
@@ -416,19 +424,17 @@ export function TrustCinematicPage() {
 
   return (
     <PageFrame className="trust" rootRef={rootRef}>
-      <Cover eyebrow="Trust & evidence" lines={['Insight.', 'With its evidence.']} image={PHOTO.proof} alt="An interface wireframe showing the thinking behind an idea" description="See the evidence behind an interpretation. Understand its limits. Keep control of your information." variant="trust" family="human-trace" transitionKey="evidence-record" />
+      <Cover lines={['Insight.', 'With its evidence.']} image={PHOTO.proof} alt="An interface wireframe showing the thinking behind an idea" description="See the evidence behind an interpretation. Understand its limits. Keep control of your information." variant="trust" family="human-trace" transitionKey="evidence-record" />
       <div className="vt-essay-intro"><h2>Inspect the reading.<br/><em>Then its origin.</em></h2><p>Follow the stages from a contextual answer to a professional comparison. Each stage has a different purpose and a different limit.</p></div>
 
-      <section className="vt-trust-track" data-trust-track aria-label="Five-stage evidence chain">
+      <section className="vt-trust-track" data-trust-track aria-label="Evidence stages">
         <div className="vt-trust-stage">
           <div className="vt-trust-record" data-transition-family="human-trace" data-transition-key="evidence-record">
-            <div className="vt-trust-record__header"><span>EXAMPLE EVIDENCE RECORD</span><span>0{active + 1} / 05</span></div>
-            <blockquote>“{PUBLIC_CONTENT.how.sampleResponse}”</blockquote>
+            <p className="vt-trust-record__source">Your response stays connected to the question and situation it describes.</p>
             <div className="vt-trust-record__pipeline" aria-hidden="true">
               {steps.map((step, index) => <span key={step.id} className={index <= active ? 'is-active' : ''}>{step.name}</span>)}
             </div>
-            <div className="vt-trust-record__reading">
-              <span>{steps[active].name.toUpperCase()}</span>
+            <div key={steps[active].id} className="vt-trust-record__reading" aria-live="polite">
               <h2>{TRUST_READINGS[steps[active].id][0]}</h2>
               <p>{TRUST_READINGS[steps[active].id][1]}</p>
               <small>{steps[active].description}</small>
@@ -436,27 +442,47 @@ export function TrustCinematicPage() {
           </div>
 
           <aside className="vt-trust-inspector">
-            {steps.map((step, index) => (
-              <button key={step.id} type="button" className={index === active ? 'is-selected' : ''} aria-pressed={index === active} onClick={() => setActive(index)}>
-                <span>0{index + 1}</span><strong>{step.name}</strong><i aria-hidden="true" />
-              </button>
-            ))}
+            <ol>
+              {steps.map((step, index) => (
+                <li key={step.id} className={index === active ? 'is-selected' : ''} aria-current={index === active ? 'step' : undefined}>
+                  <strong>{step.name}</strong><i aria-hidden="true" />
+                </li>
+              ))}
+            </ol>
             <p>The sequence is explanatory. A single response alone is not a complete scored profile.</p>
           </aside>
         </div>
 
         <div className="vt-trust-mobile-states">
-          {steps.map((step, index) => <article key={step.id}><span>0{index + 1} / 05</span><h2>{TRUST_READINGS[step.id][0]}</h2><p>{TRUST_READINGS[step.id][1]}</p></article>)}
+          {steps.map((step, index) => <article key={step.id} className={index === active ? 'is-active' : ''} aria-current={index === active ? 'step' : undefined}><h2>{TRUST_READINGS[step.id][0]}</h2><p>{TRUST_READINGS[step.id][1]}</p></article>)}
         </div>
       </section>
 
-      <section className="vt-rights"><div><span>CONTROL</span><h2>Your record.<br/>Your controls.</h2><p>Review export, transparency and account-removal actions in their authenticated contexts.</p></div><div className="vt-rights-list">{PUBLIC_CONTENT.trust.rightsActions.map((right) => <article key={right.id}><h3>{right.label}</h3><p>{right.description}</p><CinemaLink className="vt-text-link" to={right.link}>Review this control ↗</CinemaLink></article>)}</div></section>
-      <NextChapter to="/methodology" eyebrow="SCORING METHOD" title="Understand the method." subtitle="The models, formulas and their limits." image={PHOTO.inquiry} family="quiet-editorial" transitionKey="method" />
+      <section className="vt-rights"><div><h2>Your record.<br/>Your controls.</h2><p>Review export, transparency and account-removal actions in their authenticated contexts.</p></div><div className="vt-rights-list">{PUBLIC_CONTENT.trust.rightsActions.map((right) => <article key={right.id}><h3>{right.label}</h3><p>{right.description}</p><CinemaLink className="vt-text-link" to={right.link}>Review this control ↗</CinemaLink></article>)}</div></section>
+      <NextChapter to="/methodology" title="Understand the method." subtitle="The models, formulas and their limits." image={PHOTO.inquiry} family="quiet-editorial" transitionKey="method" />
     </PageFrame>
   );
 }
 
 const sectionKeys = ['bigFive', 'riasec', 'workValues', 'behavioralSignals', 'careerWeights', 'validityStates', 'aiNarrative', 'limits'];
+
+function useMethodologyTrace(rootRef, setActive) {
+  useEffect(() => {
+    const root = rootRef.current;
+    const articles = [...(root?.querySelectorAll('[data-method-section]') || [])];
+    if (!articles.length) return undefined;
+
+    const triggers = articles.map((article, index) => ScrollTrigger.create({
+      trigger: article,
+      start: 'top 58%',
+      end: 'bottom 58%',
+      onEnter: () => setActive(sectionKeys[index]),
+      onEnterBack: () => setActive(sectionKeys[index]),
+    }));
+
+    return () => triggers.forEach((trigger) => trigger.kill());
+  }, [rootRef, setActive]);
+}
 
 function MethodDetail({ name, item }) {
   if (name === 'bigFive') return <div className="vt-method-spectrum">{item.dimensions.map((dimension, index) => <span key={dimension} style={{ '--i': index }}>{dimension}</span>)}</div>;
@@ -464,22 +490,38 @@ function MethodDetail({ name, item }) {
   if (name === 'workValues') return <div className="vt-method-chip-field">{item.priorities.map((dimension) => <span key={dimension}>{dimension}</span>)}</div>;
   if (name === 'behavioralSignals') return <div className="vt-method-chip-field">{item.patterns.map((dimension) => <span key={dimension}>{dimension}</span>)}</div>;
   if (name === 'careerWeights') return <div className="vt-method-weights">{PUBLIC_CONTENT.home.calibration.weights.map((weight) => <div key={weight.id}><span>{weight.label}</span><b>{weight.percentage}%</b><i style={{ width: `${weight.percentage * 3}%` }} /></div>)}</div>;
-  if (name === 'validityStates') return <div className="vt-method-chip-field">{['valid', 'partial', 'insufficient_data'].map((state) => <code key={state}>{state}</code>)}</div>;
+  if (name === 'validityStates') return <div className="vt-method-chip-field">{[['valid', 'Enough evidence'], ['partial', 'Partial evidence'], ['insufficient_data', 'More evidence needed']].map(([state, label]) => <span key={state}>{label}</span>)}</div>;
+  if (name === 'aiNarrative') return (
+    <div className="vt-method-ai-boundary">
+      <section><h3>Scoring</h3><strong>Deterministic formula</strong><p>Profile and CV processing may provide structured inputs. AI does not replace the formula.</p></section>
+      <section><h3>Narrative interpretation</h3><strong>Optional AI support</strong><p>Generative AI may help interpret narrative context.</p></section>
+    </div>
+  );
+  if (name === 'limits') return (
+    <dl className="vt-method-limits">
+      <div><dt>Can support</dt><dd>Professional self-reflection and career planning</dd></div>
+      <div><dt>Does not provide</dt><dd>Clinical diagnosis, medical evaluation, or psychiatric assessment</dd></div>
+    </dl>
+  );
   return null;
 }
 
 export function MethodologyCinematicPage() {
   const sections = PUBLIC_CONTENT.methodology.sections;
+  const [activeSection, setActiveSection] = useState(sectionKeys[0]);
+  const rootRef = useRef(null);
+  useMethodologyTrace(rootRef, setActiveSection);
+
   return (
-    <PageFrame className="method">
-      <Cover eyebrow="Methodology" lines={['Understand', 'the thinking.']} image={PHOTO.inquiry} alt="A developer writing software on a laptop" description="Explore the models behind your profile and the factors behind a career comparison." variant="method" family="quiet-editorial" transitionKey="method" />
-      <div className="vt-method-intro"><span>TECHNICAL PUBLICATION</span><h2>Methods must be<br/><em>visible.</em></h2><p>{PUBLIC_CONTENT.methodology.hero.support}</p></div>
+    <PageFrame className="method" rootRef={rootRef}>
+      <Cover lines={['Understand', 'the thinking.']} image={PHOTO.inquiry} alt="A developer writing software on a laptop" description="Explore the models behind your profile and the factors behind a career comparison." variant="method" family="quiet-editorial" transitionKey="method" />
+      <div className="vt-method-intro"><h2>Methods must be<br/><em>visible.</em></h2><p>{PUBLIC_CONTENT.methodology.hero.support}</p></div>
       <div className="vt-monograph">
-        <nav className="vt-monograph-index" aria-label="Methodology chapters">{sectionKeys.map((key, index) => <a href={`#method-${key}`} key={key}><span>0{index + 1}</span>{sections[key].title}</a>)}</nav>
-        <div className="vt-monograph-articles">{sectionKeys.map((key, index) => <article id={`method-${key}`} key={key}><span className="vt-method-article-index">0{index + 1} / 08 · {sections[key].role}</span><h2>{sections[key].title}</h2><p>{sections[key].description}</p><MethodDetail name={key} item={sections[key]} /></article>)}</div>
+        <nav className="vt-monograph-index" aria-label="Methodology sections">{sectionKeys.map((key) => <a href={`#method-${key}`} key={key} className={activeSection === key ? 'is-active' : ''} aria-current={activeSection === key ? 'location' : undefined}>{sections[key].title}</a>)}</nav>
+        <div className="vt-monograph-articles">{sectionKeys.map((key) => <article id={`method-${key}`} key={key} data-method-section={key} className={activeSection === key ? 'is-active' : ''}><h2>{sections[key].title}</h2><p>{sections[key].description}</p><MethodDetail name={key} item={sections[key]} /></article>)}</div>
       </div>
       <div className="vt-method-verdict"><h2>Professional insight.<br/><em>Not clinical diagnosis.</em></h2><p>{sections.limits.description}</p><CinemaLink className="vt-text-link" to="/trust">Inspect the evidence chain ↗</CinemaLink></div>
-      <NextChapter to="/privacy" eyebrow="YOUR DATA RIGHTS" title="Your information. Your choice." subtitle="Plain-language governance and account controls." image={PHOTO.detail} family="quiet-editorial" transitionKey="privacy" />
+      <NextChapter to="/privacy" title="Your information. Your choice." subtitle="Plain-language governance and account controls." image={PHOTO.detail} family="quiet-editorial" transitionKey="privacy" />
     </PageFrame>
   );
 }
@@ -488,14 +530,14 @@ export function PrivacyCinematicPage() {
   const data = PUBLIC_CONTENT.privacy;
   return (
     <PageFrame className="privacy">
-      <Cover eyebrow="Privacy" lines={['Your information.', 'Your choice.']} image={PHOTO.detail} alt="A website wireframe with handwritten planning notes" description={data.hero.support} variant="privacy" family="quiet-editorial" transitionKey="privacy" />
-      <div className="vt-privacy-brief"><span>PLAIN-LANGUAGE GOVERNANCE</span><h2>Make it<br/><em>understandable.</em></h2><p>Read the published product policy below and open your account controls when you are signed in.</p></div>
+      <Cover lines={['Your information.', 'Your choice.']} image={PHOTO.detail} alt="A website wireframe with handwritten planning notes" description={data.hero.support} variant="privacy" family="quiet-editorial" transitionKey="privacy" />
+      <div className="vt-privacy-brief"><h2>Make it<br/><em>understandable.</em></h2><p>Read the published product policy below and open your account controls when you are signed in.</p></div>
       <section className="vt-privacy-document">
         <nav aria-label="Policy table of contents">{data.sections.map((section) => <a href={`#${section.id}`} key={section.id}>{section.title}</a>)}</nav>
         <div>{data.sections.map((section) => <article key={section.id} id={section.id}><h2>{section.title}</h2><p>{section.content}</p></article>)}</div>
       </section>
       <section className="vt-method-verdict"><h2>Your record remains<br/><em>inspectable.</em></h2><CinemaLink className="vt-text-link" to="/account/privacy">Open privacy controls ↗</CinemaLink></section>
-      <NextChapter to="/" eyebrow="PERSONALITY ASSESSOR" title="A clearer direction." subtitle="Explore your personality, interests and work priorities." image={PHOTO.source} family="quiet-editorial" transitionKey="home" />
+      <NextChapter to="/" title="A clearer direction." subtitle="Explore your personality, interests and work priorities." image={PHOTO.source} family="quiet-editorial" transitionKey="home" />
     </PageFrame>
   );
 }

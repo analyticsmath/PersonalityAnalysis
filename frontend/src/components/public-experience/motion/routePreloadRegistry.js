@@ -1,12 +1,8 @@
 /**
  * Personality Assessor - Route Preload Registry
- * Preloads lazy route modules, critical media manifest assets, and slot metadata
- * on pointerenter, focus, and touchstart.
+ * Preloads route modules on pointer, keyboard, and touch intent.
  */
 
-import { TextureRegistry } from '../canvas/TextureRegistry';
-
-// Lazy route chunk loaders
 const ROUTE_LOADERS = {
   '/': () => import('../../../pages/editorial/EditorialHomePage'),
   '/how-it-works': () => import('../../../pages/editorial/EditorialHowItWorksPage'),
@@ -19,8 +15,7 @@ const ROUTE_LOADERS = {
   '/signup': () => import('../../../pages/Auth/SignupPage'),
 };
 
-// Critical media keys for each destination route
-const ROUTE_CRITICAL_MEDIA = {
+const ROUTE_MEDIA = {
   '/': ['homeWorldEntry', 'homeSituationDetail'],
   '/how-it-works': ['howTransformation'],
   '/career-intelligence': ['workworldPrecision', 'careerDeepInquiry'],
@@ -30,31 +25,46 @@ const ROUTE_CRITICAL_MEDIA = {
   '/signup': ['authSignup'],
 };
 
-const preloadedRoutes = new Set();
+const preloadPromises = new Map();
 
-export const preloadRoute = (pathname) => {
-  if (!pathname || preloadedRoutes.has(pathname)) return;
-  preloadedRoutes.add(pathname);
+function resolvePath(path) {
+  try {
+    return new URL(path, window.location.origin).pathname;
+  } catch {
+    return path.split('?')[0];
+  }
+}
 
-  // 1. Preload JS bundle chunk
+export function preloadRoute(path) {
+  if (!path) return Promise.resolve();
+  const pathname = resolvePath(path);
+  if (preloadPromises.has(pathname)) return preloadPromises.get(pathname);
+
+  const tasks = [];
   const loader = ROUTE_LOADERS[pathname];
-  if (typeof loader === 'function') {
-    loader().catch(() => {});
+  if (loader) tasks.push(loader());
+
+  if (['/', '/how-it-works', '/career-intelligence', '/progress', '/trust', '/methodology', '/privacy'].includes(pathname)) {
+    tasks.push(import('../human-trace/CinematicRoutes'));
   }
 
-  // 2. Preload critical WebGL textures
-  const mediaKeys = ROUTE_CRITICAL_MEDIA[pathname] || [];
-  mediaKeys.forEach((key) => {
-    TextureRegistry.loadTexture(key).catch(() => {});
-  });
-};
+  const promise = Promise.allSettled(tasks).then(() => undefined);
+  preloadPromises.set(pathname, promise);
 
-export const attachPreloadListeners = (element, targetPath) => {
+  const mediaKeys = ROUTE_MEDIA[pathname] || [];
+  if (mediaKeys.length) {
+    import('../canvas/TextureRegistry')
+      .then(({ TextureRegistry }) => Promise.allSettled(mediaKeys.map((key) => TextureRegistry.loadTexture(key))))
+      .catch(() => {});
+  }
+
+  return promise;
+}
+
+export function attachPreloadListeners(element, targetPath) {
   if (!element || !targetPath) return () => {};
 
-  const handleIntent = () => {
-    preloadRoute(targetPath);
-  };
+  const handleIntent = () => { void preloadRoute(targetPath); };
 
   element.addEventListener('pointerenter', handleIntent, { passive: true });
   element.addEventListener('focus', handleIntent, { passive: true });
@@ -65,6 +75,6 @@ export const attachPreloadListeners = (element, targetPath) => {
     element.removeEventListener('focus', handleIntent);
     element.removeEventListener('touchstart', handleIntent);
   };
-};
+}
 
 export default { preloadRoute, attachPreloadListeners };

@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { navigateCinematic } from './routeNavigation';
+import { preloadRoute } from '../motion/routePreloadRegistry';
 import './cinematicRoutes.css';
 import './cinematicRoutesPolish.css';
 
@@ -20,6 +21,7 @@ const NAV = [
 ];
 
 const DIRECTED_SECONDARY_ROUTES = new Set(NAV.slice(1).map(([path]) => path));
+const NATIVE_SCROLL_STORY_ROUTES = new Set(['/', '/career-intelligence', '/trust']);
 
 const Navigation = createContext(null);
 const CinemaScroll = createContext((position) => window.scrollTo({ top: position, behavior: 'auto' }));
@@ -31,6 +33,9 @@ const navigateSafely = (navigate, path, origin) => navigateCinematic(navigate, p
 export function CinemaLink({ to, children, className, onClick, ...props }) {
   const go = useContext(Navigation);
   const navigate = useNavigate();
+  const preload = useCallback(() => {
+    if (!to.startsWith('#')) preloadRoute(to);
+  }, [to]);
   const handler = useCallback((event) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     if (typeof onClick === 'function') onClick(event);
@@ -39,7 +44,7 @@ export function CinemaLink({ to, children, className, onClick, ...props }) {
     (go || ((path, origin) => navigateSafely(navigate, path, origin)))(to, event.currentTarget);
   }, [go, navigate, to, onClick]);
 
-  return <a href={to} className={className} onClick={handler} {...props}>{children}</a>;
+  return <a href={to} className={className} {...props} onPointerEnter={preload} onFocus={preload} onTouchStart={preload} onClick={handler}>{children}</a>;
 }
 
 export function CinematicPublicShell() {
@@ -68,7 +73,7 @@ export function CinematicPublicShell() {
   useEffect(() => {
     const mm = gsap.matchMedia();
     mm.add('(pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
-      if (location.pathname === '/career-intelligence') return undefined;
+      if (NATIVE_SCROLL_STORY_ROUTES.has(location.pathname)) return undefined;
       const lenis = new Lenis({ duration: 0.86, smoothWheel: true, syncTouch: false });
       scrollEngine.current = lenis;
       lenis.on('scroll', ScrollTrigger.update);

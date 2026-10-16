@@ -153,3 +153,69 @@
   .vt-primary:hover span,.vt-next:hover .vt-next-arrow{transform:none!important}
   .vt-index-drawer nav a:hover,.vt-index-drawer nav a.is-active,.vt-monograph-index a:hover,.vt-privacy-document>nav a:hover{padding-left:0}
 }
+
+
+/* Scroll authored states: one owner per sequence, with enough room to read. */
+.vt-career-worlds-track{height:1000svh}
+.vt-career-world-index>span{
+  font-family:'Instrument Sans',Arial,sans-serif;
+  font-size:clamp(13px,1.05vw,16px);
+  letter-spacing:-.01em;
+  text-transform:none;
+  transition:color .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1);
+}
+.vt-career-world-copy .vt-career-world-tradeoff{margin-top:18px;max-width:390px;font-size:12px;line-height:1.55;color:rgba(255,255,255,.7)}
+.vt-career-worlds-stage .vt-career-world{transition:opacity .7s cubic-bezier(.22,1,.36,1),visibility .7s,clip-path .85s cubic-bezier(.22,1,.36,1)}
+
+/* Trust stages advance with the page scroll and settle on readable states. */
+.vt-trust-track{height:900svh}
+.vt-trust-record__source{max-width:640px;font-family:'Newsreader Variable',Georgia,serif;font-size:clamp(21px,2vw,30px);line-height:1.12;letter-spacing:-.025em}
+.vt-trust-record__pipeline{gap:clamp(10px,1.5vw,24px);margin-top:auto}
+.vt-trust-record__pipeline span{font-family:'Instrument Sans',Arial,sans-serif;font-size:clamp(10px,.9vw,13px);line-height:1.2;letter-spacing:0;text-transform:none;color:rgba(21,34,30,.48);transition:color .48s cubic-bezier(.22,1,.36,1),opacity .48s cubic-bezier(.22,1,.36,1)}
+.vt-trust-record__pipeline span.is-active{color:var(--vt-ink)}
+.vt-trust-record__reading{min-height:clamp(210px,27vh,330px);animation:vt-trust-reading-in .78s cubic-bezier(.22,1,.36,1) both}
+@keyframes vt-trust-reading-in{from{opacity:0;transform:translate3d(0,18px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.vt-trust-inspector ol{list-style:none;margin:0;padding:0;border-top:1px solid rgba(255,255,255,.16)}
+.vt-trust-inspector li{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 16px;align-items:center;gap:16px;min-height:58px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.47);opacity:.72;transition:color .48s cubic-bezier(.22,1,.36,1),opacity .48s cubic-bezier(.22,1,.36,1)}
+.vt-trust-inspector li strong{font-size:clamp(13px,1.08vw,16px);line-height:1.2;font-weight:450}
+.vt-trust-inspector li i{display:block;width:14px;height:1px;background:currentColor;transform:scaleX(.5);transform-origin:right;transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.vt-trust-inspector li.is-selected{color:white;opacity:1}
+.vt-trust-inspector li.is-selected i{transform:scaleX(1)}
+.vt-trust-inspector>p{max-width:300px;margin-top:30px;font-family:'Instrument Sans',Arial,sans-serif;font-size:12px;line-height:1.55;color:rgba(255,255,255,.62)}
+
+/* Methodology reads as one guided paper, not a list of metadata labels. */
+.vt-method-intro>span,.vt-privacy-brief>span,.vt-cover-folio,.vt-method-article-index,.vt-home-frame,.vt-home-scene__eyebrow,.vt-home-scene__index{display:none!important}
+.vt-monograph{grid-template-columns:minmax(190px,.78fr) minmax(0,1.72fr);gap:clamp(48px,7vw,112px)}
+.vt-monograph-index a{display:block;padding:15px 4px 15px 0;font-size:clamp(12px,.95vw,14px);line-height:1.35;color:#777c77;text-transform:none}
+.vt-monograph-index a span{display:none!important}
+.vt-monograph-index a.is-active{padding-left:10px;color:var(--vt-ink);border-left:1px solid var(--vt-accent)}
+.vt-monograph-articles article{min-height:78svh;display:flex;flex-direction:column;justify-content:center;opacity:.72;transition:opacity .6s cubic-bezier(.22,1,.36,1)}
+.vt-monograph-articles article.is-active{opacity:1}
+.vt-monograph-articles article.is-active h2{animation:vt-method-heading-in .8s cubic-bezier(.22,1,.36,1) both}
+@keyframes vt-method-heading-in{from{opacity:.45;transform:translate3d(0,18px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.vt-method-ai-boundary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,3vw,42px);margin-top:clamp(36px,5vw,72px);border-top:1px solid var(--vt-line);border-bottom:1px solid var(--vt-line)}
+.vt-method-ai-boundary section{padding:24px 0}
+.vt-method-ai-boundary h3{font-size:clamp(17px,1.6vw,23px);line-height:1.15;font-weight:450}
+.vt-method-ai-boundary strong{display:block;margin-top:18px;font-family:'Newsreader Variable',Georgia,serif;font-size:clamp(20px,2.3vw,34px);line-height:1.08;font-weight:400}
+.vt-method-ai-boundary p{max-width:390px;margin-top:13px;font-size:13px;line-height:1.55;color:var(--vt-muted)}
+.vt-method-limits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,4vw,60px);margin-top:clamp(36px,5vw,72px);border-top:1px solid var(--vt-line)}
+.vt-method-limits>div{padding-top:18px}
+.vt-method-limits dt{font-size:12px;font-weight:550;color:var(--vt-muted)}
+.vt-method-limits dd{max-width:430px;margin:12px 0 0;font-family:'Newsreader Variable',Georgia,serif;font-size:clamp(22px,2.5vw,38px);line-height:1.08;letter-spacing:-.02em}
+.vt-next-content strong{font-family:'Newsreader Variable',Georgia,serif}
+@media (max-width:900px),(pointer:coarse){
+  .vt-career-worlds-track,.vt-trust-track{height:auto}
+  .vt-career-world-index{display:none}
+  .vt-trust-stage{display:none}
+  .vt-trust-mobile-states{display:block}
+  .vt-trust-mobile-states article{min-height:52svh;padding:12svh var(--vt-side);opacity:.48;transition:opacity .5s cubic-bezier(.22,1,.36,1)}
+  .vt-trust-mobile-states article h2{font-size:clamp(40px,10vw,68px)}
+  .vt-trust-mobile-states article p{max-width:520px;margin-top:18px;font-size:15px;line-height:1.55}
+  .vt-trust-mobile-states article.is-active{opacity:1}
+  .vt-monograph{grid-template-columns:1fr;gap:0}
+  .vt-monograph-index{position:sticky;z-index:5;top:var(--vt-header);margin:0 -20px 32px;padding:8px 20px;overflow-x:auto;flex-direction:row;gap:8px;background:#f5f4ee;border-bottom:1px solid var(--vt-line)}
+  .vt-monograph-index a{flex:0 0 auto;border:0;padding:10px 4px}
+  .vt-monograph-index a.is-active{padding-left:4px;border-left:0;border-bottom:1px solid var(--vt-ink)}
+  .vt-monograph-articles article{min-height:60svh;padding:10vh 0;opacity:1}
+}
+@media (max-width:600px){.vt-method-ai-boundary,.vt-method-limits{grid-template-columns:1fr}.vt-method-ai-boundary section+section{border-top:1px solid var(--vt-line)}}
