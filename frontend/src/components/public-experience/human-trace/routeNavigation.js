@@ -62,7 +62,9 @@ export function navigateCinematic(navigate, path, origin) {
     window.scrollTo({ top: 0, behavior: 'auto' });
 
     if (family !== TRANSITION_FAMILIES.QUIET) {
-      destination = findSemanticActor(document, family, preferredKey) || findSemanticActor(document, family);
+      destination = preferredKey
+        ? findSemanticActor(document, family, preferredKey)
+        : findSemanticActor(document, family);
       if (destination) destination.style.viewTransitionName = 'vt-semantic-actor';
       const image = destination?.querySelector?.('img');
       if (image && !image.complete && typeof image.decode === 'function') {
