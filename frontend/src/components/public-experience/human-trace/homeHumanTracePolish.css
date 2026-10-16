@@ -1,5 +1,12 @@
 .vt-home-source-mobile{display:none}
 
+/* Explicit physical territory avoids relying on CSS multiplication support. */
+.vt-home-mass__item:nth-child(1),.vt-home-mass__item:nth-child(2){height:66.25%}
+.vt-home-mass__item:nth-child(3){height:53%}
+.vt-home-mass__item:nth-child(4){height:39.75%}
+.vt-home-mass__item:nth-child(5){height:26.5%}
+.vt-home-mass__item:nth-child(6){height:18%}
+
 @media (max-width:900px), (pointer:coarse){
   .vt-home-source-actor{display:none!important}
   .vt-home-scene--human{
