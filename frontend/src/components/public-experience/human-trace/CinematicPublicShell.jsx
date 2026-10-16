@@ -19,6 +19,8 @@ const NAV = [
   ['/privacy', 'Privacy'],
 ];
 
+const DIRECTED_SECONDARY_ROUTES = new Set(NAV.slice(1).map(([path]) => path));
+
 const Navigation = createContext(null);
 const CinemaScroll = createContext((position) => window.scrollTo({ top: position, behavior: 'auto' }));
 export const useCinemaScroll = () => useContext(CinemaScroll);
@@ -114,7 +116,7 @@ export function CinematicPublicShell() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (!['/career-intelligence', '/trust'].includes(location.pathname)) return undefined;
+    if (!DIRECTED_SECONDARY_ROUTES.has(location.pathname)) return undefined;
     let cancelled = false;
     let dispose = () => {};
     const frame = window.requestAnimationFrame(() => {
