@@ -405,17 +405,16 @@ function useTrustTimeline(rootRef, setActive) {
         const nearest = Math.round(value * lastStep);
         if (Math.abs(value - nearest / lastStep) <= 0.025) settledStep = nearest;
       };
-      const boundedProgress = (progress) => {
+      const stepForProgress = (progress) => {
         const rawPosition = Math.max(0, Math.min(1, progress)) * lastStep;
-        return Math.max(settledStep - 1, Math.min(settledStep + 1, rawPosition));
+        const forwardThreshold = settledStep === 0 ? 0.5 : 0.25;
+        if (rawPosition > settledStep + forwardThreshold) return Math.min(lastStep, settledStep + 1);
+        if (rawPosition < settledStep - 0.5) return Math.max(0, settledStep - 1);
+        return settledStep;
       };
-      const boundedSnapStop = (progress) => {
-        const requested = Math.round(Math.max(0, Math.min(1, progress)) * lastStep);
-        const allowed = Math.max(settledStep - 1, Math.min(settledStep + 1, requested));
-        return allowed / lastStep;
-      };
+      const boundedSnapStop = (progress) => stepForProgress(progress) / lastStep;
       const render = (progress) => {
-        const index = Math.round(boundedProgress(progress));
+        const index = stepForProgress(progress);
         if (index !== previous) {
           previous = index;
           setActive(index);
