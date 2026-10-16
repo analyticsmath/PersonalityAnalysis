@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { observeScrollProgress } from './scrollProgress';
+import { observeScrollProgress, readingPosition } from './scrollProgress';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,7 +83,7 @@ function paintScene(scene, index, progress, weight, dominant) {
 }
 
 function setActiveWorld(items, labels, progress) {
-  const position = clamp(progress) * Math.max(0, items.length - 1);
+  const position = readingPosition(progress, items.length);
   const current = Math.min(items.length - 1, Math.round(position));
 
   items.forEach((item, index) => {
@@ -93,7 +93,7 @@ function setActiveWorld(items, labels, progress) {
     const arrival = clamp(1 - distance);
     item.style.opacity = visible ? '1' : '0';
     item.style.visibility = visible ? 'visible' : 'hidden';
-    item.style.transform = `translate3d(${delta * 100}%, 0, 0) scale(${mix(1.06, 1, arrival)})`;
+    item.style.transform = `translate3d(${delta * 100}%, 0, 0)`;
     item.style.clipPath = 'none';
     item.style.zIndex = String(index === current ? 3 : 2);
     item.setAttribute('aria-hidden', String(index !== current));
@@ -199,7 +199,7 @@ export function mountHomeHumanTrace(root) {
         path.style.opacity = String(mix(0.22, 0.92, staggered));
       });
 
-      setActiveWorld(worldItems, worldLabels, range(p, 0.31, 0.57));
+      setActiveWorld(worldItems, worldLabels, clamp((p - 0.31) / 0.26));
 
       const weightProgress = range(p, 0.57, 0.68);
       masses.forEach((mass, index) => {

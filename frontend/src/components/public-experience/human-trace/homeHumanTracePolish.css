@@ -23,8 +23,8 @@
 .vt-home-experience .vt-home-world-index span{font-family:inherit;font-size:13px;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.7)}
 .vt-home-experience .vt-home-world-index span.is-active{color:#d6e878}
 .vt-home-experience .vt-home-scene--weight{background:#d9e2dc;color:#15221e}
-.vt-home-experience .vt-home-weight-copy p,.vt-home-experience .vt-home-weight-note{color:#344d3f}
-.vt-home-experience .vt-home-mass__item{position:relative;background:#15221e;color:#f1f4f1;border:0;padding:16px;justify-content:flex-start}
+.vt-home-experience .vt-home-weight-copy p,.vt-home-experience .vt-home-weight-note{color:#344d3f;font-family:inherit;letter-spacing:0}
+.vt-home-experience .vt-home-mass__item{overflow:visible;flex:1;position:relative;background:#15221e;color:#f1f4f1;border:0;padding:16px;justify-content:flex-start}
 .vt-home-experience .vt-home-mass__item:nth-child(2n){background:#b1c5ad;color:#15221e}
 .vt-home-experience .vt-home-mass__item:nth-child(1),.vt-home-experience .vt-home-mass__item:nth-child(2){height:100%}
 .vt-home-experience .vt-home-mass__item:nth-child(3){height:80%}
