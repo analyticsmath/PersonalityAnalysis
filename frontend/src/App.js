@@ -1,8 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import LoadingState from './components/ui/LoadingState';
-import ProtectedRoute from './components/ui/ProtectedRoute';
-import { AvatarEventProvider } from './components/avatar/AvatarEvents';
 import PublicMetadata from './components/public/PublicMetadata';
 import { PublicExperienceLayout } from './components/public-experience/shell/PublicExperienceLayout';
 import EditorialHomePage from './pages/editorial/EditorialHomePage';
@@ -19,6 +17,10 @@ const LoginPage = lazy(() => import('./pages/Auth/LoginPage'));
 const SignupPage = lazy(() => import('./pages/Auth/SignupPage'));
 const PublicNotFoundPage = lazy(() => import('./pages/PublicNotFoundPage'));
 
+// Product-only runtime dependencies are kept out of the marketing entry bundle.
+const ProductRuntimeProviders = lazy(() => import('./components/runtime/ProductRuntimeProviders'));
+const ProtectedRoute = lazy(() => import('./components/ui/ProtectedRoute'));
+
 // Protected Application Routes (Preserved)
 const DashboardPage = lazy(() => import('./pages/Dashboard'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
@@ -30,6 +32,26 @@ const AssessmentFlowResultPage = lazy(() => import('./pages/AssessmentFlow/Resul
 const CareerExplorerPage = lazy(() => import('./pages/AssessmentFlow/CareerExplorerPage'));
 const LegacyStaticAssessmentPage = lazy(() => import('./pages/Legacy/LegacyStaticAssessmentPage'));
 const PrivacyControlsPage = lazy(() => import('./pages/PrivacyControlsPage'));
+
+const PRODUCT_RUNTIME_PATHS = new Set([
+  '/login',
+  '/signup',
+  '/dashboard',
+  '/analytics',
+  '/account/privacy',
+  '/assessment',
+  '/assessment/start',
+  '/assessment/test',
+  '/assessment/behavior',
+  '/assessment/career',
+  '/assessment/result',
+  '/legacy/assessment-static',
+  '/results',
+  '/reports',
+]);
+
+const needsProductRuntime = (pathname) =>
+  PRODUCT_RUNTIME_PATHS.has(pathname) || pathname.startsWith('/result/');
 
 const ProtectedSuspenseFallback = () => (
   <div
@@ -120,11 +142,11 @@ const AppRoutes = () => {
         />
         <Route
           path="/assessment"
-          element={
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <AssessmentRootRedirect />
             </ProtectedRoute>
-          }
+          )}
         />
         <Route
           path="/legacy/assessment-static"
@@ -176,19 +198,19 @@ const AppRoutes = () => {
         />
         <Route
           path="/results"
-          element={
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <Navigate to="/assessment/result" replace />
             </ProtectedRoute>
-          }
+          )}
         />
         <Route
           path="/reports"
-          element={
+          element={withProtectedSuspense(
             <ProtectedRoute>
               <Navigate to="/dashboard" replace />
             </ProtectedRoute>
-          }
+          )}
         />
         <Route
           path="/result/:assessmentId"
@@ -203,14 +225,23 @@ const AppRoutes = () => {
   );
 };
 
-const App = () => {
+const RuntimeBoundary = () => {
+  const location = useLocation();
+  if (!needsProductRuntime(location.pathname)) return <AppRoutes />;
+
   return (
-    <BrowserRouter>
-      <AvatarEventProvider>
+    <Suspense fallback={<PublicSuspenseFallback />}>
+      <ProductRuntimeProviders>
         <AppRoutes />
-      </AvatarEventProvider>
-    </BrowserRouter>
+      </ProductRuntimeProviders>
+    </Suspense>
   );
 };
+
+const App = () => (
+  <BrowserRouter>
+    <RuntimeBoundary />
+  </BrowserRouter>
+);
 
 export default App;
