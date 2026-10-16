@@ -23,6 +23,8 @@ const DIRECTED_SECONDARY_ROUTES = new Set(NAV.slice(1).map(([path]) => path));
 
 const Navigation = createContext(null);
 const CinemaScroll = createContext((position) => window.scrollTo({ top: position, behavior: 'auto' }));
+const CinemaLenis = createContext(null);
+export const useCinemaLenis = () => useContext(CinemaLenis);
 export const useCinemaScroll = () => useContext(CinemaScroll);
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -46,6 +48,7 @@ export function CinematicPublicShell() {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cinemaLenis, setCinemaLenis] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const scrollEngine = useRef(null);
   const progressRef = useRef(null);
@@ -70,6 +73,7 @@ export function CinematicPublicShell() {
     mm.add('(pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
       const lenis = new Lenis({ duration: 0.86, smoothWheel: true, syncTouch: false });
       scrollEngine.current = lenis;
+      setCinemaLenis(lenis);
       lenis.on('scroll', ScrollTrigger.update);
       const tick = (time) => lenis.raf(time * 1000);
       gsap.ticker.add(tick);
@@ -78,6 +82,7 @@ export function CinematicPublicShell() {
         gsap.ticker.remove(tick);
         lenis.destroy();
         scrollEngine.current = null;
+        setCinemaLenis(null);
       };
     });
     return () => mm.revert();
@@ -203,7 +208,8 @@ export function CinematicPublicShell() {
   }, [menuOpen]);
 
   return (
-    <CinemaScroll.Provider value={scrollTo}>
+    <CinemaLenis.Provider value={cinemaLenis}>
+      <CinemaScroll.Provider value={scrollTo}>
       <Navigation.Provider value={go}>
         <div className="vt-cinema" data-cinematic-route={location.pathname}>
           <a className="vt-skip" href="#cinema-main">Skip to content</a>
@@ -263,7 +269,8 @@ export function CinematicPublicShell() {
           )}
         </div>
       </Navigation.Provider>
-    </CinemaScroll.Provider>
+      </CinemaScroll.Provider>
+    </CinemaLenis.Provider>
   );
 }
 
