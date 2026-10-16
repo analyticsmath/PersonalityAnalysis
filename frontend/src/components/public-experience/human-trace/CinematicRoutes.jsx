@@ -463,7 +463,7 @@ export function MethodologyCinematicPage() {
         <div className="vt-monograph-articles">{sectionKeys.map((key) => <article id={`method-${key}`} key={key} data-method-section={key} className={activeSection === key ? 'is-active' : ''}><h2>{sections[key].title}</h2><p>{sections[key].description}</p><MethodDetail name={key} item={sections[key]} /></article>)}</div>
       </div>
       <div className="vt-method-verdict"><h2>Professional insight.<br/><em>Not clinical diagnosis.</em></h2><p>{sections.limits.description}</p><CinemaLink className="vt-text-link" to="/trust">Inspect the evidence chain ↗</CinemaLink></div>
-      <NextChapter to="/privacy" title="Your information. Your choice." subtitle="Plain-language governance and account controls." image={PHOTO.detail} family="quiet-editorial" transitionKey="privacy" />
+      <NextChapter to="/privacy" title="Your information. Your choice." subtitle="Assessment data and account controls." image={PHOTO.detail} family="quiet-editorial" transitionKey="privacy" />
     </PageFrame>
   );
 }
@@ -473,7 +473,7 @@ export function PrivacyCinematicPage() {
   return (
     <PageFrame className="privacy">
       <Cover lines={['Your information.', 'Your choice.']} image={PHOTO.detail} alt="A website wireframe with handwritten planning notes" description={data.hero.support} variant="privacy" family="quiet-editorial" transitionKey="privacy" />
-      <div className="vt-privacy-brief"><h2>Make it<br/><em>understandable.</em></h2><p>Review how this deployment handles assessment data and open your account controls when you are signed in.</p></div>
+      <div className="vt-privacy-brief"><h2>Make it<br/><em>understandable.</em></h2><p>Review how the service handles assessment data and open your account controls when you are signed in.</p></div>
       <section className="vt-privacy-document">
         <nav aria-label="Policy table of contents">{data.sections.map((section) => <a href={`#${section.id}`} key={section.id}>{section.title}</a>)}</nav>
         <div>{data.sections.map((section) => <article key={section.id} id={section.id}><h2>{section.title}</h2><p>{section.content}</p></article>)}</div>

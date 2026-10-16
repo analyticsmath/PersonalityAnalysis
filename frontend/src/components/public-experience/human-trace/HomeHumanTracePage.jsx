@@ -7,10 +7,10 @@ import './homeHumanTracePolish.css';
 
 const PHOTO = {
   human: '/media/public-experience/digital/designer-1920.webp',
-  precision: '/media/public-experience/cinematic/1645258044234-f4ba2655baf1.jpg',
+  precision: '/media/public-experience/digital/wireframe-1920.webp',
   autonomy: '/media/public-experience/digital/code-detail-1920.webp',
   collaboration: '/media/public-experience/digital/collaborate-1920.webp',
-  pressure: '/media/public-experience/cinematic/1554863798-d89af6030d7d.jpg',
+  pressure: '/media/public-experience/digital/studio-1920.webp',
   proof: '/media/public-experience/digital/wireframe-1920.webp',
 };
 
@@ -54,7 +54,7 @@ export function HomeHumanTracePage() {
             data-transition-family="human-trace"
             data-transition-key="source-response"
           >
-            <p>Your response stays connected to the question and situation it describes.</p>
+            <p>Your answer keeps its question and context.</p>
           </div>
 
           <div className="vt-home-scroll-cue" data-home-scroll-cue aria-hidden="true">
@@ -80,7 +80,7 @@ export function HomeHumanTracePage() {
                 <small>A single response can suggest questions worth asking. A scored profile requires sufficient independent evidence.</small>
               </div>
               <div className="vt-home-source-mobile" data-transition-family="human-trace" data-transition-key="source-response">
-                <p>Your response stays connected to the question and situation it describes.</p>
+                <p>Your answer keeps its question and context.</p>
               </div>
             </Scene>
 
@@ -99,7 +99,7 @@ export function HomeHumanTracePage() {
                 {home.models.list.slice(0, 3).map((model, idx) => (
                   <article key={model.id} className={`vt-home-branch-node vt-home-branch-node--${idx + 1}`}>
                     <h3>{model.name}</h3>
-                    <p>{model.role}</p>
+                    <p>{model.shortDescription}</p>
                   </article>
                 ))}
               </div>
@@ -107,8 +107,8 @@ export function HomeHumanTracePage() {
 
             <Scene id="worlds" index={3}>
               <div className="vt-home-worlds-heading">
-                <h2>The same pattern<br/><em>reads differently at work.</em></h2>
-                <p>Context does not replace the evidence. It changes the question the evidence has to answer.</p>
+                <h2>Your profile.<br/><em>In the context of work.</em></h2>
+                <p>Explore the working conditions behind the roles you compare.</p>
               </div>
               <div className="vt-home-worlds" data-home-worlds>
                 {home.workworlds.conditions.map((world, idx) => (
@@ -168,7 +168,7 @@ export function HomeHumanTracePage() {
                     <strong>{label}</strong><i aria-hidden="true" />
                   </div>
                 ))}
-                <p>Your response stays connected to the question and situation it describes.</p>
+                <p>Your answer keeps its question and context.</p>
               </div>
             </Scene>
 
@@ -182,7 +182,7 @@ export function HomeHumanTracePage() {
                 </div>
               </div>
               <div className="vt-home-record-object" data-home-record-object data-transition-family="human-trace" data-transition-key="evidence-record">
-                <p className="vt-home-record-object__statement">Your response stays connected to the question and situation it describes.</p>
+                <p className="vt-home-record-object__statement">Responses, results and career comparisons stay connected to their evidence.</p>
                 <div className="vt-home-record-object__meta"><span>Source retained</span><span>Weights explicit</span><span>Limits visible</span></div>
               </div>
             </Scene>

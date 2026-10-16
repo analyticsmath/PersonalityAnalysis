@@ -68,29 +68,18 @@ function clipPath(values) {
 
 function paintScene(scene, index, progress, weight, dominant) {
   const previousHandoff = HOME_HANDOFFS[index - 1];
-  const nextHandoff = HOME_HANDOFFS[index];
   const enter = index === 0 ? 1 : range(progress, previousHandoff[0], previousHandoff[1]);
-  const exit = index === HOME_HANDOFFS.length ? 0 : range(progress, nextHandoff[0], nextHandoff[1]);
-  const shot = SHOT_GRAMMAR[index] || SHOT_GRAMMAR[0];
-
-  let x = mix(shot.enterX, 0, enter);
-  let y = mix(shot.enterY, 0, enter);
-  let scale = mix(shot.enterScale, 1, enter);
-  const enteringClip = shot.enterClip.map((value) => mix(value, 0, enter));
-
-  x = mix(x, shot.exitX, exit);
-  y = mix(y, shot.exitY, exit);
-  scale = mix(scale, shot.exitScale, exit);
-  const finalClip = enteringClip.map((value, clipIndex) => mix(value, shot.exitClip[clipIndex], exit));
-
-  const visible = weight > 0.012;
-  scene.style.opacity = String(weight);
+  const visible = weight > 0.001;
+  scene.style.opacity = visible ? '1' : '0';
   scene.style.visibility = visible ? 'visible' : 'hidden';
-  scene.style.pointerEvents = weight > 0.62 ? 'auto' : 'none';
-  scene.style.transform = `translate3d(${x}vw, ${y}vh, 0) scale(${scale})`;
-  scene.style.clipPath = clipPath(finalClip);
-  scene.style.zIndex = String(index === dominant ? 3 : index < dominant ? 1 : 2);
-  scene.setAttribute('aria-hidden', String(!visible));
+  scene.style.pointerEvents = index === dominant ? 'auto' : 'none';
+  scene.style.transform = 'none';
+  scene.style.clipPath = `inset(0 ${((1 - enter) * 100).toFixed(3)}% 0 0)`;
+  scene.style.zIndex = String(index + 1);
+  scene.setAttribute('aria-hidden', String(index !== dominant));
+  scene.querySelectorAll('h1,h2').forEach((heading) => {
+    heading.style.transform = `translate3d(0, ${((1 - enter) * 30).toFixed(2)}px, 0)`;
+  });
 }
 
 function setActiveWorld(items, labels, progress) {
@@ -185,7 +174,7 @@ export function mountHomeHumanTrace(root) {
         const enter = range(p, 0.07, 0.11);
         const travel = range(p, 0.11, 0.17);
         const settle = range(p, 0.17, 0.21);
-        const residueFade = range(p, 0.27, 0.31);
+        const residueFade = range(p, 0.17, 0.21);
         const provenanceReturn = range(p, 0.78, 0.82);
         const finalResolve = range(p, 0.88, 0.92);
         const vw = window.innerWidth;
@@ -194,8 +183,8 @@ export function mountHomeHumanTrace(root) {
         const y = mix(vh * 0.68, vh * 0.105, travel);
         const scale = mix(1.03, 0.63, travel);
         const rotate = mix(-0.45, 0.2, travel) * (1 - settle);
-        const residueOpacity = mix(1, 0.24, residueFade);
-        const restoredOpacity = mix(residueOpacity, 0.64, provenanceReturn);
+        const residueOpacity = mix(1, 0, residueFade);
+        const restoredOpacity = residueOpacity;
         const sourceOpacity = enter * restoredOpacity * (1 - finalResolve);
         source.style.opacity = String(sourceOpacity);
         source.style.visibility = sourceOpacity > 0.02 ? 'visible' : 'hidden';
@@ -254,6 +243,7 @@ export function mountHomeHumanTrace(root) {
       scenes.forEach((scene) => {
         removeInlineStyles(scene, ['opacity', 'visibility', 'pointer-events', 'transform', 'clip-path', 'z-index']);
         scene.removeAttribute('aria-hidden');
+        scene.querySelectorAll('h1,h2').forEach((heading) => heading.style.removeProperty('transform'));
       });
       removeInlineStyles(scrollCue, ['opacity', 'visibility']);
       removeInlineStyles(worldMedia, ['transform', 'clip-path', 'opacity', '--home-veil-opacity']);

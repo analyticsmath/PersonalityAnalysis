@@ -86,76 +86,35 @@ export const PUBLIC_CONTENT = {
           id: 'precision',
           name: 'Precision',
           mediaKey: 'workworldPrecision',
-          interpretation: 'Clear constraints make this pattern decisive.',
-          detail: 'In structured technical contexts, establishing boundaries first leads to high accuracy execution.',
+          interpretation: 'Explore work that rewards careful execution and clear constraints.',
+          detail: 'Structured roles place different demands on precision, verification and technical responsibility.',
         },
         {
           id: 'autonomy',
           name: 'Autonomy',
           mediaKey: 'workworldAutonomy',
-          interpretation: 'Open methods make the same pattern protective.',
-          detail: 'When self-directed, the instinct to isolate small steps protects focus and prevents over-commitment.',
+          interpretation: 'See how ownership and independent decisions shape a role.',
+          detail: 'Independent work asks you to manage priorities, decisions and follow-through.',
         },
         {
           id: 'collaboration',
           name: 'Collaboration',
           mediaKey: 'workworldCollaboration',
-          interpretation: 'Shared ownership turns clarity into coordination.',
-          detail: 'In cross-functional teams, clarifying constraints aligns stakeholders and unblocks dependent teammates.',
+          interpretation: 'Understand where shared priorities and communication matter.',
+          detail: 'Collaborative roles depend on communication across people, responsibilities and technical boundaries.',
         },
         {
           id: 'pressure',
           name: 'Operational Pressure',
           mediaKey: 'workworldPressure',
-          interpretation: 'Under operational pressure, the same instinct requires adaptation.',
-          detail: 'When rapid pivots are required, over-indexing on constraint verification must be balanced against decision speed.',
-        },
-      ],
-    },
-    models: {
-      headline: 'MULTI-MODEL PSYCHOMETRIC ATLAS',
-      list: [
-        {
-          id: 'big-five',
-          name: 'Big Five',
-          role: 'Dimensional Spectrum',
-          description: 'Evaluates Openness, Conscientiousness, Extraversion, Agreeableness, and Emotional Stability as continuous dimensions rather than binary types.',
-        },
-        {
-          id: 'riasec',
-          name: 'RIASEC',
-          role: 'Vocational Interests',
-          description: 'Maps attraction to Realistic, Investigative, Artistic, Social, Enterprising, and Conventional problem domains.',
-        },
-        {
-          id: 'work-values',
-          name: 'Work Values',
-          role: 'Environmental Motivation',
-          description: 'Quantifies organizational conditions that sustain motivation: Achievement, Independence, Working Conditions, Recognition, Relationships, and Support.',
-        },
-        {
-          id: 'career-signals',
-          name: 'Career Signals',
-          role: 'Situational Action Tendencies',
-          description: 'Identifies concrete action habits: iterative scoping, stakeholder alignment, risk containment, and diagnostic inquiry.',
-        },
-        {
-          id: 'background',
-          name: 'Background',
-          role: 'Domain Context',
-          description: 'Integrates educational foundation and technical disciplines to ground analytical interpretations.',
-        },
-        {
-          id: 'goals',
-          name: 'Goals',
-          role: 'Trajectory Alignment',
-          description: 'Weights individual aspirations and target responsibilities in career alignment calculations.',
+          interpretation: 'Examine work shaped by fast feedback and operational accountability.',
+          detail: 'Operational roles combine timely decisions with monitoring, intervention and clear ownership.',
         },
       ],
     },
     calibration: {
       headline: 'NOT EVERY SIGNAL COUNTS THE SAME.',
-      lead: 'Career-fit weights assemble six deterministic factors without black box adjustments.',
+      lead: 'Career comparisons combine six factors using fixed, published contribution weights.',
       weights: [
         { id: 'riasec', label: 'RIASEC Interests', percentage: 25, role: 'Occupational domain alignment' },
         { id: 'skills', label: 'Technical & Professional Skills', percentage: 25, role: 'Concrete capability match' },
@@ -189,7 +148,7 @@ export const PUBLIC_CONTENT = {
 
   career: {
     hero: {
-      headline: 'CAREER FIT IS A FIELD, NOT A RANKING.',
+      headline: 'EXPLORE WORK THROUGH ITS DEMANDS.',
       support: 'Career fit changes when the conditions change. Explore 17 occupational profiles grounded in deterministic evidence.',
     },
     workworlds: [
@@ -253,11 +212,7 @@ export const PUBLIC_CONTENT = {
         name: 'Source and context',
         title: 'Keep each response with its context',
         description: 'A response stays connected to the question and situation it came from, so the evidence behind an interpretation can be inspected.',
-          shortDescription: 'Connects professional behavior to career context.',
-                    shortDescription: 'Records priorities across workplace conditions.',
-                    shortDescription: 'Maps six areas of occupational interest.',
-                    shortDescription: 'Measures five continuous personality dimensions.',
-                },
+      },
       {
         id: 'isolate',
         name: 'Evidence review',
@@ -358,7 +313,7 @@ export const PUBLIC_CONTENT = {
       {
         id: 'delete',
         label: 'Delete account and related records',
-        description: 'The account control deletes the account, assessment sessions, results, and roadmap progress from this deployment. It requires confirmation and signs you out.',
+        description: 'The account control deletes the account, assessment sessions, results, and roadmap progress from the service. It requires confirmation and signs you out.',
         link: '/account/privacy',
       },
     ],
@@ -419,8 +374,8 @@ export const PUBLIC_CONTENT = {
 
   privacy: {
     hero: {
-      headline: 'PLAIN-LANGUAGE GOVERNANCE & SOVEREIGN DATA RIGHTS',
-      support: 'See what assessment data this deployment stores, how the product uses it, and which controls are available in your account.',
+      headline: 'YOUR INFORMATION. YOUR CHOICE.',
+      support: 'Understand what your assessment record contains, how it is used, and the controls available in your account.',
     },
     sections: [
       {
@@ -441,7 +396,7 @@ export const PUBLIC_CONTENT = {
       {
         id: 'user-rights',
         title: '4. Retention & Account Controls',
-        content: 'Assessment and profile data remain in this deployment until you delete them through account controls or delete your account; no automatic inactivity purge is configured. Account controls can export a JSON snapshot, clear profile/CV fields, delete one assessment by result ID, or delete the account.',
+        content: 'Assessment and profile data remain in the service until you delete them through account controls or delete your account; records are not automatically removed after inactivity. Account controls can export a JSON snapshot, clear profile/CV fields, delete one assessment by result ID, or delete the account.',
       },
       {
         id: 'security',
@@ -451,7 +406,7 @@ export const PUBLIC_CONTENT = {
       {
         id: 'contact',
         title: '6. About This Summary',
-        content: 'This page summarizes product behavior and controls in this deployment. It is not a security certification or a full account of external processing and backups.',
+        content: 'This page summarizes product behavior and controls in the service. It is not a security certification or a full account of external processing and backups.',
       },
     ],
   },

@@ -15,7 +15,7 @@ export function observeScrollProgress(track, render, { offset = 0, response = 16
   const tick = (time) => {
     frame = 0;
     if (disposed) return;
-    const elapsed = lastTime ? Math.min(64, time - lastTime) : 16;
+    const elapsed = lastTime ? Math.min(1000, time - lastTime) : 16;
     lastTime = time;
     current += (target - current) * (1 - Math.exp(-elapsed / response));
     if (Math.abs(target - current) < 0.00005) current = target;
@@ -50,8 +50,9 @@ export function observeScrollProgress(track, render, { offset = 0, response = 16
 }
 
 export function readingPosition(progress, count) {
-  const phase = clamp(progress) * (count - 1);
-  const index = Math.floor(phase);
+  const phase = clamp(progress) * count;
+  const index = Math.min(count - 1, Math.floor(phase));
+  if (index === count - 1) return index;
   const t = clamp((phase - index - 0.48) / 0.48);
   return Math.min(count - 1, index + t * t * (3 - 2 * t));
 }

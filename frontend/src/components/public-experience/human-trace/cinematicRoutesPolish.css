@@ -316,3 +316,6 @@
  .vt-route--career .vt-career-world-copy{position:relative;inset:auto;padding:40px var(--vt-side);background:#101914}
  .vt-route--career .vt-career-role-field{position:relative;inset:auto;max-height:none;display:grid}
 }
+
+.vt-cinema h1[tabindex="-1"]:focus{outline:none}
+.vt-cinema .vt-career-disclaimer{font-family:inherit;font-size:14px;line-height:1.6;letter-spacing:0;text-transform:none;border:0;padding:30px var(--vt-side)}

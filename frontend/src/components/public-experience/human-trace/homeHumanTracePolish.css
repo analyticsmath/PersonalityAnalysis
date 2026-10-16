@@ -201,3 +201,10 @@
 @media(prefers-reduced-motion:reduce){
  .vt-home-experience .vt-home-film-track,.vt-home-experience .vt-home-film-stage{height:auto!important}
 }
+
+/* Opaque spatial masks replace crossfaded headings. */
+@media(min-width:901px) and (prefers-reduced-motion:no-preference){
+ .vt-home-experience .vt-home-scene{background:#09110d}
+ .vt-home-experience .vt-home-scene--human{background:transparent}
+ .vt-home-experience .vt-home-scene--weight{background:#d9e2dc}
+}
