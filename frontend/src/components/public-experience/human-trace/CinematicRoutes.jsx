@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import careersData from '../../../content/careers.json';
@@ -23,7 +23,6 @@ const PHOTO = {
 };
 
 const RECORD_STATEMENT = 'Your responses remain part of the record.';
-const clamp = (value) => Math.max(0, Math.min(1, value));
 
 function Cover({ eyebrow, lines, image, alt, description, position = 'center', variant = '', family = 'context-media', transitionKey = 'working-context' }) {
   return (
@@ -239,7 +238,7 @@ export function CareerCinematicPage() {
               const selectedKey = selectedByWorld[world.id];
               const selectedRole = careersData[selectedKey] || careersData[world.roleKeys[0]];
               return (
-                <article key={world.id} className={`vt-career-world${activeWorld === worldIndex ? ' is-active' : ''}`} data-career-world={world.id} aria-hidden={activeWorld !== worldIndex}>
+                <article key={world.id} className={`vt-career-world${activeWorld === worldIndex ? ' is-active' : ''}`} data-career-world={world.id}>
                   <div className={`vt-career-world-media vt-career-world-media--${world.physics}`} data-transition-family="context-media" data-transition-key="career-world">
                     <img src={mediaForRole(selectedKey, world.media)} alt={`Illustrative working context for ${selectedRole.title}`} loading={worldIndex === 0 ? 'eager' : 'lazy'} />
                     <div className="vt-career-world-media__shade" aria-hidden="true" />
