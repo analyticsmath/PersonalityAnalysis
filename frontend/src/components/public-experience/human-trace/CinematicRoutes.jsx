@@ -379,7 +379,6 @@ export function TrustCinematicPage() {
             <div key={steps[active].id} className="vt-trust-record__reading" aria-live="polite">
               <h2>{TRUST_READINGS[steps[active].id][0]}</h2>
               <p>{TRUST_READINGS[steps[active].id][1]}</p>
-              <small>{steps[active].description}</small>
             </div>
           </div>
 

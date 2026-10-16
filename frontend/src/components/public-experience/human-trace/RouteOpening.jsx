@@ -13,7 +13,7 @@ const weights = [
 
 function EvidencePath() {
   return <svg viewBox="0 0 1100 260" role="img" aria-label="Evidence moves from supplied responses to inference, calculation, comparison and account controls">
-    <path className="vt-opening-path" d="M70 130 C220 -10 260 270 420 130 S620 -10 770 130 S940 270 1030 130" />
+    <path className="vt-opening-path" d="M70 130 C150 25 230 25 310 130 S470 235 550 130 S710 25 790 130 S950 235 1030 130" />
     {['Supplied', 'Inferred', 'Calculated', 'Compared', 'Controlled'].map((label, index) => <g key={label}>
       <circle cx={70 + index * 240} cy="130" r={index === 0 ? 28 : 15} />
       <text x={70 + index * 240} y="215" textAnchor="middle">{label}</text>

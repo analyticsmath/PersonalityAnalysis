@@ -329,3 +329,5 @@
 .vt-cinema .vt-header--scrolled,.vt-cinema .vt-footer-invitation,.vt-cinema .vt-career-world-index{border:0}
 .vt-cinema .vt-footer-bottom{font-family:inherit;font-size:12px;letter-spacing:0;color:#b6c9b3}
 .vt-cinema .vt-how-trace-stage:after{display:none}
+
+.vt-cinema:has(.vt-public-page-loader) .vt-header{background:#f1f4f1;color:#15221e}
