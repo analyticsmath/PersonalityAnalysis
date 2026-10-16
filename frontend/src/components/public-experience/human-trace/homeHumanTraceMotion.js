@@ -21,16 +21,17 @@ const smooth = (value) => {
 const range = (value, start, end) => smooth((value - start) / Math.max(0.0001, end - start));
 const mix = (a, b, value) => a + (b - a) * clamp(value);
 
-const SHOT_GRAMMAR = [
-  { enterX: 0, enterY: 0, enterScale: 1, exitX: -2, exitY: -4, exitScale: 0.985, enterClip: [0, 0, 0, 0], exitClip: [0, 0, 8, 0] },
-  { enterX: 0, enterY: 9, enterScale: 1.035, exitX: -3, exitY: -7, exitScale: 0.97, enterClip: [16, 0, 0, 0], exitClip: [0, 0, 12, 0] },
-  { enterX: 7, enterY: 2, enterScale: 1.02, exitX: -8, exitY: -2, exitScale: 0.98, enterClip: [0, 18, 0, 0], exitClip: [0, 0, 0, 14] },
-  { enterX: 11, enterY: 0, enterScale: 1.04, exitX: -9, exitY: 0, exitScale: 0.985, enterClip: [0, 24, 0, 0], exitClip: [0, 0, 0, 12] },
-  { enterX: 0, enterY: 8, enterScale: 1.03, exitX: 0, exitY: -8, exitScale: 0.975, enterClip: [14, 0, 0, 0], exitClip: [0, 0, 12, 0] },
-  { enterX: 8, enterY: 0, enterScale: 1.025, exitX: -8, exitY: 0, exitScale: 0.98, enterClip: [0, 18, 0, 0], exitClip: [0, 0, 0, 14] },
-  { enterX: -8, enterY: 0, enterScale: 1.025, exitX: 8, exitY: 0, exitScale: 0.98, enterClip: [0, 0, 0, 18], exitClip: [0, 14, 0, 0] },
-  { enterX: 0, enterY: 10, enterScale: 0.965, exitX: 0, exitY: 0, exitScale: 1, enterClip: [18, 0, 0, 0], exitClip: [0, 0, 0, 0] },
-];
+function sceneReveal(index, enter) {
+  const remaining = ((1 - enter) * 100).toFixed(3);
+  if (enter >= 0.9999) return 'none';
+  if (index === 1) return `inset(${remaining}% 0 0 0)`;
+  if (index === 2) return `circle(${(enter * 150).toFixed(3)}% at 70% 46%)`;
+  if (index === 4) return `inset(0 0 ${remaining}% 0)`;
+  if (index === 5) return `inset(${((1 - enter) * 48).toFixed(3)}% ${((1 - enter) * 46).toFixed(3)}%)`;
+  if (index === 6) return `inset(0 0 0 ${remaining}%)`;
+  if (index === 7) return `inset(${remaining}% 0 0 0)`;
+  return `inset(0 ${remaining}% 0 0)`;
+}
 
 function sceneWeights(progress) {
   const p = clamp(progress);
@@ -62,11 +63,8 @@ function dominantIndex(weights) {
   return best;
 }
 
-function clipPath(values) {
-  return `inset(${values.map((value) => `${Math.max(0, value).toFixed(2)}%`).join(' ')})`;
-}
 
-function paintScene(scene, index, progress, weight, dominant) {
+function paintScene(scene, index, progress, weight, dominant, headings) {
   const previousHandoff = HOME_HANDOFFS[index - 1];
   const enter = index === 0 ? 1 : range(progress, previousHandoff[0], previousHandoff[1]);
   const visible = weight > 0.001;
@@ -74,11 +72,12 @@ function paintScene(scene, index, progress, weight, dominant) {
   scene.style.visibility = visible ? 'visible' : 'hidden';
   scene.style.pointerEvents = index === dominant ? 'auto' : 'none';
   scene.style.transform = 'none';
-  scene.style.clipPath = `inset(0 ${((1 - enter) * 100).toFixed(3)}% 0 0)`;
+  scene.style.clipPath = sceneReveal(index, enter);
   scene.style.zIndex = String(index + 1);
   scene.setAttribute('aria-hidden', String(index !== dominant));
-  scene.querySelectorAll('h1,h2').forEach((heading) => {
-    heading.style.transform = `translate3d(0, ${((1 - enter) * 30).toFixed(2)}px, 0)`;
+  headings.forEach((heading) => {
+    const distance = index === 1 ? 48 : index === 2 || index === 4 ? 0 : 24;
+    heading.style.transform = `translate3d(${index === 6 ? ((1 - enter) * 30).toFixed(2) : 0}px, ${((1 - enter) * distance).toFixed(2)}px, 0)`;
   });
 }
 
@@ -90,7 +89,6 @@ function setActiveWorld(items, labels, progress) {
     const delta = index - position;
     const distance = Math.abs(delta);
     const visible = distance < 1.06;
-    const arrival = clamp(1 - distance);
     item.style.opacity = visible ? '1' : '0';
     item.style.visibility = visible ? 'visible' : 'hidden';
     item.style.transform = `translate3d(${delta * 100}%, 0, 0)`;
@@ -115,6 +113,7 @@ export function mountHomeHumanTrace(root) {
   const track = root.querySelector('[data-home-track]');
   const stage = root.querySelector('[data-home-stage]');
   const scenes = [...root.querySelectorAll('[data-home-scene]')];
+  const sceneHeadings = scenes.map((scene) => [...scene.querySelectorAll('h1,h2')]);
   const source = root.querySelector('[data-home-source-actor]');
   const worldMedia = root.querySelector('[data-home-world-media]');
   const scrollCue = root.querySelector('[data-home-scroll-cue]');
@@ -148,7 +147,7 @@ export function mountHomeHumanTrace(root) {
       stage.dataset.homeDominant = scenes[dominant]?.dataset.homeSceneId || 'human';
       stage.style.setProperty('--home-progress', String(p));
 
-      scenes.forEach((scene, index) => paintScene(scene, index, p, weights[index], dominant));
+      scenes.forEach((scene, index) => paintScene(scene, index, p, weights[index], dominant, sceneHeadings[index]));
 
       if (scrollCue) {
         const cueOpacity = 1 - range(p, 0.015, 0.07);

@@ -329,10 +329,21 @@ function useTrustTimeline(rootRef, setActive) {
     const mm = gsap.matchMedia();
     mm.add('(min-width:901px) and (prefers-reduced-motion:no-preference)', () => {
       const lastStep = Math.max(1, track.querySelectorAll('.vt-trust-record__pipeline span').length - 1);
+      const evidence = track.querySelector('[data-trust-evidence-path]');
+      const traveller = track.querySelector('[data-trust-evidence-traveller]');
+      const evidenceLength = evidence?.getTotalLength() || 1;
       let previous = -1;
       const render = (progress) => {
         const value = Math.max(0, Math.min(1, progress));
-        const index = Math.round(value * lastStep);
+        const position = readingPosition(value, lastStep + 1);
+        const index = Math.round(position);
+        const pathProgress = position / lastStep;
+        if (evidence && traveller) {
+          const point = evidence.getPointAtLength(pathProgress * evidenceLength);
+          evidence.style.strokeDashoffset = String(1 - pathProgress);
+          traveller.setAttribute('cx', point.x);
+          traveller.setAttribute('cy', point.y);
+        }
         if (index !== previous) {
           previous = index;
           setActive(index);
@@ -340,7 +351,7 @@ function useTrustTimeline(rootRef, setActive) {
       };
 
       const stop = observeScrollProgress(track, render, { offset: () => document.querySelector('.vt-header')?.offsetHeight || 84, response: 160 });
-      return stop;
+      return () => { stop(); evidence?.style.removeProperty('stroke-dashoffset'); };
     });
 
     const mobileStates = [...track.querySelectorAll('.vt-trust-mobile-states article')];
@@ -373,6 +384,12 @@ export function TrustCinematicPage() {
         <div className="vt-trust-stage">
           <div className="vt-trust-record" data-transition-family="human-trace" data-transition-key="evidence-record">
             <p className="vt-trust-record__source">Your response stays connected to the question and situation it describes.</p>
+            <svg className="vt-trust-record__path" viewBox="0 0 1000 100" aria-hidden="true">
+              <path className="vt-trust-record__path-base" d="M50 50 C125 5 200 5 275 50 S425 95 500 50 S650 5 725 50 S875 95 950 50" />
+              <path data-trust-evidence-path pathLength="1" className="vt-trust-record__path-progress" d="M50 50 C125 5 200 5 275 50 S425 95 500 50 S650 5 725 50 S875 95 950 50" />
+              {steps.map((step, index) => <circle key={step.id} cx={50 + index * 225} cy="50" r="7" className={index <= active ? 'is-reached' : ''} />)}
+              <circle data-trust-evidence-traveller cx="50" cy="50" r="15" className="vt-trust-record__traveller" />
+            </svg>
             <div className="vt-trust-record__pipeline" aria-hidden="true">
               {steps.map((step, index) => <span key={step.id} className={index <= active ? 'is-active' : ''}>{step.name}</span>)}
             </div>

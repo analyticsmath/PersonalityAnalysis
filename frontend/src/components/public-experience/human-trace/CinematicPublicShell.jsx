@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SiteFooter from './SiteFooter';
 import { navigateCinematic } from './routeNavigation';
 import { preloadRoute } from '../motion/routePreloadRegistry';
 import './cinematicRoutes.css';
@@ -241,14 +242,15 @@ export function CinematicPublicShell() {
             <Outlet />
           </main>
 
-          <footer className="vt-footer vt-grand-footer">
-            <div className="vt-footer-invitation"><p>Personality, interests and work values.<br/>Connected to their evidence.</p></div>
-            <nav aria-label="Footer navigation">
-              {NAV.slice(1).map(([to, label]) => <CinemaLink to={to} key={to}>{label}</CinemaLink>)}
-              <CinemaLink to="/login">Sign in</CinemaLink>
-            </nav>
-            <div className="vt-footer-bottom"><span>Professional insight. Not a clinical diagnosis.</span><span>By Valtum Studio</span></div>
-          </footer>
+          <SiteFooter
+            LinkComponent={CinemaLink}
+            navigation={NAV.slice(1)}
+            pathname={location.pathname}
+            onBackToTop={() => {
+              scrollTo(0);
+              document.querySelector('.vt-brand')?.focus({ preventScroll: true });
+            }}
+          />
 
           {menuOpen && (
             <div className="vt-index-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setMenuOpen(false); }}>

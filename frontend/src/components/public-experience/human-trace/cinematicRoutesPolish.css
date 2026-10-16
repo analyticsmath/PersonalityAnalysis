@@ -367,3 +367,17 @@
 @media(prefers-reduced-motion:reduce){
  .vt-method-terms>div,.vt-method-weights>div{opacity:1!important;transform:none!important}
 }
+
+/* The moving point follows the same five stages as the evidence reading. */
+.vt-trust-record__path{display:block;width:100%;height:clamp(40px,6svh,64px);overflow:visible;margin-top:24px}
+.vt-trust-record__path path{fill:none;stroke-width:2;vector-effect:non-scaling-stroke}
+.vt-trust-record__path-base{stroke:#9caf9c}
+.vt-trust-record__path-progress{stroke:#15221e;stroke-dasharray:1;stroke-dashoffset:1}
+.vt-trust-record__path circle{fill:#cbd7d0;stroke:#536f58;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.vt-trust-record__path circle.is-reached{fill:#15221e;stroke:#15221e}
+.vt-trust-record__path circle.vt-trust-record__traveller{fill:#15221e;stroke:#d6e878;stroke-width:3}
+.vt-route--trust .vt-trust-record__pipeline{margin-top:12px}
+@media(max-height:720px) and (min-width:901px){
+ .vt-trust-record__path{height:34px;margin-top:12px}
+ .vt-route--trust .vt-trust-record__pipeline{margin-top:8px}
+}
