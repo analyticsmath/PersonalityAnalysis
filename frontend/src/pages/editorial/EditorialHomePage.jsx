@@ -1,6 +1,4 @@
-import React from 'react';
-import HumanTraceFilm from '../../components/public-experience/human-trace/HumanTraceFilm';
+import HomeHumanTracePage from '../../components/public-experience/human-trace/HomeHumanTracePage';
 
-// Integrated cinematic marketing homepage. Protected app routes remain unchanged.
-export const EditorialHomePage = () => <HumanTraceFilm />;
+export const EditorialHomePage = () => <HomeHumanTracePage />;
 export default EditorialHomePage;

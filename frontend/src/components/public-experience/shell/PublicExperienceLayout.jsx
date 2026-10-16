@@ -1,77 +1,48 @@
 /**
  * Personality Assessor - Public Experience Layout
- * Editorial Evidence Atlas: Light-theme persistent shell mounting
- * PublicMotionRoot, PublicHeader, PublicRouteStage, PublicIndex overlay, and PublicFooter.
- * Survives child route navigations continuously without blank screen flashes.
+ * Canonical marketing routes use the lightweight cinematic shell. Authentication
+ * stays transactional. The older public motion stack is lazy-loaded only for
+ * fallback/non-canonical routes.
  */
-
-import React, { useState, useRef } from 'react';
+import { lazy, Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { PublicMotionRoot } from '../motion/PublicMotionRoot';
-import { TransitionPortal } from '../motion/TransitionPortal';
-import { PublicTransitionManager } from '../motion/PublicTransitionManager';
-import { PublicHeader } from '../chrome/PublicHeader';
-import { PublicIndex } from '../chrome/PublicIndex';
-import { PublicFooter } from '../chrome/PublicFooter';
-import { PublicRouteStage } from './PublicRouteStage';
 import { CinematicPublicShell } from '../human-trace/CinematicPublicShell';
 
-export const PublicExperienceLayout = () => {
-  const [indexOpen, setIndexOpen] = useState(false);
-  const triggerRef = useRef(null);
-  const location = useLocation();
+const LegacyPublicExperienceShell = lazy(() => import('./LegacyPublicExperienceShell'));
 
+const CINEMATIC_MARKETING_ROUTES = new Set([
+  '/',
+  '/how-it-works',
+  '/career-intelligence',
+  '/progress',
+  '/trust',
+  '/methodology',
+  '/privacy',
+]);
+
+export const PublicExperienceLayout = () => {
+  const location = useLocation();
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
 
-  // Home owns its cinematic header, index and footer. All other marketing
-  // routes retain their existing persistent public-experience shell.
-  if (location.pathname === '/') {
-    return <Outlet />;
-  }
-
-  if (['/how-it-works','/career-intelligence','/progress','/trust','/methodology','/privacy'].includes(location.pathname)) {
+  if (CINEMATIC_MARKETING_ROUTES.has(location.pathname)) {
     return <CinematicPublicShell />;
   }
 
-  return (
-    <PublicMotionRoot>
-      <div className="pa-public-experience pa-px-shell-root">
-        {/* Accessible Skip Navigation Link */}
-        <a href="#main-content" className="pa-px-skip-link">
-          Skip to main content
-        </a>
-
-        {/* Fixed DOM-First Transition Portal Layer */}
-        <TransitionPortal />
-
-        {/* Active Route Transition Orchestration Engine */}
-        <PublicTransitionManager />
-
-        {/* Persistent Editorial Header */}
-        <PublicHeader
-          onOpenIndex={() => setIndexOpen(true)}
-          isIndexOpen={indexOpen}
-          triggerRef={triggerRef}
-        />
-
-        {/* Transition-Aware Route DOM Stage */}
+  if (isAuthRoute) {
+    return (
+      <div className="pa-public-experience pa-px-shell-root pa-px-shell-root--auth">
+        <a href="#main-content" className="pa-px-skip-link">Skip to main content</a>
         <main id="main-content" tabIndex="-1" style={{ outline: 'none' }}>
-          <PublicRouteStage>
-            <Outlet />
-          </PublicRouteStage>
+          <Outlet />
         </main>
-
-        {/* Creative Site Index Overlay */}
-        <PublicIndex
-          isOpen={indexOpen}
-          onClose={() => setIndexOpen(false)}
-          triggerRef={triggerRef}
-        />
-
-        {/* Quiet Utility Footer on Non-Auth Routes */}
-        {!isAuthRoute && <PublicFooter />}
       </div>
-    </PublicMotionRoot>
+    );
+  }
+
+  return (
+    <Suspense fallback={<div className="pa-public-experience" aria-busy="true" />}>
+      <LegacyPublicExperienceShell />
+    </Suspense>
   );
 };
 

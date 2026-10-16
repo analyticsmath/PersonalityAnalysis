@@ -8,11 +8,11 @@ const metadata = {
   ],
   '/how-it-works': [
     'How It Works | Personality Assessor',
-    'See how evidence is collected, interpreted and evaluated before it contributes to professional insights.',
+    'Follow how a response is preserved, interpreted, weighted and recomposed into an inspectable professional record.',
   ],
   '/career-intelligence': [
     'Career Intelligence | Personality Assessor',
-    'Explore 17 occupational profiles, their skills, and the working conditions that shape career possibilities.',
+    'Explore five working environments and 17 occupational profiles without reducing career possibility to a single job-title ranking.',
   ],
   '/progress': [
     'Progress | Personality Assessor',
