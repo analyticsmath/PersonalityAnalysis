@@ -261,7 +261,8 @@ export function CareerCinematicPage() {
             {CAREER_WORLDS.map((world, index) => <span key={world.id} className={activeWorld === index ? 'is-active' : ''}>{world.index} {world.name}</span>)}
           </div>
 
-          <div className="vt-career-world-stack">
+          <div className="vt-career-world-viewport">
+            <div className="vt-career-world-stack">
             {CAREER_WORLDS.map((world, worldIndex) => {
               const selectedKey = selectedByWorld[world.id];
               const selectedRole = careersData[selectedKey] || careersData[world.roleKeys[0]];
@@ -318,6 +319,7 @@ export function CareerCinematicPage() {
                 </article>
               );
             })}
+            </div>
           </div>
         </div>
       </section>
