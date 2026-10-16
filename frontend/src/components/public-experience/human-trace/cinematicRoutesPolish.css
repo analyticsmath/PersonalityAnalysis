@@ -167,7 +167,7 @@
 .vt-career-worlds-stage .vt-career-world{transition:opacity .7s cubic-bezier(.22,1,.36,1),visibility .7s,clip-path .85s cubic-bezier(.22,1,.36,1)}
 
 /* Trust stages advance with the page scroll and settle on readable states. */
-.vt-trust-track{height:620svh}
+.vt-trust-track{height:520svh}
 .vt-trust-record__source{max-width:640px;font-family:'Newsreader Variable',Georgia,serif;font-size:clamp(21px,2vw,30px);line-height:1.12;letter-spacing:-.025em}
 .vt-trust-record__pipeline{gap:clamp(10px,1.5vw,24px);margin-top:auto}
 .vt-trust-record__pipeline span{font-family:'Instrument Sans',Arial,sans-serif;font-size:clamp(10px,.9vw,13px);line-height:1.2;letter-spacing:0;text-transform:none;color:rgba(21,34,30,.48);transition:color .48s cubic-bezier(.22,1,.36,1),opacity .48s cubic-bezier(.22,1,.36,1)}
