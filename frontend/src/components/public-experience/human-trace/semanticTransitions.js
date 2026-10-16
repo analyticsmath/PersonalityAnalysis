@@ -42,6 +42,14 @@ export function transitionActorSelector(family) {
 function isVisibleTransitionActor(node) {
   if (!node?.getClientRects?.().length) return false;
 
+  const rect = node.getBoundingClientRect();
+  const area = rect.width * rect.height;
+  if (area <= 0) return false;
+
+  const visibleWidth = Math.max(0, Math.min(rect.right, window.innerWidth) - Math.max(rect.left, 0));
+  const visibleHeight = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+  if ((visibleWidth * visibleHeight) / area < 0.08) return false;
+
   let current = node;
   while (current && current.nodeType === 1) {
     const style = window.getComputedStyle(current);
@@ -67,10 +75,10 @@ export function findSemanticActor(root, family, preferredKey) {
     const exact = actors.filter((actor) => actor.dataset.transitionKey === preferredKey);
     const visibleExact = exact.find(isVisibleTransitionActor);
     if (visibleExact) return visibleExact;
-    if (exact.length) return exact[0];
+    if (exact.length) return null;
   }
 
-  return actors.find(isVisibleTransitionActor) || actors[0];
+  return actors.find(isVisibleTransitionActor) || null;
 }
 
 export function semanticActorFromOrigin(origin) {
