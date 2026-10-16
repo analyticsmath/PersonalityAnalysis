@@ -79,6 +79,80 @@ export const PUBLIC_CONTENT = {
         },
       ],
     },
+    workworlds: {
+      headline: 'THE SAME PATTERN READS DIFFERENTLY AT WORK.',
+      conditions: [
+        {
+          id: 'precision',
+          name: 'Precision',
+          mediaKey: 'workworldPrecision',
+          interpretation: 'Clear constraints make this pattern decisive.',
+          detail: 'In structured technical contexts, establishing boundaries first leads to high accuracy execution.',
+        },
+        {
+          id: 'autonomy',
+          name: 'Autonomy',
+          mediaKey: 'workworldAutonomy',
+          interpretation: 'Open methods make the same pattern protective.',
+          detail: 'When self-directed, the instinct to isolate small steps protects focus and prevents over-commitment.',
+        },
+        {
+          id: 'collaboration',
+          name: 'Collaboration',
+          mediaKey: 'workworldCollaboration',
+          interpretation: 'Shared ownership turns clarity into coordination.',
+          detail: 'In cross-functional teams, clarifying constraints aligns stakeholders and unblocks dependent teammates.',
+        },
+        {
+          id: 'pressure',
+          name: 'Operational Pressure',
+          mediaKey: 'workworldPressure',
+          interpretation: 'Under operational pressure, the same instinct requires adaptation.',
+          detail: 'When rapid pivots are required, over-indexing on constraint verification must be balanced against decision speed.',
+        },
+      ],
+    },
+    models: {
+      headline: 'MULTI-MODEL PSYCHOMETRIC ATLAS',
+      list: [
+        {
+          id: 'big-five',
+          name: 'Big Five',
+          role: 'Dimensional Spectrum',
+          description: 'Evaluates Openness, Conscientiousness, Extraversion, Agreeableness, and Emotional Stability as continuous dimensions rather than binary types.',
+        },
+        {
+          id: 'riasec',
+          name: 'RIASEC',
+          role: 'Vocational Interests',
+          description: 'Maps attraction to Realistic, Investigative, Artistic, Social, Enterprising, and Conventional problem domains.',
+        },
+        {
+          id: 'work-values',
+          name: 'Work Values',
+          role: 'Environmental Motivation',
+          description: 'Quantifies organizational conditions that sustain motivation: Achievement, Independence, Working Conditions, Recognition, Relationships, and Support.',
+        },
+        {
+          id: 'career-signals',
+          name: 'Career Signals',
+          role: 'Situational Action Tendencies',
+          description: 'Identifies concrete action habits: iterative scoping, stakeholder alignment, risk containment, and diagnostic inquiry.',
+        },
+        {
+          id: 'background',
+          name: 'Background',
+          role: 'Domain Context',
+          description: 'Integrates educational foundation and technical disciplines to ground analytical interpretations.',
+        },
+        {
+          id: 'goals',
+          name: 'Goals',
+          role: 'Trajectory Alignment',
+          description: 'Weights individual aspirations and target responsibilities in career alignment calculations.',
+        },
+      ],
+    },
     calibration: {
       headline: 'NOT EVERY SIGNAL COUNTS THE SAME.',
       lead: 'Career-fit weights assemble six deterministic factors without black box adjustments.',
