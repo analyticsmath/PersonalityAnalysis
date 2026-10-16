@@ -161,7 +161,19 @@ export function mountHomeHumanTrace(root) {
   mm.add('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
     const lastScene = HOME_SCENE_STOPS.length - 1;
     let settledScene = 0;
-    let initialized = false;
+    const syncSettledScene = (progress) => {
+      const value = clamp(progress);
+      if (value <= 0.02) {
+        settledScene = 0;
+        return;
+      }
+      if (value >= 0.98) {
+        settledScene = lastScene;
+        return;
+      }
+      const nearest = closestSceneStop(value);
+      if (Math.abs(value - HOME_SCENE_STOPS[nearest]) <= 0.025) settledScene = nearest;
+    };
     const boundedProgress = (progress) => {
       const lower = settledScene === 0 ? 0 : HOME_SCENE_STOPS[settledScene - 1];
       const upper = settledScene === lastScene ? 1 : HOME_SCENE_STOPS[settledScene + 1];
@@ -277,10 +289,7 @@ export function mountHomeHumanTrace(root) {
       onUpdate: (self) => render(self.progress),
       onSnapComplete: (self) => { settledScene = closestSceneStop(self.progress); },
       onRefresh: (self) => {
-        if (!initialized) {
-          settledScene = closestSceneStop(self.progress);
-          initialized = true;
-        }
+        syncSettledScene(self.progress);
         render(self.progress);
       },
     });

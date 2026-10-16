@@ -178,7 +178,19 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
       const lastWorld = CAREER_WORLDS.length - 1;
       let previous = -1;
       let settledWorld = 0;
-      let initialized = false;
+      const syncSettledWorld = (progress) => {
+        const value = Math.max(0, Math.min(1, progress));
+        if (value <= 0.02) {
+          settledWorld = 0;
+          return;
+        }
+        if (value >= 0.98) {
+          settledWorld = lastWorld;
+          return;
+        }
+        const nearest = Math.round(value * lastWorld);
+        if (Math.abs(value - nearest / lastWorld) <= 0.025) settledWorld = nearest;
+      };
       const boundedProgress = (progress) => {
         const rawPosition = Math.max(0, Math.min(1, progress)) * lastWorld;
         return Math.max(settledWorld - 1, Math.min(settledWorld + 1, rawPosition));
@@ -215,10 +227,7 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
         onUpdate: (self) => render(self.progress),
         onSnapComplete: (self) => { settledWorld = Math.round(self.progress * lastWorld); },
         onRefresh: (self) => {
-          if (!initialized) {
-            settledWorld = Math.round(self.progress * lastWorld);
-            initialized = true;
-          }
+          syncSettledWorld(self.progress);
           render(self.progress);
         },
       });
@@ -324,8 +333,8 @@ export function CareerCinematicPage() {
 
                     <div className="vt-career-role-detail" role="tabpanel" aria-live="polite">
                       <h3>{selectedRole.title}</h3>
-                      <div><strong>What the work calls for</strong><p>{selectedRole.skills.slice(0, 5).map(displayRequirement).join(' · ')}</p></div>
-                      <div><strong>Knowledge behind the work</strong><p>{selectedRole.subjects.slice(0, 4).map(displayRequirement).join(' · ')}</p></div>
+                      <div><strong>Core skills</strong><p>{selectedRole.skills.slice(0, 5).map(displayRequirement).join(' · ')}</p></div>
+                      <div><strong>Related knowledge</strong><p>{selectedRole.subjects.slice(0, 4).map(displayRequirement).join(' · ')}</p></div>
                       <small>Occupational requirements. Not a personal career-fit score.</small>
                     </div>
                   </div>
@@ -394,7 +403,19 @@ function useTrustTimeline(rootRef, setActive) {
       const lastStep = 4;
       let previous = -1;
       let settledStep = 0;
-      let initialized = false;
+      const syncSettledStep = (progress) => {
+        const value = Math.max(0, Math.min(1, progress));
+        if (value <= 0.02) {
+          settledStep = 0;
+          return;
+        }
+        if (value >= 0.98) {
+          settledStep = lastStep;
+          return;
+        }
+        const nearest = Math.round(value * lastStep);
+        if (Math.abs(value - nearest / lastStep) <= 0.025) settledStep = nearest;
+      };
       const boundedProgress = (progress) => {
         const rawPosition = Math.max(0, Math.min(1, progress)) * lastStep;
         return Math.max(settledStep - 1, Math.min(settledStep + 1, rawPosition));
@@ -428,10 +449,7 @@ function useTrustTimeline(rootRef, setActive) {
         onUpdate: (self) => render(self.progress),
         onSnapComplete: (self) => { settledStep = Math.round(self.progress * lastStep); },
         onRefresh: (self) => {
-          if (!initialized) {
-            settledStep = Math.round(self.progress * lastStep);
-            initialized = true;
-          }
+          syncSettledStep(self.progress);
           render(self.progress);
         },
       });
