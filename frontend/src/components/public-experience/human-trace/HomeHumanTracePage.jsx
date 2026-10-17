@@ -4,15 +4,25 @@ import { CinemaLink } from './CinematicPublicShell';
 import { mountHomeHumanTrace } from './homeHumanTraceMotion';
 import './homeHumanTrace.css';
 import './homeHumanTracePolish.css';
+import './homeRefinement.css';
 
 const PHOTO = {
-  human: '/media/public-experience/digital/designer-1920.webp',
-  precision: '/media/public-experience/digital/wireframe-1920.webp',
-  autonomy: '/media/public-experience/digital/code-detail-1920.webp',
-  collaboration: '/media/public-experience/digital/collaborate-1920.webp',
-  pressure: '/media/public-experience/digital/studio-1920.webp',
-  proof: '/media/public-experience/digital/wireframe-1920.webp',
+  human: '/media/public-experience/homeHeroContext',
+  detail: '/media/public-experience/homeProcessDetail',
+  creative: '/media/public-experience/careerCreativeHuman',
+  research: '/media/public-experience/careerDeepInquiry',
+  precision: '/media/public-experience/workworldPrecision',
+  autonomy: '/media/public-experience/workworldAutonomy',
+  collaboration: '/media/public-experience/careerCoordination',
+  pressure: '/media/public-experience/workworldPressureHuman',
 };
+
+function Photo({ source, alt = '', priority = false, className = '' }) {
+  return <picture className={className}>
+    <source media="(max-width: 600px)" srcSet={`${source}-mobile-480.webp 480w, ${source}-mobile-960.webp 960w`} sizes="100vw" />
+    <img src={`${source}-1440.webp`} srcSet={`${source}-720.webp 720w, ${source}-1440.webp 1440w, ${source}-1920.webp 1920w`} sizes="(max-width:900px) 100vw, 85vw" alt={alt} fetchPriority={priority ? 'high' : 'auto'} loading={priority ? 'eager' : 'lazy'} decoding="async" />
+  </picture>;
+}
 
 const start = '/signup?next=%2Fassessment%2Fstart';
 
@@ -36,18 +46,43 @@ export function HomeHumanTracePage() {
 
   return (
     <div ref={rootRef} className="vt-home-experience" data-home-experience>
+      <section className="vt-home-opening" data-home-opening aria-label="Understand what drives you">
+        <div className="vt-home-opening-stage">
+          <figure className="vt-home-opening-media" data-opening-media data-transition-family="context-media" data-transition-key="working-context">
+            <Photo source={PHOTO.human} alt="A maker working with equipment beside a sunlit workshop window" priority />
+          </figure>
+          <figure className="vt-home-opening-detail" data-opening-detail aria-hidden="true"><Photo source={PHOTO.detail} /></figure>
+            <div className="vt-home-opening-copy">
+              <div className="vt-home-human-copy">
+                <h1><span>Understand</span><span>what drives you.</span></h1>
+                <div className="vt-home-human-bottom">
+                  <p>Your personality. Your priorities. A clearer direction for the work ahead.</p>
+                  <CinemaLink className="vt-primary vt-home-primary" to={start}>Discover your profile <span aria-hidden="true">↗</span></CinemaLink>
+                </div>
+              </div>
+            </div>
+
+
+          <div className="vt-home-opening-cue" aria-hidden="true">Discover what shapes your working life <span>↓</span></div>
+        </div>
+      </section>
+
+      <section className="vt-home-perspectives" data-home-perspectives aria-label="More than a personality type">
+        <div className="vt-home-perspectives-stage">
+          <div className="vt-home-perspectives-photos" aria-hidden="true">
+            <figure><Photo source={PHOTO.creative} /></figure>
+            <figure><Photo source={PHOTO.research} /></figure>
+            <figure><Photo source={PHOTO.collaboration} /></figure>
+          </div>
+          <h2 aria-label="You are more than a type. Understand the patterns. Explore the possibilities.">
+            {'You are more than a type. Understand the patterns. Explore the possibilities.'.split(' ').map((word, i) => <span className="vt-home-reveal-word" aria-hidden="true" key={i}>{word}{' '}</span>)}
+          </h2>
+          <p>Personality, interests and values bring different parts of your working life into focus.</p>
+        </div>
+      </section>
+
       <div className="vt-home-film-track" data-home-track>
         <div className="vt-home-film-stage" data-home-stage>
-          <figure
-            className="vt-home-world-media"
-            data-home-world-media
-            data-transition-family="context-media"
-            data-transition-key="working-context"
-          >
-            <img src={PHOTO.human} alt="A product designer developing interface ideas at work" fetchPriority="high" />
-            <div className="vt-home-world-media__veil" aria-hidden="true" />
-          </figure>
-
           <div
             className="vt-home-source-actor"
             data-home-source-actor
@@ -57,28 +92,14 @@ export function HomeHumanTracePage() {
             <p>Your answer keeps its question and context.</p>
           </div>
 
-          <div className="vt-home-scroll-cue" data-home-scroll-cue aria-hidden="true">
-            <span>Scroll to see how an answer is assessed</span>
-            <span>↓</span>
-          </div>
-
           <div className="vt-home-scenes">
-            <Scene id="human" index={0}>
-              <div className="vt-home-human-copy">
-                <h1><span>Understand</span><span>what drives you.</span></h1>
-                <div className="vt-home-human-bottom">
-                  <p>Your personality. Your priorities. A clearer direction for the work ahead.</p>
-                  <CinemaLink className="vt-primary vt-home-primary" to={start}>Discover your profile <span aria-hidden="true">↗</span></CinemaLink>
-                </div>
-              </div>
-            </Scene>
-
             <Scene id="source" index={1}>
               <div className="vt-home-source-copy">
-                <h2>One answer<br/>is not one result.</h2>
+                <h2>Start with you.<br/>Keep the context.</h2>
                 <p>{home.worldEntry.prompt}</p>
                 <small>A single response can suggest questions worth asking. A scored profile requires sufficient independent evidence.</small>
               </div>
+              <figure className="vt-home-source-photo"><Photo source={PHOTO.detail} alt="An architect reviewing plans and material swatches" /></figure>
               <div className="vt-home-source-mobile" data-transition-family="human-trace" data-transition-key="source-response">
                 <p>Your answer keeps its question and context.</p>
               </div>
@@ -113,7 +134,7 @@ export function HomeHumanTracePage() {
               <div className="vt-home-worlds" data-home-worlds>
                 {home.workworlds.conditions.map((world, idx) => (
                   <article key={world.id} className="vt-home-world" data-home-world={idx}>
-                    <img src={[PHOTO.precision, PHOTO.autonomy, PHOTO.collaboration, PHOTO.pressure][idx]} alt="" loading="lazy" />
+                    <Photo source={[PHOTO.precision, PHOTO.autonomy, PHOTO.collaboration, PHOTO.pressure][idx]} alt={["Two colleagues working with precision equipment", "A maker working independently at her studio table", "Colleagues exchanging ideas around a workspace", "An operator monitoring a broadcast control room"][idx]} />
                     <div className="vt-home-world__shade" aria-hidden="true" />
                     <div className="vt-home-world__copy">
                                             <h3>{world.name}</h3>
@@ -149,8 +170,8 @@ export function HomeHumanTracePage() {
                 <p>{home.timeExposure.support}</p>
               </div>
               <div className="vt-home-time-frame" data-home-time-frame>
-                <img src={PHOTO.human} alt="The same professional context used as a baseline reference" loading="lazy" />
-                <div className="vt-home-time-frame__later" data-home-time-later><img src={PHOTO.collaboration} alt="A later collaborative work context used as an illustrative comparison" loading="lazy" /></div>
+                <Photo source={PHOTO.autonomy} alt="An independent working context, illustrating an earlier record" />
+                <div className="vt-home-time-frame__later" data-home-time-later><Photo source={PHOTO.collaboration} alt="A collaborative working context, illustrating changing responsibilities" /></div>
                 <div className="vt-home-time-frame__axis" aria-hidden="true" />
                 <span className="vt-home-time-frame__label vt-home-time-frame__label--a">Earlier record</span>
                 <span className="vt-home-time-frame__label vt-home-time-frame__label--b">Later context</span>
@@ -177,23 +198,33 @@ export function HomeHumanTracePage() {
               </div>
             </Scene>
 
-            <Scene id="record" index={7}>
-              <div className="vt-home-record-copy">
-                <h2>Build a profile<br/><em>that keeps its evidence.</em></h2>
-                <p>{home.finale.support}</p>
-                <div className="vt-home-record-actions">
-                  <CinemaLink className="vt-primary" to={start}>Build my profile <span aria-hidden="true">↗</span></CinemaLink>
-                  <CinemaLink className="vt-text-link" to="/how-it-works">Follow one answer ↗</CinemaLink>
-                </div>
-              </div>
-              <div className="vt-home-record-object" data-home-record-object data-transition-family="human-trace" data-transition-key="evidence-record">
-                <p className="vt-home-record-object__statement">Responses, results and career comparisons stay connected to their evidence.</p>
-                <div className="vt-home-record-object__meta"><span>Source retained</span><span>Weights explicit</span><span>Limits visible</span></div>
-              </div>
-            </Scene>
+
           </div>
         </div>
       </div>
+
+      <section className="vt-home-book-track" data-home-book-track aria-label="Build an evidence-based profile">
+        <div className="vt-home-book-stage">
+          <div className="vt-home-book-copy">
+            <h2>A profile you<br/>can look into.</h2>
+            <p>{home.finale.support}</p>
+            <CinemaLink className="vt-primary" to={start}>Build my profile <span aria-hidden="true">↗</span></CinemaLink>
+          </div>
+          <div className="vt-home-book" data-home-book>
+            <div className="vt-home-book-page">
+              <h3>Understand the pattern.</h3>
+              <p>Explore personality dimensions, occupational interests and the conditions you value at work.</p>
+              <h3>Keep the context.</h3>
+              <p>Review the evidence behind a career comparison, then revisit your profile as your responsibilities change.</p>
+              <CinemaLink className="vt-text-link" to="/how-it-works">Explore the assessment ↗</CinemaLink>
+            </div>
+            <div className="vt-home-book-cover" data-home-book-cover aria-hidden="true">
+              <Photo source={PHOTO.creative} />
+              <div><span>Your working life,<br/>in perspective.</span><span>Personality Assessor</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="vt-home-afterword" aria-label="How the assessment works">
         <div><h2>See how one answer<br/>shapes a career comparison.</h2></div>

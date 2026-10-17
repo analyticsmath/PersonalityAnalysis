@@ -4,14 +4,11 @@ import { observeScrollProgress, readingPosition } from './scrollProgress';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// The first entry retires the old hero slot. Every subsequent interval has a
+// complete reading hold; progress never depends on snapping or wheel callbacks.
 const HOME_HANDOFFS = [
-  [0.07, 0.11],
-  [0.17, 0.21],
-  [0.27, 0.31],
-  [0.57, 0.61],
-  [0.68, 0.72],
-  [0.78, 0.82],
-  [0.88, 0.92],
+  [-0.05, 0], [0.10, 0.15], [0.25, 0.30],
+  [0.64, 0.69], [0.77, 0.82], [0.89, 0.94],
 ];
 const clamp = (value) => Math.max(0, Math.min(1, value));
 const smooth = (value) => {
@@ -75,9 +72,12 @@ function paintScene(scene, index, progress, weight, dominant, headings) {
   scene.style.clipPath = sceneReveal(index, enter);
   scene.style.zIndex = String(index + 1);
   scene.setAttribute('aria-hidden', String(index !== dominant));
+  scene.inert = index !== dominant;
+  const textEnter = index === 1 ? 1 : range(progress, previousHandoff[0] + 0.012, previousHandoff[1] + 0.014);
   headings.forEach((heading) => {
     const distance = index === 1 ? 48 : index === 2 || index === 4 ? 0 : 24;
-    heading.style.transform = `translate3d(${index === 6 ? ((1 - enter) * 30).toFixed(2) : 0}px, ${((1 - enter) * distance).toFixed(2)}px, 0)`;
+    heading.style.transform = `translate3d(0, ${((1 - textEnter) * Math.max(26, distance)).toFixed(2)}px, 0)`;
+    heading.style.clipPath = `inset(0 0 ${((1 - textEnter) * 100).toFixed(2)}% 0)`;
   });
 }
 
@@ -95,6 +95,10 @@ function setActiveWorld(items, labels, progress) {
     item.style.clipPath = 'none';
     item.style.zIndex = String(index === current ? 3 : 2);
     item.setAttribute('aria-hidden', String(index !== current));
+    const image = item.querySelector('img');
+    if (image) image.style.transform = `translate3d(${delta * -7}%, 0, 0) scale(1.09)`;
+    const copy = item.querySelector('.vt-home-world__copy');
+    if (copy) { copy.style.transform = `translate3d(${delta * 32}px, 0, 0)`; copy.style.opacity = String(1 - Math.min(1, distance * 1.5)); }
   });
 
   labels.forEach((label, index) => {
@@ -115,18 +119,15 @@ export function mountHomeHumanTrace(root) {
   const scenes = [...root.querySelectorAll('[data-home-scene]')];
   const sceneHeadings = scenes.map((scene) => [...scene.querySelectorAll('h1,h2')]);
   const source = root.querySelector('[data-home-source-actor]');
-  const worldMedia = root.querySelector('[data-home-world-media]');
-  const scrollCue = root.querySelector('[data-home-scroll-cue]');
   const worldItems = [...root.querySelectorAll('[data-home-world]')];
   const worldLabels = [...root.querySelectorAll('[data-home-world-label]')];
   const branchPaths = [...root.querySelectorAll('[data-home-branch-path]')];
   const masses = [...root.querySelectorAll('[data-home-mass]')];
   const timeFrame = root.querySelector('[data-home-time-frame]');
   const timeLater = root.querySelector('[data-home-time-later]');
-  const timeBaseImage = timeFrame?.querySelector(':scope > img');
+  const timeBaseImage = timeFrame?.querySelector(':scope > picture img');
   const timeLaterImage = timeLater?.querySelector('img');
   const provenanceSteps = [...root.querySelectorAll('[data-home-provenance-step]')];
-  const recordObject = root.querySelector('[data-home-record-object]');
 
   if (!track || !stage || !scenes.length) return () => {};
 
@@ -138,43 +139,78 @@ export function mountHomeHumanTrace(root) {
 
   const mm = gsap.matchMedia();
 
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    const opening = root.querySelector('[data-home-opening]');
+    const media = root.querySelector('[data-opening-media]');
+    const detail = root.querySelector('[data-opening-detail]');
+    const openingCopy = root.querySelector('.vt-home-opening-copy');
+    const perspectiveTrack = root.querySelector('[data-home-perspectives]');
+    const words = [...root.querySelectorAll('.vt-home-reveal-word')];
+    const perspectivePhotos = [...root.querySelectorAll('.vt-home-perspectives-photos figure')];
+    const bookTrack = root.querySelector('[data-home-book-track]');
+    const book = root.querySelector('[data-home-book]');
+    const cover = root.querySelector('[data-home-book-cover]');
+    const desktop = window.matchMedia('(min-width:901px)').matches;
+    const context = gsap.context(() => {
+      gsap.fromTo('.vt-home-opening-copy h1 span', { y: 42, opacity: 0, clipPath: 'inset(100% 0 0 0)' },
+        { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', duration: 1.25, stagger: 0.14, ease: 'power3.out', clearProps: 'transform,opacity,clipPath' });
+      gsap.fromTo('.vt-home-opening-copy .vt-home-human-bottom', { y: 16, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, delay: 0.45, ease: 'power2.out', clearProps: 'transform,opacity' });
+    }, root);
+    const stops = [];
+    if (desktop) {
+      stops.push(observeScrollProgress(opening, (p) => {
+        const movement = range(p, 0.08, 0.85);
+        media.style.clipPath = `inset(${mix(12, 0, movement)}% ${mix(4, 0, movement)}% ${mix(10, 0, movement)}% ${mix(32, 0, movement)}%)`;
+        media.querySelector('img').style.transform = `scale(${mix(1.08, 1, movement)})`;
+        openingCopy.style.transform = `translate3d(0, ${mix(0, -8, movement)}vh, 0)`;
+        detail.style.transform = `translate3d(0, ${mix(0, -15, movement)}vh, 0) rotate(${mix(-3, 0, movement)}deg)`;
+        detail.style.opacity = String(1 - range(p, 0.45, 0.85));
+      }, { response: 240 }));
+    }
+    stops.push(observeScrollProgress(perspectiveTrack, (p) => {
+      const reading = range(p, 0.10, 0.72);
+      words.forEach((word, index) => { word.style.opacity = String(mix(0.2, 1, range(reading, index / words.length * 0.8, (index + 2) / words.length * 0.8))); });
+      perspectivePhotos.forEach((photo, index) => {
+        const directions = [-1, 1, -1];
+        photo.style.transform = `translate3d(${mix(0, directions[index] * 5, p)}vw, ${mix(10 + index * 3, -14 - index * 5, p)}vh, 0) rotate(${mix(directions[index] * 4, 0, p)}deg)`;
+        photo.style.opacity = String(1 - range(p, 0.78, 1));
+      });
+    }, { response: 220 }));
+    stops.push(observeScrollProgress(bookTrack, (p) => {
+      const open = range(p, 0.12, 0.66);
+      if (desktop) {
+        book.style.transform = `translate3d(0, ${mix(5, 0, open)}vh, 0) rotate(${mix(4, 0, open)}deg)`;
+        cover.style.transform = `rotateY(${mix(0, -156, open)}deg)`;
+        cover.style.visibility = open > 0.99 ? 'hidden' : 'visible';
+      } else {
+        cover.style.opacity = String(1 - range(p, 0, 0.38));
+        cover.style.visibility = p > 0.4 ? 'hidden' : 'visible';
+      }
+    }, { response: 260 }));
+    return () => {
+      stops.forEach((stop) => stop());
+      context.revert();
+      [media, detail, openingCopy, book, cover, ...words, ...perspectivePhotos].forEach((element) => removeInlineStyles(element, ['transform', 'opacity', 'clip-path', 'visibility']));
+      removeInlineStyles(media?.querySelector('img'), ['transform']);
+    };
+  });
+
   mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', () => {
-    const heroCopy = root.querySelector('.vt-home-human-copy');
     const render = (progress) => {
       const p = clamp(progress);
       const weights = sceneWeights(p);
       const dominant = dominantIndex(weights);
-      stage.dataset.homeDominant = scenes[dominant]?.dataset.homeSceneId || 'human';
+      stage.dataset.homeDominant = scenes.find((scene) => Number(scene.dataset.homeScene) === dominant)?.dataset.homeSceneId || 'source';
       stage.style.setProperty('--home-progress', String(p));
 
-      scenes.forEach((scene, index) => paintScene(scene, index, p, weights[index], dominant, sceneHeadings[index]));
-
-      if (scrollCue) {
-        const cueOpacity = 1 - range(p, 0.015, 0.07);
-        scrollCue.style.opacity = String(cueOpacity);
-        scrollCue.style.visibility = cueOpacity > 0.01 ? 'visible' : 'hidden';
-      }
-
-      if (worldMedia) {
-        const sourceTakeover = range(p, 0, 0.17);
-        const cropResolve = range(p, 0.17, 0.27);
-        const darken = range(p, 0.17, 0.57);
-        const returnPulse = range(p, 0.78, 0.88);
-        worldMedia.style.transform = `translate3d(${mix(0, -2.5, p)}%, ${mix(0, -3.5, p)}%, 0) scale(${mix(1.025, 1.16, sourceTakeover)})`;
-        const opening = range(p, 0, 0.07);
-        worldMedia.style.clipPath = `inset(${mix(14, 0, opening)}% ${mix(5, 0, opening)}% ${mix(10, 0, opening)}% ${mix(30, 0, opening)}%)`;
-        if (heroCopy) heroCopy.style.transform = `translate3d(0, ${mix(0, -5, opening)}vh, 0)`;
-        worldMedia.style.setProperty('--home-veil-opacity', String(mix(0.55, 0.82, darken)));
-        const baseOpacity = mix(1, 0.2, range(p, 0.27, 0.68));
-        worldMedia.style.opacity = String(mix(baseOpacity, 0.5, returnPulse));
-      }
+      scenes.forEach((scene, index) => paintScene(scene, Number(scene.dataset.homeScene), p, weights[Number(scene.dataset.homeScene)], dominant, sceneHeadings[index]));
 
       if (source) {
-        const enter = range(p, 0.07, 0.11);
-        const travel = range(p, 0.11, 0.17);
-        const settle = range(p, 0.17, 0.21);
-        const residueFade = range(p, 0.17, 0.21);
-        const provenanceReturn = range(p, 0.78, 0.82);
+        const enter = 1;
+        const travel = range(p, 0.045, 0.10);
+        const settle = range(p, 0.10, 0.15);
+        const residueFade = range(p, 0.10, 0.15);
         const finalResolve = range(p, 0.88, 0.92);
         const vw = window.innerWidth;
         const vh = window.innerHeight;
@@ -190,7 +226,7 @@ export function mountHomeHumanTrace(root) {
         source.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale}) rotate(${rotate}deg)`;
       }
 
-      const branchProgress = range(p, 0.17, 0.27);
+      const branchProgress = range(p, 0.14, 0.23);
       branchPaths.forEach((path, index) => {
         const length = Number(path.dataset.pathLength || 1000);
         const staggered = range(branchProgress, index * 0.07, 0.58 + index * 0.07);
@@ -198,17 +234,16 @@ export function mountHomeHumanTrace(root) {
         path.style.opacity = String(mix(0.22, 0.92, staggered));
       });
 
-      setActiveWorld(worldItems, worldLabels, clamp((p - 0.31) / 0.26));
+      setActiveWorld(worldItems, worldLabels, clamp((p - 0.31) / 0.32));
 
-      const weightProgress = range(p, 0.57, 0.68);
+      const weightProgress = range(p, 0.68, 0.74);
       masses.forEach((mass, index) => {
         const stagger = range(weightProgress, index * 0.05, 0.52 + index * 0.05);
-        mass.style.transform = `translate3d(0, ${mix(8, 0, stagger)}%, 0) scaleY(${mix(0.045, 1, stagger)})`;
-        mass.style.opacity = String(mix(0.12, 1, stagger));
+        mass.style.setProperty('--bar-reveal', String(stagger));
       });
 
       if (timeLater) {
-        const timeProgress = range(p, 0.68, 0.78);
+        const timeProgress = range(p, 0.81, 0.86);
         const split = mix(100, 48, timeProgress);
         timeLater.style.clipPath = `inset(0 0 0 ${split}%)`;
         timeFrame?.style.setProperty('--home-time-split', `${split}%`);
@@ -216,18 +251,14 @@ export function mountHomeHumanTrace(root) {
         if (timeLaterImage) timeLaterImage.style.transform = `translate3d(${mix(4.5, 0, timeProgress)}%, 0, 0) scale(${mix(1.085, 1.035, timeProgress)})`;
       }
 
-      const provenanceProgress = range(p, 0.78, 0.88);
+      const provenanceProgress = range(p, 0.93, 0.975);
       provenanceSteps.forEach((step, index) => {
         const reveal = range(provenanceProgress, index * 0.1, 0.39 + index * 0.1);
         step.style.opacity = String(reveal);
         step.style.transform = `translate3d(${mix(52, 0, reveal)}px, ${mix(8, 0, reveal)}px, 0)`;
       });
 
-      if (recordObject) {
-        const recordProgress = range(p, 0.88, 0.98);
-        recordObject.style.transform = `translate3d(${mix(7, 0, recordProgress)}vw, ${mix(60, 0, recordProgress)}px, 0) scale(${mix(0.925, 1, recordProgress)}) rotate(${mix(0.8, 0, recordProgress)}deg)`;
-        recordObject.style.opacity = String(recordProgress);
-      }
+
     };
 
     render(0);
@@ -236,30 +267,29 @@ export function mountHomeHumanTrace(root) {
 
     return () => {
       stop();
-      heroCopy?.style.removeProperty('transform');
       delete stage.dataset.homeDominant;
       stage.style.removeProperty('--home-progress');
       scenes.forEach((scene) => {
         removeInlineStyles(scene, ['opacity', 'visibility', 'pointer-events', 'transform', 'clip-path', 'z-index']);
         scene.removeAttribute('aria-hidden');
-        scene.querySelectorAll('h1,h2').forEach((heading) => heading.style.removeProperty('transform'));
+        scene.inert = false;
+        scene.querySelectorAll('h1,h2').forEach((heading) => removeInlineStyles(heading, ['transform', 'clip-path']));
       });
-      removeInlineStyles(scrollCue, ['opacity', 'visibility']);
-      removeInlineStyles(worldMedia, ['transform', 'clip-path', 'opacity', '--home-veil-opacity']);
       removeInlineStyles(source, ['opacity', 'visibility', 'transform']);
       branchPaths.forEach((path) => removeInlineStyles(path, ['stroke-dasharray', 'stroke-dashoffset', 'opacity']));
       worldItems.forEach((item) => {
         removeInlineStyles(item, ['opacity', 'visibility', 'transform', 'clip-path', 'z-index']);
         item.removeAttribute('aria-hidden');
+        removeInlineStyles(item.querySelector('img'), ['transform']);
+        removeInlineStyles(item.querySelector('.vt-home-world__copy'), ['transform', 'opacity']);
       });
       worldLabels.forEach((label) => label.classList.remove('is-active'));
-      masses.forEach((mass) => removeInlineStyles(mass, ['transform', 'opacity']));
+      masses.forEach((mass) => removeInlineStyles(mass, ['transform', 'opacity', '--bar-reveal']));
       removeInlineStyles(timeLater, ['clip-path']);
       removeInlineStyles(timeBaseImage, ['transform']);
       removeInlineStyles(timeLaterImage, ['transform']);
       timeFrame?.style.removeProperty('--home-time-split');
       provenanceSteps.forEach((step) => removeInlineStyles(step, ['opacity', 'transform']));
-      removeInlineStyles(recordObject, ['transform', 'opacity']);
     };
   });
 
