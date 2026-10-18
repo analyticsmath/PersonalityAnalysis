@@ -27,3 +27,4 @@
 
 .vt-site-index__nav>a.is-current{border-bottom-color:#a8b980}
 .vt-site-index .vt-site-index__preview p{margin-top:24px}
+@media(max-width:380px){.vt-site-index__brand{font-size:15px}.vt-site-index__top button{font-size:14px;gap:12px;padding-left:0}.vt-site-index__top button>span{width:38px;height:38px}}
