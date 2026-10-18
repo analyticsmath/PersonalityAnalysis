@@ -58,7 +58,7 @@ export default function SiteIndex({ pathname, onClose, closeRef, drawerRef }) {
           </CinemaLink>)}
         </nav>
         <div className="vt-site-index__preview" aria-hidden="true">
-          <div className="vt-site-index__images">{DESTINATIONS.map(([path, , photo], index) => <img key={path} src={`${MEDIA}${photo}-1920.webp`} alt="" className={preview === index ? 'is-visible' : ''} />)}</div>
+          <div className="vt-site-index__images">{DESTINATIONS.map(([path, , photo], index) => <img key={path} src={`${MEDIA}${photo}-960.webp`} alt="" loading="lazy" decoding="async" className={preview === index ? 'is-visible' : ''} />)}</div>
           <p>{DESTINATIONS[preview][3]}</p>
         </div>
       </div>

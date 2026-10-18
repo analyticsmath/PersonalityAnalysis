@@ -44,3 +44,6 @@
 .vt-process__outcome{min-height:80svh;padding:80px 16px}.vt-process__outcome h2{font-size:52px}.vt-process__outcome-copy>p{font-size:16px}.vt-process__outcome-copy>a{max-width:340px}
 }
 @media(prefers-reduced-motion:reduce){.vt-process *{scroll-behavior:auto!important;transition:none!important}.vt-process__word{opacity:1!important}}
+
+.vt-process :is(a,button,[role=tabpanel]):focus-visible{outline-color:#496254}
+.vt-process__calculation a:focus-visible,.vt-process__outcome a:focus-visible{outline-color:#d6e878}
