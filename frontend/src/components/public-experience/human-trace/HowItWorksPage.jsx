@@ -119,7 +119,7 @@ export default function HowItWorksPage() {
         ['What you shared', 'Your responses, background and the context they came from.'],
         ['What it suggests', 'Separate views of personality, interests and workplace priorities.'],
         ['What supports it', 'The evidence, contribution weights and limits behind a comparison.'],
-      ].map(([title, description]) => <div key={title} data-process-reveal><h3>{title}</h3><p>{description}</p><span aria-hidden="true">↗</span></div>)}</div>
+      ].map(([title, description]) => <div key={title} data-process-reveal><h3>{title}</h3><p>{description}</p></div>)}</div>
     </section>
     <section className="vt-process__outcome"><img className="vt-process__outcome-photo" src={`${MEDIA}studio-1920.webp`} alt="A shared creative workspace with room to explore ideas" loading="lazy" /><div className="vt-process__outcome-copy" data-process-reveal><h2>A clearer picture.<br/>An open future.</h2><p>Explore where your working patterns meet different roles and environments.</p><CinemaLink to="/career-intelligence">Explore career intelligence <span aria-hidden="true">↗</span></CinemaLink><CinemaLink to="/signup?next=%2Fassessment%2Fstart" className="vt-process__build">Build my profile <span aria-hidden="true">↗</span></CinemaLink></div></section>
   </div>;
