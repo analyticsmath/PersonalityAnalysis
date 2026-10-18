@@ -1,135 +1,92 @@
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { observeScrollProgress } from './scrollProgress';
 
 const clamp = (value) => Math.max(0, Math.min(1, value));
-const smooth = (value) => {
+const ease = (value) => {
   const t = clamp(value);
   return t * t * (3 - 2 * t);
 };
-const range = (value, start, end) => smooth((value - start) / Math.max(0.0001, end - start));
-const mix = (a, b, value) => a + (b - a) * clamp(value);
+const STATES = ['capture', 'isolate', 'branch', 'weight', 'recompose'];
 
-const STATES = [
-  ['capture', 0],
-  ['isolate', 0.22],
-  ['branch', 0.45],
-  ['weight', 0.69],
-  ['recompose', 0.91],
-];
-
-function nearestState(progress) {
-  let winner = STATES[0];
-  STATES.forEach((state) => {
-    if (Math.abs(progress - state[1]) < Math.abs(progress - winner[1])) winner = state;
-  });
-  return winner[0];
-}
-
-function clear(element, properties) {
-  if (!element) return;
-  properties.forEach((property) => element.style.removeProperty(property));
-}
-
+/** One owner for both the evidence display and the explanation beside it. */
 export function mountHowTraceDirector(root = document) {
-  const route = root.querySelector?.('.vt-route--how');
+  const route = root.matches?.('.vt-route--how') ? root : root.querySelector?.('.vt-route--how');
   const sequence = route?.querySelector('.vt-how-sequence');
   const stage = route?.querySelector('[data-how-stage]');
-  const source = stage?.querySelector('.vt-how-source-card');
-  const contextImage = stage?.querySelector('.vt-how-context img');
-  const clauses = stage?.querySelector('.vt-how-clause-stage');
-  const branch = stage?.querySelector('.vt-how-branch-stage');
-  const weight = stage?.querySelector('.vt-how-weight-stage');
-  const weightBars = [...(weight?.querySelectorAll('i') || [])];
-  const record = stage?.querySelector('.vt-how-record-stage');
+  const steps = [...(route?.querySelectorAll('[data-how-step]') || [])];
+  if (!sequence || !stage || steps.length !== STATES.length) return () => {};
 
-  if (!sequence || !stage || !source || !clauses || !branch || !weight || !record) return () => {};
+  const actors = ['.vt-how-source-card', '.vt-how-clause-stage', '.vt-how-branch-stage', '.vt-how-weight-stage', '.vt-how-record-stage'].map((selector) => stage.querySelector(selector));
+  const image = stage.querySelector('.vt-how-context img');
+  const bars = [...stage.querySelectorAll('.vt-how-weight-stage i')];
+  if (actors.some((actor) => !actor)) return () => {};
 
   const mm = gsap.matchMedia();
-  mm.add('(min-width:901px) and (pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
-    stage.dataset.howDirected = 'true';
-
-    const render = (value) => {
-      const p = clamp(value);
-      stage.dataset.howState = nearestState(p);
-      stage.style.setProperty('--how-progress', String(p));
-
-      const isolate = range(p, 0.08, 0.28);
-      const branchMove = range(p, 0.28, 0.49);
-      const weightMove = range(p, 0.49, 0.72);
-      const resolve = range(p, 0.72, 0.96);
-
-      const sourceX = mix(0, -6.5, branchMove) + mix(0, -3.5, weightMove);
-      const sourceY = mix(0, -32, isolate) + mix(0, -4, branchMove);
-      const sourceScale = mix(1, 0.78, isolate) * mix(1, 0.84, branchMove) * mix(1, 0.86, weightMove);
-      const sourceOpacity = mix(1, 0.68, isolate) * mix(1, 0.56, branchMove) * mix(1, 0.7, weightMove) * mix(1, 0.32, resolve);
-      source.style.transform = `translate3d(${sourceX}vw, ${sourceY}vh, 0) scale(${sourceScale})`;
-      source.style.opacity = String(sourceOpacity);
-
-      if (contextImage) {
-        const camera = range(p, 0, 0.72);
-        const pullback = range(p, 0.72, 1);
-        contextImage.style.transform = `translate3d(${mix(0, -3.5, camera)}%, ${mix(0, -2, camera)}%, 0) scale(${mix(1.05, 1.14, camera) * mix(1, 0.95, pullback)})`;
-        contextImage.style.filter = `saturate(${mix(1, 0.68, camera)}) contrast(${mix(1, 1.08, camera)})`;
+  mm.add('(min-width:901px) and (prefers-reduced-motion:no-preference)', () => {
+    let anchors = [];
+    let active = -1;
+    const headerHeight = () => document.querySelector('.vt-header')?.offsetHeight || 84;
+    const measure = () => {
+      const origin = sequence.getBoundingClientRect().top;
+      const viewport = window.innerHeight - headerHeight();
+      const travel = Math.max(1, sequence.offsetHeight - viewport);
+      anchors = steps.map((step) => clamp((step.getBoundingClientRect().top - origin + step.offsetHeight / 2 - viewport / 2) / travel));
+    };
+    const positionAt = (progress) => {
+      for (let i = 0; i < anchors.length - 1; i += 1) {
+        if (progress <= anchors[i + 1]) {
+          const phase = clamp((progress - anchors[i]) / Math.max(0.001, anchors[i + 1] - anchors[i]));
+          // A settled explanation, a long handoff, then a settled next state.
+          return i + ease((phase - 0.24) / 0.62);
+        }
       }
-
-      const clauseIn = range(p, 0.12, 0.25);
-      const clauseOut = range(p, 0.31, 0.43);
-      const clauseOpacity = clauseIn * (1 - clauseOut);
-      clauses.style.opacity = String(clauseOpacity);
-      clauses.style.transform = `translate3d(${mix(5, 0, clauseIn)}vw, ${mix(5, 0, clauseIn) - mix(0, 3, clauseOut)}vh, 0) scale(${mix(0.94, 1, clauseIn)})`;
-      clauses.style.visibility = clauseOpacity > 0.01 ? 'visible' : 'hidden';
-
-      const branchIn = range(p, 0.32, 0.46);
-      const branchOut = range(p, 0.54, 0.64);
-      const branchOpacity = branchIn * (1 - branchOut);
-      branch.style.opacity = String(branchOpacity);
-      branch.style.transform = `translate3d(${mix(4, 0, branchIn) - mix(0, 4, branchOut)}vw, 0, 0) scale(${mix(0.87, 1, branchIn)})`;
-      branch.style.visibility = branchOpacity > 0.01 ? 'visible' : 'hidden';
-
-      const weightIn = range(p, 0.54, 0.69);
-      const weightOut = range(p, 0.75, 0.84);
-      const weightOpacity = weightIn * (1 - weightOut);
-      weight.style.opacity = String(weightOpacity);
-      weight.style.transform = `translate3d(0, ${mix(7, 0, weightIn) - mix(0, 3, weightOut)}vh, 0)`;
-      weight.style.visibility = weightOpacity > 0.01 ? 'visible' : 'hidden';
-      weightBars.forEach((bar, index) => {
-        const reveal = range(weightIn, index * 0.055, 0.56 + index * 0.055);
-        bar.style.transform = `scaleY(${mix(0.08, 1, reveal)})`;
-        bar.style.transformOrigin = 'bottom';
+      return STATES.length - 1;
+    };
+    const render = (progress) => {
+      const position = positionAt(progress);
+      const index = Math.min(STATES.length - 1, Math.round(position));
+      if (index !== active) {
+        active = index;
+        stage.dataset.howState = STATES[index];
+        steps.forEach((step, i) => step.classList.toggle('is-active', i === index));
+      }
+      stage.style.setProperty('--how-progress', String(progress));
+      actors.forEach((actor, i) => {
+        const delta = position - i;
+        const enter = delta < 0 ? ease((delta + 0.6) / 0.6) : 1;
+        const leave = delta > 0 ? 1 - ease(delta / 0.42) : 1;
+        const opacity = enter * leave;
+        actor.style.opacity = String(opacity);
+        actor.style.visibility = opacity > 0.005 ? 'visible' : 'hidden';
+        actor.style.transform = `translate3d(0, ${(1 - enter) * 24 - (1 - leave) * 12}px, 0)`;
       });
-
-      const recordIn = range(p, 0.76, 0.91);
-      record.style.opacity = String(recordIn);
-      record.style.visibility = recordIn > 0.01 ? 'visible' : 'hidden';
-      record.style.transform = `translate3d(${mix(6, 0, recordIn)}vw, ${mix(9, 0, recordIn)}vh, 0) scale(${mix(0.92, 1, recordIn)})`;
+      // Only the bar surfaces grow. Percentages and labels retain their size.
+      bars.forEach((bar, i) => {
+        const reveal = ease((position - 2.5 - i * 0.035) / 0.38);
+        bar.style.setProperty('--how-bar-reveal', String(reveal));
+      });
+      if (image) image.style.transform = `scale(${1.035 + progress * 0.025})`;
     };
 
-    render(0);
-    const trigger = ScrollTrigger.create({
-      trigger: sequence,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 0.22,
-      fastScrollEnd: 1800,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => render(self.progress),
-      onRefresh: (self) => render(self.progress),
-    });
-
+    stage.dataset.howDirected = 'true';
+    measure();
+    const resize = new window.ResizeObserver(measure);
+    resize.observe(sequence);
+    steps.forEach((step) => resize.observe(step));
+    window.addEventListener('resize', measure, { passive: true });
+    const stop = observeScrollProgress(sequence, render, { offset: headerHeight, response: 300 });
     return () => {
-      trigger.kill();
+      stop();
+      resize.disconnect();
+      window.removeEventListener('resize', measure);
       delete stage.dataset.howDirected;
+      stage.dataset.howState = 'capture';
       stage.style.removeProperty('--how-progress');
-      clear(source, ['transform', 'opacity']);
-      clear(contextImage, ['transform', 'filter']);
-      [clauses, branch, weight, record].forEach((actor) => clear(actor, ['opacity', 'transform', 'visibility']));
-      weightBars.forEach((bar) => clear(bar, ['transform', 'transform-origin']));
+      actors.forEach((actor) => ['opacity', 'visibility', 'transform'].forEach((property) => actor.style.removeProperty(property)));
+      bars.forEach((bar) => bar.style.removeProperty('--how-bar-reveal'));
+      image?.style.removeProperty('transform');
+      steps.forEach((step) => step.classList.remove('is-active'));
     };
   });
-
   return () => mm.revert();
 }
-
-export default mountHowTraceDirector;

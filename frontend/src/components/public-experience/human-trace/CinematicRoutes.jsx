@@ -7,6 +7,8 @@ import { CAREER_PRESENTATION_DISCLAIMER, CAREER_WORLDS } from './careerWorlds';
 import { CinemaLink } from './CinematicPublicShell';
 import Cover from './RouteOpening';
 import { observeScrollProgress, readingPosition } from './scrollProgress';
+import { mountHowTraceDirector } from './howTraceDirector';
+import './howRefinement.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,38 +42,7 @@ function PageFrame({ children, className = '', rootRef }) {
 }
 
 function useHowTrace(rootRef) {
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return undefined;
-    const stage = root.querySelector('[data-how-stage]');
-    const steps = [...root.querySelectorAll('[data-how-step]')];
-    if (!stage || !steps.length) return undefined;
-
-    const mm = gsap.matchMedia();
-    mm.add('(min-width: 901px) and (prefers-reduced-motion:no-preference)', () => {
-      const triggers = steps.map((step) => ScrollTrigger.create({
-        trigger: step,
-        start: 'top 58%',
-        end: 'bottom 58%',
-        onEnter: () => { stage.dataset.howState = step.dataset.howStep; },
-        onEnterBack: () => { stage.dataset.howState = step.dataset.howStep; },
-      }));
-      return () => triggers.forEach((trigger) => trigger.kill());
-    });
-    return () => mm.revert();
-  }, [rootRef]);
-}
-
-function HowMobileArtifact({ state }) {
-  return (
-    <div className={`vt-how-mobile-state vt-how-mobile-state--${state}`} aria-hidden="true">
-      <span>Your response stays in context.</span>
-      {state === 'isolate' && <div className="vt-how-mini-clauses"><i /><i /><i /></div>}
-      {state === 'branch' && <div className="vt-how-mini-branch"><i /><i /><i /></div>}
-      {state === 'weight' && <div className="vt-how-mini-mass"><i /><i /><i /><i /></div>}
-      {state === 'recompose' && <div className="vt-how-mini-record" />}
-    </div>
-  );
+  useEffect(() => mountHowTraceDirector(rootRef.current), [rootRef]);
 }
 
 export function HowCinematicPage() {
@@ -96,11 +67,15 @@ export function HowCinematicPage() {
 
       <div className="vt-how-sequence">
         <aside className="vt-how-fixed">
-          <div className="vt-how-trace-stage" data-how-stage data-how-state="capture" data-transition-family="human-trace" data-transition-key="source-response">
+          <div className="vt-how-trace-stage" aria-hidden="true" data-how-stage data-how-state="capture" data-transition-family="human-trace" data-transition-key="source-response">
             <figure className="vt-how-context"><img src={PHOTO.source} alt="A designer considering an interface in context" loading="lazy" /><div aria-hidden="true" /></figure>
             <p className="vt-how-source-card">Your response stays connected to the question and situation it describes.</p>
-            <div className="vt-how-clause-stage" aria-hidden="true"><span>Response</span><span>Context</span><span>Evidence</span><span>Interpretation</span><span>Limit</span></div>
-            <div className="vt-how-branch-stage" aria-hidden="true"><span>Big Five</span><span>RIASEC</span><span>Work Values</span></div>
+            <div className="vt-how-clause-stage" aria-hidden="true">
+              <div><strong>Your response</strong><p>The words you supplied.</p></div>
+              <div><strong>The question</strong><p>What you were responding to.</p></div>
+              <div><strong>The context</strong><p>The situation those words describe.</p></div>
+            </div>
+            <div className="vt-how-branch-stage" aria-hidden="true">{PUBLIC_CONTENT.home.models.list.slice(0, 3).map((model) => <div key={model.id}><strong>{model.name}</strong><p>{model.shortDescription}</p></div>)}</div>
             <div className="vt-how-weight-stage" aria-hidden="true">{weights.map((weight) => <i key={weight.id} style={{ '--weight': weight.percentage }}><b>{weight.percentage}%</b><span>{weight.label}</span></i>)}</div>
             <div className="vt-how-record-stage" aria-hidden="true"><strong>Source retained.</strong><strong>Weights explicit.</strong><strong>Limits visible.</strong></div>
             
@@ -110,7 +85,7 @@ export function HowCinematicPage() {
         <div className="vt-how-steps">
           {steps.map((step, index) => (
             <article key={step.id} className="vt-how-step" data-how-step={step.id} id={`step-${step.id}`}>
-              <HowMobileArtifact state={step.id} />
+              {index === 0 && <figure className="vt-how-mobile-photo"><img src={PHOTO.source} alt="A designer considering their work in context" loading="lazy" /></figure>}
               <h2>{copy[index][0]}</h2>
               <p>{copy[index][1]}</p>
               {step.id === 'branch' && <div className="vt-framework-small">{PUBLIC_CONTENT.home.models.list.slice(0, 3).map((model) => <span key={model.id}>{model.name}</span>)}</div>}
@@ -159,7 +134,7 @@ function useCareerWorldTimeline(rootRef, setActiveWorld) {
           previous = index;
           setActiveWorld(index);
         }
-      }, { offset: () => document.querySelector('.vt-header')?.offsetHeight || 84, response: 180 });
+      }, { offset: () => document.querySelector('.vt-header')?.offsetHeight || 84, response: 270 });
       return () => {
         stop();
         rail.style.removeProperty('transform');
@@ -296,7 +271,7 @@ export function ProgressCinematicPage() {
         onUpdate: () => {
           if (!manuallyControlled.current) setSplit(Math.round(position.value));
         },
-        scrollTrigger: { trigger: comparison, start: 'top 85%', end: 'bottom 25%', scrub: 0.8, invalidateOnRefresh: true },
+        scrollTrigger: { trigger: comparison, start: 'top 85%', end: 'bottom 25%', scrub: 1.05, invalidateOnRefresh: true },
       });
       return () => { animation.scrollTrigger?.kill(); animation.kill(); };
     });
@@ -369,7 +344,7 @@ function useTrustTimeline(rootRef, setActive) {
         }
       };
 
-      const stop = observeScrollProgress(track, render, { offset: () => document.querySelector('.vt-header')?.offsetHeight || 84, response: 160 });
+      const stop = observeScrollProgress(track, render, { offset: () => document.querySelector('.vt-header')?.offsetHeight || 84, response: 270 });
       return () => { stop(); evidence?.style.removeProperty('stroke-dashoffset'); };
     });
 
@@ -461,7 +436,7 @@ function useMethodologyTrace(rootRef, setActive) {
       if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
       root.querySelectorAll('[data-method-reveal], .vt-method-weights>div').forEach((row) => {
         gsap.fromTo(row, { y: 22, opacity: 0.65 }, { y: 0, opacity: 1, ease: 'none',
-          scrollTrigger: { trigger: row, start: 'top 94%', end: 'top 68%', scrub: 0.7 } });
+          scrollTrigger: { trigger: row, start: 'top 94%', end: 'top 58%', scrub: 0.95 } });
       });
     }, root);
     return () => { triggers.forEach((trigger) => trigger.kill()); motion.revert(); };

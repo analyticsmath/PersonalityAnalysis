@@ -154,7 +154,7 @@ export function mountHomeHumanTrace(root) {
     const desktop = mediaContext.conditions.desktop;
     const context = gsap.context(() => {
       gsap.fromTo('.vt-home-opening-copy h1 span', { y: 42, opacity: 0, clipPath: 'inset(100% 0 0 0)' },
-        { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', duration: 1.25, stagger: 0.14, ease: 'power3.out', clearProps: 'transform,opacity,clipPath' });
+        { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', duration: 1.45, stagger: 0.16, ease: 'power2.out', clearProps: 'transform,opacity,clipPath' });
       gsap.fromTo('.vt-home-opening-copy .vt-home-human-bottom', { y: 16, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.9, delay: 0.45, ease: 'power2.out', clearProps: 'transform,opacity' });
     }, root);
@@ -167,7 +167,7 @@ export function mountHomeHumanTrace(root) {
         openingCopy.style.transform = `translate3d(0, ${mix(0, -8, movement)}vh, 0)`;
         detail.style.transform = `translate3d(0, ${mix(0, -15, movement)}vh, 0) rotate(${mix(-3, 0, movement)}deg)`;
         detail.style.opacity = String(1 - range(p, 0.45, 0.85));
-      }, { response: 240 }));
+      }, { response: 280 }));
     }
     stops.push(observeScrollProgress(perspectiveTrack, (p) => {
       const reading = range(p, 0.10, 0.72);
@@ -179,7 +179,7 @@ export function mountHomeHumanTrace(root) {
         photo.style.transform = `translate3d(${mix(0, directions[index] * 5, p)}vw, ${mix(fromY, toY, p)}vh, 0) rotate(${mix(directions[index] * 4, 0, p)}deg)`;
         photo.style.opacity = String(1 - range(p, 0.78, 1));
       });
-    }, { response: 220 }));
+    }, { response: 280 }));
     stops.push(observeScrollProgress(bookTrack, (p) => {
       const open = range(p, 0.12, 0.66);
       if (desktop) {
@@ -248,7 +248,7 @@ export function mountHomeHumanTrace(root) {
 
     render(0);
 
-    const stop = observeScrollProgress(track, render, { response: 190 });
+    const stop = observeScrollProgress(track, render, { response: 280 });
 
     return () => {
       stop();
@@ -281,10 +281,10 @@ export function mountHomeHumanTrace(root) {
     const context = gsap.context(() => {
       root.querySelectorAll('.vt-home-scene h2').forEach((heading) => {
         gsap.fromTo(heading, { y: 40, opacity: 0.4 }, { y: 0, opacity: 1, ease: 'none',
-          scrollTrigger: { trigger: heading, start: 'top 95%', end: 'top 55%', scrub: 0.6 } });
+          scrollTrigger: { trigger: heading, start: 'top 95%', end: 'top 55%', scrub: 0.9 } });
       });
       worldItems.forEach((item) => gsap.fromTo(item.querySelector('img'), { yPercent: -7, scale: 1.16 },
-        { yPercent: 7, scale: 1.05, ease: 'none', scrollTrigger: { trigger: item, start: 'top bottom', end: 'bottom top', scrub: 0.6 } }));
+        { yPercent: 7, scale: 1.05, ease: 'none', scrollTrigger: { trigger: item, start: 'top bottom', end: 'bottom top', scrub: 0.9 } }));
     }, root);
     return () => context.revert();
   });

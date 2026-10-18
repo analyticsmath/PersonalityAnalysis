@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SiteFooter from './SiteFooter';
@@ -22,7 +23,6 @@ const NAV = [
 ];
 
 const DIRECTED_SECONDARY_ROUTES = new Set(NAV.slice(1).map(([path]) => path));
-const NATIVE_SCROLL_STORY_ROUTES = new Set(['/', '/career-intelligence', '/trust']);
 
 const Navigation = createContext(null);
 const CinemaScroll = createContext((position) => window.scrollTo({ top: position, behavior: 'auto' }));
@@ -74,8 +74,8 @@ export function CinematicPublicShell() {
   useEffect(() => {
     const mm = gsap.matchMedia();
     mm.add('(pointer:fine) and (prefers-reduced-motion:no-preference)', () => {
-      if (NATIVE_SCROLL_STORY_ROUTES.has(location.pathname)) return undefined;
-      const lenis = new Lenis({ duration: 0.86, smoothWheel: true, syncTouch: false });
+      const lenis = new Lenis({ lerp: 0.085, smoothWheel: true, syncTouch: false });
+      document.documentElement.dataset.cinemaScroll = 'lenis';
       scrollEngine.current = lenis;
       lenis.on('scroll', ScrollTrigger.update);
       const tick = (time) => lenis.raf(time * 1000);
@@ -84,6 +84,7 @@ export function CinematicPublicShell() {
       return () => {
         gsap.ticker.remove(tick);
         lenis.destroy();
+        delete document.documentElement.dataset.cinemaScroll;
         scrollEngine.current = null;
       };
     });
@@ -102,24 +103,6 @@ export function CinematicPublicShell() {
     }
     handle = window.setTimeout(warmSecondaryFilm, 900);
     return () => window.clearTimeout(handle);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (location.pathname !== '/how-it-works') return undefined;
-    let cancelled = false;
-    let dispose = () => {};
-    const frame = window.requestAnimationFrame(() => {
-      import('./howTraceDirector')
-        .then(({ mountHowTraceDirector }) => {
-          if (!cancelled) dispose = mountHowTraceDirector(document);
-        })
-        .catch(() => {});
-    });
-    return () => {
-      cancelled = true;
-      window.cancelAnimationFrame(frame);
-      dispose();
-    };
   }, [location.pathname]);
 
   useEffect(() => {

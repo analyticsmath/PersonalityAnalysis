@@ -386,3 +386,9 @@
 .vt-route--trust .vt-trust-record__pipeline span.is-active{background:transparent;color:#15221e;font-weight:550}
 .vt-trust-inspector li{grid-template-columns:1fr}
 .vt-trust-inspector li i{display:none}
+
+/* Broader scroll handoffs preserve the reading holds without gesture capture. */
+@media(min-width:901px) and (prefers-reduced-motion:no-preference){
+ .vt-route--career .vt-career-worlds-track,.vt-route--trust .vt-trust-track{height:730svh}
+ .vt-route--trust .vt-trust-record__reading{animation-duration:1.15s;animation-timing-function:cubic-bezier(.25,.6,.25,1)}
+}

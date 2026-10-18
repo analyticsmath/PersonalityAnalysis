@@ -27,16 +27,16 @@ export default function RouteOpening({ lines, image, alt, description, variant }
     const root = rootRef.current;
     if (!root || window.matchMedia('(prefers-reduced-motion:reduce)').matches) return undefined;
     const context = gsap.context(() => {
-      gsap.to('.vt-opening-media img', { yPercent: 14, scale: 1.12, ease: 'none',
-        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.65 } });
-      gsap.to('.vt-opening-title', { y: -65, ease: 'none',
-        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.65 } });
+      gsap.to('.vt-opening-media img', { yPercent: 8, scale: 1.07, ease: 'none',
+        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.95 } });
+      gsap.to('.vt-opening-title', { y: -38, ease: 'none',
+        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.95 } });
       gsap.to('.vt-opening-formula > div', { y: (index) => index % 2 ? -34 : 22, ease: 'none',
-        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 0.8 } });
+        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: 1.05 } });
     }, root);
     const reveal = () => context.add(() => {
-      gsap.from('.vt-opening-line > span', { yPercent: 110, duration: 1.15, stagger: 0.12, ease: 'power4.out' });
-      gsap.from('.vt-opening-plane', { y: 70, opacity: 0, duration: 1.3, stagger: 0.08, ease: 'power3.out' });
+      gsap.from('.vt-opening-line > span', { yPercent: 110, duration: 1.4, stagger: 0.16, ease: 'power2.out' });
+      gsap.from('.vt-opening-plane', { y: 32, opacity: 0, duration: 1.5, stagger: 0.12, ease: 'power2.out' });
       const path = root.querySelector('.vt-opening-path');
       if (path) {
         const length = path.getTotalLength();
@@ -58,7 +58,7 @@ export default function RouteOpening({ lines, image, alt, description, variant }
     </div>}
     {variant === 'how' && <>
       <figure className="vt-opening-media vt-opening-plane vt-opening-how-photo"><img src={image} alt={alt} /></figure>
-      <div className="vt-opening-response vt-opening-plane"><p>Your words,<br/>kept in context.</p><div><span>Response</span><span>Evidence</span><span>Perspective</span></div></div>
+      <div className="vt-opening-response vt-opening-plane"><p>Your words,<br/>kept in context.</p></div>
     </>}
     {variant === 'progress' && <div className="vt-opening-diptych" aria-hidden="true">
       <figure className="vt-opening-media"><img src={media + 'code-detail-1920.webp'} alt="" /></figure>
