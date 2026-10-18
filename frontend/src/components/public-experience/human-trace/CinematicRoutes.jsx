@@ -7,8 +7,7 @@ import { CAREER_PRESENTATION_DISCLAIMER, CAREER_WORLDS } from './careerWorlds';
 import { CinemaLink } from './CinematicPublicShell';
 import Cover from './RouteOpening';
 import { observeScrollProgress, readingPosition } from './scrollProgress';
-import { mountHowTraceDirector } from './howTraceDirector';
-import './howRefinement.css';
+export { default as HowCinematicPage } from './HowItWorksPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,66 +38,6 @@ function NextChapter({ to, title, subtitle, image, family = 'context-media', tra
 
 function PageFrame({ children, className = '', rootRef }) {
   return <div ref={rootRef} className={`vt-route vt-route--${className}`}>{children}</div>;
-}
-
-function useHowTrace(rootRef) {
-  useEffect(() => mountHowTraceDirector(rootRef.current), [rootRef]);
-}
-
-export function HowCinematicPage() {
-  const rootRef = useRef(null);
-  const steps = PUBLIC_CONTENT.how.movements;
-  const weights = PUBLIC_CONTENT.home.calibration.weights;
-  const copy = [
-    ['Start with your own words.', 'Your response stays with the question and the situation it describes.'],
-    ['Notice what matters.', 'Parts of an answer may point to different habits of thinking and acting. One answer is a starting point, not a conclusion.'],
-    ['Look from more than one angle.', 'Personality, interests and work values describe different parts of the picture. Each needs enough evidence.'],
-    ['See what contributes.', 'Career comparisons use explicit weights for interests, skills, values, traits, education and goals. You can inspect the calculation.'],
-    ['Bring the picture together.', 'Your professional profile connects the interpretation to its evidence and keeps its limits visible.'],
-  ];
-
-  useHowTrace(rootRef);
-
-  return (
-    <PageFrame className="how" rootRef={rootRef}>
-      <Cover lines={['From your answers.', 'To your perspective.']} image={PHOTO.detail} alt="A website wireframe sketched on paper" description="Understand how your responses contribute to a profile of your personality, interests and work values." position="55% 45%" variant="how" family="human-trace" transitionKey="source-response" />
-
-      <div className="vt-essay-intro"><h2>Before the inference,<br/><em>there is a source.</em></h2><p>A single answer can suggest questions worth asking. A scored profile requires sufficient independent evidence.</p></div>
-
-      <div className="vt-how-sequence">
-        <aside className="vt-how-fixed">
-          <div className="vt-how-trace-stage" aria-hidden="true" data-how-stage data-how-state="capture" data-transition-family="human-trace" data-transition-key="source-response">
-            <figure className="vt-how-context"><img src={PHOTO.source} alt="A designer considering an interface in context" loading="lazy" /><div aria-hidden="true" /></figure>
-            <p className="vt-how-source-card">Your response stays connected to the question and situation it describes.</p>
-            <div className="vt-how-clause-stage" aria-hidden="true">
-              <div><strong>Your response</strong><p>The words you supplied.</p></div>
-              <div><strong>The question</strong><p>What you were responding to.</p></div>
-              <div><strong>The context</strong><p>The situation those words describe.</p></div>
-            </div>
-            <div className="vt-how-branch-stage" aria-hidden="true">{PUBLIC_CONTENT.home.models.list.slice(0, 3).map((model) => <div key={model.id}><strong>{model.name}</strong><p>{model.shortDescription}</p></div>)}</div>
-            <div className="vt-how-weight-stage" aria-hidden="true">{weights.map((weight) => <i key={weight.id} style={{ '--weight': weight.percentage }}><b>{weight.percentage}%</b><span>{weight.label}</span></i>)}</div>
-            <div className="vt-how-record-stage" aria-hidden="true"><strong>Source retained.</strong><strong>Weights explicit.</strong><strong>Limits visible.</strong></div>
-            
-          </div>
-        </aside>
-
-        <div className="vt-how-steps">
-          {steps.map((step, index) => (
-            <article key={step.id} className="vt-how-step" data-how-step={step.id} id={`step-${step.id}`}>
-              {index === 0 && <figure className="vt-how-mobile-photo"><img src={PHOTO.source} alt="A designer considering their work in context" loading="lazy" /></figure>}
-              <h2>{copy[index][0]}</h2>
-              <p>{copy[index][1]}</p>
-              {step.id === 'branch' && <div className="vt-framework-small">{PUBLIC_CONTENT.home.models.list.slice(0, 3).map((model) => <span key={model.id}>{model.name}</span>)}</div>}
-              {step.id === 'weight' && <div className="vt-weight-legend">{weights.map((weight) => <span key={weight.id}>{weight.label} <b>{weight.percentage}%</b></span>)}</div>}
-            </article>
-          ))}
-        </div>
-      </div>
-
-      <section className="vt-quiet-end"><h2>No single response<br/>becomes a verdict.</h2><p>Inputs, inferred dimensions, explicit weights and limitations belong to separate stages of the record.</p><CinemaLink className="vt-text-link" to="/methodology">Examine the methodology ↗</CinemaLink></section>
-      <NextChapter to="/career-intelligence" title="Explore your possibilities." subtitle="The same evidence meets different working conditions." image={PHOTO.precision} family="human-trace" transitionKey="source-response" />
-    </PageFrame>
-  );
 }
 
 const displayRequirement = (value) => ({

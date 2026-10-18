@@ -5,6 +5,7 @@ import 'lenis/dist/lenis.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SiteFooter from './SiteFooter';
+import SiteIndex from './SiteIndex';
 import { navigateCinematic } from './routeNavigation';
 import { preloadRoute } from '../motion/routePreloadRegistry';
 import './cinematicRoutes.css';
@@ -31,7 +32,7 @@ const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 const navigateSafely = (navigate, path, origin) => navigateCinematic(navigate, path, origin);
 
-export function CinemaLink({ to, children, className, onClick, ...props }) {
+export function CinemaLink({ to, children, className, onClick, onFocus, ...props }) {
   const go = useContext(Navigation);
   const navigate = useNavigate();
   const preload = useCallback(() => {
@@ -45,13 +46,15 @@ export function CinemaLink({ to, children, className, onClick, ...props }) {
     (go || ((path, origin) => navigateSafely(navigate, path, origin)))(to, event.currentTarget);
   }, [go, navigate, to, onClick]);
 
-  return <a href={to} className={className} {...props} onPointerEnter={preload} onFocus={preload} onTouchStart={preload} onClick={handler}>{children}</a>;
+  return <a href={to} className={className} {...props} onPointerEnter={preload} onFocus={(event) => { preload(); onFocus?.(event); }} onTouchStart={preload} onClick={handler}>{children}</a>;
 }
 
 export function CinematicPublicShell() {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuClose = useRef(null);
+  const finishMenuClose = useCallback(() => setMenuOpen(false), []);
   const [scrolled, setScrolled] = useState(false);
   const scrollEngine = useRef(null);
   const progressRef = useRef(null);
@@ -167,7 +170,7 @@ export function CinematicPublicShell() {
     drawer.current?.querySelector('button')?.focus();
 
     const key = (event) => {
-      if (event.key === 'Escape') setMenuOpen(false);
+      if (event.key === 'Escape') menuClose.current?.();
       if (event.key !== 'Tab' || !drawer.current) return;
       const controls = [...drawer.current.querySelectorAll('a,button')];
       if (!controls.length) return;
@@ -235,19 +238,7 @@ export function CinematicPublicShell() {
             }}
           />
 
-          {menuOpen && (
-            <div className="vt-index-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setMenuOpen(false); }}>
-              <aside id="vt-site-index" ref={drawer} role="dialog" aria-modal="true" aria-label="Site index" className="vt-index-drawer">
-                <div className="vt-index-header"><span>Personality Assessor</span><button type="button" onClick={() => setMenuOpen(false)}>CLOSE ×</button></div>
-                <nav aria-label="Complete site index">
-                  {NAV.map(([to, label]) => (
-                    <CinemaLink key={to} to={to} onClick={() => setMenuOpen(false)} className={location.pathname === to ? 'is-active' : ''}>{label}<span aria-hidden="true">↗</span></CinemaLink>
-                  ))}
-                </nav>
-                <div className="vt-index-foot"><p>Understand your personality. Explore the work ahead.</p></div>
-              </aside>
-            </div>
-          )}
+          {menuOpen && <SiteIndex pathname={location.pathname} onClose={finishMenuClose} closeRef={menuClose} drawerRef={drawer} />}
         </div>
       </Navigation.Provider>
     </CinemaScroll.Provider>
