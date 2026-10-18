@@ -45,7 +45,7 @@
 .vt-home-book-page h3{font-size:clamp(24px,2.5vw,40px);font-weight:450;letter-spacing:-.045em;margin:0 0 14px;line-height:1.05}
 .vt-home-book-page p{max-width:340px;font-size:15px;line-height:1.55;margin:0 0 28px;color:#3c4d42}
 .vt-home-book-page .vt-text-link{align-self:flex-start}
-.vt-home-book-cover{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;backface-visibility:hidden;pointer-events:none;background:#15221e;overflow:hidden}
+.vt-home-book-cover{position:absolute;inset:0;transform-origin:right center;transform-style:preserve-3d;backface-visibility:hidden;pointer-events:none;background:#15221e;overflow:hidden}
 .vt-home-book-cover picture{height:100%}
 .vt-home-book-cover img{object-position:48% 45%;filter:brightness(.45)}
 .vt-home-book-cover>div{position:absolute;inset:0;padding:clamp(26px,3.5vw,56px);display:flex;flex-direction:column;justify-content:space-between;color:#f1f4f1}
@@ -120,4 +120,12 @@
  .vt-home-book-stage{position:relative;height:auto;min-height:800px}
  .vt-home-book-cover{display:none}
  .vt-home-book{transform:none!important}
+}
+
+@media(min-width:901px) and (prefers-reduced-motion:no-preference){
+ .vt-home-experience .vt-home-source-copy h2{font-size:clamp(44px,5.1vw,88px);line-height:1}
+ .vt-home-experience .vt-home-source-copy{bottom:14%;max-width:46vw}
+}
+@media(min-width:901px) and (max-height:740px){
+ .vt-home-experience .vt-home-mass{top:57%}
 }

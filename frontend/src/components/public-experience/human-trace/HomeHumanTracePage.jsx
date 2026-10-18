@@ -7,10 +7,10 @@ import './homeHumanTracePolish.css';
 import './homeRefinement.css';
 
 const PHOTO = {
-  human: '/media/public-experience/homeHeroContext',
+  human: '/media/public-experience/careerDeepInquiry',
   detail: '/media/public-experience/homeProcessDetail',
   creative: '/media/public-experience/careerCreativeHuman',
-  research: '/media/public-experience/careerDeepInquiry',
+  research: '/media/public-experience/homeHeroContext',
   precision: '/media/public-experience/workworldPrecision',
   autonomy: '/media/public-experience/workworldAutonomy',
   collaboration: '/media/public-experience/careerCoordination',
@@ -49,7 +49,7 @@ export function HomeHumanTracePage() {
       <section className="vt-home-opening" data-home-opening aria-label="Understand what drives you">
         <div className="vt-home-opening-stage">
           <figure className="vt-home-opening-media" data-opening-media data-transition-family="context-media" data-transition-key="working-context">
-            <Photo source={PHOTO.human} alt="A maker working with equipment beside a sunlit workshop window" priority />
+            <Photo source={PHOTO.human} alt="Researchers examining samples in a blue-lit laboratory" priority />
           </figure>
           <figure className="vt-home-opening-detail" data-opening-detail aria-hidden="true"><Photo source={PHOTO.detail} /></figure>
             <div className="vt-home-opening-copy">
@@ -83,15 +83,6 @@ export function HomeHumanTracePage() {
 
       <div className="vt-home-film-track" data-home-track>
         <div className="vt-home-film-stage" data-home-stage>
-          <div
-            className="vt-home-source-actor"
-            data-home-source-actor
-            data-transition-family="human-trace"
-            data-transition-key="source-response"
-          >
-            <p>Your answer keeps its question and context.</p>
-          </div>
-
           <div className="vt-home-scenes">
             <Scene id="source" index={1}>
               <div className="vt-home-source-copy">
@@ -100,9 +91,7 @@ export function HomeHumanTracePage() {
                 <small>A single response can suggest questions worth asking. A scored profile requires sufficient independent evidence.</small>
               </div>
               <figure className="vt-home-source-photo"><Photo source={PHOTO.detail} alt="An architect reviewing plans and material swatches" /></figure>
-              <div className="vt-home-source-mobile" data-transition-family="human-trace" data-transition-key="source-response">
-                <p>Your answer keeps its question and context.</p>
-              </div>
+
             </Scene>
 
             <Scene id="branch" index={2}>

@@ -118,7 +118,6 @@ export function mountHomeHumanTrace(root) {
   const stage = root.querySelector('[data-home-stage]');
   const scenes = [...root.querySelectorAll('[data-home-scene]')];
   const sceneHeadings = scenes.map((scene) => [...scene.querySelectorAll('h1,h2')]);
-  const source = root.querySelector('[data-home-source-actor]');
   const worldItems = [...root.querySelectorAll('[data-home-world]')];
   const worldLabels = [...root.querySelectorAll('[data-home-world-label]')];
   const branchPaths = [...root.querySelectorAll('[data-home-branch-path]')];
@@ -139,7 +138,8 @@ export function mountHomeHumanTrace(root) {
 
   const mm = gsap.matchMedia();
 
-  mm.add('(prefers-reduced-motion: no-preference)', () => {
+  mm.add({ desktop: '(min-width:901px)', motion: '(prefers-reduced-motion:no-preference)' }, (mediaContext) => {
+    if (!mediaContext.conditions.motion) return undefined;
     const opening = root.querySelector('[data-home-opening]');
     const media = root.querySelector('[data-opening-media]');
     const detail = root.querySelector('[data-opening-detail]');
@@ -150,7 +150,8 @@ export function mountHomeHumanTrace(root) {
     const bookTrack = root.querySelector('[data-home-book-track]');
     const book = root.querySelector('[data-home-book]');
     const cover = root.querySelector('[data-home-book-cover]');
-    const desktop = window.matchMedia('(min-width:901px)').matches;
+    const bookPage = book?.querySelector('.vt-home-book-page');
+    const desktop = mediaContext.conditions.desktop;
     const context = gsap.context(() => {
       gsap.fromTo('.vt-home-opening-copy h1 span', { y: 42, opacity: 0, clipPath: 'inset(100% 0 0 0)' },
         { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', duration: 1.25, stagger: 0.14, ease: 'power3.out', clearProps: 'transform,opacity,clipPath' });
@@ -181,7 +182,8 @@ export function mountHomeHumanTrace(root) {
       const open = range(p, 0.12, 0.66);
       if (desktop) {
         book.style.transform = `translate3d(0, ${mix(5, 0, open)}vh, 0) rotate(${mix(4, 0, open)}deg)`;
-        cover.style.transform = `rotateY(${mix(0, -156, open)}deg)`;
+        cover.style.transform = `rotateY(${mix(0, 156, open)}deg)`;
+        bookPage.inert = open < 0.55 && !bookPage.contains(document.activeElement);
         cover.style.visibility = open > 0.99 ? 'hidden' : 'visible';
       } else {
         cover.style.opacity = String(1 - range(p, 0, 0.38));
@@ -190,6 +192,7 @@ export function mountHomeHumanTrace(root) {
     }, { response: 260 }));
     return () => {
       stops.forEach((stop) => stop());
+      if (bookPage) bookPage.inert = false;
       context.revert();
       [media, detail, openingCopy, book, cover, ...words, ...perspectivePhotos].forEach((element) => removeInlineStyles(element, ['transform', 'opacity', 'clip-path', 'visibility']));
       removeInlineStyles(media?.querySelector('img'), ['transform']);
@@ -205,26 +208,6 @@ export function mountHomeHumanTrace(root) {
       stage.style.setProperty('--home-progress', String(p));
 
       scenes.forEach((scene, index) => paintScene(scene, Number(scene.dataset.homeScene), p, weights[Number(scene.dataset.homeScene)], dominant, sceneHeadings[index]));
-
-      if (source) {
-        const enter = 1;
-        const travel = range(p, 0.045, 0.10);
-        const settle = range(p, 0.10, 0.15);
-        const residueFade = range(p, 0.10, 0.15);
-        const finalResolve = range(p, 0.88, 0.92);
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const x = mix(vw * 0.56, vw * 0.555, travel);
-        const y = mix(vh * 0.68, vh * 0.105, travel);
-        const scale = mix(1.03, 0.63, travel);
-        const rotate = mix(-0.45, 0.2, travel) * (1 - settle);
-        const residueOpacity = mix(1, 0, residueFade);
-        const restoredOpacity = residueOpacity;
-        const sourceOpacity = enter * restoredOpacity * (1 - finalResolve);
-        source.style.opacity = String(sourceOpacity);
-        source.style.visibility = sourceOpacity > 0.02 ? 'visible' : 'hidden';
-        source.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale}) rotate(${rotate}deg)`;
-      }
 
       const branchProgress = range(p, 0.14, 0.23);
       branchPaths.forEach((path, index) => {
@@ -275,7 +258,6 @@ export function mountHomeHumanTrace(root) {
         scene.inert = false;
         scene.querySelectorAll('h1,h2').forEach((heading) => removeInlineStyles(heading, ['transform', 'clip-path']));
       });
-      removeInlineStyles(source, ['opacity', 'visibility', 'transform']);
       branchPaths.forEach((path) => removeInlineStyles(path, ['stroke-dasharray', 'stroke-dashoffset', 'opacity']));
       worldItems.forEach((item) => {
         removeInlineStyles(item, ['opacity', 'visibility', 'transform', 'clip-path', 'z-index']);
