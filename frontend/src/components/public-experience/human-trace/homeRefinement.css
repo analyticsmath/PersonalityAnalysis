@@ -129,3 +129,9 @@
 @media(min-width:901px) and (max-height:740px){
  .vt-home-experience .vt-home-mass{top:57%}
 }
+
+@media(max-width:900px){
+ .vt-home-opening-media img{object-position:100% center}
+ .vt-home-perspectives-photos figure:nth-child(1){top:3%;height:16%}
+ .vt-home-perspectives-photos figure:nth-child(2){top:5%;height:16%}
+}

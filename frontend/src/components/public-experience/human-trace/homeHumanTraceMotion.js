@@ -174,7 +174,9 @@ export function mountHomeHumanTrace(root) {
       words.forEach((word, index) => { word.style.opacity = String(mix(0.2, 1, range(reading, index / words.length * 0.8, (index + 2) / words.length * 0.8))); });
       perspectivePhotos.forEach((photo, index) => {
         const directions = [-1, 1, -1];
-        photo.style.transform = `translate3d(${mix(0, directions[index] * 5, p)}vw, ${mix(10 + index * 3, -14 - index * 5, p)}vh, 0) rotate(${mix(directions[index] * 4, 0, p)}deg)`;
+        const fromY = desktop ? 10 + index * 3 : 2 + index;
+        const toY = desktop ? -14 - index * 5 : -4 - index;
+        photo.style.transform = `translate3d(${mix(0, directions[index] * 5, p)}vw, ${mix(fromY, toY, p)}vh, 0) rotate(${mix(directions[index] * 4, 0, p)}deg)`;
         photo.style.opacity = String(1 - range(p, 0.78, 1));
       });
     }, { response: 220 }));

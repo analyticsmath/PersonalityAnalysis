@@ -90,7 +90,7 @@ export function HomeHumanTracePage() {
                 <p>{home.worldEntry.prompt}</p>
                 <small>A single response can suggest questions worth asking. A scored profile requires sufficient independent evidence.</small>
               </div>
-              <figure className="vt-home-source-photo"><Photo source={PHOTO.detail} alt="An architect reviewing plans and material swatches" /></figure>
+              <figure className="vt-home-source-photo"><Photo source={PHOTO.precision} alt="Colleagues working together with precision equipment" /></figure>
 
             </Scene>
 
